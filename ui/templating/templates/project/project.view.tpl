@@ -259,52 +259,51 @@
             <th >{Localisation::getTranslation('common_project_image')}</th>
             </thead>
             <tbody class="fs-4">
-                <tr class="p-4" >
-
-                    <td >
-                    	{if $project->getImageUploaded()}
-                          {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER)}
-                              <div>
-                            
-	                        	<img class="mb-4" src="{urlFor name="download-project-image" options="project_id.$project_id"}?{$imgCacheToken}"/>
-		                        {if !$project->getImageApproved()}
-		                        	<form id="projectImageApproveForm" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}">
-		                       			<input type="hidden" name="imageApprove" value="0" />
-		                        		<a class="btngray" onclick="$('#projectImageApproveForm').submit();">
-		            					{* <img src="{urlFor name='home'}ui/img/check.svg" class="approve" /> *}
-                                        <i class="fa-regular fa-circle-check fa-lg me-2"></i>
-                                         {Localisation::getTranslation('project_view_image_approve')}</a>
-                            {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
-		            				</form>
-                             </div>
-
-		            			{else}   
-		            				 <form id="projectImageApproveForm" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}">
-		            				 	<input type="hidden" name="imageApprove" value="1" />
-		                        		<a class=" btngray" onclick="$('#projectImageApproveForm').submit();"">
-                                        <i class="fa-regular fa-circle-xmark fa-lg me-2"></i>
-                                        {Localisation::getTranslation('project_view_image_disapprove')}</a>
-                             {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
-		            				 </form>
-		                        {/if}
-		                    {else}
-		                    	{if $project->getImageApproved()}
-		                    		<img class="project-image" src="{urlFor name="download-project-image" options="project_id.$project_id"}?{$imgCacheToken}"/>
-		                    	{else}
-			                    	{Localisation::getTranslation('common_project_image_not_approved')}
-		                    	{/if}
-		                    {/if}
-		                {else}
-		                	{Localisation::getTranslation('common_project_image_not_uploaded')}
-                    	{/if}
+                <tr class="p-4">
+                    <td>
+                        {if $project->getImageUploaded()}
+                            {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER)}
+                                <div>
+                                    <img class="mb-4" src="{urlFor name="download-project-image" options="project_id.$project_id"}?{$imgCacheToken}"/>
+                                    {if !$project->getImageApproved()}
+                                        <form id="projectImageApproveForm" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}">
+                                            <input type="hidden" name="imageApprove" value="0" />
+                                            <a class="btngray" onclick="$('#projectImageApproveForm').submit();">
+                                                {* <img src="{urlFor name='home'}ui/img/check.svg" class="approve" /> *}
+                                                <i class="fa-regular fa-circle-check fa-lg me-2"></i>
+                                                {Localisation::getTranslation('project_view_image_approve')}
+                                            </a>
+                                            {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
+                                        </form>
+                                    {else}
+                                        <form id="projectImageApproveForm" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}">
+                                            <input type="hidden" name="imageApprove" value="1" />
+                                            <a class=" btngray" onclick="$('#projectImageApproveForm').submit();"">
+                                                <i class="fa-regular fa-circle-xmark fa-lg me-2"></i>
+                                                {Localisation::getTranslation('project_view_image_disapprove')}
+                                            </a>
+                                            {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
+                                        </form>
+                                    {/if}
+                                </div>
+                            {else}
+                                {if $project->getImageApproved()}
+                                    <img class="project-image" src="{urlFor name="download-project-image" options="project_id.$project_id"}?{$imgCacheToken}"/>
+                                {else}
+                                    {Localisation::getTranslation('common_project_image_not_approved')}
+                                {/if}
+                            {/if}
+                        {else}
+                            {Localisation::getTranslation('common_project_image_not_uploaded')}
+                        {/if}
                     </td>
                 </tr>
                 <tr>
-                    <td >
+                    <td>
                         <strong>{Localisation::getTranslation('common_tags')}</strong>
                     </td>
                 </tr>
-                <tr>                
+                <tr>
                     <td class="nav nav-list unstyled" style="padding-left: 0px; padding-right: 0px;" colspan="2">
                     {if isset($project_tags) && is_array($project_tags)}
                         {foreach $project_tags as $ptag}
@@ -364,8 +363,8 @@
          </div>
         {/if}
 
-     </br>
-     </br>
+     <br />
+     <br />
 
         <div class="menu_list d-none bg-body p-4 mt-4 mb-4 rounded-2">
         <div class="">
