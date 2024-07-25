@@ -1,18 +1,11 @@
 {include file="new_header.tpl"}
 <!-- Editor Hint: ¿áéíóú -->
 
-
 <div class="container-fluid ">
-
- 
- <div class=" container py-4" >
-
+    <div class=" container py-4" >
                     <a  class="text-decoration-none text-body fw-bold"  href="/"> Home </a> <i class="fa-solid fa-chevron-right mx-1"> </i>
-        
                     <a  href="#" class="text-primaryDark fw-bold text-decoration-none"> Project </a>       
-                           
-               
-                </div>
+    </div>
 
 
 <section class="bg-light-subtle"> 
@@ -959,38 +952,38 @@
   </div>
   </div>
 </div>
+
 <!-- PO# Modal -->
 <div id="ponummodal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-
 <div class="modal-dialog">
 <div class="modal-content">
-    <div class="modal-header">
+  <div class="modal-header">
     <h3 class="modal-title fs-4 fw-bold me-4" id="myModalLabel">Set Purchase Order #</h3>
   </div>
 
   <div class="modal-body">
   <form id="ponumform"  method="post" action="{urlFor name="project-view" options="project_id.$project_id"}">
-  PO #: <input type="text" name="po" value="" />
-  <input type="hidden" name="ponum" value="" />
-  <input type="hidden" name="ready_payment_status" value="Unsettled" />
-   {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
-  </div>
-  <div class="modal-footer">
-  <button type="button" class=" btn btn-light" data-bs-dismiss="modal" aria-label="Close">Close</button>
-   
-    <button class="btn btn-success" id="ponumbtn" onclick="$('#ponumform').submit();">Confirm</button>
-  </div>
+    PO #: <input type="text" name="po" value="" />
+    <input type="hidden" name="ponum" value="" />
+    <input type="hidden" name="ready_payment_status" value="Unsettled" />
+    {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
+    <div class="modal-footer">
+      <button type="button" class=" btn btn-light" data-bs-dismiss="modal" aria-label="Close">Close</button>
+      <button class="btn btn-success" id="ponumbtn" onclick="$('#ponumform').submit();">Confirm</button>
+    </div>
   </form>
   </div>
-  </div>
 </div>
+</div>
+</div>
+
+
     </div>
 </section>
 
 </div>
-   </div> 
 
-   <script>
+<script>
    $("[data-bs-toggle='tooltip']").tooltip(); // Initialize Tooltip
 </script>
 {include file="footer2.tpl"}
