@@ -397,8 +397,6 @@
                 <input type="hidden" name="tasks_as_unpaid" value="" />
                 {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
             </form>
-      {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
-  </form>
         {/if}
         </div>
 
@@ -512,8 +510,8 @@
         <div>
             {if isset($projectTasks) && count($projectTasks) > 0}
                 {foreach from=$taskLanguageMap key=languageCountry item=tasks}
-                     <div class="mt-4">
-                <div class="d-flex align-items-center flex-wrap">
+                  <div class="mt-4">
+                    <div class="d-flex align-items-center flex-wrap">
                     <span class="me-4 fw-bold">
                         {TemplateHelper::getLanguageAndCountryFromCode($languageCountry)}
                     </span>
@@ -530,34 +528,34 @@
                     </span>
 
                     {* //Modal *}
-                    <div>
-                    <div class="modal fade" id="exampleModalToggle" aria-hidden="true" aria-labelledby="exampleModalToggleLabel" tabindex="-1">
-                    <div class="modal-dialog modal-lg modal-dialog-centered">
-                      <div class="modal-content">
-                        <div class="modal-header">
+                      <div>
+                        <div class="modal fade" id="exampleModalToggle" aria-hidden="true" aria-labelledby="exampleModalToggleLabel" tabindex="-1">
+                          <div class="modal-dialog modal-lg modal-dialog-centered">
+                            <div class="modal-content">
+                              <div class="modal-header">
                           <h1 class="modal-title fs-5" id="exampleModalToggleLabel">Tasks Restrictions </h1>
                           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body py-4">
-                        <div class="d-flex">
+                              </div>
+                              <div class="modal-body py-4">
+                                <div class="d-flex">
                         <form id="get_translators_count_availability" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}">
                         {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
                         </form>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
                         </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
 
                   <button class="btn btn-primary text-white mt-2 mt-md-0 restrictions" data-bs-target="#exampleModalToggle" data-bs-toggle="modal">Restrict Task</button>
 
-                    </div>
+                      </div>
                     {* endofModal *}
-                </div>
-                  
+                    </div>
+                  </div>
+
                     <div class="bg-body p-2 border-secondary mt-4">
                     <div class="table-responsive mt-4 ">
-
                     <table class="table " >
                         <thead class="fs-5">
                             <tr>
@@ -758,7 +756,7 @@
                                         </span>
                                     {/if}
                                     {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
-                                </form>
+                                    </form>
                                     </td>
 
                                     <td class="text-center">
@@ -821,7 +819,7 @@
                         </tbody>
                     </table>
                     </div>
-                </div>
+                    </div>
                 {/foreach}
             {else}
                 <div class="alert alert-warning">
