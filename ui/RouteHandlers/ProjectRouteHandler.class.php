@@ -744,11 +744,13 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
 
             if ($roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER)) {
                 if (isset($post['translators_count'])) {
+error_log('translators_count (task_id): ' . $post['translators_count']);//(**)
                     $response->getBody()->write(json_encode($taskDao->count_users_who_can_claim($post['translators_count'])));
                     return $response->withHeader('Content-Type', 'application/json');
                 }
 
                 if (isset($post['matching'])) {
+error_log('updateRequiredTaskNativeMatching(' . $post['task_id'] . ', ' . $post['matching'] . ')');//(**)
                     $taskDao->updateRequiredTaskNativeMatching($post['task_id'], $post['matching']);
                     $response->getBody()->write(json_encode(['result'=> 1]));
                     return $response->withHeader('Content-Type', 'application/json');
@@ -971,6 +973,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
 
             if ($roles & (SITE_ADMIN | PROJECT_OFFICER)) {
                 if (!empty($post['restrict_native_language_and_variant'])) {
+error_log('restrict_native_language_and_variant: ' . $post['restrict_native_language_and_variant']);//(**)
                     $task_ids = preg_split("/\,/", $post['restrict_native_language_and_variant']);
                     foreach ($task_ids as $id) {
                         $taskDao->updateRequiredTaskNativeMatching($id, 2);
@@ -979,6 +982,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                 }
 
                 if (!empty($post['restrict_native_language_only'])) {
+error_log('restrict_native_language_only: ' . $post['restrict_native_language_only']);//(**)
                     $task_ids = preg_split ("/\,/", $post['restrict_native_language_only']);
                     foreach ($task_ids as $id) {
                         $taskDao->updateRequiredTaskNativeMatching($id, 1);
@@ -987,6 +991,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                 }
 
                 if (!empty($post['restrict_native_language_none'])) {
+error_log('restrict_native_language_none: ' . $post['restrict_native_language_none']);//(**)
                     $task_ids = preg_split("/\,/", $post['restrict_native_language_none']);
                     foreach ($task_ids as $id) {
                         $taskDao->updateRequiredTaskNativeMatching($id, 0);
