@@ -552,7 +552,6 @@
                       </div>
                     {* endofModal *}
                     </div>
-                  </div>
 
                     <div class="bg-body p-2 border-secondary mt-4">
                     <div class="table-responsive mt-4 ">
@@ -820,6 +819,7 @@
                     </table>
                     </div>
                     </div>
+                  </div>
                 {/foreach}
             {else}
                 <div class="alert alert-warning">
