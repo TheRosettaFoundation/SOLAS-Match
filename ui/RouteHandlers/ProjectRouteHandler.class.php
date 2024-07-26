@@ -970,28 +970,28 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
             }
 
             if ($roles & (SITE_ADMIN | PROJECT_OFFICER)) {
-                if (!empty($post['publish_native_users'])) {
-                    $task_ids = preg_split ("/\,/", $post['publish_native_users']);
+                if (!empty($post['restrict_native_language_and_variant'])) {
+                    $task_ids = preg_split("/\,/", $post['restrict_native_language_and_variant']);
                     foreach ($task_ids as $id) {
                         $taskDao->updateRequiredTaskNativeMatching($id, 2);
                     }
-                    UserRouteHandler::flashNow('success', count($task_ids) . ' tasks now restricted to only native users .');
+                    UserRouteHandler::flashNow('success', count($task_ids) . ' tasks now restricted to linguists matching the native language and variant.');
                 }
 
-                if (!empty($post['publish_language_match'])) {
-                    $task_ids = preg_split ("/\,/", $post['publish_language_match']);
+                if (!empty($post['restrict_native_language_only'])) {
+                    $task_ids = preg_split ("/\,/", $post['restrict_native_language_only']);
                     foreach ($task_ids as $id) {
                         $taskDao->updateRequiredTaskNativeMatching($id, 1);
                     }
-                    UserRouteHandler::flashNow('success', count($task_ids) . ' tasks now restricted to users matching the language and variant.');
+                    UserRouteHandler::flashNow('success', count($task_ids) . ' tasks now restricted to linguists matching the native language (but not variant).');
                 }
 
-                if (!empty($post['publish_all'])) {
-                    $task_ids = preg_split ("/\,/", $post['publish_all']);
+                if (!empty($post['restrict_native_language_none'])) {
+                    $task_ids = preg_split("/\,/", $post['restrict_native_language_none']);
                     foreach ($task_ids as $id) {
                         $taskDao->updateRequiredTaskNativeMatching($id, 0);
                     }
-                    UserRouteHandler::flashNow('success', count($task_ids) . ' tasks now unrestricted to all ');
+                    UserRouteHandler::flashNow('success', count($task_ids) . ' tasks now have no native language restriction.');
                 }
             }
 
