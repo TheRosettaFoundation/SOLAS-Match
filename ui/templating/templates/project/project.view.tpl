@@ -590,8 +590,8 @@
                                         {assign var="status_id" value=$task->getTaskStatus()}
                                         {if $status_id == TaskStatusEnum::WAITING_FOR_PREREQUISITES}
                                             <span>{Localisation::getTranslation('common_waiting')}</span><br />
-                                             <div class="text-secondary-sublte fs-6 fw-bold ">
-                                             {if $get_payment_status_for_project[$task_id]['native_matching'] == 0}
+                                            <div class="text-secondary-sublte fs-6 fw-bold ">
+                                              {if $get_payment_status_for_project[$task_id]['native_matching'] == 0}
                                               <span> </span>
                                               {elseif $get_payment_status_for_project[$task_id]['native_matching'] == 1}
                                               <span data-bs-toggle="tooltip" data-bs-placement="top" class="mt-2"
@@ -601,13 +601,13 @@
                                               <span data-bs-toggle="tooltip" data-bs-placement="top" class="mt-2"
                                               data-bs-custom-class="custom-tooltip"
                                               data-bs-title="Matching Native Language and Country"> <img src="{urlFor name='home'}ui/img/Native lcm.svg" alt="Matching Country and Language icon" width="20%" height="20%" /> </span> 
-                                            {/if}
+                                              {/if}
                                             </div>
 
                                         {elseif $status_id == TaskStatusEnum::PENDING_CLAIM}
                                             <span>{Localisation::getTranslation('common_unclaimed')}</span>
                                             <div class="text-secondary-sublte fs-6 fw-bold">
-                                            {if $get_payment_status_for_project[$task_id]['native_matching'] == 0}
+                                              {if $get_payment_status_for_project[$task_id]['native_matching'] == 0}
                                                 <span> </span>
                                                 {elseif $get_payment_status_for_project[$task_id]['native_matching'] == 1}
                                                 <span data-bs-toggle="tooltip" data-bs-placement="top" class="mt-2"
