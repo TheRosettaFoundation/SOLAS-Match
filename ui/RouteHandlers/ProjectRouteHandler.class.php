@@ -25,12 +25,6 @@ class ProjectRouteHandler
             ->setName('project-view');
 
         $app->map(['GET', 'POST'],
-            '/project/{task_id}/get_users_count[/]',
-            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:get_users_count')
-            ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin_any')
-            ->setName('get_users_count');
-
-        $app->map(['GET', 'POST'],
             '/project/{project_id}/alter[/]',
             '\SolasMatch\UI\RouteHandlers\ProjectRouteHandler:projectAlter')
             ->add('\SolasMatch\UI\Lib\Middleware:authUserForOrgProject')
@@ -726,22 +720,6 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
 
         $sesskey = Common\Lib\UserSession::getCSRFKey();
 
-        $params = $request->getParsedBody();
-
-        if (isset($params['translators_count'])) {
-            $users_count_claim = $taskDao->count_users_who_can_claim($params['translators_count']);
-            $results = json_encode($users_count_claim);
-            $response->getBody()->write($results);
-            return $response ->withHeader('Content-Type', 'application/json');
-        }
-
-        if (isset($params['matching'])) {
-            $updateMatching = $taskDao->updateRequiredTaskNativeMatching($params['task_id'],$params['matching']);
-            $results = json_encode($updateMatching);
-            $response->getBody()->write($results);
-            return $response ->withHeader('Content-Type', 'application/json');
-        }
-
         $project = $projectDao->getProject($project_id);
         if (empty($project)) {
             UserRouteHandler::flash('error', 'That project does not exist!');
@@ -764,18 +742,24 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
             $post = $request->getParsedBody();
             if ($fail_CSRF = Common\Lib\UserSession::checkCSRFKey($post, 'projectView')) return $response->withStatus(302)->withHeader('Location', $fail_CSRF);
 
+            if ($roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER)) {
+                if (isset($post['translators_count'])) {
+                    $response->getBody()->write(json_encode($taskDao->count_users_who_can_claim($post['translators_count'])));
+                    return $response->withHeader('Content-Type', 'application/json');
+                }
+
+                if (isset($post['matching'])) {
+                    $taskDao->updateRequiredTaskNativeMatching($post['task_id'], $post['matching']);
+                    $response->getBody()->write(json_encode(['result'=> 1]));
+                    return $response->withHeader('Content-Type', 'application/json');
+                }
+            }
+
             $task = null;
             if (isset($post['task_id'])) {
                 $task = $taskDao->getTask($post['task_id']);
             } elseif (isset($post['revokeTaskId'])) {
                 $task = $taskDao->getTask($post['revokeTaskId']);
-            }
-
-            if (($roles & (SITE_ADMIN | PROJECT_OFFICER | NGO_ADMIN | NGO_PROJECT_OFFICER)) && isset($post['translators_count'])) {
-                $users_count_claim = $taskDao->count_users_who_can_claim($post['translators_count']);
-                $payload = json_encode($users_count_claim);
-                $response->getBody()->write($payload);
-                return $response ->withHeader('Content-Type', 'application/json');
             }
 
             if (($roles & (SITE_ADMIN | PROJECT_OFFICER | NGO_ADMIN | NGO_PROJECT_OFFICER)) && isset($post['publishedTask']) && isset($post['task_id'])) {
