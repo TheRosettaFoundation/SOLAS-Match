@@ -596,11 +596,11 @@
                                               {elseif $get_payment_status_for_project[$task_id]['native_matching'] == 1}
                                               <span data-bs-toggle="tooltip" data-bs-placement="top" class="mt-2"
                                               data-bs-custom-class="custom-tooltip"
-                                              data-bs-title="Matching Native Language"><img src="{urlFor name='home'}ui/img/Native lm.svg" alt="Matching Native language icon" width="20%" height="20%" /> </span> 
+                                              data-bs-title="Matching Native Language"><img src="{urlFor name='home'}ui/img/Native lm.svg" alt="Matching Native Language icon" width="20%" height="20%" /> </span> 
                                               {elseif $get_payment_status_for_project[$task_id]['native_matching'] == 2}
                                               <span data-bs-toggle="tooltip" data-bs-placement="top" class="mt-2"
                                               data-bs-custom-class="custom-tooltip"
-                                              data-bs-title="Matching Native Language and Country"> <img src="{urlFor name='home'}ui/img/Native lcm.svg" alt="Matching Country and Language icon" width="20%" height="20%" /> </span> 
+                                              data-bs-title="Matching Native Language and Variant"> <img src="{urlFor name='home'}ui/img/Native lcm.svg" alt="Matching Native Language and Variant icon" width="20%" height="20%" /> </span> 
                                               {/if}
                                             </div>
 
@@ -612,11 +612,11 @@
                                                 {elseif $get_payment_status_for_project[$task_id]['native_matching'] == 1}
                                                 <span data-bs-toggle="tooltip" data-bs-placement="top" class="mt-2"
                                                 data-bs-custom-class="custom-tooltip"
-                                                data-bs-title="Matching Native Language"> <img src="{urlFor name='home'}ui/img/Native lm.svg" alt="Matching Native language icon" width="20%" height="20%"/> </span>
+                                                data-bs-title="Matching Native Language"> <img src="{urlFor name='home'}ui/img/Native lm.svg" alt="Matching Native Language icon" width="20%" height="20%"/> </span>
                                                 {elseif $get_payment_status_for_project[$task_id]['native_matching'] == 2}
                                                 <span data-bs-toggle="tooltip" data-bs-placement="top" class="mt-2"
                                                 data-bs-custom-class="custom-tooltip"
-                                                data-bs-title="Matching Native Language and Country"><img src="{urlFor name='home'}ui/img/Native lcm.svg" alt="Matching Country and Language icon" width="20%" height="20%"/> </span>
+                                                data-bs-title="Matching Native Language and Variant"><img src="{urlFor name='home'}ui/img/Native lcm.svg" alt="Matching Native Language and Variant icon" width="20%" height="20%"/> </span>
                                               {/if}
                                             </div>
 
