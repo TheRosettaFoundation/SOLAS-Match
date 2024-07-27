@@ -742,7 +742,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
             $post = $request->getParsedBody();
             if ($fail_CSRF = Common\Lib\UserSession::checkCSRFKey($post, 'projectView')) return $response->withStatus(302)->withHeader('Location', $fail_CSRF);
 
-            if ($roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER)) {
+            if ($roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER | NGO_ADMIN | NGO_PROJECT_OFFICER)) {
                 if (isset($post['translators_count'])) {
 error_log('translators_count (task_id): ' . $post['translators_count']);//(**)
                     $response->getBody()->write(json_encode($taskDao->count_users_who_can_claim($post['translators_count'])));
@@ -750,7 +750,7 @@ error_log('translators_count (task_id): ' . $post['translators_count']);//(**)
                 }
 
                 if (isset($post['matching'])) {
-                    error_log('updateRequiredTaskNativeMatching(' . $post['task_id'] . ', ' . $post['matching'] . "): $user_id");
+                    error_log('updateRequiredTaskNativematching(' . $post['task_id'] . ', ' . $post['matching'] . "): $user_id");
                     $taskDao->updateRequiredTaskNativeMatching($post['task_id'], $post['matching']);
                     $response->getBody()->write(json_encode(['result'=> 1]));
                     return $response->withHeader('Content-Type', 'application/json');
@@ -971,7 +971,7 @@ error_log('translators_count (task_id): ' . $post['translators_count']);//(**)
                 }
             }
 
-            if ($roles & (SITE_ADMIN | PROJECT_OFFICER)) {
+            if ($roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER | NGO_ADMIN | NGO_PROJECT_OFFICER)) {
                 if (!empty($post['restrict_native_language_and_variant'])) {
                     $task_ids = preg_split("/\,/", $post['restrict_native_language_and_variant']);
                     foreach ($task_ids as $id) {
