@@ -183,7 +183,6 @@ restrictionsB.forEach((elt) => {
 
         uniqueElements.forEach((elt) => {
             let taskId = tobefetched[elt];
-
             let extendedEL = nativeMatching[taskId]
                 ? `<div class="d-flex mt-4 mb-2 align-items-center justify-content-between extended">
                 <div class="me-4 elt text-break textwrap"></div>
@@ -237,6 +236,7 @@ restrictionsB.forEach((elt) => {
 
                 updated.forEach((elt) => {
                     let updatedTask = document.getElementById(elt);
+                    console.log(updatedTask);
                     let status = updatedTask.querySelector("span:first-child");
                     if (!status) {
                         return;
