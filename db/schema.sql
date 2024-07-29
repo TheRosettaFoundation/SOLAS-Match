@@ -905,6 +905,19 @@ CREATE TABLE IF NOT EXISTS `RequiredOrgQualificationLevels` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
+INSERT INTO enforce_native_languages (language_id, country_id) VALUES
+  (1897, 77),
+  (329, 235),
+  (5716, 210),
+  (5716,244),
+  (5385, 184),
+  (6429, 234),
+  (1786, 236),
+  (5093,179),
+  (5093,33),
+  (1507, 84);
+  
+ 
 CREATE TABLE IF NOT EXISTS `RequiredTaskQualificationLevels` (
   task_id                      BIGINT UNSIGNED NOT NULL,
   required_qualification_level INT    UNSIGNED NOT NULL,
@@ -8680,7 +8693,11 @@ BEGIN
             1),
         IFNULL(
             (
+<<<<<<< HEAD
+                SELECT e.native_matching_default
+=======
                 SELECT enl.native_matching_default
+>>>>>>> native_matching
                 FROM Tasks t
                 JOIN enforce_native_languages enl ON t.`language_id-target`=enl.language_id AND t.`country_id-target`= enl.country_id
                 WHERE t.id=taskID

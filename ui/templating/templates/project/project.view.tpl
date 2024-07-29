@@ -353,6 +353,19 @@
                     <button class="menu_open btn  btn-primary text-white d-flex align-items-center" type="button" >
                    <span class="me-1">...</span><i class="fa-solid fa-caret-down fa-xs"></i>
                  </button>
+<<<<<<< HEAD
+
+         </div>
+
+        {/if}
+
+
+     </br>
+     </br>
+
+        <div class="menu_list d-none bg-body p-4 mt-4 mb-4 rounded-2">
+ 
+=======
          </div>
         {/if}
 
@@ -360,6 +373,7 @@
      <br />
 
         <div class="menu_list d-none bg-body p-4 mt-4 mb-4 rounded-2">
+>>>>>>> native_matching
         <div class="">
         <div class="d-flex flex-wrap mb-4">
         {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $NGO_ADMIN + $NGO_PROJECT_OFFICER)}
@@ -371,6 +385,11 @@
                 {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
             </form>
 
+<<<<<<< HEAD
+       
+
+=======
+>>>>>>> native_matching
             <form id="unpublish_selected_tasks" class="bg-light-subtle d-flex flex-column justify-content-center form_action me-2  mb-4 mb-lg-0 mb-sm-2 mb-md-0" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
                 <a class=" d-flex text-muted fs-6 p-1 text-decoration-none" onclick="$('#unpublish_selected_tasks').submit();" >
                     <i class="fa-solid fa-xmark me-2" ></i> <span>Unpublish Selected Tasks</span>
@@ -380,6 +399,10 @@
             </form>
         {/if}
 
+<<<<<<< HEAD
+
+=======
+>>>>>>> native_matching
         {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER)}
             <form id="tasks_as_paid" class="bg-light-subtle d-flex flex-column  justify-content-center form_action me-2  mb-4 mb-lg-0 mb-sm-2 mb-md-0" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
                 <a class="d-flex text-muted p-1 fs-6 text-decoration-none" onclick="$('#tasks_as_paid').submit();" >
@@ -397,8 +420,17 @@
                 <input type="hidden" name="tasks_as_unpaid" value="" />
                 {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
             </form>
+
+      
+      {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
+  </form>
         {/if}
         </div>
+<<<<<<< HEAD
+        
+        <div class="d-flex mb-4 flex-wrap">
+=======
+>>>>>>> native_matching
 
         <div class="d-flex mb-4 flex-wrap">
         {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER) || in_array($project->getOrganisationId(), $ORG_EXCEPTIONS) && $roles & ($NGO_ADMIN + $NGO_PROJECT_OFFICER)}
@@ -433,7 +465,11 @@
                 <input type="hidden" name="uncomplete_selected_tasks" value="" />
                 {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
             </form>
+<<<<<<< HEAD
+            <br>
+=======
             <br />
+>>>>>>> native_matching
              
             <div class="bg-light-subtle d-flex flex-column justify-content-center form_action me-2  mb-4 mb-lg-0">
             <a class=" d-flex p-1 text-muted fs-6 text-decoration-none open-cancel-modal p-1" data-bs-toggle="modal" data-id="1" href="#cancelmodal" role="button" data-cancelled="1">
@@ -454,6 +490,10 @@
         <div class="d-flex mt-4 flex-wrap">
         {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER)}
             <div class="bg-light-subtle d-flex flex-column justify-content-center form_action me-2  mb-4 mb-lg-0">
+<<<<<<< HEAD
+
+=======
+>>>>>>> native_matching
             <a class="d-flex p-1 text-muted fs-6 text-decoration-none open-ponum-modal"  data-bs-toggle="modal" href="#ponummodal" role="button">
             <i class="fa fa-credit-card me-2"  aria-hidden="true"></i> <span> Set Purchase Order # </span>
             </a>
@@ -484,6 +524,18 @@
                 {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
             </form>
         {/if}
+<<<<<<< HEAD
+                    
+        </div>
+        </div>
+
+        
+</div>
+</br>
+</br>
+
+<hr></hr>
+=======
         </div>
         </div>
 </div>
@@ -491,6 +543,7 @@
 <br />
 
 <hr />
+>>>>>>> native_matching
   
     </div>
 
@@ -510,8 +563,13 @@
         <div>
             {if isset($projectTasks) && count($projectTasks) > 0}
                 {foreach from=$taskLanguageMap key=languageCountry item=tasks}
+<<<<<<< HEAD
+                     <div class="mt-4">
+                <div class="d-flex align-items-center flex-wrap">
+=======
                   <div class="mt-4">
                     <div class="d-flex align-items-center flex-wrap">
+>>>>>>> native_matching
                     <span class="me-4 fw-bold">
                         {TemplateHelper::getLanguageAndCountryFromCode($languageCountry)}
                     </span>
@@ -526,6 +584,47 @@
                             <option value="delesect_all_{$languageCountry|replace:',':'_'}">Deselect all</option>
                         </select>
                     </span>
+<<<<<<< HEAD
+
+                    {* //Modal *}
+                    <div>
+                    <div class="modal fade" id="exampleModalToggle" aria-hidden="true" aria-labelledby="exampleModalToggleLabel" tabindex="-1">
+                    <div class="modal-dialog modal-lg modal-dialog-centered">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h1 class="modal-title fs-5" id="exampleModalToggleLabel">Tasks Restrictions </h1>
+                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body py-4">
+                        <div class="d-flex">
+                        <form id="get_translators_count_availability" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}">
+
+                       
+
+                        {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
+                           
+                        
+                        </form>
+
+                        </div>
+   
+                        </div>
+                  
+                      </div>
+                    </div>
+                  </div>
+
+                  <button class="btn btn-primary text-white mt-2 mt-md-0 restrictions" data-bs-target="#exampleModalToggle" data-bs-toggle="modal">Restrict Task</button>
+ 
+                    </div>
+                    {* endofModal *}
+                </div>                             
+                  
+                    <div class="bg-body p-2 border-secondary mt-4">
+         
+                    <div class="table-responsive mt-4 ">
+=======
+>>>>>>> native_matching
 
                     {* //Modal *}
                       <div>
@@ -560,8 +659,13 @@
                             <tr>
                                  <th><input type="checkbox" name="select_all_tasks" data-lang="{$languageCountry|replace:',':'_'}" /></th>
                                  <th class="text-center">{Localisation::getTranslation('common_title')}</th>
+<<<<<<< HEAD
+                                 <th class="text-center">{Localisation::getTranslation('common_status')}</th>       
+                                 <th class="text-center">{Localisation::getTranslation('common_type')}</th> 
+=======
                                  <th class="text-center">{Localisation::getTranslation('common_status')}</th>
                                  <th class="text-center">{Localisation::getTranslation('common_type')}</th>
+>>>>>>> native_matching
                                 {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER)}
                                  <th class="text-center">Paid?</th>
                                 {/if}
@@ -588,13 +692,33 @@
                                     <td id={$task->getId()} class="text-center">
                                         {assign var="status_id" value=$task->getTaskStatus()}
                                         {if $status_id == TaskStatusEnum::WAITING_FOR_PREREQUISITES}
+<<<<<<< HEAD
+                                            <span>{Localisation::getTranslation('common_waiting')}</span> <br>
+                                             <div class="text-secondary-sublte fs-6 fw-bold ">
+                                             {if $get_payment_status_for_project[$task_id]['native_matching'] == 0} 
+=======
                                             <span>{Localisation::getTranslation('common_waiting')}</span><br />
                                             <div class="text-secondary-sublte fs-6 fw-bold ">
                                               {if $get_payment_status_for_project[$task_id]['native_matching'] == 0}
+>>>>>>> native_matching
                                               <span> </span>
                                               {elseif $get_payment_status_for_project[$task_id]['native_matching'] == 1}
                                               <span data-bs-toggle="tooltip" data-bs-placement="top" class="mt-2"
                                               data-bs-custom-class="custom-tooltip"
+<<<<<<< HEAD
+                                              data-bs-title="Matching Native Language"><img src="{urlFor name='home'}ui/img/Native lm.svg" alt="Matching Native language icon" width="20%" height="20%" /> </span> 
+                                              {elseif $get_payment_status_for_project[$task_id]['native_matching'] == 2}
+                                              <span data-bs-toggle="tooltip" data-bs-placement="top" class="mt-2"
+                                              data-bs-custom-class="custom-tooltip"
+                                              data-bs-title="Matching Native Language and Country"> <img src="{urlFor name='home'}ui/img/Native lcm.svg" alt="Matching Country and Language icon" width="20%" height="20%" /> </span> 
+                                            {/if}
+                                            </div>
+
+                                        {elseif $status_id == TaskStatusEnum::PENDING_CLAIM}
+                                            <span>{Localisation::getTranslation('common_unclaimed')}</span> 
+                                            <div class="text-secondary-sublte fs-6 fw-bold">
+                                            {if $get_payment_status_for_project[$task_id]['native_matching'] == 0} 
+=======
                                               data-bs-title="Matching Native Language"><img src="{urlFor name='home'}ui/img/Native lm.svg" alt="Matching Native Language icon" width="20%" height="20%" /> </span> 
                                               {elseif $get_payment_status_for_project[$task_id]['native_matching'] == 2}
                                               <span data-bs-toggle="tooltip" data-bs-placement="top" class="mt-2"
@@ -607,10 +731,21 @@
                                             <span>{Localisation::getTranslation('common_unclaimed')}</span>
                                             <div class="text-secondary-sublte fs-6 fw-bold">
                                               {if $get_payment_status_for_project[$task_id]['native_matching'] == 0}
+>>>>>>> native_matching
                                                 <span> </span>
                                                 {elseif $get_payment_status_for_project[$task_id]['native_matching'] == 1}
                                                 <span data-bs-toggle="tooltip" data-bs-placement="top" class="mt-2"
                                                 data-bs-custom-class="custom-tooltip"
+<<<<<<< HEAD
+                                                data-bs-title="Matching Native Language"> <img src="{urlFor name='home'}ui/img/Native lm.svg" alt="Matching Native language icon" width="20%" height="20%"/> </span> 
+                                                {elseif $get_payment_status_for_project[$task_id]['native_matching'] == 2}
+                                                <span data-bs-toggle="tooltip" data-bs-placement="top" class="mt-2"
+                                                data-bs-custom-class="custom-tooltip"
+                                                data-bs-title="Matching Native Language and Country"><img src="{urlFor name='home'}ui/img/Native lcm.svg" alt="Matching Country and Language icon" width="20%" height="20%"/> </span> 
+                                              {/if}
+                                            </div>
+                                           
+=======
                                                 data-bs-title="Matching Native Language"> <img src="{urlFor name='home'}ui/img/Native lm.svg" alt="Matching Native Language icon" width="20%" height="20%"/> </span>
                                                 {elseif $get_payment_status_for_project[$task_id]['native_matching'] == 2}
                                                 <span data-bs-toggle="tooltip" data-bs-placement="top" class="mt-2"
@@ -619,6 +754,7 @@
                                               {/if}
                                             </div>
 
+>>>>>>> native_matching
                                         {elseif $status_id == TaskStatusEnum::IN_PROGRESS}
                                           {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER + $NGO_ADMIN + $NGO_PROJECT_OFFICER)}
                                             <a href="{urlFor name="task-org-feedback" options="task_id.$task_id"}">
@@ -691,7 +827,11 @@
                                         {if $get_payment_status_for_project[$task_id]['total_words']}<br />{round($get_payment_status_for_project[$task_id]['total_words'], 2)} {$get_payment_status_for_project[$task_id]['pricing_and_recognition_unit_text_hours']}{/if}
                                     </td>
                                     {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER)}
+<<<<<<< HEAD
+                                    <td class="text-center">                                    
+=======
                                     <td class="text-center">
+>>>>>>> native_matching
                                      {if $get_paid_for_project[$task_id] == 1}
                                          {if $get_payment_status_for_project[$task_id]['payment_status'] == 'Unsettled'}
                                           <span data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Unsettled">PO#: {$get_payment_status_for_project[$task_id]['purchase_order']} <i class="fa fa-solid fa-x" ></i> </span>

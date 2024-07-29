@@ -25,6 +25,12 @@ class ProjectRouteHandler
             ->setName('project-view');
 
         $app->map(['GET', 'POST'],
+        '/project/{task_id}/get_users_count[/]',
+        '\SolasMatch\UI\RouteHandlers\UserRouteHandler:get_users_count')
+        ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin_or_COMMUNITY')
+        ->setName('get_users_count');
+
+        $app->map(['GET', 'POST'],
             '/project/{project_id}/alter[/]',
             '\SolasMatch\UI\RouteHandlers\ProjectRouteHandler:projectAlter')
             ->add('\SolasMatch\UI\Lib\Middleware:authUserForOrgProject')
@@ -728,6 +734,8 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
         return [$translation_level, $revision_level];
     }
 
+
+
     public function projectView(Request $request, Response $response, $args)
     {
         global $app, $template_data;
@@ -783,6 +791,16 @@ error_log('translators_count (task_id): ' . $post['translators_count']);//(**)
                 $task = $taskDao->getTask($post['task_id']);
             } elseif (isset($post['revokeTaskId'])) {
                 $task = $taskDao->getTask($post['revokeTaskId']);
+            }
+
+
+            if (($roles & (SITE_ADMIN | PROJECT_OFFICER | NGO_ADMIN | NGO_PROJECT_OFFICER)) && isset($post['translators_count'])) {
+             
+                    $users_count_claim = $taskDao->count_users_who_can_claim($post['translators_count']);
+                    $payload = json_encode($users_count_claim);
+                    $response->getBody()->write($payload);
+                    return $response ->withHeader('Content-Type','application/json') ;
+           
             }
 
             if (($roles & (SITE_ADMIN | PROJECT_OFFICER | NGO_ADMIN | NGO_PROJECT_OFFICER)) && isset($post['publishedTask']) && isset($post['task_id'])) {
@@ -2743,8 +2761,11 @@ error_log("get_queue_asana_projects: $projectId");//(**)
             }
 
             $projectDao->delete_not_accepted_user();
+            $taskDao->update_native_matching_phase_1();
+            $taskDao->update_native_matching_phase_2();
+           
 
-            $taskDao->update_native_matching();
+    
 
             flock($fp_for_lock, LOCK_UN); // Release the lock
         }

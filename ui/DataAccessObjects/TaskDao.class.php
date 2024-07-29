@@ -340,6 +340,16 @@ error_log("createTaskDirectly: $args");
         return $ret;
     }
 
+    public function count_users_who_can_claim($task_id)
+    {
+        $ret = [];
+        $result = LibAPI\PDOWrapper::call('count_users_who_can_claim',LibAPI\PDOWrapper::cleanse($task_id));
+        if (!empty($result)) {
+            $ret = $result;
+        }
+        return $ret;
+    }
+
     public function setRestrictedTask($task_id)
     {
         LibAPI\PDOWrapper::call('setRestrictedTask', LibAPI\PDOWrapper::cleanse($task_id));
@@ -632,10 +642,14 @@ error_log("createTaskDirectly: $args");
     }
 
     public function updateRequiredTaskNativeMatching($task_id, $native_matching)
-    {
-        LibAPI\PDOWrapper::call('updateRequiredTaskNativeMatching',
+    {  
+        
+        $result = LibAPI\PDOWrapper::call('updateRequiredTaskNativeMatching',
             LibAPI\PDOWrapper::cleanse($task_id) . ',' .
             LibAPI\PDOWrapper::cleanse($native_matching));
+    
+        return $task_id;
+        
     }
 
     public function getRequiredTaskQualificationLevel($task_id)
