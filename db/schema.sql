@@ -8693,11 +8693,7 @@ BEGIN
             1),
         IFNULL(
             (
-<<<<<<< HEAD
-                SELECT e.native_matching_default
-=======
                 SELECT enl.native_matching_default
->>>>>>> native_matching
                 FROM Tasks t
                 JOIN enforce_native_languages enl ON t.`language_id-target`=enl.language_id AND t.`country_id-target`= enl.country_id
                 WHERE t.id=taskID

@@ -2733,8 +2733,7 @@ error_log("get_queue_asana_projects: $projectId");//(**)
             }
 
             $projectDao->delete_not_accepted_user();
-            $taskDao->update_native_matching_phase_1();
-            $taskDao->update_native_matching_phase_2();
+            $taskDao->update_native_matching()
            
 
     
