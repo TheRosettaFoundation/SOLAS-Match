@@ -333,16 +333,6 @@ error_log("createTaskDirectly: $args");
     public function count_users_who_can_claim($task_id)
     {
         $ret = [];
-        $result = LibAPI\PDOWrapper::call('count_users_who_can_claim', LibAPI\PDOWrapper::cleanse($task_id));
-        if (!empty($result)) {
-            $ret = $result;
-        }
-        return $ret;
-    }
-
-    public function count_users_who_can_claim($task_id)
-    {
-        $ret = [];
         $result = LibAPI\PDOWrapper::call('count_users_who_can_claim',LibAPI\PDOWrapper::cleanse($task_id));
         if (!empty($result)) {
             $ret = $result;
