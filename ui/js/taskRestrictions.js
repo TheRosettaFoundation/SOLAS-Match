@@ -187,9 +187,9 @@ restrictionsB.forEach((elt) => {
             let extendedEL = nativeMatching[taskId]
                 ? `<div class="d-flex mt-4 mb-2 align-items-center justify-content-between extended">
                 <div class="me-4 elt text-break textwrap"></div>
-
+        
                 <select class="form-select ms-2 w-75 selectedId" aria-label="Default select example">
-                <option selected value="no"> Select Restrictions</option>
+                <option selected value="no"> Select Restrictions</option> 
                     <option value="0"> </br>No restriction<span class="nocm">, Matching CMs : ${nativeMatching[taskId].native_matching_0}</span> </br>
                 <span class="nosm">, Successful CMs : ${nativeMatching[taskId].native_matching_active_0} </span> </option>
                     <option value="1">Matching Native Language<span class="mlCM">, Matching CMs : ${nativeMatching[taskId].native_matching_1}</span>
@@ -201,9 +201,9 @@ restrictionsB.forEach((elt) => {
                 </div>`
                 : `<div class="d-flex mt-4 mb-2 align-items-center justify-content-between extended">
                 <div class="me-4 elt text-break textwrap"></div>
-
+        
                 <select class="form-select ms-2 w-75 selectedId" aria-label="Default select example" disabled">
-                <option selected value="no" disabled> Select Restrictions</option>
+                <option selected value="no" disabled> Select Restrictions</option> 
                     <option value="0" disabled> </br>No restriction<span class="nocm">,Matching CMs : 0</span> </br>
                 <span class="nosm">,Successful CMs : 0 </span> </option>
                     <option value="1" disabled>Matching Native Language<span class="mlCM">,Matching CMs : 0</span>
@@ -273,11 +273,11 @@ restrictionsB.forEach((elt) => {
                                         data-bs-toggle="tooltip"
                                         data-bs-placement="top"
                                         data-bs-custom-class="custom-tooltip"
-                                        data-bs-title="Matching Native Language and Variant"
+                                        data-bs-title="Matching Native Language and Country"
                                     >
                                         <img
                                             src="/ui/img/Native lcm.svg"
-                                            alt="Matching Native Language and Variant icon"
+                                            alt="Matching Country and Language icon"
                                             width="20%"
                                             height="20%"
                                         />
