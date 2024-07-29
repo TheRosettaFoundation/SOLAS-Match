@@ -237,7 +237,9 @@ restrictionsB.forEach((elt) => {
                 updated.forEach((elt) => {
                     let updatedTask = document.getElementById(elt);
                     console.log(updatedTask);
-                    let status = updatedTask.querySelector("span:first-child");
+                    let status = updatedTask
+                        ? updatedTask.querySelector("span:first-child")
+                        : null;
                     if (!status) {
                         return;
                     }
