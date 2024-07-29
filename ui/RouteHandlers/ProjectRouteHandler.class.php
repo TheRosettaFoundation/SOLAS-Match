@@ -780,8 +780,8 @@ error_log('translators_count (task_id): ' . $post['translators_count']);//(**)
 
                 if (isset($post['matching'])) {
                     error_log('updateRequiredTaskNativematching(' . $post['task_id'] . ', ' . $post['matching'] . "): $user_id");
-                    $taskDao->updateRequiredTaskNativeMatching($post['task_id'], $post['matching']);
-                    $response->getBody()->write(json_encode($taskDao));
+                    // $taskDao->updateRequiredTaskNativeMatching($post['task_id'], $post['matching']);
+                    $response->getBody()->write(json_encode($taskDao->updateRequiredTaskNativeMatching($post['task_id'], $post['matching'])));
                     return $response->withHeader('Content-Type', 'application/json');
                 }
             }
