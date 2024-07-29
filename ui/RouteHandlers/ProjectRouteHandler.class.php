@@ -992,34 +992,34 @@ error_log('translators_count (task_id): ' . $post['translators_count']);//(**)
                 }
             }
 
-            if ($roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER | NGO_ADMIN | NGO_PROJECT_OFFICER)) {
-                if (!empty($post['restrict_native_language_and_variant'])) {
-                    $task_ids = preg_split("/\,/", $post['restrict_native_language_and_variant']);
-                    foreach ($task_ids as $id) {
-                        $taskDao->updateRequiredTaskNativeMatching($id, 2);
-                        error_log("updateRequiredTaskNativeMatching($id, 2): $user_id");
-                    }
-                    UserRouteHandler::flashNow('success', count($task_ids) . ' tasks now restricted to linguists matching the native language and variant.');
-                }
+            // if ($roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER | NGO_ADMIN | NGO_PROJECT_OFFICER)) {
+            //     if (!empty($post['restrict_native_language_and_variant'])) {
+            //         $task_ids = preg_split("/\,/", $post['restrict_native_language_and_variant']);
+            //         foreach ($task_ids as $id) {
+            //             $taskDao->updateRequiredTaskNativeMatching($id, 2);
+            //             error_log("updateRequiredTaskNativeMatching($id, 2): $user_id");
+            //         }
+            //         UserRouteHandler::flashNow('success', count($task_ids) . ' tasks now restricted to linguists matching the native language and variant.');
+            //     }
 
-                if (!empty($post['restrict_native_language_only'])) {
-                    $task_ids = preg_split ("/\,/", $post['restrict_native_language_only']);
-                    foreach ($task_ids as $id) {
-                        $taskDao->updateRequiredTaskNativeMatching($id, 1);
-                        error_log("updateRequiredTaskNativeMatching($id, 1): $user_id");
-                    }
-                    UserRouteHandler::flashNow('success', count($task_ids) . ' tasks now restricted to linguists matching the native language (but not variant).');
-                }
+            //     if (!empty($post['restrict_native_language_only'])) {
+            //         $task_ids = preg_split ("/\,/", $post['restrict_native_language_only']);
+            //         foreach ($task_ids as $id) {
+            //             $taskDao->updateRequiredTaskNativeMatching($id, 1);
+            //             error_log("updateRequiredTaskNativeMatching($id, 1): $user_id");
+            //         }
+            //         UserRouteHandler::flashNow('success', count($task_ids) . ' tasks now restricted to linguists matching the native language (but not variant).');
+            //     }
 
-                if (!empty($post['restrict_native_language_none'])) {
-                    $task_ids = preg_split("/\,/", $post['restrict_native_language_none']);
-                    foreach ($task_ids as $id) {
-                        $taskDao->updateRequiredTaskNativeMatching($id, 0);
-                        error_log("updateRequiredTaskNativeMatching($id, 0): $user_id");
-                    }
-                    UserRouteHandler::flashNow('success', count($task_ids) . ' tasks now have no native language restriction.');
-                }
-            }
+            //     if (!empty($post['restrict_native_language_none'])) {
+            //         $task_ids = preg_split("/\,/", $post['restrict_native_language_none']);
+            //         foreach ($task_ids as $id) {
+            //             $taskDao->updateRequiredTaskNativeMatching($id, 0);
+            //             error_log("updateRequiredTaskNativeMatching($id, 0): $user_id");
+            //         }
+            //         UserRouteHandler::flashNow('success', count($task_ids) . ' tasks now have no native language restriction.');
+            //     }
+            // }
 
             if ($roles & (SITE_ADMIN | PROJECT_OFFICER) || in_array($project->getOrganisationId(), ORG_EXCEPTIONS) && $roles & (NGO_ADMIN + NGO_PROJECT_OFFICER)) {
                 if (!empty($post['status_as_unclaimed'])) {
