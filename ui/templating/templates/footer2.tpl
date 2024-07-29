@@ -232,71 +232,44 @@
 
                     }
                     
-                    if(buttonBadge){
+                    if (buttonBadge) {
 
                     buttonBadge.addEventListener("click" , async()=>{
                           let linkText = badgeCopy.href ;
                         await navigator.clipboard.writeText(linkText).then(()=>{
-                          
                             buttonBadge.textContent = "Copied"
                         })
                     })
-
-
-
                     }
 
-                
-                    
-                    </script>
-
-                  
-                
-                   
-
-                      <script>
-
                             // Script for setting active navLink 
-
                             const currentPath = window.location.pathname;
                             const navLinks = document.querySelectorAll(".nav-link");
                             const currentOrigin = window.location.origin;
  
                             navLinks.forEach(link => {
-
                                 let href = link.href ;
-                                
-                                if(link.pathname === currentPath && href.includes(currentOrigin)){
+                                if (link.pathname === currentPath && href.includes(currentOrigin)) {
                                     link.classList.add("activeLink");
-                                   
-                                }else{
+                                } else {
                                     link.classList.remove("activeLink");
                                 }
                             })
 
-                            
-                     </script>
-
-                     <script>
-
                         let menu = document.querySelector(".menu_open");
                         let menuList = document.querySelector(".menu_list");
-                        if(menu&&menuList){
+                        if (menu && menuList){
                             menu.addEventListener("click", function () {
                             menuList.classList.toggle("d-none");
                         });
-
                         }
+<<<<<<< HEAD
 
                         // code for 
 
+=======
+>>>>>>> native_matching
                      </script>
-
-
-                     
-
    </div>               
  </body>                
-                    
-                    
 </html> 

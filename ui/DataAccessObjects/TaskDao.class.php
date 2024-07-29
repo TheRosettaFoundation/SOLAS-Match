@@ -324,22 +324,18 @@ error_log("createTaskDirectly: $args");
         return $ret;
     }
 
-    public function update_native_matching_phase_1()
+    public function update_native_matching()
     {
-        $ret = 0;
-        $result = LibAPI\PDOWrapper::call('update_native_matching_phase_1',LibAPI\PDOWrapper::cleanseNull(''));
-        if (!empty($result)) {
-            $ret = 1;
-        }
-        return $ret;
+        LibAPI\PDOWrapper::call('update_native_matching_phase_1', '');
+        LibAPI\PDOWrapper::call('update_native_matching_phase_2', '');
     }
 
-    public function update_native_matching_phase_2()
+    public function count_users_who_can_claim($task_id)
     {
-        $ret = 0;
-        $result = LibAPI\PDOWrapper::call('update_native_matching_phase_2',LibAPI\PDOWrapper::cleanseNull(''));
+        $ret = [];
+        $result = LibAPI\PDOWrapper::call('count_users_who_can_claim', LibAPI\PDOWrapper::cleanse($task_id));
         if (!empty($result)) {
-            $ret = 1;
+            $ret = $result;
         }
         return $ret;
     }
@@ -421,12 +417,6 @@ error_log("createTaskDirectly: $args");
     public function getTaskChunk($task_id)
     {
         $result = LibAPI\PDOWrapper::call('getTaskChunk', LibAPI\PDOWrapper::cleanse($task_id));
-        return $result;
-    }
-
-    public function getTaskSubChunks($matecat_id_job)
-    {
-        $result = LibAPI\PDOWrapper::call('getTaskSubChunks', LibAPI\PDOWrapper::cleanse($matecat_id_job));
         return $result;
     }
 

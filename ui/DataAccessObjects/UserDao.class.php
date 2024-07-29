@@ -1511,20 +1511,6 @@ error_log("claimTask_shell($userId, $taskId)");
         return $result;
     }
 
-    public function users_new()
-    {
-        $result = LibAPI\PDOWrapper::call('users_new', '');
-        if (empty($result)) $result = [];
-        return $result;
-    }
-
-    public function users_tracked()
-    {
-        $result = LibAPI\PDOWrapper::call('users_tracked', '');
-        if (empty($result)) $result = [];
-        return $result;
-    }
-
     public function saveUserFile($user_id, $cert_id, $note, $filename, $file)
     {
        $destination = Common\Lib\Settings::get('files.upload_path') . "certs/$user_id/$cert_id";

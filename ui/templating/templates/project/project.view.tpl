@@ -1,18 +1,11 @@
 {include file="new_header.tpl"}
 <!-- Editor Hint: ¿áéíóú -->
 
-
 <div class="container-fluid ">
-
- 
- <div class=" container py-4" >
-
+    <div class=" container py-4" >
                     <a  class="text-decoration-none text-body fw-bold"  href="/"> Home </a> <i class="fa-solid fa-chevron-right mx-1"> </i>
-        
                     <a  href="#" class="text-primaryDark fw-bold text-decoration-none"> Project </a>       
-                           
-               
-                </div>
+    </div>
 
 
 <section class="bg-light-subtle"> 
@@ -259,52 +252,51 @@
             <th >{Localisation::getTranslation('common_project_image')}</th>
             </thead>
             <tbody class="fs-4">
-                <tr class="p-4" >
-
-                    <td >
-                    	{if $project->getImageUploaded()}
-                          {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER)}
-                              <div>
-                            
-	                        	<img class="mb-4" src="{urlFor name="download-project-image" options="project_id.$project_id"}?{$imgCacheToken}"/>
-		                        {if !$project->getImageApproved()}
-		                        	<form id="projectImageApproveForm" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}">
-		                       			<input type="hidden" name="imageApprove" value="0" />
-		                        		<a class="btngray" onclick="$('#projectImageApproveForm').submit();">
-		            					{* <img src="{urlFor name='home'}ui/img/check.svg" class="approve" /> *}
-                                        <i class="fa-regular fa-circle-check fa-lg me-2"></i>
-                                         {Localisation::getTranslation('project_view_image_approve')}</a>
-                            {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
-		            				</form>
-                             </div>
-
-		            			{else}   
-		            				 <form id="projectImageApproveForm" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}">
-		            				 	<input type="hidden" name="imageApprove" value="1" />
-		                        		<a class=" btngray" onclick="$('#projectImageApproveForm').submit();"">
-                                        <i class="fa-regular fa-circle-xmark fa-lg me-2"></i>
-                                        {Localisation::getTranslation('project_view_image_disapprove')}</a>
-                             {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
-		            				 </form>
-		                        {/if}
-		                    {else}
-		                    	{if $project->getImageApproved()}
-		                    		<img class="project-image" src="{urlFor name="download-project-image" options="project_id.$project_id"}?{$imgCacheToken}"/>
-		                    	{else}
-			                    	{Localisation::getTranslation('common_project_image_not_approved')}
-		                    	{/if}
-		                    {/if}
-		                {else}
-		                	{Localisation::getTranslation('common_project_image_not_uploaded')}
-                    	{/if}
+                <tr class="p-4">
+                    <td>
+                        {if $project->getImageUploaded()}
+                            {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER)}
+                                <div>
+                                    <img class="mb-4" src="{urlFor name="download-project-image" options="project_id.$project_id"}?{$imgCacheToken}"/>
+                                    {if !$project->getImageApproved()}
+                                        <form id="projectImageApproveForm" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}">
+                                            <input type="hidden" name="imageApprove" value="0" />
+                                            <a class="btngray" onclick="$('#projectImageApproveForm').submit();">
+                                                {* <img src="{urlFor name='home'}ui/img/check.svg" class="approve" /> *}
+                                                <i class="fa-regular fa-circle-check fa-lg me-2"></i>
+                                                {Localisation::getTranslation('project_view_image_approve')}
+                                            </a>
+                                            {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
+                                        </form>
+                                    {else}
+                                        <form id="projectImageApproveForm" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}">
+                                            <input type="hidden" name="imageApprove" value="1" />
+                                            <a class=" btngray" onclick="$('#projectImageApproveForm').submit();"">
+                                                <i class="fa-regular fa-circle-xmark fa-lg me-2"></i>
+                                                {Localisation::getTranslation('project_view_image_disapprove')}
+                                            </a>
+                                            {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
+                                        </form>
+                                    {/if}
+                                </div>
+                            {else}
+                                {if $project->getImageApproved()}
+                                    <img class="project-image" src="{urlFor name="download-project-image" options="project_id.$project_id"}?{$imgCacheToken}"/>
+                                {else}
+                                    {Localisation::getTranslation('common_project_image_not_approved')}
+                                {/if}
+                            {/if}
+                        {else}
+                            {Localisation::getTranslation('common_project_image_not_uploaded')}
+                        {/if}
                     </td>
                 </tr>
                 <tr>
-                    <td >
+                    <td>
                         <strong>{Localisation::getTranslation('common_tags')}</strong>
                     </td>
                 </tr>
-                <tr>                
+                <tr>
                     <td class="nav nav-list unstyled" style="padding-left: 0px; padding-right: 0px;" colspan="2">
                     {if isset($project_tags) && is_array($project_tags)}
                         {foreach $project_tags as $ptag}
@@ -361,6 +353,7 @@
                     <button class="menu_open btn  btn-primary text-white d-flex align-items-center" type="button" >
                    <span class="me-1">...</span><i class="fa-solid fa-caret-down fa-xs"></i>
                  </button>
+<<<<<<< HEAD
 
          </div>
 
@@ -372,6 +365,15 @@
 
         <div class="menu_list d-none bg-body p-4 mt-4 mb-4 rounded-2">
  
+=======
+         </div>
+        {/if}
+
+     <br />
+     <br />
+
+        <div class="menu_list d-none bg-body p-4 mt-4 mb-4 rounded-2">
+>>>>>>> native_matching
         <div class="">
         <div class="d-flex flex-wrap mb-4">
         {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $NGO_ADMIN + $NGO_PROJECT_OFFICER)}
@@ -383,8 +385,11 @@
                 {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
             </form>
 
+<<<<<<< HEAD
        
 
+=======
+>>>>>>> native_matching
             <form id="unpublish_selected_tasks" class="bg-light-subtle d-flex flex-column justify-content-center form_action me-2  mb-4 mb-lg-0 mb-sm-2 mb-md-0" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
                 <a class=" d-flex text-muted fs-6 p-1 text-decoration-none" onclick="$('#unpublish_selected_tasks').submit();" >
                     <i class="fa-solid fa-xmark me-2" ></i> <span>Unpublish Selected Tasks</span>
@@ -394,7 +399,10 @@
             </form>
         {/if}
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> native_matching
         {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER)}
             <form id="tasks_as_paid" class="bg-light-subtle d-flex flex-column  justify-content-center form_action me-2  mb-4 mb-lg-0 mb-sm-2 mb-md-0" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
                 <a class="d-flex text-muted p-1 fs-6 text-decoration-none" onclick="$('#tasks_as_paid').submit();" >
@@ -418,9 +426,13 @@
   </form>
         {/if}
         </div>
+<<<<<<< HEAD
         
         <div class="d-flex mb-4 flex-wrap">
+=======
+>>>>>>> native_matching
 
+        <div class="d-flex mb-4 flex-wrap">
         {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER) || in_array($project->getOrganisationId(), $ORG_EXCEPTIONS) && $roles & ($NGO_ADMIN + $NGO_PROJECT_OFFICER)}
             <form id="status_as_unclaimed" class="bg-light-subtle d-flex flex-column justify-content-center form_action me-2  mb-4 mb-lg-0" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
                 <a class="d-flex text-muted p-1 fs-6 text-decoration-none" onclick="$('#status_as_unclaimed').submit();" >
@@ -453,7 +465,11 @@
                 <input type="hidden" name="uncomplete_selected_tasks" value="" />
                 {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
             </form>
+<<<<<<< HEAD
             <br>
+=======
+            <br />
+>>>>>>> native_matching
              
             <div class="bg-light-subtle d-flex flex-column justify-content-center form_action me-2  mb-4 mb-lg-0">
             <a class=" d-flex p-1 text-muted fs-6 text-decoration-none open-cancel-modal p-1" data-bs-toggle="modal" data-id="1" href="#cancelmodal" role="button" data-cancelled="1">
@@ -474,11 +490,13 @@
         <div class="d-flex mt-4 flex-wrap">
         {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER)}
             <div class="bg-light-subtle d-flex flex-column justify-content-center form_action me-2  mb-4 mb-lg-0">
+<<<<<<< HEAD
 
+=======
+>>>>>>> native_matching
             <a class="d-flex p-1 text-muted fs-6 text-decoration-none open-ponum-modal"  data-bs-toggle="modal" href="#ponummodal" role="button">
             <i class="fa fa-credit-card me-2"  aria-hidden="true"></i> <span> Set Purchase Order # </span>
             </a>
-            
             </div>
 
             <form id="ready_payment" class="bg-light-subtle d-flex flex-column justify-content-center form_action me-2  mb-4 mb-lg-0" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" style="margin-bottom: 2px;">
@@ -506,6 +524,7 @@
                 {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
             </form>
         {/if}
+<<<<<<< HEAD
                     
         </div>
         </div>
@@ -516,6 +535,15 @@
 </br>
 
 <hr></hr>
+=======
+        </div>
+        </div>
+</div>
+<br />
+<br />
+
+<hr />
+>>>>>>> native_matching
   
     </div>
 
@@ -531,13 +559,17 @@
         </div>
     {/if}      
 
-
         <div class="mt-4">
         <div>
             {if isset($projectTasks) && count($projectTasks) > 0}
                 {foreach from=$taskLanguageMap key=languageCountry item=tasks}
+<<<<<<< HEAD
                      <div class="mt-4">
                 <div class="d-flex align-items-center flex-wrap">
+=======
+                  <div class="mt-4">
+                    <div class="d-flex align-items-center flex-wrap">
+>>>>>>> native_matching
                     <span class="me-4 fw-bold">
                         {TemplateHelper::getLanguageAndCountryFromCode($languageCountry)}
                     </span>
@@ -552,6 +584,7 @@
                             <option value="delesect_all_{$languageCountry|replace:',':'_'}">Deselect all</option>
                         </select>
                     </span>
+<<<<<<< HEAD
 
                     {* //Modal *}
                     <div>
@@ -590,15 +623,49 @@
                     <div class="bg-body p-2 border-secondary mt-4">
          
                     <div class="table-responsive mt-4 ">
+=======
+>>>>>>> native_matching
 
+                    {* //Modal *}
+                      <div>
+                        <div class="modal fade" id="exampleModalToggle" aria-hidden="true" aria-labelledby="exampleModalToggleLabel" tabindex="-1">
+                          <div class="modal-dialog modal-lg modal-dialog-centered">
+                            <div class="modal-content">
+                              <div class="modal-header">
+                          <h1 class="modal-title fs-5" id="exampleModalToggleLabel">Tasks Restrictions </h1>
+                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                              </div>
+                              <div class="modal-body py-4">
+                                <div class="d-flex">
+                        <form id="get_translators_count_availability" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}">
+                        {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
+                        </form>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
+                  <button class="btn btn-primary text-white mt-2 mt-md-0 restrictions" data-bs-target="#exampleModalToggle" data-bs-toggle="modal">Restrict Task</button>
+
+                      </div>
+                    {* endofModal *}
+                    </div>
+
+                    <div class="bg-body p-2 border-secondary mt-4">
+                    <div class="table-responsive mt-4 ">
                     <table class="table " >
                         <thead class="fs-5">
                             <tr>
-                                
                                  <th><input type="checkbox" name="select_all_tasks" data-lang="{$languageCountry|replace:',':'_'}" /></th>
                                  <th class="text-center">{Localisation::getTranslation('common_title')}</th>
+<<<<<<< HEAD
                                  <th class="text-center">{Localisation::getTranslation('common_status')}</th>       
                                  <th class="text-center">{Localisation::getTranslation('common_type')}</th> 
+=======
+                                 <th class="text-center">{Localisation::getTranslation('common_status')}</th>
+                                 <th class="text-center">{Localisation::getTranslation('common_type')}</th>
+>>>>>>> native_matching
                                 {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER)}
                                  <th class="text-center">Paid?</th>
                                 {/if}
@@ -620,18 +687,25 @@
                                         <a class="custom-link" href="{urlFor name="task-view" options="task_id.$task_id"}">
                                             {TemplateHelper::uiCleanseHTMLNewlineAndTabs($task->getTitle())}
                                         </a>
-                                        <br/>
+                                        <br />
                                     </td>
                                     <td id={$task->getId()} class="text-center">
                                         {assign var="status_id" value=$task->getTaskStatus()}
                                         {if $status_id == TaskStatusEnum::WAITING_FOR_PREREQUISITES}
+<<<<<<< HEAD
                                             <span>{Localisation::getTranslation('common_waiting')}</span> <br>
                                              <div class="text-secondary-sublte fs-6 fw-bold ">
                                              {if $get_payment_status_for_project[$task_id]['native_matching'] == 0} 
+=======
+                                            <span>{Localisation::getTranslation('common_waiting')}</span><br />
+                                            <div class="text-secondary-sublte fs-6 fw-bold ">
+                                              {if $get_payment_status_for_project[$task_id]['native_matching'] == 0}
+>>>>>>> native_matching
                                               <span> </span>
                                               {elseif $get_payment_status_for_project[$task_id]['native_matching'] == 1}
                                               <span data-bs-toggle="tooltip" data-bs-placement="top" class="mt-2"
                                               data-bs-custom-class="custom-tooltip"
+<<<<<<< HEAD
                                               data-bs-title="Matching Native Language"><img src="{urlFor name='home'}ui/img/Native lm.svg" alt="Matching Native language icon" width="20%" height="20%" /> </span> 
                                               {elseif $get_payment_status_for_project[$task_id]['native_matching'] == 2}
                                               <span data-bs-toggle="tooltip" data-bs-placement="top" class="mt-2"
@@ -644,10 +718,25 @@
                                             <span>{Localisation::getTranslation('common_unclaimed')}</span> 
                                             <div class="text-secondary-sublte fs-6 fw-bold">
                                             {if $get_payment_status_for_project[$task_id]['native_matching'] == 0} 
+=======
+                                              data-bs-title="Matching Native Language"><img src="{urlFor name='home'}ui/img/Native lm.svg" alt="Matching Native Language icon" width="20%" height="20%" /> </span> 
+                                              {elseif $get_payment_status_for_project[$task_id]['native_matching'] == 2}
+                                              <span data-bs-toggle="tooltip" data-bs-placement="top" class="mt-2"
+                                              data-bs-custom-class="custom-tooltip"
+                                              data-bs-title="Matching Native Language and Variant"> <img src="{urlFor name='home'}ui/img/Native lcm.svg" alt="Matching Native Language and Variant icon" width="20%" height="20%" /> </span> 
+                                              {/if}
+                                            </div>
+
+                                        {elseif $status_id == TaskStatusEnum::PENDING_CLAIM}
+                                            <span>{Localisation::getTranslation('common_unclaimed')}</span>
+                                            <div class="text-secondary-sublte fs-6 fw-bold">
+                                              {if $get_payment_status_for_project[$task_id]['native_matching'] == 0}
+>>>>>>> native_matching
                                                 <span> </span>
                                                 {elseif $get_payment_status_for_project[$task_id]['native_matching'] == 1}
                                                 <span data-bs-toggle="tooltip" data-bs-placement="top" class="mt-2"
                                                 data-bs-custom-class="custom-tooltip"
+<<<<<<< HEAD
                                                 data-bs-title="Matching Native Language"> <img src="{urlFor name='home'}ui/img/Native lm.svg" alt="Matching Native language icon" width="20%" height="20%"/> </span> 
                                                 {elseif $get_payment_status_for_project[$task_id]['native_matching'] == 2}
                                                 <span data-bs-toggle="tooltip" data-bs-placement="top" class="mt-2"
@@ -656,6 +745,16 @@
                                               {/if}
                                             </div>
                                            
+=======
+                                                data-bs-title="Matching Native Language"> <img src="{urlFor name='home'}ui/img/Native lm.svg" alt="Matching Native Language icon" width="20%" height="20%"/> </span>
+                                                {elseif $get_payment_status_for_project[$task_id]['native_matching'] == 2}
+                                                <span data-bs-toggle="tooltip" data-bs-placement="top" class="mt-2"
+                                                data-bs-custom-class="custom-tooltip"
+                                                data-bs-title="Matching Native Language and Variant"><img src="{urlFor name='home'}ui/img/Native lcm.svg" alt="Matching Native Language and Variant icon" width="20%" height="20%"/> </span>
+                                              {/if}
+                                            </div>
+
+>>>>>>> native_matching
                                         {elseif $status_id == TaskStatusEnum::IN_PROGRESS}
                                           {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER + $NGO_ADMIN + $NGO_PROJECT_OFFICER)}
                                             <a href="{urlFor name="task-org-feedback" options="task_id.$task_id"}">
@@ -728,7 +827,11 @@
                                         {if $get_payment_status_for_project[$task_id]['total_words']}<br />{round($get_payment_status_for_project[$task_id]['total_words'], 2)} {$get_payment_status_for_project[$task_id]['pricing_and_recognition_unit_text_hours']}{/if}
                                     </td>
                                     {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER)}
+<<<<<<< HEAD
                                     <td class="text-center">                                    
+=======
+                                    <td class="text-center">
+>>>>>>> native_matching
                                      {if $get_paid_for_project[$task_id] == 1}
                                          {if $get_payment_status_for_project[$task_id]['payment_status'] == 'Unsettled'}
                                           <span data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Unsettled">PO#: {$get_payment_status_for_project[$task_id]['purchase_order']} <i class="fa fa-solid fa-x" ></i> </span>
@@ -751,23 +854,22 @@
                                     <td class="text-center">
                                      {if $task->get_cancelled()} 
                                          <form id="cancelyes" class="cancel" method="post" onclick="$('#cancelyes').submit();" action="{urlFor name="project-view" options="project_id.$project_id"}" >
-                                         <span data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Uncancel" >
-                                   
+                                           <span data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Uncancel" >
                                             <a class=" btn-grayish cancel"   data-id="0" id="uncancel"  role="button" data-cancelled="0" data-task-id="{$task->getId()}">
                                             Yes
                                             </a>
                                             <input type="hidden" name="cancel" value="" />
                                             <input type="hidden" name="cancelled" value="0" />
                                             {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
-                                          </form>
-                                        </span>
-                                    {else}
+                                           </span>
+                                         </form>
+                                     {else}
                                         <span data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Cancel" >
                                             <a class="btngray cancel" data-bs-toggle="modal"  data-bs-target="#cancelmodal" id="cancel"  href="#cancelmodal" role="button" data-task-id="{$task->getId()}" data-cancelled="1">
                                                No
                                             </a>
                                         </span>
-                                    {/if}
+                                     {/if}
                                     </td>
 
                                     <td class="text-center">
@@ -793,7 +895,7 @@
                                         </span>
                                     {/if}
                                     {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
-                                </form>
+                                    </form>
                                     </td>
 
                                     <td class="text-center">
@@ -846,7 +948,6 @@
                                                 <a class="btn-grayish"
                                                     onclick="if (confirm('{Localisation::getTranslation('project_view_3')}'))
                                                         $('#archiveDeleteForm{$task_id}').submit();" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-custom-class="custom-tooltip" data-bs-title="{Localisation::getTranslation('common_archive')}"> <img src="{urlFor name='home'}ui/img/project-trash.svg" alt="retrieve" > </a>
-                                                   
                                                 {/if}
                                             {/if}
                                             {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
@@ -857,7 +958,8 @@
                         </tbody>
                     </table>
                     </div>
-                </div>
+                    </div>
+                  </div>
                 {/foreach}
             {else}
                 <div class="alert alert-warning">
@@ -875,12 +977,7 @@
             {Localisation::getTranslation('project_view_6')}
         </p>
         {/if}
-  
-
-
     {/if}
-
-
 
     {if !empty($volunteerTaskLanguageMap)}
     <hr />
@@ -889,7 +986,6 @@
         <small>{Localisation::getTranslation('project_view_0')}</small>
     </h3>
                 {foreach from=$volunteerTaskLanguageMap key=languageCountry item=tasks}
-
                     <div class="fs-5 fw-bold">
                         {TemplateHelper::getLanguageAndCountryFromCode($languageCountry)}
                     </div>
@@ -914,7 +1010,7 @@
                                         <a  class="custom-link" href="{urlFor name="task-view" options="task_id.$task_id"}?twb_page=project&twb_zone=task">
                                             {TemplateHelper::uiCleanseHTMLNewlineAndTabs($task['title'])}
                                         </a>
-                                        <br/>
+                                        <br />
                                     </td>
                                     <td>
                                         {assign var="status_id" value=$task['status_id']}
@@ -954,9 +1050,6 @@
                 {/foreach}
     {/if}
 
-  
-
-
     <!-- Cancel Modal -->
 <div id="cancelmodal" class="modal fade"  tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true">
 <div class="modal-dialog">
@@ -978,9 +1071,9 @@
     <option value="Request cancelled by TWB due to lack of capacity">Request cancelled by TWB due to lack of capacity</option>
     <option value="other">Other</option>    
   </select>
-  <br/>
+  <br />
   <p name="reason_text">Further details:</p>
-  <br/>
+  <br />
   <textarea rows="4" cols="40" name="reason" id="reason" style="width:auto;"></textarea>
   <br />
   <input type="checkbox" name="cancel_selected_only" value="1" /> Cancel only the selected task on TWB only (not on Phrase)
@@ -997,52 +1090,38 @@
   </div>
   </div>
 </div>
+
 <!-- PO# Modal -->
 <div id="ponummodal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-
 <div class="modal-dialog">
 <div class="modal-content">
-    <div class="modal-header">
+  <div class="modal-header">
     <h3 class="modal-title fs-4 fw-bold me-4" id="myModalLabel">Set Purchase Order #</h3>
-    
-
   </div>
-
 
   <div class="modal-body">
   <form id="ponumform"  method="post" action="{urlFor name="project-view" options="project_id.$project_id"}">
-  PO #: <input type="text" name="po" value="" />
-  <input type="hidden" name="ponum" value="" />
-  <input type="hidden" name="ready_payment_status" value="Unsettled" />
-   {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
-  </div>
-  <div class="modal-footer">
-  <button type="button" class=" btn btn-light" data-bs-dismiss="modal" aria-label="Close">Close</button>
-   
-    <button class="btn btn-success" id="ponumbtn" onclick="$('#ponumform').submit();">Confirm</button>
-  </div>
+    PO #: <input type="text" name="po" value="" />
+    <input type="hidden" name="ponum" value="" />
+    <input type="hidden" name="ready_payment_status" value="Unsettled" />
+    {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
+    <div class="modal-footer">
+      <button type="button" class=" btn btn-light" data-bs-dismiss="modal" aria-label="Close">Close</button>
+      <button class="btn btn-success" id="ponumbtn" onclick="$('#ponumform').submit();">Confirm</button>
+    </div>
   </form>
   </div>
-  </div>
+</div>
+</div>
 </div>
 
 
-
     </div>
-
-
-
 </section>
 
 </div>
 
-   </div> 
-
-
-
-   <script>
+<script>
    $("[data-bs-toggle='tooltip']").tooltip(); // Initialize Tooltip
 </script>
 {include file="footer2.tpl"}
-      
-

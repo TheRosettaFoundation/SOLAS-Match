@@ -40,6 +40,12 @@ For full terms see License.txt or http://www.gnu.org/licenses/lgpl-3.0.txt
 
 # Release Notes
 
+## Version 16.2
+
+- Tasks can now be set to require linguists to have matching Native Language and/or Variant or neither. This setting is only set automatically on task creation for a subset of target languages. It is changed automatically for self service tasks to neither after 2 days (in stages). Other tasks are left for the PO to change.
+- As part of this when a PO is setting these values in Project View, they will see the number of linguists who could claim the task for each setting value and additionally the smaller number of linguists for each setting value that have claimed a task previously.
+- When canceling a task, it is now possible to decided to cancel only the one task or all tasks for the language pair for the file.
+- Project description now has rich text editing support.
 
 ## Version 16.1
 

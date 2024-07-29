@@ -147,40 +147,10 @@ class UserRouteHandler
             ->setName('users_review');
 
         $app->map(['GET', 'POST'],
-            '/users_new[/]',
-            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:users_new')
-            ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin_any')
-            ->setName('users_new');
-
-        $app->get(
-            '/users_tracked[/]',
-            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:users_tracked')
-            ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin_any')
-            ->setName('users_tracked');
-
-        $app->map(['GET', 'POST'],
             '/add_tracking_code[/]',
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:add_tracking_code')
             ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin_any')
             ->setName('add_tracking_code');
-
-        $app->get(
-            '/download_users_tracked[/]',
-            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:download_users_tracked')
-            ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin_any')
-            ->setName('download_users_tracked');
-
-        $app->get(
-            '/download_users_new[/]',
-            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:download_users_new')
-            ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin_any')
-            ->setName('download_users_new');
-
-        $app->get(
-            '/download_users_new_unreviewed[/]',
-            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:download_users_new_unreviewed')
-            ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin_any')
-            ->setName('download_users_new_unreviewed');
 
         $app->map(['GET', 'POST'],
             '/{user_id}/notification/stream[/]',
@@ -2286,75 +2256,6 @@ class UserRouteHandler
         return UserRouteHandler::render('user/users_review.tpl', $response);
     }
 
-    public function users_new(Request $request, Response $response)
-    {
-        global $app, $template_data;
-        $userDao = new DAO\UserDao();
-
-        $sesskey = Common\Lib\UserSession::getCSRFKey();
-
-        $all_users = $userDao->users_new();
-
-        if ($request->getMethod() === 'POST') {
-            $post = $request->getParsedBody();
-            if ($fail_CSRF = Common\Lib\UserSession::checkCSRFKey($post, 'users_new')) return $response->withStatus(302)->withHeader('Location', $fail_CSRF);
-            if (!empty($post['max_user_id'])) {
-                foreach ($all_users as $user_row) {
-                    if ($user_row['user_id'] <= $post['max_user_id']) { // Make sure a new one has not appeared
-                        if (empty($user_row['reviewed_text'])) $userDao->updateUserHowheard($user_row['user_id'], 1);
-                    }
-                }
-                $all_users = $userDao->users_new();
-            }
-        }
-
-        $template_data = array_merge($template_data, array('all_users' => $all_users, 'sesskey' => $sesskey));
-        return UserRouteHandler::render('user/users_new.tpl', $response);
-    }
-
-    public function download_users_new(Request $request, Response $response, $args)
-    {
-        $this->download_users_new_unreviewed($request, $response, $args, true);
-    }
-
-    public function download_users_new_unreviewed(Request $request, Response $response, $args, $all = false)
-    {
-        $userDao = new DAO\UserDao();
-        $all_users = $userDao->users_new();
-
-        $data = "\xEF\xBB\xBF" . '"Name","Created","Native Language","Language Pairs","Biography","Certificates","Email"' . "\n";
-
-        foreach ($all_users as $user_row) {
-            if ($all || empty($user_row['reviewed_text'])) {
-                $data .= '"' . str_replace('"', '""', $user_row['name']) . '","' .
-                    $user_row['created_time'] . '","' .
-                    str_replace('"', '""', $user_row['native_language']) . '","' .
-                    $user_row['language_pairs'] . '","' .
-                    str_replace(array('\r\n', '\n', '\r'), "\n", str_replace('"', '""', $user_row['bio'])) . '","' .
-                    $user_row['certificates'] . '","' .
-                    $user_row['email'] . '"' . "\n";
-            }
-        }
-
-        header('Content-type: text/csv');
-        header('Content-Disposition: attachment; filename="users_new.csv"');
-        header('Content-length: ' . strlen($data));
-        header('X-Frame-Options: ALLOWALL');
-        header('Pragma: no-cache');
-        header('Cache-control: no-cache, must-revalidate, no-transform');
-        echo $data;
-        die;
-    }
-
-    public function users_tracked(Request $request, Response $response)
-    {
-        global $app, $template_data;
-        $userDao = new DAO\UserDao();
-        $all_users = $userDao->users_tracked();
-        $template_data = array_merge($template_data, array('all_users' => $all_users));
-        return UserRouteHandler::render('user/users_tracked.tpl', $response);
-    }
-
     public function add_tracking_code(Request $request, Response $response)
     {
         global $app, $template_data;
@@ -2380,34 +2281,6 @@ class UserRouteHandler
             'referers' => $referers,
         ));
         return UserRouteHandler::render('user/add_tracking_code.tpl', $response);
-    }
-
-    public function download_users_tracked(Request $request, Response $response)
-    {
-        $userDao = new DAO\UserDao();
-        $all_users = $userDao->users_tracked();
-
-        $data = "\xEF\xBB\xBF" . '"Tracked","Name","Created","Native Language","Language Pairs","Biography","Certificates","Email"' . "\n";
-
-        foreach ($all_users as $user_row) {
-            $data .= '"' . str_replace('"', '""', $user_row['referer']) . '","' .
-                str_replace('"', '""', $user_row['name']) . '","' .
-                $user_row['created_time'] . '","' .
-                str_replace('"', '""', $user_row['native_language']) . '","' .
-                $user_row['language_pairs'] . '","' .
-                str_replace(array('\r\n', '\n', '\r'), "\n", str_replace('"', '""', $user_row['bio'])) . '","' .
-                $user_row['certificates'] . '","' .
-                $user_row['email'] . '"' . "\n";
-        }
-
-        header('Content-type: text/csv');
-        header('Content-Disposition: attachment; filename="users_tracked.csv"');
-        header('Content-length: ' . strlen($data));
-        header('X-Frame-Options: ALLOWALL');
-        header('Pragma: no-cache');
-        header('Cache-control: no-cache, must-revalidate, no-transform');
-        echo $data;
-        die;
     }
 
     /**

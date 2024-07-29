@@ -97,6 +97,27 @@ class ProjectRouteHandler
             '/memsource_hook',
             '\SolasMatch\UI\RouteHandlers\ProjectRouteHandler:memsourceHook')
             ->setName('memsource_hook');
+
+        $app->map(['GET', 'POST'],
+            '/api_hook',
+            '\SolasMatch\UI\RouteHandlers\ProjectRouteHandler:api_hook')
+            ->setName('api_hook');
+    }
+
+    public function api_hook(Request $request)
+    {
+        global $app;
+        if ($request->getHeaderLine('X-API-TOKEN') !== Common\Lib\Settings::get('api_hook.X-API-TOKEN')) {
+            error_log('X-API-TOKEN does not match!');
+            die;
+        }
+        $body = (string)$request->getBody();
+        $hook = json_decode($body, true);
+        if (empty($hook)) {
+            error_log("api_hook not decoded: $body");
+        }
+        error_log('api_hook: ' . print_r(json_decode($body, true), true));
+        die;
     }
 
     public function memsourceHook(Request $request)
@@ -728,27 +749,6 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
 
         $sesskey = Common\Lib\UserSession::getCSRFKey();
 
-        $params = $request->getParsedBody();
-
-        if(isset($params['translators_count'])){
-
-            $users_count_claim = $taskDao->count_users_who_can_claim($params['translators_count']);
-            $results = json_encode($users_count_claim);
-            $response->getBody()->write($results);            
-            return $response ->withHeader('Content-Type','application/json') ;
-
-        }
-
-        if(isset($params['matching'])){
-
-            $updateMatching = $taskDao->updateRequiredTaskNativeMatching($params['task_id'],$params['matching']);
-            $results = json_encode($updateMatching);
-            $response->getBody()->write($results);            
-            return $response ->withHeader('Content-Type','application/json') ;
-
-        }
-
-
         $project = $projectDao->getProject($project_id);
         if (empty($project)) {
             UserRouteHandler::flash('error', 'That project does not exist!');
@@ -770,6 +770,21 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
         if ($request->getMethod() === 'POST') {
             $post = $request->getParsedBody();
             if ($fail_CSRF = Common\Lib\UserSession::checkCSRFKey($post, 'projectView')) return $response->withStatus(302)->withHeader('Location', $fail_CSRF);
+
+            if ($roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER | NGO_ADMIN | NGO_PROJECT_OFFICER)) {
+                if (isset($post['translators_count'])) {
+error_log('translators_count (task_id): ' . $post['translators_count']);//(**)
+                    $response->getBody()->write(json_encode($taskDao->count_users_who_can_claim($post['translators_count'])));
+                    return $response->withHeader('Content-Type', 'application/json');
+                }
+
+                if (isset($post['matching'])) {
+                    error_log('updateRequiredTaskNativematching(' . $post['task_id'] . ', ' . $post['matching'] . "): $user_id");
+                    $taskDao->updateRequiredTaskNativeMatching($post['task_id'], $post['matching']);
+                    $response->getBody()->write(json_encode(['result'=> 1]));
+                    return $response->withHeader('Content-Type', 'application/json');
+                }
+            }
 
             $task = null;
             if (isset($post['task_id'])) {
@@ -995,29 +1010,32 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                 }
             }
 
-            if ($roles & (SITE_ADMIN | PROJECT_OFFICER)) {
-                if (!empty($post['publish_native_users'])) {
-                    $task_ids = preg_split ("/\,/", $post['publish_native_users']);
+            if ($roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER | NGO_ADMIN | NGO_PROJECT_OFFICER)) {
+                if (!empty($post['restrict_native_language_and_variant'])) {
+                    $task_ids = preg_split("/\,/", $post['restrict_native_language_and_variant']);
                     foreach ($task_ids as $id) {
                         $taskDao->updateRequiredTaskNativeMatching($id, 2);
+                        error_log("updateRequiredTaskNativeMatching($id, 2): $user_id");
                     }
-                    UserRouteHandler::flashNow('success', count($task_ids) . ' tasks now restricted to only native users .');
+                    UserRouteHandler::flashNow('success', count($task_ids) . ' tasks now restricted to linguists matching the native language and variant.');
                 }
 
-                if (!empty($post['publish_language_match'])) {
-                    $task_ids = preg_split ("/\,/", $post['publish_language_match']);
+                if (!empty($post['restrict_native_language_only'])) {
+                    $task_ids = preg_split ("/\,/", $post['restrict_native_language_only']);
                     foreach ($task_ids as $id) {
                         $taskDao->updateRequiredTaskNativeMatching($id, 1);
+                        error_log("updateRequiredTaskNativeMatching($id, 1): $user_id");
                     }
-                    UserRouteHandler::flashNow('success', count($task_ids) . ' tasks now restricted to users matching the language and variant.');
+                    UserRouteHandler::flashNow('success', count($task_ids) . ' tasks now restricted to linguists matching the native language (but not variant).');
                 }
 
-                if (!empty($post['publish_all'])) {
-                    $task_ids = preg_split ("/\,/", $post['publish_all']);
+                if (!empty($post['restrict_native_language_none'])) {
+                    $task_ids = preg_split("/\,/", $post['restrict_native_language_none']);
                     foreach ($task_ids as $id) {
                         $taskDao->updateRequiredTaskNativeMatching($id, 0);
+                        error_log("updateRequiredTaskNativeMatching($id, 0): $user_id");
                     }
-                    UserRouteHandler::flashNow('success', count($task_ids) . ' tasks now unrestricted to all ');
+                    UserRouteHandler::flashNow('success', count($task_ids) . ' tasks now have no native language restriction.');
                 }
             }
 
@@ -1161,7 +1179,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
             $extra_scripts .= "<script defer type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/taskRestrictions.js\"></script>";
             $extra_scripts .= '<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.2/jquery.validate.min.js" type="text/javascript"></script>';
             $extra_scripts .= file_get_contents(__DIR__."/../js/project-view1.js");
-            $extra_scripts .= file_get_contents(__DIR__."/../js/TaskView3.js");   
+            $extra_scripts .= file_get_contents(__DIR__."/../js/TaskView3.js");
             // Load Twitter JS asynch, see https://dev.twitter.com/web/javascript/loading
             $extra_scripts .= '<script>window.twttr = (function(d, s, id) { var js, fjs = d.getElementsByTagName(s)[0], t = window.twttr || {}; if (d.getElementById(id)) return t; js = d.createElement(s); js.id = id; js.src = "https://platform.twitter.com/widgets.js"; fjs.parentNode.insertBefore(js, fjs); t._e = []; t.ready = function(f) { t._e.push(f); }; return t; }(document, "script", "twitter-wjs"));</script>';
 
@@ -2747,6 +2765,7 @@ error_log("get_queue_asana_projects: $projectId");//(**)
             $taskDao->update_native_matching_phase_2();
            
 
+    
 
             flock($fp_for_lock, LOCK_UN); // Release the lock
         }
