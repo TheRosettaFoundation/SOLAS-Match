@@ -117,7 +117,7 @@ restrictionsB.forEach((elt) => {
 
             // console.log(typeIndex);
             let typeIndex = task_types.indexOf(parseInt(taskType));
-            console.log("types", types);
+
             console.log("typeIndex", typeIndex);
             console.log("taskType", taskType);
 
