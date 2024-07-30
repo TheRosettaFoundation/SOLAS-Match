@@ -2,7 +2,6 @@ let uniqueElements = [];
 let taskSelected = {};
 let tobefetched = {};
 let countFetch = [];
-let errorTag;
 
 const url = window.location.href;
 const regex = /project\/(\d+)\//;
@@ -36,9 +35,6 @@ myModalEl.addEventListener("hide.bs.modal", (event) => {
     uniqueElements = [];
     tobefetched = {};
     countFetch = [];
-    if (errorTag) {
-        errorTag.classList.add("d-none");
-    }
 
     if (form_1) {
         let children = form_1.querySelectorAll(".extended");
@@ -188,59 +184,25 @@ restrictionsB.forEach((elt) => {
             }
         });
 
-        const getOptionDisabledAttr = (value) => {
-            return value == 0 ? "disabled" : "";
-        };
-
         uniqueElements.forEach((elt) => {
             let taskId = tobefetched[elt];
-            let extendedEL = nativeMatching[taskId]
-                ? `<div class="d-flex mt-4 mb-2 align-items-center justify-content-between extended">
+            let extendedEL = `<div class="d-flex mt-4 mb-2 align-items-center justify-content-between extended">
                 <div class="me-4 elt text-break textwrap"></div>
 
                 <select class="form-select ms-2 w-75 selectedId" aria-label="Default select example">
                 <option selected value="no"> Select Restrictions</option>
-                    <option value="0" ${getOptionDisabledAttr(
-                        nativeMatching[taskId].native_matching_0
-                    )}> </br>No restriction<span class="nocm">, Matching CMs : ${
-                      nativeMatching[taskId].native_matching_0
-                  }</span> </br>
-                <span class="nosm">, Successful CMs : ${
-                    nativeMatching[taskId].native_matching_active_0
-                } </span> </option>
+                    <option value="0" 
+                    )}> </br>No restriction<span class="nocm">, Matching CMs : ${nativeMatching[taskId].native_matching_0}</span> </br>
+                <span class="nosm">, Successful CMs : ${nativeMatching[taskId].native_matching_active_0} </span> </option>
 
-                    <option value="1" ${getOptionDisabledAttr(
-                        nativeMatching[taskId].native_matching_1
+                    <option value="1" 
                     )}>
-                    Matching Native Language , Matching CMs: ${
-                        nativeMatching[taskId].native_matching_1
-                    } 
-                <span class="slCM">, Successful CMs : ${
-                    nativeMatching[taskId].native_matching_active_1
-                }</span></option>
+                    Matching Native Language , Matching CMs: ${nativeMatching[taskId].native_matching_1} 
+                <span class="slCM">, Successful CMs : ${nativeMatching[taskId].native_matching_active_1}</span></option>
 
-                    <option value="2" ${getOptionDisabledAttr(
-                        nativeMatching[taskId].native_matching_2
-                    )} >Matching Native Language and Locale/Country<span class="mCM">, Matching CMs : ${
-                      nativeMatching[taskId].native_matching_2
-                  }</span>
-                <span class="sCM">, Successful CMs : ${
-                    nativeMatching[taskId].native_matching_active_2
-                }</span></option>
-                </select>
-
-                </div>`
-                : `<div class="d-flex mt-4 mb-2 align-items-center justify-content-between extended">
-                <div class="me-4 elt text-break textwrap"></div>
-
-                <select class="form-select ms-2 w-75 selectedId" aria-label="Default select example" disabled">
-                <option selected value="no" disabled> Select Restrictions</option>
-                    <option value="0" disabled> </br>No restriction<span class="nocm">,Matching CMs : 0</span> </br>
-                <span class="nosm">,Successful CMs : 0 </span> </option>
-                    <option value="1" disabled>Matching Native Language<span class="mlCM">,Matching CMs : 0</span>
-                <span class="slCM">,Successful CMs : 0</span></option>
-                    <option value="2" disabled>Matching Native Language and Locale/Country<span class="mCM">,Matching CMs : 0 </span>
-                <span class="sCM">,Successful CMs : 0</span></option>
+                    <option value="2" 
+                    )} >Matching Native Language and Locale/Country<span class="mCM">, Matching CMs : ${nativeMatching[taskId].native_matching_2}</span>
+                <span class="sCM">, Successful CMs : ${nativeMatching[taskId].native_matching_active_2}</span></option>
                 </select>
 
                 </div>`;
@@ -248,14 +210,6 @@ restrictionsB.forEach((elt) => {
             let extendedHtml = document
                 .createRange()
                 .createContextualFragment(extendedEL);
-
-            if (!nativeMatching[taskId]) {
-                errorTag = document.querySelector(".modal_error");
-
-                errorTag.classList.remove("d-none");
-                errorTag.textContent =
-                    "Currently, there are no tasks available for restriction.";
-            }
 
             let taskelt = extendedHtml.querySelector(".elt");
             let selectNative = extendedHtml.querySelector(".selectedId");

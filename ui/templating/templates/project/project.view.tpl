@@ -541,7 +541,7 @@
                           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                               </div>
                               <div class="modal-body py-4">
-                                <div class="modal_error d-none text-danger fw-bold"> </div>
+
                                 <div class="d-flex">
                         <form id="get_translators_count_availability" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}">
                         {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
