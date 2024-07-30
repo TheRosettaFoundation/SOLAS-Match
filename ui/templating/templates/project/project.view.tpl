@@ -461,7 +461,7 @@
 
             <form id="ready_payment" class="bg-light-subtle d-flex flex-column justify-content-center form_action me-2  mb-4 mb-lg-0" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" style="margin-bottom: 2px;">
             <a class="d-flex p-1 text-muted fs-6 text-decoration-none" onclick="$('#ready_payment').submit();" style="color:#000000;" role="button">
-                <i class="fa fa-money me-2" aria-hidden="true"></i> <span>Set tasks to Ready for Payment</span>
+                <i class="fa-solid fa-money-bill me-2" aria-hidden="true"></i> <span>Set tasks to Ready for Payment</span>
             </a>
                 <input type="hidden" name="ready_payment" value="" />
                 <input type="hidden" name="ready_payment_status" value="Ready for payment" />
@@ -553,7 +553,7 @@
                     {* endofModal *}
                     </div>
 
-                    <div class="bg-body p-2 border-secondary mt-4">
+                    <div class="bg-body table-checkboxes p-2 border-secondary mt-4">
                     <div class="table-responsive mt-4 ">
                     <table class="table " >
                         <thead class="fs-5">
@@ -696,7 +696,7 @@
                                          {if $get_payment_status_for_project[$task_id]['payment_status'] == 'Unsettled'}
                                           <span data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Unsettled">PO#: {$get_payment_status_for_project[$task_id]['purchase_order']} <i class="fa fa-solid fa-x" ></i> </span>
                                          {elseif $get_payment_status_for_project[$task_id]['payment_status'] == 'Ready for payment'}
-                                          <span data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Ready for payment">PO#: {$get_payment_status_for_project[$task_id]['purchase_order']} <i class="fa fa-money" style="font-size: 15px !important;padding:0 !important;width:12px !important;margin-left:-2px;"></i> </span>
+                                          <span data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Ready for payment">PO#: {$get_payment_status_for_project[$task_id]['purchase_order']} <i class="fa-solid fa-money-bill" style="font-size: 15px !important;padding:0 !important;width:12px !important;margin-left:-2px;"></i> </span>
                                          {elseif $get_payment_status_for_project[$task_id]['payment_status'] == 'Pending documentation'}
                                           <span data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Pending documentation">PO#: {$get_payment_status_for_project[$task_id]['purchase_order']} <i class="fa fa-book" style="font-size: 15px !important;padding:0 !important;width:12px !important;margin-left:-2px;" ></i> </span>
                                          {elseif $get_payment_status_for_project[$task_id]['payment_status'] == 'Settled'}
