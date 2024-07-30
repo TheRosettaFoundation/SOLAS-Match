@@ -109,19 +109,17 @@ async function getUsersCount(taskIds) {
 restrictionsB.forEach((elt) => {
     elt.addEventListener("click", async (e) => {
         const clickedElement = e.target;
-        console.log(clickedElement);
+
         const parent =
             clickedElement.parentElement.parentElement.nextElementSibling;
 
         const checkedCheckboxes = parent.querySelectorAll(
             'input[type="checkbox"]:checked'
         );
-        console.log(checkedCheckboxes);
 
         checkedCheckboxes.forEach((checkbox) => {
             const taskType = checkbox.getAttribute("data-task-type");
 
-            // console.log(typeIndex);
             let typeIndex = task_types.indexOf(parseInt(taskType));
 
             const taskName = type_texts[typeIndex];
@@ -253,7 +251,7 @@ restrictionsB.forEach((elt) => {
 
             if (!nativeMatching[taskId]) {
                 errorTag = document.querySelector(".modal_error");
-                console.log(errorTag);
+
                 errorTag.classList.remove("d-none");
                 errorTag.textContent =
                     "Currently, there are no tasks available for restriction.";
@@ -279,7 +277,7 @@ restrictionsB.forEach((elt) => {
 
                 updated.forEach((elt) => {
                     let updatedTask = document.getElementById(elt);
-                    console.log(updatedTask);
+
                     let status = updatedTask
                         ? updatedTask.querySelector("span:first-child")
                         : null;
