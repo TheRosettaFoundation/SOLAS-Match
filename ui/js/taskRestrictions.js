@@ -7,6 +7,7 @@ const url = window.location.href;
 const regex = /project\/(\d+)\//;
 const project_id = url.match(regex)[1];
 let errorTag = document.querySelector(".modal-error");
+console.log(errorTag);
 
 let taskToRestrict = [];
 
