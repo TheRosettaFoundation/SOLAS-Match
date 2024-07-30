@@ -558,9 +558,9 @@
                     {* endofModal *}
                     </div>
 
-                    <div class="bg-body p-2 border-secondary mt-4">
+                    <div class="bg-body table-checkboxes  p-2 border-secondary mt-4">
                     <div class="table-responsive mt-4 ">
-                    <table class="table table-checkboxes " >
+                    <table class="table " >
                         <thead class="fs-5">
                             <tr>
                                  <th><input type="checkbox" name="select_all_tasks" data-lang="{$languageCountry|replace:',':'_'}" /></th>
