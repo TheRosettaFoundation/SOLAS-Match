@@ -771,9 +771,8 @@ error_log('translators_count (task_id): ' . $post['translators_count']);//(**)
                 }
 
                 if (isset($post['matching'])) {
-                    error_log('updateRequiredTaskNativematching(' . $post['task_id'] . ', ' . $post['matching'] . "): $user_id");
-                    $taskDao->updateRequiredTaskNativeMatching($post['task_id'], $post['matching']);
-                    $response->getBody()->write(json_encode(['result'=> 1]));
+                    error_log('updateRequiredTaskNativeMatching(' . $post['task_id'] . ', ' . $post['matching'] . "): $user_id");
+                    $response->getBody()->write(json_encode($taskDao->updateRequiredTaskNativeMatching($post['task_id'], $post['matching'])));
                     return $response->withHeader('Content-Type', 'application/json');
                 }
             }
@@ -989,35 +988,6 @@ error_log('translators_count (task_id): ' . $post['translators_count']);//(**)
                         $taskDao->clear_paid_status($id);
                     }
                     UserRouteHandler::flashNow('success', count($task_ids) . ' tasks now marked as unpaid.');
-                }
-            }
-
-            if ($roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER | NGO_ADMIN | NGO_PROJECT_OFFICER)) {
-                if (!empty($post['restrict_native_language_and_variant'])) {
-                    $task_ids = preg_split("/\,/", $post['restrict_native_language_and_variant']);
-                    foreach ($task_ids as $id) {
-                        $taskDao->updateRequiredTaskNativeMatching($id, 2);
-                        error_log("updateRequiredTaskNativeMatching($id, 2): $user_id");
-                    }
-                    UserRouteHandler::flashNow('success', count($task_ids) . ' tasks now restricted to linguists matching the native language and variant.');
-                }
-
-                if (!empty($post['restrict_native_language_only'])) {
-                    $task_ids = preg_split ("/\,/", $post['restrict_native_language_only']);
-                    foreach ($task_ids as $id) {
-                        $taskDao->updateRequiredTaskNativeMatching($id, 1);
-                        error_log("updateRequiredTaskNativeMatching($id, 1): $user_id");
-                    }
-                    UserRouteHandler::flashNow('success', count($task_ids) . ' tasks now restricted to linguists matching the native language (but not variant).');
-                }
-
-                if (!empty($post['restrict_native_language_none'])) {
-                    $task_ids = preg_split("/\,/", $post['restrict_native_language_none']);
-                    foreach ($task_ids as $id) {
-                        $taskDao->updateRequiredTaskNativeMatching($id, 0);
-                        error_log("updateRequiredTaskNativeMatching($id, 0): $user_id");
-                    }
-                    UserRouteHandler::flashNow('success', count($task_ids) . ' tasks now have no native language restriction.');
                 }
             }
 
