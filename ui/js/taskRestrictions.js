@@ -119,7 +119,7 @@ restrictionsB.forEach((elt) => {
             const taskType = checkbox.getAttribute("data-task-type");
 
             // console.log(typeIndex);
-            let typeIndex = types.indexOf(parseInt(taskType));
+            let typeIndex = task_types.indexOf(parseInt(taskType));
             console.log("types", types);
             console.log("typeIndex", typeIndex);
             console.log("taskType", taskType);
