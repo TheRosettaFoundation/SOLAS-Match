@@ -107,6 +107,7 @@ async function getUsersCount(taskIds) {
 restrictionsB.forEach((elt) => {
     elt.addEventListener("click", async (e) => {
         const clickedElement = e.target;
+        console.log(clickedElement);
         const parent =
             clickedElement.parentElement.parentElement.nextElementSibling;
 
