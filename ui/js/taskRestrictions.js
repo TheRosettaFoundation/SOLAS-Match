@@ -113,7 +113,7 @@ restrictionsB.forEach((elt) => {
         const parent =
             clickedElement.parentElement.parentElement.nextElementSibling;
 
-        const parentTest = clickedElement.closest(".table-checkboxes");
+        const parentTest = e.currentTarget.closest(".table-checkboxes");
         console.log(parentTest);
 
         console.log(parent);
