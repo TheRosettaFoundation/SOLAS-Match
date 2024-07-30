@@ -189,6 +189,10 @@ restrictionsB.forEach((elt) => {
             }
         });
 
+        const getOptionDisabledAttr = (value) => {
+            return value === 0 ? "disabled" : "";
+        };
+
         uniqueElements.forEach((elt) => {
             let taskId = tobefetched[elt];
             let extendedEL = nativeMatching[taskId]
@@ -197,12 +201,30 @@ restrictionsB.forEach((elt) => {
 
                 <select class="form-select ms-2 w-75 selectedId" aria-label="Default select example">
                 <option selected value="no"> Select Restrictions</option>
-                    <option value="0"> </br>No restriction<span class="nocm">, Matching CMs : ${nativeMatching[taskId].native_matching_0}</span> </br>
-                <span class="nosm">, Successful CMs : ${nativeMatching[taskId].native_matching_active_0} </span> </option>
-                    <option value="1">Matching Native Language<span class="mlCM">, Matching CMs : ${nativeMatching[taskId].native_matching_1}</span>
-                <span class="slCM">, Successful CMs : ${nativeMatching[taskId].native_matching_active_1}</span></option>
-                    <option value="2">Matching Native Language and Locale/Country<span class="mCM">, Matching CMs : ${nativeMatching[taskId].native_matching_2}</span>
-                <span class="sCM">, Successful CMs : ${nativeMatching[taskId].native_matching_active_2}</span></option>
+                    <option value="0" ${getOptionDisabledAttr(
+                        nativeMatching[taskId].native_matching_0
+                    )}> </br>No restriction<span class="nocm">, Matching CMs : ${
+                      nativeMatching[taskId].native_matching_0
+                  }</span> </br>
+                <span class="nosm">, Successful CMs : ${
+                    nativeMatching[taskId].native_matching_active_0
+                } </span> </option>
+                    <option value="1" ${getOptionDisabledAttr(
+                        nativeMatching[taskId].native_matching_1
+                    )}>Matching Native Language<span class="mlCM >, Matching CMs : ${
+                      nativeMatching[taskId].native_matching_1
+                  }</span>
+                <span class="slCM">, Successful CMs : ${
+                    nativeMatching[taskId].native_matching_active_1
+                }</span></option>
+                    <option value="2" ${getOptionDisabledAttr(
+                        nativeMatching[taskId].native_matching_2
+                    )} >Matching Native Language and Locale/Country<span class="mCM">, Matching CMs : ${
+                      nativeMatching[taskId].native_matching_2
+                  }</span>
+                <span class="sCM">, Successful CMs : ${
+                    nativeMatching[taskId].native_matching_active_2
+                }</span></option>
                 </select>
 
                 </div>`
