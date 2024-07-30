@@ -255,7 +255,8 @@ restrictionsB.forEach((elt) => {
                 errorTag = document.querySelector(".modal_error");
                 console.log(errorTag);
                 errorTag.classList.remove("d-none");
-                errorTag.textContent = "There are no available task !";
+                errorTag.textContent =
+                    "Currently, there are no tasks available for restriction.";
             }
 
             let taskelt = extendedHtml.querySelector(".elt");
