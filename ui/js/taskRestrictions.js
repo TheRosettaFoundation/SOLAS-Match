@@ -36,7 +36,9 @@ myModalEl.addEventListener("hide.bs.modal", (event) => {
     uniqueElements = [];
     tobefetched = {};
     countFetch = [];
-    errorTag.classList.add("d-none");
+    if (errorTag) {
+        errorTag.classList.add("d-none");
+    }
 
     if (form_1) {
         let children = form_1.querySelectorAll(".extended");
