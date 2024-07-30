@@ -114,8 +114,8 @@ restrictionsB.forEach((elt) => {
 
         checkedCheckboxes.forEach((checkbox) => {
             const taskType = checkbox.getAttribute("data-task-type");
-
-            const taskName = type_texts[taskType];
+            let typeIndex = task_types.indexOf(parseInt(taskType));
+            const taskName = type_texts[typeIndex];
             let value = checkbox.value;
 
             let selectedCol = document.getElementById(value);
@@ -183,18 +183,17 @@ restrictionsB.forEach((elt) => {
 
         uniqueElements.forEach((elt) => {
             let taskId = tobefetched[elt];
-
             let extendedEL = nativeMatching[taskId]
                 ? `<div class="d-flex mt-4 mb-2 align-items-center justify-content-between extended">
                 <div class="me-4 elt text-break textwrap"></div>
 
                 <select class="form-select ms-2 w-75 selectedId" aria-label="Default select example">
                 <option selected value="no"> Select Restrictions</option>
-                    <option value="0"> </br>No restriction<span class="nocm">, Matching CMs : ${nativeMatching[taskId].native_matching_0}</span> </br>
-                <span class="nosm">, Successful CMs : ${nativeMatching[taskId].native_matching_active_0} </span> </option>
-                    <option value="1">Matching Native Language<span class="mlCM">, Matching CMs : ${nativeMatching[taskId].native_matching_1}</span>
-                <span class="slCM">, Successful CMs : ${nativeMatching[taskId].native_matching_active_1}</span></option>
-                    <option value="2">Matching Native Language and Locale/Country<span class="mCM">, Matching CMs : ${nativeMatching[taskId].native_matching_2}</span>
+                    <option value="0"> <br />No restriction<span class="nocm">, Matching CMs: ${nativeMatching[taskId].native_matching_0}</span> <br />
+                <span class="nosm">, Successful CMs: ${nativeMatching[taskId].native_matching_active_0} </span> </option>
+                    <option value="1">Matching Native Language<span class="mlCM">, Matching CMs: ${nativeMatching[taskId].native_matching_1}</span>
+                <span class="slCM">, Successful CMs: ${nativeMatching[taskId].native_matching_active_1}</span></option>
+                    <option value="2">Matching Native Language and Locale/Country<span class="mCM">, Matching CMs: ${nativeMatching[taskId].native_matching_2}</span>
                 <span class="sCM">, Successful CMs : ${nativeMatching[taskId].native_matching_active_2}</span></option>
                 </select>
 
@@ -203,16 +202,17 @@ restrictionsB.forEach((elt) => {
                 <div class="me-4 elt text-break textwrap"></div>
 
                 <select class="form-select ms-2 w-75 selectedId" aria-label="Default select example" disabled">
-                <option selected value="no" disabled> Select Restrictions</option>
-                    <option value="0" disabled> </br>No restriction<span class="nocm">,Matching CMs : 0</span> </br>
-                <span class="nosm">,Successful CMs : 0 </span> </option>
-                    <option value="1" disabled>Matching Native Language<span class="mlCM">,Matching CMs : 0</span>
-                <span class="slCM">,Successful CMs : 0</span></option>
-                    <option value="2" disabled>Matching Native Language and Locale/Country<span class="mCM">,Matching CMs : 0 </span>
-                <span class="sCM">,Successful CMs : 0</span></option>
+                <option selected value="no"> Select Restrictions</option>
+                    <option value="0" > <br />No restriction<span class="nocm">, Matching CMs: 0</span> <br />
+                <span class="nosm">, Successful CMs: 0 </span> </option>
+                    <option value="1" >Matching Native Language<span class="mlCM">, Matching CMs: 0</span>
+                <span class="slCM">, Successful CMs: 0</span></option>
+                    <option value="2" >Matching Native Language and Locale/Country<span class="mCM">, Matching CMs: 0 </span>
+                <span class="sCM">, Successful CMs: 0</span></option>
                 </select>
 
                 </div>`;
+
             let extendedHtml = document
                 .createRange()
                 .createContextualFragment(extendedEL);
@@ -237,10 +237,10 @@ restrictionsB.forEach((elt) => {
 
                 updated.forEach((elt) => {
                     let updatedTask = document.getElementById(elt);
-                    let status = updatedTask.querySelector("span:first-child");
-                    if (!status) {
-                        return;
-                    }
+                    let status = updatedTask
+                        ? updatedTask.querySelector("span:first-child")
+                        : null;
+
                     let newNative = updatedTask.querySelector("div");
 
                     let statusText = status.textContent.trim();
