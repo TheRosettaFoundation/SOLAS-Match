@@ -226,14 +226,6 @@ restrictionsB.forEach((elt) => {
                 .createRange()
                 .createContextualFragment(extendedEL);
 
-            if (!nativeMatching[taskId]) {
-                errorTag = document.querySelector(".modal_error");
-
-                errorTag.classList.remove("d-none");
-                errorTag.textContent =
-                    "Currently, there are no tasks available for restriction.";
-            }
-
             let taskelt = extendedHtml.querySelector(".elt");
             let selectNative = extendedHtml.querySelector(".selectedId");
             selectNative.addEventListener("change", async (e) => {
