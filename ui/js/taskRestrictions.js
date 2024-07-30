@@ -223,7 +223,7 @@ restrictionsB.forEach((elt) => {
                 .createContextualFragment(extendedEL);
 
             if (!nativeMatching[taskId]) {
-                errorTag = document.querySelector(".modal-error");
+                errorTag = document.querySelector(".modal_error");
                 console.log(errorTag);
                 errorTag.classList.remove("d-none");
                 errorTag.textContent = "There are no available task !";
