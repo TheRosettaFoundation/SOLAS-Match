@@ -6,6 +6,7 @@ let countFetch = [];
 const url = window.location.href;
 const regex = /project\/(\d+)\//;
 const project_id = url.match(regex)[1];
+let errorTag = document.querySelector(".modal-error");
 
 let taskToRestrict = [];
 
@@ -35,6 +36,7 @@ myModalEl.addEventListener("hide.bs.modal", (event) => {
     uniqueElements = [];
     tobefetched = {};
     countFetch = [];
+    errorTag.classList.add("d-none");
 
     if (form_1) {
         let children = form_1.querySelectorAll(".extended");
@@ -117,9 +119,6 @@ restrictionsB.forEach((elt) => {
 
             // console.log(typeIndex);
             let typeIndex = task_types.indexOf(parseInt(taskType));
-
-            console.log("typeIndex", typeIndex);
-            console.log("taskType", taskType);
 
             const taskName = type_texts[typeIndex];
             let value = checkbox.value;
@@ -218,6 +217,10 @@ restrictionsB.forEach((elt) => {
                 </select>
 
                 </div>`;
+            if (!nativeMatching[taskId]) {
+                errorTag.classList.remove("d-none");
+                errorTag.textContent = "There are no available task !";
+            }
             let extendedHtml = document
                 .createRange()
                 .createContextualFragment(extendedEL);
@@ -247,6 +250,8 @@ restrictionsB.forEach((elt) => {
                         ? updatedTask.querySelector("span:first-child")
                         : null;
                     if (!status) {
+                        errorTag.classList.remove("d-none");
+                        errorTag.textContent = "error";
                         return;
                     }
                     let newNative = updatedTask.querySelector("div");
