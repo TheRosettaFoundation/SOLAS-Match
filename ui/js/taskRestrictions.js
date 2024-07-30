@@ -118,6 +118,12 @@ restrictionsB.forEach((elt) => {
 
         console.log(parent);
 
+        const checkedTest = parentTest.querySelectorAll(
+            'input[type="checkbox"]:checked'
+        );
+
+        console.log(checkedTest);
+
         const checkedCheckboxes = parent.querySelectorAll(
             'input[type="checkbox"]:checked'
         );
