@@ -250,11 +250,7 @@ restrictionsB.forEach((elt) => {
                     let status = updatedTask
                         ? updatedTask.querySelector("span:first-child")
                         : null;
-                    if (!status) {
-                        errorTag.classList.remove("d-none");
-                        errorTag.textContent = "error";
-                        return;
-                    }
+
                     let newNative = updatedTask.querySelector("div");
 
                     let statusText = status.textContent.trim();
