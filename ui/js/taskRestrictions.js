@@ -113,9 +113,11 @@ restrictionsB.forEach((elt) => {
         const parent =
             clickedElement.parentElement.parentElement.nextElementSibling;
 
+        const parentTest = document.querySelector(".table-checkboxes");
+
         console.log(parent);
 
-        const checkedCheckboxes = parent.querySelectorAll(
+        const checkedCheckboxes = parentTest.querySelectorAll(
             'input[type="checkbox"]:checked'
         );
 

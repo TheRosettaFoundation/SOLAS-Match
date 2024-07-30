@@ -72,7 +72,7 @@
             </p>
         {/if}
 
-        <div class="bg-body p-2 border-secondary rounded-top-3 mt-2">
+        <div class="bg-body  p-2 border-secondary rounded-top-3 mt-2">
             <div class="table-responsive mt-4  ">   
         <table class="table table-borderless">
         <thead class="fs-5 align-middle">            
@@ -560,7 +560,7 @@
 
                     <div class="bg-body p-2 border-secondary mt-4">
                     <div class="table-responsive mt-4 ">
-                    <table class="table " >
+                    <table class="table table-checkboxes " >
                         <thead class="fs-5">
                             <tr>
                                  <th><input type="checkbox" name="select_all_tasks" data-lang="{$languageCountry|replace:',':'_'}" /></th>
