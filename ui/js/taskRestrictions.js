@@ -190,8 +190,6 @@ restrictionsB.forEach((elt) => {
         });
 
         const getOptionDisabledAttr = (value) => {
-            console.log(value);
-            console.log(typeof value);
             return value == 0 ? "disabled" : "";
         };
 
