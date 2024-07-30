@@ -217,15 +217,17 @@ restrictionsB.forEach((elt) => {
                 </select>
 
                 </div>`;
+
+            let extendedHtml = document
+                .createRange()
+                .createContextualFragment(extendedEL);
+
             if (!nativeMatching[taskId]) {
                 errorTag = document.querySelector(".modal-error");
                 console.log(errorTag);
                 errorTag.classList.remove("d-none");
                 errorTag.textContent = "There are no available task !";
             }
-            let extendedHtml = document
-                .createRange()
-                .createContextualFragment(extendedEL);
 
             let taskelt = extendedHtml.querySelector(".elt");
             let selectNative = extendedHtml.querySelector(".selectedId");
