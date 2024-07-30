@@ -641,6 +641,8 @@ a:hover{
                                             <a id="task-{$task_id}" href="{$siteLocation}task/{$task_id}/view" class="custom-link w-75 text-wrap ">{TemplateHelper::uiCleanseHTMLNewlineAndTabs($task_title)} 
                                              <img src="{urlFor name='home'}ui/img/question.svg" class="d-none" alt="question_Img" /></a> 
                                         </div>
+                                </div>
+                                <div>
 
                                         <div class="d-flex mt-2 mb-3 ">
                                             <span class=" badge rounded-pill border border-2 text-white text-uppercase border-greenBorder border-opacity-25 fs-7 font-bold" style="background-color:{TaskTypeEnum::$enum_to_UI[$type_id]['colour']}">  {TaskTypeEnum::$enum_to_UI[$type_id]['type_text']} </span>
