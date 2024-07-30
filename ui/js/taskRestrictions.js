@@ -2,12 +2,11 @@ let uniqueElements = [];
 let taskSelected = {};
 let tobefetched = {};
 let countFetch = [];
+let errorTag;
 
 const url = window.location.href;
 const regex = /project\/(\d+)\//;
 const project_id = url.match(regex)[1];
-let errorTag = document.querySelector(".modal-error");
-console.log(errorTag);
 
 let taskToRestrict = [];
 
@@ -219,6 +218,8 @@ restrictionsB.forEach((elt) => {
 
                 </div>`;
             if (!nativeMatching[taskId]) {
+                errorTag = document.querySelector(".modal-error");
+                console.log(errorTag);
                 errorTag.classList.remove("d-none");
                 errorTag.textContent = "There are no available task !";
             }
