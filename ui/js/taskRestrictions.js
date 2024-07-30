@@ -113,6 +113,8 @@ restrictionsB.forEach((elt) => {
         const parent =
             clickedElement.parentElement.parentElement.nextElementSibling;
 
+        console.log(parent);
+
         const checkedCheckboxes = parent.querySelectorAll(
             'input[type="checkbox"]:checked'
         );
