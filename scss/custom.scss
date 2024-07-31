@@ -305,10 +305,9 @@ li[data-list="bullet"] {
 }
 
 /* Style the iframe */
-iframe {
+.iframe {
     border: 2px solid blue; /* Remove the border */
-    width: 100%; /* Full width */
-    height: 100%; /* Adjust height */
+    background-color: red;
 }
 
 /* Style the container if you have one */
