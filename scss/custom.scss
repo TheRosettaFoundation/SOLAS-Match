@@ -304,8 +304,17 @@ li[data-list="bullet"] {
     }
 }
 
-iframe[src*="metabase"] {
-    background-color: red;
+/* Style the iframe */
+iframe {
+    border: none; /* Remove the border */
+    width: 100%; /* Full width */
+    height: 600px; /* Adjust height */
+}
+
+/* Style the container if you have one */
+.dashboard-container {
+    padding: 10px; /* Add padding */
+    background-color: #f9f9f9; /* Background color */
 }
 
 @import "../node_modules/bootstrap/scss/bootstrap";
