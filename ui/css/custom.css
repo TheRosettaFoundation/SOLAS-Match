@@ -234,6 +234,10 @@ li[data-list=bullet] {
     overflow: hidden;
   }
 }
+iframe[src*=metabase] {
+  background-color: red;
+}
+
 /*!
  * Bootstrap  v5.3.2 (https://getbootstrap.com/)
  * Copyright 2011-2023 The Bootstrap Authors

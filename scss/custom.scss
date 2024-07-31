@@ -304,6 +304,10 @@ li[data-list="bullet"] {
     }
 }
 
+iframe[src*="metabase"] {
+    background-color: red;
+}
+
 @import "../node_modules/bootstrap/scss/bootstrap";
 
 // 6. Optionally include any other parts as needed
