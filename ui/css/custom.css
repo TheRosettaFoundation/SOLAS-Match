@@ -238,6 +238,9 @@ li[data-list=bullet] {
 .iframe {
   border: 2px solid blue; /* Remove the border */
   background-color: red;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
 }
 
 /* Style the container if you have one */
