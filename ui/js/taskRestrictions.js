@@ -192,15 +192,18 @@ restrictionsB.forEach((elt) => {
 
                 <select class="form-select ms-2 w-75 selectedId" aria-label="Default select example">
                 <option selected value="no"> Select Restriction</option>
-                    <option value="0"> <b>No restriction:</b><span class="nocm">Matching CMs: ${nativeMatching[taskId].native_matching_0} // </span> 
-                <span class="nosm">Successful CMs : ${nativeMatching[taskId].native_matching_active_0} </span> </option>
+                    <option value="0" 
+                    )}> </br>No restriction <span class="nocm">, Matching CMs : ${nativeMatching[taskId].native_matching_0}</span> </br>
+                <span class="nosm">, Successful CMs : ${nativeMatching[taskId].native_matching_active_0} </span> </option>
 
-                    <option value="1">
-                   <span > Matching Native Language:</span> Matching CMs: ${nativeMatching[taskId].native_matching_1} // 
-                <span class="slCM">Successful CMs : ${nativeMatching[taskId].native_matching_active_1}</span></option>
+                    <option value="1" 
+                    )}>
+                    Matching Native Language , Matching CMs: ${nativeMatching[taskId].native_matching_1} 
+                <span class="slCM">, Successful CMs : ${nativeMatching[taskId].native_matching_active_1}</span></option>
 
-                    <option value="2"> <span> Matching Native Language and Locale/Country:</span><span class="mCM">Matching CMs: ${nativeMatching[taskId].native_matching_2} // </span>
-                <span class="sCM">Successful CMs : ${nativeMatching[taskId].native_matching_active_2}</span></option>
+                    <option value="2" 
+                    )} >Matching Native Language and Locale/Country <span class="mCM">, Matching CMs : ${nativeMatching[taskId].native_matching_2}</span>
+                <span class="sCM">, Successful CMs : ${nativeMatching[taskId].native_matching_active_2}</span></option>
                 </select>
 
                 </div>`
@@ -209,12 +212,12 @@ restrictionsB.forEach((elt) => {
 
                 <select class="form-select ms-2 w-75 selectedId" aria-label="Default select example" disabled">
                 <option selected value="no" > Select Restriction</option>
-                    <option value="0" > </br><span class="fw-bold">No restriction:</span> <span class="nocm"></span>Matching CMs: 0 // </span>
+                    <option value="0" > No restriction:Matching CMs : 0 // </span>
                 <span class="nosm">Successful CMs : 0 </span> </option>
-                    <option value="1" > <span>Matching Native Language:</span> <span class="mlCM">Matching CMs: 0 // </span>
-                <span class="slCM">Successful CMs : 0</span></option>
-                    <option value="2" ><span>Matching Native Language and Locale/Country:</span><span class="mCM">Matching CMs: 0 // </span>
-                <span>Successful CMs : 0</span></option>
+                    <option value="1" >Matching Native Language:</span> Matching CMs : 0 //
+                , Successful CMs : 0</span></option>
+                    <option value="2" ><span class="fw-bold">Matching Native Language and Locale/Country:</span><span class="mCM">Matching CMs : 0 </span>
+                <span class="sCM">, Successful CMs : 0</span></option>
                 </select>
 
                 </div>`;
