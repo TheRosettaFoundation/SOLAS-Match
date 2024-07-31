@@ -188,26 +188,26 @@ restrictionsB.forEach((elt) => {
                 <div class="me-4 elt text-break textwrap"></div>
 
                 <select class="form-select ms-2 w-75 selectedId" aria-label="Default select example">
-                <option selected value="no"> Select Restrictions</option>
+                <option selected value="no"> Select Restriction</option>
                     <option value="0"> <br />No restriction<span class="nocm">, Matching CMs: ${nativeMatching[taskId].native_matching_0}</span> <br />
                 <span class="nosm">, Successful CMs: ${nativeMatching[taskId].native_matching_active_0} </span> </option>
                     <option value="1">Matching Native Language<span class="mlCM">, Matching CMs: ${nativeMatching[taskId].native_matching_1}</span>
                 <span class="slCM">, Successful CMs: ${nativeMatching[taskId].native_matching_active_1}</span></option>
                     <option value="2">Matching Native Language and Locale/Country<span class="mCM">, Matching CMs: ${nativeMatching[taskId].native_matching_2}</span>
-                <span class="sCM">, Successful CMs : ${nativeMatching[taskId].native_matching_active_2}</span></option>
+                <span class="sCM">, Successful CMs: ${nativeMatching[taskId].native_matching_active_2}</span></option>
                 </select>
 
                 </div>`
                 : `<div class="d-flex mt-4 mb-2 align-items-center justify-content-between extended">
                 <div class="me-4 elt text-break textwrap"></div>
 
-                <select class="form-select ms-2 w-75 selectedId" aria-label="Default select example" disabled">
-                <option selected value="no"> Select Restrictions</option>
-                    <option value="0" > <br />No restriction<span class="nocm">, Matching CMs: 0</span> <br />
-                <span class="nosm">, Successful CMs: 0 </span> </option>
-                    <option value="1" >Matching Native Language<span class="mlCM">, Matching CMs: 0</span>
+                <select class="form-select ms-2 w-75 selectedId" aria-label="Default select example">
+                <option selected value="no"> Select Restriction</option>
+                    <option value="0"> <br />No restriction<span class="nocm">, Matching CMs: 0</span> <br />
+                <span class="nosm">, Successful CMs: 0</span></option>
+                    <option value="1">Matching Native Language<span class="mlCM">, Matching CMs: 0</span>
                 <span class="slCM">, Successful CMs: 0</span></option>
-                    <option value="2" >Matching Native Language and Locale/Country<span class="mCM">, Matching CMs: 0 </span>
+                    <option value="2">Matching Native Language and Locale/Country<span class="mCM">, Matching CMs: 0</span>
                 <span class="sCM">, Successful CMs: 0</span></option>
                 </select>
 
