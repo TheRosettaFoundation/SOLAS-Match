@@ -236,9 +236,9 @@ li[data-list=bullet] {
 }
 /* Style the iframe */
 iframe {
-  border: none; /* Remove the border */
+  border: 2px solid blue; /* Remove the border */
   width: 100%; /* Full width */
-  height: 600px; /* Adjust height */
+  height: 100%; /* Adjust height */
 }
 
 /* Style the container if you have one */
