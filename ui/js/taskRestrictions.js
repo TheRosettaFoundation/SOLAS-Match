@@ -3,6 +3,8 @@ let taskSelected = {};
 let tobefetched = {};
 let countFetch = [];
 
+let modalDescShow = document.querySelector(".modal-desc");
+
 const url = window.location.href;
 const regex = /project\/(\d+)\//;
 const project_id = url.match(regex)[1];
@@ -35,6 +37,8 @@ myModalEl.addEventListener("hide.bs.modal", (event) => {
     uniqueElements = [];
     tobefetched = {};
     countFetch = [];
+
+    modalDescShow.classList.toggle("d-none");
 
     if (form_1) {
         let children = form_1.querySelectorAll(".extended");
@@ -183,6 +187,8 @@ restrictionsB.forEach((elt) => {
                 nativeMatching = 0;
             }
         });
+
+        modalDescShow.classList.toggle("d-none");
 
         uniqueElements.forEach((elt) => {
             let taskId = tobefetched[elt];
