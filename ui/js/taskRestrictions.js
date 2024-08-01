@@ -194,10 +194,10 @@ restrictionsB.forEach((elt) => {
         uniqueElements.forEach((elt) => {
             let taskId = tobefetched[elt];
             let extendedEL = nativeMatching[taskId]
-                ? `<div class="d-flex mt-4 mb-2 align-items-center justify-content-between extended">
+                ? `<div class="d-flex mt-4 mb-2 align-items-center justify-content-between extended fs-4">
                 <div class="me-4 elt text-break textwrap"></div>
 
-                <select class="form-select ms-2 w-75 selectedId fs-5" aria-label="Default select example">
+                <select class="form-select ms-2 w-75 selectedId fs-4" aria-label="Default select example">
                 <option selected value="no"> Select Restriction</option>
                     <option value="0" 
                     > </br>No restriction: <span class="nocm">Matching CMs : ${nativeMatching[taskId].native_matching_0}</span> //
@@ -214,10 +214,10 @@ restrictionsB.forEach((elt) => {
                 </select>
 
                 </div>`
-                : `<div class="d-flex mt-4 mb-2 align-items-center justify-content-between extended">
+                : `<div class="d-flex mt-4 mb-2 align-items-center justify-content-between extended fs-4">
                 <div class="me-4 elt text-break textwrap"></div>
 
-                <select class="form-select ms-2 w-75 selectedId fs-5" aria-label="Default select example" disabled">
+                <select class="form-select ms-2 w-75 selectedId fs-4" aria-label="Default select example" disabled">
                 <option selected value="no" > Select Restriction</option>
                     <option value="0" > No restriction: Matching CMs : 0 // </span>
                 <span class="nosm">Successful CMs : 0 </span> </option>
