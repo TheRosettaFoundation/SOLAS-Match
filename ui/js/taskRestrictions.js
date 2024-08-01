@@ -264,6 +264,8 @@ restrictionsB.forEach((elt) => {
                     let newNative = updatedTask.querySelector("div");
 
                     let statusText = status.textContent.trim();
+                    // Part displaying the icons
+
                     if (statusText == "Unclaimed" || statusText == "Waiting") {
                         switch (matching) {
                             case "0":
