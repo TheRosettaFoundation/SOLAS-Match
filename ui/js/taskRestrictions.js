@@ -189,28 +189,26 @@ restrictionsB.forEach((elt) => {
 
                 <select class="form-select ms-2 w-75 selectedId fs-4" aria-label="Default select example">
                 <option selected value="no"> Select Restriction</option>
-                    <option value="0"> <br />No restriction<span class="nocm">, Matching CMs: ${nativeMatching[taskId].native_matching_0}</span> <br />
-                <span class="nosm">, Active CMs: ${nativeMatching[taskId].native_matching_active_0} </span> </option>
-                    <option value="1">Matching Native Language<span class="mlCM">, Matching CMs: ${nativeMatching[taskId].native_matching_1}</span>
-                <span class="slCM">, Active CMs: ${nativeMatching[taskId].native_matching_active_1}</span></option>
+                    <option value="0"> <br />No restriction: <span class="nocm">Matching CMs: ${nativeMatching[taskId].native_matching_0}</span> //
+                <span class="nosm">Active CMs: ${nativeMatching[taskId].native_matching_active_0}</span></option>
+
+                    <option value="1">Matching Native Language: <span class="mlCM">Matching CMs: ${nativeMatching[taskId].native_matching_1}</span>
+                <span class="slCM">Active CMs: ${nativeMatching[taskId].native_matching_active_1}</span></option>
+
                     <option value="2">Matching Native Language and Locale/Country<span class="mCM">, Matching CMs: ${nativeMatching[taskId].native_matching_2}</span>
-                <span class="sCM">, Active CMs: ${nativeMatching[taskId].native_matching_active_2}</span></option>
+                <span class="sCM">Active CMs: ${nativeMatching[taskId].native_matching_active_2}</span></option>
                 </select>
-[[[SHE HAD BEFGORE
+[[[SHE HAD BEFGORE FIXED
                 <select class="form-select ms-2 w-75 selectedId fs-4" aria-label="Default select example">
                 <option selected value="no"> Select Restriction</option>
-                    <option value="0"
-                    > </br>No restriction: <span class="nocm">Matching CMs : ${nativeMatching[taskId].native_matching_0}</span> //
-                <span class="nosm">Successful CMs : ${nativeMatching[taskId].native_matching_active_0} </span> </option>
+                    <option value="0"> <br />No restriction: <span class="nocm">Matching CMs: ${nativeMatching[taskId].native_matching_0}</span> //
+                <span class="nosm">Active CMs: ${nativeMatching[taskId].native_matching_active_0}</span></option>
 
-                    <option value="1"
-                    >
-                    Matching Native Language: Matching CMs: ${nativeMatching[taskId].native_matching_1} //
-                <span class="slCM">Successful CMs : ${nativeMatching[taskId].native_matching_active_1}</span></option>
+                    <option value="1">Matching Native Language: Matching CMs: ${nativeMatching[taskId].native_matching_1} //
+                <span class="slCM">Active CMs: ${nativeMatching[taskId].native_matching_active_1}</span></option>
 
-                    <option value="2"
-                  >Matching Native Language and Locale/Country <span class="mCM">: Matching CMs : ${nativeMatching[taskId].native_matching_2}</span>
-                <span class="sCM"> // Successful CMs : ${nativeMatching[taskId].native_matching_active_2}</span></option>
+                    <option value="2">Matching Native Language and Locale/Country <span class="mCM">: Matching CMs: ${nativeMatching[taskId].native_matching_2}</span>
+                <span class="sCM"> // Active CMs: ${nativeMatching[taskId].native_matching_active_2}</span></option>
                 </select>
 ]]]
 
