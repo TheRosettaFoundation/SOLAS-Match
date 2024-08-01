@@ -2,7 +2,7 @@ let uniqueElements = [];
 let taskSelected = {};
 let tobefetched = {};
 let countFetch = [];
-
+// Displaying description of the restrictions on the modal
 let modalDescShow = document.querySelector(".modal-desc");
 
 const url = window.location.href;
