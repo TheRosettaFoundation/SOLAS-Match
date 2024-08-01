@@ -537,7 +537,7 @@
                           <div class="modal-dialog modal-lg modal-dialog-centered">
                             <div class="modal-content">
                               <div class="modal-header">
-                          <h1 class="modal-title fs-5 fw-bold text-grayish" id="exampleModalToggleLabel">Tasks Restrictions </h1>
+                          <h1 class="modal-title fs-4 fw-bold text-grayish" id="exampleModalToggleLabel">Tasks Restrictions </h1>
                           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                               </div>
                               <div class="modal-body py-4">
