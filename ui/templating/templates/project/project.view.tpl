@@ -544,9 +544,9 @@
 
                               <div class="text-muted modal-desc d-none " >
 
-                              <div><span class="fw-bold text-secondary">Matching CMs:</span> Total community members who could claim this task.</div>
-                              <div> <span class="fw-bold text-secondary">Successful CMs:</span> Community members who claimed at least a task in the past.</div>
-                              <div><span class="fw-bold text-secondary">Active CMs:</span> Community members who claimed and completed at least a task in the past 12 months.</div>
+                              <div><span class="fw-bold text-grayish">Matching CMs:</span> Total community members who could claim this task.</div>
+                              <div> <span class="fw-bold text-grayish">Successful CMs:</span> Community members who claimed at least a task in the past.</div>
+                              <div><span class="fw-bold text-grayish">Active CMs:</span> Community members who claimed and completed at least a task in the past 12 months.</div>
 
                               </div>
 
