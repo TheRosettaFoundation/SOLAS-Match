@@ -537,12 +537,18 @@
                           <div class="modal-dialog modal-lg modal-dialog-centered">
                             <div class="modal-content">
                               <div class="modal-header">
-                          <h1 class="modal-title fs-5 fw-bold" id="exampleModalToggleLabel">Tasks Restrictions </h1>
+                          <h1 class="modal-title fs-5" id="exampleModalToggleLabel">Tasks Restrictions </h1>
                           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                               </div>
                               <div class="modal-body py-4">
 
-                             
+                              <div class="text-muted modal-desc d-none " >
+
+                              <div><span class="fw-bold text-secondary">Matching CMs:</span> Total community members who could claim this task.</div>
+                              <div> <span class="fw-bold text-secondary">Successful CMs:</span> Community members who claimed at least a task in the past.</div>
+                              <div><span class="fw-bold text-secondary">Active CMs:</span> Community members who claimed and completed at least a task in the past 12 months.</div>
+
+                              </div>
 
                                 <div class="d-flex">
                         <form id="get_translators_count_availability" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}">
@@ -554,7 +560,7 @@
                           </div>
                         </div>
 
-                  <button class="btn btn-primary text-white mt-2 mt-md-0 restrictions" data-bs-target="#exampleModalToggle" data-bs-toggle="modal">Restrict Task</button>
+                  <button class="btn btn-primary text-white mt-2 mt-md-0 restrictions " data-bs-target="#exampleModalToggle" data-bs-toggle="modal">Restrict Task</button>
 
                       </div>
                     {* endofModal *}

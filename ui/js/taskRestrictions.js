@@ -188,18 +188,9 @@ restrictionsB.forEach((elt) => {
             let taskId = tobefetched[elt];
             let extendedEL = nativeMatching[taskId]
                 ? `<div class="d-flex mt-4 mb-2 align-items-center justify-content-between extended">
-                <div class="me-4 elt text-break textwrap">
+                <div class="me-4 elt text-break textwrap"></div>
 
-                 <div class="text-muted " >
-
-                              <div><span class="fw-bold text-grayish">Matching CMs:</span> Total community members who could claim this task.</div>
-                              <div> <span class="fw-bold text-grayish">Successful CMs:</span> Community members who claimed at least a task in the past.</div>
-                              <div><span class="fw-bold text-grayish">Active CMs:</span> Community members who claimed and completed at least a task in the past 12 months.</div>
-
-                </div>
-                </div>
-
-                <select class="form-select ms-2 w-75 selectedId fs-5" aria-label="Default select example">
+                <select class="form-select ms-2 w-75 selectedId fs5" aria-label="Default select example">
                 <option selected value="no"> Select Restriction</option>
                     <option value="0" 
                     > </br>No restriction: <span class="nocm">Matching CMs : ${nativeMatching[taskId].native_matching_0}</span> //
@@ -217,18 +208,9 @@ restrictionsB.forEach((elt) => {
 
                 </div>`
                 : `<div class="d-flex mt-4 mb-2 align-items-center justify-content-between extended">
-                <div class="me-4 elt text-break textwrap">
-                 <div class="text-muted " >
+                <div class="me-4 elt text-break textwrap"></div>
 
-                              <div><span class="fw-bold text-secondary">Matching CMs:</span> Total community members who could claim this task.</div>
-                              <div> <span class="fw-bold text-secondary">Successful CMs:</span> Community members who claimed at least a task in the past.</div>
-                              <div><span class="fw-bold text-secondary">Active CMs:</span> Community members who claimed and completed at least a task in the past 12 months.</div>
-
-                              </div>
-                
-                </div>
-
-                <select class="form-select ms-2 w-75 selectedId fs-5" aria-label="Default select example" disabled">
+                <select class="form-select ms-2 w-75 selectedId" aria-label="Default select example" disabled">
                 <option selected value="no" > Select Restriction</option>
                     <option value="0" > No restriction: Matching CMs : 0 // </span>
                 <span class="nosm">Successful CMs : 0 </span> </option>
