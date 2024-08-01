@@ -544,9 +544,9 @@
 
                               <div class="text-muted " >
 
-                              <div><span class="fw-bold">Matching CMs:</span> Total community members who could claim this task.</div>
-                              <div> <span class="fw-bold">Successful CMs:</span> Community members who claimed at least a task in the past.</div>
-                              <div><span class="fw-bold">Active CMs:</span> Community members who claimed and completed at least a task in the past 12 months.</div>
+                              <div><span class="fw-bold text-secondary">Matching CMs:</span> Total community members who could claim this task.</div>
+                              <div> <span class="fw-bold text-secondary">Successful CMs:</span> Community members who claimed at least a task in the past.</div>
+                              <div><span class="fw-bold text-secondary">Active CMs:</span> Community members who claimed and completed at least a task in the past 12 months.</div>
 
                               </div>
 
@@ -560,7 +560,7 @@
                           </div>
                         </div>
 
-                  <button class="btn btn-primary text-white mt-2 mt-md-0 restrictions" data-bs-target="#exampleModalToggle" data-bs-toggle="modal">Restrict Task</button>
+                  <button class="btn btn-primary text-white mt-2 mt-md-0 restrictions fw-bold" data-bs-target="#exampleModalToggle" data-bs-toggle="modal">Restrict Task</button>
 
                       </div>
                     {* endofModal *}
