@@ -542,13 +542,7 @@
                               </div>
                               <div class="modal-body py-4">
 
-                              <div class="text-muted " >
-
-                              <div><span class="fw-bold text-secondary">Matching CMs:</span> Total community members who could claim this task.</div>
-                              <div> <span class="fw-bold text-secondary">Successful CMs:</span> Community members who claimed at least a task in the past.</div>
-                              <div><span class="fw-bold text-secondary">Active CMs:</span> Community members who claimed and completed at least a task in the past 12 months.</div>
-
-                              </div>
+                             
 
                                 <div class="d-flex">
                         <form id="get_translators_count_availability" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}">
