@@ -537,16 +537,16 @@
                           <div class="modal-dialog modal-lg modal-dialog-centered">
                             <div class="modal-content">
                               <div class="modal-header">
-                          <h1 class="modal-title fs-5" id="exampleModalToggleLabel">Tasks Restrictions </h1>
+                          <h1 class="modal-title fs-5 fw-bold text-grayish" id="exampleModalToggleLabel">Tasks Restrictions </h1>
                           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                               </div>
                               <div class="modal-body py-4">
 
                               <div class="text-muted modal-desc d-none " >
 
-                              <div><span class="fw-bold text-grayish">Matching CMs:</span> Total community members who could claim this task.</div>
-                              <div> <span class="fw-bold text-grayish">Successful CMs:</span> Community members who claimed at least a task in the past.</div>
-                              <div><span class="fw-bold text-grayish">Active CMs:</span> Community members who claimed and completed at least a task in the past 12 months.</div>
+                              <div><span class="fw-bold text-gray">Matching CMs:</span> Total community members who could claim this task.</div>
+                              <div> <span class="fw-bold text-gray">Successful CMs:</span> Community members who claimed at least a task in the past.</div>
+                              <div><span class="fw-bold text-gray">Active CMs:</span> Community members who claimed and completed at least a task in the past 12 months.</div>
 
                               </div>
 
