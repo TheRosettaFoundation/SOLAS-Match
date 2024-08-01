@@ -41,7 +41,7 @@ myModalEl.addEventListener("hide.bs.modal", (event) => {
     tobefetched = {};
     countFetch = [];
 
-    modalDescShow.classList.remove("d-none");
+    modalDescShow.classList.add("d-none");
 
     if (form_1) {
         let children = form_1.querySelectorAll(".extended");
