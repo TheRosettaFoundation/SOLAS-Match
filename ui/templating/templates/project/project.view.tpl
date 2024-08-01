@@ -537,7 +537,7 @@
                           <div class="modal-dialog modal-lg modal-dialog-centered">
                             <div class="modal-content">
                               <div class="modal-header">
-                          <h1 class="modal-title fs-5" id="exampleModalToggleLabel">Tasks Restrictions </h1>
+                          <h1 class="modal-title fs-5 fw-bold" id="exampleModalToggleLabel">Tasks Restrictions </h1>
                           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                               </div>
                               <div class="modal-body py-4">
@@ -554,7 +554,7 @@
                           </div>
                         </div>
 
-                  <button class="btn btn-primary text-white mt-2 mt-md-0 restrictions fw-bold" data-bs-target="#exampleModalToggle" data-bs-toggle="modal">Restrict Task</button>
+                  <button class="btn btn-primary text-white mt-2 mt-md-0 restrictions" data-bs-target="#exampleModalToggle" data-bs-toggle="modal">Restrict Task</button>
 
                       </div>
                     {* endofModal *}
