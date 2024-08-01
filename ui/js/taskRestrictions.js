@@ -3,7 +3,6 @@ let taskSelected = {};
 let tobefetched = {};
 let countFetch = [];
 // Displaying description of the restrictions on the modal
-let modalDescShow = document.querySelector(".modal-desc");
 
 const url = window.location.href;
 const regex = /project\/(\d+)\//;
@@ -11,9 +10,13 @@ const project_id = url.match(regex)[1];
 
 let taskToRestrict = [];
 
+// DOM Selection
+
 const sesskey = document.querySelector('input[name="sesskey"]').value;
 
 const myModalEl = document.getElementById("exampleModalToggle");
+
+let modalDescShow = document.querySelector(".modal-desc");
 
 let form_1 = myModalEl.querySelector("form");
 
