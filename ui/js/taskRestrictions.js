@@ -28,6 +28,9 @@ myModalEl.addEventListener("shown.bs.modal", (event) => {
         form_1.appendChild(
             document.createRange().createContextualFragment(error)
         );
+        modalDescShow.classList.add("d-none");
+    } else {
+        modalDescShow.classList.remove("d-none");
     }
 });
 
@@ -38,7 +41,7 @@ myModalEl.addEventListener("hide.bs.modal", (event) => {
     tobefetched = {};
     countFetch = [];
 
-    modalDescShow.classList.toggle("d-none");
+    modalDescShow.classList.remove("d-none");
 
     if (form_1) {
         let children = form_1.querySelectorAll(".extended");
@@ -187,8 +190,6 @@ restrictionsB.forEach((elt) => {
                 nativeMatching = 0;
             }
         });
-
-        modalDescShow.classList.toggle("d-none");
 
         uniqueElements.forEach((elt) => {
             let taskId = tobefetched[elt];
