@@ -532,7 +532,7 @@
                     </span>
 
                     {* //Modal *}
-                      <div>
+                      <div class="fs-5">
                         <div class="modal fade" id="exampleModalToggle" aria-hidden="true" aria-labelledby="exampleModalToggleLabel" tabindex="-1">
                           <div class="modal-dialog modal-lg modal-dialog-centered">
                             <div class="modal-content">
@@ -542,7 +542,7 @@
                               </div>
                               <div class="modal-body py-4">
 
-                              <div class="text-muted fs-5" >
+                              <div class="text-muted " >
 
                               <div><span class="fw-bold">Matching CMs:</span> Total community members who could claim this task.</div>
                               <div> <span class="fw-bold">Successful CMs:</span> Community members who claimed at least a task in the past.</div>
