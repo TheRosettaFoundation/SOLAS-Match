@@ -542,7 +542,7 @@
                               </div>
                               <div class="modal-body py-4">
 
-                              <div class="text-muted fs-6" >
+                              <div class="text-muted fs-5" >
 
                               <div><span class="fw-bold">Matching CMs:</span> Total community members who could claim this task.</div>
                               <div> <span class="fw-bold">Successful CMs:</span> Community members who claimed at least a task in the past.</div>
