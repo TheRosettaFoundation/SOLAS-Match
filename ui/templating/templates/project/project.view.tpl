@@ -542,11 +542,11 @@
                               </div>
                               <div class="modal-body py-4">
 
-                              <div >
+                              <div class="text-muted fs-6" >
 
-                              <div><span class="fw-bold">Matching CMs:</span> total community members who could claim this task</div>
-                              <div> <span class="fw-bold">Successful CMs:<span> community members who claimed at least a task in the past</div>
-                              <div><span class="fw-bold">Active CMs:<span> community members who claimed and completed at least a task in the past 12 months.</div>
+                              <div><span class="fw-bold">Matching CMs:</span> Total community members who could claim this task.</div>
+                              <div> <span class="fw-bold">Successful CMs:</span> Community members who claimed at least a task in the past.</div>
+                              <div><span class="fw-bold">Active CMs:</span> Community members who claimed and completed at least a task in the past 12 months.</div>
 
                               </div>
 
