@@ -2,6 +2,7 @@ let uniqueElements = [];
 let taskSelected = {};
 let tobefetched = {};
 let countFetch = [];
+// Displaying description of the restrictions on the modal
 
 const url = window.location.href;
 const regex = /project\/(\d+)\//;
@@ -9,9 +10,13 @@ const project_id = url.match(regex)[1];
 
 let taskToRestrict = [];
 
+// DOM Selection
+
 const sesskey = document.querySelector('input[name="sesskey"]').value;
 
 const myModalEl = document.getElementById("exampleModalToggle");
+
+let modalDescShow = document.querySelector(".modal-desc");
 
 let form_1 = myModalEl.querySelector("form");
 
@@ -26,6 +31,9 @@ myModalEl.addEventListener("shown.bs.modal", (event) => {
         form_1.appendChild(
             document.createRange().createContextualFragment(error)
         );
+        modalDescShow.classList.add("d-none");
+    } else {
+        modalDescShow.classList.remove("d-none");
     }
 });
 
@@ -35,6 +43,8 @@ myModalEl.addEventListener("hide.bs.modal", (event) => {
     uniqueElements = [];
     tobefetched = {};
     countFetch = [];
+
+    modalDescShow.classList.add("d-none");
 
     if (form_1) {
         let children = form_1.querySelectorAll(".extended");
@@ -105,6 +115,7 @@ async function getUsersCount(taskIds) {
 restrictionsB.forEach((elt) => {
     elt.addEventListener("click", async (e) => {
         const clickedElement = e.target;
+
         const parent =
             clickedElement.parentElement.parentElement.nextElementSibling;
 
@@ -114,6 +125,7 @@ restrictionsB.forEach((elt) => {
 
         checkedCheckboxes.forEach((checkbox) => {
             const taskType = checkbox.getAttribute("data-task-type");
+
             let typeIndex = task_types.indexOf(parseInt(taskType));
             const taskName = type_texts[typeIndex];
             let value = checkbox.value;
@@ -192,25 +204,12 @@ restrictionsB.forEach((elt) => {
                     <option value="0"> <br />No restriction: <span class="nocm">Matching CMs: ${nativeMatching[taskId].native_matching_0}</span> //
                 <span class="nosm">Active CMs: ${nativeMatching[taskId].native_matching_active_0}</span></option>
 
-                    <option value="1">Matching Native Language: <span class="mlCM">Matching CMs: ${nativeMatching[taskId].native_matching_1}</span>
+                    <option value="1">Matching Native Language: <span class="mlCM">Matching CMs: ${nativeMatching[taskId].native_matching_1}</span> //
                 <span class="slCM">Active CMs: ${nativeMatching[taskId].native_matching_active_1}</span></option>
 
-                    <option value="2">Matching Native Language and Locale/Country<span class="mCM">, Matching CMs: ${nativeMatching[taskId].native_matching_2}</span>
+                    <option value="2">Matching Native Language and Locale/Country<span class="mCM">: Matching CMs: ${nativeMatching[taskId].native_matching_2}</span> //
                 <span class="sCM">Active CMs: ${nativeMatching[taskId].native_matching_active_2}</span></option>
                 </select>
-[[[SHE HAD BEFGORE FIXED
-                <select class="form-select ms-2 w-75 selectedId fs-4" aria-label="Default select example">
-                <option selected value="no"> Select Restriction</option>
-                    <option value="0"> <br />No restriction: <span class="nocm">Matching CMs: ${nativeMatching[taskId].native_matching_0}</span> //
-                <span class="nosm">Active CMs: ${nativeMatching[taskId].native_matching_active_0}</span></option>
-
-                    <option value="1">Matching Native Language: Matching CMs: ${nativeMatching[taskId].native_matching_1} //
-                <span class="slCM">Active CMs: ${nativeMatching[taskId].native_matching_active_1}</span></option>
-
-                    <option value="2">Matching Native Language and Locale/Country <span class="mCM">: Matching CMs: ${nativeMatching[taskId].native_matching_2}</span>
-                <span class="sCM"> // Active CMs: ${nativeMatching[taskId].native_matching_active_2}</span></option>
-                </select>
-]]]
 
                 </div>`
                 : `<div class="d-flex mt-4 mb-2 align-items-center justify-content-between extended fs-4">
@@ -249,6 +248,7 @@ restrictionsB.forEach((elt) => {
 
                 updated.forEach((elt) => {
                     let updatedTask = document.getElementById(elt);
+
                     let status = updatedTask
                         ? updatedTask.querySelector("span:first-child")
                         : null;
@@ -256,6 +256,8 @@ restrictionsB.forEach((elt) => {
                     let newNative = updatedTask.querySelector("div");
 
                     let statusText = status.textContent.trim();
+                    // Part displaying the icons
+
                     if (statusText == "Unclaimed" || statusText == "Waiting") {
                         switch (matching) {
                             case "0":
