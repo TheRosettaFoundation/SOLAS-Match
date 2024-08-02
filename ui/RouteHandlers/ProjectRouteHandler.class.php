@@ -765,7 +765,6 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
 
             if ($roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER | NGO_ADMIN | NGO_PROJECT_OFFICER)) {
                 if (isset($post['translators_count'])) {
-error_log('translators_count (task_id): ' . $post['translators_count']);//(**)
                     $response->getBody()->write(json_encode($taskDao->count_users_who_can_claim($post['translators_count'])));
                     return $response->withHeader('Content-Type', 'application/json');
                 }
