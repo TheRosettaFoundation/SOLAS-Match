@@ -276,6 +276,11 @@ function addMoreTargetLanguages(index)
     proofreadingCheckbox.checked = true;
     if (create_memsource == 1 && index != 0) proofreadingCheckbox.disabled = true;
 
+    if (!userIsAdmin) {
+      translationCheckbox.disabled = true;
+      proofreadingCheckbox.disabled = true;
+    }
+
     // Put the Select Elements into their div
     targetLanguageCell.appendChild(targetLanguageSelect);
 
