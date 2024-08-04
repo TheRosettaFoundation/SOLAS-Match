@@ -277,8 +277,23 @@ function addMoreTargetLanguages(index)
     if (create_memsource == 1 && index != 0) proofreadingCheckbox.disabled = true;
 
     if (!userIsAdmin) {
+      translationCheckbox.name = "disabled_translation_" + targetCount;
       translationCheckbox.disabled = true;
+
+      proofreadingCheckbox.name = "disabled_proofreading_" + targetCount;
       proofreadingCheckbox.disabled = true;
+
+      var forced_translationCheckbox = document.createElement("input");
+      forced_translationCheckbox.setAttribute("type", "hidden");
+      forced_translationCheckbox.name = "translation_" + targetCount;
+      forced_translationCheckbox.value = "1";
+      translationRequiredDiv.appendChild(forced_translationCheckbox);
+
+      var forced_proofreadingCheckbox = document.createElement("input");
+      forced_proofreadingCheckbox.setAttribute("type", "hidden");
+      forced_proofreadingCheckbox.name = "proofreading_" + targetCount;
+      forced_proofreadingCheckbox.value = "1";
+      proofreadingRequiredDiv.appendChild(forced_proofreadingCheckbox);
     }
 
     // Put the Select Elements into their div
