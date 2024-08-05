@@ -7,8 +7,8 @@ function replaceNewlinesWithBr() {
         let content = displayElement.innerHTML;
 
         // Replace \n, \r, \t, \n\r with <br> tags
-        content = content.replace(/(\\r\\n|\\n|\\r|\\t)/g, "<br/>");
-        content = content.replace(/(\\t)/g, "&nbsp;&nbsp;&nbsp;&nbsp;");
+        content = content.replace(/(\r\n|\n|\r|\t)/g, "<br/>");
+        content = content.replace(/(\t)/g, "&nbsp;&nbsp;&nbsp;&nbsp;");
 
         displayElement.innerHTML = content;
     } else if (displayonAlter) {
@@ -16,8 +16,8 @@ function replaceNewlinesWithBr() {
         console.log(content);
 
         // Replace \n, \r, \t, \n\r with <br> tags
-        content = content.replace(/(\\r\\n|\\n|\\r|\\t)/g, "<br/>");
-        content = content.replace(/(\\t)/g, "&nbsp;&nbsp;&nbsp;&nbsp;");
+        content = content.replace(/(\r\n|\n|\r|\t)/g, "<br/>");
+        content = content.replace(/(\t)/g, "&nbsp;&nbsp;&nbsp;&nbsp;");
         console.log(content);
 
         displayonAlter.value = content;
