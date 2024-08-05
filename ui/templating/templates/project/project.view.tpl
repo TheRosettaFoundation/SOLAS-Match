@@ -550,9 +550,9 @@
                             </div>
                           </div>
                         </div>
-
+{if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
                   <button class="btn btn-primary text-white mt-2 mt-md-0 restrictions" data-bs-target="#exampleModalToggle" data-bs-toggle="modal">Restrict Task</button>
-
+{/if}
                       </div>
                     {* endofModal *}
                     </div>
