@@ -13,6 +13,7 @@ function replaceNewlinesWithBr() {
         displayElement.innerHTML = content;
     } else if (displayonAlter) {
         let content = displayonAlter.innerHTML;
+        console.log(content);
 
         // Replace \n, \r, \t, \n\r with <br> tags
         content = content.replace(/(\\r\\n|\\n|\\r|\\t)/g, "<br/>");
