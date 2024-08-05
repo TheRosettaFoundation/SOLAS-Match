@@ -1,6 +1,7 @@
 function replaceNewlinesWithBr() {
     const displayElement = document.querySelector(".displayF");
     const displayonAlter = document.querySelector("#project_description");
+    console.log(displayonAlter);
 
     if (displayElement) {
         let content = displayElement.innerHTML;
