@@ -1,7 +1,9 @@
+let htmlQuillContent = quill.root.innerHTML;
+console.log(htmlQuillContent);
 function replaceNewlinesWithBr() {
     const displayElement = document.querySelector(".displayF");
     const displayonAlter = document.querySelector("#project_description");
-    let htmlQuillContent = quill.root.innerHTML;
+
     console.log(displayonAlter);
 
     if (displayElement) {
@@ -21,7 +23,7 @@ function replaceNewlinesWithBr() {
 
         displayonAlter.value = content;
         content = content.replace(/(\t)/g, "&nbsp;&nbsp;&nbsp;&nbsp;");
-        htmlQuillContent = content;
+        quill.root.innerHTML = content;
     } else {
         console.error('Element with id "displayF" not found');
     }
