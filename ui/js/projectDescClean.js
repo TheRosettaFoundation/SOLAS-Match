@@ -18,7 +18,7 @@ function replaceNewlinesWithBr() {
         console.log(content);
 
         // Replace \n, \r, \t, \n\r with <br> tags
-        let modifiedText = content.replace(/\r\n|\n|\r/g, "<br/>");
+        let modifiedText = content.replace(/\r\n|\\n|\r/g, "<br/>");
 
         richEditorAlter.innerHTML = modifiedText;
     } else {
