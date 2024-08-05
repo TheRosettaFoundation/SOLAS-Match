@@ -18,10 +18,9 @@ function replaceNewlinesWithBr() {
         console.log(content);
 
         // Replace \n, \r, \t, \n\r with <br> tags
-        content = content.replace(/(\r\n|\n|\r|\t)/g, "<br/>");
+        let modifiedText = content.replace(/\r\n|\n|\r/g, "<br/>");
 
-        displayonAlter.value = content;
-        richEditorAlter.textContent = content;
+        richEditorAlter.innerHTML = modifiedText;
     } else {
         console.error('Element with id "displayF" not found');
     }
