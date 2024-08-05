@@ -18,6 +18,7 @@ function replaceNewlinesWithBr() {
         // Replace \n, \r, \t, \n\r with <br> tags
         content = content.replace(/(\\r\\n|\\n|\\r|\\t)/g, "<br/>");
         content = content.replace(/(\\t)/g, "&nbsp;&nbsp;&nbsp;&nbsp;");
+        console.log(content);
 
         displayonAlter.innerHTML = content;
     } else {
