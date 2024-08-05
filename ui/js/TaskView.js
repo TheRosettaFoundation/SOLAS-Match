@@ -7,6 +7,7 @@ $(document).ready(documentReady);
  */
 function documentReady()
 {
+  console.log("test");
   $(".convert_utc_to_local").each(function ()
     {
       $(this).removeClass("convert_utc_to_local");
