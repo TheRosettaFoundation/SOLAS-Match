@@ -3,6 +3,7 @@ console.log(htmlQuillContent);
 function replaceNewlinesWithBr() {
     const displayElement = document.querySelector(".displayF");
     const displayonAlter = document.querySelector("#project_description");
+    const richEditorAlter = document.querySelector(".ql-editor");
 
     console.log(displayonAlter);
 
@@ -12,8 +13,6 @@ function replaceNewlinesWithBr() {
         // Replace \n, \r, \t, \n\r with <br> tags
         content = content.replace(/(\r\n|\n|\r|\t)/g, "<br/>");
         content = content.replace(/(\t)/g, "&nbsp;&nbsp;&nbsp;&nbsp;");
-
-        displayElement.innerHTML = content;
     } else if (displayonAlter) {
         let content = displayonAlter.innerHTML;
         console.log(content);
@@ -22,8 +21,7 @@ function replaceNewlinesWithBr() {
         content = content.replace(/(\r\n|\n|\r|\t)/g, "<br/>");
 
         displayonAlter.value = content;
-        // content = content.replace(/(\t)/g, "&nbsp;&nbsp;&nbsp;&nbsp;");
-        // quill.root.innerHTML = content;
+        richEditorAlter.textContent = content;
     } else {
         console.error('Element with id "displayF" not found');
     }
