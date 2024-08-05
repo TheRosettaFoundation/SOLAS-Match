@@ -4,8 +4,8 @@ function replaceNewlinesWithBr() {
     if (displayElement) {
         let content = displayElement.innerHTML;
 
-        // Replace \n, \r, \t, \n\r with <br> tags
-        content = content.replace(/(\r\n|\n|\r|\t)/g, "<br/>");
+        // Replace \n, \r, \t, \n\r ,&nbsp  with <br> tags
+        content = content.replace(/(\r\n|\n|\r|\t|&nbsp)/g, "<br/>");
 
         displayElement.innerHTML = content;
     } else {
