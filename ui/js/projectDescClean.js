@@ -19,7 +19,7 @@ function replaceNewlinesWithBr() {
 
         // Replace \n, \r, \t, \n\r with <br> tags
         let modifiedText = content.replace(/\r\n|\\n|\r/g, "<br/>");
-
+        displayonAlter.value = modifiedText;
         richEditorAlter.innerHTML = modifiedText;
     } else {
         console.error('Element with id "displayF" not found');
