@@ -20,7 +20,7 @@ function replaceNewlinesWithBr() {
         content = content.replace(/(\\t)/g, "&nbsp;&nbsp;&nbsp;&nbsp;");
         console.log(content);
 
-        displayonAlter.innerHTML = content;
+        displayonAlter.value = content;
     } else {
         console.error('Element with id "displayF" not found');
     }
