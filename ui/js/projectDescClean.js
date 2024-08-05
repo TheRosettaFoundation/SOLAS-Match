@@ -22,8 +22,8 @@ function replaceNewlinesWithBr() {
         content = content.replace(/(\r\n|\n|\r|\t)/g, "<br/>");
 
         displayonAlter.value = content;
-        content = content.replace(/(\t)/g, "&nbsp;&nbsp;&nbsp;&nbsp;");
-        quill.root.innerHTML = content;
+        // content = content.replace(/(\t)/g, "&nbsp;&nbsp;&nbsp;&nbsp;");
+        // quill.root.innerHTML = content;
     } else {
         console.error('Element with id "displayF" not found');
     }
