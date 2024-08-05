@@ -220,7 +220,7 @@ let textarea = document.getElementById("project_description");
 let htmlText = textarea.value ;
 console.log(htmlText) ;
 
-let cleanText =  htmlText.replace(/\r\n|\\n|\r/g, "<br/>");
+let cleanText =  htmlText.replace(/\t|\n/g, "<br/>");
 console.log(cleanText)
 textarea.value = cleanText;
 var delta = quill.clipboard.convert(cleanText);
