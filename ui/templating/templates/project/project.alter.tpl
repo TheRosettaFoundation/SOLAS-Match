@@ -217,10 +217,13 @@ const quill = new Quill('#editor', {
 });
 
 let textarea = document.getElementById("project_description");
-let htmlText = textarea.value ;
-var delta = quill.clipboard.convert(htmlText);
+let htmlText = textarea.value;
+let cleanText = htmlText.replace(/\\r\\n|\\n|\\r/g, '<br/>');
+cleanText = cleanText.replace(/\\t/g, '&nbsp;&nbsp;&nbsp;&nbsp;');
+textarea.value = cleanText;
+var delta = quill.clipboard.convert(cleanText);
 
-quill.root.innerHTML = htmlText;
+quill.root.innerHTML = cleanText;
 
 quill.on('text-change', function(delta, oldDelta, source) {
    if (source =='user') {
@@ -230,6 +233,8 @@ quill.on('text-change', function(delta, oldDelta, source) {
 
 function updateFormattedText() {
     let htmlContent = quill.root.innerHTML;
+    // remove the color code black 
+    htmlContent = htmlContent.replace(/style="color: black;"/g ,'');
     let delta = quill.getContents();
     textarea.value = htmlContent;
 }
