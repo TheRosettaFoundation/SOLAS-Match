@@ -1,5 +1,5 @@
 function replaceNewlinesWithBr() {
-    const displayElement = document.getElementById("displayF");
+    const displayElement = document.querySelector(".displayF");
 
     if (displayElement) {
         let content = displayElement.innerHTML;
@@ -9,7 +9,7 @@ function replaceNewlinesWithBr() {
 
         displayElement.innerHTML = content;
     } else {
-        console.error('Element with id "display" not found');
+        console.error('Element with id "displayF" not found');
     }
 }
 
