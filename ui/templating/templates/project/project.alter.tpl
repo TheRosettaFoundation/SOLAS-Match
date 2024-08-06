@@ -218,7 +218,7 @@ const quill = new Quill('#editor', {
 
 let textarea = document.getElementById("project_description");
 let htmlText = textarea.value ;
-let cleanText =  htmlText.replace(/\\r|\\n|\\r\\n/g, '<br/>')
+let cleanText = htmlText.replace(/\\r\\n|\\n|\\r/g, '<br/>')
 cleanText = cleanText.replace(/\\t/g, '&nbsp;&nbsp;&nbsp;&nbsp;')
 textarea.value = cleanText ;
 var delta = quill.clipboard.convert(cleanText);
@@ -227,7 +227,7 @@ quill.root.innerHTML = cleanText;
 
 quill.on('text-change', function(delta, oldDelta, source) {
    if (source =='user') {
-       updateFormattedText();  
+       updateFormattedText();
    }
 } )
 
@@ -238,7 +238,6 @@ function updateFormattedText() {
     let delta = quill.getContents();
     textarea.value = htmlContent;
 }
-
 </script>
     
 {include file="footer.tpl"}
