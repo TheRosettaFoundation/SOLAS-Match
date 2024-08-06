@@ -7,3 +7,5 @@ function cleanColorDescription() {
         console.log(span);
     });
 }
+
+cleanColorDescription();
