@@ -2321,7 +2321,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
         $apiUrl = "https://app.asana.com/api/1.0/tasks/$taskGid";
         // Initialize cURL
         $ch = curl_init($apiUrl);
-        $token = Common\Lib\Settings::get('asana.api_key6')
+        $token = Common\Lib\Settings::get('asana.api_key6');
         // reine 1204552084888528
         // asana_test 1202769016140285
         // Set the cURL options
