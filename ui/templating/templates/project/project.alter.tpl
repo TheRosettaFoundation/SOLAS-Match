@@ -221,7 +221,7 @@ let htmlText = textarea.value ;
 console.log(htmlText);
 console.log (typeof htmlText) ;
 
-let cleanText =  htmlText.replace/\\t/g, '<br />');
+let cleanText =  htmlText.replace(/\\t/g, '<br />')
 console.log(cleanText)
 
 var delta = quill.clipboard.convert(htmlText);
