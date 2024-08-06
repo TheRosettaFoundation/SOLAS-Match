@@ -7,10 +7,11 @@ function cleanColorDescription() {
 
     let spansWithStyle = descriptionField.querySelectorAll("span[style]");
 
+    let test = "rgb(0 ,0 ,0)";
+    let testconsole = removeRGBString(test);
+    console.log(testconsole);
+
     spansWithStyle.forEach(function (span) {
-        let test = "rgb(0 ,0 ,0)";
-        let testconsole = removeRGBString(test);
-        console.log(testconsole);
         if (span.style.color == "black" || span.style.color == "rgb(0, 0, 0)") {
             span.removeAttribute("style");
         }
