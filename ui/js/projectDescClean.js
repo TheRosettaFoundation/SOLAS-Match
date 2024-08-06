@@ -5,6 +5,7 @@ function cleanColorDescription() {
 
     spansWithStyle.forEach(function (span) {
         if (span.style.color == "black") {
+            console.log("inside");
             span.removeAttribute("style");
         }
     });
