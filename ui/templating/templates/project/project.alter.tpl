@@ -221,7 +221,9 @@ let htmlText = textarea.value ;
 
 let cleanText =  htmlText.replace(/\\r|\\n|\\r\\n/g, '<br/>')
 cleanText = cleanText.replace(/\\t/g, '&nbsp;&nbsp;&nbsp;&nbsp;')
+cleanText = cleanText.replace(/style="color: black;"/g ,'')
 textarea.value = cleanText ;
+
 var delta = quill.clipboard.convert(cleanText);
 
 quill.root.innerHTML = cleanText;
