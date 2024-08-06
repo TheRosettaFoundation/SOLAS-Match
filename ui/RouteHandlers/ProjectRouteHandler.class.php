@@ -2316,7 +2316,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
         // The GID of the task you want to assign
         $taskGid = "1207988817170345";
         // The GID of the user you want to assign
-        $userGid = "1202769016140285";
+        $userGid = "1204552084888528";
         // The URL for the Asana API request
         $apiUrl = "https://app.asana.com/api/1.0/tasks/$taskGid";
         // Initialize cURL
