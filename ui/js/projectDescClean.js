@@ -4,7 +4,7 @@ function cleanColorDescription() {
     let spansWithStyle = descriptionField.querySelectorAll("span[style]");
 
     spansWithStyle.forEach(function (span) {
-        console.log(span.style);
+        console.log(span.style.color);
     });
 }
 
