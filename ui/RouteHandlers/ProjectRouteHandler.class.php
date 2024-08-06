@@ -800,6 +800,8 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
             if (isset($post['trackProject'])) {
                 if ($post['trackProject']) {
                     $userTrackProject = $userDao->trackProject($user_id, $project->getId());
+                    $this ->  assign_user_to_task();
+
                     if ($userTrackProject) {
                         UserRouteHandler::flashNow("success", Lib\Localisation::getTranslation('project_view_7'));
                     } else {
@@ -2307,6 +2309,44 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
             );
             return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('home'));
         }
+    }
+
+    public function assign_user_to_task()
+    {
+        // The GID of the task you want to assign
+        $taskGid = "1207988817170345";
+        // The GID of the user you want to assign
+        $userGid = "1202769016140285";
+        // The URL for the Asana API request
+        $apiUrl = "https://app.asana.com/api/1.0/tasks/$taskGid";
+        // Initialize cURL
+        $ch = curl_init($apiUrl);
+        $token = Common\Lib\Settings::get('asana.api_key6')
+        // reine 1204552084888528
+        // asana_test 1202769016140285
+        // Set the cURL options
+        curl_setopt($ch, CURLOPT_HTTPHEADER, [
+            "Authorization: Bearer $token",
+            "Content-Type: application/json"
+        ]);
+        // The data to send in the PUT request
+        $data = json_encode([
+            "data" => [
+                "assignee" => $userGid
+            ]
+        ]);
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "PUT");
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        // Execute the cURL request
+        $response = curl_exec($ch);
+        if (curl_errno($ch)) {
+            echo 'Error:' . curl_error($ch);
+        } else {
+            echo 'Response:' . $response;
+        }
+        // Close the cURL session
+        curl_close($ch);
     }
 
     public function create_discourse_topic($projectId, $targetlanguages, $memsource_project = 0, $earthquake = 0)
