@@ -221,7 +221,7 @@ let htmlText = textarea.value ;
 
 let cleanText =  htmlText.replace(/\\r|\\n|\\r\\n/g, '<br/>')
 cleanText = cleanText.replace(/\\t/g, '&nbsp;&nbsp;&nbsp;&nbsp;')
-let findBlack = cleanText.match(/style="color: black;"/g ,'')
+let findBlack = cleanText.replace(/style="color: black;"/g ,'')
 console.log(findBlack);
 textarea.value = cleanText ;
 
