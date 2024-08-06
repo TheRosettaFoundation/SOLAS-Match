@@ -229,7 +229,7 @@ textarea.value = cleanText ;
 
 var delta = quill.clipboard.convert(cleanText);
 
-quill.root.innerHTML = htmlText;
+quill.root.innerHTML = cleanText;
 
 quill.on('text-change', function(delta, oldDelta, source) {
    if (source =='user') {
