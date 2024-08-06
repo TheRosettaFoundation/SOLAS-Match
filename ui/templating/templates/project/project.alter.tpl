@@ -222,8 +222,8 @@ console.log (typeof htmlText) ;
 
 let cleanText =  htmlText.match(/\t/g, '<br />');
 console.log(cleanText)
-textarea.value = cleanText;
-var delta = quill.clipboard.convert(cleanText);
+
+var delta = quill.clipboard.convert(htmlText);
 
 quill.root.innerHTML = htmlText;
 
