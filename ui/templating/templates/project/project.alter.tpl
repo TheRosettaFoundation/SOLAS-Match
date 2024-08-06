@@ -229,6 +229,7 @@ quill.root.innerHTML = cleanText;
 quill.on('text-change', function(delta, oldDelta, source) {
    if (source =='user') {
        updateFormattedText();
+       cleanColorDescription();
    }
 } )
 
@@ -236,6 +237,18 @@ function updateFormattedText() {
     let htmlContent = quill.root.innerHTML;
     let delta = quill.getContents();
     textarea.value = htmlContent;
+}
+
+function cleanColorDescription() {
+    let descriptionField = document.querySelector(".displayF");
+
+    let spansWithStyle = descriptionField.querySelectorAll("span[style]");
+
+    spansWithStyle.forEach(function (span) {
+        if (span.style.color == "black") {
+            span.removeAttribute("style");
+        }
+    });
 }
 </script>
     
