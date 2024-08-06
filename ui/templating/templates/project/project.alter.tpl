@@ -238,7 +238,7 @@ quill.on('text-change', function(delta, oldDelta, source) {
 
 function updateFormattedText() {
     let htmlContent = quill.root.innerHTML;
-    console.log(htmlContent);
+    htmlContent = htmlContent.replace(/style="color: black;"/g ,'');
     let delta = quill.getContents();
     textarea.value = htmlContent;
 }
