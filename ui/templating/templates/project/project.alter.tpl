@@ -218,7 +218,7 @@ const quill = new Quill('#editor', {
 
 let textarea = document.getElementById("project_description");
 let htmlText = textarea.value ;
-console.log(htmlText) ;
+console.log (typeof htmlText) ;
 
 let cleanText =  htmlText.replace(/\t|\n|\r/g, '<br />');
 console.log(cleanText)
