@@ -235,7 +235,7 @@ function updateFormattedText() {
     let htmlContent = quill.root.innerHTML;
     // remove the color code black 
     htmlContent = htmlContent.replace(/style="color: black;"/g ,'');
-    htmlContent = htmlContent.replace(/rgb(0, 0, 0);"/g ,'');
+//    htmlContent = htmlContent.replace(/rgb(0, 0, 0);"/g ,'');
     let delta = quill.getContents();
     textarea.value = htmlContent;
 }
