@@ -218,7 +218,6 @@ const quill = new Quill('#editor', {
 
 let textarea = document.getElementById("project_description");
 let htmlText = textarea.value ;
-
 let cleanText =  htmlText.replace(/\\r|\\n|\\r\\n/g, '<br/>')
 cleanText = cleanText.replace(/\\t/g, '&nbsp;&nbsp;&nbsp;&nbsp;')
 textarea.value = cleanText ;
@@ -228,8 +227,7 @@ quill.root.innerHTML = cleanText;
 
 quill.on('text-change', function(delta, oldDelta, source) {
    if (source =='user') {
-       updateFormattedText();
-    
+       updateFormattedText();  
    }
 } )
 
@@ -237,7 +235,6 @@ function updateFormattedText() {
     let htmlContent = quill.root.innerHTML;
     // remove the color code black 
     htmlContent = htmlContent.replace(/style="color: black;"/g ,'');
-    console.log(htmlContent);
     let delta = quill.getContents();
     textarea.value = htmlContent;
 }
