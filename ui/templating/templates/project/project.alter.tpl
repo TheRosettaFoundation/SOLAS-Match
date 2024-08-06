@@ -221,10 +221,7 @@ let htmlText = textarea.value ;
 
 let cleanText =  htmlText.replace(/\\r|\\n|\\r\\n/g, '<br/>')
 cleanText = cleanText.replace(/\\t/g, '&nbsp;&nbsp;&nbsp;&nbsp;')
-cleanText= cleanText.replace(/style="color: black;"/g ,'')
-
 textarea.value = cleanText ;
-
 var delta = quill.clipboard.convert(cleanText);
 
 quill.root.innerHTML = cleanText;
@@ -238,6 +235,7 @@ quill.on('text-change', function(delta, oldDelta, source) {
 
 function updateFormattedText() {
     let htmlContent = quill.root.innerHTML;
+    // remove the color code black 
     htmlContent = htmlContent.replace(/style="color: black;"/g ,'');
     console.log(htmlContent);
     let delta = quill.getContents();
