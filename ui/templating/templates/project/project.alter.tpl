@@ -225,7 +225,7 @@ let cleanText =  htmlText.replace(/\\r|\\n|\\r\\n/g, '<br/>')
 cleanText = cleanText.replace(/\\t/g, '&nbsp;&nbsp;&nbsp;&nbsp;')
 console.log(cleanText)
 
-var delta = quill.clipboard.convert(htmlText);
+var delta = quill.clipboard.convert(cleanText);
 
 quill.root.innerHTML = htmlText;
 
