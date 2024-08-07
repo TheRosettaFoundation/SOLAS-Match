@@ -2361,11 +2361,11 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
         ]);
 
         curl_setopt($ch,CURLOPT_POSTFIELDS,$data);
-        
+
         $response = curl_exec($ch);
 
         if (curl_errno($ch)) {
-            echo 'Error:' . curl_error($ch);
+           error_log("Did not work !");
         } else {
             // Decode the JSON response
             $responseData = json_decode($response, true);
