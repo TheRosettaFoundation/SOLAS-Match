@@ -800,8 +800,8 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
             if (isset($post['trackProject'])) {
                 if ($post['trackProject']) {
                     $userTrackProject = $userDao->trackProject($user_id, $project->getId());                    
-                    $this->assign_user_to_task($project->getId());
-                    $this->follow_discource_project($project->getId());
+                    $this->assign_user_to_task($project->getId(),$user_id);
+                    $this->follow_discource_project($project->getId(),$user_id);
                     if ($userTrackProject) {
                         UserRouteHandler::flashNow("success", Lib\Localisation::getTranslation('project_view_7'));
                     } else {
@@ -2312,13 +2312,17 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
     }
 
 
-    public function  follow_discource_project($project_id){
+    public function  follow_discource_project($project_id,$userId){
 
+        
+        global $app;
+        $projectDao = new DAO\ProjectDao();        
+        $userDao = new DAO\UserDao();
+        $user = $userDao->getUser($userId);
+         
+        error_log("user : $user ");
         error_log("project_id for dis: $project_id ");
 
-        global $app;
-
-        $projectDao = new DAO\ProjectDao();
 
         $topicIdFromDB = $projectDao->get_discourse_id($project_id) ;
 
@@ -2355,9 +2359,6 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
         } else {
             // Decode the JSON response
             $responseData = json_decode($response, true);
-
-            // Output the response (for debugging purposes)
-            echo '<pre>' . print_r($responseData, true) . '</pre>';
             }
 
             // Close the cURL session
@@ -2366,12 +2367,11 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
        
     }
 
-    public function assign_user_to_task($project_id)
+    public function assign_user_to_task($project_id,$user_id)
     {
        
-        
         error_log("project_id for asana: $project_id ");
-       
+
         // The GID of the task you want to assign , are the taskId from Asana the ?
         $taskGid = "1207988817170345";
         // are the users from Asana synchronise with the users in the db ?
