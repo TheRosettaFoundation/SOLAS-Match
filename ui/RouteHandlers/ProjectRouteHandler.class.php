@@ -2424,6 +2424,8 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
            
                 foreach ($task_ids as $taskId) { 
                     // Asana API endpoint to assign the task
+                    error_log("task_ids") ;
+                    error_log(print_r($taskId));
                     $tasksApiUrl = 'https://app.asana.com/api/1.0/tasks/' . $taskId; 
                     // Data to assign the task
                     $data = [ 'assignee' => $userGid ];
