@@ -2393,8 +2393,6 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
 
         $task_ids = $projectDao->get_asana_tasks($projectId);
         
-        error_log(print_r($task_ids,true)) ;
-        
         // Initialize cURL
         $ch = curl_init();
 
@@ -2406,17 +2404,16 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
         curl_setopt($ch, CURLOPT_HTTPHEADER, [ 'Authorization: Bearer ' . $token, 'Content-Type: application/json' ]); 
         // Execute the cURL request to get users
         $response = curl_exec($ch); 
-        // Check for errors
+
         if (curl_errno($ch)) { die('Error:' . curl_error($ch)); } 
-        // Decode the JSON response
+
         $responseData = json_decode($response, true); 
 
-        //  error_log(print_r($responseData,true)) ;
-        // Close the cURL sessioncurl_close($ch); // Initialize variables
+
         $userGid = null; // Check if the response contains user data
 
         if (isset($responseData['data'])) { // Iterate through the users to find the one with the target email
-            foreach ($responseData['data'] as $user) { if (isset($user['name']) && $user['name'] === "IRAMURIKIYE Reine Alice") { 
+            foreach ($responseData['data'] as $user) { if (isset($user['name']) && $user['name'] === $email) { 
 
                 $userGid = $user['gid']; break; } } 
                 // Check if we found the user
@@ -2425,7 +2422,6 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                 foreach ($task_ids as $taskId) { 
                     // Asana API endpoint to assign the task
                
-                    error_log(print_r($taskId));
                     $asanaTask = $taskId["asana_task_id"] ;
                     $tasksApiUrl = 'https://app.asana.com/api/1.0/tasks/' . $asanaTask; 
                    
@@ -2440,21 +2436,14 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                      curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PUT'); 
                      curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data)); 
                      curl_setopt($ch, CURLOPT_HTTPHEADER, [ 'Authorization: Bearer ' . $token, 'Content-Type: application/json' ]); 
-                     // Execute the cURL request to assign the task
                      $response = curl_exec($ch); 
-                     // Check for errors
+
                      if (curl_errno($ch)) { echo 'Error assigning task ' . $taskId . ': ' . curl_error($ch) . '<br>'; } 
                      else { 
-                        // Decode the JSON response
+                      
                         $responseData = json_decode($response, true); 
-                        // Output the response (for debugging purposes)
                         error_log(print_r($taskId,true) ); } 
-                        // Close the cURL session
                         curl_close($ch); } } else { die('No users found in the response.'); }
-
-        
-     
-       
 
 
     }
