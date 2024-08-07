@@ -233,7 +233,7 @@ quill.on('text-change', function(delta, oldDelta, source) {
 
 function updateFormattedText() {
     let htmlContent = quill.root.innerHTML;
-    // remove the color code black 
+    // remove the color code black and background 
     htmlContent = htmlContent.replace(/style="color: black;"/g ,'');
     htmlContent = htmlContent.replace(/style="background-color: transparent; color: rgb(0, 0, 0);"/g ,'');
     let delta = quill.getContents();
