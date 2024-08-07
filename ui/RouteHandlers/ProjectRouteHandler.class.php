@@ -2334,47 +2334,44 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
         $userName =  Common\Lib\Settings::get('discourse.api_username');
         
         //hard code topicId
-        $topicId = 3138 ;
+        $topicId = 56618 ;
 
         // Create the API endpoint URL
-        $apiUrl = "$discourseDomain/t/$topicId/t/status";
+        $apiUrl = "$discourseDomain/t/$topicId/notifications.json";
         
         error_log("url : $apiUrl");
         error_log("topicFromDB : $topicIdFromDB");
-
-
-        $ch = curl_init();
-
-        // Set the cURL options
-        curl_setopt($ch, CURLOPT_URL, $apiUrl); 
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true); 
-        curl_setopt($ch,CURLOPT_CUSTOMREQUEST,'PUT');
        
-        curl_setopt($ch, CURLOPT_HTTPHEADER, [
-            'Api-Key: ' . $apiKey,
-            'Api-Username: ' . $userName,
-            'Content-Type: application/json'
-        ]);
-
-        $data = json_encode([
-            'status'=>"watching"
-        ]);
-
-        curl_setopt($ch,CURLOPT_POSTFIELDS,$data);
-
-        $response = curl_exec($ch);
-
-        if (curl_errno($ch)) {
-           error_log("Did not work !");
-        } else {
-            // Decode the JSON response
-            $responseData = json_decode($response, true);
-            echo "<script> console.log($response)</script>";
+        $data = array(
+            'notification_level' => 3
+        );
         
-            }
+        $options = array(
+            CURLOPT_URL => $api_url,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_CUSTOMREQUEST => 'PUT',
+            CURLOPT_POSTFIELDS => http_build_query($data),
+            CURLOPT_HTTPHEADER => array(
+                'Api-Key: ' . $apiKey,
+                'Api-Username: ' . $userName,
+                'Content-Type: application/x-www-form-urlencoded'
+            ),
+        );
+        
+        $ch = curl_init();
+        curl_setopt_array($ch, $options);
+        $response = curl_exec($ch);
+        
+        if ($response === false) {
+            echo 'Error: ' . curl_error($ch);
+        } else {
+            echo 'Response: ' . $response;
+        }
+        
+        curl_close($ch);
+        
 
-            // Close the cURL session
-            curl_close($ch);
+        
 
        
     }
