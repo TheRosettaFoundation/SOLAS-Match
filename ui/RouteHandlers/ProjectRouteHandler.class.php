@@ -2321,7 +2321,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
         error_log("user : $userId ");
         $user = $userDao->getUser($userId);
 
-        $email = $user['email'];
+        $email = $user->email;
 
         $userJson = json_encode($user,JSON_PRETTY_PRINT);
          
