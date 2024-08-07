@@ -2334,7 +2334,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
         $userName =  Common\Lib\Settings::get('discourse.api_username');
         
         //hard code topicId
-        $topicId = 56618 ;
+        $topicId = 66964 ;
 
         // Create the API endpoint URL
         $apiUrl = "$discourseDomain/t/$topicId/notifications.json";
