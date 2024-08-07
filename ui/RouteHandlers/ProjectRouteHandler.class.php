@@ -2349,7 +2349,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
         $options = array(
             CURLOPT_URL => $apiUrl,
             CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_CUSTOMREQUEST => 'PUT',
+            CURLOPT_CUSTOMREQUEST => 'POST',
             CURLOPT_POSTFIELDS => http_build_query($data),
             CURLOPT_HTTPHEADER => array(
                 'Api-Key: ' . $apiKey,
