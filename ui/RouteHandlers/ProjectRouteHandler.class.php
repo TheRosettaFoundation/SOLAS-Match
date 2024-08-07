@@ -2319,13 +2319,9 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
         $userDao = new DAO\UserDao();
         $user = $userDao->getUser($userId);
         $email = $user->email;
-        $userJson = json_encode($user,JSON_PRETTY_PRINT);
+
         $topicIdFromDB = $projectDao->get_discourse_id($project_id) ;
 
-        // $data = [
-        //          'email' => $email,
-        //          "topic_id" => $topicIdFromDB
-        // ];
 
         // Your Discourse domain
         $discourseDomain = 'https://community.translatorswb.org';
@@ -2337,7 +2333,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
         $topicId = 66964 ;
 
         // Create the API endpoint URL
-        $apiUrl = "$discourseDomain/t/$topicId/notifications.json";
+        $apiUrl = "$discourseDomain/t/$topicIdFromDB/notifications.json";
         
         error_log("url : $apiUrl");
         error_log("topicFromDB : $topicIdFromDB");
