@@ -2320,8 +2320,10 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
         $userDao = new DAO\UserDao();
         error_log("user : $userId ");
         $user = $userDao->getUser($userId);
+
+        $userJson = json_encode($user,JSON_PRETTY_PRINT);
          
-        error_log("user : $user ");
+        error_log("user:$userJson ");
         error_log("project_id for dis: $project_id ");
 
 
