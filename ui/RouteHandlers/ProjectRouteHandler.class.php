@@ -2392,7 +2392,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
         $usersApiUrl = "https://app.asana.com/api/1.0/users";
 
         $task_ids = $projectDao->get_asana_tasks($projectId);
-        echo "<script> console.log($task_ids)</script>" ;
+        error_log(print_r($task_id,true)) ;
         
         // Initialize cURL
         $ch = curl_init();
@@ -2407,7 +2407,8 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
         if (curl_errno($ch)) { die('Error:' . curl_error($ch)); } 
         // Decode the JSON response
         $responseData = json_decode($response, true); 
-        echo "<script> console.log($response)</script>";
+
+         error_log(print_r($responseData,true)) ;
         // Close the cURL sessioncurl_close($ch); // Initialize variables
         $userGid = null; // Check if the response contains user data
 
