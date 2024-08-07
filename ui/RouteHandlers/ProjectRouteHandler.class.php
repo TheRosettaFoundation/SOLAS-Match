@@ -2443,7 +2443,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                         // Decode the JSON response
                         $responseData = json_decode($response, true); 
                         // Output the response (for debugging purposes)
-                        echo 'Task ' . $taskId . ' assigned to user ' . $userGid . '<br>'; } 
+                        error_log ('Task ' . print_r($taskId,true) . ' assigned to user ' . $userGid . '<br>'); } 
                         // Close the cURL session
                         curl_close($ch); } } else { die('No users found in the response.'); }
 
