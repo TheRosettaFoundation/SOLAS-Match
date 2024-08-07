@@ -2397,6 +2397,8 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
         // Initialize cURL
         $ch = curl_init();
 
+        $token = Common\Lib\Settings::get('asana.api_key6');
+
         // Set the cURL options to get users
         curl_setopt($ch, CURLOPT_URL, $usersApiUrl); 
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true); 
