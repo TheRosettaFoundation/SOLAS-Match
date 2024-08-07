@@ -2328,7 +2328,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
         $discourseDomain = 'https://community.translatorswb.org';
         // Keys
         $apiKey = Common\Lib\Settings::get('discourse.api_key');
-        $userName =  Common\Lib\Settings::get('discourse.user_name');
+        $userName =  Common\Lib\Settings::get('discourse.api_username');
 
         $topicId = 3138 ;
 
