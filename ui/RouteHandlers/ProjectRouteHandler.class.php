@@ -2314,41 +2314,38 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
 
     public function  follow_discource_project($project_id,$userId){
 
-        
         global $app;
         $projectDao = new DAO\ProjectDao();        
         $userDao = new DAO\UserDao();
-        error_log("user : $userId ");
         $user = $userDao->getUser($userId);
-
         $email = $user->email;
-
         $userJson = json_encode($user,JSON_PRETTY_PRINT);
-         
-        error_log("the email is :  $email");
-        error_log("project_id for dis: $project_id ");
-
-
         $topicIdFromDB = $projectDao->get_discourse_id($project_id) ;
 
-        error_log("topic Id  for BD: $topicIdFromDB ");
+        $data = [
+                 'email' => $email,
+                 "topic_id" => $topicIdFromDB
+                ]
 
         // Your Discourse domain
         $discourseDomain = 'https://community.translatorswb.org';
         // Keys
         $apiKey = Common\Lib\Settings::get('discourse.api_key');
         $userName =  Common\Lib\Settings::get('discourse.api_username');
-
+        
+        //hard code topicId
         $topicId = 3138 ;
 
         // Create the API endpoint URL
-        $apiUrl = $discourseDomain . '/t/' . $topicId . '.json';
+        $apiUrl = $discourseDomain . '/t/' . $topicIdFromDB . '/invite.json';
 
         $ch = curl_init();
 
         // Set the cURL options
-        curl_setopt($ch, CURLOPT_URL, $apiUrl);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_URL, $apiUrl); 
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true); 
+        curl_setopt($ch, CURLOPT_POST, true); 
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
         curl_setopt($ch, CURLOPT_HTTPHEADER, [
             'Api-Key: ' . $apiKey,
             'Api-Username: ' . $userName,
@@ -2374,11 +2371,10 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
     public function assign_user_to_task($project_id,$user_id)
     {
        
-        error_log("project_id for asana: $project_id ");
 
-        // The GID of the task you want to assign , are the taskId from Asana the ?
+        // The GID of the task you want to assign , are the taskId  the same as in AsanaTasks Table ?
         $taskGid = "1207988817170345";
-        // are the users from Asana synchronise with the users in the db ?
+        // are the users from Asana synchronise with the Users Table if not , how do we synchronise , create a new table AsanaUsers ?
         $userGid = "1204552084888528";
         // Asana API 
         $apiUrl = "https://app.asana.com/api/1.0/tasks/$taskGid";
@@ -2403,14 +2399,14 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "PUT");
         curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        // Execute the cURL request
-        // $response = curl_exec($ch);
-        // if (curl_errno($ch)) {
-        //     echo 'Error:' . curl_error($ch);
-        // } else {
-        //     echo 'Response:' . $response;
-        // }
-        // Close the cURL session
+        Execute the cURL request
+        $response = curl_exec($ch);
+        if (curl_errno($ch)) {
+            echo 'Error:' . curl_error($ch);
+        } else {
+            echo 'Response:' . $response;
+        }
+     
         curl_close($ch);
 
 
