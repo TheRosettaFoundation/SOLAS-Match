@@ -2399,7 +2399,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "PUT");
         curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        Execute the cURL request
+
         $response = curl_exec($ch);
         if (curl_errno($ch)) {
             echo 'Error:' . curl_error($ch);
