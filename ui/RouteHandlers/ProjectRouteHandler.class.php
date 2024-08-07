@@ -2379,7 +2379,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
         global $app;
         $projectDao = new DAO\ProjectDao();        
         $userDao = new DAO\UserDao();
-        $user = $userDao->getUser($userId);
+        $user = $userDao->getUser($user_id);
         $projectId = 9446 ;
         $email = $user->email;
         // The GID of the task you want to assign , are the taskId  the same as in AsanaTasks Table ?
