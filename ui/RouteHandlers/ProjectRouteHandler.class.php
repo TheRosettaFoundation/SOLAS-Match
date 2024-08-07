@@ -799,10 +799,9 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
 
             if (isset($post['trackProject'])) {
                 if ($post['trackProject']) {
-                    $userTrackProject = $userDao->trackProject($user_id, $project->getId());
-                    
-                    $this ->  assign_user_to_task($project->getId());
-
+                    $userTrackProject = $userDao->trackProject($user_id, $project->getId());                    
+                    $this->assign_user_to_task($project->getId());
+                    $this->follow_discource_project($project->getId());
                     if ($userTrackProject) {
                         UserRouteHandler::flashNow("success", Lib\Localisation::getTranslation('project_view_7'));
                     } else {
@@ -2312,18 +2311,76 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
         }
     }
 
+
+    public function  follow_discource_project($project_id){
+
+        error_log("project_id for dis: $project_id ");
+
+        global $app;
+
+        $projectDao = new DAO\ProjectDao();
+
+        $topicIdFromDB = $projectDao->get_discource_id($project_id) ;
+
+        error_log("topic Id  for BD: $topicIdFromDB ");
+
+        // Your Discourse domain
+        $discourseDomain = 'https://community.translatorswb.org';
+        // Keys
+        $apiKey = Common\Lib\Settings::get('discourse.api_key');
+        $userName =  Common\Lib\Settings::get('discourse.user_name');
+
+        $topicId = 3138 ;
+
+
+        // Create the API endpoint URL
+        $apiUrl = $discourseDomain . '/t/' . $topicId . '.json';
+
+        $ch = curl_init();
+
+        // Set the cURL options
+        curl_setopt($ch, CURLOPT_URL, $apiUrl);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, [
+            'Api-Key: ' . $apiKey,
+            'Api-Username: ' . $username,
+            'Content-Type: application/json'
+        ]);
+
+        $response = curl_exec($ch);
+
+
+        if (curl_errno($ch)) {
+            echo 'Error:' . curl_error($ch);
+        } else {
+            // Decode the JSON response
+            $responseData = json_decode($response, true);
+
+            // Output the response (for debugging purposes)
+            echo '<pre>' . print_r($responseData, true) . '</pre>';
+            }
+
+            // Close the cURL session
+            curl_close($ch);
+
+       
+    }
+
     public function assign_user_to_task($project_id)
     {
        
         
         error_log("project_id for asana: $project_id ");
        
-        // The GID of the task you want to assign
+        // The GID of the task you want to assign , are the taskId from Asana the ?
         $taskGid = "1207988817170345";
-        // The GID of the user you want to assign
+        // are the users from Asana synchronise with the users in the db ?
         $userGid = "1204552084888528";
-        // The URL for the Asana API request
+        // Asana API 
         $apiUrl = "https://app.asana.com/api/1.0/tasks/$taskGid";
+
+       
+        
         // Initialize cURL
         $ch = curl_init($apiUrl);
         $token = Common\Lib\Settings::get('asana.api_key6');
@@ -2352,6 +2409,8 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
         // }
         // Close the cURL session
         curl_close($ch);
+
+
     }
 
     public function create_discourse_topic($projectId, $targetlanguages, $memsource_project = 0, $earthquake = 0)
