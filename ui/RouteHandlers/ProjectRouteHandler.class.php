@@ -2337,10 +2337,10 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
         $topicId = 3138 ;
 
         // Create the API endpoint URL
-        $apiUrl = $discourseDomain . '/t/' . $topicId . '/invite.json';
+        $apiUrl = "$discourseDomain/t/$topicId/t/status";
         
         error_log("url : $apiUrl");
-        error_log("topicFromDB : $$topicIdFromDB");
+        error_log("topicFromDB : $topicIdFromDB");
 
 
         $ch = curl_init();
@@ -2348,14 +2348,20 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
         // Set the cURL options
         curl_setopt($ch, CURLOPT_URL, $apiUrl); 
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true); 
-        curl_setopt($ch, CURLOPT_POST, true); 
-        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+        curl_setopt($ch,CURLOPT_CUSTOMREQUEST,'PUT');
+       
         curl_setopt($ch, CURLOPT_HTTPHEADER, [
             'Api-Key: ' . $apiKey,
             'Api-Username: ' . $userName,
             'Content-Type: application/json'
         ]);
 
+        $data = json_encode([
+            'status'=>"watching"
+        ]);
+
+        curl_setopt($ch,CURLOPT_POSTFIELDS,$data);
+        
         $response = curl_exec($ch);
 
         if (curl_errno($ch)) {
@@ -2380,11 +2386,14 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
         $projectDao = new DAO\ProjectDao();        
         $userDao = new DAO\UserDao();
         $user = $userDao->getUser($user_id);
-        $projectId = 9446 ;
+        
+        // Can be used for testing
+        // $projectId = 9446 ;
+        
         $email = $user->email;
           
-        $apiUrl = "https://app.asana.com/api/1.0/tasks/$taskGid";        
         $usersApiUrl = "https://app.asana.com/api/1.0/users";
+    
         $task_ids = $projectDao->get_asana_tasks($project_id);
 
         $ch = curl_init();
