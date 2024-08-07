@@ -2322,10 +2322,10 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
         $userJson = json_encode($user,JSON_PRETTY_PRINT);
         $topicIdFromDB = $projectDao->get_discourse_id($project_id) ;
 
-        $data = [
-                 'email' => $email,
-                 "topic_id" => $topicIdFromDB
-        ];
+        // $data = [
+        //          'email' => $email,
+        //          "topic_id" => $topicIdFromDB
+        // ];
 
         // Your Discourse domain
         $discourseDomain = 'https://community.translatorswb.org';
@@ -2347,7 +2347,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
         );
         
         $options = array(
-            CURLOPT_URL => $api_url,
+            CURLOPT_URL => $apiUrl,
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_CUSTOMREQUEST => 'PUT',
             CURLOPT_POSTFIELDS => http_build_query($data),
