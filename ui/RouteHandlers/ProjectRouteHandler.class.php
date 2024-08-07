@@ -2407,7 +2407,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
         if (curl_errno($ch)) { die('Error:' . curl_error($ch)); } 
         // Decode the JSON response
         $responseData = json_decode($response, true); 
-        echo "<script> console.log($response)</script>"
+        echo "<script> console.log($response)</script>";
         // Close the cURL sessioncurl_close($ch); // Initialize variables
         $userGid = null; // Check if the response contains user data
 
