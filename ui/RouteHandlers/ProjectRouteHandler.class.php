@@ -2391,7 +2391,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
         
         $usersApiUrl = "https://app.asana.com/api/1.0/users";
 
-        $task_ids = $projectDao->get_asana_tasks($projectId);
+        $task_ids = $projectDao->get_asana_tasks($project_id);
         
         // Initialize cURL
         $ch = curl_init();
@@ -2412,7 +2412,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
 
         $userGid = null; // Check if the response contains user data
 
-        if (isset($responseData['data'])) { // Iterate through the users to find the one with the target email
+        if (isset($responseData['data']) && isset(task_ids)) { // Iterate through the users to find the one with the target email
             foreach ($responseData['data'] as $user) { if (isset($user['name']) && $user['name'] === $email) { 
 
                 $userGid = $user['gid']; break; } } 
