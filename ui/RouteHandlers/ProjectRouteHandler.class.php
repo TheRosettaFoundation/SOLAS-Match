@@ -2422,7 +2422,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                 // Check if we found the user
                 if ($userGid === null) { error_log("User with email with : $email not found!"); } 
            
-                foreach ($taskIds as $taskId) { 
+                foreach ($task_ids as $taskId) { 
                     // Asana API endpoint to assign the task
                     $tasksApiUrl = 'https://app.asana.com/api/1.0/tasks/' . $taskId; 
                     // Data to assign the task
