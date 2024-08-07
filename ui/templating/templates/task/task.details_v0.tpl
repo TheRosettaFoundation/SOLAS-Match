@@ -6,7 +6,7 @@
         <th>{Localisation::getTranslation('common_target_language')}</th>
         <th>{Localisation::getTranslation('common_created')}</th>
         <th>{Localisation::getTranslation('common_task_deadline')}</th>
-        <th>{TaskTypeEnum::$enum_to_UI[$type_id]['unit_count_text']}</th>
+        <th>Linguist {TaskTypeEnum::$enum_to_UI[$type_id]['unit_count_text']}</th>
         {if ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $NGO_ADMIN + $NGO_PROJECT_OFFICER))}<th>{Localisation::getTranslation('common_status')}</th>{/if}
     </thead>
     <tbody>
