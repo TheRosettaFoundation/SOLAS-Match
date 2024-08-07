@@ -2392,7 +2392,8 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
         $usersApiUrl = "https://app.asana.com/api/1.0/users";
 
         $task_ids = $projectDao->get_asana_tasks($projectId);
-        error_log(print_r($task_id,true)) ;
+        
+        error_log(print_r($task_ids,true)) ;
         
         // Initialize cURL
         $ch = curl_init();
@@ -2410,7 +2411,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
         // Decode the JSON response
         $responseData = json_decode($response, true); 
 
-         error_log(print_r($responseData,true)) ;
+        //  error_log(print_r($responseData,true)) ;
         // Close the cURL sessioncurl_close($ch); // Initialize variables
         $userGid = null; // Check if the response contains user data
 
@@ -2418,7 +2419,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
             foreach ($responseData['data'] as $user) { if (isset($user['name']) && $user['name'] === $email) { 
                 $userGid = $user['gid']; break; } } 
                 // Check if we found the user
-                if ($userGid === null) { die('User with email ' . $targetEmail . ' not found.'); } 
+                if ($userGid === null) { die('User with email ' . $email . ' not found.'); } 
            
                 foreach ($taskIds as $taskId) { 
                     // Asana API endpoint to assign the task
