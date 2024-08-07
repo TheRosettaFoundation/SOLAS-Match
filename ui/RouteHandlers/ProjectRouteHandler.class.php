@@ -2382,57 +2382,45 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
         $user = $userDao->getUser($user_id);
         $projectId = 9446 ;
         $email = $user->email;
-        // The GID of the task you want to assign , are the taskId  the same as in AsanaTasks Table ?
-        $taskGid = "1207988817170345";
-        // are the users from Asana synchronise with the Users Table if not , how do we synchronise , create a new table AsanaUsers ?
-        $userGid = "1204552084888528";
-        // Asana API 
-        $apiUrl = "https://app.asana.com/api/1.0/tasks/$taskGid";
-        
+          
+        $apiUrl = "https://app.asana.com/api/1.0/tasks/$taskGid";        
         $usersApiUrl = "https://app.asana.com/api/1.0/users";
-
         $task_ids = $projectDao->get_asana_tasks($project_id);
 
-        error_log(print_r($task_ids));
-        
-        // Initialize cURL
         $ch = curl_init();
 
         $token = Common\Lib\Settings::get('asana.api_key6');
 
-        // Set the cURL options to get users
         curl_setopt($ch, CURLOPT_URL, $usersApiUrl); 
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true); 
         curl_setopt($ch, CURLOPT_HTTPHEADER, [ 'Authorization: Bearer ' . $token, 'Content-Type: application/json' ]); 
-        // Execute the cURL request to get users
+   
         $response = curl_exec($ch); 
 
         if (curl_errno($ch)) { die('Error:' . curl_error($ch)); } 
 
         $responseData = json_decode($response, true); 
+       
+        $userGid = null; 
 
-
-        $userGid = null; // Check if the response contains user data
-
-        if (isset($responseData['data']) && $task_ids) { // Iterate through the users to find the one with the target email
+        if (isset($responseData['data']) && !empty($task_ids)) { 
             foreach ($responseData['data'] as $user) { if (isset($user['name']) && $user['name'] === $email) { 
 
                 $userGid = $user['gid']; break; } } 
-                // Check if we found the user
+                
                 if ($userGid === null) { error_log("User with email with : $email not found!"); } 
            
                 foreach ($task_ids as $taskId) { 
-                    // Asana API endpoint to assign the task
-               
+
                     $asanaTask = $taskId["asana_task_id"] ;
+                      // Asana API endpoint to assign the task   
                     $tasksApiUrl = 'https://app.asana.com/api/1.0/tasks/' . $asanaTask; 
                    
                     error_log("Asana Task ID : $asanaTask");
-                    // Data to assign the task
+
                     $data = [ 'assignee' => $userGid ];
-                     // Initialize a cURL session
                      $ch = curl_init(); 
-                     // Set the cURL options to assign the task
+        
                      curl_setopt($ch, CURLOPT_URL, $tasksApiUrl); 
                      curl_setopt($ch, CURLOPT_RETURNTRANSFER, true); 
                      curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PUT'); 
