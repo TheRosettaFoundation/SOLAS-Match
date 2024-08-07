@@ -2320,7 +2320,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
 
         $projectDao = new DAO\ProjectDao();
 
-        $topicIdFromDB = $projectDao->get_discource_id($project_id) ;
+        $topicIdFromDB = $projectDao->get_discourse_id($project_id) ;
 
         error_log("topic Id  for BD: $topicIdFromDB ");
 
