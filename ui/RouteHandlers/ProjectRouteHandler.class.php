@@ -2337,7 +2337,11 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
         $topicId = 3138 ;
 
         // Create the API endpoint URL
-        $apiUrl = $discourseDomain . '/t/' . $topicIdFromDB . '/invite.json';
+        $apiUrl = $discourseDomain . '/t/' . $topicId . '/invite.json';
+        
+        error_log("url : $apiUrl");
+        error_log("topicFromDB : $$topicIdFromDB");
+
 
         $ch = curl_init();
 
