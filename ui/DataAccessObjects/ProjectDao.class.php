@@ -416,6 +416,7 @@ $replace = array(
 
     public function get_discourse_id($project_id)
     {
+        error_log("inside the DAO");
         $topic_id = 0;
         $result = LibAPI\PDOWrapper::call('get_discourse_id', LibAPI\PDOWrapper::cleanse($project_id));
         if (!empty($result)) {
