@@ -800,7 +800,8 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
             if (isset($post['trackProject'])) {
                 if ($post['trackProject']) {
                     $userTrackProject = $userDao->trackProject($user_id, $project->getId());
-                    $this ->  assign_user_to_task();
+                    
+                    $this ->  assign_user_to_task($project->getId());
 
                     if ($userTrackProject) {
                         UserRouteHandler::flashNow("success", Lib\Localisation::getTranslation('project_view_7'));
@@ -2311,8 +2312,12 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
         }
     }
 
-    public function assign_user_to_task()
+    public function assign_user_to_task($project_id)
     {
+       
+        
+        error_log("project_id for asana: $project_id ");
+       
         // The GID of the task you want to assign
         $taskGid = "1207988817170345";
         // The GID of the user you want to assign
