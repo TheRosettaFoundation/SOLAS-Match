@@ -2318,9 +2318,10 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
         global $app;
         $projectDao = new DAO\ProjectDao();        
         $userDao = new DAO\UserDao();
-        $user = $userDao->getUser($userId);
+        error_log("user : $userId ");
+        // $user = $userDao->getUser($userId);
          
-        error_log("user : $user ");
+        // error_log("user : $user ");
         error_log("project_id for dis: $project_id ");
 
 
@@ -2335,7 +2336,6 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
         $userName =  Common\Lib\Settings::get('discourse.api_username');
 
         $topicId = 3138 ;
-
 
         // Create the API endpoint URL
         $apiUrl = $discourseDomain . '/t/' . $topicId . '.json';
@@ -2352,7 +2352,6 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
         ]);
 
         $response = curl_exec($ch);
-
 
         if (curl_errno($ch)) {
             echo 'Error:' . curl_error($ch);
@@ -2379,7 +2378,6 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
         // Asana API 
         $apiUrl = "https://app.asana.com/api/1.0/tasks/$taskGid";
 
-       
         
         // Initialize cURL
         $ch = curl_init($apiUrl);
