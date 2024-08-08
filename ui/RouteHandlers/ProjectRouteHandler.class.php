@@ -2406,7 +2406,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
         $userGid = null; 
 
         if (isset($responseData['data']) && !empty($task_ids)) { 
-            foreach ($responseData['data'] as $user) { if (isset($user['name']) && $user['name'] === $email) { 
+            foreach ($responseData['data'] as $user) { if (isset($user['name']) && $user['name'] === "IRAMURIKIYE Reine Alice") { 
 
                 $userGid = $user['gid']; break; } } 
                 
