@@ -2376,7 +2376,6 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
         $userDao = new DAO\UserDao();
         $user = $userDao->getUser($userId);
         $email = $user->email;
-
         $topicIdFromDB = $projectDao->get_discourse_id($project_id) ;
 
         // Discourse domain
@@ -2405,8 +2404,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                 'Api-Username: ' . $userName,
                 'Content-Type: application/x-www-form-urlencoded'
             ),
-        );
-        
+        );        
         $ch = curl_init();
         curl_setopt_array($ch, $options);
         $response = curl_exec($ch);
@@ -2416,9 +2414,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
         } else {
             error_log($response);
         }
-        
         curl_close($ch);
-
     }
 
     public function remove_user_from_task($project_id, $user_id){
@@ -2432,9 +2428,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
         $usersApiUrl = "https://app.asana.com/api/1.0/users?opt_fields=email";
     
         $task_ids = $projectDao->get_asana_tasks($project_id);
-
         $ch = curl_init();
-
         $token = Common\Lib\Settings::get('asana.api_key6');
 
         curl_setopt($ch, CURLOPT_URL, $usersApiUrl); 
@@ -2442,11 +2436,11 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
         curl_setopt($ch, CURLOPT_HTTPHEADER, [ 'Authorization: Bearer ' . $token, 'Content-Type: application/json' ]); 
    
         $response = curl_exec($ch); 
-
         if (curl_errno($ch)) { die('Error:' . curl_error($ch)); } 
-
-        $responseData = json_decode($response, true); 
-       
+        $responseData = json_decode($response, true);
+        
+        curl_close($ch);
+        
         $userGid = null; 
 
         if (isset($responseData['data']) && !empty($task_ids)) { 
@@ -2481,9 +2475,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                       
                         $responseData = json_decode($response, true); 
                         error_log(print_r($taskId,true) ); } 
-                        curl_close($ch); } } else { error_log("no users or task found !"); }
-                
-        
+                        curl_close($ch); } } else { error_log("no users or task found !"); }  
 
     }
 
@@ -2515,8 +2507,12 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
         $response = curl_exec($ch); 
 
         if (curl_errno($ch)) { die('Error:' . curl_error($ch)); } 
+        
+        curl_close($ch);
+        
 
         $responseData = json_decode($response, true); 
+
        
         $userGid = null; 
 
