@@ -809,7 +809,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                     }
                 } else {
                     $userUntrackProject = $userDao->untrackProject($user_id, $project->getId());
-                    $this->remove_user_to_task($project->getId(),$user_id);
+                    $this->remove_user_from_task($project->getId(),$user_id);
                     $this->unfollow_discource_project($project->getId(),$user_id);
                     if ($userUntrackProject) {
                         UserRouteHandler::flashNow("success", Lib\Localisation::getTranslation('project_view_9'));
@@ -2426,7 +2426,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
        
     }
 
-    public function remove_user_to_task($project_id,$user_id){
+    public function remove_user_from_task($project_id,$user_id){
 
         global $app;
         $projectDao = new DAO\ProjectDao();        
@@ -2434,7 +2434,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
         $user = $userDao->getUser($user_id);
         $email = $user->email;
 
-        $usersApiUrl = "https://app.asana.com/api/1.0/users";
+        $usersApiUrl = "https://app.asana.com/api/1.0/users?opt_fields=email";
     
         $task_ids = $projectDao->get_asana_tasks($project_id);
 
@@ -2505,7 +2505,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
         
         $email = $user->email;
           
-        $usersApiUrl = "https://app.asana.com/api/1.0/users";
+        $usersApiUrl = "https://app.asana.com/api/1.0/users?opt_fields=email";
     
         $task_ids = $projectDao->get_asana_tasks($project_id);
 
