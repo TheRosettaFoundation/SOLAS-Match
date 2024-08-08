@@ -810,6 +810,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                 } else {
                     $userUntrackProject = $userDao->untrackProject($user_id, $project->getId());
                     $this->remove_user_to_task($project->getId(),$user_id);
+                    $this->unfollow_discource_project($project->getId(),$user_id);
                     if ($userUntrackProject) {
                         UserRouteHandler::flashNow("success", Lib\Localisation::getTranslation('project_view_9'));
                     } else {
@@ -2367,13 +2368,65 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
         curl_close($ch);
         
 
+    }
+
+    public function  unfollow_discource_project($project_id,$userId){
+
+        global $app;
+        $projectDao = new DAO\ProjectDao();        
+        $userDao = new DAO\UserDao();
+        $user = $userDao->getUser($userId);
+        $email = $user->email;
+
+        $topicIdFromDB = $projectDao->get_discourse_id($project_id) ;
+
+        // Discourse domain
+        $discourseDomain = 'https://community.translatorswb.org';
+        // Keys
+        $apiKey = Common\Lib\Settings::get('discourse.api_key');
+        $userName =  Common\Lib\Settings::get('discourse.api_username');
+        
+        //hardcdode topicId
+        // $topicId = 66964 ;
+
+        // Create the API endpoint URL
+        $apiUrl = "$discourseDomain/t/$topicIdFromDB/notifications.json";
+
+        $data = array(
+            'notification_level' => "0"
+        );
+        
+        $options = array(
+            CURLOPT_URL => $apiUrl,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_CUSTOMREQUEST => 'POST',
+            CURLOPT_POSTFIELDS => http_build_query($data),
+            CURLOPT_HTTPHEADER => array(
+                'Api-Key: ' . $apiKey,
+                'Api-Username: ' . $userName,
+                'Content-Type: application/x-www-form-urlencoded'
+            ),
+        );
+        
+        $ch = curl_init();
+        curl_setopt_array($ch, $options);
+        $response = curl_exec($ch);
+        
+        if ($response === false) {
+            echo 'Error: ' . curl_error($ch);
+        } else {
+            error_log($response);
+        }
+        
+        curl_close($ch);
+        
+
         
 
        
     }
 
     public function remove_user_to_task($project_id,$user_id){
-
 
         global $app;
         $projectDao = new DAO\ProjectDao();        
