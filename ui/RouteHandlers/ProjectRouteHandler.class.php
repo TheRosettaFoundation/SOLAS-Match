@@ -2381,7 +2381,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
         $user = $userDao->getUser($user_id);
         
         // Can be used for testing
-        // $projectId = 9446 ;
+        $projectId = 9446 ;
         
         $email = $user->email;
           
