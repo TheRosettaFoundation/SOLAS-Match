@@ -809,6 +809,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                     }
                 } else {
                     $userUntrackProject = $userDao->untrackProject($user_id, $project->getId());
+                    $this->remove_user_to_task($project->getId(),$user_id);
                     if ($userUntrackProject) {
                         UserRouteHandler::flashNow("success", Lib\Localisation::getTranslation('project_view_9'));
                     } else {
@@ -2322,14 +2323,13 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
 
         $topicIdFromDB = $projectDao->get_discourse_id($project_id) ;
 
-
-        // Your Discourse domain
+        // Discourse domain
         $discourseDomain = 'https://community.translatorswb.org';
         // Keys
         $apiKey = Common\Lib\Settings::get('discourse.api_key');
         $userName =  Common\Lib\Settings::get('discourse.api_username');
         
-        //hard code topicId
+        //hardcdode topicId
         $topicId = 66964 ;
 
         // Create the API endpoint URL
@@ -2370,6 +2370,73 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
         
 
        
+    }
+
+    public function remove_user_to_task($userId){
+
+
+        global $app;
+        $projectDao = new DAO\ProjectDao();        
+        $userDao = new DAO\UserDao();
+        $user = $userDao->getUser($user_id);
+        $email = $user->email;
+
+        $usersApiUrl = "https://app.asana.com/api/1.0/users";
+    
+        $task_ids = $projectDao->get_asana_tasks($project_id);
+
+        $ch = curl_init();
+
+        $token = Common\Lib\Settings::get('asana.api_key6');
+
+        curl_setopt($ch, CURLOPT_URL, $usersApiUrl); 
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true); 
+        curl_setopt($ch, CURLOPT_HTTPHEADER, [ 'Authorization: Bearer ' . $token, 'Content-Type: application/json' ]); 
+   
+        $response = curl_exec($ch); 
+
+        if (curl_errno($ch)) { die('Error:' . curl_error($ch)); } 
+
+        $responseData = json_decode($response, true); 
+       
+        $userGid = null; 
+
+        if (isset($responseData['data']) && !empty($task_ids)) { 
+            foreach ($responseData['data'] as $user) { if (isset($user['name']) && $user['name'] === $email) { 
+                
+                $userGid = $user['gid'];
+                error_log(" userGid : $userGid") ;               
+                break; } } 
+                
+                if ($userGid === null) { error_log("User with email with : $email not found!"); } 
+           
+                foreach ($task_ids as $taskId) { 
+
+                    $asanaTask = $taskId["asana_task_id"] ;
+                      // Asana API endpoint to assign the task   
+                    $tasksApiUrl = "https://app.asana.com/api/1.0/tasks/$asanaTask/$userGid"; 
+                   
+                    error_log("Asana Task ID : $asanaTask");
+
+                    $data = [ 'assignee' => null ];
+                     $ch = curl_init(); 
+        
+                     curl_setopt($ch, CURLOPT_URL, $tasksApiUrl); 
+                     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true); 
+                     curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PUT'); 
+                     curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data)); 
+                     curl_setopt($ch, CURLOPT_HTTPHEADER, [ 'Authorization: Bearer ' . $token, 'Content-Type: application/json' ]); 
+                     $response = curl_exec($ch); 
+
+                     if (curl_errno($ch)) { echo 'Error re-assigning task ' . $taskId . ': ' . curl_error($ch) . '<br>'; } 
+                     else { 
+                      
+                        $responseData = json_decode($response, true); 
+                        error_log(print_r($taskId,true) ); } 
+                        curl_close($ch); } } else { error_log("no users or task found !"); }
+                
+        
+
     }
 
     public function assign_user_to_task($project_id,$user_id)
