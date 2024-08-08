@@ -2381,13 +2381,13 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
         $user = $userDao->getUser($user_id);
         
         // Can be used for testing
-        $projectId = 9446 ;
+        // $projectId = 9446 ;
         
         $email = $user->email;
           
         $usersApiUrl = "https://app.asana.com/api/1.0/users";
     
-        $task_ids = $projectDao->get_asana_tasks($projectId);
+        $task_ids = $projectDao->get_asana_tasks($project_id);
 
         $ch = curl_init();
 
@@ -2406,13 +2406,10 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
         $userGid = null; 
 
         if (isset($responseData['data']) && !empty($task_ids)) { 
-            foreach ($responseData['data'] as $user) { if (isset($user['name']) && $user['name'] === "IRAMURIKIYE Reine Alice") { 
-
+            foreach ($responseData['data'] as $user) { if (isset($user['name']) && $user['name'] === $email) { 
                 
                 $userGid = $user['gid'];
-
-                error_log(" userGid : $userGid") ;
-                
+                error_log(" userGid : $userGid") ;               
                 break; } } 
                 
                 if ($userGid === null) { error_log("User with email with : $email not found!"); } 
