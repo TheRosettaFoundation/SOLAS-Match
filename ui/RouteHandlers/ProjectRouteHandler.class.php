@@ -2408,7 +2408,12 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
         if (isset($responseData['data']) && !empty($task_ids)) { 
             foreach ($responseData['data'] as $user) { if (isset($user['name']) && $user['name'] === "IRAMURIKIYE Reine Alice") { 
 
-                $userGid = $user['gid']; break; } } 
+                
+                $userGid = $user['gid'];
+
+                error_log(" userGid : $userGid") ;
+                
+                break; } } 
                 
                 if ($userGid === null) { error_log("User with email with : $email not found!"); } 
            
