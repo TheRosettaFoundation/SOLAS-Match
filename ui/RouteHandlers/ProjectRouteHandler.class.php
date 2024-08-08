@@ -2339,7 +2339,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
         error_log("topicFromDB : $topicIdFromDB");
        
         $data = array(
-            'notification_level' => "0"
+            'notification_level' => "3"
         );
         
         $options = array(
@@ -2361,7 +2361,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
         if ($response === false) {
             echo 'Error: ' . curl_error($ch);
         } else {
-            error_log($response);
+            echo 'Response: ' . $response;
         }
         
         curl_close($ch);
@@ -2434,7 +2434,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                      else { 
                       
                         $responseData = json_decode($response, true); 
-                      
+                        error_log(print_r($taskId,true) ); } 
                         curl_close($ch); } } else { error_log("no users or task found !"); }
 
 
