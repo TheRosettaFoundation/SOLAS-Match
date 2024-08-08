@@ -800,8 +800,8 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
             if (isset($post['trackProject'])) {
                 if ($post['trackProject']) {
                     $userTrackProject = $userDao->trackProject($user_id, $project->getId());                    
-                    $this->assign_user_to_task($project->getId(),$user_id);
-                    $this->follow_discource_project($project->getId(),$user_id);
+                    $this->assign_user_to_task($project->getId(), $user_id);
+                    $this->follow_discource_project($project->getId(), $user_id);
                     if ($userTrackProject) {
                         UserRouteHandler::flashNow("success", Lib\Localisation::getTranslation('project_view_7'));
                     } else {
@@ -809,8 +809,8 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                     }
                 } else {
                     $userUntrackProject = $userDao->untrackProject($user_id, $project->getId());
-                    $this->remove_user_from_task($project->getId(),$user_id);
-                    $this->unfollow_discource_project($project->getId(),$user_id);
+                    $this->remove_user_from_task($project->getId(), $user_id);
+                    $this->unfollow_discource_project($project->getId(), $user_id);
                     if ($userUntrackProject) {
                         UserRouteHandler::flashNow("success", Lib\Localisation::getTranslation('project_view_9'));
                     } else {
@@ -2314,7 +2314,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
     }
 
 
-    public function  follow_discource_project($project_id,$userId){
+    public function  follow_discource_project($project_id, $userId){
 
         global $app;
         $projectDao = new DAO\ProjectDao();        
@@ -2366,11 +2366,10 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
         }
         
         curl_close($ch);
-        
 
     }
 
-    public function  unfollow_discource_project($project_id,$userId){
+    public function  unfollow_discource_project($project_id, $userId){
 
         global $app;
         $projectDao = new DAO\ProjectDao();        
@@ -2419,14 +2418,10 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
         }
         
         curl_close($ch);
-        
 
-        
-
-       
     }
 
-    public function remove_user_from_task($project_id,$user_id){
+    public function remove_user_from_task($project_id, $user_id){
 
         global $app;
         $projectDao = new DAO\ProjectDao();        
@@ -2492,7 +2487,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
 
     }
 
-    public function assign_user_to_task($project_id,$user_id)
+    public function assign_user_to_task($project_id, $user_id)
     {
        
         global $app;
