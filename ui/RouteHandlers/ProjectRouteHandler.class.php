@@ -223,6 +223,7 @@ class ProjectRouteHandler
             empty($hook['createdBy']['uid']) ? '' : $hook['createdBy']['uid'],
             empty($hook['owner']['uid']) ? '' : $hook['owner']['uid'],
             $workflowLevels);
+        $projectDao->update_project_owner_id($project_id, empty($hook['owner']['uid']) ? 0 : $projectDao->get_user_id_from_memsource_user($hook['owner']['uid']), 0);
 
         $target_languages = '';
         if (!empty($hook['targetLangs'])) {
