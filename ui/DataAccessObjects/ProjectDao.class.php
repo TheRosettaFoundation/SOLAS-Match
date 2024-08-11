@@ -596,6 +596,11 @@ $replace = array(
             LibAPI\PDOWrapper::cleanseWrapStr($workflowLevels[11]));
     }
 
+    public function update_project_owner_id($project_id, $owner_id, $self_service)
+    {
+        LibAPI\PDOWrapper::call('update_project_owner_id', LibAPI\PDOWrapper::cleanse($project_id) . ',' . LibAPI\PDOWrapper::cleanse($owner_id) . ',' . LibAPI\PDOWrapper::cleanse($self_service));
+    }
+
     public function update_memsource_project_owner($project_id, $owner_uid)
     {
         LibAPI\PDOWrapper::call('update_memsource_project_owner',
