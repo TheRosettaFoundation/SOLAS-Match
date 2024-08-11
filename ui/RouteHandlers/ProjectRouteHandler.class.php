@@ -1880,6 +1880,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                     mkdir(Common\Lib\Settings::get("files.upload_path") . "proj-$project_id/", 0755);
 
                     $projectDao->set_memsource_project($project_id, $project_id, $project_id, $user_id, $user_id, ['', '', '', '', '', '', '', '', '', '', '', '']);
+                    $projectDao->update_project_owner_id($project_id, $user_id, 2);
                     $memsource_project = $projectDao->get_memsource_project($project_id);
 
                     $image_failed = false;
