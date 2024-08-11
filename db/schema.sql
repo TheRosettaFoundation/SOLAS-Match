@@ -10027,11 +10027,27 @@ DELIMITER ;
 
 DROP PROCEDURE IF EXISTS `update_memsource_project_owner`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `update_memsource_project_owner`(IN projectID INT, IN ownerUID BIGINT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `update_memsource_project_owner`(IN projectID INT, IN ownerUID VARCHAR(30))
 BEGIN
     UPDATE MemsourceProjects
     SET owner_uid=ownerUID
     WHERE project_id=projectID;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `update_project_owner_id`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `update_project_owner_id`(IN pID INT UNSIGNED, IN oID INT UNSIGNED, IN ss INT)
+BEGIN
+    UPDATE project_complete_dates SET owner_id=oID, self_service=ss WHERE project_id=pID;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `update_project_owner_id_only`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `update_project_owner_id_only`(IN pID INT UNSIGNED, IN oID INT UNSIGNED)
+BEGIN
+    UPDATE project_complete_dates SET owner_id=oID WHERE project_id=pID;
 END//
 DELIMITER ;
 
