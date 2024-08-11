@@ -1346,6 +1346,8 @@ CREATE TABLE IF NOT EXISTS `UserServices` (
 CREATE TABLE IF NOT EXISTS `project_complete_dates` (
   project_id    INT(10) UNSIGNED NOT NULL,
   status        INT(10) UNSIGNED NOT NULL,
+  owner_id      INT UNSIGNED NOT NULL DEFAULT 0,
+  self_service  INT NOT NULL DEFAULT 0,
   complete_date DATETIME NOT NULL,
   deal_id       BIGINT UNSIGNED NOT NULL DEFAULT 0,
   allocated_budget INT UNSIGNED NOT NULL DEFAULT 0,
