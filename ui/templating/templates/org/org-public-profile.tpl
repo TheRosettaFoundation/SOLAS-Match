@@ -718,6 +718,27 @@
 {/if}
 
 {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
+    <p style="margin-bottom: 40px"></p>
+    <h1 class="page-header">Asana Board for Parner</h1>
+    <form method="post" action="{urlFor name="org-public-profile" options="org_id.$org_id"}">
+        <table>
+            <tr>
+                <td>
+                    <label for="asana_board" style="font-size: large"><strong>Asana ID (not full URL) for this Parner's Board/Project</strong></label>
+                    <input type="text" name="asana_board" id="asana_board" maxlength="20" value="{$asana_board_for_org['asana_board']}" style="width: 80%" />
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <button type="submit" value="set_asana_board" name="set_asana_board" class="btn btn-primary">
+                        <i class="icon-refresh icon-white"></i> Update Asana ID
+                    </button>
+                </td>
+            </tr>
+        </table>
+        {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
+    </form>
+
     <p style="margin-bottom: 40px" />
     <h1 class="page-header">
         Subscription
