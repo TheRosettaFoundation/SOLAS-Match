@@ -2401,6 +2401,7 @@ error_log("fields: $fields targetlanguages: $targetlanguages");//(**)
         $projectDao = new DAO\ProjectDao();
         $taskDao = new DAO\TaskDao();
         $orgDao = new DAO\OrganisationDao();
+        $userDao = new DAO\UserDao();
         $memsourceApiToken = Common\Lib\Settings::get('memsource.memsource_api_token');
 
         $fp_for_lock = fopen(__DIR__ . '/task_cron_1_minute_lock.txt', 'r');
@@ -2580,8 +2581,12 @@ error_log("get_queue_asana_projects: $projectId");//(**)
                 $memsource_project_id = $memsource_project['memsource_project_id'];
                 $self_service = (strpos($pm, '@translatorswithoutborders.org') === false && strpos($pm, '@clearglobal.org') === false) || $projectDao->get_memsource_self_service_project($memsource_project_id);
                 if ($self_service) $asana_project = '778921846018141';
-                else               $asana_project = '1200067882657242';
-
+                else {
+                    $asana_project = '1200067882657242';
+                    $asana_board_for_org = $userDao->get_asana_board_for_org($org_id);
+                    if (!empty($asana_board_for_org['asana_board'])) $asana_project = (string)$asana_board_for_org['asana_board'];
+                }
+error_log("asana_board_for_org $org_id, $asana_project");
                 $tasks = $projectDao->getProjectTasksArray($projectId);
                 $asana_task_splits = [];
                 foreach ($tasks as $task) {
