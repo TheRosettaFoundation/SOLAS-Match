@@ -13435,6 +13435,14 @@ END//
 DELIMITER ;
 
 
+CREATE TABLE IF NOT EXISTS `asana_board_for_org` (
+  org_id      INT UNSIGNED NOT NULL,
+  asana_board BIGINT UNSIGNED NOT NULL,
+  PRIMARY KEY (org_id),
+  CONSTRAINT FK_asana_board_for_org_org_id FOREIGN KEY (org_id) REFERENCES Organisations (id) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+
 /*---------------------------------------end of procs----------------------------------------------*/
 
 
