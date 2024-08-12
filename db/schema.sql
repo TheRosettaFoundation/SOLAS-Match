@@ -13454,7 +13454,7 @@ DROP PROCEDURE IF EXISTS `set_asana_board_for_org`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `set_asana_board_for_org`(IN oID INT UNSIGNED, IN aID BIGINT UNSIGNED)
 BEGIN
-    REPLACE INTO RestrictedTasks (org_id, asana_board) VALUES (oID, aID);
+    REPLACE INTO asana_board_for_org (org_id, asana_board) VALUES (oID, aID);
 END//
 DELIMITER ;
 
