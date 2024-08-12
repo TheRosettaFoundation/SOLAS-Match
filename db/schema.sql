@@ -13442,6 +13442,22 @@ CREATE TABLE IF NOT EXISTS `asana_board_for_org` (
   CONSTRAINT FK_asana_board_for_org_org_id FOREIGN KEY (org_id) REFERENCES Organisations (id) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+DROP PROCEDURE IF EXISTS `get_asana_board_for_org`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_asana_board_for_org`(IN oID INT UNSIGNED)
+BEGIN
+    SELECT * FROM asana_board_for_org WHERE org_id=oID;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `set_asana_board_for_org`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `set_asana_board_for_org`(IN oID INT UNSIGNED, IN aID BIGINT UNSIGNED)
+BEGIN
+    REPLACE INTO RestrictedTasks (org_id, asana_board) VALUES (oID, aID);
+END//
+DELIMITER ;
+
 
 /*---------------------------------------end of procs----------------------------------------------*/
 
