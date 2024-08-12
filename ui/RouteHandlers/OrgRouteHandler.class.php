@@ -1663,6 +1663,9 @@ class OrgRouteHandler
                 } elseif (!empty($post['required_qualification_level'])) {
                     $userDao->updateRequiredOrgQualificationLevel($org_id, $post['required_qualification_level']);
                 }
+                if (!empty($post['asana_board'])) {
+                    $orgDao->set_asana_board_for_org($org_id, $post['asana_board']);
+                }
             }
         }
         $orgMemberList = $adminDao->getOrgMembers($org_id);
@@ -1712,6 +1715,7 @@ class OrgRouteHandler
                 'extra_scripts' => $extra_scripts,
                 'no_subscription' => $no_subscription,
                 'subscription' => $subscription,
+                'asana_board_for_org' => $orgDao->get_asana_board_for_org($org_id),
                 'required_qualification_level' => $userDao->getRequiredOrgQualificationLevel($org_id),
                 'siteName' => $siteName,
         ));
