@@ -2509,4 +2509,16 @@ error_log(print_r($result, true));//(**)
         if (empty($result)) return [];
         return $result;
     }
+
+    public function get_asana_board_for_org($org_id)
+    {
+        $result = LibAPI\PDOWrapper::call('get_asana_board_for_org', LibAPI\PDOWrapper::cleanse($org_id));
+        if (empty($result)) return ['asana_board' => ''];
+        return $result[0];
+    }
+
+    public function set_asana_board_for_org($org_id, $asana_board)
+    {
+        LibAPI\PDOWrapper::call('set_asana_board_for_org', LibAPI\PDOWrapper::cleanse($org_id) . ',' . LibAPI\PDOWrapper::cleanse($asana_board));
+    }
 }
