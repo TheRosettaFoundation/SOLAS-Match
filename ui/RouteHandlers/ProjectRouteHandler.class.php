@@ -2497,7 +2497,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
     
         $task_ids = $projectDao->get_asana_tasks($project_id);
 
-        error_log( $task_ids) ; 
+        // error_log( $task_ids) ; 
 
 
         $ch = curl_init();
@@ -2553,7 +2553,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                      else { 
                       
                         $responseData = json_decode($response, true); 
-                        error_log($responseData);
+                        error_log(print_r($responseData));
                         error_log(print_r($taskId,true) );
                          } 
                         curl_close($ch); } } else { error_log("no users or task found !"); }
