@@ -2486,6 +2486,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
         $projectDao = new DAO\ProjectDao();        
         $userDao = new DAO\UserDao();
         $user = $userDao->getUser($user_id);
+  
         
         // Can be used for testing
         // $projectId = 9446 ;
@@ -2493,8 +2494,13 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
         $email = $user->email;
           
         $usersApiUrl = "https://app.asana.com/api/1.0/users?opt_fields=email";
+     
     
         $task_ids = $projectDao->get_asana_tasks($project_id);
+
+        error_log( $task_ids) ; 
+
+
 
         $ch = curl_init();
 
@@ -2530,6 +2536,8 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                     $asanaTask = $taskId["asana_task_id"] ;
                       // Asana API endpoint to assign the task   
                     $tasksApiUrl = 'https://app.asana.com/api/1.0/tasks/' . $asanaTask; 
+                    
+                    $taskSubtask = "https://app.asana.com/api/1.0/tasks/$asanaTask/subtasks"; 
                    
                     error_log("Asana Task ID : $asanaTask");
 
@@ -2547,7 +2555,8 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                      else { 
                       
                         $responseData = json_decode($response, true); 
-                        error_log(print_r($taskId,true) ); } 
+                        error_log(print_r($taskId,true) );
+                         } 
                         curl_close($ch); } } else { error_log("no users or task found !"); }
 
 
