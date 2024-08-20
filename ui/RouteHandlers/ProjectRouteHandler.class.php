@@ -2493,7 +2493,6 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
         $usersApiUrl = "https://app.asana.com/api/1.0/users?opt_fields=email";
         $task_ids = $projectDao->get_asana_tasks($projectId);
 
-        print_r($task_ids) ; 
 
         // Section for getting the  user gid
                
