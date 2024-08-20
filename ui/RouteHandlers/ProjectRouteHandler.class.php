@@ -2539,27 +2539,58 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                    
                     error_log("Asana Task ID : $asanaTask");
 
-                    $data = [ 'assignee' => $email ];
-                     $ch = curl_init(); 
+                    $data = [ 'contributor' => $email ];
+                     
+                    $ch = curl_init(); 
         
-                     curl_setopt($ch, CURLOPT_URL, $tasksApiUrl); 
-                     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true); 
-                     curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PUT'); 
-                     curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data)); 
-                     curl_setopt($ch, CURLOPT_HTTPHEADER, [ 'Authorization: Bearer ' . $token, 'Content-Type: application/json' ]); 
-                     $response = curl_exec($ch); 
+                    curl_setopt($ch, CURLOPT_URL, $tasksApiUrl); 
+                    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true); 
+                    curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PUT'); 
+                    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data)); 
+                    curl_setopt($ch, CURLOPT_HTTPHEADER, [ 'Authorization: Bearer ' . $token, 'Content-Type: application/json' ]); 
+                    $response = curl_exec($ch); 
 
+
+                    $ch1 = curl_init(); 
+        
+                    curl_setopt($ch1, CURLOPT_URL, $taskSubtask); 
+                    curl_setopt($ch1, CURLOPT_RETURNTRANSFER, true); 
+                    curl_setopt($ch1, CURLOPT_HTTPHEADER, [ 'Authorization: Bearer ' . $token, 'Content-Type: application/json' ]); 
+                    
+                    $response_sub = curl_exec($ch_1); 
+                
+
+                
+                     
                      if (curl_errno($ch)) { echo 'Error assigning task ' . $taskId . ': ' . curl_error($ch) . '<br>'; } 
+
                      else { 
                       
                         $responseData = json_decode($response, true); 
                         error_log(print_r($responseData));
                         error_log(print_r($taskId,true) );
                          } 
-                        curl_close($ch); } } else { error_log("no users or task found !"); }
+                        curl_close($ch);
+
+                        if (curl_errno($ch1)) { echo "subtask not retrived "; } else{
+
+                        $responseDataSub = json_decode($response_sub, true); 
+                        error_log(print_r($responseDataSub));
+                        }
+                    
+                    } } else { error_log("no users or task found !"); }
+
+                    // Call subtasks
+                    
+                       
+                        
+                         
+                     
+        }
+                        
 
 
-    }
+    
 
     public function create_discourse_topic($projectId, $targetlanguages, $memsource_project = 0, $earthquake = 0)
     {
