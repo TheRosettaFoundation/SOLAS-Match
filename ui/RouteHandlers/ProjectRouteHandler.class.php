@@ -2497,7 +2497,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
     
         $task_ids = $projectDao->get_asana_tasks($projectId);
 
-        print_r($task_ids,true) ; 
+        print_r($task_ids) ; 
 
         // Section for getting the  user gid
 
