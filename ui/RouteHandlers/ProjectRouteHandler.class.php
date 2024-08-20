@@ -2542,8 +2542,10 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                     $taskData = json_decode($taskStatusResponse, true);
                     error_log("below status is complete or ");
                     error_log($taskData['data']['completed']); 
+                    print_r($taskData['data']['completed']);
+                    break;
 
-                    curl_close($taskch);
+                 
 
 
                     
