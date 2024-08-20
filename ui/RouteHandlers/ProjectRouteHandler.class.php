@@ -2550,8 +2550,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                     if (curl_errno($ch)) { echo 'Error assigning task ' . $taskId . ': ' . curl_error($ch) . '<br>'; } 
                      else { 
                         $responseData = json_decode($response, true); 
-                        error_log(print_r($responseData));
-                        error_log(print_r($taskId,true) );
+                        
                          } 
                        
                     curl_close($ch);
@@ -2568,10 +2567,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                     $response_sub = curl_exec($ch1); 
                     $res = var_export($response_sub, true);
                     
-                    error_log("subtask below");
-                    error_log($res);
-           
-                     
+                 
 
                     if (curl_errno($ch1)) { echo "subtask not retrived "; } else{
                     
@@ -2608,8 +2604,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                             else { 
                              
                                $responseData = json_decode($response, true); 
-                               error_log(print_r($responseData));
-                               error_log(print_r($taskId,true) );
+                               
                                 } 
                               
                            curl_close($ch2);
