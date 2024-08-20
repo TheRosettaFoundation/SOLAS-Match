@@ -2558,11 +2558,12 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                     curl_setopt($ch1, CURLOPT_HTTPHEADER, [ 'Authorization: Bearer ' . $token, 'Content-Type: application/json' ]); 
                     
                     $response_sub = curl_exec($ch_1); 
-                    print_r($response_sub);
-                
 
-                
-                     
+                    $res = var_export($response_sub, true);
+                    
+                    error_log("subtask below");
+                    error_log($res);
+           
                      if (curl_errno($ch)) { echo 'Error assigning task ' . $taskId . ': ' . curl_error($ch) . '<br>'; } 
 
                      else { 
