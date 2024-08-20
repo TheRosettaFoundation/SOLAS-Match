@@ -2614,7 +2614,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                                error_log(print_r($taskId,true) );
                                 } 
                               
-                           curl_close($ch);
+                           curl_close($ch2);
 
                         }
                     }
