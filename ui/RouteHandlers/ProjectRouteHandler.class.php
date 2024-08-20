@@ -2497,32 +2497,26 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
     
         $task_ids = $projectDao->get_asana_tasks($projectId);
 
-        error_log( print_r($task_ids,true)) ; 
+        print_r($task_ids,true) ; 
 
+        // Section for getting the  user gid
 
+               
+        $userGid = null; 
         $ch = curl_init();
-
         $token = Common\Lib\Settings::get('asana.api_key6');
 
         curl_setopt($ch, CURLOPT_URL, $usersApiUrl); 
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true); 
-        curl_setopt($ch, CURLOPT_HTTPHEADER, [ 'Authorization: Bearer ' . $token, 'Content-Type: application/json' ]); 
-   
+        curl_setopt($ch, CURLOPT_HTTPHEADER, [ 'Authorization: Bearer ' . $token, 'Content-Type: application/json' ]);    
         $response = curl_exec($ch); 
-
         if (curl_errno($ch)) { die('Error:' . curl_error($ch)); } 
-        
         curl_close($ch);
-        
-
         $responseData = json_decode($response, true); 
 
-       
-        $userGid = null; 
 
         if (isset($responseData['data']) && !empty($task_ids)) { 
-            foreach ($responseData['data'] as $user) { if (isset($user['email']) && $user['email'] === $email) { 
-                
+            foreach ($responseData['data'] as $user) { if (isset($user['email']) && $user['email'] === $email) {                 
                 $userGid = $user['gid'];
                 error_log(" userGid : $userGid") ;               
                 break; } } 
@@ -2530,19 +2524,19 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                 if ($userGid === null) { error_log("User with email with : $email not found!"); } 
            
                 foreach ($task_ids as $taskId) { 
-
                     $asanaTask = $taskId["asana_task_id"] ;
 
                     
                       // Asana API endpoint to assign the task   
                     $tasksApiUrl = 'https://app.asana.com/api/1.0/tasks/' . $asanaTask; 
-                    
+                    // Asana Api endpoint to get task subtask
                     $taskSubtask = "https://app.asana.com/api/1.0/tasks/$asanaTask/subtasks"; 
                    
-                    error_log("Asana Task ID : $asanaTask");
+                    // check if the task is is complete 
 
                     $data =['data' => [ 'assignee' => $userGid ]];
-                     
+                    
+                    // Section for assign a task to  the suer 
                     $ch = curl_init(); 
         
                     curl_setopt($ch, CURLOPT_URL, $tasksApiUrl); 
@@ -2555,7 +2549,6 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
 
                     if (curl_errno($ch)) { echo 'Error assigning task ' . $taskId . ': ' . curl_error($ch) . '<br>'; } 
                      else { 
-                      
                         $responseData = json_decode($response, true); 
                         error_log(print_r($responseData));
                         error_log(print_r($taskId,true) );
@@ -2564,7 +2557,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                     curl_close($ch);
                     
 
-                    // Assign user to all subtask
+                    // Call to get all subtask 
 
                     $ch1 = curl_init(); 
         
