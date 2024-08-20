@@ -2532,6 +2532,8 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                 foreach ($task_ids as $taskId) { 
 
                     $asanaTask = $taskId["asana_task_id"] ;
+
+                    
                       // Asana API endpoint to assign the task   
                     $tasksApiUrl = 'https://app.asana.com/api/1.0/tasks/' . $asanaTask; 
                     
@@ -2584,11 +2586,12 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                     // array with subtask
                     $responseDataSub = json_decode($response_sub, true); 
 
-                    print_r($responseDataSub) ;
-
                     if(isset($responseDataSub['data'])){
                         $ch2 = curl_init(); 
                         foreach($responseDataSub['data'] as $subtask){
+
+                           if($subtask['complete']){
+
 
                             $subGid  = $subtask['gid'] ;
                             error_log("subtask gid is $subGid");
@@ -2598,27 +2601,29 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                                 'assignee' =>  $userGid
                             ]];
 
-                            // curl_setopt($ch2, CURLOPT_URL, $taskSubUrl); 
-                            // curl_setopt($ch2, CURLOPT_RETURNTRANSFER, true); 
-                            // curl_setopt($ch2, CURLOPT_CUSTOMREQUEST, 'PUT'); 
-                            // curl_setopt($ch2, CURLOPT_POSTFIELDS, json_encode($dataSub)); 
-                            // curl_setopt($ch2, CURLOPT_HTTPHEADER, [ 'Authorization: Bearer ' . $token, 'Content-Type: application/json' ]); 
-                            // $responseSub = curl_exec($ch2); 
-                            // if (curl_errno($ch2)) { echo 'Error assigning subtask ' . $taskId . ': ' . curl_error($ch) . '<br>'; } 
-                            // else { 
+
+                            curl_setopt($ch2, CURLOPT_URL, $taskSubUrl); 
+                            curl_setopt($ch2, CURLOPT_RETURNTRANSFER, true); 
+                            curl_setopt($ch2, CURLOPT_CUSTOMREQUEST, 'PUT'); 
+                            curl_setopt($ch2, CURLOPT_POSTFIELDS, json_encode($dataSub)); 
+                            curl_setopt($ch2, CURLOPT_HTTPHEADER, [ 'Authorization: Bearer ' . $token, 'Content-Type: application/json' ]); 
+                            $responseSub = curl_exec($ch2); 
+
+                           } 
+
+                            if (curl_errno($ch2)) { echo 'Error assigning subtask ' . $taskId . ': ' . curl_error($ch) . '<br>'; } 
+                            else { 
                              
-                            //    $responseData = json_decode($response, true); 
-                            //    error_log(print_r($responseData));
-                            //    error_log(print_r($taskId,true) );
-                            //     } 
+                               $responseData = json_decode($response, true); 
+                               error_log(print_r($responseData));
+                               error_log(print_r($taskId,true) );
+                                } 
                               
                            curl_close($ch2);
 
                         }
                     }
 
-                    error_log("response below");
-                    print_r("#######################################");
                     error_log(print_r($responseDataSub,true));
                     }
                     curl_close($ch1);
@@ -2628,10 +2633,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                     else { error_log("no users or task found !"); }
 
                     // Call subtasks
-                    
-                       
-                        
-                         
+                                   
                      
         }
                         
