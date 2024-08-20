@@ -2562,11 +2562,11 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
 
                 
                      
-                     if (curl_errno($ch)) { echo 'Error assigning task ' . $taskId . ': ' . curl_error($ch) . '<br>'; } 
+                     if (curl_errno($ch1)) { echo 'Error assigning task ' . $taskId . ': ' . curl_error($ch) . '<br>'; } 
 
                      else { 
                       
-                        $responseData = json_decode($response, true); 
+                        $responseData = json_decode($response_sub, true); 
                         error_log(print_r($responseData));
                         error_log(print_r($taskId,true) );
                          } 
