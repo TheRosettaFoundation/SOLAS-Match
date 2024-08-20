@@ -2542,32 +2542,32 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                     $taskData = json_decode($taskStatusResponse, true);
                     error_log("below status is complete or ");
                     error_log($taskData['data']['completed']); 
-                    print_r($taskData['data']['completed']);
-                    break;
-
-                 
-
-
-                    
+                  
+    
                     // Section for assign a task to  the suer 
-                    $ch = curl_init(); 
-        
-                    curl_setopt($ch, CURLOPT_URL, $tasksApiUrl); 
-                    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true); 
-                    curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PUT'); 
-                    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data)); 
-                    curl_setopt($ch, CURLOPT_HTTPHEADER, [ 'Authorization: Bearer ' . $token, 'Content-Type: application/json' ]); 
-                    $response = curl_exec($ch); 
+                   
 
+                    if($taskData['data']['completed']){
 
-                    if (curl_errno($ch)) { echo 'Error assigning task ' . $taskId . ': ' . curl_error($ch) . '<br>'; } 
-                     else { 
-                        $responseData = json_decode($response, true); 
-                        
-                         } 
-                       
-                    curl_close($ch);
-                    
+                        $ch = curl_init(); 
+
+                        curl_setopt($ch, CURLOPT_URL, $tasksApiUrl); 
+                        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true); 
+                        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PUT'); 
+                        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data)); 
+                        curl_setopt($ch, CURLOPT_HTTPHEADER, [ 'Authorization: Bearer ' . $token, 'Content-Type: application/json' ]); 
+                        $response = curl_exec($ch); 
+    
+    
+                        if (curl_errno($ch)) { echo 'Error assigning task ' . $taskId . ': ' . curl_error($ch) . '<br>'; } 
+                         else { 
+                            $responseData = json_decode($response, true); 
+                            
+                             } 
+                           
+                        curl_close($ch);
+                    }
+
 
                     // Call to get all subtask 
 
