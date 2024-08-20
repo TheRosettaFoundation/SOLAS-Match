@@ -2488,14 +2488,14 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
         $user = $userDao->getUser($user_id);
   
         
-        // Can be used for testing
-        // $projectId = 9446 ;
+        Can be used for testing
+        $projectId = 9446 ;
         
         $email = $user->email;
           
         $usersApiUrl = "https://app.asana.com/api/1.0/users?opt_fields=email";
     
-        $task_ids = $projectDao->get_asana_tasks($project_id);
+        $task_ids = $projectDao->get_asana_tasks($projectId);
 
         error_log( print_r($task_ids)) ; 
 
