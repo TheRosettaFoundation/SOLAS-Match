@@ -2486,21 +2486,16 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
         $projectDao = new DAO\ProjectDao();        
         $userDao = new DAO\UserDao();
         $user = $userDao->getUser($user_id);
-  
-        
-        // Can be used for testing
-        $projectId = 9446 ;
-        
-        $email = $user->email;
           
+        // Can be used for testing
+        $projectId = 9446 ;   
+        $email = $user->email;
         $usersApiUrl = "https://app.asana.com/api/1.0/users?opt_fields=email";
-    
         $task_ids = $projectDao->get_asana_tasks($projectId);
 
         print_r($task_ids) ; 
 
         // Section for getting the  user gid
-
                
         $userGid = null; 
         $ch = curl_init();
@@ -2532,9 +2527,28 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                     // Asana Api endpoint to get task subtask
                     $taskSubtask = "https://app.asana.com/api/1.0/tasks/$asanaTask/subtasks"; 
                    
-                    // check if the task is is complete 
+                    //Action: check if the task is is complete 
+
+               
+
+
 
                     $data =['data' => [ 'assignee' => $userGid ]];
+
+                    // first get the task to check if it uncomplete
+
+                    $taskch = curl_init();
+
+                    curl_setopt($taskch, CURLOPT_URL, $tasksApiUrl); 
+                    curl_setopt($taskch, CURLOPT_RETURNTRANSFER, true); 
+                    curl_setopt($taskch, CURLOPT_HTTPHEADER, [ 'Authorization: Bearer ' . $token, 'Content-Type: application/json' ]); 
+                    $taskStatusResponse = curl_exec($taskch); 
+                    $taskData = json_decode($taskStatusResponse, true);
+                    print_r($taskData); 
+
+                    curl_close($taskch);
+
+
                     
                     // Section for assign a task to  the suer 
                     $ch = curl_init(); 
