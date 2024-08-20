@@ -2541,7 +2541,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                    
                     error_log("Asana Task ID : $asanaTask");
 
-                    $data = json_encode(['data' => [ 'assignee' => $userGid ]]);
+                    $data =['data' => [ 'assignee' => $userGid ]];
                      
                     $ch = curl_init(); 
         
