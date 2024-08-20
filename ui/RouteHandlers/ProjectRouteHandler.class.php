@@ -2594,10 +2594,10 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
 
                             $subGid  = $subtask[gid] ;
                             error_log("subtask gid is $subGid");
-                            $taskSubUrl = $tasksApiUrl = 'https://app.asana.com/api/1.0/tasks/' . $subGid;
+                            $taskSubUrl = 'https://app.asana.com/api/1.0/tasks/' . $subGid;
 
                             $dataSub = ['data'=>[
-                                'assignee' => $userGid
+                                'assignee' =>  $userGid
                             ]];
 
                             curl_setopt($ch2, CURLOPT_URL, $taskSubUrl); 
