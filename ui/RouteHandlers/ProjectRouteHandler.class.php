@@ -2577,7 +2577,8 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                     if (curl_errno($ch1)) { echo "subtask not retrived "; } else{
 
                     $responseDataSub = json_decode($response_sub, true); 
-                    error_log(print_r($responseDataSub));
+                    error_log("response below");
+                    error_log(print_r($responseDataSub,true));
                     }
                     url_close($ch1);
                     
