@@ -2558,7 +2558,6 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                     curl_setopt($ch1, CURLOPT_HTTPHEADER, [ 'Authorization: Bearer ' . $token, 'Content-Type: application/json' ]); 
                     
                     $response_sub = curl_exec($ch1); 
-
                     $res = var_export($response_sub, true);
                     
                     error_log("subtask below");
@@ -2582,7 +2581,9 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                     }
                     url_close($ch1);
                     
-                    } } else { error_log("no users or task found !"); }
+                    } } 
+                    
+                    else { error_log("no users or task found !"); }
 
                     // Call subtasks
                     
