@@ -2598,19 +2598,19 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                                 'assignee' =>  $userGid
                             ]];
 
-                            curl_setopt($ch2, CURLOPT_URL, $taskSubUrl); 
-                            curl_setopt($ch2, CURLOPT_RETURNTRANSFER, true); 
-                            curl_setopt($ch2, CURLOPT_CUSTOMREQUEST, 'PUT'); 
-                            curl_setopt($ch2, CURLOPT_POSTFIELDS, json_encode($dataSub)); 
-                            curl_setopt($ch2, CURLOPT_HTTPHEADER, [ 'Authorization: Bearer ' . $token, 'Content-Type: application/json' ]); 
-                            $responseSub = curl_exec($ch2); 
-                            if (curl_errno($ch2)) { echo 'Error assigning subtask ' . $taskId . ': ' . curl_error($ch) . '<br>'; } 
-                            else { 
+                            // curl_setopt($ch2, CURLOPT_URL, $taskSubUrl); 
+                            // curl_setopt($ch2, CURLOPT_RETURNTRANSFER, true); 
+                            // curl_setopt($ch2, CURLOPT_CUSTOMREQUEST, 'PUT'); 
+                            // curl_setopt($ch2, CURLOPT_POSTFIELDS, json_encode($dataSub)); 
+                            // curl_setopt($ch2, CURLOPT_HTTPHEADER, [ 'Authorization: Bearer ' . $token, 'Content-Type: application/json' ]); 
+                            // $responseSub = curl_exec($ch2); 
+                            // if (curl_errno($ch2)) { echo 'Error assigning subtask ' . $taskId . ': ' . curl_error($ch) . '<br>'; } 
+                            // else { 
                              
-                               $responseData = json_decode($response, true); 
-                               error_log(print_r($responseData));
-                               error_log(print_r($taskId,true) );
-                                } 
+                            //    $responseData = json_decode($response, true); 
+                            //    error_log(print_r($responseData));
+                            //    error_log(print_r($taskId,true) );
+                            //     } 
                               
                            curl_close($ch2);
 
