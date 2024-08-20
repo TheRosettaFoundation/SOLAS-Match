@@ -2481,6 +2481,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
 
     public function assign_user_to_task($project_id, $user_id)
     {
+
        
         global $app;
         $projectDao = new DAO\ProjectDao();        
@@ -2488,10 +2489,11 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
         $user = $userDao->getUser($user_id);
           
         // Can be used for testing
+        // improve get all task asana task from the api and then insert it in the asanaTasks Table
         $projectId = 9446 ;   
         $email = $user->email;
         $usersApiUrl = "https://app.asana.com/api/1.0/users?opt_fields=email";
-        $task_ids = $projectDao->get_asana_tasks($projectId);
+        $task_ids = $projectDao->get_asana_tasks($project_id);
 
 
         // Section for getting the  user gid
@@ -2546,7 +2548,6 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
     
                     // Section for assign a task to  the suer 
                    
-
                     if($taskData['data']['completed']){
 
                         $ch = curl_init(); 
