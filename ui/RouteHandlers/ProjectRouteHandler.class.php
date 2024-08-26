@@ -2535,64 +2535,63 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                
         $userGid = null; 
 
-        if ($userResponse && isset($userResponse['data'])) {
-            foreach ($userResponse['data'] as $user) {
-                if ($user['email'] === $userEmail) {
-                    $userGid = $user['gid'];  // Get the user's GID (unique ID in Asana)
-                    break;
-                }
+        // if ($userResponse && isset($userResponse['data'])) {
+        //     foreach ($userResponse['data'] as $user) {
+        //         if ($user['email'] === $userEmail) {
+        //             $userGid = $user['gid'];  // Get the user's GID (unique ID in Asana)
+        //             break;
+        //         }
 
-                if(empty($task_ids)){
+        //         if(empty($task_ids)){
 
-                    foreach ($task_ids as $taskId) { 
-                        $asanaTask = $taskId["asana_task_id"] ;
+        //             foreach ($task_ids as $taskId) { 
+        //                 $asanaTask = $taskId["asana_task_id"] ;
     
                         
-                        // Asana API endpoint to assign the task   
-                        $tasksApiUrl = 'https://app.asana.com/api/1.0/tasks/' . $asanaTask; 
-                        // Asana Api endpoint to get task subtask
-                        $taskSubtask = "https://app.asana.com/api/1.0/tasks/$asanaTask/subtasks"; 
+        //                 // Asana API endpoint to assign the task   
+        //                 $tasksApiUrl = 'https://app.asana.com/api/1.0/tasks/' . $asanaTask; 
+        //                 // Asana Api endpoint to get task subtask
+        //                 $taskSubtask = "https://app.asana.com/api/1.0/tasks/$asanaTask/subtasks"; 
     
-                        $contributorCustomFields = "https://app.asana.com/api/1.0/$asanaTask/custom_fields";
-    
-    
-                        $taskData =['data' => [ 'assignee' => $userGid ]];
-    
-                        $customFields =['data' => ['contributor' => $userGid]] ;
+        //                 $contributorCustomFields = "https://app.asana.com/api/1.0/$asanaTask/custom_fields";
     
     
-                        $taskResponse = executeCurl($tasksApiUrl,'PUT',$taskData , $token) ;
+        //                 $taskData =['data' => [ 'assignee' => $userGid ]];
     
-                        $responseDataSub =  executeCurl($taskSubtask,'GET', null , $token) ;
+        //                 $customFields =['data' => ['contributor' => $userGid]] ;
     
     
-                        if(isset($responseDataSub['data'])){
-                            $ch2 = curl_init(); 
-                            foreach($responseDataSub['data'] as $subtask){
+        //                 $taskResponse = executeCurl($tasksApiUrl,'PUT',$taskData , $token) ;
     
-                                $subGid  = $subtask['gid'] ;
-                                error_log("subtask gid is $subGid");
-                                $taskSubUrl = 'https://app.asana.com/api/1.0/tasks/' . $subGid;
+        //                 $responseDataSub =  executeCurl($taskSubtask,'GET', null , $token) ;
+    
+    
+        //                 if(isset($responseDataSub['data'])){
+        //                     $ch2 = curl_init(); 
+        //                     foreach($responseDataSub['data'] as $subtask){
+    
+        //                         $subGid  = $subtask['gid'] ;
+        //                         error_log("subtask gid is $subGid");
+        //                         $taskSubUrl = 'https://app.asana.com/api/1.0/tasks/' . $subGid;
                           
-                                $dataSub = ['data'=>[
-                                    'assignee' =>  $userGid
-                                ]];
+        //                         $dataSub = ['data'=>[
+        //                             'assignee' =>  $userGid
+        //                         ]];
     
     
     
-                                executeCurl($taskSubUrl,'PUT',$taskData , $token) ;
+        //                         executeCurl($taskSubUrl,'PUT',$taskData , $token) ;
     
     
-                            }
-                        }
+        //                     }
+        //                 }
     
-                  }
-            }
-    
-
-
+        //           }
+        //     }
                 
-            }
+        //     }
+
+        // }
             
 
         
@@ -2766,7 +2765,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                      
                     
         // }   else { error_log("no users or task found !"); }
-    }
+    
 
 }
                         
