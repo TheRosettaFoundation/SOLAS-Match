@@ -2673,7 +2673,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                                 
                                 executeCurl($taskSubUrl,'PUT',$taskData , $token) ; 
 
-                                executeCurl($contributorSubFollowerUrl,'POST', $followers , $token) ;
+                                // executeCurl($contributorSubFollowerUrl,'POST', $followers , $token) ;
 
                             
                           
