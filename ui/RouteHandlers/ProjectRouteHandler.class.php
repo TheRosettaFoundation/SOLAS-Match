@@ -2661,13 +2661,14 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                     curl_close($ch1);
                     
                     } } 
-                    
-                    else { error_log("no users or task found !"); }
+                  
 
                     // Call subtasks
                                    
                      
-        }
+                    
+        }   else { error_log("no users or task found !"); }
+    }
                         
 
 
