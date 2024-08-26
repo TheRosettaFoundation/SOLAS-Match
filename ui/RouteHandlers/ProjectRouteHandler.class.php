@@ -2641,11 +2641,11 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
 
                     $taskRes = executeCurl($tasksApiUrl,'GET', null , $token) ;
 
-                    error_log("subtask gid is $subGid");
+
 
                     $task_complete = !$taskRes['data']['completed'];
 
-                    error_log("subtask gid is $task_complete");
+                    error_log("task status is $task_complete");
 
                     if(!$task_complete)
                     {
