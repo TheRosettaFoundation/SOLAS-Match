@@ -2499,7 +2499,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                     // Asana Api endpoint to get task subtask
                     $taskSubtask = "https://app.asana.com/api/1.0/tasks/$asanaTask/subtasks"; 
 
-                    $contributorFollowerUrl = "https://app.asana.com/api/1.0/$asanaTask/removeFollowers";
+                    $contributorFollowerUrl = "https://app.asana.com/api/1.0/tasks/$asanaTask/removeFollowers";
 
                     $taskData =['data' => [ 'assignee' => null ]];
 
@@ -2525,7 +2525,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
 
                                 $taskSubUrl = 'https://app.asana.com/api/1.0/tasks/' . $subGid;
 
-                                $contributorSubFollowerUrl = "https://app.asana.com/api/1.0/$subGid/removeFollowers";
+                                $contributorSubFollowerUrl = "https://app.asana.com/api/1.0/tasks/$subGid/removeFollowers";
                       
                                 $dataSub = ['data'=>[
                                     'assignee' =>  null
@@ -2665,7 +2665,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
 
                                 $taskSubUrl = 'https://app.asana.com/api/1.0/tasks/' . $subGid;
 
-                                $contributorSubFollowerUrl = "https://app.asana.com/api/1.0/$subGid/addFollowers";
+                                $contributorSubFollowerUrl = "https://app.asana.com/api/1.0/tasks/$subGid/addFollowers";
 
                                 error_log("subtask gid is $contributorSubFollowerUrl");
                       
@@ -2675,7 +2675,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                                 
                                 executeCurl($taskSubUrl,'PUT',$taskData , $token) ; 
 
-                                // executeCurl($contributorSubFollowerUrl,'POST', $followers , $token) ;
+                                executeCurl($contributorSubFollowerUrl,'POST', $followers , $token) ;
 
                             
                           
