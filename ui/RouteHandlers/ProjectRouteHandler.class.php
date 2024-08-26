@@ -2425,6 +2425,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
         $user = $userDao->getUser($user_id);
         $email = $user->email;
 
+
         $usersApiUrl = "https://app.asana.com/api/1.0/users?opt_fields=email";
     
         $task_ids = $projectDao->get_asana_tasks($project_id);
@@ -2520,17 +2521,13 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
             {
                 echo 'Error: ' . curl_error($ch);
             } else {
-                // You can process the response here if needed
+               
                 echo 'Response: ' . $response;
                 return json_decode($response ,true);
             }
 
             curl_close($ch);
         }
-
-          
-        // improve get all task asana task from the api and then insert it in the asanaTasks Table
-        $projectId = 9446 ;   
         $email = $user->email;
         $usersApiUrl = "https://app.asana.com/api/1.0/users?opt_fields=email";
         $task_ids = $projectDao->get_asana_tasks($project_id);
@@ -2573,6 +2570,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                     $taskData =['data' => [ 'assignee' => $userGid ]];
 
                     $followers =['followers' => [$userGid]] ;
+
 
 
                     $taskResponse = executeCurl($tasksApiUrl,'PUT',$taskData , $token) ;
