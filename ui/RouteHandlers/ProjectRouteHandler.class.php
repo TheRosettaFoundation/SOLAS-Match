@@ -2503,7 +2503,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
 
                     $taskData =['data' => [ 'assignee' => null ]];
 
-                    $followers =['followers' => [ $userGid ]] ;
+                    $followers =['data' => ['followers'=> [ $userGid ]]] ;
 
                     $taskResponse = executeCurl($tasksApiUrl,'PUT',$taskData , $token) ;      
                    
@@ -2637,7 +2637,8 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
 
                     $taskData =['data' => [ 'assignee' => $userGid ]];
 
-                    $followers =['followers' => [$userGid]] ;
+                    $followers =['data' => ['followers'=> [ $userGid ]]] ;
+
 
 
 
