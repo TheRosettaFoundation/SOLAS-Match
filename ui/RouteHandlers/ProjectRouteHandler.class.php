@@ -2504,12 +2504,15 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
 
             if ($method == 'PUT') {
                 curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PUT');
+                curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+
             } elseif ($method == 'POST') {
                 curl_setopt($ch, CURLOPT_POST, true);
+                curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+
             } 
 
-            curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
-
+          
             $response = curl_exec($ch);
 
             if (curl_errno($ch)) {
@@ -2517,6 +2520,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
             } else {
                 // You can process the response here if needed
                 echo 'Response: ' . $response;
+                return json_decode($response ,true);
             }
 
             curl_close($ch);
