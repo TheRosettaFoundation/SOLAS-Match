@@ -2527,11 +2527,15 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                     $tasksApiUrl = 'https://app.asana.com/api/1.0/tasks/' . $asanaTask; 
                     // Asana Api endpoint to get task subtask
                     $taskSubtask = "https://app.asana.com/api/1.0/tasks/$asanaTask/subtasks"; 
+
+                    $contributorCustomFields = "https://app.asana.com/api/1.0/$asanaTask/custom_fields";
                    
                     //Action: check if the task is is complete 
 
 
                     $data =['data' => [ 'assignee' => $userGid ]];
+
+                    $customFields =['data' => ['contributor' => $userGid]] ;
 
                     // first get the task to check if it uncomplete
 
@@ -2544,11 +2548,13 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                     $taskData = json_decode($taskStatusResponse, true);
                     error_log("below status is complete or ");
                     error_log($taskData['data']['completed']); 
+
+
                   
     
                     // Section for assign a task to  the suer 
                    
-                    if($taskData['data']['completed']){
+                    if(!$taskData['data']['completed']){
 
                         $ch = curl_init(); 
 
@@ -2560,15 +2566,39 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                         $response = curl_exec($ch); 
     
     
-                        if (curl_errno($ch)) { echo 'Error assigning task ' . $taskId . ': ' . curl_error($ch) . '<br>'; } 
+                        if (curl_errno($ch)) { 
+                            
+                            echo 'Error assigning task ' . $taskId . ': ' . curl_error($ch) . '<br>'; 
+                            curl_close($ch);
+                        } 
                          else { 
                             $responseData = json_decode($response, true); 
+
+                            curl_close($ch);
+                            // create a custom field as a contributor
+                            $ch =  curl_init();
+
+                            curl_setopt($ch, CURLOPT_URL,  $contributorCustomFields); 
+                            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true); 
+                            curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PUT'); 
+                            curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($$customFields)); 
+                            curl_setopt($ch, CURLOPT_HTTPHEADER, [ 'Authorization: Bearer ' . $token, 'Content-Type: application/json' ]); 
+                            $response = curl_exec($ch); 
+
+                            if (curl_errno($ch)) { 
+                            
+                                echo 'Error assigning task ' . $taskId . ': ' . curl_error($ch) . '<br>'; 
+                                
+                            } 
+                             else { 
+                                $responseData = json_decode($response, true); 
                             
                              } 
-                           
-                        curl_close($ch);
-                    }
 
+                             curl_close($ch);
+                           
+                     
+                    }
 
                     // Call to get all subtask 
 
@@ -2593,7 +2623,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                         $ch2 = curl_init(); 
                         foreach($responseDataSub['data'] as $subtask){
 
-                           if($subtask['complete']){
+                           if(!$subtask['complete']){
 
 
                             $subGid  = $subtask['gid'] ;
