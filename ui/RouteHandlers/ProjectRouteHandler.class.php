@@ -2639,21 +2639,28 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
 
                     $followers =['data' => ['followers'=> [ $userGid ]]] ;
 
+                    $taskRes = executeCurl($tasksApiUrl,'GET', null , $token) ;
 
+                    error_log("subtask gid is $subGid");
 
+                    $task_complete = !$taskRes['data']['completed'];
 
-                    $taskResponse = executeCurl($tasksApiUrl,'PUT',$taskData , $token) ;
+                    error_log("subtask gid is $task_complete");
 
-                    if(isset($taskResponse['data'])){
-        
+                    if(!$task_complete)
+                    {
+
+                        $taskResponse = executeCurl($tasksApiUrl,'PUT',$taskData , $token) ;
                         
-                        executeCurl($contributorFollowerUrl,'POST', $followers , $token) ;
-                    }
+                        if(isset($taskResponse['data'])){
+                            
+                            executeCurl($contributorFollowerUrl,'POST', $followers , $token) ;
+                        }
 
-                    $responseDataSub =  executeCurl($taskSubtask,'GET', null , $token) ;
+                        $responseDataSub =  executeCurl($taskSubtask,'GET', null , $token) ;
 
 
-                    if(isset($responseDataSub['data']))
+                        if(isset($responseDataSub['data']))
                     {
                        
                         foreach($responseDataSub['data'] as $subtask)
@@ -2683,6 +2690,16 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
 
                         }
                     }
+
+
+
+                    
+                    }
+
+                  
+
+                    
+                    
 
               }
         }
