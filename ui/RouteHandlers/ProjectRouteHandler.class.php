@@ -2492,9 +2492,9 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
 
 
         // Function to execute a cURL request
-        function executeCurl($url, $method, $data, $accessToken) {
+        function executeCurl($url, $method, $data, $accessToken) 
+        {
             $ch = curl_init();
-
             curl_setopt($ch, CURLOPT_URL, $url);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
             curl_setopt($ch, CURLOPT_HTTPHEADER, [
@@ -2502,20 +2502,22 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                 "Content-Type: application/json"
             ]);
 
-            if ($method == 'PUT') {
+            if ($method == 'PUT') 
+            {
                 curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PUT');
                 curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
 
-            } elseif ($method == 'POST') {
+            } elseif ($method == 'POST') 
+            {
                 curl_setopt($ch, CURLOPT_POST, true);
                 curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
 
             } 
-
-          
+         
             $response = curl_exec($ch);
 
-            if (curl_errno($ch)) {
+            if (curl_errno($ch))
+            {
                 echo 'Error: ' . curl_error($ch);
             } else {
                 // You can process the response here if needed
@@ -2527,7 +2529,6 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
         }
 
           
-        // Can be used for testing
         // improve get all task asana task from the api and then insert it in the asanaTasks Table
         $projectId = 9446 ;   
         $email = $user->email;
@@ -2539,10 +2540,12 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                
         $userGid = null; 
 
-        if ($userResponse && isset($userResponse['data'])) {
+        if ($userResponse && isset($userResponse['data'])) 
+        {
 
             // Retrieve the user in the list of users
-            foreach ($userResponse['data'] as $user) {
+            foreach ($userResponse['data'] as $user) 
+            {
                 if ($user['email'] === $email) {
                     $userGid = $user['gid'];  // Get the user's GID (unique ID in Asana)
                     break;
@@ -2551,9 +2554,11 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
             }
 
 
-            if(!empty($task_ids)){
+            if(!empty($task_ids))
+            {
 
-                foreach ($task_ids as $taskId) { 
+                foreach ($task_ids as $taskId) 
+                { 
                     
                     $asanaTask = $taskId["asana_task_id"] ;
 
@@ -2563,22 +2568,26 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                     // Asana Api endpoint to get task subtask
                     $taskSubtask = "https://app.asana.com/api/1.0/tasks/$asanaTask/subtasks"; 
 
-                    $contributorCustomFields = "https://app.asana.com/api/1.0/$asanaTask/custom_fields";
-
+                    $contributorFollowerUrl = "https://app.asana.com/api/1.0/$asanaTask/addFollowers";
 
                     $taskData =['data' => [ 'assignee' => $userGid ]];
 
-                    $customFields =['data' => ['contributor' => $userGid]] ;
+                    $followers =['followers' => [$userGid]] ;
 
 
                     $taskResponse = executeCurl($tasksApiUrl,'PUT',$taskData , $token) ;
 
                     $responseDataSub =  executeCurl($taskSubtask,'GET', null , $token) ;
 
+                    $followResponse = executeCurl($contributorFollowerUrl,'POST', followers , $token) ;
 
-                    if(isset($responseDataSub['data'])){
+
+                    if(isset($responseDataSub['data']))
+                    {
                         $ch2 = curl_init(); 
-                        foreach($responseDataSub['data'] as $subtask){
+                        foreach($responseDataSub['data'] as $subtask)
+                       
+                        {
 
                             $subGid  = $subtask['gid'] ;
                             error_log("subtask gid is $subGid");
@@ -2587,11 +2596,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                             $dataSub = ['data'=>[
                                 'assignee' =>  $userGid
                             ]];
-
-
-
                             executeCurl($taskSubUrl,'PUT',$taskData , $token) ;
-
 
                         }
                     }
