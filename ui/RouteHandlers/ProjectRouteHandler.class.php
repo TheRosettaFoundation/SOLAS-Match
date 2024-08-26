@@ -2499,13 +2499,14 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                     // Asana Api endpoint to get task subtask
                     $taskSubtask = "https://app.asana.com/api/1.0/tasks/$asanaTask/subtasks"; 
 
-                    $contributorFollowerUrl = "https://app.asana.com/api/1.0/$asanaTask/addFollowers";
+                    $contributorFollowerUrl = "https://app.asana.com/api/1.0/$asanaTask/removeFollowers";
 
                     $taskData =['data' => [ 'assignee' => null ]];
 
-                    $followers =['followers' => [ ]] ;
+                    $followers =['followers' => [ $userGid ]] ;
 
                     $taskResponse = executeCurl($tasksApiUrl,'PUT',$taskData , $token) ;      
+                   
                     executeCurl($contributorFollowerUrl,'POST', $followers , $token) ;
                     
 
@@ -2524,7 +2525,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
 
                                 $taskSubUrl = 'https://app.asana.com/api/1.0/tasks/' . $subGid;
 
-                                $contributorSubFollowerUrl = "https://app.asana.com/api/1.0/$subGid/addFollowers";
+                                $contributorSubFollowerUrl = "https://app.asana.com/api/1.0/$subGid/removeFollowers";
                       
                                 $dataSub = ['data'=>[
                                     'assignee' =>  null
