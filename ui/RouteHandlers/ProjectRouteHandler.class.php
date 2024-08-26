@@ -2432,51 +2432,115 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
         $ch = curl_init();
         $token = Common\Lib\Settings::get('asana.api_key6');
 
-        curl_setopt($ch, CURLOPT_URL, $usersApiUrl); 
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true); 
-        curl_setopt($ch, CURLOPT_HTTPHEADER, [ 'Authorization: Bearer ' . $token, 'Content-Type: application/json' ]); 
+           // Function to execute a cURL request
+           function executeCurl($url, $method, $data, $accessToken) 
+           {
+               $ch = curl_init();
+               curl_setopt($ch, CURLOPT_URL, $url);
+               curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+               curl_setopt($ch, CURLOPT_HTTPHEADER, [
+                   "Authorization: Bearer $accessToken",
+                   "Content-Type: application/json"
+               ]);
    
-        $response = curl_exec($ch); 
-        if (curl_errno($ch)) { die('Error:' . curl_error($ch)); } 
-        $responseData = json_decode($response, true);
+               if ($method == 'PUT') 
+               {
+                   curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PUT');
+                   curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+   
+               } elseif ($method == 'POST') 
+               {
+                   curl_setopt($ch, CURLOPT_POST, true);
+                   curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+   
+               } 
+            
+               $response = curl_exec($ch);
+   
+               if (curl_errno($ch))
+               {
+                   echo 'Error: ' . curl_error($ch);
+               } else {
+                  
+                   echo 'Response: ' . $response;
+                   return json_decode($response ,true);
+               }
+           
         
-        curl_close($ch);
-        
+        $userResponse = executeCurl($usersApiUrl,'GET',null, $token) ;        
         $userGid = null; 
 
-        if (isset($responseData['data']) && !empty($task_ids)) { 
-            foreach ($responseData['data'] as $user) { if (isset($user['email']) && $user['email'] === $email) { 
-                
-                $userGid = $user['gid'];
-                error_log(" userGid : $userGid") ;               
-                break; } } 
-                
-                if ($userGid === null) { error_log("User with email with : $email not found!"); } 
-           
-                foreach ($task_ids as $taskId) { 
+        if ($userResponse && isset($userResponse['data'])) 
+        {
 
+            // Retrieve the user in the list of users
+            foreach ($userResponse['data'] as $user) 
+            {
+                if ($user['email'] === $email) {
+                    $userGid = $user['gid'];  // Get the user's GID (unique ID in Asana)
+                    break;
+                }
+                
+            }
+
+
+            if(!empty($task_ids))
+            {
+
+                foreach ($task_ids as $taskId) 
+                {                    
                     $asanaTask = $taskId["asana_task_id"] ;
-                      // Asana API endpoint to assign the task   
-                    $tasksApiUrl = "https://app.asana.com/api/1.0/tasks/$asanaTask/$userGid"; 
-                   
-                    error_log("Asana Task ID : $asanaTask");
 
-                    $data = [ 'assignee' => null ];
-                     $ch = curl_init(); 
-        
-                     curl_setopt($ch, CURLOPT_URL, $tasksApiUrl); 
-                     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true); 
-                     curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PUT'); 
-                     curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data)); 
-                     curl_setopt($ch, CURLOPT_HTTPHEADER, [ 'Authorization: Bearer ' . $token, 'Content-Type: application/json' ]); 
-                     $response = curl_exec($ch); 
+                    
+                    // Asana API endpoint to assign the task   
+                    $tasksApiUrl = 'https://app.asana.com/api/1.0/tasks/' . $asanaTask; 
+                    // Asana Api endpoint to get task subtask
+                    $taskSubtask = "https://app.asana.com/api/1.0/tasks/$asanaTask/subtasks"; 
 
-                     if (curl_errno($ch)) { echo 'Error re-assigning task ' . $taskId . ': ' . curl_error($ch) . '<br>'; } 
-                     else { 
+                    $contributorFollowerUrl = "https://app.asana.com/api/1.0/$asanaTask/addFollowers";
+
+                    $taskData =['data' => [ 'assignee' => null ]];
+
+                    $followers =['followers' => [ ]] ;
+
+                    $taskResponse = executeCurl($tasksApiUrl,'PUT',$taskData , $token) ;      
+                    executeCurl($contributorFollowerUrl,'POST', $followers , $token) ;
+                    
+
+                    $responseDataSub =  executeCurl($taskSubtask,'GET', null , $token) ;
+
+
+                    if(isset($responseDataSub['data']))
+                    {
+                       
+                        foreach($responseDataSub['data'] as $subtask)
+                       
+                        {
+
+                                $subGid  = $subtask['gid'] ;                            
+                                error_log("subtask gid is $subGid");
+
+                                $taskSubUrl = 'https://app.asana.com/api/1.0/tasks/' . $subGid;
+
+                                $contributorSubFollowerUrl = "https://app.asana.com/api/1.0/$subGid/addFollowers";
                       
-                        $responseData = json_decode($response, true); 
-                        error_log(print_r($taskId,true) ); } 
-                        curl_close($ch); } } else { error_log("no users or task found !"); }  
+                                $dataSub = ['data'=>[
+                                    'assignee' =>  null
+                                ]];
+                                
+                                executeCurl($taskSubUrl,'PUT',$taskData , $token) ; 
+
+                                executeCurl($contributorSubFollowerUrl,'POST', $followers , $token) ;
+
+
+                        }
+                    }
+
+              }
+        }
+
+        }
+
 
     }
 
@@ -2576,6 +2640,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                     $taskResponse = executeCurl($tasksApiUrl,'PUT',$taskData , $token) ;
 
                     if(isset($taskResponse['data'])){
+        
                         
                         executeCurl($contributorFollowerUrl,'POST', $followers , $token) ;
                     }
