@@ -2575,26 +2575,42 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
 
                     $taskResponse = executeCurl($tasksApiUrl,'PUT',$taskData , $token) ;
 
-                    $responseDataSub =  executeCurl($taskSubtask,'GET', null , $token) ;
+                    if(isset($taskResponse['data'])){
+                        
+                        executeCurl($contributorFollowerUrl,'POST', $followers , $token) ;
+                    }
 
-                    $followResponse = executeCurl($contributorFollowerUrl,'POST', $followers , $token) ;
+                    $responseDataSub =  executeCurl($taskSubtask,'GET', null , $token) ;
 
 
                     if(isset($responseDataSub['data']))
                     {
-                        $ch2 = curl_init(); 
+                       
                         foreach($responseDataSub['data'] as $subtask)
                        
                         {
 
                             $subGid  = $subtask['gid'] ;
                             error_log("subtask gid is $subGid");
-                            $taskSubUrl = 'https://app.asana.com/api/1.0/tasks/' . $subGid;
+
+
+
+                            if(!$subtask['complete'])
+                            {
+                                $taskSubUrl = 'https://app.asana.com/api/1.0/tasks/' . $subGid;
+
+                                $contributorSubFollowerUrl = "https://app.asana.com/api/1.0/$subGid/addFollowers";
                       
-                            $dataSub = ['data'=>[
-                                'assignee' =>  $userGid
-                            ]];
-                            executeCurl($taskSubUrl,'PUT',$taskData , $token) ;
+                                $dataSub = ['data'=>[
+                                    'assignee' =>  $userGid
+                                ]];
+                                
+                                executeCurl($taskSubUrl,'PUT',$taskData , $token) ; 
+
+                                executeCurl($contributorSubFollowerUrl,'POST', $followers , $token) ;
+
+                            }
+                          
 
                         }
                     }
