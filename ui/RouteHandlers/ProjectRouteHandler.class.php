@@ -2417,7 +2417,8 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
         curl_close($ch);
     }
 
-    public function remove_user_from_task($project_id, $user_id){
+    public function remove_user_from_task($project_id, $user_id)
+    {
 
         global $app;
         $projectDao = new DAO\ProjectDao();        
@@ -2465,6 +2466,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                    echo 'Response: ' . $response;
                    return json_decode($response ,true);
                }
+            }
            
         
         $userResponse = executeCurl($usersApiUrl,'GET',null, $token) ;        
@@ -2540,9 +2542,10 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
         }
 
         }
-
-
     }
+
+
+    
 
     public function assign_user_to_task($project_id, $user_id)
     {
