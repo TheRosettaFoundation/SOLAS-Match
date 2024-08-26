@@ -2487,6 +2487,41 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
         $projectDao = new DAO\ProjectDao();        
         $userDao = new DAO\UserDao();
         $user = $userDao->getUser($user_id);
+
+        $token = Common\Lib\Settings::get('asana.api_key6');
+
+
+        // Function to execute a cURL request
+        function executeCurl($url, $method, $data, $accessToken) {
+            $ch = curl_init();
+
+            curl_setopt($ch, CURLOPT_URL, $url);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_HTTPHEADER, [
+                "Authorization: Bearer $accessToken",
+                "Content-Type: application/json"
+            ]);
+
+            if ($method == 'PUT') {
+                curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PUT');
+            } elseif ($method == 'POST') {
+                curl_setopt($ch, CURLOPT_POST, true);
+            } 
+
+            curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+
+            $response = curl_exec($ch);
+
+            if (curl_errno($ch)) {
+                echo 'Error: ' . curl_error($ch);
+            } else {
+                // You can process the response here if needed
+                echo 'Response: ' . $response;
+            }
+
+            curl_close($ch);
+        }
+
           
         // Can be used for testing
         // improve get all task asana task from the api and then insert it in the asanaTasks Table
@@ -2495,180 +2530,245 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
         $usersApiUrl = "https://app.asana.com/api/1.0/users?opt_fields=email";
         $task_ids = $projectDao->get_asana_tasks($project_id);
 
+        $userResponse = executeCurl($usersApiUrl,'GET',null , $token) ;
 
-        // Section for getting the  user gid
                
         $userGid = null; 
-        $ch = curl_init();
-        $token = Common\Lib\Settings::get('asana.api_key6');
 
-        curl_setopt($ch, CURLOPT_URL, $usersApiUrl); 
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true); 
-        curl_setopt($ch, CURLOPT_HTTPHEADER, [ 'Authorization: Bearer ' . $token, 'Content-Type: application/json' ]);    
-        $response = curl_exec($ch); 
-        if (curl_errno($ch)) { die('Error:' . curl_error($ch)); } 
-        curl_close($ch);
-        $responseData = json_decode($response, true); 
+        if ($userResponse && isset($userResponse['data'])) {
+            foreach ($userResponse['data'] as $user) {
+                if ($user['email'] === $userEmail) {
+                    $userGid = $user['gid'];  // Get the user's GID (unique ID in Asana)
+                    break;
+                }
+
+                if(empty($task_ids)){
+
+                    foreach ($task_ids as $taskId) { 
+                        $asanaTask = $taskId["asana_task_id"] ;
+    
+                        
+                        // Asana API endpoint to assign the task   
+                        $tasksApiUrl = 'https://app.asana.com/api/1.0/tasks/' . $asanaTask; 
+                        // Asana Api endpoint to get task subtask
+                        $taskSubtask = "https://app.asana.com/api/1.0/tasks/$asanaTask/subtasks"; 
+    
+                        $contributorCustomFields = "https://app.asana.com/api/1.0/$asanaTask/custom_fields";
+    
+    
+                        $taskData =['data' => [ 'assignee' => $userGid ]];
+    
+                        $customFields =['data' => ['contributor' => $userGid]] ;
+    
+    
+                        $taskResponse = executeCurl($tasksApiUrl,'PUT',$taskData , $token) ;
+    
+                        $responseDataSub =  executeCurl($taskSubtask,'GET', null , $token) ;
+    
+    
+                        if(isset($responseDataSub['data'])){
+                            $ch2 = curl_init(); 
+                            foreach($responseDataSub['data'] as $subtask){
+    
+                                $subGid  = $subtask['gid'] ;
+                                error_log("subtask gid is $subGid");
+                                $taskSubUrl = 'https://app.asana.com/api/1.0/tasks/' . $subGid;
+                          
+                                $dataSub = ['data'=>[
+                                    'assignee' =>  $userGid
+                                ]];
+    
+    
+    
+                                executeCurl($taskSubUrl,'PUT',$taskData , $token) ;
+    
+    
+                            }
+                        }
+    
+                  }
+            }
+    
 
 
-        if (isset($responseData['data']) && !empty($task_ids)) { 
-            foreach ($responseData['data'] as $user) { if (isset($user['email']) && $user['email'] === $email) {                 
-                $userGid = $user['gid'];
-                error_log(" userGid : $userGid") ;               
-                break; } } 
                 
-                if ($userGid === null) { error_log("User with email with : $email not found!"); } 
+            }
+            
+
+        
+       
+        // $ch = curl_init();
+        
+
+        // curl_setopt($ch, CURLOPT_URL, $usersApiUrl); 
+        // curl_setopt($ch, CURLOPT_RETURNTRANSFER, true); 
+        // curl_setopt($ch, CURLOPT_HTTPHEADER, [ 'Authorization: Bearer ' . $token, 'Content-Type: application/json' ]);    
+        // $response = curl_exec($ch); 
+        // if (curl_errno($ch)) { die('Error:' . curl_error($ch)); } 
+        // curl_close($ch);
+        // $responseData = json_decode($response, true); 
+
+
+        // if (isset($responseData['data']) && !empty($task_ids)) { 
+        //     foreach ($responseData['data'] as $user) { if (isset($user['email']) && $user['email'] === $email) {                 
+        //         $userGid = $user['gid'];
+        //         error_log(" userGid : $userGid") ;               
+        //         break; } } 
+                
+        //         if ($userGid === null) { error_log("User with email with : $email not found!"); } 
            
-                foreach ($task_ids as $taskId) { 
-                    $asanaTask = $taskId["asana_task_id"] ;
+        //         foreach ($task_ids as $taskId) { 
+        //             $asanaTask = $taskId["asana_task_id"] ;
 
                     
-                    // Asana API endpoint to assign the task   
-                    $tasksApiUrl = 'https://app.asana.com/api/1.0/tasks/' . $asanaTask; 
-                    // Asana Api endpoint to get task subtask
-                    $taskSubtask = "https://app.asana.com/api/1.0/tasks/$asanaTask/subtasks"; 
+        //             // Asana API endpoint to assign the task   
+        //             $tasksApiUrl = 'https://app.asana.com/api/1.0/tasks/' . $asanaTask; 
+        //             // Asana Api endpoint to get task subtask
+        //             $taskSubtask = "https://app.asana.com/api/1.0/tasks/$asanaTask/subtasks"; 
 
-                    $contributorCustomFields = "https://app.asana.com/api/1.0/$asanaTask/custom_fields";
+        //             $contributorCustomFields = "https://app.asana.com/api/1.0/$asanaTask/custom_fields";
                    
-                    //Action: check if the task is is complete 
+        //             //Action: check if the task is is complete 
 
 
-                    $data =['data' => [ 'assignee' => $userGid ]];
+        //             $data =['data' => [ 'assignee' => $userGid ]];
 
-                    $customFields =['data' => ['contributor' => $userGid]] ;
+        //             $customFields =['data' => ['contributor' => $userGid]] ;
 
-                    // first get the task to check if it uncomplete
+        //             // first get the task to check if it uncomplete
 
-                    $taskch = curl_init();
+        //             $taskch = curl_init();
 
-                    curl_setopt($taskch, CURLOPT_URL, $tasksApiUrl); 
-                    curl_setopt($taskch, CURLOPT_RETURNTRANSFER, true); 
-                    curl_setopt($taskch, CURLOPT_HTTPHEADER, [ 'Authorization: Bearer ' . $token, 'Content-Type: application/json' ]); 
-                    $taskStatusResponse = curl_exec($taskch); 
-                    $taskData = json_decode($taskStatusResponse, true);
-                    error_log("below status is complete or ");
-                    error_log($taskData['data']['completed']); 
+        //             curl_setopt($taskch, CURLOPT_URL, $tasksApiUrl); 
+        //             curl_setopt($taskch, CURLOPT_RETURNTRANSFER, true); 
+        //             curl_setopt($taskch, CURLOPT_HTTPHEADER, [ 'Authorization: Bearer ' . $token, 'Content-Type: application/json' ]); 
+        //             $taskStatusResponse = curl_exec($taskch); 
+        //             $taskData = json_decode($taskStatusResponse, true);
+        //             error_log("below status is complete or ");
+        //             error_log($taskData['data']['completed']); 
 
 
                   
     
-                    // Section for assign a task to  the suer 
+        //             // Section for assign a task to  the suer 
                    
-                    if(!$taskData['data']['completed']){
+        //             if(!$taskData['data']['completed']){
 
-                        $ch = curl_init(); 
+        //                 $ch = curl_init(); 
 
-                        curl_setopt($ch, CURLOPT_URL, $tasksApiUrl); 
-                        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true); 
-                        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PUT'); 
-                        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data)); 
-                        curl_setopt($ch, CURLOPT_HTTPHEADER, [ 'Authorization: Bearer ' . $token, 'Content-Type: application/json' ]); 
-                        $response = curl_exec($ch); 
+        //                 curl_setopt($ch, CURLOPT_URL, $tasksApiUrl); 
+        //                 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true); 
+        //                 curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PUT'); 
+        //                 curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data)); 
+        //                 curl_setopt($ch, CURLOPT_HTTPHEADER, [ 'Authorization: Bearer ' . $token, 'Content-Type: application/json' ]); 
+        //                 $response = curl_exec($ch); 
     
     
-                        if (curl_errno($ch)) { 
+        //                 if (curl_errno($ch)) { 
                             
-                            echo 'Error assigning task ' . $taskId . ': ' . curl_error($ch) . '<br>'; 
-                            curl_close($ch);
-                        } 
-                         else { 
-                            $responseData = json_decode($response, true); 
+        //                     echo 'Error assigning task ' . $taskId . ': ' . curl_error($ch) . '<br>'; 
+        //                     curl_close($ch);
+        //                 } 
+        //                  else { 
+        //                     $responseData = json_decode($response, true); 
 
-                            curl_close($ch);
-                            // create a custom field as a contributor
-                            $ch =  curl_init();
+        //                     curl_close($ch);
+        //                     // create a custom field as a contributor
+        //                     $ch =  curl_init();
 
-                            curl_setopt($ch, CURLOPT_URL,  $contributorCustomFields); 
-                            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true); 
-                            curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PUT'); 
-                            curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($$customFields)); 
-                            curl_setopt($ch, CURLOPT_HTTPHEADER, [ 'Authorization: Bearer ' . $token, 'Content-Type: application/json' ]); 
-                            $response = curl_exec($ch); 
+        //                     curl_setopt($ch, CURLOPT_URL,  $contributorCustomFields); 
+        //                     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true); 
+        //                     curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PUT'); 
+        //                     curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($$customFields)); 
+        //                     curl_setopt($ch, CURLOPT_HTTPHEADER, [ 'Authorization: Bearer ' . $token, 'Content-Type: application/json' ]); 
+        //                     $response = curl_exec($ch); 
 
-                            if (curl_errno($ch)) { 
+        //                     if (curl_errno($ch)) { 
                             
-                                echo 'Error assigning task ' . $taskId . ': ' . curl_error($ch) . '<br>'; 
+        //                         echo 'Error assigning task ' . $taskId . ': ' . curl_error($ch) . '<br>'; 
                                 
-                            } 
-                             else { 
-                                $responseData = json_decode($response, true); 
+        //                     } 
+        //                      else { 
+        //                         $responseData = json_decode($response, true); 
                             
-                             } 
+        //                      } 
 
-                             curl_close($ch);
+        //                      curl_close($ch);
                            
                      
-                    }
+        //             }
 
-                    // Call to get all subtask 
+        //             // Call to get all subtask 
 
-                    $ch1 = curl_init(); 
+        //             $ch1 = curl_init(); 
         
-                    curl_setopt($ch1, CURLOPT_URL, $taskSubtask); 
-                    curl_setopt($ch1, CURLOPT_RETURNTRANSFER, true); 
-                    curl_setopt($ch1, CURLOPT_HTTPHEADER, [ 'Authorization: Bearer ' . $token, 'Content-Type: application/json' ]); 
+        //             curl_setopt($ch1, CURLOPT_URL, $taskSubtask); 
+        //             curl_setopt($ch1, CURLOPT_RETURNTRANSFER, true); 
+        //             curl_setopt($ch1, CURLOPT_HTTPHEADER, [ 'Authorization: Bearer ' . $token, 'Content-Type: application/json' ]); 
                     
-                    $response_sub = curl_exec($ch1); 
-                    $res = var_export($response_sub, true);
+        //             $response_sub = curl_exec($ch1); 
+        //             $res = var_export($response_sub, true);
                     
                  
 
-                    if (curl_errno($ch1)) { echo "subtask not retrived "; } else{
+        //             if (curl_errno($ch1)) { echo "subtask not retrived "; } else{
                     
 
-                    // array with subtask
-                    $responseDataSub = json_decode($response_sub, true); 
+        //             // array with subtask
+        //             $responseDataSub = json_decode($response_sub, true); 
 
-                    if(isset($responseDataSub['data'])){
-                        $ch2 = curl_init(); 
-                        foreach($responseDataSub['data'] as $subtask){
+        //             if(isset($responseDataSub['data'])){
+        //                 $ch2 = curl_init(); 
+        //                 foreach($responseDataSub['data'] as $subtask){
 
-                           if(!$subtask['complete']){
-
-
-                            $subGid  = $subtask['gid'] ;
-                            error_log("subtask gid is $subGid");
-                            $taskSubUrl = 'https://app.asana.com/api/1.0/tasks/' . $subGid;
-
-                            $dataSub = ['data'=>[
-                                'assignee' =>  $userGid
-                            ]];
+        //                    if(!$subtask['complete']){
 
 
-                            curl_setopt($ch2, CURLOPT_URL, $taskSubUrl); 
-                            curl_setopt($ch2, CURLOPT_RETURNTRANSFER, true); 
-                            curl_setopt($ch2, CURLOPT_CUSTOMREQUEST, 'PUT'); 
-                            curl_setopt($ch2, CURLOPT_POSTFIELDS, json_encode($dataSub)); 
-                            curl_setopt($ch2, CURLOPT_HTTPHEADER, [ 'Authorization: Bearer ' . $token, 'Content-Type: application/json' ]); 
-                            $responseSub = curl_exec($ch2); 
+        //                     $subGid  = $subtask['gid'] ;
+        //                     error_log("subtask gid is $subGid");
+        //                     $taskSubUrl = 'https://app.asana.com/api/1.0/tasks/' . $subGid;
 
-                           } 
+        //                     $dataSub = ['data'=>[
+        //                         'assignee' =>  $userGid
+        //                     ]];
 
-                            if (curl_errno($ch2)) { echo 'Error assigning subtask ' . $taskId . ': ' . curl_error($ch) . '<br>'; } 
-                            else { 
+
+        //                     curl_setopt($ch2, CURLOPT_URL, $taskSubUrl); 
+        //                     curl_setopt($ch2, CURLOPT_RETURNTRANSFER, true); 
+        //                     curl_setopt($ch2, CURLOPT_CUSTOMREQUEST, 'PUT'); 
+        //                     curl_setopt($ch2, CURLOPT_POSTFIELDS, json_encode($dataSub)); 
+        //                     curl_setopt($ch2, CURLOPT_HTTPHEADER, [ 'Authorization: Bearer ' . $token, 'Content-Type: application/json' ]); 
+        //                     $responseSub = curl_exec($ch2); 
+
+        //                    } 
+
+        //                     if (curl_errno($ch2)) { echo 'Error assigning subtask ' . $taskId . ': ' . curl_error($ch) . '<br>'; } 
+        //                     else { 
                              
-                               $responseData = json_decode($response, true); 
+        //                        $responseData = json_decode($response, true); 
                                
-                                } 
+        //                         } 
                               
-                           curl_close($ch2);
+        //                    curl_close($ch2);
 
-                        }
-                    }
+        //                 }
+        //             }
 
-                    error_log(print_r($responseDataSub,true));
-                    }
-                    curl_close($ch1);
+        //             error_log(print_r($responseDataSub,true));
+        //             }
+        //             curl_close($ch1);
                     
-                    } } 
+        //             } } 
                   
 
-                    // Call subtasks
+        //             // Call subtasks
                                    
                      
                     
-        }   else { error_log("no users or task found !"); }
+        // }   else { error_log("no users or task found !"); }
     }
+
+}
                         
 
 
