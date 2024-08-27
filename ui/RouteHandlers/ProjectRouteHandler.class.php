@@ -2456,10 +2456,11 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
    
                if (curl_errno($ch))
                {
-                   echo 'Error: ' . curl_error($ch);
+                    error_log(curl_error($ch)) ;
+                //    echo 'Error: ' . curl_error($ch);
                } else {
                   
-                   echo 'Response: ' . $response;
+                //    echo 'Response: ' . $response;
                    return json_decode($response ,true);
                }
             }
