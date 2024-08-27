@@ -2614,7 +2614,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                     $task_complete = !$taskRes['data']['completed'];
                     error_log("task status is $task_complete");
 
-                    if(!$task_complete)
+                    if($task_complete)
                     {
                         $taskResponse = executeCurl($tasksApiUrl,'PUT',$taskData , $token) ;    
                         if(isset($taskResponse['data'])){                        
