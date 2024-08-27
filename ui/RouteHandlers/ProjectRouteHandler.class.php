@@ -2494,9 +2494,9 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                     // Asana Api endpoint to get task subtask
                     $taskSubtask = "https://app.asana.com/api/1.0/tasks/$asanaTask/subtasks"; 
                     $contributorFollowerUrl = "https://app.asana.com/api/1.0/tasks/$asanaTask/removeFollowers";
-                    $taskData =['data' => [ 'assignee' => null ]];
+                  
                     $followers =['data' => ['followers'=> [ $userGid ]]] ;
-                    $taskResponse = executeCurl($tasksApiUrl,'PUT',$taskData , $token) ;      
+                    
                    
                     executeCurl($contributorFollowerUrl,'POST', $followers , $token) ;                    
                     $responseDataSub =  executeCurl($taskSubtask,'GET', null , $token) ;
@@ -2511,12 +2511,6 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                                 $taskSubUrl = 'https://app.asana.com/api/1.0/tasks/' . $subGid;
 
                                 $contributorSubFollowerUrl = "https://app.asana.com/api/1.0/tasks/$subGid/removeFollowers";
-                      
-                                $dataSub = ['data'=>[
-                                    'assignee' =>  null
-                                ]];
-                                
-                                executeCurl($taskSubUrl,'PUT',$taskData , $token) ; 
 
                                 executeCurl($contributorSubFollowerUrl,'POST', $followers , $token) ;
 
@@ -2610,7 +2604,6 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                     // Asana Api endpoint to get task subtask
                     $taskSubtask = "https://app.asana.com/api/1.0/tasks/$asanaTask/subtasks"; 
                     $contributorFollowerUrl = "https://app.asana.com/api/1.0/$asanaTask/addFollowers";
-                    $taskData =['data' => [ 'assignee' => $userGid ]];
                     $followers =['data' => ['followers'=> [ $userGid ]]] ;
                     $taskRes = executeCurl($tasksApiUrl,'GET', null , $token) ;
                     $task_complete = !$taskRes['data']['completed'];
@@ -2618,11 +2611,11 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
 
                     if($task_complete)
                     {
-                        $taskResponse = executeCurl($tasksApiUrl,'PUT',$taskData , $token) ;    
-                        if(isset($taskResponse['data'])){                        
-                            executeCurl($contributorFollowerUrl,'POST', $followers , $token) ;
-                        }
+                     
+                        executeCurl($contributorFollowerUrl,'POST', $followers , $token) ;
+                 
                         $responseDataSub =  executeCurl($taskSubtask,'GET', null , $token) ;
+                        
                         if(isset($responseDataSub['data']))
                             {                
                                foreach($responseDataSub['data'] as $subtask)                        
@@ -2632,22 +2625,9 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                                         $taskSubUrl = 'https://app.asana.com/api/1.0/tasks/' . $subGid;
                                         $contributorSubFollowerUrl = "https://app.asana.com/api/1.0/tasks/$subGid/addFollowers";
                                         error_log("subtask gid is $contributorSubFollowerUrl");                      
-                                        $dataSub = ['data'=>[
-                                            'assignee' =>  $userGid
-                                        ]];
-                                        
-                                        $subTaskData =  executeCurl($taskSubUrl,'GET',null, $token) ; 
-
-                                        $subTaskStatus = !$subTaskData['data']['completed'];
+                                        $subTaskStatus = !$subtask['completed'];
 
                                         error_log("subtask status is $subTaskStatus ") ;
-
-                                        if($subTaskStatus){
-
-                                            executeCurl($taskSubUrl,'PUT',$taskData , $token) ; 
-
-                                        }
-
                                         executeCurl($contributorSubFollowerUrl,'POST', $followers , $token) ;
 
                                 }
