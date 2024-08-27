@@ -2339,15 +2339,13 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
         error_log("url : $apiUrl");
         error_log("topicFromDB : $topicIdFromDB");
        
-        $data = array(
-            'notification_level' => "3"
-        );
+        $data = ['notification_level' => 3];
         
         $options = array(
             CURLOPT_URL => $apiUrl,
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_CUSTOMREQUEST => 'POST',
-            CURLOPT_POSTFIELDS => http_build_query($data),
+            CURLOPT_POSTFIELDS => json_encode($data),
             CURLOPT_HTTPHEADER => array(
                 'Api-Key: ' . $apiKey,
                 'Api-Username: ' . $userName,
@@ -2390,15 +2388,13 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
         // Create the API endpoint URL
         $apiUrl = "$discourseDomain/t/$topicIdFromDB/notifications.json";
 
-        $data = array(
-            'notification_level' => "0"
-        );
-        
+        $data = ['notification_level' => 0];
+
         $options = array(
             CURLOPT_URL => $apiUrl,
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_CUSTOMREQUEST => 'POST',
-            CURLOPT_POSTFIELDS => http_build_query($data),
+            CURLOPT_POSTFIELDS => json_encode($data),
             CURLOPT_HTTPHEADER => array(
                 'Api-Key: ' . $apiKey,
                 'Api-Username: ' . $userName,
@@ -2481,10 +2477,8 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                 if ($user['email'] === $email) {
                     $userGid = $user['gid'];  // Get the user's GID (unique ID in Asana)
                     break;
-                }
-                
+                }                
             }
-
 
             if(!empty($task_ids))
             {
@@ -2498,31 +2492,21 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                     $tasksApiUrl = 'https://app.asana.com/api/1.0/tasks/' . $asanaTask; 
                     // Asana Api endpoint to get task subtask
                     $taskSubtask = "https://app.asana.com/api/1.0/tasks/$asanaTask/subtasks"; 
-
                     $contributorFollowerUrl = "https://app.asana.com/api/1.0/tasks/$asanaTask/removeFollowers";
-
                     $taskData =['data' => [ 'assignee' => null ]];
-
                     $followers =['data' => ['followers'=> [ $userGid ]]] ;
-
                     $taskResponse = executeCurl($tasksApiUrl,'PUT',$taskData , $token) ;      
                    
-                    executeCurl($contributorFollowerUrl,'POST', $followers , $token) ;
-                    
-
+                    executeCurl($contributorFollowerUrl,'POST', $followers , $token) ;                    
                     $responseDataSub =  executeCurl($taskSubtask,'GET', null , $token) ;
 
-
                     if(isset($responseDataSub['data']))
-                    {
-                       
-                        foreach($responseDataSub['data'] as $subtask)
-                       
+                    {                       
+                        foreach($responseDataSub['data'] as $subtask)                       
                         {
 
                                 $subGid  = $subtask['gid'] ;                            
                                 error_log("subtask gid is $subGid");
-
                                 $taskSubUrl = 'https://app.asana.com/api/1.0/tasks/' . $subGid;
 
                                 $contributorSubFollowerUrl = "https://app.asana.com/api/1.0/tasks/$subGid/removeFollowers";
@@ -2546,7 +2530,6 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
     }
 
 
-    
 
     public function assign_user_to_task($project_id, $user_id)
     {
@@ -2580,7 +2563,6 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
             {
                 curl_setopt($ch, CURLOPT_POST, true);
                 curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
-
             } 
          
             $response = curl_exec($ch);
@@ -2596,121 +2578,75 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
 
             curl_close($ch);
         }
+
         $email = $user->email;
         $usersApiUrl = "https://app.asana.com/api/1.0/users?opt_fields=email";
         $task_ids = $projectDao->get_asana_tasks($project_id);
 
         $userResponse = executeCurl($usersApiUrl,'GET',null, $token) ;
-      
-               
+                   
         $userGid = null; 
 
         if ($userResponse && isset($userResponse['data'])) 
         {
-
             // Retrieve the user in the list of users
             foreach ($userResponse['data'] as $user) 
             {
                 if ($user['email'] === $email) {
                     $userGid = $user['gid'];  // Get the user's GID (unique ID in Asana)
                     break;
-                }
-                
+                }                
             }
-
 
             if(!empty($task_ids))
             {
-
                 foreach ($task_ids as $taskId) 
-                { 
-                    
-                    $asanaTask = $taskId["asana_task_id"] ;
-
-                    
+                {                     
+                    $asanaTask = $taskId["asana_task_id"] ;                 
                     // Asana API endpoint to assign the task   
                     $tasksApiUrl = 'https://app.asana.com/api/1.0/tasks/' . $asanaTask; 
                     // Asana Api endpoint to get task subtask
                     $taskSubtask = "https://app.asana.com/api/1.0/tasks/$asanaTask/subtasks"; 
-
                     $contributorFollowerUrl = "https://app.asana.com/api/1.0/$asanaTask/addFollowers";
-
                     $taskData =['data' => [ 'assignee' => $userGid ]];
-
                     $followers =['data' => ['followers'=> [ $userGid ]]] ;
-
                     $taskRes = executeCurl($tasksApiUrl,'GET', null , $token) ;
-
-
-
                     $task_complete = !$taskRes['data']['completed'];
-
                     error_log("task status is $task_complete");
 
                     if(!$task_complete)
                     {
-
-                        $taskResponse = executeCurl($tasksApiUrl,'PUT',$taskData , $token) ;
-                        
-                        if(isset($taskResponse['data'])){
-                            
+                        $taskResponse = executeCurl($tasksApiUrl,'PUT',$taskData , $token) ;    
+                        if(isset($taskResponse['data'])){                        
                             executeCurl($contributorFollowerUrl,'POST', $followers , $token) ;
                         }
-
                         $responseDataSub =  executeCurl($taskSubtask,'GET', null , $token) ;
-
-
                         if(isset($responseDataSub['data']))
-                    {
-                       
-                        foreach($responseDataSub['data'] as $subtask)
-                       
-                        {
+                            {                
+                               foreach($responseDataSub['data'] as $subtask)                        
+                                {
+                                        $subGid  = $subtask['gid'] ;                            
+                                        error_log("subtask gid is $subGid");
+                                        $taskSubUrl = 'https://app.asana.com/api/1.0/tasks/' . $subGid;
+                                        $contributorSubFollowerUrl = "https://app.asana.com/api/1.0/tasks/$subGid/addFollowers";
+                                        error_log("subtask gid is $contributorSubFollowerUrl");                      
+                                        $dataSub = ['data'=>[
+                                            'assignee' =>  $userGid
+                                        ]];
+                                    
+                                        executeCurl($taskSubUrl,'PUT',$taskData , $token) ; 
 
-                                $subGid  = $subtask['gid'] ;
-                            
-                                error_log("subtask gid is $subGid");
+                                        executeCurl($contributorSubFollowerUrl,'POST', $followers , $token) ;
 
-                                $taskSubUrl = 'https://app.asana.com/api/1.0/tasks/' . $subGid;
-
-                                $contributorSubFollowerUrl = "https://app.asana.com/api/1.0/tasks/$subGid/addFollowers";
-
-                                error_log("subtask gid is $contributorSubFollowerUrl");
-                      
-                                $dataSub = ['data'=>[
-                                    'assignee' =>  $userGid
-                                ]];
-                                
-                                executeCurl($taskSubUrl,'PUT',$taskData , $token) ; 
-
-                                executeCurl($contributorSubFollowerUrl,'POST', $followers , $token) ;
-
-                            
-                          
-
-                        }
+                                }
+                            }            
                     }
-
-
-
-                    
-                    }
-
-                  
-
-                    
-                    
-
               }
-        }
+           }
 
-        }
-            
-
+        }            
     
-    
-
-}
+    }
                         
 
 
