@@ -13216,7 +13216,9 @@ BEGIN
     LEFT JOIN invoices                        i ON tp.invoice_number=i.invoice_number
     WHERE
         tp.processed>=0 AND
-        t.`task-status_id`=4
+        t.`task-status_id`=4 AND
+        tcd.complete_date<CAST(DATE_FORMAT(NOW(), '%Y-%m-01 00:00:01') as DATETIME) AND
+        tp.payment_status NOT IN ('In-kind', 'In-house', 'Waived')
     ORDER BY
         tp.processed,
         IFNULL(i.invoice_date, '9999-12-31 23:59:59') DESC,
@@ -13263,7 +13265,9 @@ BEGIN
         tp.processed>=0 AND
         pos.status IS NOT NULL AND
         (pos.status='Completed' OR pos.status='Approved') AND
-        t.`task-status_id`=4
+        t.`task-status_id`=4 AND
+        tcd.complete_date<CAST(DATE_FORMAT(NOW(), '%Y-%m-01 00:00:01') as DATETIME) AND
+        tp.payment_status NOT IN ('In-kind', 'In-house', 'Waived')
     GROUP BY
         i.invoice_date,
         tc.user_id,
