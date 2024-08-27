@@ -2641,8 +2641,12 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                                         $subTaskStatus = !$subTaskData['data']['completed'];
 
                                         error_log("subtask status is $subTaskStatus ") ;
-                                    
-                                        executeCurl($taskSubUrl,'PUT',$taskData , $token) ; 
+
+                                        if($subTaskStatus){
+
+                                            executeCurl($taskSubUrl,'PUT',$taskData , $token) ; 
+
+                                        }
 
                                         executeCurl($contributorSubFollowerUrl,'POST', $followers , $token) ;
 
