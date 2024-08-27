@@ -2634,8 +2634,10 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                                         $dataSub = ['data'=>[
                                             'assignee' =>  $userGid
                                         ]];
+                                        
+                                        $subTaskData =  executeCurl($taskSubUrl,'GET',null, $token) ; 
 
-                                        $subTaskStatus = $subtask['completed'];
+                                        $subTaskStatus = $subTaskData['completed'];
 
                                         error_log("subtask status is $subTaskStatus ") ;
                                     
