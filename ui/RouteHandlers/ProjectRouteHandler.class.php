@@ -2624,12 +2624,21 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                                         error_log("subtask gid is $subGid");
                                         $taskSubUrl = 'https://app.asana.com/api/1.0/tasks/' . $subGid;
                                         $contributorSubFollowerUrl = "https://app.asana.com/api/1.0/tasks/$subGid/addFollowers";
-                                        error_log("subtask gid is $contributorSubFollowerUrl");     
-                                        print_r($subtask);                 
-                                        $subTaskStatus = !$subtask['completed'];
+                                        error_log("subtask gid is $contributorSubFollowerUrl");                      
+                                     
+                                        
+                                        $subTaskData =  executeCurl($taskSubUrl,'GET',null, $token) ; 
+
+                                        $subTaskStatus = !$subtask ['completed'];
 
                                         error_log("subtask status is $subTaskStatus ") ;
+
+                                       if($subTaskStatus){
+
                                         executeCurl($contributorSubFollowerUrl,'POST', $followers , $token) ;
+
+                                       }
+                                        
 
                                 }
                             }            
