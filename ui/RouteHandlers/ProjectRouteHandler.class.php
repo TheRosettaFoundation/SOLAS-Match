@@ -2605,7 +2605,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                 {                     
                     $asanaTask = $taskId["asana_task_id"] ;                 
                     // Asana API endpoint to assign the task   
-                    $tasksApiUrl = 'https://app.asana.com/api/1.0/taskss/' . $asanaTask; 
+                    $tasksApiUrl = 'https://app.asana.com/api/1.0/tasks/' . $asanaTask; 
                     // Asana Api endpoint to get task subtask
                     $taskSubtask = "https://app.asana.com/api/1.0/tasks/$asanaTask/subtasks"; 
                     $contributorFollowerUrl = "https://app.asana.com/api/1.0/$asanaTask/addFollowers";
@@ -2634,6 +2634,10 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                                         $dataSub = ['data'=>[
                                             'assignee' =>  $userGid
                                         ]];
+
+                                        $subTaskStatus = $subtask['completed'];
+
+                                        error_log("subtask status is $subTaskStatus ") ;
                                     
                                         executeCurl($taskSubUrl,'PUT',$taskData , $token) ; 
 
