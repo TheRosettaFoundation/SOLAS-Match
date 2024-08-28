@@ -418,7 +418,7 @@ class TemplateHelper
 
     public static function clean_project_description($string)
     {
-        return str_replace('\t', '&nbsp;&nbsp;&nbsp;&nbsp;', str_replace(array('\r\n', '\n', '\r'), "<br/>", strip_tags($string, '<p><span><strong><em><u><a><ol><li><br>')));
+        return str_replace('\t', '&nbsp;&nbsp;&nbsp;&nbsp;', str_replace(array('\r\n', '\n', '\r'), "<br/>", strip_tags($string, '<p><span><strong><em><u><a><ol><li><br><table><tbody><tr><td>')));
     }
 
     public static function uiCleanseHTMLReinsertNewlineAndTabs($string)
