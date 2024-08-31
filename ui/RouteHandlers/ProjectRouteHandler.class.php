@@ -800,7 +800,9 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
 
             if (isset($post['trackProject'])) {
                 if ($post['trackProject']) {
-                    $userTrackProject = $userDao->trackProject($user_id, $project->getId());
+                    $userTrackProject = $userDao->trackProject($user_id, $project->getId());                    
+                    $this->assign_user_to_task($project->getId(), $user_id);
+                    $this->follow_discource_project($project->getId(), $user_id);
                     if ($userTrackProject) {
                         UserRouteHandler::flashNow("success", Lib\Localisation::getTranslation('project_view_7'));
                     } else {
@@ -808,6 +810,8 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                     }
                 } else {
                     $userUntrackProject = $userDao->untrackProject($user_id, $project->getId());
+                    $this->remove_user_from_task($project->getId(), $user_id);
+                    $this->unfollow_discource_project($project->getId(), $user_id);
                     if ($userUntrackProject) {
                         UserRouteHandler::flashNow("success", Lib\Localisation::getTranslation('project_view_9'));
                     } else {
@@ -2310,6 +2314,357 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
             return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('home'));
         }
     }
+
+
+    public function  follow_discource_project($project_id, $userId){
+
+        global $app;
+        $projectDao = new DAO\ProjectDao();        
+        $userDao = new DAO\UserDao();
+        $user = $userDao->getUser($userId);
+        $email = $user->email;
+
+        $topicIdFromDB = $projectDao->get_discourse_id($project_id) ;
+
+        // Discourse domain
+        $discourseDomain = 'https://community.translatorswb.org';
+        // Keys
+        $apiKey = Common\Lib\Settings::get('discourse.api_key');
+        $userName =  Common\Lib\Settings::get('discourse.api_username');
+        
+        //hardcdode topicId
+        $topicId = 66964 ;
+
+        // Create the API endpoint URL
+        $apiUrl = "$discourseDomain/t/$topicId/notifications.json";
+        
+        error_log("url : $apiUrl");
+        error_log("topicFromDB : $topicIdFromDB");
+       
+        $data = ['notification_level' => 3];
+        
+        $options = array(
+            CURLOPT_URL => $apiUrl,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_CUSTOMREQUEST => 'POST',
+            CURLOPT_POSTFIELDS => json_encode($data),
+            CURLOPT_HTTPHEADER => array(
+                'Api-Key: ' . $apiKey,
+                'Api-Username: ' . $userName,
+                'Content-Type: application/x-www-form-urlencoded'
+            ),
+        );
+        
+        $ch = curl_init();
+        curl_setopt_array($ch, $options);
+        $response = curl_exec($ch);
+        
+        if ($response === false) {
+            echo 'Error: ' . curl_error($ch);
+        } else {
+            error_log($response);
+        }
+        
+        curl_close($ch);
+
+    }
+
+    public function  unfollow_discource_project($project_id, $userId){
+
+        global $app;
+        $projectDao = new DAO\ProjectDao();        
+        $userDao = new DAO\UserDao();
+        $user = $userDao->getUser($userId);
+        $email = $user->email;
+        $topicIdFromDB = $projectDao->get_discourse_id($project_id) ;
+
+        // Discourse domain
+        $discourseDomain = 'https://community.translatorswb.org';
+        // Keys
+        $apiKey = Common\Lib\Settings::get('discourse.api_key');
+        $userName =  Common\Lib\Settings::get('discourse.api_username');
+        
+        //hardcdode topicId
+        // $topicId = 66964 ;
+
+        // Create the API endpoint URL
+        $apiUrl = "$discourseDomain/t/$topicIdFromDB/notifications.json";
+
+        $data = ['notification_level' => 0];
+
+        $options = array(
+            CURLOPT_URL => $apiUrl,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_CUSTOMREQUEST => 'POST',
+            CURLOPT_POSTFIELDS => json_encode($data),
+            CURLOPT_HTTPHEADER => array(
+                'Api-Key: ' . $apiKey,
+                'Api-Username: ' . $userName,
+                'Content-Type: application/x-www-form-urlencoded'
+            ),
+        );        
+        $ch = curl_init();
+        curl_setopt_array($ch, $options);
+        $response = curl_exec($ch);
+        
+        if ($response === false) {
+            echo 'Error: ' . curl_error($ch);
+        } else {
+            error_log($response);
+        }
+        curl_close($ch);
+    }
+
+    public function remove_user_from_task($project_id, $user_id)
+    {
+
+        global $app;
+        $projectDao = new DAO\ProjectDao();        
+        $userDao = new DAO\UserDao();
+        $user = $userDao->getUser($user_id);
+        $email = $user->email;
+
+
+        $usersApiUrl = "https://app.asana.com/api/1.0/users?opt_fields=email";
+    
+        $task_ids = $projectDao->get_asana_tasks($project_id);
+        $ch = curl_init();
+        $token = Common\Lib\Settings::get('asana.api_key6');
+
+           // Function to execute a cURL request
+           function executeCurl($url, $method, $data, $accessToken) 
+           {
+               $ch = curl_init();
+               curl_setopt($ch, CURLOPT_URL, $url);
+               curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+               curl_setopt($ch, CURLOPT_HTTPHEADER, [
+                   "Authorization: Bearer $accessToken",
+                   "Content-Type: application/json"
+               ]);
+   
+               if ($method == 'PUT') 
+               {
+                   curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PUT');
+                   curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+   
+               } elseif ($method == 'POST') 
+               {
+                   curl_setopt($ch, CURLOPT_POST, true);
+                   curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+   
+               } 
+            
+               $response = curl_exec($ch);
+   
+               if (curl_errno($ch))
+               {
+                    error_log(curl_error($ch)) ;
+                //    echo 'Error: ' . curl_error($ch);
+               } else {
+                  
+                //    echo 'Response: ' . $response;
+                   return json_decode($response ,true);
+               }
+            }
+           
+        
+        $userResponse = executeCurl($usersApiUrl,'GET',null, $token) ;        
+        $userGid = null; 
+
+        if ($userResponse && isset($userResponse['data'])) 
+        {
+
+            // Retrieve the user in the list of users
+            foreach ($userResponse['data'] as $user) 
+            {
+                if ($user['email'] === $email) {
+                    $userGid = $user['gid'];  // Get the user's GID (unique ID in Asana)
+                    break;
+                }                
+            }
+
+            if(!empty($task_ids))
+            {
+
+                foreach ($task_ids as $taskId) 
+                {                    
+                    $asanaTask = $taskId["asana_task_id"] ;
+
+                    
+                    // Asana API endpoint to assign the task   
+                    $tasksApiUrl = 'https://app.asana.com/api/1.0/tasks/' . $asanaTask; 
+                    // Asana Api endpoint to get task subtask
+                    $taskSubtask = "https://app.asana.com/api/1.0/tasks/$asanaTask/subtasks"; 
+                    $contributorFollowerUrl = "https://app.asana.com/api/1.0/tasks/$asanaTask/removeFollowers";
+                  
+                    $followers =['data' => ['followers'=> [ $userGid ]]] ;
+                    
+                   
+                    executeCurl($contributorFollowerUrl,'POST', $followers , $token) ;                    
+                    $responseDataSub =  executeCurl($taskSubtask,'GET', null , $token) ;
+
+                    if(isset($responseDataSub['data']))
+                    {                       
+                        foreach($responseDataSub['data'] as $subtask)                       
+                        {
+
+                                $subGid  = $subtask['gid'] ;                            
+                                error_log("subtask gid is $subGid");
+
+                                $taskSubUrl = 'https://app.asana.com/api/1.0/tasks/' . $subGid;
+
+                                $subTaskData =  executeCurl($taskSubUrl,'GET',null, $token) ; 
+
+                                $subTaskStatus = !$subtask ['completed'];
+
+                                error_log("subtask status is $subTaskStatus ") ;
+
+                                $contributorSubFollowerUrl = "https://app.asana.com/api/1.0/tasks/$subGid/removeFollowers";
+
+                                if($subTaskStatus ){
+
+                                    executeCurl($contributorSubFollowerUrl,'POST', $followers , $token) ;
+
+                                }
+
+                        }
+                    }
+
+              }
+        }
+
+        }
+    }
+
+
+
+    public function assign_user_to_task($project_id, $user_id)
+    {
+
+       
+        global $app;
+        $projectDao = new DAO\ProjectDao();        
+        $userDao = new DAO\UserDao();
+        $user = $userDao->getUser($user_id);
+
+        $token = Common\Lib\Settings::get('asana.api_key6');
+
+
+        // Function to execute a cURL request
+        function executeCurl($url, $method, $data, $accessToken) 
+        {
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, $url);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_HTTPHEADER, [
+                "Authorization: Bearer $accessToken",
+                "Content-Type: application/json"
+            ]);
+
+            if ($method == 'PUT') 
+            {
+                curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PUT');
+                curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+
+            } elseif ($method == 'POST') 
+            {
+                curl_setopt($ch, CURLOPT_POST, true);
+                curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+            } 
+         
+            $response = curl_exec($ch);
+
+            if (curl_errno($ch))
+            {
+                error_log(curl_errno($ch)) ;
+                // echo 'Error: ' . curl_error($ch);
+            } else {
+               
+                // echo 'Response: ' . $response;
+                return json_decode($response ,true);
+            }
+
+            curl_close($ch);
+        }
+
+        $email = $user->email;
+        $usersApiUrl = "https://app.asana.com/api/1.0/users?opt_fields=email";
+        $task_ids = $projectDao->get_asana_tasks($project_id);
+
+        $userResponse = executeCurl($usersApiUrl,'GET',null, $token) ;
+                   
+        $userGid = null; 
+
+        if ($userResponse && isset($userResponse['data'])) 
+        {
+            // Retrieve the user in the list of users
+            foreach ($userResponse['data'] as $user) 
+            {
+                if ($user['email'] === $email) {
+                    $userGid = $user['gid'];  // Get the user's GID (unique ID in Asana)
+                    break;
+                }                
+            }
+
+            if(!empty($task_ids))
+            {
+                foreach ($task_ids as $taskId) 
+                {                     
+                    $asanaTask = $taskId["asana_task_id"] ;                 
+                    // Asana API endpoint to assign the task   
+                    $tasksApiUrl = 'https://app.asana.com/api/1.0/tasks/' . $asanaTask; 
+                    // Asana Api endpoint to get task subtask
+                    $taskSubtask = "https://app.asana.com/api/1.0/tasks/$asanaTask/subtasks"; 
+                    $contributorFollowerUrl = "https://app.asana.com/api/1.0/$asanaTask/addFollowers";
+                    $followers =['data' => ['followers'=> [ $userGid ]]] ;
+                    $taskRes = executeCurl($tasksApiUrl,'GET', null , $token) ;
+                    $task_complete = !$taskRes['data']['completed'];
+                    error_log("task status is $task_complete");
+
+                    if($task_complete)
+                    {
+                     
+                        executeCurl($contributorFollowerUrl,'POST', $followers , $token) ;
+                 
+                        $responseDataSub =  executeCurl($taskSubtask,'GET', null , $token) ;
+                        
+                        if(isset($responseDataSub['data']))
+                            {                
+                               foreach($responseDataSub['data'] as $subtask)                        
+                                {
+                                        $subGid  = $subtask['gid'] ;                            
+                                        error_log("subtask gid is $subGid");
+                                        $taskSubUrl = 'https://app.asana.com/api/1.0/tasks/' . $subGid;
+                                        $contributorSubFollowerUrl = "https://app.asana.com/api/1.0/tasks/$subGid/addFollowers";
+                                        error_log("subtask gid is $contributorSubFollowerUrl");                      
+                                     
+                                        
+                                        $subTaskData =  executeCurl($taskSubUrl,'GET',null, $token) ; 
+
+                                        $subTaskStatus = !$subtask ['completed'];
+
+                                        error_log("subtask status is $subTaskStatus ") ;
+
+                                       if($subTaskStatus){
+
+                                        executeCurl($contributorSubFollowerUrl,'POST', $followers , $token) ;
+
+                                       }
+                                        
+
+                                }
+                            }            
+                    }
+              }
+           }
+
+        }            
+    
+    }
+                        
+
+
+    
 
     public function create_discourse_topic($projectId, $targetlanguages, $memsource_project = 0, $earthquake = 0)
     {
