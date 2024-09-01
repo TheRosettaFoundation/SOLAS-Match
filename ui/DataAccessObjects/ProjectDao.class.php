@@ -1667,26 +1667,23 @@ error_log("Sync update_task_from_job() task_id: $task_id, status: $status, job: 
                     $taskSubtask = "https://app.asana.com/api/1.0/tasks/$asanaTask/subtasks";
                     $contributorFollowerUrl = "https://app.asana.com/api/1.0/$asanaTask/addFollowers";
                     $followers =['data' => ['followers'=> [ $userGid ]]];
-                    $taskRes = $this->executeCurl($tasksApiUrl,'GET');
-                    $task_complete = !$taskRes['data']['completed'];
-                    error_log("task status is $task_complete");
+                    $taskRes = $this->executeCurl($tasksApiUrl, 'GET');
+                    $task_complete = !empty($taskRes['data']) && !$taskRes['data']['completed'];
 
                     if ($task_complete) {
                         $this->executeCurl($contributorFollowerUrl, 'POST', $followers);
 
                         $responseDataSub = $this->executeCurl($taskSubtask, 'GET');
 
-                        if (isset($responseDataSub['data'])) {
+                        if (!empty($responseDataSub['data'])) {
                                foreach($responseDataSub['data'] as $subtask) {
                                         $subGid  = $subtask['gid'];
-                                        error_log("subtask gid is $subGid");
-                                        $taskSubUrl = 'https://app.asana.com/api/1.0/tasks/' . $subGid;
+                                        $taskSubUrl = "https://app.asana.com/api/1.0/tasks/$subGid";
                                         $contributorSubFollowerUrl = "https://app.asana.com/api/1.0/tasks/$subGid/addFollowers";
                                         error_log("subtask gid is $contributorSubFollowerUrl");
 
                                         $subTaskData = $this->executeCurl($taskSubUrl, 'GET');
-                                        $subTaskStatus = !$subtask ['completed'];
-                                        error_log("subtask status is $subTaskStatus ");
+                                        $subTaskStatus = !empty($subtask['completed']) && !$subtask['completed'];
 
                                        if ($subTaskStatus) {
                                            $this->executeCurl($contributorSubFollowerUrl, 'POST', $followers);
@@ -1739,19 +1736,16 @@ error_log("Sync update_task_from_job() task_id: $task_id, status: $status, job: 
                     $this->executeCurl($contributorFollowerUrl, 'POST', $followers);
                     $responseDataSub =  $this->executeCurl($taskSubtask, 'GET') ;
 
-                    if (isset($responseDataSub['data'])) {
+                    if (!empty($responseDataSub['data'])) {
                         foreach($responseDataSub['data'] as $subtask) {
 
                                 $subGid  = $subtask['gid'];
-                                error_log("subtask gid is $subGid");
 
-                                $taskSubUrl = 'https://app.asana.com/api/1.0/tasks/' . $subGid;
+                                $taskSubUrl = "https://app.asana.com/api/1.0/tasks/$subGid";
 
                                 $subTaskData =  $this->executeCurl($taskSubUrl, 'GET');
 
-                                $subTaskStatus = !$subtask ['completed'];
-
-                                error_log("subtask status is $subTaskStatus ");
+                                $subTaskStatus = !empty($subtask['completed']) && !$subtask['completed'];
 
                                 $contributorSubFollowerUrl = "https://app.asana.com/api/1.0/tasks/$subGid/removeFollowers";
 
@@ -1874,10 +1868,11 @@ error_log("Sync update_task_from_job() task_id: $task_id, status: $status, job: 
         $result = curl_exec($ch);
 
         if (curl_errno($ch)) {
-            error_log('executeCurl($url):' . curl_errno($ch));
+            error_log("executeCurl($url): " . curl_errno($ch));
             curl_close($ch);
             return 0;
         }
+error_log("executeCurl($url): $result");//(**)
         return json_decode($result ,true);
     }
 }
