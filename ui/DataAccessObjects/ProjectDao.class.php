@@ -1637,107 +1637,80 @@ error_log("Sync update_task_from_job() task_id: $task_id, status: $status, job: 
 
     public function follow_asana_tasks($project_id, $user_id)
     {
-        $projectDao = new DAO\ProjectDao();
         $userDao = new DAO\UserDao();
         $user = $userDao->getUser($user_id);
-
         $email = $user->email;
-        $usersApiUrl = "https://app.asana.com/api/1.0/users?opt_fields=email";
-        $task_ids = $projectDao->get_asana_tasks($project_id);
 
-        $userResponse = $this->executeCurl($usersApiUrl, 'GET');
+        $task_ids = $this->get_asana_tasks($project_id);
 
-        $userGid = null;
+        $userResponse = $this->executeCurl('https://app.asana.com/api/1.0/users?opt_fields=email', 'GET');
 
+        $userGid = 0;
         if ($userResponse && isset($userResponse['data'])) {
-            // Retrieve the user in the list of users
             foreach ($userResponse['data'] as $user) {
                 if ($user['email'] === $email) {
-                    $userGid = $user['gid'];  // Get the user's GID (unique ID in Asana)
+                    $userGid = $user['gid'];
                     break;
                 }
             }
 
-            if (!empty($task_ids)) {
+            if ($userGid && !empty($task_ids)) {
                 foreach ($task_ids as $taskId) {
-                    $asanaTask = $taskId["asana_task_id"];
-                    // Asana API endpoint to assign the task
-                    $tasksApiUrl = 'https://app.asana.com/api/1.0/tasks/' . $asanaTask;
-                    // Asana Api endpoint to get task subtask
-                    $taskSubtask = "https://app.asana.com/api/1.0/tasks/$asanaTask/subtasks";
-                    $contributorFollowerUrl = "https://app.asana.com/api/1.0/$asanaTask/addFollowers";
-                    $followers =['data' => ['followers'=> [ $userGid ]]];
-                    $taskRes = $this->executeCurl($tasksApiUrl, 'GET');
-                    $task_complete = !empty($taskRes['data']) && !$taskRes['data']['completed'];
+                    $asanaTask = $taskId['asana_task_id'];
 
-                    if ($task_complete) {
-                        $this->executeCurl($contributorFollowerUrl, 'POST', $followers);
+                    $taskRes = $this->executeCurl("https://app.asana.com/api/1.0/tasks/$asanaTask", 'GET');
+                    if (!empty($taskRes['data']) && !$taskRes['data']['completed']) {
+                        $this->executeCurl("https://app.asana.com/api/1.0/$asanaTask/addFollowers", 'POST', ['data' => ['followers'=> [$userGid]]]);
 
-                        $responseDataSub = $this->executeCurl($taskSubtask, 'GET');
-
+                        $responseDataSub = $this->executeCurl("https://app.asana.com/api/1.0/tasks/$asanaTask/subtasks", 'GET');
                         if (!empty($responseDataSub['data'])) {
-                               foreach($responseDataSub['data'] as $subtask) {
-                                        $subGid  = $subtask['gid'];
-                                        $taskSubUrl = "https://app.asana.com/api/1.0/tasks/$subGid";
-                                        $contributorSubFollowerUrl = "https://app.asana.com/api/1.0/tasks/$subGid/addFollowers";
-                                        error_log("subtask gid is $contributorSubFollowerUrl");
+                            foreach ($responseDataSub['data'] as $subtask) {
+                                $subGid  = $subtask['gid'];
+                                $subTaskData = $this->executeCurl("https://app.asana.com/api/1.0/tasks/$subGid", 'GET');
 
-                                        $subTaskData = $this->executeCurl($taskSubUrl, 'GET');
-                                        $subTaskStatus = !empty($subtask['completed']) && !$subtask['completed'];
-
-                                       if ($subTaskStatus) {
-                                           $this->executeCurl($contributorSubFollowerUrl, 'POST', $followers);
-                                       }
-                                }
+                                if (!empty($subtask['completed']) && !$subtask['completed']) $this->executeCurl("https://app.asana.com/api/1.0/tasks/$subGid/addFollowers", 'POST', $followers);
                             }
+                        }
                     }
-              }
-           }
+                }
+            }
         }
     }
 
     public function unfollow_asana_tasks($project_id, $user_id)
     {
-        $projectDao = new DAO\ProjectDao();
         $userDao = new DAO\UserDao();
         $user = $userDao->getUser($user_id);
         $email = $user->email;
 
-        $usersApiUrl = "https://app.asana.com/api/1.0/users?opt_fields=email";
+        $task_ids = $this->get_asana_tasks($project_id);
 
-        $task_ids = $projectDao->get_asana_tasks($project_id);
-        $ch = curl_init();
+        $userResponse = $this->executeCurl('https://app.asana.com/api/1.0/users?opt_fields=email', 'GET');
 
-        $userResponse = $this->executeCurl($usersApiUrl, 'GET');
-        $userGid = null;
-
+        $userGid = 0;
         if ($userResponse && isset($userResponse['data'])) {
-            // Retrieve the user in the list of users
             foreach ($userResponse['data'] as $user) {
                 if ($user['email'] === $email) {
-                    $userGid = $user['gid']; // Get the user's GID (unique ID in Asana)
+                    $userGid = $user['gid'];
                     break;
                 }
             }
 
-            if (!empty($task_ids)) {
-
+            if ($userGid && !empty($task_ids)) {
                 foreach ($task_ids as $taskId) {
                     $asanaTask = $taskId["asana_task_id"] ;
 
-                    // Asana API endpoint to assign the task
-                    $tasksApiUrl = 'https://app.asana.com/api/1.0/tasks/' . $asanaTask;
-                    // Asana Api endpoint to get task subtask
-                    $taskSubtask = "https://app.asana.com/api/1.0/tasks/$asanaTask/subtasks";
-                    $contributorFollowerUrl = "https://app.asana.com/api/1.0/tasks/$asanaTask/removeFollowers";
+$tasksApiUrl = "https://app.asana.com/api/1.0/tasks/$asanaTask";
+https://github.com/TheRosettaFoundation/SOLAS-Match/compare/develop...metadata_feature
+only 3 hits!!!
 
-                    $followers =['data' => ['followers'=> [ $userGid ]]];
+                    $followers =['data' => ['followers'=> [$userGid]]];
 
-                    $this->executeCurl($contributorFollowerUrl, 'POST', $followers);
-                    $responseDataSub =  $this->executeCurl($taskSubtask, 'GET') ;
+                    $this->executeCurl("https://app.asana.com/api/1.0/tasks/$asanaTask/removeFollowers", 'POST', $followers);
+                    $responseDataSub =  $this->executeCurl("https://app.asana.com/api/1.0/tasks/$asanaTask/subtasks", 'GET') ;
 
                     if (!empty($responseDataSub['data'])) {
-                        foreach($responseDataSub['data'] as $subtask) {
+                        foreach ($responseDataSub['data'] as $subtask) {
 
                                 $subGid  = $subtask['gid'];
 
@@ -1760,12 +1733,11 @@ error_log("Sync update_task_from_job() task_id: $task_id, status: $status, job: 
     }
 
     public function watch_discource_topic($project_id, $userId) {
-        $projectDao = new DAO\ProjectDao();
         $userDao = new DAO\UserDao();
         $user = $userDao->getUser($userId);
         $email = $user->email;
 
-        $topicIdFromDB = $projectDao->get_discourse_id($project_id);
+        $topicIdFromDB = $this->get_discourse_id($project_id);
 
         // Discourse domain
         $discourseDomain = 'https://community.translatorswb.org';
@@ -1809,11 +1781,10 @@ error_log("Sync update_task_from_job() task_id: $task_id, status: $status, job: 
     }
 
     public function unwatch_discource_topic($project_id, $userId) {
-        $projectDao = new DAO\ProjectDao();
         $userDao = new DAO\UserDao();
         $user = $userDao->getUser($userId);
         $email = $user->email;
-        $topicIdFromDB = $projectDao->get_discourse_id($project_id);
+        $topicIdFromDB = $this->get_discourse_id($project_id);
 
         // Discourse domain
         $discourseDomain = 'https://community.translatorswb.org';
