@@ -1641,47 +1641,11 @@ error_log("Sync update_task_from_job() task_id: $task_id, status: $status, job: 
         $userDao = new DAO\UserDao();
         $user = $userDao->getUser($user_id);
 
-        $token = Common\Lib\Settings::get('asana.api_key6');
-
-
-        // Function to execute a cURL request
-        function executeCurl($url, $method, $data, $accessToken)
-        {
-            $ch = curl_init();
-            curl_setopt($ch, CURLOPT_URL, $url);
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-            curl_setopt($ch, CURLOPT_HTTPHEADER, [
-                "Authorization: Bearer $accessToken",
-                "Content-Type: application/json"
-            ]);
-
-            if ($method == 'PUT') {
-                curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PUT');
-                curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
-
-            } elseif ($method == 'POST') {
-                curl_setopt($ch, CURLOPT_POST, true);
-                curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
-            }
-
-            $response = curl_exec($ch);
-
-            if (curl_errno($ch)) {
-                error_log(curl_errno($ch)) ;
-                // echo 'Error: ' . curl_error($ch);
-            } else {
-                // echo 'Response: ' . $response;
-                return json_decode($response ,true);
-            }
-
-            curl_close($ch);
-        }
-
         $email = $user->email;
         $usersApiUrl = "https://app.asana.com/api/1.0/users?opt_fields=email";
         $task_ids = $projectDao->get_asana_tasks($project_id);
 
-        $userResponse = executeCurl($usersApiUrl,'GET',null, $token);
+        $userResponse = $this->executeCurl($usersApiUrl, 'GET');
 
         $userGid = null;
 
@@ -1703,14 +1667,14 @@ error_log("Sync update_task_from_job() task_id: $task_id, status: $status, job: 
                     $taskSubtask = "https://app.asana.com/api/1.0/tasks/$asanaTask/subtasks";
                     $contributorFollowerUrl = "https://app.asana.com/api/1.0/$asanaTask/addFollowers";
                     $followers =['data' => ['followers'=> [ $userGid ]]];
-                    $taskRes = executeCurl($tasksApiUrl,'GET', null , $token);
+                    $taskRes = $this->executeCurl($tasksApiUrl,'GET');
                     $task_complete = !$taskRes['data']['completed'];
                     error_log("task status is $task_complete");
 
                     if ($task_complete) {
-                        executeCurl($contributorFollowerUrl, 'POST', $followers , $token);
+                        $this->executeCurl($contributorFollowerUrl, 'POST', $followers);
 
-                        $responseDataSub =  executeCurl($taskSubtask, 'GET', null, $token);
+                        $responseDataSub = $this->executeCurl($taskSubtask, 'GET');
 
                         if (isset($responseDataSub['data'])) {
                                foreach($responseDataSub['data'] as $subtask) {
@@ -1720,14 +1684,12 @@ error_log("Sync update_task_from_job() task_id: $task_id, status: $status, job: 
                                         $contributorSubFollowerUrl = "https://app.asana.com/api/1.0/tasks/$subGid/addFollowers";
                                         error_log("subtask gid is $contributorSubFollowerUrl");
 
-                                        $subTaskData =  executeCurl($taskSubUrl,'GET',null, $token);
-
+                                        $subTaskData = $this->executeCurl($taskSubUrl, 'GET');
                                         $subTaskStatus = !$subtask ['completed'];
-
                                         error_log("subtask status is $subTaskStatus ");
 
                                        if ($subTaskStatus) {
-                                        executeCurl($contributorSubFollowerUrl,'POST', $followers , $token);
+                                           $this->executeCurl($contributorSubFollowerUrl, 'POST', $followers);
                                        }
                                 }
                             }
@@ -1748,39 +1710,8 @@ error_log("Sync update_task_from_job() task_id: $task_id, status: $status, job: 
 
         $task_ids = $projectDao->get_asana_tasks($project_id);
         $ch = curl_init();
-        $token = Common\Lib\Settings::get('asana.api_key6');
 
-           // Function to execute a cURL request
-           function executeCurl($url, $method, $data, $accessToken)
-           {
-               $ch = curl_init();
-               curl_setopt($ch, CURLOPT_URL, $url);
-               curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-               curl_setopt($ch, CURLOPT_HTTPHEADER, [
-                   "Authorization: Bearer $accessToken",
-                   "Content-Type: application/json"
-               ]);
-
-               if ($method == 'PUT') {
-                   curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PUT');
-                   curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
-               } elseif ($method == 'POST') {
-                   curl_setopt($ch, CURLOPT_POST, true);
-                   curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
-               }
-
-               $response = curl_exec($ch);
-
-               if (curl_errno($ch)) {
-                    error_log(curl_error($ch));
-                //    echo 'Error: ' . curl_error($ch);
-               } else {
-                //    echo 'Response: ' . $response;
-                   return json_decode($response ,true);
-               }
-            }
-
-        $userResponse = executeCurl($usersApiUrl,'GET',null, $token);
+        $userResponse = $this->executeCurl($usersApiUrl, 'GET');
         $userGid = null;
 
         if ($userResponse && isset($userResponse['data'])) {
@@ -1805,8 +1736,8 @@ error_log("Sync update_task_from_job() task_id: $task_id, status: $status, job: 
 
                     $followers =['data' => ['followers'=> [ $userGid ]]];
 
-                    executeCurl($contributorFollowerUrl, 'POST', $followers , $token);
-                    $responseDataSub =  executeCurl($taskSubtask, 'GET', null , $token) ;
+                    $this->executeCurl($contributorFollowerUrl, 'POST', $followers);
+                    $responseDataSub =  $this->executeCurl($taskSubtask, 'GET') ;
 
                     if (isset($responseDataSub['data'])) {
                         foreach($responseDataSub['data'] as $subtask) {
@@ -1816,7 +1747,7 @@ error_log("Sync update_task_from_job() task_id: $task_id, status: $status, job: 
 
                                 $taskSubUrl = 'https://app.asana.com/api/1.0/tasks/' . $subGid;
 
-                                $subTaskData =  executeCurl($taskSubUrl,'GET',null, $token);
+                                $subTaskData =  $this->executeCurl($taskSubUrl, 'GET');
 
                                 $subTaskStatus = !$subtask ['completed'];
 
@@ -1825,7 +1756,7 @@ error_log("Sync update_task_from_job() task_id: $task_id, status: $status, job: 
                                 $contributorSubFollowerUrl = "https://app.asana.com/api/1.0/tasks/$subGid/removeFollowers";
 
                                 if ($subTaskStatus ) {
-                                    executeCurl($contributorSubFollowerUrl,'POST', $followers , $token);
+                                    $this->executeCurl($contributorSubFollowerUrl, 'POST', $followers);
                                 }
                         }
                     }
@@ -1925,5 +1856,28 @@ error_log("Sync update_task_from_job() task_id: $task_id, status: $status, job: 
             error_log($response);
         }
         curl_close($ch);
+    }
+
+    public function executeCurl($url, $method, $data)
+    {
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        if ($method == 'PUT') {
+            curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+            url_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PUT');
+        } elseif ($method == 'POST') {
+            curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+            curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'POST');
+        }
+        curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json', 'Authorization: Bearer ' . Common\Lib\Settings::get('asana.api_key6')]);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $result = curl_exec($ch);
+
+        if (curl_errno($ch)) {
+            error_log('executeCurl($url):' . curl_errno($ch));
+            curl_close($ch);
+            return 0;
+        }
+        return json_decode($result ,true);
     }
 }
