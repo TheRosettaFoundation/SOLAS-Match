@@ -1637,6 +1637,16 @@ error_log("Sync update_task_from_job() task_id: $task_id, status: $status, job: 
 
     public function follow_asana_tasks($project_id, $user_id)
     {
+        $this->follow_unfollow_asana_tasks('addFollowers', $project_id, $user_id);
+    }
+
+    public function unfollow_asana_tasks($project_id, $user_id)
+    {
+        $this->follow_unfollow_asana_tasks('removeFollowers', $project_id, $user_id);
+    }
+
+    public function follow_unfollow_asana_tasks($addFollowers, $project_id, $user_id)
+    {
         $userDao = new DAO\UserDao();
         $user = $userDao->getUser($user_id);
         $email = $user->email;
@@ -1660,75 +1670,22 @@ error_log("Sync update_task_from_job() task_id: $task_id, status: $status, job: 
 
                     $taskRes = $this->executeCurl("https://app.asana.com/api/1.0/tasks/$asanaTask", 'GET');
                     if (!empty($taskRes['data']) && !$taskRes['data']['completed']) {
-                        $this->executeCurl("https://app.asana.com/api/1.0/$asanaTask/addFollowers", 'POST', ['data' => ['followers'=> [$userGid]]]);
+                        $this->executeCurl("https://app.asana.com/api/1.0/$asanaTask/$addFollowers", 'POST', ['data' => ['followers'=> [$userGid]]]);
 
                         $responseDataSub = $this->executeCurl("https://app.asana.com/api/1.0/tasks/$asanaTask/subtasks", 'GET');
                         if (!empty($responseDataSub['data'])) {
                             foreach ($responseDataSub['data'] as $subtask) {
-                                $subGid  = $subtask['gid'];
-                                $subTaskData = $this->executeCurl("https://app.asana.com/api/1.0/tasks/$subGid", 'GET');
-
-                                if (!empty($subtask['completed']) && !$subtask['completed']) $this->executeCurl("https://app.asana.com/api/1.0/tasks/$subGid/addFollowers", 'POST', $followers);
+error_log('subtask: ' . print_r($subtask, 1));//(**)
+                                $subGid = $subtask['gid'];
+$subTaskData = $this->executeCurl("https://app.asana.com/api/1.0/tasks/$subGid", 'GET');
+error_log('subTaskData: ' . print_r($subTaskData, 1));//(**)
+// not used or needed? if (!empty($subTaskData['data']) && !$subTaskData['data']['completed'])
+                                if (!empty($subtask['completed']) && !$subtask['completed']) $this->executeCurl("https://app.asana.com/api/1.0/tasks/$subGid/$addFollowers", 'POST', $followers);
                             }
                         }
                     }
                 }
             }
-        }
-    }
-
-    public function unfollow_asana_tasks($project_id, $user_id)
-    {
-        $userDao = new DAO\UserDao();
-        $user = $userDao->getUser($user_id);
-        $email = $user->email;
-
-        $task_ids = $this->get_asana_tasks($project_id);
-
-        $userResponse = $this->executeCurl('https://app.asana.com/api/1.0/users?opt_fields=email', 'GET');
-
-        $userGid = 0;
-        if ($userResponse && isset($userResponse['data'])) {
-            foreach ($userResponse['data'] as $user) {
-                if ($user['email'] === $email) {
-                    $userGid = $user['gid'];
-                    break;
-                }
-            }
-
-            if ($userGid && !empty($task_ids)) {
-                foreach ($task_ids as $taskId) {
-                    $asanaTask = $taskId["asana_task_id"] ;
-
-$tasksApiUrl = "https://app.asana.com/api/1.0/tasks/$asanaTask";
-https://github.com/TheRosettaFoundation/SOLAS-Match/compare/develop...metadata_feature
-only 3 hits!!!
-
-                    $followers =['data' => ['followers'=> [$userGid]]];
-
-                    $this->executeCurl("https://app.asana.com/api/1.0/tasks/$asanaTask/removeFollowers", 'POST', $followers);
-                    $responseDataSub =  $this->executeCurl("https://app.asana.com/api/1.0/tasks/$asanaTask/subtasks", 'GET') ;
-
-                    if (!empty($responseDataSub['data'])) {
-                        foreach ($responseDataSub['data'] as $subtask) {
-
-                                $subGid  = $subtask['gid'];
-
-                                $taskSubUrl = "https://app.asana.com/api/1.0/tasks/$subGid";
-
-                                $subTaskData =  $this->executeCurl($taskSubUrl, 'GET');
-
-                                $subTaskStatus = !empty($subtask['completed']) && !$subtask['completed'];
-
-                                $contributorSubFollowerUrl = "https://app.asana.com/api/1.0/tasks/$subGid/removeFollowers";
-
-                                if ($subTaskStatus ) {
-                                    $this->executeCurl($contributorSubFollowerUrl, 'POST', $followers);
-                                }
-                        }
-                    }
-              }
-        }
         }
     }
 
