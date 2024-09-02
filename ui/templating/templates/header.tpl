@@ -36,7 +36,7 @@
             {$extra_styles}
         {/if}
 
-        {* <link rel="stylesheet" href="{urlFor name="home"}resources/css/solas2.css"/> *}
+        <link rel="stylesheet" href="{urlFor name="home"}resources/css/solas2.css"/>
             <link rel="stylesheet" href="{urlFor name="home"}resources/css/custom.css"/>
 
         {if isset($platformJS)}
