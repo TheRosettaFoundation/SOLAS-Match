@@ -193,7 +193,7 @@ a[href^="mailto:"] {
 }
 
 li[data-list=bullet] {
-  list-style-type: none;
+  list-style-type: none !important;
   position: relative;
   margin: 0;
   margin-bottom: 5px;

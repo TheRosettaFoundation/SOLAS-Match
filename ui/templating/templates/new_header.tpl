@@ -22,9 +22,9 @@
         <meta name="twitter:image" content="{Settings::get('twitter.image')}"/>
 
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-        <link href="{urlFor name="home"}ui/css/custom.css" rel="stylesheet" type="text/css"> 
         <link rel="shortcut icon" type="image/x-icon" href="{urlFor name="home"}ui/img/favicon/faviconM.png"> 
         <link href="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.snow.css" rel="stylesheet">
+        <link href="{urlFor name="home"}ui/css/custom.css" rel="stylesheet" type="text/css"> 
 		
         {if isset($extra_styles)}
             {$extra_styles}
