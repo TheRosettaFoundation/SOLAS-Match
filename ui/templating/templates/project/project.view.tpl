@@ -190,7 +190,7 @@
                 <tr >
                     <td>
                         {if $project->getDescription() != ''}
-                            <div class="displayF">{TemplateHelper::clean_project_description($project->getDescription())}</div>
+                            <div class="ql-editor">{TemplateHelper::clean_project_description($project->getDescription())}</div>
                         {else}
                             {Localisation::getTranslation('common_no_description_has_been_listed')}
                         {/if}  

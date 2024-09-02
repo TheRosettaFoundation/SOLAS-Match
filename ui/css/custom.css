@@ -168,30 +168,6 @@ a[href^="mailto:"] {
   text-align: justify;
 }
 
-.ql-indent-1 {
-  margin-left: 20px;
-}
-
-.ql-indent-2 {
-  margin-left: 40px;
-}
-
-.ql-indent-3 {
-  margin-left: 60px;
-}
-
-.ql-indent-4 {
-  margin-left: 80px;
-}
-
-.ql-indent-5 {
-  padding-left: 100px;
-}
-
-.ql-indent-6 {
-  padding-left: 120px;
-}
-
 li[data-list=bullet] {
   list-style-type: disc;
   position: relative;
