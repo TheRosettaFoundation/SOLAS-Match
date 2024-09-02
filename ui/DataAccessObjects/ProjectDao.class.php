@@ -1823,7 +1823,7 @@ only 3 hits!!!
         curl_close($ch);
     }
 
-    public function executeCurl($url, $method, $data)
+    public function executeCurl($url, $method, $data = 0, $timeout = 0)
     {
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
@@ -1836,6 +1836,7 @@ only 3 hits!!!
         }
         curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json', 'Authorization: Bearer ' . Common\Lib\Settings::get('asana.api_key6')]);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        if ($timeout) curl_setopt($ch, CURLOPT_TIMEOUT, 300);
         $result = curl_exec($ch);
 
         if (curl_errno($ch)) {
