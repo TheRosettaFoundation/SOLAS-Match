@@ -168,35 +168,35 @@ a[href^="mailto:"] {
   text-align: justify;
 }
 
-li[data-list=order].ql-indent-1 {
-  margin-left: 10px;
+.ql-indent-1 {
+  padding-left: 20px;
 }
 
 .ql-indent-2 {
-  padding-left: 20px;
-}
-
-.ql-indent-3 {
-  padding-left: 30px;
-}
-
-.ql-indent-4 {
   padding-left: 40px;
 }
 
-.ql-indent-5 {
+.ql-indent-3 {
   padding-left: 60px;
 }
 
+.ql-indent-4 {
+  padding-left: 80px;
+}
+
+.ql-indent-5 {
+  padding-left: 100px;
+}
+
 .ql-indent-6 {
-  padding-left: 70px;
+  padding-left: 120px;
 }
 
 li[data-list=bullet] {
-  list-style-type: disc !important;
+  list-style-type: disc;
   position: relative;
   margin: 0;
-  padding-left: 20px;
+  margin-bottom: 5px;
 }
 
 .form_action {
