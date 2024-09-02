@@ -38,7 +38,13 @@ table {
     background-color: #f5f5f5;
     *background-color: #e6e6e6;
     background-image: -ms-linear-gradient(top, #ffffff, #e6e6e6);
-    background-image: -webkit-gradient( linear, 0 0, 0 100%, from(#ffffff), to(#e6e6e6));
+    background-image: -webkit-gradient(
+        linear,
+        0 0,
+        0 100%,
+        from(#ffffff),
+        to(#e6e6e6)
+    );
     background-image: -webkit-linear-gradient(top, #ffffff, #e6e6e6);
     background-image: -o-linear-gradient(top, #ffffff, #e6e6e6);
     background-image: linear-gradient(top, #ffffff, #e6e6e6);
@@ -55,9 +61,12 @@ table {
     filter: progid: dximagetransform.microsoft.gradient(startColorstr='#ffffff', endColorstr='#e6e6e6', GradientType=0);
     filter: progid: dximagetransform.microsoft.gradient(enabled=false);
     *zoom: 1;
-    -webkit-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
-    -moz-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
+    -webkit-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2),
+        0 1px 2px rgba(0, 0, 0, 0.05);
+    -moz-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2),
+        0 1px 2px rgba(0, 0, 0, 0.05);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2),
+        0 1px 2px rgba(0, 0, 0, 0.05);
 }
 
 .marker:active,
@@ -78,7 +87,13 @@ table {
     background-color: #da4f49;
     *background-color: #bd362f;
     background-image: -ms-linear-gradient(top, #ee5f5b, #bd362f);
-    background-image: -webkit-gradient( linear, 0 0, 0 100%, from(#ee5f5b), to(#bd362f));
+    background-image: -webkit-gradient(
+        linear,
+        0 0,
+        0 100%,
+        from(#ee5f5b),
+        to(#bd362f)
+    );
     background-image: -webkit-linear-gradient(top, #ee5f5b, #bd362f);
     background-image: -o-linear-gradient(top, #ee5f5b, #bd362f);
     background-image: -moz-linear-gradient(top, #ee5f5b, #bd362f);
@@ -94,7 +109,13 @@ table {
     background-color: #0074cc;
     *background-color: #0055cc;
     background-image: -ms-linear-gradient(top, #0088cc, #0055cc);
-    background-image: -webkit-gradient( linear, 0 0, 0 100%, from(#0088cc), to(#0055cc));
+    background-image: -webkit-gradient(
+        linear,
+        0 0,
+        0 100%,
+        from(#0088cc),
+        to(#0055cc)
+    );
     background-image: -webkit-linear-gradient(top, #0088cc, #0055cc);
     background-image: -o-linear-gradient(top, #0088cc, #0055cc);
     background-image: -moz-linear-gradient(top, #0088cc, #0055cc);
@@ -148,9 +169,9 @@ table {
     background-color: rgba(99, 99, 99, 0.3);
 }
 
-.navbar .nav .active>a,
+.navbar .nav .active > a,
 .navbar .nav a:hover,
-.navbar .nav .active>a:hover {
+.navbar .nav .active > a:hover {
     background-color: #cb7500;
 }
 
@@ -187,7 +208,6 @@ table {
 .fixMargin {
     margin-right: 10px;
 }
-
 
 /* Start of CSS related to Project Create page (including loading animation) */
 
@@ -285,7 +305,6 @@ table {
 .bottom-line-border {
     border-bottom: 1px solid #999996;
 }
-
 
 /*End of Project Create CSS */
 
@@ -442,44 +461,4 @@ input[value^="-"] {
 
 .interval {
     margin-top: 2%;
-}
-
-.displayF p,
-.displayH p {
-  margin: 0;
-  margin-bottom: 0px;
-}
-.ql-align-center {
-    text-align: center;
-}
-.ql-align-right {
-    text-align: right;
-}
-.ql-align-justify {
-    text-align: justify;
-}
-.ql-indent-1 {
-    padding-left: 20px;
-}
-.ql-indent-2 {
-    padding-left: 40px;
-}
-.ql-indent-3 {
-    padding-left: 60px;
-}
-.ql-indent-4 {
-    padding-left: 80px;
-}
-.ql-indent-5 {
-    padding-left: 100px;
-}
-.ql-indent-6 {
-    padding-left: 120px;
-}
-li[data-list="bullet"] {
-    list-style-type: disc;
-    position: relative;
-    margin: 0;
-    margin-bottom: 5px;
-    margin-left: 2px;
 }

@@ -30,14 +30,15 @@
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
 		<link rel="shortcut icon" type="image/x-icon" href="{urlFor name="home"}ui/img/favicon/faviconM.png"> 
-        <link href="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.snow.css" rel="stylesheet">
 
         {if isset($extra_styles)}
             {$extra_styles}
         {/if}
 
         <link rel="stylesheet" href="{urlFor name="home"}resources/css/solas2.css"/>
-            <link rel="stylesheet" href="{urlFor name="home"}resources/css/custom.css"/>
+        <link rel="stylesheet" href="{urlFor name="home"}resources/css/custom.css"/>
+        <link href="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.snow.css" rel="stylesheet">
+
 
         {if isset($platformJS)}
             {$platformJS}
