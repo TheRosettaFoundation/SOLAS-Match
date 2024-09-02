@@ -1670,7 +1670,7 @@ error_log("Sync update_task_from_job() task_id: $task_id, status: $status, job: 
 
                     $taskRes = $this->executeCurl("https://app.asana.com/api/1.0/tasks/$asanaTask", 'GET');
                     if (!empty($taskRes['data']) && !$taskRes['data']['completed']) {
-                        $this->executeCurl("https://app.asana.com/api/1.0/$asanaTask/$addFollowers", 'POST', ['data' => ['followers'=> [$userGid]]]);
+                        $this->executeCurl("https://app.asana.com/api/1.0/tasks/$asanaTask/$addFollowers", 'POST', ['data' => ['followers'=> [$userGid]]]);
 
                         $responseDataSub = $this->executeCurl("https://app.asana.com/api/1.0/tasks/$asanaTask/subtasks", 'GET');
                         if (!empty($responseDataSub['data'])) {
