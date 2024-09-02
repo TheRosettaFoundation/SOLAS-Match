@@ -198,7 +198,11 @@ li[data-list=bullet] {
   margin: 0;
   margin-bottom: 5px;
   margin-top: 5px;
-  margin-left: -2px;
+}
+
+.ql-ui {
+  list-style-type: disc !important;
+  left: -5px;
 }
 
 .form_action {
