@@ -194,6 +194,7 @@ a[href^="mailto:"] {
 
 li[data-list=bullet] {
   list-style-type: none !important;
+  padding-left: 4px !important;
   position: relative;
   margin: 0;
   margin-bottom: 5px;
@@ -202,7 +203,6 @@ li[data-list=bullet] {
 
 .ql-ui {
   list-style-type: disc !important;
-  left: -5px;
 }
 
 .form_action {

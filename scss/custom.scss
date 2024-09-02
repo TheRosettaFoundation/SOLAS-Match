@@ -263,6 +263,7 @@ a[href^="mailto:"] {
 
 li[data-list="bullet"] {
     list-style-type: none !important;
+    padding-left: 4px !important;
     position: relative;
     margin: 0;
     margin-bottom: 5px;
