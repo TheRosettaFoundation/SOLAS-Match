@@ -192,13 +192,6 @@ a[href^="mailto:"] {
   padding-left: 120px;
 }
 
-li[data-list=bullet] {
-  list-style-type: disc;
-  position: relative;
-  margin: 0;
-  margin-bottom: 5px;
-}
-
 .form_action {
   width: 126px;
   height: 55px;
