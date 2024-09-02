@@ -160,10 +160,8 @@ ol {
   counter-reset: list-counter;
 }
 
-ol li::before {
+ol li[data-list=bullet] {
   content: counter(list-counter, lower-alpha) ".";
-  counter-increment: list-counter;
-  counter-increment: list-counter !important;
   counter-increment: list-counter 0 !important;
 }
 
