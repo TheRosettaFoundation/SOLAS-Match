@@ -189,20 +189,14 @@ a[href^="mailto:"] {
 }
 
 .ql-indent-6 {
-  padding-left: 70px;
+  padding-left: 120px;
 }
 
 li[data-list=bullet] {
-  list-style-type: none !important;
-  padding-left: 4px !important;
+  list-style-type: disc !important;
   position: relative;
   margin: 0;
   margin-bottom: 5px;
-  margin-top: 5px;
-}
-
-.ql-ui {
-  list-style-type: disc !important;
 }
 
 .form_action {
