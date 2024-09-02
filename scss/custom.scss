@@ -240,8 +240,8 @@ a[href^="mailto:"] {
 .ql-align-justify {
     text-align: justify;
 }
-.ql-indent-1 {
-    padding-left: 10px;
+li[data-list="order"].ql-indent-1 {
+    margin-left: 5px;
 }
 
 .ql-indent-2 {
@@ -265,7 +265,7 @@ li[data-list="bullet"] {
     list-style-type: disc !important;
     position: relative;
     margin: 0;
-    margin-bottom: 5px;
+    margin-bottom: 20px;
 }
 
 .form_action {
