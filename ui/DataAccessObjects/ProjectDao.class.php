@@ -1647,7 +1647,7 @@ error_log("Sync update_task_from_job() task_id: $task_id, status: $status, job: 
 
     public function follow_unfollow_asana_tasks($addFollowers, $project_id, $user_id)
     {
-        $userDao = new DAO\UserDao();
+        $userDao = new UserDao();
         $user = $userDao->getUser($user_id);
         $email = $user->email;
 
@@ -1691,7 +1691,7 @@ error_log('subTaskData: ' . print_r($subTaskData, 1));//(**)
 
     public function watch_discource_topic($project_id, $user_id, $timeout = 0) {
 return;
-        $userDao = new DAO\UserDao();
+        $userDao = new UserDao();
         $user = $userDao->getUser($user_id);
         $email = $user->email;
 
