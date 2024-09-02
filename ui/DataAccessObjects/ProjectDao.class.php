@@ -1689,71 +1689,29 @@ error_log('subTaskData: ' . print_r($subTaskData, 1));//(**)
         }
     }
 
-    public function watch_discource_topic($project_id, $user_id) {
+    public function watch_discource_topic($project_id, $user_id, $timeout = 0) {
+return;
         $userDao = new DAO\UserDao();
         $user = $userDao->getUser($user_id);
         $email = $user->email;
 
-        $topicIdFromDB = $this->get_discourse_id($project_id);
-
-        //hardcdode topicId
-        $topicId = 66964 ;
-
+        $topic_id = $this->get_discourse_id($project_id);
         $data = ['notification_level' => 3];
 
         $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, "https://community.translatorswb.org/t/$topicId/notifications.json");
+        curl_setopt($ch, CURLOPT_URL, "https://community.translatorswb.org/t/$topic_id/notifications.json");
         curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'POST');
         curl_setopt($ch, CURLOPT_HTTPHEADER, ['Api-Key: ' . Common\Lib\Settings::get('discourse.api_key'), 'Api-Username: ' . Common\Lib\Settings::get('discourse.api_username'), 'Content-Type: application/x-www-form-urlencoded']);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-if ($timeout) curl_setopt($ch, CURLOPT_TIMEOUT, 300);
+        if ($timeout) curl_setopt($ch, CURLOPT_TIMEOUT, 300);
         $result = curl_exec($ch);
-error_log("executeCurl($url): " . curl_errno($ch));
+error_log("watch_discource_topic($project_id, $user_id, $timeout), topic_id:$topic_id... $result");
         curl_close($ch);
     }
 
     public function unwatch_discource_topic($project_id, $user_id) {
-        $userDao = new DAO\UserDao();
-        $user = $userDao->getUser($user_id);
-        $email = $user->email;
-        $topicIdFromDB = $this->get_discourse_id($project_id);
-
-        // Discourse domain
-        $discourseDomain = 'https://community.translatorswb.org';
-        // Keys
-        $apiKey = Common\Lib\Settings::get('discourse.api_key');
-        $userName =  Common\Lib\Settings::get('discourse.api_username');
-
-        //hardcdode topicId
-        // $topicId = 66964 ;
-
-        // Create the API endpoint URL
-        $apiUrl = "$discourseDomain/t/$topicIdFromDB/notifications.json";
-
         $data = ['notification_level' => 0];
-
-        $options = array(
-            CURLOPT_URL => $apiUrl,
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_CUSTOMREQUEST => 'POST',
-            CURLOPT_POSTFIELDS => json_encode($data),
-            CURLOPT_HTTPHEADER => array(
-                'Api-Key: ' . $apiKey,
-                'Api-Username: ' . $userName,
-                'Content-Type: application/x-www-form-urlencoded'
-            ),
-        );
-        $ch = curl_init();
-        curl_setopt_array($ch, $options);
-        $response = curl_exec($ch);
-
-        if ($response === false) {
-            echo 'Error: ' . curl_error($ch);
-        } else {
-            error_log($response);
-        }
-        curl_close($ch);
     }
 
     public function executeCurl($url, $method, $data = 0, $timeout = 0)
