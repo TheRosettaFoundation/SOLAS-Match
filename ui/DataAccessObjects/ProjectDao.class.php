@@ -1651,36 +1651,33 @@ error_log("Sync update_task_from_job() task_id: $task_id, status: $status, job: 
         $user = $userDao->getUser($user_id);
         $email = $user->email;
 
-        $task_ids = $this->get_asana_tasks($project_id);
+        $asana_tasks = $this->get_asana_tasks($project_id);
 
-        $userResponse = $this->executeCurl('https://app.asana.com/api/1.0/users?opt_fields=email', 'GET');
+        $userData = $this->executeCurl('https://app.asana.com/api/1.0/users?opt_fields=email', 'GET');
 
         $userGid = 0;
-        if ($userResponse && isset($userResponse['data'])) {
-            foreach ($userResponse['data'] as $user) {
+        if ($userData && isset($userData['data'])) {
+            foreach ($userData['data'] as $user) {
                 if ($user['email'] === $email) {
                     $userGid = $user['gid'];
                     break;
                 }
             }
 
-            if ($userGid && !empty($task_ids)) {
-                foreach ($task_ids as $taskId) {
-                    $asanaTask = $taskId['asana_task_id'];
+            if ($userGid && !empty($asana_tasks)) {
+                foreach ($asana_tasks as $asana_task) {
+                    $asana_task_id = $asana_task['asana_task_id'];
 
-                    $taskRes = $this->executeCurl("https://app.asana.com/api/1.0/tasks/$asanaTask", 'GET');
-                    if (!empty($taskRes['data']) && !$taskRes['data']['completed']) {
-                        $this->executeCurl("https://app.asana.com/api/1.0/tasks/$asanaTask/$addFollowers", 'POST', ['data' => ['followers'=> [$userGid]]]);
+                    $taskData = $this->executeCurl("https://app.asana.com/api/1.0/tasks/$asana_task_id", 'GET');
+                    if (!empty($taskData['data']) && !$taskData['data']['completed']) {
+                        $this->executeCurl("https://app.asana.com/api/1.0/tasks/$asana_task_id/$addFollowers", 'POST', ['data' => ['followers'=> [$userGid]]]);
 
-                        $responseDataSub = $this->executeCurl("https://app.asana.com/api/1.0/tasks/$asanaTask/subtasks", 'GET');
-                        if (!empty($responseDataSub['data'])) {
-                            foreach ($responseDataSub['data'] as $subtask) {
-error_log('subtask: ' . print_r($subtask, 1));//(**)
+                        $subtasks = $this->executeCurl("https://app.asana.com/api/1.0/tasks/$asana_task_id/subtasks", 'GET');
+                        if (!empty($subtasks['data'])) {
+                            foreach ($subtasks['data'] as $subtask) {
                                 $subGid = $subtask['gid'];
-$subTaskData = $this->executeCurl("https://app.asana.com/api/1.0/tasks/$subGid", 'GET');
-error_log('subTaskData: ' . print_r($subTaskData, 1));//(**)
-// not used or needed? if (!empty($subTaskData['data']) && !$subTaskData['data']['completed'])
-                                if (!empty($subtask['completed']) && !$subtask['completed']) $this->executeCurl("https://app.asana.com/api/1.0/tasks/$subGid/$addFollowers", 'POST', $followers);
+                                $subTaskData = $this->executeCurl("https://app.asana.com/api/1.0/tasks/$subGid", 'GET');
+                                if (!empty($subTaskData['data']) && !$subTaskData['data']['completed']) $this->executeCurl("https://app.asana.com/api/1.0/tasks/$subGid/$addFollowers", 'POST', $followers);
                             }
                         }
                     }
