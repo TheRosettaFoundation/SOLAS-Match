@@ -231,13 +231,13 @@ a[href^="mailto:"] {
     margin-bottom: 0px;
 }
 
-ol {
-    counter-reset: list-counter;
-}
-ol li[data-list="bullet"] {
-    content: counter(list-counter, lower-alpha) ".";
-    counter-increment: list-counter 0 !important;
-}
+// ol {
+//     counter-reset: list-counter;
+// }
+// ol li[data-list="bullet"] {
+//     content: counter(list-counter, lower-alpha) ".";
+//     counter-increment: list-counter 0 !important;
+// }
 .ql-align-center {
     text-align: center;
 }
@@ -248,7 +248,7 @@ ol li[data-list="bullet"] {
     text-align: justify;
 }
 li[data-list="order"].ql-indent-1 {
-    margin-left: 5px;
+    margin-left: 10px;
 }
 
 .ql-indent-2 {
@@ -273,6 +273,7 @@ li[data-list="bullet"] {
     position: relative;
     margin: 0;
     margin-bottom: 20px;
+    padding-left: 5px;
 }
 
 .form_action {
