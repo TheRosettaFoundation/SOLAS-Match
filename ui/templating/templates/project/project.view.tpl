@@ -125,7 +125,7 @@
                              {if $userSubscribedToProject}
                                 <p>
                                     <input type="hidden" name="trackProject" value="0" />
-                                    <a class=" btngray mt-2" onclick="document.getElementById("trackProject_0_disable").disabled = true; $('#trackedProjectForm').submit();" id="trackProject_0_disable">
+                                    <a class=" btngray mt-2" onclick="$('#trackedProjectForm').submit();" >
                                          <i class="fa-solid fa-ban fa-lg"></i>
                                          {Localisation::getTranslation('project_view_untrack_project')}
                                     </a>
@@ -133,7 +133,7 @@
                             {else}
                                 <p>
                                     <input type="hidden" name="trackProject" value="1" />
-                                    <a class=" btngray mt-2" onclick="document.getElementById("trackProject_1_disable").disabled = true; $('#trackedProjectForm').submit();" id="trackProject_1_disable">
+                                    <a class=" btngray mt-2" onclick="$('#trackedProjectForm').submit();" >
                                          <i class="fa-solid fa-envelope fa-lg"></i>
                                          {Localisation::getTranslation('common_track_project')}
                                     </a>
