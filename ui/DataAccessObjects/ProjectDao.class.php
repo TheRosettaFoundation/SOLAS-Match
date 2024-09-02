@@ -1663,6 +1663,7 @@ error_log("Sync update_task_from_job() task_id: $task_id, status: $status, job: 
                     break;
                 }
             }
+            $followers = ['data' => ['followers'=> [$userGid]]];
 
             if ($userGid && !empty($asana_tasks)) {
                 foreach ($asana_tasks as $asana_task) {
@@ -1670,7 +1671,7 @@ error_log("Sync update_task_from_job() task_id: $task_id, status: $status, job: 
 
                     $taskData = $this->executeCurl("https://app.asana.com/api/1.0/tasks/$asana_task_id", 'GET');
                     if (!empty($taskData['data']) && !$taskData['data']['completed']) {
-                        $this->executeCurl("https://app.asana.com/api/1.0/tasks/$asana_task_id/$addFollowers", 'POST', ['data' => ['followers'=> [$userGid]]]);
+                        $this->executeCurl("https://app.asana.com/api/1.0/tasks/$asana_task_id/$addFollowers", 'POST', $followers);
 
                         $subtasks = $this->executeCurl("https://app.asana.com/api/1.0/tasks/$asana_task_id/subtasks", 'GET');
                         if (!empty($subtasks['data'])) {
