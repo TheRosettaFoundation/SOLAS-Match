@@ -13182,6 +13182,7 @@ BEGIN
         tp.purchase_order,
         pos.status AS po_status,
         pos.approver_mail,
+        pos.total,
         IF(t.`word-count`>1, IF(ttd.divide_rate_by_60, t.`word-count`             /60, t.`word-count`             ), 0) AS total_paid_words,
         ttd.pricing_and_recognition_unit_text_hours,
         tp.unit_rate,
