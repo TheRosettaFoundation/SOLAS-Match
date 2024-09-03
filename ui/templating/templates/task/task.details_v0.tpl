@@ -6,7 +6,7 @@
         <th>{Localisation::getTranslation('common_target_language')}</th>
         <th>{Localisation::getTranslation('common_created')}</th>
         <th>{Localisation::getTranslation('common_task_deadline')}</th>
-        <th>{TaskTypeEnum::$enum_to_UI[$type_id]['unit_count_text']}</th>
+        <th>Linguist {TaskTypeEnum::$enum_to_UI[$type_id]['unit_count_text']}</th>
         {if ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $NGO_ADMIN + $NGO_PROJECT_OFFICER))}<th>{Localisation::getTranslation('common_status')}</th>{/if}
     </thead>
     <tbody>
@@ -277,7 +277,7 @@
           {if !empty($paid_status)}
             <th>Purchase Order</th>
             <th>Payment Status</th>
-            <th>Unit Rate for {TaskTypeEnum::$enum_to_UI[$type_id]['pricing_and_recognition_unit_text_hours']}</th>
+            <th>Linguist Unit Rate for {TaskTypeEnum::$enum_to_UI[$type_id]['pricing_and_recognition_unit_text_hours']}</th>
             <th>Default Unit Rate for {TaskTypeEnum::$enum_to_UI[$type_id]['pricing_and_recognition_unit_text_hours']}</th>
             <th>Total Expected Cost</th>
           {else}
@@ -287,7 +287,7 @@
             <th></th>
             <th></th>
           {/if}
-            <th>Pricing Units in {TaskTypeEnum::$enum_to_UI[$type_id]['pricing_and_recognition_unit_text']}</th>
+            <th>Linguist weighted {TaskTypeEnum::$enum_to_UI[$type_id]['pricing_and_recognition_unit_text']}</th>
             <th>Source Units in {TaskTypeEnum::$enum_to_UI[$type_id]['source_unit_for_later_stats']}</th>
         </thead>
         <tr align="center">

@@ -223,6 +223,7 @@ class ProjectRouteHandler
             empty($hook['createdBy']['uid']) ? '' : $hook['createdBy']['uid'],
             empty($hook['owner']['uid']) ? '' : $hook['owner']['uid'],
             $workflowLevels);
+        $projectDao->update_project_owner_id($project_id, empty($hook['owner']['uid']) ? 0 : $projectDao->get_user_id_from_memsource_user($hook['owner']['uid']), 0);
 
         $target_languages = '';
         if (!empty($hook['targetLangs'])) {
@@ -1128,6 +1129,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
           
             $extra_scripts  = "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}resources/bootstrap/js/bootstrap.min.js\"></script>";
             $extra_scripts .= "<script defer type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/taskRestrictions.js\"></script>";
+            $extra_scripts .= "<script defer type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/projectDescClean.js\"></script>";
             $extra_scripts .= '<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.2/jquery.validate.min.js" type="text/javascript"></script>';
             $extra_scripts .= file_get_contents(__DIR__."/../js/project-view1.js");
             $extra_scripts .= file_get_contents(__DIR__."/../js/TaskView3.js");
@@ -1879,6 +1881,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                     mkdir(Common\Lib\Settings::get("files.upload_path") . "proj-$project_id/", 0755);
 
                     $projectDao->set_memsource_project($project_id, $project_id, $project_id, $user_id, $user_id, ['', '', '', '', '', '', '', '', '', '', '', '']);
+                    $projectDao->update_project_owner_id($project_id, $user_id, 2);
                     $memsource_project = $projectDao->get_memsource_project($project_id);
 
                     $image_failed = false;
@@ -2398,6 +2401,7 @@ error_log("fields: $fields targetlanguages: $targetlanguages");//(**)
         $projectDao = new DAO\ProjectDao();
         $taskDao = new DAO\TaskDao();
         $orgDao = new DAO\OrganisationDao();
+        $userDao = new DAO\UserDao();
         $memsourceApiToken = Common\Lib\Settings::get('memsource.memsource_api_token');
 
         $fp_for_lock = fopen(__DIR__ . '/task_cron_1_minute_lock.txt', 'r');
@@ -2577,8 +2581,12 @@ error_log("get_queue_asana_projects: $projectId");//(**)
                 $memsource_project_id = $memsource_project['memsource_project_id'];
                 $self_service = (strpos($pm, '@translatorswithoutborders.org') === false && strpos($pm, '@clearglobal.org') === false) || $projectDao->get_memsource_self_service_project($memsource_project_id);
                 if ($self_service) $asana_project = '778921846018141';
-                else               $asana_project = '1200067882657242';
-
+                else {
+                    $asana_project = '1200067882657242';
+//                    $asana_board_for_org = $userDao->get_asana_board_for_org($org_id);
+//                    if (!empty($asana_board_for_org['asana_board'])) $asana_project = (string)$asana_board_for_org['asana_board'];
+                }
+error_log("asana_board_for_org $org_id, $asana_project");
                 $tasks = $projectDao->getProjectTasksArray($projectId);
                 $asana_task_splits = [];
                 foreach ($tasks as $task) {
