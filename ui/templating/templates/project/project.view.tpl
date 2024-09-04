@@ -998,12 +998,12 @@
   <div class="modal-body">
   <form id="wordcountform"  method="post" action="{urlFor name="project-view" options="project_id.$project_id"}">
     Word Count #: <input type="text" name="word_count" value="" />
-    <input type="hidden" name="wordcount" value="" />
+    <input type="hidden" name="wordnum" value="" />
 
     {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
     <div class="modal-footer">
       <button type="button" class=" btn btn-light" data-bs-dismiss="modal" aria-label="Close">Close</button>
-      <button class="btn btn-success" id="ponumbtn" onclick="$('#wordcountform').submit();">Confirm</button>
+      <button class="btn btn-success" id="wordnumbtn" onclick="$('#wordcountform').submit();">Confirm</button>
     </div>
   </form>
   </div>
