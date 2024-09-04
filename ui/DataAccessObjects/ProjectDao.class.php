@@ -1687,31 +1687,6 @@ error_log("Sync update_task_from_job() task_id: $task_id, status: $status, job: 
         }
     }
 
-    public function watch_discource_topic($project_id, $user_id, $timeout = 0) {
-return;
-        $userDao = new UserDao();
-        $user = $userDao->getUser($user_id);
-        $email = $user->email;
-
-        $topic_id = $this->get_discourse_id($project_id);
-        $data = ['notification_level' => 3];
-
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, "https://community.translatorswb.org/t/$topic_id/notifications.json");
-        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
-        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'POST');
-        curl_setopt($ch, CURLOPT_HTTPHEADER, ['Api-Key: ' . Common\Lib\Settings::get('discourse.api_key'), 'Api-Username: ' . Common\Lib\Settings::get('discourse.api_username'), 'Content-Type: application/x-www-form-urlencoded']);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        if ($timeout) curl_setopt($ch, CURLOPT_TIMEOUT, 300);
-        $result = curl_exec($ch);
-error_log("watch_discource_topic($project_id, $user_id, $timeout), topic_id:$topic_id... $result");
-        curl_close($ch);
-    }
-
-    public function unwatch_discource_topic($project_id, $user_id) {
-        $data = ['notification_level' => 0];
-    }
-
     public function executeCurl($url, $method, $data = 0, $timeout = 0)
     {
         $ch = curl_init();

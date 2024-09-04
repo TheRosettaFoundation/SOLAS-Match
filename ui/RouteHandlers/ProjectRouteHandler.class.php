@@ -803,7 +803,6 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                     $userTrackProject = $userDao->trackProject($user_id, $project->getId());
                     if ($roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER)) {
                         $projectDao->follow_asana_tasks($project->getId(), $user_id);
-                        $projectDao->watch_discource_topic($project->getId(), $user_id);
                     }
                     if ($userTrackProject) {
                         UserRouteHandler::flashNow("success", Lib\Localisation::getTranslation('project_view_7'));
@@ -814,7 +813,6 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                     $userUntrackProject = $userDao->untrackProject($user_id, $project->getId());
                     if ($roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER)) {
                         $projectDao->unfollow_asana_tasks($project->getId(), $user_id);
-                        $projectDao->unwatch_discource_topic($project->getId(), $user_id);
                     }
                     if ($userUntrackProject) {
                         UserRouteHandler::flashNow("success", Lib\Localisation::getTranslation('project_view_9'));
