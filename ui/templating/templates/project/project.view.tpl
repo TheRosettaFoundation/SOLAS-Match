@@ -483,6 +483,38 @@
                 <input type="hidden" name="ready_payment_status" value="Settled" />
                 {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
             </form>
+
+                            <!-- Button trigger modal -->
+                <button type="button" class="d-flex  p-1 text-muted fs-6 text-decoration-none" data-bs-toggle="modal" data-bs-target="#wordCountModal">
+                Set word count
+                </button>
+
+                <!-- Modal -->
+                <div class="modal fade" id="wordCountModal" tabindex="-1" aria-labelledby="wordCountModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Set Word Count</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                    <form id="set_word_count" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}">
+                        {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
+                         
+                            <input type="text" name="word_count"  />
+                            <input type="submit" name="sesskey" value="Save" />
+
+                    </form>
+
+
+                    </div>
+                    <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Save changes</button>
+                    </div>
+                </div>
+                </div>
+                </div>
             
         {/if}
         </div>
