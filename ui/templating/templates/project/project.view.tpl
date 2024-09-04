@@ -484,28 +484,36 @@
                 {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
             </form>
             <!-- Button trigger modal -->
-            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
-                    Set Word Count
-            </button>
+           <!-- Button trigger modal -->
+        <button type="button" class="btn btn-light-subtle fs-6 p-1" data-bs-toggle="modal" data-bs-target="#exampleModal">
+        Set word count
+        </button>
 
-            <!-- Modal -->
-            <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-            <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                <h1 class="modal-title fs-5" id="staticBackdropLabel">Modal title</h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                ...
-                </div>
-                <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Understood</button>
-                </div>
+        <!-- Modal -->
+        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+            <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
+            <div class="modal-body">
+            <form id="set_word_count" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}">
+                {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
+
+            <div class="mb-3">
+            <label for="word_count" class="form-label">Word count</label>
+            <input type="text" class="form-control" id="word_count" placeholder="">
+        </div>
             </div>
+            <div class="modal-footer">
+            <button type="submit" class="btn btn-primary mb-3">Set Word Count</button>
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>           
             </div>
+        </div>
+        </div>
+        </div>
+          
         {/if}
         </div>
         </div>
