@@ -987,7 +987,7 @@
 
 
 
-<!-- WordCountModal Modal -->
+<!-- Word Count Modal -->
 <div id="wordcountmodal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 <div class="modal-dialog">
 <div class="modal-content">
@@ -1003,7 +1003,7 @@
     {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
     <div class="modal-footer">
       <button type="button" class=" btn btn-light" data-bs-dismiss="modal" aria-label="Close">Close</button>
-      <button class="btn btn-success" id="ponumbtn" onclick="$('#form').submit();">Confirm</button>
+      <button class="btn btn-success" id="ponumbtn" onclick="$('#wordcountform').submit();">Confirm</button>
     </div>
   </form>
   </div>
