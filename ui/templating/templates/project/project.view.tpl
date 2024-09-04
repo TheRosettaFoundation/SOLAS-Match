@@ -483,16 +483,6 @@
                 <input type="hidden" name="ready_payment_status" value="Settled" />
                 {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
             </form>
-
-            <div class="bg-light-subtle d-flex flex-column justify-content-center form_action me-2  mb-4 mb-lg-0">
-            <a class=" d-flex p-1 text-muted fs-6 text-decoration-none  p-1" data-bs-toggle="modal" data_target="#wordCountModal" data-id="1" href="#cancelmodal" role="button" data-cancelled="1">
-                <i class="fa fa-ban me-2"  aria-hidden="true"></i> <span>Set Word Count</span>
-            </a>
-            </div>
-
-            
-
-                
         {/if}
         </div>
         </div>
@@ -964,33 +954,6 @@
   </div>
   </div>
 </div>
-
-
-    <!-- wordCount Modal -->
-    <div id="wordCountmodal" class="modal fade"  tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-    <div class="modal-content">
-        <div class="modal-header">
-        <h3 class="modal-title fs-4 fw-bold me-4" id="myModalLabel">Set Word Count</h3>
-        <strong id="wordmsg" class="btn btn-danger me-4">No task has bee</strong>
-    
-      </div>
-      <div class="modal-body">
-      <form id="cancel"  method="post" action="{urlFor name="project-view" options="project_id.$project_id"}"> 
-    
-      <input type="hidden" name="cancelled" value="" />
-       {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
-      </div>
-      <div class="modal-footer">
-      <button type="button" class="btn btn-light"  data-bs-dismiss="modal" aria-label="Close"> Close</button>
-        <button class="btn btn-danger" id="cancelbtn" onclick="$('#cancel').submit();">Confirm</button>
-      </div>
-    
-      </form>
-      </div>
-      </div>
-    </div>
-
 
 <!-- PO# Modal -->
 <div id="ponummodal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
