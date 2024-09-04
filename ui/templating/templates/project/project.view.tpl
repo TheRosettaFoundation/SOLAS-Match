@@ -483,6 +483,12 @@
                 <input type="hidden" name="ready_payment_status" value="Settled" />
                 {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
             </form>
+
+            <div class="bg-light-subtle d-flex flex-column justify-content-center form_action me-2  mb-4 mb-lg-0">
+            <a class="d-flex p-1 text-muted fs-6 text-decoration-none open-ponum-modal"  data-bs-toggle="modal" href="#wordcountmodal" role="button">
+            <i class="fa fa-credit-card me-2"  aria-hidden="true"></i> <span> Set Word Count # </span>
+            </a>
+            </div>
         {/if}
         </div>
         </div>
@@ -972,6 +978,32 @@
     <div class="modal-footer">
       <button type="button" class=" btn btn-light" data-bs-dismiss="modal" aria-label="Close">Close</button>
       <button class="btn btn-success" id="ponumbtn" onclick="$('#ponumform').submit();">Confirm</button>
+    </div>
+  </form>
+  </div>
+</div>
+</div>
+</div>
+
+
+
+<!-- WordCountModal Modal -->
+<div id="wordcountmodal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div class="modal-dialog">
+<div class="modal-content">
+  <div class="modal-header">
+    <h3 class="modal-title fs-4 fw-bold me-4" id="myModalLabel">Set Word Count #</h3>
+  </div>
+
+  <div class="modal-body">
+  <form id="wordcountform"  method="post" action="{urlFor name="project-view" options="project_id.$project_id"}">
+    Word Count #: <input type="text" name="po" value="" />
+    <input type="hidden" name="ponum" value="" />
+    <input type="hidden" name="ready_payment_status" value="Unsettled" />
+    {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
+    <div class="modal-footer">
+      <button type="button" class=" btn btn-light" data-bs-dismiss="modal" aria-label="Close">Close</button>
+      <button class="btn btn-success" id="ponumbtn" onclick="$('#wordcountform').submit();">Confirm</button>
     </div>
   </form>
   </div>
