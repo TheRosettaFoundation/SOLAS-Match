@@ -36,6 +36,7 @@ function select() {
             $("[name=ready_payment]").val(arr);
             $("[name=pending_documentation]").val(arr);
             $("[name=tasks_settled]").val(arr);
+            $("[name=word_count]").val(arr);
         } else if (valueSelected == "all_revision_tasks") {
             $(":checkbox[data-task-type='3']").prop("checked", true);
             $(':checkbox:checked').each(function () {
@@ -59,6 +60,7 @@ function select() {
             $("[name=ready_payment]").val(arr);
             $("[name=pending_documentation]").val(arr);
             $("[name=tasks_settled]").val(arr);
+            $("[name=word_count]").val(arr);
         } else if (valueSelected == "all_tasks") {
             $('[name=select_task]').prop("checked", true);
             $(':checkbox:checked').each(function () {
@@ -82,6 +84,7 @@ function select() {
             $("[name=ready_payment]").val(arr);
             $("[name=pending_documentation]").val(arr);
             $("[name=tasks_settled]").val(arr);
+            $("[name=word_count]").val(arr);
         } else if (valueSelected == "all_approval_tasks") {
             $(":checkbox[data-task-type='6']").prop("checked", true);
             $(':checkbox:checked').each(function () {
@@ -105,6 +108,7 @@ function select() {
             $("[name=ready_payment]").val(arr);
             $("[name=pending_documentation]").val(arr);
             $("[name=tasks_settled]").val(arr);
+            $("[name=word_count]").val(arr);
         } else if (valueSelected == "all_revtrans_tasks") {
             $(":checkbox[data-task-type='2']").prop("checked", true);
             $(":checkbox[data-task-type='3']").prop("checked", true);
@@ -129,6 +133,7 @@ function select() {
             $("[name=ready_payment]").val(arr);
             $("[name=pending_documentation]").val(arr);
             $("[name=tasks_settled]").val(arr);
+            $("[name=word_count]").val(arr);
         } else if (valueSelected == "all_paid_tasks") {
             $(":checkbox[data-paid='1']").prop("checked", true);
             $(':checkbox:checked').each(function () {
@@ -152,6 +157,7 @@ function select() {
             $("[name=ready_payment]").val(arr);
             $("[name=pending_documentation]").val(arr);
             $("[name=tasks_settled]").val(arr);
+            $("[name=word_count]").val(arr);
         } else if (valueSelected == "all_tasks_ready_payment") {
             $(":checkbox[data-payment-status='Ready for payment']").prop("checked", true);
             $(':checkbox:checked').each(function () {
@@ -175,6 +181,7 @@ function select() {
             $("[name=ready_payment]").val(arr);
             $("[name=pending_documentation]").val(arr);
             $("[name=tasks_settled]").val(arr);
+            $("[name=word_count]").val(arr);
         }
         else {
             $(":checkbox").prop("checked", false);
@@ -195,6 +202,7 @@ function select() {
             $("[name=ready_payment]").val(arr);
             $("[name=pending_documentation]").val(arr);
             $("[name=tasks_settled]").val(arr);
+            $("[name=word_count]").val(arr);
         }
     });
 
@@ -234,6 +242,7 @@ function select() {
         $("[name=ready_payment]").val(select_all_tasks);
         $("[name=pending_documentation]").val(select_all_tasks);
         $("[name=tasks_settled]").val(select_all_tasks);
+        $("[name=word_count]").val(arr);
     });
 
     $('[name=select_task]').on('change', function (e) {
@@ -259,6 +268,7 @@ function select() {
         $("[name=ready_payment]").val(arr_select_task);
         $("[name=pending_documentation]").val(arr_select_task);
         $("[name=tasks_settled]").val(arr_select_task);
+        $("[name=word_count]").val(arr);
     });
 
     var forms = [
@@ -272,7 +282,8 @@ function select() {
         "uncomplete_selected_tasks",
         "restrict_native_language_and_variant",
         "restrict_native_language_only",
-        "restrict_native_language_none"
+        "restrict_native_language_none",
+        "wordcountform"
     ];
 
     // Validation if user clicks on action without doing a selection
@@ -336,6 +347,8 @@ function select() {
             $("[name=ready_payment]").val(arr);
             $("[name=pending_documentation]").val(arr);
             $("[name=tasks_settled]").val(arr);
+            $("[name=word_count]").val(arr);
+
         } else if (valueSelected == "all_translation_tasks_"+$(this).attr("data-select-name")) {
             $(':checkbox[data-lang="'+$(this).attr("data-select-name")+'"][data-task-type="2"]').prop("checked", true);
            // arr = [];
@@ -360,6 +373,7 @@ function select() {
             $("[name=ready_payment]").val(arr);
             $("[name=pending_documentation]").val(arr);
             $("[name=tasks_settled]").val(arr);
+            $("[name=word_count]").val(arr);
         } else if (valueSelected == "all_revision_tasks_"+$(this).attr("data-select-name")) {
             $(':checkbox[data-lang="'+$(this).attr("data-select-name")+'"][data-task-type="3"]').prop("checked", true);
            // arr = [];
@@ -384,6 +398,7 @@ function select() {
             $("[name=ready_payment]").val(arr);
             $("[name=pending_documentation]").val(arr);
             $("[name=tasks_settled]").val(arr);
+            $("[name=word_count]").val(arr);
         } else if (valueSelected == "all_approval_tasks_"+$(this).attr("data-select-name")) {
             $(':checkbox[data-lang="'+$(this).attr("data-select-name")+'"][data-task-type="6"]').prop("checked", true);
            // arr = [];
@@ -408,6 +423,7 @@ function select() {
             $("[name=ready_payment]").val(arr);
             $("[name=pending_documentation]").val(arr);
             $("[name=tasks_settled]").val(arr);
+            $("[name=word_count]").val(arr);
         } else if (valueSelected == "all_revtrans_tasks_"+$(this).attr("data-select-name")) {
             $(':checkbox[data-lang="'+$(this).attr("data-select-name")+'"][data-task-type="2"]').prop("checked", true);
             $(':checkbox[data-lang="'+$(this).attr("data-select-name")+'"][data-task-type="3"]').prop("checked", true);
@@ -433,6 +449,7 @@ function select() {
             $("[name=ready_payment]").val(arr);
             $("[name=pending_documentation]").val(arr);
             $("[name=tasks_settled]").val(arr);
+            $("[name=word_count]").val(arr);
         }
          else if (valueSelected == "delesect_all_"+$(this).attr("data-select-name")) {
             $(':checkbox[data-lang="'+$(this).attr("data-select-name")+'"]').prop("checked", false);
@@ -457,6 +474,7 @@ function select() {
             $("[name=ready_payment]").val(arr);
             $("[name=pending_documentation]").val(arr);
             $("[name=tasks_settled]").val(arr);
+            $("[name=word_count]").val(arr);
         } else {
             $("[name=unpublish_selected_tasks]").val(arr);
             $("[name=publish_selected_tasks]").val(arr);
@@ -474,6 +492,7 @@ function select() {
             $("[name=ready_payment]").val(arr);
             $("[name=pending_documentation]").val(arr);
             $("[name=tasks_settled]").val(arr);
+            $("[name=word_count]").val(arr);
         }
     });
 
