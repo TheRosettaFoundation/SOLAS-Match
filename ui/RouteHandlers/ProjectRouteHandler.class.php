@@ -762,6 +762,17 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
         $reload_for_wordcount = 0;
         if ($request->getMethod() === 'POST') {
             $post = $request->getParsedBody();
+
+            if ($roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER | NGO_ADMIN | NGO_PROJECT_OFFICER)) {
+                if (isset($post['word_count'])) {
+                        
+                    print_r($post['word_count']) ;
+                    
+                }
+
+            }
+
+
             if ($fail_CSRF = Common\Lib\UserSession::checkCSRFKey($post, 'projectView')) return $response->withStatus(302)->withHeader('Location', $fail_CSRF);
 
             if ($roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER | NGO_ADMIN | NGO_PROJECT_OFFICER)) {
