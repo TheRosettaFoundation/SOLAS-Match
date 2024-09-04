@@ -490,7 +490,7 @@
                 </button>
 
                 <!-- Modal -->
-                <div class="modal fade" id="wordCountModal" tabindex="-1" aria-labelledby="wordCountModalLabel" aria-hidden="true">
+                <div class="modal fade" id="wordCountModal"  aria-labelledby="wordCountModalLabel" aria-hidden="true">
                 <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -502,7 +502,7 @@
                         {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
                          
                             <input type="text" name="word_count"  />
-                            <input type="submit" name="sesskey" value="Save" />
+                            <input type="submit" name="sesskey" value="Save"  class="btn btn-primary"/>
 
                     </form>
 
@@ -510,7 +510,7 @@
                     </div>
                     <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Save changes</button>
+                
                     </div>
                 </div>
                 </div>
