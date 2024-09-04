@@ -766,7 +766,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
             if ($roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER | NGO_ADMIN | NGO_PROJECT_OFFICER)) {
                 if (isset($post['word_count'])) {
                         
-                    print_r($post['word_count']) ;
+                    print_r($post) ;
                     
                 }
 
