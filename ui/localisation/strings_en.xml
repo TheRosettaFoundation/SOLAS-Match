@@ -530,7 +530,7 @@ Should you have any questions please contact <a href="mailto:info@translatorswit
     <string name="project_create_21">The file you uploaded is too large, please check the maximum file upload size under the Source Text header.</string>
     <string name="project_create_22">Please note that the word count of your file is excessively high - the recommended limit is 3000 words. We suggest you create a segmentation task instead. Are you sure you want to continue?</string>
     <string name="project_create_error_title_too_long">Project title is too long, please use one hundred characters or less.</string>
-    <string name="project_create_error_description_too_long">Project description is too long, please use 4096 characters or less.</string>
+    <string name="project_create_error_description_too_long">Project description is too long, please use 15000 characters or less.</string>
     <string name="project_create_error_impact_too_long">Project impact is too long, please use 4096 characters or less.</string>
     <string name="project_create_error_reference_invalid">Project reference must be a valid URL.</string>    
     <string name="project_create_error_reference_too_long">Project reference URL is too long, it must be 128 characters or less. Consider using a URL shortening tool such as <a href="https://bitly.com/">bitly</a>.</string>

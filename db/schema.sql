@@ -28,7 +28,7 @@ CREATE TABLE IF NOT EXISTS `Admins` (
 CREATE TABLE IF NOT EXISTS `ArchivedProjects` (
   `id` int(10) unsigned NOT NULL,
   `title` varchar(128) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `description` varchar(15000) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `description` VARCHAR(15000) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `impact` varchar(4096) COLLATE utf8mb4_unicode_ci NOT NULL,
   `deadline` datetime NOT NULL,
   `organisation_id` int(10) unsigned NOT NULL,
