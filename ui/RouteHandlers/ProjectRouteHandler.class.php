@@ -263,8 +263,8 @@ class ProjectRouteHandler
 
     private function truncate_note($note)
     {
-        if (mb_strlen($note) <= 15000) return $note;
-        return mb_substr($note, 0, 15000 - 37) . ' THIS TEXT HAS BEEN EDITED FOR LENGTH';
+        if (mb_strlen($note) <= 12000) return $note;
+        return mb_substr($note, 0, 12000 - 37) . ' THIS TEXT HAS BEEN EDITED FOR LENGTH';
     }
 
     private function update_project_due_date($hook)

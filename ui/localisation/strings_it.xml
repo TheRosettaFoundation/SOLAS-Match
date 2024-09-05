@@ -526,7 +526,7 @@ Per qualsiasi domanda si prega di contattare <a href="mailto:info@translatorswit
     <string name="project_create_21">Il file che hai caricato è troppo pesante. Controlla la grandezza massima per un file da caricare nell'intestazione del testo di partenza.</string>
     <string name="project_create_22">Il conteggio parole del tuo file supera il limite raccomandato di 3000 parole. In alternativa, ti consigliamo di creare un'attività di segmentazione. Sei sicuro di voler continuare?</string>
     <string name="project_create_error_title_too_long">Il titolo del progetto è troppo lungo: puoi usare fino a 100 caratteri.</string>
-    <string name="project_create_error_description_too_long">La descrizione del progetto è troppo lunga: puoi usare fino a 15000 caratteri.</string>
+    <string name="project_create_error_description_too_long">La descrizione del progetto è troppo lunga: puoi usare fino a 12000 caratteri.</string>
     <string name="project_create_error_impact_too_long">L'impatto del progetto è troppo lungo: puoi usare fino a 4096 caratteri.</string>
     <string name="project_create_error_reference_invalid">Il riferimento del progetto deve essere un indirizzo web valido.</string>    
     <string name="project_create_error_reference_too_long">L'indirizzo web del progetto è troppo lungo: può essere fino a 128 caratteri. Potresti utilizzare un servizio di abbreviazione degli indirizzi web come<a href="https://bitly.com/">bitly</a>.</string>

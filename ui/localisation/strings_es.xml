@@ -530,7 +530,7 @@ Si tiene alguna pregunta, no dude en contactarnos en <a href="mailto:info@transl
     <string name="project_create_21">El archivo que estás intentando adjuntar es demasiado grande; consulta el tamaño máximo admitido en el campo &quot;Texto original&quot;.</string>
     <string name="project_create_22">El número de palabras del archivo es demasiado elevado; el límite recomendado es 3.000 palabras por archivo. Te sugerimos que crees una tarea de fragmentación para dividir el texto. ¿Seguro que quieres continuar?</string>
     <string name="project_create_error_title_too_long">El título del proyecto es demasiado largo. Los títulos no deben exceder los 100 caracteres.</string>
-    <string name="project_create_error_description_too_long">La descripción del proyecto es demasiado larga. Las descripciones no deben exceder los 15.000 caracteres.</string>
+    <string name="project_create_error_description_too_long">La descripción del proyecto es demasiado larga. Las descripciones no deben exceder los 12.000 caracteres.</string>
     <string name="project_create_error_impact_too_long">La repercusión del proyecto es demasiado larga. Este campo no debe exceder los 4.096 caracteres.</string>
     <string name="project_create_error_reference_invalid">Tienes que especificar una dirección URL válida.</string>
     <string name="project_create_error_reference_too_long">La URL del proyecto es demasiado larga. Las URL no deben exceder los 128 caracteres. Puedes acortarla utilizando <a href="https://bitly.com/">bitly</a> u otra herramienta similar.</string>
