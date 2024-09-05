@@ -28,7 +28,7 @@ CREATE TABLE IF NOT EXISTS `Admins` (
 CREATE TABLE IF NOT EXISTS `ArchivedProjects` (
   `id` int(10) unsigned NOT NULL,
   `title` varchar(128) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `description` varchar(4096) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `description` varchar(15000) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `impact` varchar(4096) COLLATE utf8mb4_unicode_ci NOT NULL,
   `deadline` datetime NOT NULL,
   `organisation_id` int(10) unsigned NOT NULL,
@@ -330,7 +330,7 @@ CREATE TABLE IF NOT EXISTS `ProjectFiles` (
 CREATE TABLE IF NOT EXISTS `Projects` (
   `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
   `title` VARCHAR(128) NOT NULL COLLATE 'utf8mb4_unicode_ci',
-  `description` VARCHAR(4096) NOT NULL COLLATE 'utf8mb4_unicode_ci',
+  `description` VARCHAR(15000) NOT NULL COLLATE 'utf8mb4_unicode_ci',
   `impact` VARCHAR(4096) NOT NULL COLLATE 'utf8mb4_unicode_ci',
   `deadline` DATETIME NOT NULL,
   `organisation_id` INT(10) UNSIGNED NOT NULL,
@@ -2726,6 +2726,7 @@ BEGIN
 END//
 DELIMITER ;
 
+# Not currently used...
 DROP PROCEDURE IF EXISTS `getArchivedProject`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getArchivedProject`(IN `projectId` INT, IN `titleText` VARCHAR(128), IN `descr` VARCHAR(4096), IN `imp` VARCHAR(4096), IN `deadlineTime` DATETIME, IN `orgId` INT, IN `ref` VARCHAR(128), IN `wordCount` INT, IN `createdTime` DATETIME, IN `archiveDate` DATETIME, IN `archiverId` INT, IN `lCode` VARCHAR(3), IN `cCode` VARCHAR(4), IN imageUploaded BIT(1), IN imageApproved BIT(1))
@@ -5129,7 +5130,7 @@ DELIMITER ;
 
 DROP PROCEDURE IF EXISTS `projectInsertAndUpdate`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `projectInsertAndUpdate`(IN `projectId` INT, IN `titleText` VARCHAR(128), IN `descr` VARCHAR(4096), IN `impactText` VARCHAR(4096), IN `deadlineTime` DATETIME, IN `orgId` INT, IN `ref` VARCHAR(128), IN `wordCount` INT, IN `createdTime` DATETIME, IN `sourceCountryCode` VARCHAR(4), IN `sourceLanguageCode` VARCHAR(3), IN imageUploaded BIT(1), IN imageApproved BIT(1))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `projectInsertAndUpdate`(IN `projectId` INT, IN `titleText` VARCHAR(128), IN `descr` VARCHAR(15000), IN `impactText` VARCHAR(4096), IN `deadlineTime` DATETIME, IN `orgId` INT, IN `ref` VARCHAR(128), IN `wordCount` INT, IN `createdTime` DATETIME, IN `sourceCountryCode` VARCHAR(4), IN `sourceLanguageCode` VARCHAR(3), IN imageUploaded BIT(1), IN imageApproved BIT(1))
 BEGIN
     if projectId="" then set projectId=null; end if;
     if orgId="" then set orgId=null; end if;
@@ -10318,7 +10319,7 @@ DELIMITER ;
 
 DROP PROCEDURE IF EXISTS `update_project_description`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `update_project_description`(IN projectID INT, IN d VARCHAR(4096))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `update_project_description`(IN projectID INT, IN d VARCHAR(15000))
 BEGIN
     UPDATE Projects SET description=d WHERE id=projectID;
 END//
