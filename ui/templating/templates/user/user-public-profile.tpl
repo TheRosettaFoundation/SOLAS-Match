@@ -1295,17 +1295,13 @@ If a language is to be removed from this list, the community will be informed be
     {foreach $user_invoices as $invoice}
         <tr>
             <td>
-                {if ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER + 128)) || !($invoice['status']&1)}
-                    <a class="link link-primary text-primary" href="{urlFor name="get-invoice" options="invoice_number.{$invoice['invoice_number']}"}" target="_blank">{if $invoice['status']&1}DRAFT{else}TWB{/if}-{str_pad($invoice['invoice_number'], 4, '0', STR_PAD_LEFT)}</a>
-                {else}
-                    {if $invoice['status']&1}DRAFT{else}TWB{/if}-{str_pad($invoice['invoice_number'], 4, '0', STR_PAD_LEFT)}
-                {/if}
+                <a class="link link-primary text-primary" href="{urlFor name="get-invoice" options="invoice_number.{$invoice['invoice_number']}"}" target="_blank">TWB-{str_pad($invoice['invoice_number'], 4, '0', STR_PAD_LEFT)}</a>
             </td>
             <td>{substr($invoice['invoice_date'], 0, 10)}</td>
             <td>${round($invoice['amount'], 2)}</td>
             <td>
                 {if     $invoice['status'] == 0}Invoice
-                {elseif $invoice['status'] == 1}Draft
+                {elseif $invoice['status'] == 1}Please review invoice and email it to linguistspayments@clearglobal.org
                 {elseif $invoice['status'] == 2}Invoice Paid
                 {elseif $invoice['status'] == 3}Draft Paid
                 {elseif $invoice['status'] == 4}Invoice Bounced

@@ -1123,9 +1123,7 @@ error_log("total_expected_cost: $total_expected_cost, divide_rate_by_60 " . $tas
             foreach ($invoice as $row) {
                 LibAPI\PDOWrapper::call('update_invoice_processed', LibAPI\PDOWrapper::cleanse($row['task_id']) . ',' . LibAPI\PDOWrapper::cleanse($invoice_number));
             }
-            $TWB = '-TWB-';
-            if ($proforma) $TWB = '-DRAFT-';
-            $filename = date('Ym') . $TWB . str_pad($invoice_number, 4, '0', STR_PAD_LEFT) . '.pdf';
+            $filename = date('Ym') . '-TWB-' . str_pad($invoice_number, 4, '0', STR_PAD_LEFT) . '.pdf';
 
             [$fn, $file] = $RH->get_invoice_pdf($invoice_number);
             $data = [
