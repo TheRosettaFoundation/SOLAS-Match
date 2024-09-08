@@ -2461,20 +2461,7 @@ error_log("fields: $fields targetlanguages: $targetlanguages");//(**)
                     }
                     error_log("task_cron ERROR ($task_id) responseCode: $responseCode");
                 }
-
-                // Patch the KP Project URL into Memsource Project PO (this will happen many times)
-                $ch = curl_init("https://cloud.memsource.com/web/api2/v1/projects/$memsource_project_uid");
-                $data = [
-                    'purchaseOrder' => "https://twbplatform.org/project/$project_id/view",
-                ];
-                $payload = json_encode($data);
-                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-                curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json', "Authorization: Bearer $memsourceApiToken"]);
-                curl_setopt($ch, CURLOPT_TIMEOUT, 300); // Just so it does not hang forever and block because of file lock
-                curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PATCH');
-                curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
-                $result = curl_exec($ch);
-                curl_close($ch);
+                $userDao->update_phrase_field($memsource_project_uid, 'project_url', "https://twbplatform.org/project/$project_id/view", 1); // Update in Phrase (this will happen many times)
             }
 
             if (($task_id = $projectDao->get_task_analysis_trigger()) && ($memsource_task = $projectDao->get_memsource_task($task_id)) && !preg_match('/^\d*$/', $memsource_task_uid = $memsource_task['memsource_task_uid'])) {
