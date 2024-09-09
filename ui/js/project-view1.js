@@ -572,6 +572,8 @@ function select() {
         console.log(selected) ;
         console.log('trying to submit here ...');
         let error = $('#error_message') ;
+
+        console.log(error) ;
         let isValid = true ;
 
         if($.trim(selected.val())===""){
