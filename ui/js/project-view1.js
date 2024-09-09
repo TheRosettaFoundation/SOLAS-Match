@@ -576,12 +576,11 @@ function select() {
         let isValid = true ;
 
         if($.trim(selected.val())===""){
-            error.addClass('d-none');
+            error.removeClass('d-none');
             console.log('not valid')
             isValid = false ;
         }else{
-            error.removeClass('d-none');
-            error.addClass('d-block text-danger');
+            error.addClass('d-none');
             isValid = true ;
             console.log(' valid')
         }
