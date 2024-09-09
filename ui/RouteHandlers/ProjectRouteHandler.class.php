@@ -1103,7 +1103,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                     
                     $taskDistribution = [] ;
 
-                    for($i = 0 ; $i < $task_count , i++){
+                    for($i = 0 ;$i < $task_count; $i++){
 
                         $taskDistribution[$task_ids[$i]] = $distribution[$i] ;
                     }
