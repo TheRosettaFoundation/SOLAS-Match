@@ -587,6 +587,7 @@ function select() {
 
         if($.trim(selected.val())===""){
             error.removeClass('d-none');
+            error.addClass('text-danger my-2');
             console.log('not valid')
             isValid = false ;
         }else{
