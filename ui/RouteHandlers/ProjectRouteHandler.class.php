@@ -1106,7 +1106,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                     print_r($taskDistribution) ;
                     foreach ($taskDistribution as $task_id => $wordCount) {
                         
-                        $taskDao -> setTaskWordCount($task_id,$wordCount);
+                        $taskDao -> setTaskWordCount($task_id, int($wordCount));
                         
                     }
                     UserRouteHandler::flashNow('success', "$task_ids  word count distributed .");
