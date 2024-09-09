@@ -562,9 +562,12 @@ function select() {
              });
         });
       });
+
+
+      document.getElementById("wordcountform").addEventListener('submit', function(e){
+        console.log("this is the wordCountModal") ;
+    })
 }
 
-document.getElementById("wordcountform").addEventListener('submit', function(e){
-    console.log("this is the wordCountModal") ;
-})
+
 </script>
