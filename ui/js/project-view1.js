@@ -576,7 +576,7 @@ function select() {
      
 
 
-     $('#wordcountform').on('submit',function(e){
+     $('#wordcountmodal').on('show',function(e){
 
         let selected = $('#task_ids') ;
        
@@ -587,7 +587,7 @@ function select() {
 
         if($.trim(selected.val())===""){
             error.removeClass('d-none');
-            error.addClass('text-danger my-2');
+            error.addClass('text-danger my-2 fw-bold');
             console.log('not valid')
             isValid = false ;
         }else{
@@ -596,9 +596,7 @@ function select() {
             console.log(' valid')
         }
 
-        if(!isValid){
-            e.preventDefault() ;
-        }
+      
      })
 }
 
