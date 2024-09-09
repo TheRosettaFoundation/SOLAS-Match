@@ -569,9 +569,8 @@ function select() {
      $('#wordcountform').on('submit',function(e){
 
         let selected = $('#task_ids') ;
-        console.log(selected) ;
-        console.log('trying to submit here ...');
-        let error = $('#error_message') ;
+       
+        let error = $('#wordCount_error') ;
 
         console.log(error) ;
         let isValid = true ;
