@@ -2092,7 +2092,6 @@ error_log(print_r($project_result, true));//(**)
             error_log('memsource Project Create Failed: ' . print_r($project_result, true));
             return 0;
         }
-        $this->update_phrase_field($project_result['uid'], 'project_url', 'https://twbplatform.org/project/' . $project->getId() . '/view', 0);
 
         $workflowLevels = ['', '', '', '', '', '', '', '', '', '', '', '']; // Will contain e.g. 'Translation' or 'Revision' for workflowLevel 1 possibly up to 12
         if (!empty($project_result['workflowSteps'])) {
@@ -2106,6 +2105,7 @@ error_log(print_r($project_result, true));//(**)
             empty($project_result['createdBy']['uid']) ? '' : $project_result['createdBy']['uid'],
             empty($project_result['owner']['uid']) ? '' : $project_result['owner']['uid'],
             $workflowLevels);
+        $this->update_phrase_field($project_result['uid'], 'project_url', 'https://twbplatform.org/project/' . $project->getId() . '/view', 0);
         $projectDao->update_project_owner_id($project->getId(), Common\Lib\UserSession::getCurrentUserID(), 1);
 
         $split = 1;
