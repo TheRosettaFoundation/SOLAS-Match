@@ -527,9 +527,9 @@ error_log("createTaskDirectly: $args");
     {
         LibAPI\PDOWrapper::call('setTaskWordCount',
             LibAPI\PDOWrapper::cleanse($task_id) . ',' .
-            LibAPI\PDOWrapper::cleanse($status));
+            LibAPI\PDOWrapper::cleanse($word_count));
 
-        LibAPI\PDOWrapper::call('update_tasks_status', LibAPI\PDOWrapper::cleanse($task_id) . ',' . LibAPI\PDOWrapper::cleanse($status) . ',NULL');
+        LibAPI\PDOWrapper::call('update_tasks_status', LibAPI\PDOWrapper::cleanse($task_id) . ',' . LibAPI\PDOWrapper::cleanse($word_count) . ',NULL');
     }
 
     public function getTaskStatus($task_id)
