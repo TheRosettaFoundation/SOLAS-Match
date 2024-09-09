@@ -571,11 +571,6 @@ function select() {
         
       });
 
-
-
-     
-
-
      $('#wordcountmodal').on('shown.bs.modal',function(e){
 
         let selected = $('#task_ids') ;       
