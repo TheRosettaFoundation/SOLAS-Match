@@ -575,10 +575,13 @@ function select() {
         let isValid = true ;
 
         if($.trim(selected.val())===""){
-            error.show() ;
+            error.addClass('d-none');
+            console.log('not valid')
             isValid = false ;
         }else{
-            error.hide();
+            error.addClass('d-block');
+            isValid = true ;
+            console.log(' valid')
         }
 
         if(!isValid){
