@@ -1,3 +1,5 @@
+const { ErrorMessages } = require("@eonasdan/tempus-dominus/types/utilities/errors");
+
 <script type="text/javascript">
     window.onload = runStartup;
 
@@ -564,9 +566,25 @@ function select() {
       });
 
 
-      document.getElementById("wordcountform").addEventListener('submit', function(e){
-        console.log("this is the wordCountModal") ;
-    })
+     $('#wordcountform').on('submit',function(e){
+
+        let selected = $('#task_ids') ;
+        console.log(selected) ;
+        console.log('trying to submit here ...');
+        let error = $('#error_message') ;
+        let isValid = true ;
+
+        if($.trim(selected.val())===""){
+            error.show() ;
+            isValid = false ;
+        }else{
+            error.hide();
+        }
+
+        if(!isValid){
+            e.preventDefault() ;
+        }
+     })
 }
 
 

@@ -997,9 +997,9 @@
 
   <div class="modal-body">
   <form id="wordcountform"  method="post" action="{urlFor name="project-view" options="project_id.$project_id"}">
-   <div class="d-none error_word_count"> You need to select tasks !! </div>
+   <div class="d-none" id="error_message"> You need to select tasks !! </div>
     Word Count #: <input type="text" name="word_count" value="" />
-    <input type="hidden" name="wordnum" value="" />
+    <input type="hidden" id="task_ids" name="wordnum" value="" />
 
     {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
     <div class="modal-footer">
