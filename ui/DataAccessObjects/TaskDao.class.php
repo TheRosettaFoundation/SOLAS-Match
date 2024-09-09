@@ -523,6 +523,15 @@ error_log("createTaskDirectly: $args");
         LibAPI\PDOWrapper::call('update_tasks_status', LibAPI\PDOWrapper::cleanse($task_id) . ',' . LibAPI\PDOWrapper::cleanse($status) . ',NULL');
     }
 
+    public function setTaskWordCount($task_id, $word_count)
+    {
+        LibAPI\PDOWrapper::call('setTaskWordCount',
+            LibAPI\PDOWrapper::cleanse($task_id) . ',' .
+            LibAPI\PDOWrapper::cleanse($status));
+
+        LibAPI\PDOWrapper::call('update_tasks_status', LibAPI\PDOWrapper::cleanse($task_id) . ',' . LibAPI\PDOWrapper::cleanse($status) . ',NULL');
+    }
+
     public function getTaskStatus($task_id)
     {
         $result = LibAPI\PDOWrapper::call('getTaskStatus', LibAPI\PDOWrapper::cleanse($task_id));

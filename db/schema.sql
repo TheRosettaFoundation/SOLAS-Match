@@ -5598,6 +5598,16 @@ BEGIN
 END//
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `setTaskWordCount`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `setTaskWordCount`(IN `tID` INT, IN `wID` INT)
+BEGIN
+  update Tasks
+    set Tasks.`word-count`=wID
+    where Tasks.id=tID;
+END//
+DELIMITER ;
+
 DROP PROCEDURE IF EXISTS `getTaskStatus`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getTaskStatus`(IN `tID` BIGINT)

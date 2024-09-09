@@ -1097,26 +1097,19 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                         }
                     }
 
-                    print_r($totalDistributed) ;
-
-    
-                    
                     $taskDistribution = [] ;
-
                     for($i = 0 ;$i < $task_count; $i++){
 
                         $taskDistribution[$task_ids[$i]] = $distribution[$i] ;
                     }
 
                     print_r($taskDistribution) ;
-
-                    // foreach ($taskDistribution as $task_id => $wordCount) {
-                       
-                            
+                    foreach ($taskDistribution as $task_id => $wordCount) {
                         
+                        $taskDao -> setTaskWordCount($task_id,$wordCount);
                         
-                    // }
-                    UserRouteHandler::flashNow('success', "$updated  word count distributed .");
+                    }
+                    UserRouteHandler::flashNow('success', "$task_ids  word count distributed .");
                 }
             }
             if ($roles & (SITE_ADMIN | PROJECT_OFFICER) || in_array($project->getOrganisationId(), ORG_EXCEPTIONS) && $roles & (NGO_ADMIN + NGO_PROJECT_OFFICER)) {
