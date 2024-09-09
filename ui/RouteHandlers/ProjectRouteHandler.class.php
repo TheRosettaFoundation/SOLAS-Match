@@ -1080,6 +1080,36 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                         UserRouteHandler::flashNow('success', "$updated tasks purchase order number set.");
                     } else UserRouteHandler::flashNow('error', 'Purchase Order must be an integer.');
                 }
+
+                if (!empty($post['wordnum']) && !empty($post['word_count']) ) {
+                    $total_wordCount = $post['word_count'] ;
+                    $task_ids = preg_split ("/\,/", $post['wordnum']);
+                    $task_count = count($task_ids);
+                    $wordsPerTask = ceil($total_wordCount/$task_count);
+                    $distribution = array_fill(0,$task_count , $wordsPerTask) ;
+                    $totalDistributed = $wordsPerTask * $task_count ;
+                   
+                    if($totalDistributed > $word_count){
+                        $excess = $totalDistributed - $total_wordCount ;
+                        for($i = 0; $i < $excess; $i++)
+                        {
+                            $distribution[$i]-- ;
+                        }
+                    }
+
+                    print_r($totalDistributed) ;
+
+                    print_r($distribution) ;
+                    
+
+                    // foreach ($task_ids as $id) {
+                       
+
+                        
+                        
+                    // }
+                    UserRouteHandler::flashNow('success', "$updated  word count distributed .");
+                }
             }
             if ($roles & (SITE_ADMIN | PROJECT_OFFICER) || in_array($project->getOrganisationId(), ORG_EXCEPTIONS) && $roles & (NGO_ADMIN + NGO_PROJECT_OFFICER)) {
                 if (!empty($post['complete_task'])) {
