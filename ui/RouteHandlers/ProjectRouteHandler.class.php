@@ -1109,7 +1109,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                         $taskDao -> setTaskWordCount($task_id, int($wordCount));
                         
                     }
-                    UserRouteHandler::flashNow('success', "$task_ids  word count distributed .");
+                    UserRouteHandler::flashNow('success', "  word count distributed .");
                 }
             }
             if ($roles & (SITE_ADMIN | PROJECT_OFFICER) || in_array($project->getOrganisationId(), ORG_EXCEPTIONS) && $roles & (NGO_ADMIN + NGO_PROJECT_OFFICER)) {
