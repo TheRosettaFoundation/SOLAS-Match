@@ -255,7 +255,7 @@ class ProjectRouteHandler
         // Create a topic in the Community forum (Discourse)
         error_log("projectCreate create_discourse_topic($project_id, $target_languages)");
         try {
-            $this->create_discourse_topic($project_id, $target_languages, ['owner_uid' => empty($hook['owner']['uid']) ? '' : $hook['owner']['uid']]);
+            $this->create_discourse_topic($project_id, $target_languages, ['owner_uid' => empty($hook['owner']['uid']) ? '' : $hook['owner']['uid']], 0, $hook['uid']);
         } catch (\Exception $e) {
             error_log('projectCreate create_discourse_topic Exception: ' . $e->getMessage());
         }
@@ -1720,7 +1720,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                                         // Create a topic in the Community forum (Discourse)
                                         error_log('projectCreate create_discourse_topic(' . $project->getId() . ", $target_languages)");
                                         try {
-                                           $this->create_discourse_topic($project->getId(), $target_languages, 0, !empty($post['earthquake']));
+                                           $this->create_discourse_topic($project->getId(), $target_languages, 0, !empty($post['earthquake']), empty($memsource_project['memsource_project_uid']) ? '' : $memsource_project['memsource_project_uid']);
                                         } catch (\Exception $e) {
                                             error_log('projectCreate create_discourse_topic Exception: ' . $e->getMessage());
                                         }
@@ -2317,11 +2317,12 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
         }
     }
 
-    public function create_discourse_topic($projectId, $targetlanguages, $memsource_project = 0, $earthquake = 0)
+    public function create_discourse_topic($projectId, $targetlanguages, $memsource_project = 0, $earthquake = 0, $memsource_project_uid = '')
     {
         global $app;
         $projectDao = new DAO\ProjectDao();
         $taskDao = new DAO\TaskDao();
+        $userDao = new DAO\UserDao();
         $project = $projectDao->getProject($projectId);
         $org_id = $project->getOrganisationId();
         $orgDao = new DAO\OrganisationDao();
@@ -2380,6 +2381,8 @@ error_log("fields: $fields targetlanguages: $targetlanguages");//(**)
             }
         }
         curl_close($re);
+
+        if ($memsource_project_uid) $userDao->update_phrase_field($memsource_project_uid, 'community_url', $projectDao->discourse_parameterize($project), 0);
     }
 
     public function project_cron_1_minute(Request $request)
