@@ -995,8 +995,8 @@
     <h3 class="modal-title fs-4 fw-bold me-4" id="myModalLabel">Set Word Count</h3>
   </div>
 
-  <div class="modal-body">
-  <form id="wordcountform" class="py-2"  method="post" action="{urlFor name="project-view" options="project_id.$project_id"}">
+  <div class="modal-body py-2">
+  <form id="wordcountform"   method="post" action="{urlFor name="project-view" options="project_id.$project_id"}">
    <div class="d-none" id="wordCount_error"> You need to select tasks !! </div>
     Word Count #: <input type="text" name="word_count" value="" />
     <input type="hidden" id="task_ids" name="wordnum" value="" />
