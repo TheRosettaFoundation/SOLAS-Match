@@ -563,4 +563,8 @@ function select() {
         });
       });
 }
+
+document.getElementById("wordcountform").addEventListener('submit', function(e){
+    console.log("this is the wordCountModal") ;
+})
 </script>
