@@ -565,6 +565,16 @@ function select() {
         });
       });
 
+    
+      $('#wordcountmodal').on('hide.bs.modal', function () {
+        $("#wordCount_error").addClass("d-none");
+        
+      });
+
+
+
+     
+
 
      $('#wordcountform').on('submit',function(e){
 
