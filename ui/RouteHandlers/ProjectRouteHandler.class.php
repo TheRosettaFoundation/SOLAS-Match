@@ -1110,9 +1110,9 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
 
                     print_r($taskDistribution) ;
 
-                    // foreach ($task_ids as $id) {
+                    // foreach ($taskDistribution as $task_id => $wordCount) {
                        
-
+                            
                         
                         
                     // }
