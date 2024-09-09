@@ -579,7 +579,8 @@ function select() {
             console.log('not valid')
             isValid = false ;
         }else{
-            error.addClass('d-block');
+            error.removeClass('d-none');
+            error.addClass('d-block text-danger');
             isValid = true ;
             console.log(' valid')
         }
