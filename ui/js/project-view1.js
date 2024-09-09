@@ -576,12 +576,10 @@ function select() {
      
 
 
-     $('#wordcountmodal').on('show',function(e){
+     $('#wordcountmodal').on('shown.bs.modal',function(e){
 
-        let selected = $('#task_ids') ;
-       
+        let selected = $('#task_ids') ;       
         let error = $('#wordCount_error') ;
-
         console.log(error) ;
         let isValid = true ;
 
