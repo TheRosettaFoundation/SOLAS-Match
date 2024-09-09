@@ -2548,9 +2548,8 @@ error_log(print_r($result, true));//(**)
         if ($timeout) curl_setopt($ch, CURLOPT_TIMEOUT, 300);
         $result = curl_exec($ch);
         curl_close($ch);
-error_log("result: $result");//(**)
         $current_fields = json_decode($result, true);
-        if (!empty($current_fields['content'])) {
+        if (isset($current_fields['content']) && is_array($current_fields['content'])) {
             $field_instance_uid = 0;
             foreach ($current_fields['content'] as $field) {
                 if (!empty($field['customField']) && $field['customField']['uid'] == $field_uid) $field_instance_uid = $field['uid'];
@@ -2578,6 +2577,6 @@ error_log("result: $result");//(**)
             if ($timeout) curl_setopt($ch, CURLOPT_TIMEOUT, 300);
             $result = curl_exec($ch);
             curl_close($ch);
-        } else error_log("update_phrase_field($project_uid, $field_uid, $value, $timeout): No field content");
+        } else error_log("update_phrase_field($project_uid, $field_uid, $value, $timeout): No fields content");
     }
 }
