@@ -2461,7 +2461,7 @@ error_log("fields: $fields targetlanguages: $targetlanguages");//(**)
                     }
                     error_log("task_cron ERROR ($task_id) responseCode: $responseCode");
                 }
-                $userDao->update_phrase_field($memsource_project_uid, 'project_url', "https://twbplatform.org/project/$project_id/viewX", 1); // Update in Phrase (this will happen many times)
+                $userDao->update_phrase_field($memsource_project_uid, 'project_url', "https://twbplatform.org/project/$project_id/view", 1); // Update in Phrase (this will happen many times)
             }
 
             if (($task_id = $projectDao->get_task_analysis_trigger()) && ($memsource_task = $projectDao->get_memsource_task($task_id)) && !preg_match('/^\d*$/', $memsource_task_uid = $memsource_task['memsource_task_uid'])) {
