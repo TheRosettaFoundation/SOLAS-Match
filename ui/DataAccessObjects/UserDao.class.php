@@ -2548,6 +2548,7 @@ error_log(print_r($result, true));//(**)
         if ($timeout) curl_setopt($ch, CURLOPT_TIMEOUT, 300);
         $result = curl_exec($ch);
         curl_close($ch);
+error_log("result: $result");//(**)
         $current_fields = json_decode($result, true);
         if (!empty($current_fields['content'])) {
             $field_instance_uid = 0;
