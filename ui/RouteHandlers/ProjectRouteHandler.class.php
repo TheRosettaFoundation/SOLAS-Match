@@ -752,8 +752,8 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                 if (!in_array($taskType, $linguist_taskTypes)) { $linguist_taskTypes[] = $taskType; } 
             }
         }
-        print_r($linguist_summary) ;
-        print_r($linguist_taskTypes);
+        // print_r($linguist_summary) ;
+        // print_r($linguist_taskTypes);
 
         if (empty($project)) {
             UserRouteHandler::flash('error', 'That project does not exist!');
