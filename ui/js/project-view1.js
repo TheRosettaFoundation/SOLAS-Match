@@ -575,7 +575,7 @@ function select() {
 
         let selected = $('#task_ids') ;       
         let error = $('#wordCount_error') ;
-        console.log(error) ;
+     
         let isValid = true ;
 
         if($.trim(selected.val())===""){

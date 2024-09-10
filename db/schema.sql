@@ -13390,6 +13390,7 @@ BEGIN
         SUM( t.`word-count`) AS num
         FROM Tasks t
         INNER JOIN Projects p ON t.project_id = p.id
+        INNER JOIN TaskPaids tp on tp.task_id = t.id
         INNER JOIN TaskClaims tc ON t.id = tc.task_id
         INNER JOIN Users usr ON usr.id = tc.user_id 
         WHERE p.id = pID
