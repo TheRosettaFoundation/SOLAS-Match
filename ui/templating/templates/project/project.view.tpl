@@ -938,7 +938,7 @@
         
         {foreach from=$linguist_summary item=taskTypesforLinguist key=linguist}
         <tr>
-            <td>$linguist</td>
+            <td>{$linguist}</td>
             {foreach from=$linguist_taskTypes item=taskType}
                 {if isset($taskTypesforLinguist[$taskType])}
                   <td>{$taskTypesforLinguist[$taskType]} </td>
