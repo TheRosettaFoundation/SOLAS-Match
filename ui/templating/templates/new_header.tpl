@@ -71,6 +71,7 @@
                     "{$ui['type_text']}",
                 {/foreach}
             ];
+            console.log(type_texts) ;
 </script>
         {if isset($extra_scripts)}
             {$extra_scripts}
