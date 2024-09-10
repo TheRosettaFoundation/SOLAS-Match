@@ -926,10 +926,9 @@
         <thead class="fs-5">
             <tr>                               
                  <th class="text-center">Linguist</th>
-                   {foreach from=$linguist_taskTypes item=count key=taskType} 
+                   {foreach from=$linguist_taskTypes item=taskType} 
               
                                   <th> {$taskType}</th>                                                                
-
                    {/foreach}
                 
               
@@ -1013,7 +1012,6 @@
 </div>
 
 
-<
 
 <!-- Word Count Modal -->
 <div id="wordcountmodal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
