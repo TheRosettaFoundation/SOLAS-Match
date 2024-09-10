@@ -928,7 +928,7 @@
                  <th class="text-center">Linguist</th>
                    {foreach from=$linguist_taskTypes item=taskType} 
               
-                                  <th> {$type_texts[$taskType]}</th>                                                                
+                                  <th> {$taskType}</th>                                                                
                    {/foreach}
                 
               
