@@ -927,7 +927,7 @@
             <tr>                               
                  <th class="text-center">Linguist</th>
                    {foreach from=$linguist_taskTypes item=taskType} 
-              
+        
                                   <th> {$taskType}</th>                                                                
                    {/foreach}
                 
@@ -935,6 +935,22 @@
             </tr>
         </thead>
         <tbody class="fs-4 bg-primary">
+        
+        {foreach from=$linguist_summary item=taskTypesforLinguist key=linguist}
+        <tr>
+            <td>$linguist</td>
+            {foreach from=$linguist_taskTypes item=taskType}
+                {if isset($taskTypesforLinguist[$taskType])}
+                  <td>{$taskTypesforLinguist[$taskType]} </td>
+                {else}
+                    <td> - </td>
+            {/foreach}
+                
+        
+        </tr>
+        {/foreach}
+     
+        
 
    
 
