@@ -944,6 +944,7 @@
                   <td>{$taskTypesforLinguist[$taskType]} </td>
                 {else}
                     <td> - </td>
+                {/if}
             {/foreach}
                 
         
