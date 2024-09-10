@@ -927,9 +927,7 @@
             <tr>                               
                  <th class="text-center">Linguist</th>
                    {foreach from=$linguist_taskTypes item=taskType} 
-        
-                                  {* <th> {$type_texts[$taskType]}</th>  *}
-                    <th>
+                    
 
                     {foreach from=TaskTypeEnum::$enum_to_UI key=task_type item=ui}
                         {if $taskType == $task_type}
@@ -937,7 +935,7 @@
                         {/if}
                     {/foreach}
                     
-                    </th>
+                  
 
                    {/foreach}
                 
@@ -962,9 +960,6 @@
         {/foreach}
      
         
-
-   
-
 
         </tbody>
         </table>
