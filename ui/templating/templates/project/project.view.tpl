@@ -933,7 +933,7 @@
 
                     {foreach from=TaskTypeEnum::$enum_to_UI key=task_type item=ui}
                     
-                            <th><span style="color: {$ui['colour']}">{$ui['type_text'][$taskType]}</span>{if $ui['shell_task']}<br />{$ui['type_category_text']}{/if}</th>
+                            <th><span style="color: {$ui['colour']}">{$ui['type_text'][$taskType]}</span></th>
                     
                     {/foreach}
                     
