@@ -77,18 +77,25 @@ class ProjectDao extends BaseDao
         $linguist_summary = [] ;
         if (!empty($results)) {
             foreach ($results as $result) {
-                if(!$linguist_summary [$result['linguistDisplayName']]){
-                 
-                    $linguist_summary [$result['linguistDisplayName']] =[$result[$taskType] => $result[$taskType] ] ;
-                   
-                }else{
 
-                    $linguist_summary [$result['linguistDisplayName']] =[$result[$taskType] => $result[$taskType] ] ;
+                $linguist = $result['linguistDisplayName'];
+                $taskType = $result['taskTypeStatus'];
+                $count = $result['num'];
+
+                if(!isset($linguist_summary[$linguist])){
+                    $linguist_summary[$linguist] = [] ;
                 }
+
+                if(!isset($linguist_summary[$linguist][$taskType])){
+                    $linguist_summary[$linguist][$taskType] = [];
+                }
+
+                $linguist_summary[$linguist][$taskType] = $count ;
+                
 
             }
         }
-        return $result ;
+        return $linguist_summary ;
    
     }
 
