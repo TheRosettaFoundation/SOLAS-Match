@@ -920,7 +920,7 @@
                 {/foreach}
     {/if}
 
-    div class="bg-body  p-2 border-secondary mt-4">
+    <div class="bg-body  p-2 border-secondary mt-4">
     <div class="table-responsive mt-4 ">
     <table class="table " >
         <thead class="fs-5">
@@ -929,10 +929,8 @@
                    {foreach from=$linguist_summary item=taskTypes key=Linguist} 
 
                         {foreach from=$taskTypes item=count key=taskType}
-
-                        
-                                  <th> {$taskTypes}</th>
-                           
+              
+                                  <th> {$taskType}</th>                           
                             
                         {/foreach}
 
@@ -948,6 +946,7 @@
 
         </tbody>
         </table>
+        </div>
 
 
     <!-- Cancel Modal -->
