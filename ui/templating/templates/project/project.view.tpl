@@ -928,7 +928,17 @@
                  <th class="text-center">Linguist</th>
                    {foreach from=$linguist_taskTypes item=taskType} 
         
-                                  <th> {$type_texts[$taskType]}</th>                                                                
+                                  {* <th> {$type_texts[$taskType]}</th>  *}
+                    <th>
+
+                    {foreach from=TaskTypeEnum::$enum_to_UI key=task_type item=ui}
+                    
+                            <span style="color: {$ui['colour']}">{$ui['type_text']}</span>{if $ui['shell_task']}<br />{$ui['type_category_text']}{/if}
+                    
+                    {/foreach}
+                    
+                    </th>
+
                    {/foreach}
                 
               
