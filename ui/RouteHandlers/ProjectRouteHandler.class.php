@@ -743,6 +743,9 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
         $sesskey = Common\Lib\UserSession::getCSRFKey();
 
         $project = $projectDao->getProject($project_id);
+
+        $linguist_summary = $projectDao->get_linguist_project_tasksummary($project_id) ;
+
         if (empty($project)) {
             UserRouteHandler::flash('error', 'That project does not exist!');
             return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('home'));
@@ -762,8 +765,6 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
         $reload_for_wordcount = 0;
         if ($request->getMethod() === 'POST') {
             $post = $request->getParsedBody();
-
-            print_r($post) ;
 
             if ($fail_CSRF = Common\Lib\UserSession::checkCSRFKey($post, 'projectView')) return $response->withStatus(302)->withHeader('Location', $fail_CSRF);
 
@@ -1096,14 +1097,12 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                             $distribution[$i]-- ;
                         }
                     }
-
                     $taskDistribution = [] ;
                     for($i = 0 ;$i < $task_count; $i++){
 
                         $taskDistribution[$task_ids[$i]] = $distribution[$i] ;
                     }
 
-                    print_r($taskDistribution) ;
                     foreach ($taskDistribution as $task_id => $wordCount) {
                         
                         $taskDao -> setTaskWordCount($task_id, $wordCount);

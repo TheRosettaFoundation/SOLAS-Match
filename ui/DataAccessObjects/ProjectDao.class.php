@@ -71,6 +71,13 @@ class ProjectDao extends BaseDao
         return $ret;
     }
 
+    public function get_linguist_project_tasksummary($projectId)
+    {
+        $result = LibAPI\PDOWrapper::call('get_linguist_project_tasksummary', LibAPI\PDOWrapper::cleanse($projectId));
+        return $result ;
+   
+    }
+
     public function createProjectDirectly($project)
     {
         $tags = $project->getTag();

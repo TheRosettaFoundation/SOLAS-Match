@@ -13380,6 +13380,23 @@ BEGIN
 END//
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `get_linguist_project_tasksummary`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_linguist_project_tasksummary`(IN pID INT)
+BEGIN
+     SELECT 
+        `display-name` AS linguistDisplayName,
+        t.`task-type_id` AS taskTypeStatus,
+        COUNT(*)
+        FROM Tasks t
+        INNER JOIN Projects p ON t.project_id = p.id
+        INNER JOIN TaskClaims tc ON t.id = tc.task_id
+        INNER JOIN Users usr ON usr.id = tc.user_id 
+        WHERE p.id = pID
+        GROUP BY t.`task-type_id`, `display-name`;
+END//
+DELIMITER ;
+
 CREATE TABLE IF NOT EXISTS `user_country_id_to_variant` (
   country_id  INT UNSIGNED,
   variant_id  INT UNSIGNED NOT NULL,
