@@ -3273,7 +3273,7 @@ EOF;
 
         $status = $invoice['status'];
         $paid = $status&2 ? 'PAID' : '';
-        $draft_message = $status == 1 ? 'Please review invoice and email it to linguistspayments@clearglobal.org' : '';
+        $draft_message = $status == 1 ? 'After review, please download and send invoice to <a href="mailto:linguists.payments@clearglobal.org?subject=' . rawurlencode('Invoice to Clear Global') . '" target="_blank">linguists.payments@clearglobal.org</a>' : '';
         if ($status&4) $paid = 'BOUNCED';
 
         $email = $invoice['email'];
