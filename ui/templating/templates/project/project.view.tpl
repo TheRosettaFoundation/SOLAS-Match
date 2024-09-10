@@ -925,7 +925,7 @@
     <table class="table " >
         <thead class="fs-5">
             <tr>                               
-                 <th class="text-center">Linguist</th>
+                 <th>Linguist</th>
                    {foreach from=$linguist_taskTypes item=taskType} 
                     
 
