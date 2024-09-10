@@ -745,6 +745,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
         $project = $projectDao->getProject($project_id);
 
         $linguist_summary = $projectDao->get_linguist_project_tasksummary($project_id) ;
+        print_r($linguist_summary) ;
 
         if (empty($project)) {
             UserRouteHandler::flash('error', 'That project does not exist!');
