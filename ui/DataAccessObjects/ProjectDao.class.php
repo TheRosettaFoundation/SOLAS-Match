@@ -88,7 +88,7 @@ class ProjectDao extends BaseDao
 
             }
         }
-        return inguist_summary ;
+        return $linguist_summary ;
    
     }
 
