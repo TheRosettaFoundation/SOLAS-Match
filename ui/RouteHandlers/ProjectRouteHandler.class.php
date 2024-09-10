@@ -743,8 +743,15 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
         $sesskey = Common\Lib\UserSession::getCSRFKey();
 
         $project = $projectDao->getProject($project_id);
-
+       
+        // Section for selecting linguist project task summary 
         $linguist_summary = $projectDao->get_linguist_project_tasksummary($project_id) ;
+        $linguist_taskTypes = [] ;
+        foreach($linguist_summary as $taskTypes){
+            foreach ($taskTypes as $taskType => $count) { 
+                if (!in_array($taskType, $linguist_taskTypes)) { $taskTypes[] = $taskType; } 
+            }
+        }
         print_r($linguist_summary) ;
 
         if (empty($project)) {
@@ -1237,7 +1244,9 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                 'total_expected_price'         => $total_expected_price,
                 'total_expected_cost_waived'   => $total_expected_cost_waived,
                 'one_paid'                     => $one_paid,
-                'linguist_summary'             => $linguist_summary
+                'linguist_summary'             => $linguist_summary,
+                'linguist_taskTypes'          => $linguist_taskTypes
+
         ));
 
         return UserRouteHandler::render("project/project.view.tpl", $response);

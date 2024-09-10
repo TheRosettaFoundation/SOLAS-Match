@@ -926,13 +926,9 @@
         <thead class="fs-5">
             <tr>                               
                  <th class="text-center">Linguist</th>
-                   {foreach from=$linguist_summary item=taskTypes key=Linguist} 
-
-                        {foreach from=$taskTypes item=count key=taskType}
+                   {foreach from=$linguist_taskTypes item=count key=taskType} 
               
-                                  <th> {$taskType}</th>                           
-                            
-                        {/foreach}
+                                  <th> {$taskType}</th>                                                                
 
                    {/foreach}
                 
