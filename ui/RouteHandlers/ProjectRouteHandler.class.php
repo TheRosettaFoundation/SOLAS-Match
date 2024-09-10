@@ -1237,6 +1237,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                 'total_expected_price'         => $total_expected_price,
                 'total_expected_cost_waived'   => $total_expected_cost_waived,
                 'one_paid'                     => $one_paid,
+                'linguist_summary'             => $linguist_summary
         ));
 
         return UserRouteHandler::render("project/project.view.tpl", $response);
