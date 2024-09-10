@@ -78,12 +78,12 @@ class ProjectDao extends BaseDao
         if (!empty($results)) {
             foreach ($results as $key => $result) {
                 if(!$linguist_summary [$result['linguistDisplayName']]){
-                    $linguist_summary [$result['linguistDisplayName']]=[] ;
-                    $linguist_summary [$result['linguistDisplayName']] [$key] =[$result[$taskType] => $result[$taskType] ] ;
+                 
+                    $linguist_summary [$result['linguistDisplayName']] =[$result[$taskType] => $result[$taskType] ] ;
                    
                 }else{
 
-                    $linguist_summary [$result['linguistDisplayName']][$key] =[$result[$taskType] => $result[$taskType] ] ;
+                    $linguist_summary [$result['linguistDisplayName']] =[$result[$taskType] => $result[$taskType] ] ;
                 }
 
             }
