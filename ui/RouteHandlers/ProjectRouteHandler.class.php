@@ -2385,6 +2385,10 @@ error_log("fields: $fields targetlanguages: $targetlanguages");//(**)
         if ($memsource_project_uid) {
             $userDao->update_phrase_field($memsource_project_uid, 'community_url', $projectDao->discourse_parameterize($project), 0);
             $userDao->update_phrase_field($memsource_project_uid, 'monitoring_dashboard_url', "https://twbplatform.org/metabase/projectdash.php?projectid=$projectId", 0);
+
+            if (empty($memsource_project)) $asana_board = '778921846018141'; // 0 => Self Service (if there is a UID)
+            else                           $asana_board = (string)$userDao->get_asana_board_for_org($org_id)['asana_board'];
+            if ($asana_board) $userDao->update_phrase_field($memsource_project_uid, 'asana_partner_board_url', "https://app.asana.com/0/$asana_board", 0);
         }
     }
 
