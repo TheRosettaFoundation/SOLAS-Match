@@ -84,12 +84,11 @@ class ProjectDao extends BaseDao
                 }else{
 
                     $linguist_summary [$result['linguistDisplayName']][$key] =[$result[$taskType] => $result[$taskType] ] ;
-
                 }
 
             }
         }
-        return $result ;
+        return inguist_summary ;
    
     }
 

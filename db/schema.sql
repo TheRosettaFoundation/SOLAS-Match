@@ -13387,7 +13387,7 @@ BEGIN
      SELECT 
         `display-name` AS linguistDisplayName,
         t.`task-type_id` AS taskTypeStatus,
-        COUNT(*)
+        COUNT(*) AS num
         FROM Tasks t
         INNER JOIN Projects p ON t.project_id = p.id
         INNER JOIN TaskClaims tc ON t.id = tc.task_id
