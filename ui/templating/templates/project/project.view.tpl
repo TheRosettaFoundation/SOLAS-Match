@@ -920,6 +920,36 @@
                 {/foreach}
     {/if}
 
+    div class="bg-body  p-2 border-secondary mt-4">
+    <div class="table-responsive mt-4 ">
+    <table class="table " >
+        <thead class="fs-5">
+            <tr>                               
+                 <th class="text-center">Linguist</th>
+                   {foreach from=$linguist_summary item=taskTypes key=Linguist} 
+
+                        {foreach from=$taskTypes item=count key=taskType}
+
+                        
+                                  <th> {$taskTypes}</th>
+                           
+                            
+                        {/foreach}
+
+                   {/foreach}
+                
+              
+            </tr>
+        </thead>
+        <tbody class="fs-4 bg-primary">
+
+   
+
+
+        </tbody>
+        </table>
+
+
     <!-- Cancel Modal -->
 <div id="cancelmodal" class="modal fade"  tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true">
 <div class="modal-dialog">
@@ -988,39 +1018,7 @@
 </div>
 
 
-<div class="bg-body  p-2 border-secondary mt-4">
-                    <div class="table-responsive mt-4 ">
-                    <table class="table " >
-                        <thead class="fs-5">
-                            <tr>                               
-                                 <th class="text-center">Linguist</th>
-                                   {foreach from=$linguist_summary item=taskTypes key=Linguist} 
-
-                                        {foreach from=$taskTypes item=count key=taskType}
-
-                                            {assign var="type_id" value=$taskTypes}
-                                            
-                                            {foreach from=TaskTypeEnum::$enum_to_UI key=task_type item=ui}
-                                                
-                                                {if $type_id == $task_type}
-                                                  <th>  <span style="color: {$ui['colour']}">{$ui['type_text']}</span>{if $ui['shell_task']}<br />{$ui['type_category_text']}{/if} </th>
-                                                {/if}
-                                            {/foreach}
-
-                                            
-                                        {/foreach}
-
-                                   {/foreach}
-                              
-                            </tr>
-                        </thead>
-                        <tbody class="fs-4 bg-primary">
-
-                   
-
-
-                        </tbody>
-
+<
 
 <!-- Word Count Modal -->
 <div id="wordcountmodal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
