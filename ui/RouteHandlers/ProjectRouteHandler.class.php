@@ -2382,7 +2382,10 @@ error_log("fields: $fields targetlanguages: $targetlanguages");//(**)
         }
         curl_close($re);
 
-        if ($memsource_project_uid) $userDao->update_phrase_field($memsource_project_uid, 'community_url', $projectDao->discourse_parameterize($project), 0);
+        if ($memsource_project_uid) {
+            $userDao->update_phrase_field($memsource_project_uid, 'community_url', $projectDao->discourse_parameterize($project), 0);
+            $userDao->update_phrase_field($memsource_project_uid, 'monitoring_dashboard_url', "https://twbplatform.org/metabase/projectdash.php?projectid=$projectId", 0);
+        }
     }
 
     public function project_cron_1_minute(Request $request)
