@@ -141,6 +141,15 @@
                             {/if}
                             {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
                         </form>
+
+                        {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
+                            <p>
+                                <a href="{urlFor name="change_ownership" options="project_id.$project_id"}" class="btngray mt-2">
+                                    <i class="fa-solid fa-envelope fa-lg"></i>
+                                    Change Project Owner
+                                </a>
+                            </p>
+                        {/if}
                     </td>
                 {/if}
             </tr>
