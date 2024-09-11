@@ -142,7 +142,7 @@
                             {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
                         </form>
 
-                        {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
+                        {if ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)) && $pm != 'projects@translatorswithoutborders.org'}
                             <p>
                                 <a href="{urlFor name="change_owner" options="project_id.$project_id"}" class="btngray mt-2">
                                     <i class="fa-solid fa-envelope fa-lg"></i>
