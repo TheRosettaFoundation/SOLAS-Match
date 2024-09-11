@@ -1105,18 +1105,19 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
 
                     foreach ($taskDistribution as $task_id => $wordCount) {
 
-                        // code below for checking tasktype and send error message if needed
+                        try {
+                            $taskDao -> setTaskWordCount($task_id, $wordCount);
+                            UserRouteHandler::flashNow('success', 'Word Count Updated.');
 
-                        // $task =  $taskDao -> getTask($task_id) ;
-                        // $taskType = $task -> getTaskType($task) ;
-                  
+                        } catch (\Throwable $th) {
+                            UserRouteHandler::flashNow('error', 'Word Count failed to update');
+                        }
                                            
-                        $taskDao -> setTaskWordCount($task_id, $wordCount);
+                       
                         
                     }
 
-                    UserRouteHandler::flashNow('success', 'Word Count Updated!');
-
+                 
                
     
                  
