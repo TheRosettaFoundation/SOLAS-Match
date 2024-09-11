@@ -23,8 +23,13 @@
 {/if}
 
 <form method="post" action="{urlFor name="change_owner" options="project_id.$project_id"}" class="well" accept-charset="utf-8">
-    <label for="email"><strong>{Localisation::getTranslation('common_email')}</strong></label>
-    <input type="text" name="email" id="email" placeholder="{Localisation::getTranslation('common_email')}"/>
+    <label for="owner_id"><strong>New Owner</strong></label>
+    <select name="owner_id" id="owner_id" class="form-select">
+        <option value="0" selected="selected">Select New Project Owner...</option>
+        {foreach $admin_list as $admin}
+        <option value="{$admin['id']}">{TemplateHelper::uiCleanseHTML($admin['email'])}</option>
+        {/foreach}
+    </select>
     <p>
         <button type="submit" class="btn btn-success" name="submit">
             <i class="icon-star icon-white"></i> Chnage Owner
