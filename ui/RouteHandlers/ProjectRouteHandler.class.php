@@ -1115,15 +1115,9 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                         
                     }
 
-                // Section for selecting linguist project task summary 
-                $linguist_summary = $projectDao->get_linguist_project_tasksummary($project_id) ;
-                $linguist_taskTypes = [] ;
-                foreach($linguist_summary as $taskTypes){
-                    foreach ($taskTypes as $taskType => $count) { 
-                        if (!in_array($taskType, $linguist_taskTypes)) { $linguist_taskTypes[] = $taskType; } 
-                    }
-                }
-       
+                    UserRouteHandler::flashNow('success', 'Word Count Updated!');
+
+               
     
                  
                 }
@@ -1229,6 +1223,16 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
         }
 
         $preventImageCacheToken = time(); //see http://stackoverflow.com/questions/126772/how-to-force-a-web-browser-not-to-cache-images
+
+         // Section for selecting linguist project task summary 
+         $linguist_summary = $projectDao->get_linguist_project_tasksummary($project_id) ;
+         $linguist_taskTypes = [] ;
+         foreach($linguist_summary as $taskTypes){
+             foreach ($taskTypes as $taskType => $count) { 
+                 if (!in_array($taskType, $linguist_taskTypes)) { $linguist_taskTypes[] = $taskType; } 
+             }
+         }
+
 
         $creator = $taskDao->get_creator($project_id, $memsource_project);
         $pm = $creator['email'];
