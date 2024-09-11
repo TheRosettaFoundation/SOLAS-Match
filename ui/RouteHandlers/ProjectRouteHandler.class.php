@@ -1120,7 +1120,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                
     
                  
-                }else UserRouteHandler::flashNow('error', 'Word Count failed to update.');
+                }
             }
             if ($roles & (SITE_ADMIN | PROJECT_OFFICER) || in_array($project->getOrganisationId(), ORG_EXCEPTIONS) && $roles & (NGO_ADMIN + NGO_PROJECT_OFFICER)) {
                 if (!empty($post['complete_task'])) {
