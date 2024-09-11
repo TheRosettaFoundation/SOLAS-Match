@@ -1,5 +1,5 @@
 function cleanColorDescription() {
-    let descriptionField = document.querySelector(".displayF");
+    let descriptionField = document.querySelector(".ql-editor");
 
     let spansWithStyle = descriptionField.querySelectorAll("span[style]");
 
