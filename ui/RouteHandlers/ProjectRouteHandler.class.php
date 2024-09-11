@@ -1118,11 +1118,8 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                         
                     }
 
-                        $template_data = array_merge($template_data, array(
-                            'linguist_summary'             => $linguist_summary,
-                            'linguist_taskTypes'          => $linguist_taskTypes
-                        ));
-                    UserRouteHandler::flashNow('success', "Word count distributed .",$linguist_summary );
+    
+                    UserRouteHandler::flashNow('success', "Word count distributed .",$linguist_summary,$linguist_taskTypes );
                 }
             }
             if ($roles & (SITE_ADMIN | PROJECT_OFFICER) || in_array($project->getOrganisationId(), ORG_EXCEPTIONS) && $roles & (NGO_ADMIN + NGO_PROJECT_OFFICER)) {
