@@ -74,9 +74,8 @@ class ProjectDao extends BaseDao
     public function get_linguist_project_tasksummary($projectId)
     {
         $results = LibAPI\PDOWrapper::call('get_linguist_project_tasksummary', LibAPI\PDOWrapper::cleanse($projectId));
-        $linguist_summary = [];
-        print_r($results);    
-            foreach ($results as $result) {
+        $linguist_summary = [];   
+            foreach($results as $result) {
                 $linguist = $result['linguistDisplayName'];
                 $taskType = $result['taskTypeStatus'];
                 $count = $result['num'];
