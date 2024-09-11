@@ -151,36 +151,9 @@
     </div>  
     </div>
 
-    {if ($roles & ($SITE_ADMIN + $PROJECT_OFFICER)) && $one_paid}
-    <div class="bg-body p-2 border-secondary rounded-top-3 mt-4">
-    <div class="table-responsive mt-4  ">
-    <table class="table table-borderless" >
-        <thead class="fs-5">
-            <th>Deal ID</th>
-            <th>Project Price</th>
-            <th>Allocated Budget</th>
-            <th>Project Cost</th>
-            <th>Remaining Budget</th>
-            <th>Waived Tasks (In-kind, In-house, waived)</th>
-        </thead>
-        <tbody class="fs-4">
-            <tr style="overflow-wrap: break-word;">
-                <td>{if $project_complete_date['deal_id'] > 0}<a href="{urlFor name="deal_id_report" options="deal_id.{$project_complete_date['deal_id']}"}" class="custom-link" target="_blank">{$project_complete_date['deal_id']}</a>{else}{$project_complete_date['deal_id']}{/if}</td>
-                <td><div >${round($total_expected_price, 2)}</div></td>
-                <td>${round($project_complete_date['allocated_budget'], 2)}</td>
-                <td>${round($total_expected_cost, 2)}</td>
-                <td>${round($project_complete_date['allocated_budget'] - $total_expected_cost, 2)}</td>
-                <td>${round($total_expected_cost_waived, 2)}</td>
-            </tr>
-        </tbody>
-    </table>
-    </div>
-    </div>
-    {/if}
-
     {if ($roles & ($SITE_ADMIN + $PROJECT_OFFICER))}
         {if !empty($linguist_summary)}
-    <div class="bg-body  p-2 border-secondary mt-4 mb-4>
+    <div class="bg-body  p-2 border-secondary mt-4">
     <h3 class="fw-bold flex-grow-1 align-middle"> Linguist Project Summary 
                 <small class="text-muted text-sm"> Word Count</small>
             </h3>
@@ -223,6 +196,35 @@
         </div>
     {/if}
     {/if}
+
+    {if ($roles & ($SITE_ADMIN + $PROJECT_OFFICER)) && $one_paid}
+    <div class="bg-body p-2 border-secondary rounded-top-3 mt-4">
+    <div class="table-responsive mt-4  ">
+    <table class="table table-borderless" >
+        <thead class="fs-5">
+            <th>Deal ID</th>
+            <th>Project Price</th>
+            <th>Allocated Budget</th>
+            <th>Project Cost</th>
+            <th>Remaining Budget</th>
+            <th>Waived Tasks (In-kind, In-house, waived)</th>
+        </thead>
+        <tbody class="fs-4">
+            <tr style="overflow-wrap: break-word;">
+                <td>{if $project_complete_date['deal_id'] > 0}<a href="{urlFor name="deal_id_report" options="deal_id.{$project_complete_date['deal_id']}"}" class="custom-link" target="_blank">{$project_complete_date['deal_id']}</a>{else}{$project_complete_date['deal_id']}{/if}</td>
+                <td><div >${round($total_expected_price, 2)}</div></td>
+                <td>${round($project_complete_date['allocated_budget'], 2)}</td>
+                <td>${round($total_expected_cost, 2)}</td>
+                <td>${round($project_complete_date['allocated_budget'] - $total_expected_cost, 2)}</td>
+                <td>${round($total_expected_cost_waived, 2)}</td>
+            </tr>
+        </tbody>
+    </table>
+    </div>
+    </div>
+    {/if}
+
+    
 
 
    
