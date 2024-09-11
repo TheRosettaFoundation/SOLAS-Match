@@ -153,7 +153,7 @@
 
     {if ($roles & ($SITE_ADMIN + $PROJECT_OFFICER))}
         {if !empty($linguist_summary)}
-    <div class="bg-body  p-2 border-secondary mt-4">
+    <div class="bg-body  p-2 border-secondary mt-4 mb-4">
     <h3 class="fw-bold flex-grow-1 align-middle"> Linguist Project Summary 
                 <small class="text-muted text-sm"> Word Count</small>
             </h3>
@@ -193,6 +193,7 @@
 
         </tbody>
         </table>
+        </div>
         </div>
     {/if}
     {/if}
