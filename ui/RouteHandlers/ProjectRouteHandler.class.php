@@ -1117,7 +1117,12 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                         $taskDao -> setTaskWordCount($task_id, $wordCount);
                         
                     }
-                    UserRouteHandler::flashNow('success', "  word count distributed .");
+
+                        $template_data = array_merge($template_data, array(
+                            'linguist_summary'             => $linguist_summary,
+                            'linguist_taskTypes'          => $linguist_taskTypes
+                        ));
+                    UserRouteHandler::flashNow('success', "Word count distributed .");
                 }
             }
             if ($roles & (SITE_ADMIN | PROJECT_OFFICER) || in_array($project->getOrganisationId(), ORG_EXCEPTIONS) && $roles & (NGO_ADMIN + NGO_PROJECT_OFFICER)) {
@@ -1245,8 +1250,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                 'total_expected_price'         => $total_expected_price,
                 'total_expected_cost_waived'   => $total_expected_cost_waived,
                 'one_paid'                     => $one_paid,
-                'linguist_summary'             => $linguist_summary,
-                'linguist_taskTypes'          => $linguist_taskTypes
+               
 
         ));
 
