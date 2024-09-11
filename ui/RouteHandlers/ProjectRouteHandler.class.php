@@ -744,16 +744,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
 
         $project = $projectDao->getProject($project_id);
        
-        // Section for selecting linguist project task summary 
-        $linguist_summary = $projectDao->get_linguist_project_tasksummary($project_id) ;
-        $linguist_taskTypes = [] ;
-        foreach($linguist_summary as $taskTypes){
-            foreach ($taskTypes as $taskType => $count) { 
-                if (!in_array($taskType, $linguist_taskTypes)) { $linguist_taskTypes[] = $taskType; } 
-            }
-        }
-        // print_r($linguist_summary) ;
-        // print_r($linguist_taskTypes);
+      
 
         if (empty($project)) {
             UserRouteHandler::flash('error', 'That project does not exist!');
@@ -1124,6 +1115,15 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                         
                     }
 
+                // Section for selecting linguist project task summary 
+                $linguist_summary = $projectDao->get_linguist_project_tasksummary($project_id) ;
+                $linguist_taskTypes = [] ;
+                foreach($linguist_summary as $taskTypes){
+                    foreach ($taskTypes as $taskType => $count) { 
+                        if (!in_array($taskType, $linguist_taskTypes)) { $linguist_taskTypes[] = $taskType; } 
+                    }
+                }
+       
     
                  
                 }
