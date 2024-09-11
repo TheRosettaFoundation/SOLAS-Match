@@ -1114,9 +1114,12 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
 
                     foreach ($taskDistribution as $task_id => $wordCount) {
 
-                        $task =  $taskDao -> getTask($task_id) ;
-                        $taskType = $task -> getTaskType($task) ;
-                        print_r($taskType);                       
+                        // code below for checking tasktype and send error message if needed
+
+                        // $task =  $taskDao -> getTask($task_id) ;
+                        // $taskType = $task -> getTaskType($task) ;
+                  
+                                           
                         $taskDao -> setTaskWordCount($task_id, $wordCount);
                         
                     }
