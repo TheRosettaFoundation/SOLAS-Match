@@ -1250,6 +1250,8 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                 'total_expected_price'         => $total_expected_price,
                 'total_expected_cost_waived'   => $total_expected_cost_waived,
                 'one_paid'                     => $one_paid,
+                'linguist_summary'         => $linguist_summary,
+                'linguist_taskTypes'          => $linguist_taskTypes
                
 
         ));
@@ -1524,8 +1526,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
             'memsource_project' => $memsource_project,
             'project_complete_date' => $taskDao->get_project_complete_date($project_id),
             'sesskey'        => $sesskey,
-            'linguist_summary'             => $linguist_summary,
-            'linguist_taskTypes'          => $linguist_taskTypes
+           
         ));
 
         return UserRouteHandler::render("project/project.alter.tpl", $response);
