@@ -1663,7 +1663,8 @@ error_log("Sync update_task_from_job() task_id: $task_id, status: $status, job: 
                     break;
                 }
             }
-            $followers = ['data' => ['followers'=> [$userGid]]];
+            if ($addFollowers == 'assign') $followers = ['data' => ['assignee' => $userGid]]
+            else                           $followers = ['data' => ['followers'=> [$userGid]]];
 
             if ($userGid && !empty($asana_tasks)) {
                 foreach ($asana_tasks as $asana_task) {
@@ -1671,14 +1672,18 @@ error_log("Sync update_task_from_job() task_id: $task_id, status: $status, job: 
 
                     $taskData = $this->executeCurl("https://app.asana.com/api/1.0/tasks/$asana_task_id", 'GET');
                     if (!empty($taskData['data']) && !$taskData['data']['completed']) {
-                        $this->executeCurl("https://app.asana.com/api/1.0/tasks/$asana_task_id/$addFollowers", 'POST', $followers);
+                        if ($addFollowers == 'assign') $this->executeCurl("https://app.asana.com/api/1.0/tasks/$asana_task_id", 'PUT', $followers);
+                        else                           $this->executeCurl("https://app.asana.com/api/1.0/tasks/$asana_task_id/$addFollowers", 'POST', $followers);
 
                         $subtasks = $this->executeCurl("https://app.asana.com/api/1.0/tasks/$asana_task_id/subtasks", 'GET');
                         if (!empty($subtasks['data'])) {
                             foreach ($subtasks['data'] as $subtask) {
                                 $subGid = $subtask['gid'];
                                 $subTaskData = $this->executeCurl("https://app.asana.com/api/1.0/tasks/$subGid", 'GET');
-                                if (!empty($subTaskData['data']) && !$subTaskData['data']['completed']) $this->executeCurl("https://app.asana.com/api/1.0/tasks/$subGid/$addFollowers", 'POST', $followers);
+                                if (!empty($subTaskData['data']) && !$subTaskData['data']['completed']) {
+                                    if ($addFollowers == 'assign') $this->executeCurl("https://app.asana.com/api/1.0/tasks/$subGid", 'PUT', $followers);
+                                    else                           $this->executeCurl("https://app.asana.com/api/1.0/tasks/$subGid/$addFollowers", 'POST', $followers);
+                                }
                             }
                         }
                     }
