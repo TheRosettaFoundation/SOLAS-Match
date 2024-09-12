@@ -1716,4 +1716,42 @@ error_log("Sync update_task_from_job() task_id: $task_id, status: $status, job: 
 error_log("executeCurl($url): $result");//(**)
         return json_decode($result ,true);
     }
+
+    public function change_owner($project_id, $owner_id)
+    {
+        $userDao = new UserDao();
+        $projectDao = new ProjectDao();
+
+        $result = LibAPI\PDOWrapper::call('get_project_complete_date', LibAPI\PDOWrapper::cleanse($project_id));
+        if (!$result) return "get_project_complete_date($project_id, $owner_id) Failed";
+
+        $self_service = $result[0]['self_service'];
+        if ($self_service == 1) return 'SELF SERVICE Failed';
+        if ($self_service == 2) LibAPI\PDOWrapper::call('update_memsource_project_owner', LibAPI\PDOWrapper::cleanse($project_id) . ',' . LibAPI\PDOWrapper::cleanseWrapStr($owner_id)); // Non Phrase
+        if ($self_service == 0) {
+            $owner_uid = $userDao->get_memsource_user($owner_id);
+            if (!$owner_uid) return "get_memsource_user($owner_id) Failed";
+            LibAPI\PDOWrapper::call('update_memsource_project_owner', LibAPI\PDOWrapper::cleanse($project_id) . ',' . LibAPI\PDOWrapper::cleanseWrapStr($owner_uid));
+        }
+
+        LibAPI\PDOWrapper::call('update_project_owner_id_only', LibAPI\PDOWrapper::cleanse($project_id) . ',' . LibAPI\PDOWrapper::cleanse($owner_id));
+        $userDao->trackProject($owner_id, $project_id);
+        $projectDao->follow_unfollow_asana_tasks('assign', $project_id, $user_id);
+
+        if ($self_service == 0) {
+            $memsource_project = $this->get_memsource_project($project_id);
+            if (empty($memsource_project)) return "get_memsource_project($project_id) Failed";
+            $memsource_project_uid = $memsource_project['memsource_project_uid'];
+            $ch = curl_init("https://cloud.memsource.com/web/api2/v1/projects/$memsource_project_uid");
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            $memsourceApiToken = Common\Lib\Settings::get('memsource.memsource_api_token');
+            curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json', "Authorization: Bearer $memsourceApiToken"]);
+            curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PATCH');
+            curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode(['owner' => ['id' => $owner_uid]]));
+            $result = curl_exec($ch);
+            curl_close($ch);
+            error_log("PATCH Phrase Project uid: $memsource_project_uid to owner: $owner_uid, result: $result");
+        }
+        return '';
+    }
 }
