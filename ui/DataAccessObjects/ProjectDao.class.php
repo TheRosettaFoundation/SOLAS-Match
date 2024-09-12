@@ -1663,7 +1663,7 @@ error_log("Sync update_task_from_job() task_id: $task_id, status: $status, job: 
                     break;
                 }
             }
-            if ($addFollowers == 'assign') $followers = ['data' => ['assignee' => $userGid]]
+            if ($addFollowers == 'assign') $followers = ['data' => ['assignee' => $userGid]];
             else                           $followers = ['data' => ['followers'=> [$userGid]]];
 
             if ($userGid && !empty($asana_tasks)) {
