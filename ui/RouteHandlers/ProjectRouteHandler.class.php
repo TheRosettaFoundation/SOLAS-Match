@@ -25,6 +25,12 @@ class ProjectRouteHandler
             ->setName('project-view');
 
         $app->map(['GET', 'POST'],
+            '/{project_id}/change_owner[/]',
+            '\SolasMatch\UI\RouteHandlers\ProjectRouteHandler:change_owner')
+            ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin_any')
+            ->setName('change_owner');
+
+        $app->map(['GET', 'POST'],
             '/project/{project_id}/alter[/]',
             '\SolasMatch\UI\RouteHandlers\ProjectRouteHandler:projectAlter')
             ->add('\SolasMatch\UI\Lib\Middleware:authUserForOrgProject')
@@ -1212,6 +1218,32 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
         ));
 
         return UserRouteHandler::render("project/project.view.tpl", $response);
+    }
+
+    public function change_owner(Request $request, Response $response, $args)
+    {
+        global $app, $template_data;
+        $project_id = $args['project_id'];
+
+        $projectDao = new DAO\UserDao();
+        $adminDao = new DAO\AdminDao();
+
+        $sesskey = Common\Lib\UserSession::getCSRFKey();
+
+        $error = '';
+        if ($request->getMethod() === 'POST' && sizeof($request->getParsedBody()) > 1) {
+            $post = $request->getParsedBody();
+            if ($fail_CSRF = Common\Lib\UserSession::checkCSRFKey($post, 'change_owner')) return $response->withStatus(302)->withHeader('Location', $fail_CSRF);
+
+            if (!($error = $projectDao->change_owner($project_id, $post['owner_id']))) {
+                UserRouteHandler::flashNow('success', '');
+            } else {
+                UserRouteHandler::flashNow('error', $error);
+            }
+        }
+        if ($error) $template_data = array_merge($template_data, ['error' => $error]);
+        $template_data = array_merge($template_data, ['project_id' => $project_id, 'admin_list' => $adminDao->getSiteAdmins(), 'sesskey' => $sesskey]);
+        return UserRouteHandler::render('project/change_owner.tpl', $response);
     }
 
     public function projectAlter(Request $request, Response $response, $args)
