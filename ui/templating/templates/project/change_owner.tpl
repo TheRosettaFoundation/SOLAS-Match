@@ -22,7 +22,7 @@
     </div>
 {/if}
 
-<form method="post" action="{urlFor name="change_owner" options="project_id.$project_id"}" class="well" accept-charset="utf-8">
+<form  id="change_owner_form" method="post" action="{urlFor name="change_owner" options="project_id.$project_id"}" class="well" accept-charset="utf-8">
     <label for="owner_id"><strong>New Owner</strong></label>
     <select name="owner_id" id="owner_id" class="form-select">
         <option value="0" selected="selected">Select New Project Owner...</option>
@@ -31,7 +31,7 @@
         {/foreach}
     </select>
     <p>
-        <button type="submit" class="btn btn-success" name="submit">
+        <button id="handle_click_change_owner" type="submit" class="btn btn-success" name="submit" onclick="handle_click_change_owner();">
             <i class="icon-star icon-white"></i> Change Owner
         </button>
 
@@ -41,5 +41,14 @@
     </p>
     {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
 </form>
+
+<script>
+function handle_click_change_owner() {
+    let link = document.getElementById('handle_click_change_owner');
+    link.style.pointerEvents = 'none'; // This prevents further clicks
+    link.style.opacity = '0.5';
+    $('#change_owner_form').submit();
+}
+</script>
 
 {include file="footer.tpl"}
