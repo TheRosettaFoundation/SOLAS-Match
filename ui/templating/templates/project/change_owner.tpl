@@ -32,7 +32,7 @@
     </select>
     <p>
         <button type="submit" class="btn btn-success" name="submit">
-            <i class="icon-star icon-white"></i> Chnage Owner
+            <i class="icon-star icon-white"></i> Change Owner
         </button>
     </p>
     {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
