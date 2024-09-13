@@ -1736,7 +1736,7 @@ error_log("executeCurl($url): $result");//(**)
 
         LibAPI\PDOWrapper::call('update_project_owner_id_only', LibAPI\PDOWrapper::cleanse($project_id) . ',' . LibAPI\PDOWrapper::cleanse($owner_id));
         $userDao->trackProject($owner_id, $project_id);
-        $projectDao->follow_unfollow_asana_tasks('assign', $project_id, $user_id);
+        $projectDao->follow_unfollow_asana_tasks('assign', $project_id, $owner_id);
 
         if ($self_service == 0) {
             $memsource_project = $this->get_memsource_project($project_id);
