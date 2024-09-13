@@ -34,6 +34,10 @@
         <button type="submit" class="btn btn-success" name="submit">
             <i class="icon-star icon-white"></i> Change Owner
         </button>
+
+        <a href="{urlFor name="project-view" options="project_id.$project_id"}" class="btn btn-primary">
+            <i class="icon-list icon-white"></i> Return to Project View
+        </a>
     </p>
     {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
 </form>
