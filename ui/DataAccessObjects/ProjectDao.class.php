@@ -1698,7 +1698,7 @@ error_log("Sync update_task_from_job() task_id: $task_id, status: $status, job: 
         curl_setopt($ch, CURLOPT_URL, $url);
         if ($method == 'PUT') {
             curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
-            url_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PUT');
+            curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PUT');
         } elseif ($method == 'POST') {
             curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
             curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'POST');
