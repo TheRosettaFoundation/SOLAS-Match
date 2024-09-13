@@ -2415,7 +2415,8 @@ error_log("fields: $fields targetlanguages: $targetlanguages");//(**)
         curl_close($re);
 
         if ($memsource_project_uid) {
-            $userDao->update_phrase_field($memsource_project_uid, 'community_url', $projectDao->discourse_parameterize($project), 0);
+            $userDao->update_phrase_field($memsource_project_uid, 'project_url', "https://twbplatform.org/project/$projectId/view", 0);
+            $userDao->update_phrase_field($memsource_project_uid, 'community_url', 'https://community.translatorswb.org/t/' . $projectDao->discourse_parameterize($project), 0);
             $userDao->update_phrase_field($memsource_project_uid, 'monitoring_dashboard_url', "https://twbplatform.org/metabase/projectdash.php?projectid=$projectId", 0);
 
             if (empty($memsource_project)) $asana_board = '778921846018141'; // 0 => Self Service (if there is a UID)
@@ -2503,7 +2504,6 @@ error_log("fields: $fields targetlanguages: $targetlanguages");//(**)
                     }
                     error_log("task_cron ERROR ($task_id) responseCode: $responseCode");
                 }
-                $userDao->update_phrase_field($memsource_project_uid, 'project_url', "https://twbplatform.org/project/$project_id/view", 1); // Update in Phrase (this will happen many times)
             }
 
             if (($task_id = $projectDao->get_task_analysis_trigger()) && ($memsource_task = $projectDao->get_memsource_task($task_id)) && !preg_match('/^\d*$/', $memsource_task_uid = $memsource_task['memsource_task_uid'])) {
