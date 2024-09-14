@@ -70,9 +70,11 @@
        <!-- <td>{$task['budget_code']}</td> -->
             <td>
                 {$task['purchase_order']}
+                {if !empty($task['total'])}<br />Total: ${round($task['total'], 2)}{/if}
                 <br />{if !empty($task['po_status'])}{if $task['po_status'] == 'Completed' || $task['po_status'] == 'Approved'}{$task['po_status']}{else}<span style="color: red;">{$task['po_status']}, Not Completed</span>{/if}{else}<span style="color: red;">No PO</span>{/if}
                 {if !empty($task['approver_mail'])}<br />{substr($task['approver_mail'], 0, strpos($task['approver_mail'], '@'))}{/if}
                 {if empty($task['google_drive_link'])}<br /><span style="color: red;">No Linguist Payment Information</span>{/if}
+                {if empty($task['deal_id'])}<br /><span style="color: red;">No HS Deal</span>{/if}
            </td>
             <td>{round($task['total_paid_words'], 2)} {$task['pricing_and_recognition_unit_text_hours']}</td>
             <td>{round($task['unit_rate'], 2)}</td>
@@ -93,7 +95,7 @@
                 {elseif $task['status'] == 3}5-Draft Paid
                 {/if}
             </td>
-            <td>{if $task['invoice_number'] > 0}<a href="{urlFor name="get-invoice" options="invoice_number.{$task['invoice_number']}"}" target="_blank">{if $task['status']&1}DRAFT{else}TWB{/if}-{str_pad($task['invoice_number'], 4, '0', STR_PAD_LEFT)}</a>{/if}</td>
+            <td>{if $task['invoice_number'] > 0}<a href="{urlFor name="get-invoice" options="invoice_number.{$task['invoice_number']}"}" target="_blank">TWB-{str_pad($task['invoice_number'], 4, '0', STR_PAD_LEFT)}</a>{/if}</td>
         </tr>
         {/foreach}
     </tbody>

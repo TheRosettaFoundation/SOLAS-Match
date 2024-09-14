@@ -125,7 +125,7 @@
                              {if $userSubscribedToProject}
                                 <p>
                                     <input type="hidden" name="trackProject" value="0" />
-                                    <a class=" btngray mt-2" onclick="$('#trackedProjectForm').submit();" >
+                                    <a id="handle_click_track" class="btngray mt-2" onclick="handle_click_track();">
                                          <i class="fa-solid fa-ban fa-lg"></i>
                                          {Localisation::getTranslation('project_view_untrack_project')}
                                     </a>
@@ -133,7 +133,7 @@
                             {else}
                                 <p>
                                     <input type="hidden" name="trackProject" value="1" />
-                                    <a class=" btngray mt-2" onclick="$('#trackedProjectForm').submit();" >
+                                    <a id="handle_click_track" class="btngray mt-2" onclick="handle_click_track();">
                                          <i class="fa-solid fa-envelope fa-lg"></i>
                                          {Localisation::getTranslation('common_track_project')}
                                     </a>
@@ -141,6 +141,15 @@
                             {/if}
                             {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
                         </form>
+
+                        {if ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)) && $pm != 'projects@translatorswithoutborders.org'}
+                            <p>
+                                <a href="{urlFor name="change_owner" options="project_id.$project_id"}" class="btngray mt-2">
+                                    <i class="fa-solid fa-envelope fa-lg"></i>
+                                    Change Project Owner
+                                </a>
+                            </p>
+                        {/if}
                     </td>
                 {/if}
             </tr>
@@ -986,6 +995,13 @@
 </div>
 
 <script>
+function handle_click_track() {
+    let link = document.getElementById('handle_click_track');
+    link.style.pointerEvents = 'none'; // This prevents further clicks
+    link.style.opacity = '0.5';
+    $('#trackedProjectForm').submit();
+}
+
    $("[data-bs-toggle='tooltip']").tooltip(); // Initialize Tooltip
 </script>
 {include file="footer2.tpl"}

@@ -3265,17 +3265,15 @@ EOF;
 
         $user_id = Common\Lib\UserSession::getCurrentUserID();
         $roles = $adminDao->get_roles($user_id);
-        if (!(($user_id == $invoice['linguist_id'] && !($invoice['status']&1)) || ($roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER | FINANCE)))) return ['none.pdf', 'Not Allowed'];
+        if (!(($user_id == $invoice['linguist_id']) || ($roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER | FINANCE)))) return ['none.pdf', 'Not Allowed'];
 
-        $TWB = 'TWB-';
-        if ($invoice['status']&1) $TWB = 'DRAFT-';
-        $invoice_number = $TWB . str_pad($invoice_number, 4, '0', STR_PAD_LEFT);
+        $invoice_number = 'TWB-' . str_pad($invoice_number, 4, '0', STR_PAD_LEFT);
 
         $name = $invoice['linguist_name'];
 
         $status = $invoice['status'];
-        $inv = $status&1 ? 'DRAFT' : 'INVOICE';
         $paid = $status&2 ? 'PAID' : '';
+        $draft_message = $status == 1 ? 'After review, please download and send invoice to <a href="mailto:linguists.payments@clearglobal.org?subject=' . rawurlencode('Invoice to Clear Global') . '" target="_blank">linguists.payments@clearglobal.org</a>' : '';
         if ($status&4) $paid = 'BOUNCED';
 
         $email = $invoice['email'];
@@ -3313,10 +3311,10 @@ EOF;
 $html = <<<EOF
         <table width="100%" cellspacing="0" cellpadding="55%">
         <tr valign="bottom">
-            <td class="header1" rowspan="2" align="left" valign="middle" width="33%"></td>
+            <td class="header1" rowspan="2" align="left" valign="middle" width="33%">$draft_message</td>
             <td width="35%"></td>
             <td class="header1" rowspan="2" align="left" valign="middle" width="35%">
-                <div style="font-weight:bold; float:left ; font-size:26px; text-transform:uppercase">$inv</div>
+                <div style="font-weight:bold; float:left ; font-size:26px; text-transform:uppercase">INVOICE</div>
             </td>
         </tr>
         <br/>

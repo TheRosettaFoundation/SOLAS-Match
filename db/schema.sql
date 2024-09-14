@@ -28,7 +28,7 @@ CREATE TABLE IF NOT EXISTS `Admins` (
 CREATE TABLE IF NOT EXISTS `ArchivedProjects` (
   `id` int(10) unsigned NOT NULL,
   `title` varchar(128) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `description` varchar(4096) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `description` VARCHAR(12000) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `impact` varchar(4096) COLLATE utf8mb4_unicode_ci NOT NULL,
   `deadline` datetime NOT NULL,
   `organisation_id` int(10) unsigned NOT NULL,
@@ -330,7 +330,7 @@ CREATE TABLE IF NOT EXISTS `ProjectFiles` (
 CREATE TABLE IF NOT EXISTS `Projects` (
   `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
   `title` VARCHAR(128) NOT NULL COLLATE 'utf8mb4_unicode_ci',
-  `description` VARCHAR(4096) NOT NULL COLLATE 'utf8mb4_unicode_ci',
+  `description` VARCHAR(12000) NOT NULL COLLATE 'utf8mb4_unicode_ci',
   `impact` VARCHAR(4096) NOT NULL COLLATE 'utf8mb4_unicode_ci',
   `deadline` DATETIME NOT NULL,
   `organisation_id` INT(10) UNSIGNED NOT NULL,
@@ -1346,6 +1346,8 @@ CREATE TABLE IF NOT EXISTS `UserServices` (
 CREATE TABLE IF NOT EXISTS `project_complete_dates` (
   project_id    INT(10) UNSIGNED NOT NULL,
   status        INT(10) UNSIGNED NOT NULL,
+  owner_id      INT UNSIGNED NOT NULL DEFAULT 0,
+  self_service  INT NOT NULL DEFAULT 0,
   complete_date DATETIME NOT NULL,
   deal_id       BIGINT UNSIGNED NOT NULL DEFAULT 0,
   allocated_budget INT UNSIGNED NOT NULL DEFAULT 0,
@@ -2724,6 +2726,7 @@ BEGIN
 END//
 DELIMITER ;
 
+# Not currently used...
 DROP PROCEDURE IF EXISTS `getArchivedProject`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getArchivedProject`(IN `projectId` INT, IN `titleText` VARCHAR(128), IN `descr` VARCHAR(4096), IN `imp` VARCHAR(4096), IN `deadlineTime` DATETIME, IN `orgId` INT, IN `ref` VARCHAR(128), IN `wordCount` INT, IN `createdTime` DATETIME, IN `archiveDate` DATETIME, IN `archiverId` INT, IN `lCode` VARCHAR(3), IN `cCode` VARCHAR(4), IN imageUploaded BIT(1), IN imageApproved BIT(1))
@@ -5127,7 +5130,7 @@ DELIMITER ;
 
 DROP PROCEDURE IF EXISTS `projectInsertAndUpdate`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `projectInsertAndUpdate`(IN `projectId` INT, IN `titleText` VARCHAR(128), IN `descr` VARCHAR(4096), IN `impactText` VARCHAR(4096), IN `deadlineTime` DATETIME, IN `orgId` INT, IN `ref` VARCHAR(128), IN `wordCount` INT, IN `createdTime` DATETIME, IN `sourceCountryCode` VARCHAR(4), IN `sourceLanguageCode` VARCHAR(3), IN imageUploaded BIT(1), IN imageApproved BIT(1))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `projectInsertAndUpdate`(IN `projectId` INT, IN `titleText` VARCHAR(128), IN `descr` VARCHAR(12000), IN `impactText` VARCHAR(4096), IN `deadlineTime` DATETIME, IN `orgId` INT, IN `ref` VARCHAR(128), IN `wordCount` INT, IN `createdTime` DATETIME, IN `sourceCountryCode` VARCHAR(4), IN `sourceLanguageCode` VARCHAR(3), IN imageUploaded BIT(1), IN imageApproved BIT(1))
 BEGIN
     if projectId="" then set projectId=null; end if;
     if orgId="" then set orgId=null; end if;
@@ -10025,11 +10028,27 @@ DELIMITER ;
 
 DROP PROCEDURE IF EXISTS `update_memsource_project_owner`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `update_memsource_project_owner`(IN projectID INT, IN ownerUID BIGINT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `update_memsource_project_owner`(IN projectID INT, IN ownerUID VARCHAR(30))
 BEGIN
     UPDATE MemsourceProjects
     SET owner_uid=ownerUID
     WHERE project_id=projectID;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `update_project_owner_id`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `update_project_owner_id`(IN pID INT UNSIGNED, IN oID INT UNSIGNED, IN ss INT)
+BEGIN
+    UPDATE project_complete_dates SET owner_id=oID, self_service=ss WHERE project_id=pID;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `update_project_owner_id_only`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `update_project_owner_id_only`(IN pID INT UNSIGNED, IN oID INT UNSIGNED)
+BEGIN
+    UPDATE project_complete_dates SET owner_id=oID WHERE project_id=pID;
 END//
 DELIMITER ;
 
@@ -10300,7 +10319,7 @@ DELIMITER ;
 
 DROP PROCEDURE IF EXISTS `update_project_description`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `update_project_description`(IN projectID INT, IN d VARCHAR(4096))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `update_project_description`(IN projectID INT, IN d VARCHAR(12000))
 BEGIN
     UPDATE Projects SET description=d WHERE id=projectID;
 END//
@@ -13164,6 +13183,7 @@ BEGIN
         tp.purchase_order,
         pos.status AS po_status,
         pos.approver_mail,
+        pos.total,
         IF(t.`word-count`>1, IF(ttd.divide_rate_by_60, t.`word-count`             /60, t.`word-count`             ), 0) AS total_paid_words,
         ttd.pricing_and_recognition_unit_text_hours,
         tp.unit_rate,
@@ -13198,7 +13218,9 @@ BEGIN
     LEFT JOIN invoices                        i ON tp.invoice_number=i.invoice_number
     WHERE
         tp.processed>=0 AND
-        t.`task-status_id`=4
+        t.`task-status_id`=4 AND
+        tcd.complete_date<CAST(DATE_FORMAT(NOW(), '%Y-%m-01 00:00:01') as DATETIME) AND
+        tp.payment_status NOT IN ('In-kind', 'In-house', 'Waived')
     ORDER BY
         tp.processed,
         IFNULL(i.invoice_date, '9999-12-31 23:59:59') DESC,
@@ -13245,7 +13267,9 @@ BEGIN
         tp.processed>=0 AND
         pos.status IS NOT NULL AND
         (pos.status='Completed' OR pos.status='Approved') AND
-        t.`task-status_id`=4
+        t.`task-status_id`=4 AND
+        tcd.complete_date<CAST(DATE_FORMAT(NOW(), '%Y-%m-01 00:00:01') as DATETIME) AND
+        tp.payment_status NOT IN ('In-kind', 'In-house', 'Waived')
     GROUP BY
         i.invoice_date,
         tc.user_id,
@@ -13413,6 +13437,30 @@ BEGIN
         GROUP BY t.id, uqp.user_id
     ) AS users_task_native_matching
     GROUP BY users_task_native_matching.task_id;
+END//
+DELIMITER ;
+
+
+CREATE TABLE IF NOT EXISTS `asana_board_for_org` (
+  org_id      INT UNSIGNED NOT NULL,
+  asana_board BIGINT UNSIGNED NOT NULL,
+  PRIMARY KEY (org_id),
+  CONSTRAINT FK_asana_board_for_org_org_id FOREIGN KEY (org_id) REFERENCES Organisations (id) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+DROP PROCEDURE IF EXISTS `get_asana_board_for_org`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_asana_board_for_org`(IN oID INT UNSIGNED)
+BEGIN
+    SELECT * FROM asana_board_for_org WHERE org_id=oID;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `set_asana_board_for_org`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `set_asana_board_for_org`(IN oID INT UNSIGNED, IN aID BIGINT UNSIGNED)
+BEGIN
+    REPLACE INTO asana_board_for_org (org_id, asana_board) VALUES (oID, aID);
 END//
 DELIMITER ;
 

@@ -596,11 +596,17 @@ $replace = array(
             LibAPI\PDOWrapper::cleanseWrapStr($workflowLevels[11]));
     }
 
+    public function update_project_owner_id($project_id, $owner_id, $self_service)
+    {
+        LibAPI\PDOWrapper::call('update_project_owner_id', LibAPI\PDOWrapper::cleanse($project_id) . ',' . LibAPI\PDOWrapper::cleanse($owner_id) . ',' . LibAPI\PDOWrapper::cleanse($self_service));
+    }
+
     public function update_memsource_project_owner($project_id, $owner_uid)
     {
         LibAPI\PDOWrapper::call('update_memsource_project_owner',
             LibAPI\PDOWrapper::cleanse($project_id) . ',' .
             LibAPI\PDOWrapper::cleanseWrapStr($owner_uid));
+        LibAPI\PDOWrapper::call('update_project_owner_id_only', LibAPI\PDOWrapper::cleanse($project_id) . ',' . LibAPI\PDOWrapper::cleanse($this->get_user_id_from_memsource_user($owner_uid)));
     }
 
     public function record_memsource_project_languages($project_id, $source_language_pair, $target_languages)
@@ -1060,7 +1066,7 @@ error_log("set_memsource_task($task_id, 0, {$job['uid']}...), success: $success"
             }
         }
 
-        if($this->is_task_claimable($task_id)) $taskDao->setTaskStatus($task_id, Common\Enums\TaskStatusEnum::PENDING_CLAIM);
+        if ($this->is_task_claimable($task_id)) $taskDao->setTaskStatus($task_id, Common\Enums\TaskStatusEnum::PENDING_CLAIM);
 
         $project_restrictions = $taskDao->get_project_restrictions($project_id);
         if ($project_restrictions && (
@@ -1627,5 +1633,124 @@ error_log("Sync update_task_from_job() task_id: $task_id, status: $status, job: 
                 LibAPI\PDOWrapper::call('insert_task_resource_TM', LibAPI\PDOWrapper::cleanse($task_id) . ',' . LibAPI\PDOWrapper::cleanseWrapStr($TM['name']) . ',' . LibAPI\PDOWrapper::cleanse($TM['readMode']) . ',' . LibAPI\PDOWrapper::cleanse($TM['writeMode']) . ',' . LibAPI\PDOWrapper::cleanse($TM['penalty']) . ',' . LibAPI\PDOWrapper::cleanseWrapStr($TM['targetLang']));
             error_log("insert_task_resource_info: $task_id $url");
         }
+    }
+
+    public function follow_asana_tasks($project_id, $user_id)
+    {
+        $this->follow_unfollow_asana_tasks('addFollowers', $project_id, $user_id);
+    }
+
+    public function unfollow_asana_tasks($project_id, $user_id)
+    {
+        $this->follow_unfollow_asana_tasks('removeFollowers', $project_id, $user_id);
+    }
+
+    public function follow_unfollow_asana_tasks($addFollowers, $project_id, $user_id)
+    {
+        $userDao = new UserDao();
+        $user = $userDao->getUser($user_id);
+        $email = $user->email;
+
+        $asana_tasks = $this->get_asana_tasks($project_id);
+
+        $userData = $this->executeCurl('https://app.asana.com/api/1.0/users?opt_fields=email', 'GET');
+
+        $userGid = 0;
+        if ($userData && isset($userData['data'])) {
+            foreach ($userData['data'] as $user) {
+                if ($user['email'] === $email) {
+                    $userGid = $user['gid'];
+                    break;
+                }
+            }
+            if ($addFollowers == 'assign') $followers = ['data' => ['assignee' => $userGid]];
+            else                           $followers = ['data' => ['followers'=> [$userGid]]];
+
+            if ($userGid && !empty($asana_tasks)) {
+                foreach ($asana_tasks as $asana_task) {
+                    $asana_task_id = $asana_task['asana_task_id'];
+
+                    $taskData = $this->executeCurl("https://app.asana.com/api/1.0/tasks/$asana_task_id", 'GET');
+                    if (!empty($taskData['data']) && !$taskData['data']['completed']) {
+                        if ($addFollowers == 'assign') $this->executeCurl("https://app.asana.com/api/1.0/tasks/$asana_task_id", 'PUT', $followers);
+                        else                           $this->executeCurl("https://app.asana.com/api/1.0/tasks/$asana_task_id/$addFollowers", 'POST', $followers);
+
+                        $subtasks = $this->executeCurl("https://app.asana.com/api/1.0/tasks/$asana_task_id/subtasks", 'GET');
+                        if (!empty($subtasks['data'])) {
+                            foreach ($subtasks['data'] as $subtask) {
+                                $subGid = $subtask['gid'];
+                                $subTaskData = $this->executeCurl("https://app.asana.com/api/1.0/tasks/$subGid", 'GET');
+                                if (!empty($subTaskData['data']) && !$subTaskData['data']['completed']) {
+                                    if ($addFollowers == 'assign') $this->executeCurl("https://app.asana.com/api/1.0/tasks/$subGid", 'PUT', $followers);
+                                    else                           $this->executeCurl("https://app.asana.com/api/1.0/tasks/$subGid/$addFollowers", 'POST', $followers);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    public function executeCurl($url, $method, $data = 0, $timeout = 0)
+    {
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        if ($method == 'PUT') {
+            curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+            curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PUT');
+        } elseif ($method == 'POST') {
+            curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+            curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'POST');
+        }
+        curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json', 'Authorization: Bearer ' . Common\Lib\Settings::get('asana.api_key6')]);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        if ($timeout) curl_setopt($ch, CURLOPT_TIMEOUT, 300);
+        $result = curl_exec($ch);
+
+        if (curl_errno($ch)) {
+            error_log("executeCurl($url): " . curl_errno($ch));
+            curl_close($ch);
+            return 0;
+        }
+        return json_decode($result ,true);
+    }
+
+    public function change_owner($project_id, $owner_id)
+    {
+        $userDao = new UserDao();
+        $projectDao = new ProjectDao();
+
+        $result = LibAPI\PDOWrapper::call('get_project_complete_date', LibAPI\PDOWrapper::cleanse($project_id));
+        if (!$result) return "get_project_complete_date($project_id, $owner_id) Failed";
+
+        $self_service = $result[0]['self_service'];
+        if ($self_service == 1) return 'SELF SERVICE Failed';
+        if ($self_service == 2) LibAPI\PDOWrapper::call('update_memsource_project_owner', LibAPI\PDOWrapper::cleanse($project_id) . ',' . LibAPI\PDOWrapper::cleanseWrapStr($owner_id)); // Non Phrase
+        if ($self_service == 0) {
+            $owner_uid = $userDao->get_memsource_user($owner_id);
+            if (!$owner_uid) return "get_memsource_user($owner_id) Failed";
+            LibAPI\PDOWrapper::call('update_memsource_project_owner', LibAPI\PDOWrapper::cleanse($project_id) . ',' . LibAPI\PDOWrapper::cleanseWrapStr($owner_uid));
+        }
+
+        LibAPI\PDOWrapper::call('update_project_owner_id_only', LibAPI\PDOWrapper::cleanse($project_id) . ',' . LibAPI\PDOWrapper::cleanse($owner_id));
+        $userDao->trackProject($owner_id, $project_id);
+        $projectDao->follow_unfollow_asana_tasks('assign', $project_id, $owner_id);
+
+        if ($self_service == 0) {
+            $memsource_project = $this->get_memsource_project($project_id);
+            if (empty($memsource_project)) return "get_memsource_project($project_id) Failed";
+            $memsource_project_uid = $memsource_project['memsource_project_uid'];
+            $ch = curl_init("https://cloud.memsource.com/web/api2/v1/projects/$memsource_project_uid");
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            $memsourceApiToken = Common\Lib\Settings::get('memsource.memsource_api_token');
+            curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json', "Authorization: Bearer $memsourceApiToken"]);
+            curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PATCH');
+            curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode(['owner' => ['id' => $owner_uid]]));
+            $result = curl_exec($ch);
+            curl_close($ch);
+            error_log("PATCH Phrase Project uid: $memsource_project_uid to owner: $owner_uid, result: $result");
+        }
+        return '';
     }
 }

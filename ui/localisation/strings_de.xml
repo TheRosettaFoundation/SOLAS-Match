@@ -522,7 +522,7 @@ Bei Fragen schreiben Sie bitte an <a href="mailto:info@translatorswithoutborders
     <string name="project_create_21">Die hochgeladene Datei ist zu groß, bitte überprüfe die maximal erlaubte Dateigröße unter der Kopfzeile des Ausgangstextes.</string>
     <string name="project_create_22">Bitte beachte, dass die Wortanzahl Deiner Datei übermäßig hoch ist - die empfohlene Obergrenze liegt bei 3000 Wörtern. Wir empfehlen Dir, zunächst eine Segmentierungsaufgabe zu erstellen. Bist Du sicher, dass Du fortfahren möchtest?</string>
     <string name="project_create_error_title_too_long">Der Projekttitel ist zu lang. Bitte verwende maximal einhundert Zeichen.</string>
-    <string name="project_create_error_description_too_long">Die Projektbeschreibung ist zu lang. Bitte verwende maximal 4096 Zeichen.</string>
+    <string name="project_create_error_description_too_long">Die Projektbeschreibung ist zu lang. Bitte verwende maximal 12000 Zeichen.</string>
     <string name="project_create_error_impact_too_long">Die Beschreibung der Projektrelevanz ist zu lang. Bitte verwende maximal 4096 Zeichen.</string>
     <string name="project_create_error_reference_invalid">Die Projektreferenz muss eine gültige URL sein.</string>    
     <string name="project_create_error_reference_too_long">Die Referenz-URL des Projekts ist zu lang. Sie darf maximal 128 Zeichen enthalten. Du kannst ein Tool zur Verkürzung von URLs, wie zum Beispiel <a href="https://bitly.com/">bitly</a>, verwenden.</string>
