@@ -2075,7 +2075,6 @@ error_log("Sync memsource_list_jobs() project_id: $project_id, workflowLevels_ar
             'useDefaultProjectSettings' => true,
             'workflowSteps' => $workflowSteps,
             'dateDue' => substr($deadline, 0, 10) . 'T' . substr($deadline, 11, 8) . 'Z',
-            'purchaseOrder' => 'https://twbplatform.org/project/' . $project->getId() . '/view',
         ];
         if ($client = $projectDao->get_memsource_client($project->getOrganisationId())) $data['client'] = ['id' => $client['memsource_client_uid']];
 
@@ -2520,5 +2519,63 @@ error_log(print_r($result, true));//(**)
     public function set_asana_board_for_org($org_id, $asana_board)
     {
         LibAPI\PDOWrapper::call('set_asana_board_for_org', LibAPI\PDOWrapper::cleanse($org_id) . ',' . LibAPI\PDOWrapper::cleanse($asana_board));
+    }
+
+    public function update_phrase_field($project_uid, $field, $value, $timeout)
+    {
+        $field_uid = [ // Live Phrase fields
+            'asana_partner_board_url'  => 'pdYAJoE10zGnPA0ib6q8Hv',
+            'monitoring_dashboard_url' => 'NEKFhD2jmYHKbdCC4dtgA0',
+            'community_url'            => 'CMEIPSEUNTH85ZMvfRtOi2',
+            'project_url'              => 'yTV0kbvArUO6i219LMi1t6',
+        ][$field];
+        if ($this->usernamePrefix === 'DEV_') { // dev Phrase fields
+        $field_uid = [
+            'asana_partner_board_url'  => 'v1AMNgUUpISRviaguSaqK6',
+            'monitoring_dashboard_url' => '7tXKUWpz7jq0oqtC1GFOT0',
+            'community_url'            => 'xzlSHz2fVPoC1GF3yhGGN7',
+            'project_url'              => 'a0DwFaq4rTgEsaWkit8jd1',
+        ][$field];
+        }
+
+        $authorization = 'Authorization: Bearer ' . $this->memsourceApiToken;
+
+        // Get custom fields of project (page)
+        $ch = curl_init("https://cloud.memsource.com/web/api2/v1/projects/$project_uid/customFields");
+        curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json', $authorization]);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        if ($timeout) curl_setopt($ch, CURLOPT_TIMEOUT, 300);
+        $result = curl_exec($ch);
+        curl_close($ch);
+        $current_fields = json_decode($result, true);
+        if (isset($current_fields['content']) && is_array($current_fields['content'])) {
+            $field_instance_uid = 0;
+            foreach ($current_fields['content'] as $field) {
+                if (!empty($field['customField']) && $field['customField']['uid'] == $field_uid) $field_instance_uid = $field['uid'];
+            }
+            if (!$field_instance_uid) {
+                error_log("Creating field instance in update_phrase_field($project_uid, $field_uid, $value, $timeout)");
+                $data = [
+                    'addInstances' => [
+                        ['customField' => ['uid' => $field_uid], 'value' => $value]
+                    ]
+                ];
+            } else {
+                error_log("Updating field instance in update_phrase_field($project_uid, $field_uid, $value, $timeout), instance: $field_instance_uid");
+                $data = [
+                    'updateInstances' => [
+                        ['customFieldInstance' => ['uid' => $field_instance_uid], 'customField' => ['uid' => $field_uid], 'value' => $value]
+                    ]
+                ];
+            }
+            $ch = curl_init("https://cloud.memsource.com/web/api2/v1/projects/$project_uid/customFields");
+            curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+            curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PUT');
+            curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json', $authorization));
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            if ($timeout) curl_setopt($ch, CURLOPT_TIMEOUT, 300);
+            $result = curl_exec($ch);
+            curl_close($ch);
+        } else error_log("update_phrase_field($project_uid, $field_uid, $value, $timeout): No fields content");
     }
 }

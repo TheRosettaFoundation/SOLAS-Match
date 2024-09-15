@@ -719,12 +719,12 @@
 
 {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
     <p style="margin-bottom: 40px"></p>
-    <h1 class="page-header">Asana Board for Parner</h1>
+    <h1 class="page-header">Asana Board for Partner</h1>
     <form method="post" action="{urlFor name="org-public-profile" options="org_id.$org_id"}">
         <table>
             <tr>
                 <td>
-                    <label for="asana_board" style="font-size: large"><strong>Asana ID (not full URL) for this Parner's Board/Project</strong></label>
+                    <label for="asana_board" style="font-size: large"><strong>Asana ID (not full URL) for this Partner's Board/Project</strong></label>
                     <input type="text" name="asana_board" id="asana_board" maxlength="20" value="{$asana_board_for_org['asana_board']}" style="width: 80%" />
                 </td>
             </tr>

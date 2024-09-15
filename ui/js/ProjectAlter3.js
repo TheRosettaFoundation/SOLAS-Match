@@ -232,7 +232,7 @@ function validateLocalValues()
   if (description == '') {
     descriptionError = parameters.getTranslation("project_create_33");
     success = false;
-  } else if (description.length > 4096) {
+  } else if (description.length > 12000) {
     descriptionError = parameters.getTranslation("project_create_error_description_too_long");
     success = false;
   }

@@ -25,6 +25,12 @@ class ProjectRouteHandler
             ->setName('project-view');
 
         $app->map(['GET', 'POST'],
+            '/{project_id}/change_owner[/]',
+            '\SolasMatch\UI\RouteHandlers\ProjectRouteHandler:change_owner')
+            ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin_any')
+            ->setName('change_owner');
+
+        $app->map(['GET', 'POST'],
             '/project/{project_id}/alter[/]',
             '\SolasMatch\UI\RouteHandlers\ProjectRouteHandler:projectAlter')
             ->add('\SolasMatch\UI\Lib\Middleware:authUserForOrgProject')
@@ -255,7 +261,7 @@ class ProjectRouteHandler
         // Create a topic in the Community forum (Discourse)
         error_log("projectCreate create_discourse_topic($project_id, $target_languages)");
         try {
-            $this->create_discourse_topic($project_id, $target_languages, ['owner_uid' => empty($hook['owner']['uid']) ? '' : $hook['owner']['uid']]);
+            $this->create_discourse_topic($project_id, $target_languages, ['owner_uid' => empty($hook['owner']['uid']) ? '' : $hook['owner']['uid']], 0, $hook['uid']);
         } catch (\Exception $e) {
             error_log('projectCreate create_discourse_topic Exception: ' . $e->getMessage());
         }
@@ -263,8 +269,8 @@ class ProjectRouteHandler
 
     private function truncate_note($note)
     {
-        if (mb_strlen($note) <= 4096) return $note;
-        return mb_substr($note, 0, 4096 - 37) . ' THIS TEXT HAS BEEN EDITED FOR LENGTH';
+        if (mb_strlen($note) <= 12000) return $note;
+        return mb_substr($note, 0, 12000 - 37) . ' THIS TEXT HAS BEEN EDITED FOR LENGTH';
     }
 
     private function update_project_due_date($hook)
@@ -805,6 +811,9 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
             if (isset($post['trackProject'])) {
                 if ($post['trackProject']) {
                     $userTrackProject = $userDao->trackProject($user_id, $project->getId());
+                    if ($roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER)) {
+                        $projectDao->follow_asana_tasks($project->getId(), $user_id);
+                    }
                     if ($userTrackProject) {
                         UserRouteHandler::flashNow("success", Lib\Localisation::getTranslation('project_view_7'));
                     } else {
@@ -812,6 +821,9 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                     }
                 } else {
                     $userUntrackProject = $userDao->untrackProject($user_id, $project->getId());
+                    if ($roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER)) {
+                        $projectDao->unfollow_asana_tasks($project->getId(), $user_id);
+                    }
                     if ($userUntrackProject) {
                         UserRouteHandler::flashNow("success", Lib\Localisation::getTranslation('project_view_9'));
                     } else {
@@ -1265,6 +1277,32 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
         ));
 
         return UserRouteHandler::render("project/project.view.tpl", $response);
+    }
+
+    public function change_owner(Request $request, Response $response, $args)
+    {
+        global $app, $template_data;
+        $project_id = $args['project_id'];
+
+        $projectDao = new DAO\ProjectDao();
+        $adminDao = new DAO\AdminDao();
+
+        $sesskey = Common\Lib\UserSession::getCSRFKey();
+
+        $error = '';
+        if ($request->getMethod() === 'POST' && sizeof($request->getParsedBody()) > 1) {
+            $post = $request->getParsedBody();
+            if ($fail_CSRF = Common\Lib\UserSession::checkCSRFKey($post, 'change_owner')) return $response->withStatus(302)->withHeader('Location', $fail_CSRF);
+
+            if (!($error = $projectDao->change_owner($project_id, $post['owner_id']))) {
+                UserRouteHandler::flashNow('success', '');
+            } else {
+                UserRouteHandler::flashNow('error', $error);
+            }
+        }
+        if ($error) $template_data = array_merge($template_data, ['error' => $error]);
+        $template_data = array_merge($template_data, ['project_id' => $project_id, 'admin_list' => $adminDao->getSiteAdmins(), 'sesskey' => $sesskey]);
+        return UserRouteHandler::render('project/change_owner.tpl', $response);
     }
 
     public function projectAlter(Request $request, Response $response, $args)
@@ -1774,7 +1812,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                                         // Create a topic in the Community forum (Discourse)
                                         error_log('projectCreate create_discourse_topic(' . $project->getId() . ", $target_languages)");
                                         try {
-                                           $this->create_discourse_topic($project->getId(), $target_languages, 0, !empty($post['earthquake']));
+                                           $this->create_discourse_topic($project->getId(), $target_languages, 0, !empty($post['earthquake']), empty($memsource_project['memsource_project_uid']) ? '' : $memsource_project['memsource_project_uid']);
                                         } catch (\Exception $e) {
                                             error_log('projectCreate create_discourse_topic Exception: ' . $e->getMessage());
                                         }
@@ -2371,11 +2409,12 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
         }
     }
 
-    public function create_discourse_topic($projectId, $targetlanguages, $memsource_project = 0, $earthquake = 0)
+    public function create_discourse_topic($projectId, $targetlanguages, $memsource_project = 0, $earthquake = 0, $memsource_project_uid = '')
     {
         global $app;
         $projectDao = new DAO\ProjectDao();
         $taskDao = new DAO\TaskDao();
+        $userDao = new DAO\UserDao();
         $project = $projectDao->getProject($projectId);
         $org_id = $project->getOrganisationId();
         $orgDao = new DAO\OrganisationDao();
@@ -2434,6 +2473,16 @@ error_log("fields: $fields targetlanguages: $targetlanguages");//(**)
             }
         }
         curl_close($re);
+
+        if ($memsource_project_uid) {
+            $userDao->update_phrase_field($memsource_project_uid, 'project_url', "https://twbplatform.org/project/$projectId/view", 0);
+            $userDao->update_phrase_field($memsource_project_uid, 'community_url', 'https://community.translatorswb.org/t/' . $projectDao->discourse_parameterize($project), 0);
+            $userDao->update_phrase_field($memsource_project_uid, 'monitoring_dashboard_url', "https://twbplatform.org/metabase/projectdash.php?projectid=$projectId", 0);
+
+            if (empty($memsource_project)) $asana_board = '778921846018141'; // 0 => Self Service (if there is a UID)
+            else                           $asana_board = (string)$userDao->get_asana_board_for_org($org_id)['asana_board'];
+            if ($asana_board) $userDao->update_phrase_field($memsource_project_uid, 'asana_partner_board_url', "https://app.asana.com/0/$asana_board", 0);
+        }
     }
 
     public function project_cron_1_minute(Request $request)
@@ -2515,20 +2564,6 @@ error_log("fields: $fields targetlanguages: $targetlanguages");//(**)
                     }
                     error_log("task_cron ERROR ($task_id) responseCode: $responseCode");
                 }
-
-                // Patch the KP Project URL into Memsource Project PO (this will happen many times)
-                $ch = curl_init("https://cloud.memsource.com/web/api2/v1/projects/$memsource_project_uid");
-                $data = [
-                    'purchaseOrder' => "https://twbplatform.org/project/$project_id/view",
-                ];
-                $payload = json_encode($data);
-                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-                curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json', "Authorization: Bearer $memsourceApiToken"]);
-                curl_setopt($ch, CURLOPT_TIMEOUT, 300); // Just so it does not hang forever and block because of file lock
-                curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PATCH');
-                curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
-                $result = curl_exec($ch);
-                curl_close($ch);
             }
 
             if (($task_id = $projectDao->get_task_analysis_trigger()) && ($memsource_task = $projectDao->get_memsource_task($task_id)) && !preg_match('/^\d*$/', $memsource_task_uid = $memsource_task['memsource_task_uid'])) {
@@ -2641,12 +2676,7 @@ error_log("get_queue_asana_projects: $projectId");//(**)
                 $memsource_project_id = $memsource_project['memsource_project_id'];
                 $self_service = (strpos($pm, '@translatorswithoutborders.org') === false && strpos($pm, '@clearglobal.org') === false) || $projectDao->get_memsource_self_service_project($memsource_project_id);
                 if ($self_service) $asana_project = '778921846018141';
-                else {
-                    $asana_project = '1200067882657242';
-//                    $asana_board_for_org = $userDao->get_asana_board_for_org($org_id);
-//                    if (!empty($asana_board_for_org['asana_board'])) $asana_project = (string)$asana_board_for_org['asana_board'];
-                }
-error_log("asana_board_for_org $org_id, $asana_project");
+                else               $asana_project = '1200067882657242';
                 $tasks = $projectDao->getProjectTasksArray($projectId);
                 $asana_task_splits = [];
                 foreach ($tasks as $task) {
@@ -2769,6 +2799,17 @@ error_log("asana_board_for_org $org_id, $asana_project");
                         if (!empty($asana_task_details['data']['gid'])) {
                             $asana_task_id = $asana_task_details['data']['gid'];
                             $projectDao->set_asana_task($projectId, $sourceLocale_code, $targetLocale_code, $type_category, $asana_task_id);
+
+                            if (!$self_service) {
+                                $asana_board_for_org = $userDao->get_asana_board_for_org($org_id);
+                                if (!empty($asana_board_for_org['asana_board'])) {
+                                    $asana_board_for_org = (string)$asana_board_for_org['asana_board'];
+                                    error_log("Moving $asana_task_id to board for $org_id: $asana_board_for_org");
+                                    $move_result = $projectDao->executeCurl("https://app.asana.com/api/1.0/tasks/$asana_task_id/addProject", 'POST', ['data' => ['project' => $asana_board_for_org]], 1);
+                                    if (isset($move_result['data'])) $projectDao->executeCurl("https://app.asana.com/api/1.0/tasks/$asana_task_id/removeProject", 'POST', ['data' => ['project' => $asana_project]], 1);
+                                    else error_log('Failed: ' . print_r($move_result, 1));
+                                }
+                            }
                         }
                     }
                 }
