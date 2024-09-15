@@ -1713,6 +1713,7 @@ error_log("Sync update_task_from_job() task_id: $task_id, status: $status, job: 
             curl_close($ch);
             return 0;
         }
+        curl_close($ch);
         return json_decode($result ,true);
     }
 
