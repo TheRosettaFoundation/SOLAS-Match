@@ -2616,12 +2616,7 @@ error_log("get_queue_asana_projects: $projectId");//(**)
                 $memsource_project_id = $memsource_project['memsource_project_id'];
                 $self_service = (strpos($pm, '@translatorswithoutborders.org') === false && strpos($pm, '@clearglobal.org') === false) || $projectDao->get_memsource_self_service_project($memsource_project_id);
                 if ($self_service) $asana_project = '778921846018141';
-                else {
-                    $asana_project = '1200067882657242';
-//                    $asana_board_for_org = $userDao->get_asana_board_for_org($org_id);
-//                    if (!empty($asana_board_for_org['asana_board'])) $asana_project = (string)$asana_board_for_org['asana_board'];
-                }
-error_log("asana_board_for_org $org_id, $asana_project");
+                else               $asana_project = '1200067882657242';
                 $tasks = $projectDao->getProjectTasksArray($projectId);
                 $asana_task_splits = [];
                 foreach ($tasks as $task) {
@@ -2744,6 +2739,19 @@ error_log("asana_board_for_org $org_id, $asana_project");
                         if (!empty($asana_task_details['data']['gid'])) {
                             $asana_task_id = $asana_task_details['data']['gid'];
                             $projectDao->set_asana_task($projectId, $sourceLocale_code, $targetLocale_code, $type_category, $asana_task_id);
+
+                            if (!$self_service) {
+                                $asana_board_for_org = $userDao->get_asana_board_for_org($org_id);
+                                if (!empty($asana_board_for_org['asana_board'])) {
+                                    $asana_board_for_org = (string)$asana_board_for_org['asana_board'];
+                                    error_log("Moving $asana_task_id to board for $org_id: $asana_board_for_org");
+$tresult=                                    $projectDao->executeCurl("https://app.asana.com/api/1.0/tasks/$asana_task_id/addProject", 'POST', ['data' => ['project' => $asana_board_for_org]], 1);
+error_log(print_r($tresult), 1);
+//???if success
+$tresult=                                    $projectDao->executeCurl("https://app.asana.com/api/1.0/tasks/$asana_task_id/removeProject", 'POST', ['data' => ['project' => $asana_project]], 1);
+error_log(print_r($tresult), 1);
+                                }
+                            }
                         }
                     }
                 }
