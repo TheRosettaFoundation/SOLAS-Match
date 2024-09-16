@@ -2745,11 +2745,9 @@ error_log("get_queue_asana_projects: $projectId");//(**)
                                 if (!empty($asana_board_for_org['asana_board'])) {
                                     $asana_board_for_org = (string)$asana_board_for_org['asana_board'];
                                     error_log("Moving $asana_task_id to board for $org_id: $asana_board_for_org");
-$tresult=                                    $projectDao->executeCurl("https://app.asana.com/api/1.0/tasks/$asana_task_id/addProject", 'POST', ['data' => ['project' => $asana_board_for_org]], 1);
-error_log(print_r($tresult, 1));
-//???if success
-$tresult=                                    $projectDao->executeCurl("https://app.asana.com/api/1.0/tasks/$asana_task_id/removeProject", 'POST', ['data' => ['project' => $asana_project]], 1);
-error_log(print_r($tresult, 1));
+                                    $move_result = $projectDao->executeCurl("https://app.asana.com/api/1.0/tasks/$asana_task_id/addProject", 'POST', ['data' => ['project' => $asana_board_for_org]], 1);
+                                    if (isset($move_result['data'])) $projectDao->executeCurl("https://app.asana.com/api/1.0/tasks/$asana_task_id/removeProject", 'POST', ['data' => ['project' => $asana_project]], 1);
+                                    else error_log('Failed: ' . print_r($move_result, 1));
                                 }
                             }
                         }
