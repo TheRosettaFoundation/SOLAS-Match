@@ -183,7 +183,7 @@
                 {if isset($taskTypesforLinguist[$taskType])}
                     {foreach from=TaskTypeEnum::$enum_to_UI key=task_type item=ui}
                         {if $taskType == $task_type}
-                            <td>{$taskTypesforLinguist[$taskType]} {$ui['type_text'] } </td>
+                            <td>{$taskTypesforLinguist[$taskType]} {$ui['pricing_and_recognition_unit_text'] } </td>
                          {/if}
                     {/foreach}
                 {else}
