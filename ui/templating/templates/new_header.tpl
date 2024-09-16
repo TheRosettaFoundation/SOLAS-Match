@@ -71,7 +71,6 @@
                     "{$ui['type_text']}",
                 {/foreach}
             ];
-            
 </script>
         {if isset($extra_scripts)}
             {$extra_scripts}

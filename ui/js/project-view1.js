@@ -1,5 +1,3 @@
-
-
 <script type="text/javascript">
     window.onload = runStartup;
 
@@ -286,7 +284,6 @@ function select() {
         "restrict_native_language_only",
         "restrict_native_language_none",
         "wordcountform"
-      
     ];
 
     // Validation if user clicks on action without doing a selection
@@ -351,7 +348,6 @@ function select() {
             $("[name=pending_documentation]").val(arr);
             $("[name=tasks_settled]").val(arr);
             $("[name=wordnum]").val(arr);
-
         } else if (valueSelected == "all_translation_tasks_"+$(this).attr("data-select-name")) {
             $(':checkbox[data-lang="'+$(this).attr("data-select-name")+'"][data-task-type="2"]').prop("checked", true);
            // arr = [];
@@ -565,33 +561,24 @@ function select() {
         });
       });
 
-    
       $('#wordcountmodal').on('hide.bs.modal', function () {
         $("#wordCount_error").addClass("d-none");
-        
       });
 
-     $('#wordcountmodal').on('shown.bs.modal',function(e){
-
-        let selected = $('#task_ids') ;       
+     $('#wordcountmodal').on('shown.bs.modal', function(e) {
+        let selected = $('#task_ids') ;
         let error = $('#wordCount_error') ;
-     
         let isValid = true ;
-
-        if($.trim(selected.val())===""){
+        if ($.trim(selected.val()) === "") {
             error.removeClass('d-none');
             error.addClass('text-danger my-2 fw-bold');
             console.log('not valid')
             isValid = false ;
-        }else{
+        } else {
             error.addClass('d-none');
-            isValid = true ;
+            isValid = true;
             console.log(' valid')
         }
-
-      
      })
 }
-
-
 </script>

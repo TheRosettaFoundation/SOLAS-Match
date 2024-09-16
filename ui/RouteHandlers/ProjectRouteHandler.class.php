@@ -749,9 +749,6 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
         $sesskey = Common\Lib\UserSession::getCSRFKey();
 
         $project = $projectDao->getProject($project_id);
-       
-      
-
         if (empty($project)) {
             UserRouteHandler::flash('error', 'That project does not exist!');
             return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('home'));
@@ -771,7 +768,6 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
         $reload_for_wordcount = 0;
         if ($request->getMethod() === 'POST') {
             $post = $request->getParsedBody();
-
             if ($fail_CSRF = Common\Lib\UserSession::checkCSRFKey($post, 'projectView')) return $response->withStatus(302)->withHeader('Location', $fail_CSRF);
 
             if ($roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER | NGO_ADMIN | NGO_PROJECT_OFFICER)) {
@@ -1033,6 +1029,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                     error_log("Tasks potentially Marked WAITING_FOR_PREREQUISITES by $user_id, IDs: " . $post['status_as_waiting']);
                 }
             }
+
             if ($roles & (SITE_ADMIN | PROJECT_OFFICER)) {
                 $updated = 0;
                 if (!empty($post['ready_payment'])) {
@@ -1094,47 +1091,35 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                     } else UserRouteHandler::flashNow('error', 'Purchase Order must be an integer.');
                 }
 
-                if (!empty($post['wordnum']) && !empty($post['word_count']) ) {
-                    $total_wordCount = $post['word_count'] ;
-                    $task_ids = preg_split ("/\,/", $post['wordnum']);
+                if (!empty($post['wordnum']) && !empty($post['word_count'])) {
+                    $total_wordCount = $post['word_count'];
+                    $task_ids = preg_split("/\,/", $post['wordnum']);
                     $task_count = count($task_ids);
                     $wordsPerTask = ceil($total_wordCount/$task_count);
-                    $distribution = array_fill(0,$task_count , $wordsPerTask) ;
-                    $totalDistributed = $wordsPerTask * $task_count ;
-                   
-                    if($totalDistributed > $total_wordCount){
-                        $excess = $totalDistributed - $total_wordCount ;
-                        for($i = 0; $i < $excess; $i++)
-                        {
+                    $distribution = array_fill(0, $task_count, $wordsPerTask);
+                    $totalDistributed = $wordsPerTask * $task_count;
+                    if ($totalDistributed > $total_wordCount) {
+                        $excess = $totalDistributed - $total_wordCount;
+                        for ($i = 0; $i < $excess; $i++) {
                             $distribution[$i]-- ;
                         }
                     }
-                    $taskDistribution = [] ;
-                    for($i = 0 ;$i < $task_count; $i++){
-
-                        $taskDistribution[$task_ids[$i]] = $distribution[$i] ;
+                    $taskDistribution = [];
+                    for ($i = 0; $i < $task_count; $i++) {
+                        $taskDistribution[$task_ids[$i]] = $distribution[$i];
                     }
 
                     foreach ($taskDistribution as $task_id => $wordCount) {
-
                         try {
-                            $taskDao -> setTaskWordCount($task_id, $wordCount);
+                            $taskDao->setTaskWordCount($task_id, $wordCount);
                             UserRouteHandler::flashNow('success', 'Word Count Updated.');
-
                         } catch (\Throwable $th) {
                             UserRouteHandler::flashNow('error', 'Word Count failed to update');
                         }
-                                           
-                       
-                        
                     }
-
-                 
-               
-    
-                 
                 }
             }
+
             if ($roles & (SITE_ADMIN | PROJECT_OFFICER) || in_array($project->getOrganisationId(), ORG_EXCEPTIONS) && $roles & (NGO_ADMIN + NGO_PROJECT_OFFICER)) {
                 if (!empty($post['complete_task'])) {
                     $task_id = $post['task_id'];
@@ -1237,15 +1222,13 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
 
         $preventImageCacheToken = time(); //see http://stackoverflow.com/questions/126772/how-to-force-a-web-browser-not-to-cache-images
 
-         // Section for selecting linguist project task summary 
-         $linguist_summary = $projectDao->get_linguist_project_tasksummary($project_id) ;
-         $linguist_taskTypes = [] ;
-         foreach($linguist_summary as $taskTypes){
-             foreach ($taskTypes as $taskType => $count) { 
-                 if (!in_array($taskType, $linguist_taskTypes)) { $linguist_taskTypes[] = $taskType; } 
-             }
-         }
-
+        $linguist_summary = $projectDao->get_linguist_project_tasksummary($project_id);
+        $linguist_taskTypes = [];
+        foreach ($linguist_summary as $taskTypes) {
+            foreach ($taskTypes as $taskType => $count) {
+                if (!in_array($taskType, $linguist_taskTypes)) $linguist_taskTypes[] = $taskType;
+            }
+        }
 
         $creator = $taskDao->get_creator($project_id, $memsource_project);
         $pm = $creator['email'];
@@ -1270,10 +1253,8 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                 'total_expected_price'         => $total_expected_price,
                 'total_expected_cost_waived'   => $total_expected_cost_waived,
                 'one_paid'                     => $one_paid,
-                'linguist_summary'         => $linguist_summary,
-                'linguist_taskTypes'          => $linguist_taskTypes
-               
-
+                'linguist_summary'             => $linguist_summary,
+                'linguist_taskTypes'           => $linguist_taskTypes
         ));
 
         return UserRouteHandler::render("project/project.view.tpl", $response);
@@ -1572,7 +1553,6 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
             'memsource_project' => $memsource_project,
             'project_complete_date' => $taskDao->get_project_complete_date($project_id),
             'sesskey'        => $sesskey,
-           
         ));
 
         return UserRouteHandler::render("project/project.alter.tpl", $response);
