@@ -166,7 +166,7 @@
                 
                     {foreach from=TaskTypeEnum::$enum_to_UI key=task_type item=ui}
                         {if $taskType == $task_type}
-                            <th><span style="color: {$ui['colour']}">{$ui['type_text'] } {$ui['memsource_name']}</span></th>
+                            <th><span style="color: {$ui['colour']}">{$ui['type_text'] } </span></th>
                         {/if}
                     {/foreach}
 
@@ -181,7 +181,11 @@
             <td>{$linguist}</td>
             {foreach from=$linguist_taskTypes item=taskType}
                 {if isset($taskTypesforLinguist[$taskType])}
-                  <td>{$taskTypesforLinguist[$taskType]} </td>
+                    {foreach from=TaskTypeEnum::$enum_to_UI key=task_type item=ui}
+                        {if $taskType == $task_type}
+                            <td>{$taskTypesforLinguist[$taskType]} {$ui['type_text'] } </td>
+                         {/if}
+                    {/foreach}
                 {else}
                     <td> - </td>
                 {/if}
