@@ -161,26 +161,21 @@
     </div>
 
     {if ($roles & ($SITE_ADMIN + $PROJECT_OFFICER))}
-        {if !empty($linguist_summary)}
+    {if !empty($linguist_summary)}
     <div class="bg-body  p-2 border-secondary mt-4 mb-4 rounded-3 ">
-    <h3 class="fw-bold flex-grow-1 align-middle"> Linguists Project Word Count Summary
-                
-            </h3>
+    <h3 class="fw-bold flex-grow-1 align-middle"> Linguists Project Word Count Summary</h3>
     <div class="table-responsive mt-4 ">
     <table class="table " >
         <thead class="fs-5">
             <tr>                               
                  <th>Linguist</th>
                    {foreach from=$linguist_taskTypes item=taskType} 
-                
                     {foreach from=TaskTypeEnum::$enum_to_UI key=task_type item=ui}
                         {if $taskType == $task_type}
                             <th><span style="color: {$ui['colour']}">{$ui['type_text'] } </span></th>
                         {/if}
                     {/foreach}
-
                    {/foreach}
-                         
             </tr>
         </thead>
         <tbody class="fs-4 bg-primary">
@@ -199,11 +194,8 @@
                     <td> - </td>
                 {/if}
             {/foreach}
-                
-        
         </tr>
         {/foreach}
-
         </tbody>
         </table>
         </div>
@@ -238,10 +230,6 @@
     </div>
     {/if}
 
-    
-
-
-   
        <div class="d-flex justify-content-between flex-wrap">
      <div class="bg-body p-2 border-secondary rounded-top-3 mt-4 flex-grow-1 me-md-2">
         <div class="table-responsive mt-4  ">   
@@ -984,9 +972,6 @@
                 {/foreach}
     {/if}
 
-  
-
-
     <!-- Cancel Modal -->
 <div id="cancelmodal" class="modal fade"  tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true">
 <div class="modal-dialog">
@@ -1028,8 +1013,6 @@
   </div>
 </div>
 
-
-
 <!-- PO# Modal -->
 <div id="ponummodal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 <div class="modal-dialog">
@@ -1053,7 +1036,6 @@
 </div>
 </div>
 </div>
-
 
 
 <!-- Word Count Modal -->
