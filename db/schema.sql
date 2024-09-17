@@ -13398,7 +13398,8 @@ BEGIN
     JOIN TaskClaims         tc ON t.id=tc.task_id
     JOIN Users               u ON tc.user_id=u.id
     WHERE p.id=pID
-    GROUP BY t.`task-type_id`, u.id;
+    GROUP BY t.`task-type_id`, u.id
+    ORDER BY u.`display-name`, u.id, t.`task-type_id`;
 END//
 DELIMITER ;
 

@@ -71,23 +71,21 @@ class ProjectDao extends BaseDao
         return $ret;
     }
 
-    public function get_linguist_project_tasksummary($projectId)
+    public function get_linguist_project_tasksummary($project_id)
     {
-        $results = LibAPI\PDOWrapper::call('get_linguist_project_tasksummary', LibAPI\PDOWrapper::cleanse($projectId));
-        $linguist_summary = [];   
-            foreach($results as $result) {
-                $linguist = $result['linguistDisplayName'];
-                $taskType = $result['taskTypeStatus'];
-                $count = $result['num'];
-                if(!isset($linguist_summary[$linguist])){
-                    $linguist_summary[$linguist] = [];
-                }
-                if(!isset($linguist_summary[$linguist][$taskType])){
-                    $linguist_summary[$linguist][$taskType] = [];
-                }
-                $linguist_summary[$linguist][$taskType] = $count;
-            }    
-        return $linguist_summary;
+        $results = LibAPI\PDOWrapper::call('get_linguist_project_tasksummary', LibAPI\PDOWrapper::cleanse($project_id));
+        if (empty($results)) return [[], []];
+
+        $linguist_summary = [];
+        $task_type_list = [];
+        foreach ($results as $result) {
+            $linguist_summary[$result['id']][0] = $result['linguistDisplayName'];
+            $linguist_summary[$result['id']][$result['taskTypeStatus']] = $result['num'] . ' ' . $result['pricing_and_recognition_unit_tex'];
+            $task_type_list['taskTypeStatus'] = $result['type_text'];
+        }
+        ksort($task_type_list);
+
+        return [$linguist_summary, $task_type_list];
     }
 
     public function createProjectDirectly($project)
