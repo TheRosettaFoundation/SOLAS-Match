@@ -160,49 +160,6 @@
     </div>  
     </div>
 
-    {if ($roles & ($SITE_ADMIN + $PROJECT_OFFICER))}
-    {if !empty($linguist_summary)}
-    <div class="bg-body  p-2 border-secondary mt-4 mb-4 rounded-3 ">
-    <h3 class="fw-bold flex-grow-1 align-middle"> Linguists Project Word Count Summary</h3>
-    <div class="table-responsive mt-4 ">
-    <table class="table " >
-        <thead class="fs-5">
-            <tr>                               
-                 <th>Linguist</th>
-                   {foreach from=$linguist_taskTypes item=taskType} 
-                    {foreach from=TaskTypeEnum::$enum_to_UI key=task_type item=ui}
-                        {if $taskType == $task_type}
-                            <th><span style="color: {$ui['colour']}">{$ui['type_text'] } </span></th>
-                        {/if}
-                    {/foreach}
-                   {/foreach}
-            </tr>
-        </thead>
-        <tbody class="fs-4 bg-primary">
-        
-        {foreach from=$linguist_summary item=taskTypesforLinguist key=linguist}
-        <tr>
-            <td>{$linguist}</td>
-            {foreach from=$linguist_taskTypes item=taskType}
-                {if isset($taskTypesforLinguist[$taskType])}
-                    {foreach from=TaskTypeEnum::$enum_to_UI key=task_type item=ui}
-                        {if $taskType == $task_type}
-                            <td>{$taskTypesforLinguist[$taskType]} {$ui['pricing_and_recognition_unit_text'] } </td>
-                         {/if}
-                    {/foreach}
-                {else}
-                    <td> - </td>
-                {/if}
-            {/foreach}
-        </tr>
-        {/foreach}
-        </tbody>
-        </table>
-        </div>
-        </div>
-    {/if}
-    {/if}
-
     {if ($roles & ($SITE_ADMIN + $PROJECT_OFFICER)) && $one_paid}
     <div class="bg-body p-2 border-secondary rounded-top-3 mt-4">
     <div class="table-responsive mt-4  ">
@@ -971,6 +928,51 @@
                     </div>
                 {/foreach}
     {/if}
+
+
+    {if ($roles & ($SITE_ADMIN + $PROJECT_OFFICER))}
+    {if !empty($linguist_summary)}
+    <div class="bg-body  p-2 border-secondary mt-4 mb-4 rounded-3 ">
+    <h3 class="fw-bold flex-grow-1 align-middle"> Linguists Project Word Count Summary</h3>
+    <div class="table-responsive mt-4 ">
+    <table class="table " >
+        <thead class="fs-5">
+            <tr>
+                 <th>Linguist</th>
+                   {foreach from=$linguist_taskTypes item=taskType}
+                    {foreach from=TaskTypeEnum::$enum_to_UI key=task_type item=ui}
+                        {if $taskType == $task_type}
+                            <th><span style="color: {$ui['colour']}">{$ui['type_text'] } </span></th>
+                        {/if}
+                    {/foreach}
+                   {/foreach}
+            </tr>
+        </thead>
+        <tbody class="fs-4 bg-primary">
+
+        {foreach from=$linguist_summary item=taskTypesforLinguist key=linguist}
+        <tr>
+            <td>{$linguist}</td>
+            {foreach from=$linguist_taskTypes item=taskType}
+                {if isset($taskTypesforLinguist[$taskType])}
+                    {foreach from=TaskTypeEnum::$enum_to_UI key=task_type item=ui}
+                        {if $taskType == $task_type}
+                            <td>{$taskTypesforLinguist[$taskType]} {$ui['pricing_and_recognition_unit_text'] } </td>
+                         {/if}
+                    {/foreach}
+                {else}
+                    <td> - </td>
+                {/if}
+            {/foreach}
+        </tr>
+        {/foreach}
+        </tbody>
+        </table>
+        </div>
+        </div>
+    {/if}
+    {/if}
+
 
     <!-- Cancel Modal -->
 <div id="cancelmodal" class="modal fade"  tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true">
