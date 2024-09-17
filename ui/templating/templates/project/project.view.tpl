@@ -930,7 +930,7 @@
     {/if}
 
 
-    {if ($roles & ($SITE_ADMIN + $PROJECT_OFFICER))}
+    {if ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER))}
     {if !empty($linguist_summary)}
     <div class="bg-body  p-2 border-secondary mt-4 mb-4 rounded-3 ">
     <h3 class="fw-bold flex-grow-1 align-middle">Linguist's Paid Word Count Summary</h3>
@@ -938,38 +938,29 @@
     <table class="table " >
         <thead class="fs-5">
             <tr>
-                 <th>Linguist</th>
-                   {foreach from=$linguist_taskTypes item=taskType}
-                    {foreach from=TaskTypeEnum::$enum_to_UI key=task_type item=ui}
-                        {if $taskType == $task_type}
-                            <th><span style="color: {$ui['colour']}">{$ui['type_text'] } </span></th>
-                        {/if}
-                    {/foreach}
-                   {/foreach}
+                <th>Linguist</th>
+                {foreach from=$task_type_list key=task_type item=type_text}
+                <th><span style="color: {TaskTypeEnum::$enum_to_UI[$task_type]['colour']}">{$type_text}</span></th>
+                {/foreach}
             </tr>
         </thead>
         <tbody class="fs-4 bg-primary">
-
-        {foreach from=$linguist_summary item=taskTypesforLinguist key=linguist}
-        <tr>
-            <td>{$linguist}</td>
-            {foreach from=$linguist_taskTypes item=taskType}
-                {if isset($taskTypesforLinguist[$taskType])}
-                    {foreach from=TaskTypeEnum::$enum_to_UI key=task_type item=ui}
-                        {if $taskType == $task_type}
-                            <td>{$taskTypesforLinguist[$taskType]} {$ui['pricing_and_recognition_unit_text'] } </td>
-                         {/if}
-                    {/foreach}
-                {else}
-                    <td> - </td>
-                {/if}
-            {/foreach}
-        </tr>
+        {foreach from=$linguist_summary item=linguist_row}
+            <tr>
+                <td>{$linguist_row[0]}</td>
+                {foreach from=$task_type_list key=task_type item=type_text}
+                    {if !empty($linguist_row[$task_type])}
+                        <td>{$linguist_row[$task_type]}</td>
+                    {else}
+                        <td>-</td>
+                    {/if}
+                {/foreach}
+            </tr>
         {/foreach}
         </tbody>
-        </table>
-        </div>
-        </div>
+    </table>
+    </div>
+    </div>
     {/if}
     {/if}
 

@@ -80,7 +80,7 @@ class ProjectDao extends BaseDao
         $task_type_list = [];
         foreach ($results as $result) {
             $linguist_summary[$result['id']][0] = $result['linguistDisplayName'];
-            $linguist_summary[$result['id']][$result['taskTypeStatus']] = $result['num'] . ' ' . $result['pricing_and_recognition_unit_tex'];
+            $linguist_summary[$result['id']][$result['taskTypeStatus']] = $result['num'] . ' ' . $result['pricing_and_recognition_unit_text'];
             $task_type_list['taskTypeStatus'] = $result['type_text'];
         }
         ksort($task_type_list);

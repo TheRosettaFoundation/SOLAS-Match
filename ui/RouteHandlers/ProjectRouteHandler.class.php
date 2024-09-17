@@ -1222,13 +1222,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
 
         $preventImageCacheToken = time(); //see http://stackoverflow.com/questions/126772/how-to-force-a-web-browser-not-to-cache-images
 
-        $linguist_summary = $projectDao->get_linguist_project_tasksummary($project_id);
-        $linguist_taskTypes = [];
-        foreach ($linguist_summary as $taskTypes) {
-            foreach ($taskTypes as $taskType => $count) {
-                if (!in_array($taskType, $linguist_taskTypes)) $linguist_taskTypes[] = $taskType;
-            }
-        }
+        [$linguist_summary, $task_type_list] = $projectDao->get_linguist_project_tasksummary($project_id);
 
         $creator = $taskDao->get_creator($project_id, $memsource_project);
         $pm = $creator['email'];
@@ -1254,7 +1248,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                 'total_expected_cost_waived'   => $total_expected_cost_waived,
                 'one_paid'                     => $one_paid,
                 'linguist_summary'             => $linguist_summary,
-                'linguist_taskTypes'           => $linguist_taskTypes
+                'task_type_list'               => $task_type_list
         ));
 
         return UserRouteHandler::render("project/project.view.tpl", $response);
