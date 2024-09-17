@@ -525,11 +525,7 @@ error_log("createTaskDirectly: $args");
 
     public function setTaskWordCount($task_id, $word_count)
     {
-        LibAPI\PDOWrapper::call('setTaskWordCount',
-            LibAPI\PDOWrapper::cleanse($task_id) . ',' .
-            LibAPI\PDOWrapper::cleanse($word_count));
-
-        LibAPI\PDOWrapper::call('update_tasks_status', LibAPI\PDOWrapper::cleanse($task_id) . ',' . LibAPI\PDOWrapper::cleanse($word_count) . ',NULL');
+        LibAPI\PDOWrapper::call('setTaskWordCount', LibAPI\PDOWrapper::cleanse($task_id) . ',' . LibAPI\PDOWrapper::cleanse($word_count));
     }
 
     public function getTaskStatus($task_id)
