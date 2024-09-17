@@ -5601,11 +5601,9 @@ DELIMITER ;
 
 DROP PROCEDURE IF EXISTS `setTaskWordCount`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `setTaskWordCount`(IN `tID` INT, IN `wID` INT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `setTaskWordCount`(IN tID BIGINT UNSIGNED, IN wc INT)
 BEGIN
-  update Tasks
-    set Tasks.`word-count`=wID
-    where Tasks.id=tID;
+  UPDATE Tasks SET `word-count`=wc WHERE id=tID;
 END//
 DELIMITER ;
 
@@ -13384,19 +13382,23 @@ DELIMITER ;
 
 DROP PROCEDURE IF EXISTS `get_linguist_project_tasksummary`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `get_linguist_project_tasksummary`(IN pID INT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_linguist_project_tasksummary`(IN pID INT UNSIGNED)
 BEGIN
-     SELECT 
-        `display-name` AS linguistDisplayName,
-        t.`task-type_id` AS taskTypeStatus,
-        SUM( t.`word-count`) AS num
-        FROM Tasks t
-        INNER JOIN Projects p ON t.project_id = p.id
-        INNER JOIN TaskPaids tp on tp.task_id = t.id
-        INNER JOIN TaskClaims tc ON t.id = tc.task_id
-        INNER JOIN Users usr ON usr.id = tc.user_id 
-        WHERE p.id = pID
-        GROUP BY t.`task-type_id`, `display-name`;
+    SELECT
+        u.id,
+        u.`display-name`    AS linguistDisplayName,
+        t.`task-type_id`    AS taskTypeStatus,
+        ttd.type_text,
+        ttd.pricing_and_recognition_unit_text,
+        SUM(t.`word-count`) AS num
+    FROM Projects            p
+    JOIN Tasks               t ON p.id=t.project_id
+    JOIN task_type_details ttd ON t.`task-type_id`=ttd.type_enum
+    JOIN TaskPaids          tp ON t.id=tp.task_id
+    JOIN TaskClaims         tc ON t.id=tc.task_id
+    JOIN Users               u ON tc.user_id=u.id
+    WHERE p.id=pID
+    GROUP BY t.`task-type_id`, u.id;
 END//
 DELIMITER ;
 
