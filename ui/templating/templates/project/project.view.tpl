@@ -1036,7 +1036,7 @@
 <div class="modal-dialog">
 <div class="modal-content">
   <div class="modal-header">
-    <h3 class="modal-title fs-4 fw-bold me-4" id="myModalLabel">Set Word Count</h3>
+    <h3 class="modal-title fs-4 fw-bold me-4" id="myModalLabel">Distribute Word Count</h3>
   </div>
 
   <div class="modal-body py-2">
