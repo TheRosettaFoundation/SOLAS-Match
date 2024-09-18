@@ -495,7 +495,7 @@
 
             <div class="bg-light-subtle d-flex flex-column justify-content-center form_action me-2  mb-4 mb-lg-0">
             <a class="d-flex p-1 text-muted fs-6 text-decoration-none "  data-bs-toggle="modal" href="#wordcountmodal" role="button">
-            <i class="fa-solid fa-check me-2 "></i> <span> Set Word Count </span>
+            <i class="fa-solid fa-check me-2 "></i> <span> Distribute Word Count </span>
             </a>
             </div>
         {/if}
