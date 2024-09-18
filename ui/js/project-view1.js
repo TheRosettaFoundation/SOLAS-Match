@@ -566,18 +566,16 @@ function select() {
       });
 
      $('#wordcountmodal').on('shown.bs.modal', function(e) {
-        let selected = $('#task_ids') ;
-        let error = $('#wordCount_error') ;
+        let selected = $('#task_ids');
+        let error = $('#wordCount_error');
         let isValid = true ;
         if ($.trim(selected.val()) === "") {
             error.removeClass('d-none');
             error.addClass('text-danger my-2 fw-bold');
-            console.log('not valid')
-            isValid = false ;
+            isValid = false;
         } else {
             error.addClass('d-none');
             isValid = true;
-            console.log(' valid')
         }
      })
 }
