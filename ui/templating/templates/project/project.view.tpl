@@ -950,7 +950,7 @@
                 <td>{$linguist_row[0]}</td>
                 {foreach from=$task_type_list key=task_type item=type_text}
                     {if !empty($linguist_row[$task_type])}
-                        <td>{$linguist_row[$task_type]}</td>
+                        <td>{$linguist_row[$task_type]} {TaskTypeEnum::$enum_to_UI[$task_type]['pricing_and_recognition_unit_text']}</td>
                     {else}
                         <td>-</td>
                     {/if}
