@@ -1301,7 +1301,7 @@ If a language is to be removed from this list, the community will be informed be
             <td>${round($invoice['amount'], 2)}</td>
             <td>
                 {if     $invoice['status'] == 0}Invoice
-                {elseif $invoice['status'] == 1}Please review invoice and send it to <a href="mailto:linguists.payments@clearglobal.org?subject={rawurlencode('Invoice to Clear Global')}" target="_blank">linguists.payments@clearglobal.org</a>
+                {elseif $invoice['status'] == 1}Please review invoice and send it to <a href="mailto:linguistspayments@translatorswithoutborders.org?subject={rawurlencode('Invoice to Clear Global')}" target="_blank">linguistspayments@translatorswithoutborders.org</a>
                 {elseif $invoice['status'] == 2}Invoice Paid
                 {elseif $invoice['status'] == 3}Draft Paid
                 {elseif $invoice['status'] == 4}Invoice Bounced
