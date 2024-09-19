@@ -37,24 +37,36 @@
     <thead>
         <th>PO #</th>
         <th>Supplier</th>
-        <th>Total</th>
         <th>Status</th>
         <th>Approver mail</th>
         <th>Approval date</th>
-        <th>Total Tasks Assigned</th>
-        <th>Total Tasks Completed</th>
-    </thead>    
+        <th>Total Zahara</th>
+        <th>Total Tasks Assigned to PO</th>
+        <th>Difference</th>
+        <th>Total Tasks Completed for PO</th>
+        <th>Total Tasks Waived for PO</th>
+    </thead>
     <tbody>
         {foreach $pos as $po}
         <tr>
             <td>{$po['purchase_order']}</td>
             <td>{$po['supplier']}</td>
-            <td>{$po['total']} {$po['currency']}</td>
             <td>{$po['status']}</td>
             <td>{$po['approver_mail']}</td>
             <td>{$po['approval_date']}</td>
-            <td>{round($po['total_tasks_for_po'], 2)}</td>
-            <td>{round($po['total_completed_tasks_for_po'], 2)}</td>
+            <td>{$po['total']} {$po['currency']}</td>
+            <td>${round($po['total_tasks_for_po'], 2)}</td>
+
+Difference: Zahara Total - Total Tasks Assigned (Color in Red if <> 0)
+[[[
+I had a discussion with Dona today and we just need to add to the PO report a "Difference" field (amount in Red if not 0) so that POs can identify issues.
+It is the difference between the Zahara total and the total allocated to paid tasks under that PO #. The report becomes (the below is heading & information):
+]]]
+
+
+
+            <td>${round($po['total_completed_tasks_for_po'], 2)}</td>
+            <td>${round($po['total_waived_tasks_for_po'], 2)}</td>
         {/foreach}
     </tbody>
 </table>
