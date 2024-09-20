@@ -32,6 +32,7 @@
 
 <h2 style="text-align:center;">SoW Report - Completed Unsettled Paid</h2>
 IF &claimed=1: SoW Report - Ongoing Paid Tasks
+AND LINK TO OTHER SOW REPORT???
 <a href="{urlFor name="sow_linguist_report"}" target="_blank">SoW Linguist Report</a>
 <br />
 
@@ -75,6 +76,7 @@ if NEITH OF ABOVE SHOW completed=1
             <td>{if !empty($task['deal_id'])}<a href="{urlFor name="deal_id_report" options="deal_id.{$task['deal_id']}"}" target="_blank">{$task['deal_id']}</a>{/if}</td>
        <!-- <td>{$task['budget_code']}</td> -->
             <td>
+LinK HERE???
                 {$task['purchase_order']}
                 {if !empty($task['total'])}<br />Total: ${round($task['total'], 2)}{/if}
                 <br />{if !empty($task['po_status'])}{if $task['po_status'] == 'Completed' || $task['po_status'] == 'Approved'}{$task['po_status']}{else}<span style="color: red;">{$task['po_status']}, Not Completed</span>{/if}{else}<span style="color: red;">No PO</span>{/if}

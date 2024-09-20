@@ -13178,6 +13178,7 @@ BEGIN
         t.id AS task_id,
         IF(t.`task-status_id`=3, 1, 0) AS claimed,
         IF(t.`task-status_id`=4, 1, 0) AS completed,
+        IF(tcd.complete_date IS NOT NULL AND tcd.complete_date<CAST(DATE_FORMAT(NOW(), '%Y-%m-01 00:00:01') as DATETIME), 1, 0) AS before_current_month,
         ttd.type_text,
         CONCAT(l1.code, '-', c1.code, '<br />', l2.code, '-', c2.code) AS language_pair,
         pcd.deal_id,
@@ -13220,11 +13221,6 @@ BEGIN
     LEFT JOIN invoices                        i ON tp.invoice_number=i.invoice_number
     WHERE
         tp.processed>=0 AND
-[[[
-        IF(tcd.complete_date IS NOT NULL AND tcd.complete_date<CAST(DATE_FORMAT(NOW(), '%Y-%m-01 00:00:01') as DATETIME)) AS before_current_month,
-(**)• Update SoW criteria to show even the tasks Completed in the current month,
-(**)  but don't include them in when generating invoices. This allows POs to identify missing information while the tasks are still new and not wait to the next month
-]]]
         tp.payment_status NOT IN ('In-kind', 'In-house', 'Waived')
     ORDER BY
         tp.processed,
