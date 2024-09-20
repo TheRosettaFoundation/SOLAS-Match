@@ -3311,8 +3311,8 @@ EOF;
 $html = <<<EOF
         <table width="100%" cellspacing="0" cellpadding="55%">
         <tr valign="bottom">
-            <td class="header1" rowspan="2" align="left" valign="middle" width="33%">$draft_message</td>
-            <td width="35%"></td>
+            <td class="header1" rowspan="2" align="left" valign="middle" width="55%">$draft_message</td>
+            <td width="10%"></td>
             <td class="header1" rowspan="2" align="left" valign="middle" width="35%">
                 <div style="font-weight:bold; float:left ; font-size:26px; text-transform:uppercase">INVOICE</div>
             </td>
