@@ -30,7 +30,8 @@
 <body>
 {if !empty($tasks)}
 
-<h2 style="text-align:center;">SoW Report</h2>
+<h2 style="text-align:center;">SoW Report - Completed Unsettled Paid</h2>
+IF &claimed=1: SoW Report - Ongoing Paid Tasks
 <a href="{urlFor name="sow_linguist_report"}" target="_blank">SoW Linguist Report</a>
 <br />
 
@@ -58,6 +59,11 @@
     </thead>    
     <tbody>
         {foreach $tasks as $task}
+[[
+IF claimed=1 only show claimed=1 (or non zero)
+IF PO show all
+if NEITH OF ABOVE SHOW completed=1
+]]
         <tr>
             <td><a href="{urlFor name="user-public-profile" options="user_id.{$task['user_id']}"}" target="_blank">{TemplateHelper::uiCleanseHTML($task['linguist'])}</a></td>
             <td><a href="{urlFor name="org-public-profile" options="org_id.{$task['organisation_id']}"}" target="_blank">{TemplateHelper::uiCleanseHTML($task['name'])}</a></td>
