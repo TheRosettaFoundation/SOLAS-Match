@@ -25,6 +25,7 @@
   {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER)}
     <p><a href="{urlFor name="all_deals_report"}" target="_blank">List all deals.</a></p>
     <p><a href="{urlFor name="paid_projects"}" target="_blank">List all paid projects.</a></p>
+    <p><a href="{urlFor name="po_report"}" target="_blank">List purchase orders.</a></p>
   {/if}
     <p><a href="{urlFor name="community_dashboard"}">[Download community dashboard report]</a></p>
     <p><a href="{urlFor name="users_review"}">List user certificates to be reviewed</a></p>
@@ -32,6 +33,7 @@
 {elseif $roles & (128)}
     <p><a href="{urlFor name="all_deals_report"}" target="_blank">List all deals.</a></p>
     <p><a href="{urlFor name="paid_projects"}" target="_blank">List all paid projects.</a></p>
+    <p><a href="{urlFor name="po_report"}" target="_blank">List purchase orders.</a></p>
     <hr />
 {/if}
 
