@@ -508,6 +508,9 @@ class AdminRouteHandler
         global $template_data;
         $statsDao = new DAO\StatisticsDao();
 
+        $parms = $request->getQueryParams();
+        $po = !empty($parms['po']) ? $parms['po'] : 0;
+
         $template_data['tasks'] = $statsDao->sow_report();
         return UserRouteHandler::render('admin/sow_report.tpl', $response);
     }

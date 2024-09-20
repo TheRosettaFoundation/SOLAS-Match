@@ -49,7 +49,7 @@
     <tbody>
         {foreach $pos as $po}
         <tr>
-            <td>{$po['purchase_order']}</td>
+            <td><a href="{urlFor name="sow_report"}?po={$po['purchase_order']}" target="_blank">{$po['purchase_order']}</a></td>
             <td>{$po['supplier']}</td>
             <td>{$po['status']}</td>
             <td>{$po['approver_mail']}</td>
