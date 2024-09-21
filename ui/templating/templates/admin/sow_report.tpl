@@ -30,9 +30,14 @@
 <body>
 {if !empty($tasks)}
 
+{if !$claimed}
 <h2 style="text-align:center;">SoW Report - Completed Unsettled Paid</h2>
-IF &claimed=1: SoW Report - Ongoing Paid Tasks
-AND LINK TO OTHER SOW REPORT???
+{else}
+<h2 style="text-align:center;">SoW Report - Ongoing Paid Tasks</h2>
+{/if}
+
+<a href="{urlFor name="sow_linguist_report"}" target="_blank">SoW Report - Ongoing Paid Tasks</a>
+<br />
 <a href="{urlFor name="sow_linguist_report"}" target="_blank">SoW Linguist Report</a>
 <br />
 
