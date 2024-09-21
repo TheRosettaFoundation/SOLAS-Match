@@ -30,10 +30,12 @@
 <body>
 {if !empty($tasks)}
 
-{if !$claimed}
-<h2 style="text-align:center;">SoW Report - Completed Unsettled Paid</h2>
-{else}
+{if $claimed}
 <h2 style="text-align:center;">SoW Report - Ongoing Paid Tasks</h2>
+{elseif $po}
+<h2 style="text-align:center;">SoW Report - All Tasks for Purchase Order: {$po}</h2>
+{else}
+<h2 style="text-align:center;">SoW Report - Completed Unsettled Paid</h2>
 {/if}
 
 {if !$claimed}
