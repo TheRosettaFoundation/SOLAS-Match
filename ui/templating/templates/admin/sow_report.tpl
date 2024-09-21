@@ -36,7 +36,7 @@
 <h2 style="text-align:center;">SoW Report - Ongoing Paid Tasks</h2>
 {/if}
 
-<a href="{urlFor name="sow_linguist_report"}" target="_blank">SoW Report - Ongoing Paid Tasks</a>
+<a href="{urlFor name="sow_report"}?claimed=1" target="_blank">SoW Report - Ongoing Paid Tasks</a>
 <br />
 <a href="{urlFor name="sow_linguist_report"}" target="_blank">SoW Linguist Report</a>
 <br />
