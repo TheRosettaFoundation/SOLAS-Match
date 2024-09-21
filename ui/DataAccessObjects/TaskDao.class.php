@@ -1099,6 +1099,13 @@ error_log("total_expected_cost: $total_expected_cost, divide_rate_by_60 " . $tas
         $tasks = 0;
         $invoices = [];
         foreach ($sow_reports as $row) {
+
+
+if (!$row['completed']) error_log("skipping BECAUSE NOT 'completed', user_id: " . $row['user_id']);
+if (!$row['before_current_month']) error_log("skipping BECAUSE NOT 'before_current_month', user_id: " . $row['user_id']);
+
+
+
             if ($row['processed'] == 0 && $row['completed'] && $row['before_current_month'] && !empty($row['google_drive_link']) && !empty($row['po_status']) && ($row['po_status'] == 'Completed' || $row['po_status'] == 'Approved')) {
                 $i = $row['user_id'];
                 if ($row['total_expected_cost'] >= 600) $i = "$i-P";
