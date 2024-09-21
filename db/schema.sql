@@ -1715,7 +1715,7 @@ CREATE TABLE IF NOT EXISTS `zahara_purchase_orders` (
   approver_mail      VARCHAR(255) COLLATE utf8mb4_unicode_ci DEFAULT '',
   approval_date      DATETIME,
   md5_hash           BINARY(32) DEFAULT '00000000000000000000000000000000',
-  KEY (purchase_order)
+  PRIMARY KEY (purchase_order)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
