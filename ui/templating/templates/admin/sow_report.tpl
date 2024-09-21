@@ -36,7 +36,11 @@
 <h2 style="text-align:center;">SoW Report - Ongoing Paid Tasks</h2>
 {/if}
 
+{if !$claimed}
 <a href="{urlFor name="sow_report"}?claimed=1" target="_blank">SoW Report - Ongoing Paid Tasks</a>
+{else}
+<a href="{urlFor name="sow_report"}" target="_blank">SoW Report - Completed Unsettled Paid</a>
+{/if}
 <br />
 <a href="{urlFor name="sow_linguist_report"}" target="_blank">SoW Linguist Report</a>
 <br />
