@@ -66,8 +66,11 @@
     <tbody>
         {foreach $tasks as $task}
 [[
-IF claimed=1 only show claimed=1 (or non zero)
-IF PO show all
+{if !empty($tasks)}
+if ($claimed && $task['claimed'])
+||
+IF $po && $po=$task['purchase_order'] show all
+||
 if NEITH OF ABOVE SHOW completed=1
 ]]
         <tr>
@@ -81,8 +84,7 @@ if NEITH OF ABOVE SHOW completed=1
             <td>{if !empty($task['deal_id'])}<a href="{urlFor name="deal_id_report" options="deal_id.{$task['deal_id']}"}" target="_blank">{$task['deal_id']}</a>{/if}</td>
        <!-- <td>{$task['budget_code']}</td> -->
             <td>
-LinK HERE???
-                {$task['purchase_order']}
+                <a href="{urlFor name="po_report"}?po={$task['purchase_order']}" target="_blank">{$task['purchase_order']}</a>
                 {if !empty($task['total'])}<br />Total: ${round($task['total'], 2)}{/if}
                 <br />{if !empty($task['po_status'])}{if $task['po_status'] == 'Completed' || $task['po_status'] == 'Approved'}{$task['po_status']}{else}<span style="color: red;">{$task['po_status']}, Not Completed</span>{/if}{else}<span style="color: red;">No PO</span>{/if}
                 {if !empty($task['approver_mail'])}<br />{substr($task['approver_mail'], 0, strpos($task['approver_mail'], '@'))}{/if}
@@ -110,6 +112,7 @@ LinK HERE???
             </td>
             <td>{if $task['invoice_number'] > 0}<a href="{urlFor name="get-invoice" options="invoice_number.{$task['invoice_number']}"}" target="_blank">TWB-{str_pad($task['invoice_number'], 4, '0', STR_PAD_LEFT)}</a>{/if}</td>
         </tr>
+        {/if}
         {/foreach}
     </tbody>
 </table>
