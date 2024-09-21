@@ -13283,6 +13283,36 @@ BEGIN
 END//
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `po_report`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `po_report`()
+BEGIN
+    SELECT
+        pos.purchase_order,
+        MAX(pos.creation_date)  AS creation_date,
+        MAX(supplier)           AS supplier,
+        MAX(supplier_reference) AS supplier_reference,
+        MAX(total)              AS total,
+        MAX(currency)           AS currency,
+        MAX(description)        AS description,
+        MAX(division_name)      AS division_name,
+        MAX(status)             AS status,
+        MAX(approver_mail)      AS approver_mail,
+        MAX(approval_date)      AS approval_date,
+        SUM(IF(1                                                     , IF(t.`word-count`>1, IF(ttd.divide_rate_by_60, t.`word-count`*tp.unit_rate/60, t.`word-count`*tp.unit_rate), 0), 0)) AS total_tasks_for_po,
+        SUM(IF(t.`task-status_id`=4                                  , IF(t.`word-count`>1, IF(ttd.divide_rate_by_60, t.`word-count`*tp.unit_rate/60, t.`word-count`*tp.unit_rate), 0), 0)) AS total_completed_tasks_for_po,
+        SUM(IF(tp.payment_status IN ('In-kind', 'In-house', 'Waived'), IF(t.`word-count`>1, IF(ttd.divide_rate_by_60, t.`word-count`*tp.unit_rate/60, t.`word-count`*tp.unit_rate), 0), 0)) AS total_waived_tasks_for_po
+    FROM zahara_purchase_orders pos
+    JOIN TaskPaids               tp ON pos.purchase_order=tp.purchase_order
+    JOIN Tasks                    t ON tp.task_id=t.id
+    JOIN task_type_details      ttd ON t.`task-type_id`=ttd.type_enum
+    WHERE
+        pos.purchase_order>=6450
+    GROUP BY pos.purchase_order
+    ORDER BY pos.purchase_order;
+END//
+DELIMITER ;
+
 DROP PROCEDURE IF EXISTS `set_invoice_paid`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `set_invoice_paid`(IN inv INT, IN aID INT UNSIGNED)
