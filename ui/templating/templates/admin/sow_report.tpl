@@ -38,10 +38,12 @@
 <h2 style="text-align:center;">SoW Report - Completed Unsettled Paid</h2>
 {/if}
 
-{if !$claimed}
-<a href="{urlFor name="sow_report"}?claimed=1" target="_blank">SoW Report - Ongoing Paid Tasks</a>
-{else}
+{if $claimed}
 <a href="{urlFor name="sow_report"}" target="_blank">SoW Report - Completed Unsettled Paid</a>
+{elseif $po}
+<a href="{urlFor name="sow_report"}" target="_blank">SoW Report - Completed Unsettled Paid</a>
+{else}
+<a href="{urlFor name="sow_report"}?claimed=1" target="_blank">SoW Report - Ongoing Paid Tasks</a>
 {/if}
 <br />
 <a href="{urlFor name="sow_linguist_report"}" target="_blank">SoW Linguist Report</a>
