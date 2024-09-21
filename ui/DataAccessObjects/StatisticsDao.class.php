@@ -185,24 +185,6 @@ class StatisticsDao extends BaseDao
 
     public function po_report()
     {
-
-                $args = LibAPI\PDOWrapper::cleanse(6044) . ',';
-                $args .= LibAPI\PDOWrapper::cleanseWrapStr('2024-01-19 11:56:15') . ',';
-                $args .= LibAPI\PDOWrapper::cleanseWrapStr('aaa') . ',';
-                $args .= LibAPI\PDOWrapper::cleanseWrapStr('bbb') . ',';
-                $args .= LibAPI\PDOWrapper::cleanse(0) . ',';
-                $args .= LibAPI\PDOWrapper::cleanseWrapStr('ccc') . ',';
-                $args .= LibAPI\PDOWrapper::cleanseWrapStr('ddd') . ',';
-                $args .= LibAPI\PDOWrapper::cleanseWrapStr('eee') . ',';
-                $args .= LibAPI\PDOWrapper::cleanseWrapStr('fff') . ',';
-                $args .= LibAPI\PDOWrapper::cleanseWrapStr('ggg') . ',';
-                $args .= LibAPI\PDOWrapper::cleanseWrapStr('2024-01-19 11:56:15') . ',';
-                $args .= LibAPI\PDOWrapper::cleanseWrapStr(md5('hhh'));
-                LibAPI\PDOWrapper::call('insert_update_zahara_purchase_orders', "1,$args");
-
-error_log("AFTER FAIL!!!!!!!!!!!!!!!");
-
-
         return LibAPI\PDOWrapper::call('po_report', '');
     }
 }
