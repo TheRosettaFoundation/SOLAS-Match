@@ -185,6 +185,16 @@ class StatisticsDao extends BaseDao
 
     public function po_report()
     {
+
+        try {
+LibAPI\PDOWrapper::call('set_paid_status', LibAPI\PDOWrapper::cleanse(30000));
+        } catch (\Exception $e) {
+
+error_log("CATCH!!!!!!!!!!!!!!!");
+}
+error_log("AFTER TRY!!!!!!!!!!!!!!!");
+
+
         return LibAPI\PDOWrapper::call('po_report', '');
     }
 }
