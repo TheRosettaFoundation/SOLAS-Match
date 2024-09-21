@@ -65,14 +65,7 @@
     </thead>    
     <tbody>
         {foreach $tasks as $task}
-[[
-{if !empty($tasks)}
-if ($claimed && $task['claimed'])
-||
-IF $po && $po=$task['purchase_order'] show all
-||
-if NEITH OF ABOVE SHOW completed=1
-]]
+        {if (!$claimed && !$po && $task['completed']) || ($claimed && $task['claimed']) || ($po && $po=$task['purchase_order'])}
         <tr>
             <td><a href="{urlFor name="user-public-profile" options="user_id.{$task['user_id']}"}" target="_blank">{TemplateHelper::uiCleanseHTML($task['linguist'])}</a></td>
             <td><a href="{urlFor name="org-public-profile" options="org_id.{$task['organisation_id']}"}" target="_blank">{TemplateHelper::uiCleanseHTML($task['name'])}</a></td>
