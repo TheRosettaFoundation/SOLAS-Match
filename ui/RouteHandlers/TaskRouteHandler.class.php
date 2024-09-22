@@ -1432,7 +1432,6 @@ class TaskRouteHandler
         if (Common\Enums\TaskTypeEnum::$enum_to_UI[$task->getTaskType()]['divide_rate_by_60']) $total_expected_price /= 60;
         $extra_scripts .= "<script type=\"text/javascript\"  src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/pagination.js\" defer ></script>";
 
-
         $template_data = array_merge($template_data, array(
                 'sesskey' => $sesskey,
                 'siteLocation' => $siteLocation,
@@ -1461,6 +1460,7 @@ class TaskRouteHandler
                 'memsource_task' => $memsource_task,
                 'is_denied_for_task' => $userDao->is_denied_for_task($user_id, $task_id),
                 'user_within_limitations' => $taskDao->user_within_limitations($user_id, $task_id),
+                'complete_date' => $task->getTaskStatus() == Common\Enums\TaskStatusEnum::COMPLETE ? $taskDao->get_task_complete_date($task_id): 0,
         ));
 
         return UserRouteHandler::render("task/task.view.tpl", $response);
