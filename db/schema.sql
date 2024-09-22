@@ -1715,7 +1715,7 @@ CREATE TABLE IF NOT EXISTS `zahara_purchase_orders` (
   approver_mail      VARCHAR(255) COLLATE utf8mb4_unicode_ci DEFAULT '',
   approval_date      DATETIME,
   md5_hash           BINARY(32) DEFAULT '00000000000000000000000000000000',
-  KEY (purchase_order)
+  PRIMARY KEY (purchase_order)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
@@ -13174,7 +13174,7 @@ DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `sow_report`()
 BEGIN
     SELECT
-        tc.user_id,
+        IFNULL(tc.user_id, 0) AS user_id,
         IFNULL(i.linguist_name, IFNULL(lpi.linguist_name, IFNULL(CONCAT(upi.`first-name`, ' ', upi.`last-name`), ''))) AS linguist,
         lpi.google_drive_link,
         p.organisation_id,
@@ -13184,6 +13184,9 @@ BEGIN
         IF(mu.user_id IS NOT NULL AND mu.user_id!=99269, mu.user_id, IFNULL(pf.user_id, u3.id)) AS creator_id,
         IF( u.email   IS NOT NULL AND  u.email!='projects@translatorswithoutborders.org', u.email, IFNULL(u2.email, u3.email)) AS creator_email,
         t.id AS task_id,
+        IF(t.`task-status_id`=3, 1, 0) AS claimed,
+        IF(t.`task-status_id`=4, 1, 0) AS completed,
+        IF(tcd.complete_date IS NOT NULL AND tcd.complete_date<CAST(DATE_FORMAT(NOW(), '%Y-%m-01 00:00:01') as DATETIME), 1, 0) AS before_current_month,
         ttd.type_text,
         CONCAT(l1.code, '-', c1.code, '<br />', l2.code, '-', c2.code) AS language_pair,
         pcd.deal_id,
@@ -13204,9 +13207,6 @@ BEGIN
         tp.payment_status
     FROM TaskPaids                           tp
     JOIN Tasks                                t ON tp.task_id=t.id
-    JOIN TaskClaims                          tc ON t.id=tc.task_id
-    JOIN TaskCompleteDates                  tcd ON t.id=tcd.task_id
-    JOIN UserPersonalInformation            upi ON tc.user_id=upi.user_id
     JOIN Projects                             p ON t.project_id=p.id
     JOIN Organisations                        o ON p.organisation_id=o.id
     JOIN project_complete_dates             pcd ON p.id=pcd.project_id
@@ -13216,6 +13216,9 @@ BEGIN
     JOIN Languages                           l2 ON t.`language_id-target`=l2.id
     JOIN Countries                           c1 ON t.`country_id-source`=c1.id
     JOIN Countries                           c2 ON t.`country_id-target`=c2.id
+    LEFT JOIN TaskClaims                     tc ON t.id=tc.task_id
+    LEFT JOIN TaskCompleteDates             tcd ON t.id=tcd.task_id
+    LEFT JOIN UserPersonalInformation       upi ON tc.user_id=upi.user_id
     LEFT JOIN linguist_payment_informations lpi ON tc.user_id=lpi.user_id
     LEFT JOIN zahara_purchase_orders        pos ON tp.purchase_order=pos.purchase_order AND pos.purchase_order!=0
     LEFT JOIN MemsourceUsers                 mu ON mp.owner_uid=memsource_user_uid
@@ -13226,8 +13229,6 @@ BEGIN
     LEFT JOIN invoices                        i ON tp.invoice_number=i.invoice_number
     WHERE
         tp.processed>=0 AND
-        t.`task-status_id`=4 AND
-        tcd.complete_date<CAST(DATE_FORMAT(NOW(), '%Y-%m-01 00:00:01') as DATETIME) AND
         tp.payment_status NOT IN ('In-kind', 'In-house', 'Waived')
     ORDER BY
         tp.processed,
@@ -13287,6 +13288,36 @@ BEGIN
         IFNULL(i.invoice_date, '9999-12-31 23:59:59') DESC,
         IFNULL(i.linguist_name, IFNULL(lpi.linguist_name, IFNULL(CONCAT(upi.`first-name`, ' ', upi.`last-name`), ''))),
         IFNULL(i.status, -1);
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `po_report`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `po_report`()
+BEGIN
+    SELECT
+        pos.purchase_order,
+        MAX(pos.creation_date)  AS creation_date,
+        MAX(supplier)           AS supplier,
+        MAX(supplier_reference) AS supplier_reference,
+        MAX(total)              AS total,
+        MAX(currency)           AS currency,
+        MAX(description)        AS description,
+        MAX(division_name)      AS division_name,
+        MAX(status)             AS status,
+        MAX(approver_mail)      AS approver_mail,
+        MAX(approval_date)      AS approval_date,
+        SUM(IF(1                                                     , IF(t.`word-count`>1, IF(ttd.divide_rate_by_60, t.`word-count`*tp.unit_rate/60, t.`word-count`*tp.unit_rate), 0), 0)) AS total_tasks_for_po,
+        SUM(IF(t.`task-status_id`=4                                  , IF(t.`word-count`>1, IF(ttd.divide_rate_by_60, t.`word-count`*tp.unit_rate/60, t.`word-count`*tp.unit_rate), 0), 0)) AS total_completed_tasks_for_po,
+        SUM(IF(tp.payment_status IN ('In-kind', 'In-house', 'Waived'), IF(t.`word-count`>1, IF(ttd.divide_rate_by_60, t.`word-count`*tp.unit_rate/60, t.`word-count`*tp.unit_rate), 0), 0)) AS total_waived_tasks_for_po
+    FROM zahara_purchase_orders pos
+    JOIN TaskPaids               tp ON pos.purchase_order=tp.purchase_order
+    JOIN Tasks                    t ON tp.task_id=t.id
+    JOIN task_type_details      ttd ON t.`task-type_id`=ttd.type_enum
+    WHERE
+        pos.purchase_order>=6450
+    GROUP BY pos.purchase_order
+    ORDER BY pos.purchase_order;
 END//
 DELIMITER ;
 

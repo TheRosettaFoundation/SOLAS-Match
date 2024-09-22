@@ -137,6 +137,7 @@ class AdminDao extends BaseDao
 
     public function adjust_org_admin($user_id, $org_id, $remove, $add)
     {
+error_log("adjust_org_admin($user_id, $org_id, $remove, $add)");
         LibAPI\PDOWrapper::call('adjust_org_admin', LibAPI\PDOWrapper::cleanse($user_id) . ',' .  LibAPI\PDOWrapper::cleanse($org_id) . ',' . LibAPI\PDOWrapper::cleanse($remove) . ',' . LibAPI\PDOWrapper::cleanse($add));
     }
 
@@ -179,6 +180,7 @@ class AdminDao extends BaseDao
 
     public function copy_roles_from_special_registration($user_id, $email)
     {
+error_log("copy_roles_from_special_registration($user_id, $email)");
         if (empty($_SESSION['reg_data'])) {
             $this->adjust_org_admin($user_id, 0, 0, LINGUIST);
             return 0;

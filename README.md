@@ -40,6 +40,24 @@ For full terms see License.txt or http://www.gnu.org/licenses/lgpl-3.0.txt
 
 # Release Notes
 
+## Version 16.3
+
+- A new item has been added to the Admin page "List purchase orders." ( https://dev.translatorswb.org/po_report/ ) shows all purchase orders. Each "PO #" has a link to a version of the SoW Report which contains all tasks of any status for that PO.
+- A bug which allowed duplicate purchase order imports has been fixed.
+- The Sow Report comes in two versions "SoW Report - Completed Paid" ( https://dev.translatorswb.org/sow_report/ ) and "SoW Report - Ongoing Paid Tasks" ( https://dev.translatorswb.org/sow_report/?claimed=1 ). The latter shows claimed/in progress but not completed tasks.
+- The "SoW Linguist Report" ( https://dev.translatorswb.org/sow_linguist_report/ ) shows invoices for a linguist.
+- When invoices are generated, emails will be sent to the linguists with larger amounts.
+- In the Task Page, we show the Completion Date under the Status if the task is Complete.
+- Asana tasks for (non self service) projects are posted to a Partner's Asana board (if this has been configured in the partner's organisation).
+- Each new project created in Phrase will have these 4 fields which are links to help project officers navigate easily: TWB Platform Project, TWB Community, Monitoring Dashboard and Asana board.
+- A new button under "Track Project" called "Change Project Owner" will bring you to a page which will allow you to change the project owner. This button will only appear for non self service Phrase projects. When you select a Project Officer to give the ownership of the project to, the following will happen:
+  - The Project owner in TWB Platform will be changed.
+  - The Project owner in Phrase will be changed.
+  - The new owner will be made the assignee of all uncompleted Asana Tasks and their subtasks for this project.
+  - The new owner will track the task in TWB Platform (get email notifications).
+- The track button in project view will set the person clicking it (if a TWB PO, CO or Admin) to follow all Asana tasks for the project and their subtasks. (reversed if un tracked.)
+- In Project View it is now possible to distribute words equally to a number of tasks.
+
 ## Version 16.2
 
 - Tasks can now be set to require linguists to have matching Native Language and/or Variant or neither. This setting is only set automatically on task creation for a subset of target languages. It is changed automatically for self service tasks to neither after 2 days (in stages). Other tasks are left for the PO to change.

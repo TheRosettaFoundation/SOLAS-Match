@@ -74,6 +74,12 @@ class AdminRouteHandler
             ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin_any_or_FINANCE')
             ->setName('sow_linguist_report');
 
+        $app->get(
+            '/po_report[/]',
+            '\SolasMatch\UI\RouteHandlers\AdminRouteHandler:po_report')
+            ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin_any_or_FINANCE')
+            ->setName('po_report');
+
         $app->map(['GET', 'POST'],
             '/set_invoice_paid/{invoice_number}[/]',
             '\SolasMatch\UI\RouteHandlers\AdminRouteHandler:set_invoice_paid')
@@ -502,7 +508,11 @@ class AdminRouteHandler
         global $template_data;
         $statsDao = new DAO\StatisticsDao();
 
-        $template_data['tasks'] = $statsDao->sow_report();
+        $parms = $request->getQueryParams();
+
+        $template_data['tasks']   = $statsDao->sow_report();
+        $template_data['po']      = !empty($parms['po']) ? $parms['po'] : 0;
+        $template_data['claimed'] = !empty($parms['claimed']) ? 1 : 0;
         return UserRouteHandler::render('admin/sow_report.tpl', $response);
     }
 
@@ -516,6 +526,15 @@ class AdminRouteHandler
         $template_data['roles'] = $adminDao->get_roles(Common\Lib\UserSession::getCurrentUserID());
         $template_data['sesskey'] = Common\Lib\UserSession::getCSRFKey();
         return UserRouteHandler::render('admin/sow_linguist_report.tpl', $response);
+    }
+
+    public function po_report(Request $request, Response $response)
+    {
+        global $template_data;
+        $statsDao = new DAO\StatisticsDao();
+
+        $template_data['pos'] = $statsDao->po_report();
+        return UserRouteHandler::render('admin/po_report.tpl', $response);
     }
 
     public function set_invoice_paid(Request $request, Response $response, $args)

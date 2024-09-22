@@ -62,6 +62,7 @@
                         {Localisation::getTranslation('common_in_progress')}
                     {elseif $status_id == TaskStatusEnum::COMPLETE}
                         {Localisation::getTranslation('common_complete')}
+                        {if !empty($complete_date)}<br />{substr($complete_date, 0, 10)}{/if}
                     {/if}
                 </td>
             {/if}

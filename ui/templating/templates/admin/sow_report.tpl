@@ -30,7 +30,22 @@
 <body>
 {if !empty($tasks)}
 
-<h2 style="text-align:center;">SoW Report</h2>
+{if $claimed}
+<h2 style="text-align:center;">SoW Report - Ongoing Paid Tasks</h2>
+{elseif $po}
+<h2 style="text-align:center;">SoW Report - All Tasks for Purchase Order: {$po}</h2>
+{else}
+<h2 style="text-align:center;">SoW Report - Completed Paid</h2>
+{/if}
+
+{if $claimed}
+<a href="{urlFor name="sow_report"}" target="_blank">SoW Report - Completed Paid</a>
+{elseif $po}
+<a href="{urlFor name="sow_report"}" target="_blank">SoW Report - Completed Paid</a>
+{else}
+<a href="{urlFor name="sow_report"}?claimed=1" target="_blank">SoW Report - Ongoing Paid Tasks</a>
+{/if}
+<br />
 <a href="{urlFor name="sow_linguist_report"}" target="_blank">SoW Linguist Report</a>
 <br />
 
@@ -58,6 +73,7 @@
     </thead>    
     <tbody>
         {foreach $tasks as $task}
+        {if (!$claimed && !$po && $task['completed']) || ($claimed && $task['claimed']) || ($po && $po==$task['purchase_order'])}
         <tr>
             <td><a href="{urlFor name="user-public-profile" options="user_id.{$task['user_id']}"}" target="_blank">{TemplateHelper::uiCleanseHTML($task['linguist'])}</a></td>
             <td><a href="{urlFor name="org-public-profile" options="org_id.{$task['organisation_id']}"}" target="_blank">{TemplateHelper::uiCleanseHTML($task['name'])}</a></td>
@@ -69,7 +85,7 @@
             <td>{if !empty($task['deal_id'])}<a href="{urlFor name="deal_id_report" options="deal_id.{$task['deal_id']}"}" target="_blank">{$task['deal_id']}</a>{/if}</td>
        <!-- <td>{$task['budget_code']}</td> -->
             <td>
-                {$task['purchase_order']}
+                {if !empty($task['purchase_order'])}<a href="{urlFor name="sow_report"}?po={$task['purchase_order']}" target="_blank">{$task['purchase_order']}</a>{else}{$task['purchase_order']}{/if}
                 {if !empty($task['total'])}<br />Total: ${round($task['total'], 2)}{/if}
                 <br />{if !empty($task['po_status'])}{if $task['po_status'] == 'Completed' || $task['po_status'] == 'Approved'}{$task['po_status']}{else}<span style="color: red;">{$task['po_status']}, Not Completed</span>{/if}{else}<span style="color: red;">No PO</span>{/if}
                 {if !empty($task['approver_mail'])}<br />{substr($task['approver_mail'], 0, strpos($task['approver_mail'], '@'))}{/if}
@@ -79,7 +95,7 @@
             <td>{round($task['total_paid_words'], 2)} {$task['pricing_and_recognition_unit_text_hours']}</td>
             <td>{round($task['unit_rate'], 2)}</td>
             <td>${round($task['total_expected_cost'], 2)}</td>
-            <td>{if !empty($task['complete_date'])}{substr($task['complete_date'], 0, 10)}{/if}</td>
+            <td>{if !empty($task['complete_date']) && $task['completed']}{substr($task['complete_date'], 0, 10)}{/if}</td>
             <td>{$task['payment_status']}</td>
             <td>{if $task['processed'] > 0}Yes{/if}</td>
             <td>{if !empty($task['invoice_date'])}{$task['invoice_date']}{else}None{/if}</td>
@@ -97,6 +113,7 @@
             </td>
             <td>{if $task['invoice_number'] > 0}<a href="{urlFor name="get-invoice" options="invoice_number.{$task['invoice_number']}"}" target="_blank">TWB-{str_pad($task['invoice_number'], 4, '0', STR_PAD_LEFT)}</a>{/if}</td>
         </tr>
+        {/if}
         {/foreach}
     </tbody>
 </table>
