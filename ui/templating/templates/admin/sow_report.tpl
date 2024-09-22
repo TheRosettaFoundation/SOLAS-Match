@@ -35,13 +35,13 @@
 {elseif $po}
 <h2 style="text-align:center;">SoW Report - All Tasks for Purchase Order: {$po}</h2>
 {else}
-<h2 style="text-align:center;">SoW Report - Completed Unsettled Paid</h2>
+<h2 style="text-align:center;">SoW Report - Completed Paid</h2>
 {/if}
 
 {if $claimed}
-<a href="{urlFor name="sow_report"}" target="_blank">SoW Report - Completed Unsettled Paid</a>
+<a href="{urlFor name="sow_report"}" target="_blank">SoW Report - Completed Paid</a>
 {elseif $po}
-<a href="{urlFor name="sow_report"}" target="_blank">SoW Report - Completed Unsettled Paid</a>
+<a href="{urlFor name="sow_report"}" target="_blank">SoW Report - Completed Paid</a>
 {else}
 <a href="{urlFor name="sow_report"}?claimed=1" target="_blank">SoW Report - Ongoing Paid Tasks</a>
 {/if}
