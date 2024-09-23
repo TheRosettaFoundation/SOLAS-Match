@@ -397,12 +397,10 @@ class UserRouteHandler
                     $taskImages[$taskId] = "{$siteLocation}project/{$project->getId()}/image";
                 }
             }
-         
 
         $extra_scripts  = "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/Parameters.js\"></script>";
         $extra_scripts .= "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/Home.js\" async></script>";
         $extra_scripts .= "<script type=\"text/javascript\"  src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/pagination.js\" defer ></script>";
- 
 
         $org_admin = false;
         if (empty($topTasks) && !empty($user_id)) {
