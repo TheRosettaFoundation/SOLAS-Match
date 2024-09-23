@@ -42,10 +42,10 @@ For full terms see License.txt or http://www.gnu.org/licenses/lgpl-3.0.txt
 
 ## Version 16.3
 
-- A new item has been added to the Admin page "List purchase orders." ( https://dev.translatorswb.org/po_report/ ) shows all purchase orders. Each "PO #" has a link to a version of the SoW Report which contains all tasks of any status for that PO.
+- A new item has been added to the Admin page "List purchase orders." ( https://twbplatform.org/po_report/ ) shows all purchase orders. Each "PO #" has a link to a version of the SoW Report which contains all tasks of any status for that PO.
 - A bug which allowed duplicate purchase order imports has been fixed.
-- The Sow Report comes in two versions "SoW Report - Completed Paid" ( https://dev.translatorswb.org/sow_report/ ) and "SoW Report - Ongoing Paid Tasks" ( https://dev.translatorswb.org/sow_report/?claimed=1 ). The latter shows claimed/in progress but not completed tasks.
-- The "SoW Linguist Report" ( https://dev.translatorswb.org/sow_linguist_report/ ) shows invoices for a linguist.
+- The Sow Report comes in two versions "SoW Report - Completed Paid" ( https://twbplatform.org/sow_report/ ) and "SoW Report - Ongoing Paid Tasks" ( https://twbplatform.org/sow_report/?claimed=1 ). The latter shows claimed/in progress but not completed tasks.
+- The "SoW Linguist Report" ( https://twbplatform.org/sow_linguist_report/ ) shows invoices for a linguist.
 - When invoices are generated, emails will be sent to the linguists with larger amounts.
 - In the Task Page, we show the Completion Date under the Status if the task is Complete.
 - Asana tasks for (non self service) projects are posted to a Partner's Asana board (if this has been configured in the partner's organisation).
