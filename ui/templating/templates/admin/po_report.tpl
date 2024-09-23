@@ -56,7 +56,7 @@
             <td>{$po['approval_date']}</td>
             <td>{$po['total']} {$po['currency']}</td>
             <td>${round($po['total_tasks_for_po'], 2)}</td>
-            <td>{if ($po['total'] - $po['total_tasks_for_po']) != 0}<strong><span style="color: red">{round($po['total'] - $po['total_tasks_for_po'], 2)}</span></strong>{/if}</td>
+            <td>{if round($po['total'] - $po['total_tasks_for_po'], 2) != 0}<strong><span style="color: red">{round($po['total'] - $po['total_tasks_for_po'], 2)}</span></strong>{/if}</td>
             <td>${round($po['total_completed_tasks_for_po'], 2)}</td>
             <td>${round($po['total_waived_tasks_for_po'], 2)}</td>
         {/foreach}
