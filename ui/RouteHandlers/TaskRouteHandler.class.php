@@ -288,7 +288,8 @@ class TaskRouteHandler
         $allow_downloads = array();
         $show_mark_chunk_complete = array();
         $memsource_tasks = [];
-        $tasksIds  = [];
+        $tasksIds = [];
+        $chunks = [];
 
         $lastScrollPage = ceil($topTasksCount / $itemsPerScrollPage);
         if ($currentScrollPage <= $lastScrollPage) {
@@ -530,7 +531,7 @@ class TaskRouteHandler
                 );
             }
         }
-        $chunks =  $userDao->getUserTaskChunks(...$tasksIds);
+        $chunks = $userDao->getUserTaskChunks(...$tasksIds);
         if ($currentScrollPage == $lastScrollPage && ($recentTasksCount % $itemsPerScrollPage != 0)) {
             $itemsPerScrollPage = $recentTasksCount % $itemsPerScrollPage;
         }

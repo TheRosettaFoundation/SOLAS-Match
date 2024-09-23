@@ -206,10 +206,10 @@ class UserDao extends BaseDao
 
     public function getUserPageTasksCount($user_id, $taskType, $sourceLanguageCode, $targetLanguageCode)
     {
-        $args  = LibAPI\PDOWrapper::cleanse($user_id) . ',0,' .
-                 LibAPI\PDOWrapper::cleanseNull($taskType) . ', ' .
-                 LibAPI\PDOWrapper::cleanseNullOrWrapStr($sourceLanguageCode) . ', ' .
-                 LibAPI\PDOWrapper::cleanseNullOrWrapStr($targetLanguageCode);
+        $args = LibAPI\PDOWrapper::cleanse($user_id) . ',0,' .
+                LibAPI\PDOWrapper::cleanseNull($taskType) . ', ' .
+                LibAPI\PDOWrapper::cleanseNullOrWrapStr($sourceLanguageCode) . ', ' .
+                LibAPI\PDOWrapper::cleanseNullOrWrapStr($targetLanguageCode);
         $result = LibAPI\PDOWrapper::call('getUserTopTasksCount', $args);
         if ($result) return $result[0]['result'];
         return 0;
@@ -217,23 +217,20 @@ class UserDao extends BaseDao
     
     public function getUserTaskChunks($task_id_1 = 0, $task_id_2 = 0, $task_id_3 = 0, $task_id_4 = 0, $task_id_5 = 0, $task_id_6 = 0)
     {
-      
-        $args  = LibAPI\PDOWrapper::cleanse($task_id_1) . ',' .
-                 LibAPI\PDOWrapper::cleanse($task_id_2) . ',' .
-                 LibAPI\PDOWrapper::cleanse($task_id_3) . ',' .
-                 LibAPI\PDOWrapper::cleanse($task_id_4) . ',' .
-                 LibAPI\PDOWrapper::cleanse($task_id_5) . ',' .
-                 LibAPI\PDOWrapper::cleanse($task_id_6);
-        $result =  LibAPI\PDOWrapper::call('getNumberOfChunks', $args);   
-        
-        if(empty($result)) return [];
+        $args = LibAPI\PDOWrapper::cleanse($task_id_1) . ',' .
+                LibAPI\PDOWrapper::cleanse($task_id_2) . ',' .
+                LibAPI\PDOWrapper::cleanse($task_id_3) . ',' .
+                LibAPI\PDOWrapper::cleanse($task_id_4) . ',' .
+                LibAPI\PDOWrapper::cleanse($task_id_5) . ',' .
+                LibAPI\PDOWrapper::cleanse($task_id_6);
+        $result = LibAPI\PDOWrapper::call('getNumberOfChunks', $args);
+        if (empty($result)) return [];
 
-        $chunks=[];
-        foreach($result as $row) {
+        $chunks = [];
+        foreach ($result as $row) {
             $chunks[$row['task_id']] = $row;
         }
         return $chunks;
-
     }
 
     public function getFilteredUserClaimedTasks($userId, $selectedOrdering, $limit, $offset, $selectedTaskType, $selectedTaskStatus)

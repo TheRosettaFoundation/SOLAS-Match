@@ -2571,7 +2571,6 @@ error_log("fields: $fields targetlanguages: $targetlanguages");//(**)
 
             $count = 0;
             while ($task_id = $projectDao->get_task_resource_info_trigger()) {
-                error_log("get_task_resource_info_trigger: $task_id, $count");
                 $task = $taskDao->getTask($task_id);
                 $task_id = $task->getId();
                 $memsource_task = $projectDao->get_memsource_task($task_id);

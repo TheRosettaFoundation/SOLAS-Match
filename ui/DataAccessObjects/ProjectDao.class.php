@@ -1262,7 +1262,6 @@ error_log("Sync update_task_from_job() task_id: $task_id, status: $status, job: 
                                 if (($memsource_task['beginIndex'] <= $project_task['endIndex']) && ($project_task['beginIndex'] <= $memsource_task['endIndex'])) { // Overlap
                                     if ($project_task['task-status_id'] != Common\Enums\TaskStatusEnum::COMPLETE) {
                                         $translations_not_all_complete[$memsource_task['id']] = 1;
-                                        error_log("identify_claimed_but_not_yet_in_progress($project_id), translations_not_all_complete {$memsource_task['task_id']}: {$project_task['id']} {$project_task['internalId']}");//(**)
                                     }
                                 }
                             }
