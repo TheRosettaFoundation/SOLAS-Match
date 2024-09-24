@@ -654,7 +654,6 @@ a:hover{
                                         </div>
 
                                          {if TaskTypeEnum::$enum_to_UI[$type_id]['source_and_target']}
-                                         
                                             <div class="mb-3  text-muted">
                                                 <span class=" ">
                                                     Languages: <strong>{TemplateHelper::getLanguageAndCountryNoCodes($task->getSourceLocale())}  <img src="{urlFor name='home'}ui/img/lang_arr.svg" alt="arrow" class="mx-1" > </strong>
@@ -665,7 +664,6 @@ a:hover{
                                             </span>
                                             </div>
                                          {else}
-
                                          <div class="mb-3  text-muted">
                                                 <span class=" ">
                                                     Language:
@@ -675,11 +673,10 @@ a:hover{
                                             </span>
                                             </div>
                                          {/if}
-                                         
-                                        
-                                            
-                                          
-                                            <div class="process_deadline_utc d-flex flex-wrap align-items-center text-muted" style="visibility: hidden"> {$deadline_timestamps[$task_id]}</div>
+
+                                         <div class="mb-1 text-muted">{$max_translation_deadlines[$task_id]}</div>
+
+                                        <div class="process_deadline_utc d-flex flex-wrap align-items-center text-muted" style="visibility: hidden"> {$deadline_timestamps[$task_id]}</div>
                              </div>
                            
 

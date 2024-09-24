@@ -1770,4 +1770,35 @@ error_log("Sync update_task_from_job() task_id: $task_id, status: $status, job: 
         }
         return '';
     }
+
+    public function max_translations_deadline($task)
+    {
+        $max_translations_deadline = 0;
+        $translations_not_all_complete = 0;
+        if ($task->getTaskType() == Common\Enums\TaskTypeEnum::PROOFREADING || $task->getTaskType() == Common\Enums\TaskTypeEnum::APPROVAL) {
+            if ($memsource_task = $this->get_memsource_task($task->getId())) {
+                $top_level = $this->get_top_level($memsource_task['internalId']);
+                $project_tasks = $this->get_tasks_for_project($task->getProjectId());
+                foreach ($project_tasks as $project_task) {
+                    if ($top_level == $this->get_top_level($project_task['internalId'])) {
+                        if ($memsource_task['workflowLevel'] > $project_task['workflowLevel']) { // Dependent on
+                            if (($memsource_task['beginIndex'] <= $project_task['endIndex']) && ($project_task['beginIndex'] <= $memsource_task['endIndex'])) { // Overlap
+                                $max_translations_deadline = max($task->getDeadline(), $max_translations_deadline);
+error_log("max_translations_deadline {$memsource_task['task_id']}: {$project_task['id']} {$project_task['internalId']} $max_translations_deadline");
+
+                                if ($project_task['task-status_id'] != Common\Enums\TaskStatusEnum::COMPLETE) $translations_not_all_complete = 1;
+                            }
+                        }
+                    }
+                }
+            }
+            if ($max_translations_deadline) {
+                $max_translations_deadline = substr($max_translations_deadline, 0, 10);
+                $prereq = [0, 0, 0, 'translation', 0, 0, 'revision'][$task->getTaskType()];
+                if (!$translations_not_all_complete) $max_translations_deadline = "Previous step $prereq: <span class='fw-bold'>Completed</span>";
+                else                                 $max_translations_deadline = "Previous step $prereq due by: <span class='fw-bold'>$max_translations_deadline</span>";
+            }
+        }
+        return $max_translations_deadline;
+    }
 }
