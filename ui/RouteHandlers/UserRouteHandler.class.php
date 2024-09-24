@@ -257,6 +257,7 @@ class UserRouteHandler
         $projectAndOrgs = [];
         $taskImages = [];
         $tasksIds = [];
+        $max_translation_deadlines = [];
         foreach ($topTasks as $topTask) {
             $topTask->setTitle(Lib\TemplateHelper::uiCleanseHTMLNewlineAndTabs($topTask->getTitle()));
             $topTask->getSourceLocale()->setLanguageName(Lib\TemplateHelper::getLanguageAndCountryNoCodes($topTask->getSourceLocale()));
@@ -283,10 +284,11 @@ class UserRouteHandler
             if ($project->getImageApproved() && $project->getImageUploaded()) {
                 $taskImages[$taskId] = "{$siteLocation}project/{$project->getId()}/image";
             }
+            $max_translation_deadlines[$taskId] = $projectDao->max_translations_deadline($topTask);
         }
         $chunks =  $userDao->getUserTaskChunks(...$tasksIds);
  
-        $results = json_encode(['tasks'=> $topTasks , 'images' => $taskImages, 'projects'=> $projectAndOrgs, 'chunks'=> $chunks]);
+        $results = json_encode(['tasks' => $topTasks, 'images' => $taskImages, 'projects' => $projectAndOrgs, 'chunks' => $chunks, 'max_translation_deadlines' => $max_translation_deadlines]);
         $response->getBody()->write($results);
         return $response->withHeader('Content-Type', 'application/json');
     }
@@ -364,7 +366,8 @@ class UserRouteHandler
         $projectAndOrgs = array();
         $taskImages = array();
         $tasksIds = array();
-       
+        $max_translation_deadlines = [];
+
         $pages = ceil($topTasksCount/6);
             foreach ($topTasks as $topTask) {
                 $taskId = $topTask->getId();
@@ -396,6 +399,7 @@ class UserRouteHandler
                 if ($project->getImageApproved() && $project->getImageUploaded()) {
                     $taskImages[$taskId] = "{$siteLocation}project/{$project->getId()}/image";
                 }
+                $max_translation_deadlines[$taskId] = $projectDao->max_translations_deadline($topTask);
             }
 
         $extra_scripts  = "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/Parameters.js\"></script>";
@@ -429,6 +433,7 @@ class UserRouteHandler
             'org_admin' => $org_admin,
             'page_count' => $pages,
             'roles' => !empty($user_id) ? $adminDao->get_roles($user_id) : 0,
+            'max_translation_deadlines' => $max_translation_deadlines,
         ));
         return UserRouteHandler::render('index-home.tpl', $response);
     }
