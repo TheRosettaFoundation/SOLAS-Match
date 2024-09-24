@@ -1773,10 +1773,12 @@ error_log("Sync update_task_from_job() task_id: $task_id, status: $status, job: 
 
     public function max_translations_deadline($task)
     {
+error_log(print_r($task, 1));
         $max_translations_deadline = 0;
         $translations_not_all_complete = 0;
         if ($task->getTaskType() == Common\Enums\TaskTypeEnum::PROOFREADING || $task->getTaskType() == Common\Enums\TaskTypeEnum::APPROVAL) {
             if ($memsource_task = $this->get_memsource_task($task->getId())) {
+error_log(print_r($memsource_task, 1));
                 $top_level = $this->get_top_level($memsource_task['internalId']);
                 $project_tasks = $this->get_tasks_for_project($task->getProjectId());
                 foreach ($project_tasks as $project_task) {
