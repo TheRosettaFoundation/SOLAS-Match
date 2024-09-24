@@ -13315,7 +13315,8 @@ BEGIN
     JOIN Tasks                    t ON tp.task_id=t.id
     JOIN task_type_details      ttd ON t.`task-type_id`=ttd.type_enum
     WHERE
-        pos.purchase_order>=6450
+        pos.purchase_order>=6450 AND
+        tp.processed>=0
     GROUP BY pos.purchase_order
     ORDER BY pos.purchase_order;
 END//
