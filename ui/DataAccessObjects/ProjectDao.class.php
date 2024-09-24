@@ -1784,8 +1784,6 @@ error_log("Sync update_task_from_job() task_id: $task_id, status: $status, job: 
                         if ($memsource_task['workflowLevel'] > $project_task['workflowLevel']) { // Dependent on
                             if (($memsource_task['beginIndex'] <= $project_task['endIndex']) && ($project_task['beginIndex'] <= $memsource_task['endIndex'])) { // Overlap
                                 $max_translations_deadline = max($task->getDeadline(), $max_translations_deadline);
-error_log("max_translations_deadline {$memsource_task['task_id']}: {$project_task['id']} {$project_task['internalId']} $max_translations_deadline");
-
                                 if ($project_task['task-status_id'] != Common\Enums\TaskStatusEnum::COMPLETE) $translations_not_all_complete = 1;
                             }
                         }
