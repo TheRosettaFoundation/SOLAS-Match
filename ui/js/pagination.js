@@ -383,6 +383,9 @@ if (isPagination) {
         let images;
         let projects;
         let chunks;
+        let max_translation_deadlines;
+        let max_translation_deadline = "0";
+        let max_translation_deadline_text = "";
 
         try {
             parsed = typeof pages === "string" ? JSON.parse(pages) : pages;
@@ -400,6 +403,10 @@ if (isPagination) {
 
         if (parsed.hasOwnProperty("chunks")) {
             chunks = parsed.chunks;
+        }
+
+        if (parsed.hasOwnProperty("max_translation_deadlines")) {
+            max_translation_deadlines = parsed.max_translation_deadlines;
         }
 
         const newData = document.createElement("div");
@@ -514,12 +521,12 @@ if (isPagination) {
                     imageId.length > 2
                         ? `
             <div>
-    
+
                 <div id=''  >
                     <img style='width:100px ; height:100px'  src= ${imageId}  class='image' />
                 </div>
                 </div>
-    
+
             `
                         : "<div> </div>";
             }
@@ -531,6 +538,12 @@ if (isPagination) {
                     badgeContainer.appendChild(badgeC);
                 }
             }
+
+            if (max_translation_deadlines) {
+                max_translation_deadline = max_translation_deadlines[item.id];
+            }
+            if (max_translation_deadline != "0") max_translation_deadline_text = '<div class="mb-1 text-muted">' + max_translation_deadline + '</div>';
+            else max_translation_deadline_text = "";
 
             const { deadline } = item;
             const deadlineDate = new Date(
@@ -556,7 +569,9 @@ if (isPagination) {
                             </svg> <span class='fw-bold'> ${item.targetLocale.languageName}</span>
                         </span>
             </div>
-    
+
+            ${max_translation_deadline_text}
+
             <div class='text-muted d-flex me-2' > <div> Due by </div>
             <strong class='d-flex align-items-center'> <div class='mx-2 '> ${date} </div>
              <svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='#f89406' class='bi bi-clock' viewBox='0 0 16 16' class='mx-1'>
@@ -564,17 +579,19 @@ if (isPagination) {
                 <path d='M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16m7-8A7 7 0 1 1 1 8a7 7 0 0 1 14 0'/>
                 </svg>  <div class='mx-2'> ${hour}:${min}:${sec} </div>  </strong>
                 <div class='ms-2 fw-bold'> ${timezone}</div>
-    
+
              </div>
-    
+
             `;
 
             const language = `<div class='mt-3 mb-3'>
             <span class='mb-1  text-muted'>
-                            Language:<span class='fw-bold'>  ${item.targetLocale.languageName} </span> 
+                            Language:<span class='fw-bold'>  ${item.targetLocale.languageName} </span>
                         </span>
             </div>
-    
+
+            ${max_translation_deadline_text}
+
             <div class='text-muted d-flex me-2' > <div> Due by </div>
             <strong class='d-flex align-items-center'> <div class='mx-2 '> ${date} </div>
              <svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='#f89406' class='bi bi-clock' viewBox='0 0 16 16' class='mx-1'>
@@ -582,9 +599,9 @@ if (isPagination) {
                 <path d='M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16m7-8A7 7 0 1 1 1 8a7 7 0 0 1 14 0'/>
                 </svg>  <div class='mx-2'> ${hour}:${min}:${sec} </div>  </strong>
                 <div class='ms-2 fw-bold'> ${timezone}</div>
-    
+
              </div>
-    
+
             `;
 
             if (image) {
@@ -619,7 +636,7 @@ if (isPagination) {
                                 <div class='d-flex justify-content-end mt-2 mt-sm-4 mt-md-0'>
                                     <a class='btn btn-secondary fs-5 px-3' href='/task/${item.id}/view' >View Task</a>
                                 </div>
-    
+
                                 </div>`;
 
             const viewHtml = document
