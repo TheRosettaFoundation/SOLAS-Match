@@ -674,7 +674,9 @@ a:hover{
                                             </div>
                                          {/if}
 
+                                         {if $max_translation_deadlines[$task_id]}
                                          <div class="mb-1 text-muted">{$max_translation_deadlines[$task_id]}</div>
+                                         {/if}
 
                                         <div class="process_deadline_utc d-flex flex-wrap align-items-center text-muted" style="visibility: hidden"> {$deadline_timestamps[$task_id]}</div>
                              </div>
