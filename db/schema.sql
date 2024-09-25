@@ -10529,20 +10529,20 @@ BEGIN
         IFNULL(SUM(IF(t.`task-type_id`=2 AND (t.`task-status_id`=4 OR (t.`task-status_id`=3 AND t.cancelled=2 AND t.`word-count`>1)), t.`word-count`, 0)), 0) AS words_translated,
         IFNULL(SUM(IF(t.`task-type_id`=3 AND (t.`task-status_id`=4 OR (t.`task-status_id`=3 AND t.cancelled=2 AND t.`word-count`>1)), t.`word-count`, 0)), 0) AS words_proofread,
         IFNULL(SUM(IF(t.`task-type_id`=6 AND (t.`task-status_id`=4 OR (t.`task-status_id`=3 AND t.cancelled=2 AND t.`word-count`>1)), t.`word-count`, 0)), 0) AS words_approved,
-              IFNULL(SUM(IF(tp.task_id IS NULL AND (t.`task-status_id`=4 OR (t.`task-status_id`=3 AND t.cancelled=2 AND t.`word-count`>1)), t.`word-count`, 0)*ttd.convert_to_words),          0) + (SELECT IFNULL(SUM(pd.wordstranslated), 0) FROM prozdata pd WHERE u.id=pd.user_id)        AS words_donated,
-        ROUND(IFNULL(SUM(IF(tp.task_id IS NULL AND (t.`task-status_id`=4 OR (t.`task-status_id`=3 AND t.cancelled=2 AND t.`word-count`>1)), t.`word-count`, 0)*ttd.convert_to_hours),          0))                                                                                            AS hours_donated,
-        ROUND(IFNULL(SUM(IF(tp.task_id IS NOT NULL AND (t.`task-status_id`=4 OR (t.`task-status_id`=3 AND t.cancelled=2 AND t.`word-count`>1)), t.`word-count`, 0)*ttd.convert_to_hours),      0))                                                                                            AS hours_paid,
+              IFNULL(SUM(IF((tp.task_id IS NULL OR tp.payment_status IN ('In-kind', 'In-house', 'Waived')) AND (t.`task-status_id`=4 OR (t.`task-status_id`=3 AND t.cancelled=2 AND t.`word-count`>1)), t.`word-count`, 0)*ttd.convert_to_words),          0) + (SELECT IFNULL(SUM(pd.wordstranslated), 0) FROM prozdata pd WHERE u.id=pd.user_id)        AS words_donated,
+        ROUND(IFNULL(SUM(IF((tp.task_id IS NULL OR tp.payment_status IN ('In-kind', 'In-house', 'Waived')) AND (t.`task-status_id`=4 OR (t.`task-status_id`=3 AND t.cancelled=2 AND t.`word-count`>1)), t.`word-count`, 0)*ttd.convert_to_hours),          0))                                                                                            AS hours_donated,
+        ROUND(IFNULL(SUM(IF((tp.task_id IS NOT NULL AND tp.payment_status NOT IN ('In-kind', 'In-house', 'Waived')) AND (t.`task-status_id`=4 OR (t.`task-status_id`=3 AND t.cancelled=2 AND t.`word-count`>1)), t.`word-count`, 0)*ttd.convert_to_hours),      0))                                                                                            AS hours_paid,
         ROUND(IFNULL(SUM(IF(                       (t.`task-status_id`=4 OR (t.`task-status_id`=3 AND t.cancelled=2 AND t.`word-count`>1)), t.`word-count`, 0)*ttd.convert_to_hours_for_cert), 0) + (SELECT IFNULL(SUM(pd.wordstranslated), 0) FROM prozdata pd WHERE u.id=pd.user_id)*0.005) AS hours_donated_for_cert,
               IFNULL(SUM(IF(                       (t.`task-status_id`=4 OR (t.`task-status_id`=3 AND t.cancelled=2 AND t.`word-count`>1)), t.`word-count`, 0)*ttd.convert_to_words),          0) + (SELECT IFNULL(SUM(pd.wordstranslated), 0) FROM prozdata pd WHERE u.id=pd.user_id)        AS words_donated_for_cert,
         ROUND(
-            IFNULL(SUM(IF(tp.task_id IS NULL AND (t.`task-status_id`=4 OR (t.`task-status_id`=3 AND t.cancelled=2 AND t.`word-count`>1)), t.`word-count`, 0)*ttd.rate_for_recognition), 0) +
+            IFNULL(SUM(IF((tp.task_id IS NULL OR tp.payment_status IN ('In-kind', 'In-house', 'Waived')) AND (t.`task-status_id`=4 OR (t.`task-status_id`=3 AND t.cancelled=2 AND t.`word-count`>1)), t.`word-count`, 0)*ttd.rate_for_recognition), 0) +
             (SELECT IFNULL(SUM(pd.wordstranslated), 0) FROM prozdata pd WHERE u.id=pd.user_id) +
             (SELECT IFNULL(SUM(ap.points), 0) FROM adjust_points ap WHERE u.id=ap.user_id)
         ) AS recognition_points,
         ROUND(
             IFNULL(SUM(
                 IF(
-                    tp.task_id IS NULL AND
+                    (tp.task_id IS NULL OR tp.payment_status IN ('In-kind', 'In-house', 'Waived')) AND
                     (t.`task-status_id`=4 OR (t.`task-status_id`=3 AND t.cancelled=2 AND t.`word-count`>1)) AND
                     sco.start IS NOT NULL AND
                     t.`created-time`>=sco.start,
