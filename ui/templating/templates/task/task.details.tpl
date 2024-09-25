@@ -40,6 +40,10 @@
 
             <td>
                 <div class="convert_utc_to_local_deadline" style="visibility: hidden">{$task->getDeadline()}</div>
+
+                {if $max_translation_deadline}
+                <div>{$max_translation_deadline}</div>
+                {/if}
             </td>
             <td>
                <span class="d-none">
