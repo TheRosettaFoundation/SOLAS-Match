@@ -2266,6 +2266,17 @@ error_log("TM added: $result");//(**)
         if ($responseCode > 204) error_log("Pre-Translate $url responseCode: $responseCode");
         curl_close($ch);
 
+        // Set Termbases
+        $ch = curl_init("https://cloud.memsource.com/web/api2/v1/projects/{$project_result['uid']}/termBases";);
+        $bases = [['id' => 'fc1RG1AtuxC9zA5w11eZZp'], ['id' => 'RX38uI1mE3Tl6WcclmOOy4'], ['id' => 'zTVphV3E75FK8BUExAJMf1']];
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode(['readTermBases' => $bases, 'qualityAssuranceTermBases' => $bases]));
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PUT');
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json', $authorization));
+        $result = curl_exec($ch);
+        curl_close($ch);
+        error_log("termBases: $result");
+
         // Create Job
         $url = "https://cloud.memsource.com/web/api2/v1/projects/{$project_result['uid']}/jobs";
         $ch = curl_init($url);
@@ -2291,12 +2302,6 @@ error_log(print_r($result, true));//(**)
         }
 
         $memsource_project = $projectDao->get_memsource_project($project->getId());
-
-        //$jobs_indexed = [];
-        //foreach ($result['jobs'] as $job) {
-        //    $jobs_indexed["{$job['targetLang']}-{$job['workflowLevel']}"] = $job;
-        //}
-        //$memsource_project['jobs'] = $jobs_indexed;
         return $memsource_project;
     }
 
