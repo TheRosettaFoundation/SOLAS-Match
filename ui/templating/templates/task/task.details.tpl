@@ -442,7 +442,7 @@
                 <div class="mt-4 fw-bold fs-5">Total Expected Cost</div>
                 <hr />
                 <div> 
-            ${round($total_expected_cost, 2)} for {if $task->getWordCount() != '' && $task->getWordCount() > 1}{$task->getWordCount()}{else}-{/if} {TaskTypeEnum::$enum_to_UI[$type_id]['unit_count_text_short']}
+            ${if $paid_status['payment_status'] == 'In-kind' || $paid_status['payment_status'] == 'In-house' || $paid_status['payment_status'] == 'Waived'}<del>{round($total_expected_cost, 2)}</del>{else}{round($total_expected_cost, 2)}{/if} for {if $task->getWordCount() != '' && $task->getWordCount() > 1}{$task->getWordCount()}{else}-{/if} {TaskTypeEnum::$enum_to_UI[$type_id]['unit_count_text_short']}
 
                 </div>
                 </form>

@@ -723,7 +723,7 @@
                                           {else}
                                           PO#: {$get_payment_status_for_project[$task_id]['purchase_order']}<br />{$get_payment_status_for_project[$task_id]['payment_status']} 
                                           {/if}
-                                         <br />${round($get_payment_status_for_project[$task_id]['total_expected_cost'], 2)}
+                                         <br />${if $get_payment_status_for_project[$task_id]['payment_status'] == 'In-kind' || $get_payment_status_for_project[$task_id]['payment_status'] == 'In-house' || $get_payment_status_for_project[$task_id]['payment_status'] == 'Waived'}<del>{round($get_payment_status_for_project[$task_id]['total_expected_cost'], 2)}</del>{else}{round($get_payment_status_for_project[$task_id]['total_expected_cost'], 2)}{/if}
                                      {else}
                                          <span>-</span>
                                      {/if}
