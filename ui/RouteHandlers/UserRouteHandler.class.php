@@ -284,7 +284,7 @@ class UserRouteHandler
             if ($project->getImageApproved() && $project->getImageUploaded()) {
                 $taskImages[$taskId] = "{$siteLocation}project/{$project->getId()}/image";
             }
-            $max_translation_deadlines[$taskId] = $projectDao->max_translations_deadline($topTask);
+            $max_translation_deadlines[$taskId] = $projectDao->max_translation_deadline($topTask);
         }
         $chunks =  $userDao->getUserTaskChunks(...$tasksIds);
  
@@ -399,7 +399,7 @@ class UserRouteHandler
                 if ($project->getImageApproved() && $project->getImageUploaded()) {
                     $taskImages[$taskId] = "{$siteLocation}project/{$project->getId()}/image";
                 }
-                $max_translation_deadlines[$taskId] = $projectDao->max_translations_deadline($topTask);
+                $max_translation_deadlines[$taskId] = $projectDao->max_translation_deadline($topTask);
             }
 
         $extra_scripts  = "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/Parameters.js\"></script>";
