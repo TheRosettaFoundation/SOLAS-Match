@@ -42,7 +42,15 @@
                 <div class="convert_utc_to_local_deadline" style="visibility: hidden">{$task->getDeadline()}</div>
 
                 {if $max_translation_deadline}
-                <div>{$max_translation_deadline}</div>
+                    {if strpos($max_translation_deadline, 'Completed')}
+                        <div>{$max_translation_deadline}</div>
+                    {else}
+                        {assign var="pos_colon" value=strpos($max_translation_deadline, ':')}
+                        <div>
+                            {substr($max_translation_deadline, 0, $pos_colon + 2)}
+                            <span class="convert_utc_to_local_deadline_no_timezone" style="visibility: hidden">{substr($max_translation_deadline, $pos_colon + 2)}</span>
+                        </div>
+                    {/if}
                 {/if}
             </td>
             <td>
