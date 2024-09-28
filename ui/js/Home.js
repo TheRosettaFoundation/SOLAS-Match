@@ -123,6 +123,42 @@ function renderTaskDetails() {
         $(this).css("visibility", "visible");
     });
 
+    $(".process_deadline_utc_non_timezone").each(function () {
+        $(this).removeClass("process_deadline_utc_non_timezone");
+        const max_translation_deadline = $(this).text();
+        const max_translation_deadline_text = "";
+        const pos_colon = max_translation_deadline.indexOf(":");
+        if (max_translation_deadline.indexOf("Completed")) {
+            max_translation_deadline_text = max_translation_deadline.substring(0, pos_colon + 2) + '<div class="fw-bold d-flex align-items-center ms-2 me-4"><div class="me-2"> Completed </div></div>';
+        } else {
+            const deadline = max_translation_deadline.substring(pos_colon + 2);
+            const deadlineDate = new Date(
+                `${deadline.substring(0, 10)}T${deadline.substring(11)}Z`
+            );
+            const date = `${deadlineDate.getFullYear()}-${(deadlineDate.getMonth() + 1)
+                .toString().padStart(2, "0")}-${deadlineDate.getDate()
+                .toString().padStart(2, "0")}`;
+            const hour = deadlineDate.getHours().toString().padStart(2, "0");
+            const min = deadlineDate.getMinutes().toString().padStart(2, "0");
+            const sec = deadlineDate.getSeconds().toString().padStart(2, "0");
+
+            max_translation_deadline_text =
+                max_translation_deadline.substring(0, pos_colon + 2) +
+                '<div class="fw-bold d-flex align-items-center ms-2 me-4">' +
+                    '<div class="me-2"> ' + date + ' </div>' +
+                    '<div class="d-flex align-items-center wrap mx-2">' +
+                        '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#f89406" class="bi bi-clock" viewBox="0 0 16 16" class="ms-2 me-1">' +
+                            '<path d="M8 3.5a.5.5 0 0 0-1 0V9a.5.5 0 0 0 .252.434l3.5 2a.5.5 0 0 0 .496-.868L8 8.71z"/>' +
+                            '<path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16m7-8A7 7 0 1 1 1 8a7 7 0 0 1 14 0"/>' +
+                        '</svg>' +
+                        '<span class="mx-2"> ' + hour + ':' + min + ':' + sec + ' </span>' +
+                    '</div>' +
+                '</div>';
+        }
+        $(this).html(max_translation_deadline_text);
+        $(this).css("visibility", "visible");
+    });
+
     $(".process_completed_utc").each(function () {
         $(this).removeClass("process_completed_utc");
         var utcTime = $(this).text();
