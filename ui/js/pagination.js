@@ -543,30 +543,21 @@ if (isPagination) {
                 max_translation_deadline = max_translation_deadlines[item.id];
             }
             if (max_translation_deadline != "0") {
+                const pos_colon = max_translation_deadline.indexOf(":");
+                if (max_translation_deadline.indexOf("Completed")) {
+                    max_translation_deadline_text = '<div class="mb-1 text-muted">' + max_translation_deadline.substring(0, pos_colon + 2) + '<span class="fw-bold">Completed</span></div>';
+                } else {
+                    const deadline = max_translation_deadline.substring(pos_colon + 2);
+                    const deadlineDate = new Date(
+                        `${deadline.substring(0, 10)}T${deadline.substring(11)}Z`
+                    );
+                    const date = `${deadlineDate.getFullYear()}-${(deadlineDate.getMonth() + 1)
+                        .toString().padStart(2, "0")}-${deadlineDate.getDate()
+                        .toString().padStart(2, "0")}`;
+                    const hour = deadlineDate.getHours().toString().padStart(2, "0");
+                    const min = deadlineDate.getMinutes().toString().padStart(2, "0");
+                    const sec = deadlineDate.getSeconds().toString().padStart(2, "0");
 
-
-
-
-add fw-bold
-              max_translation_deadline_text = '<div class="mb-1 text-muted">' + max_translation_deadline + '</div>';
-[[[
-                    {if strpos($max_translation_deadline, 'Completed')}
-                        <div>{$max_translation_deadline}</div>
-                    {else}
-                        {assign var="pos_colon" value=strpos($max_translation_deadline, ':')}
-                        <div>
-
-[[[
-            const { deadline } = item;
-            const deadlineDate = new Date(
-                `${deadline.substring(0, 10)}T${deadline.substring(11)}Z`
-            );
-            const date = `${deadlineDate.getFullYear()}-${(deadlineDate.getMonth() + 1)
-                .toString().padStart(2, "0")}-${deadlineDate.getDate()
-                .toString().padStart(2, "0")}`;
-            const hour = deadlineDate.getHours().toString().padStart(2, "0");
-            const min = deadlineDate.getMinutes().toString().padStart(2, "0");
-            const sec = deadlineDate.getSeconds().toString().padStart(2, "0");
 
             ${max_translation_deadline_text}
 
@@ -580,6 +571,16 @@ add fw-bold
             `;
 ]]]
 
+
+LIKE
+                    max_translation_deadline_text = '<div class="mb-1 text-muted">' + max_translation_deadline.substring(0, pos_colon + 2) + '<span class="fw-bold">Completed</span></div>';
+
+
+let text = "Hello world,:welcome to the universe.";
+let pos_colon = text.indexOf(":");
+
+document.getElementById("demo").innerHTML = text.substring(0, pos_colon + 2);
+document.getElementById("demo2").innerHTML = text.substring(pos_colon + 2);
 
                             {substr($max_translation_deadline, 0, $pos_colon + 2)}
                             <span class="convert_utc_to_local_deadline_no_timezone" style="visibility: hidden">{substr($max_translation_deadline, $pos_colon + 2)}</span>
