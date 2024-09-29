@@ -544,7 +544,7 @@ if (isPagination) {
             }
             if (max_translation_deadline != "0") {
                 const pos_colon = max_translation_deadline.indexOf(":");
-                if (max_translation_deadline.indexOf("Completed")) {
+                if (max_translation_deadline.indexOf("Completed") > 0) {
                     max_translation_deadline_text = '<div class="mb-1 text-muted">' + max_translation_deadline.substring(0, pos_colon + 2) + '<span class="fw-bold">Completed</span></div>';
                 } else {
                     const deadline = max_translation_deadline.substring(pos_colon + 2);
