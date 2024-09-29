@@ -128,7 +128,7 @@ function renderTaskDetails() {
         const max_translation_deadline = $(this).text();
         let   max_translation_deadline_text = "";
         const pos_colon = max_translation_deadline.indexOf(":");
-        if (max_translation_deadline.indexOf("Completed")) {
+        if (max_translation_deadline.indexOf("Completed") > 0) {
             max_translation_deadline_text = max_translation_deadline.substring(0, pos_colon + 2) + '<div class="fw-bold d-flex align-items-center ms-2 me-4"><div class="me-2"> Completed </div></div>';
         } else {
             const deadline = max_translation_deadline.substring(pos_colon + 2);
