@@ -1794,9 +1794,6 @@ error_log("Sync update_task_from_job() task_id: $task_id, status: $status, job: 
                 $prereq = [0, 0, 0, 'translation', 0, 0, 'revision'][$task->getTaskType()];
                 if (!$translations_not_all_complete) $max_translation_deadline = "Previous $prereq step: Completed";
                 else                                 $max_translation_deadline = "Previous $prereq step due by: $max_translation_deadline";
-
-$max_translation_deadline = "Previous $prereq step: Completed";
-
             }
         }
         return $max_translation_deadline;
