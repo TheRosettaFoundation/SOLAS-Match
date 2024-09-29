@@ -95,33 +95,33 @@ function documentReady()
   $(".convert_utc_to_local_deadline_no_timezone").each(function ()
     {
       $(this).removeClass("convert_utc_to_local_deadline_no_timezone");
-      var dUTC = $(this).text();
-      var year    = dUTC.substring(0, 4);
-      var month   = dUTC.substring(5, 7) -1;
-      var day     = dUTC.substring(8, 10);
-      var hour    = dUTC.substring(11, 13);
-      var minutes = dUTC.substring(14, 16);
-      var seconds = dUTC.substring(17, 19);
+      const dUTC = $(this).text();
+      const year    = dUTC.substring(0, 4);
+      const month   = dUTC.substring(5, 7) -1;
+      const day     = dUTC.substring(8, 10);
+      const hour    = dUTC.substring(11, 13);
+      const minutes = dUTC.substring(14, 16);
+      const seconds = dUTC.substring(17, 19);
 
-      var d = new Date(Date.UTC(year, month, day, hour, minutes, seconds));
+      const d = new Date(Date.UTC(year, month, day, hour, minutes, seconds));
 
-      var m = d.getMonth() + 1;
+      let m = d.getMonth() + 1;
       if (m < 10) {
         m = "0" + m;
       }
-      var da = d.getDate();
+      let da = d.getDate();
       if (da < 10) {
         da = "0" + da;
       }
-      var h = d.getHours();
+      let h = d.getHours();
       if (h < 10) {
         h = "0" + h;
       }
-      var mi = d.getMinutes();
+      let mi = d.getMinutes();
       if (mi < 10) {
         mi = "0" + mi;
       }
-      var s = d.getSeconds();
+      let s = d.getSeconds();
       if (s < 10) {
         s = "0" + s;
       }
