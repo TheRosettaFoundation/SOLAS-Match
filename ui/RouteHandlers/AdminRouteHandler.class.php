@@ -35,13 +35,13 @@ class AdminRouteHandler
         $app->map(['GET'],
             '/analytics[/]',
             '\SolasMatch\UI\RouteHandlers\AdminRouteHandler:analytics')
-            ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin_any')
+            ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin_any_or_FINANCE')
             ->setName('analytics');
 
         $app->map(['GET'],
             '/metabase/{report}',
             '\SolasMatch\UI\RouteHandlers\AdminRouteHandler:metabase')
-            ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin_any')
+            ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin_any_or_FINANCE')
             ->setName('metabase');
 
         $app->get(
