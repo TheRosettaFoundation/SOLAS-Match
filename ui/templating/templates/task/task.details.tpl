@@ -169,7 +169,7 @@
             </thead>
             <tbody class="fs-4">
             <tr>
-                <td class="w-50 d-flex">
+                <td class="w-50 d-flex flex-column">
                    <div class="pb-0 bg-dark rounded-2"> {if !preg_match('/^Test.{4}$/', $task->getTitle())}<a href="https://community.translatorswb.org/t/{$discourse_slug}" class="btngray-lg" target="_blank">Discuss task</a>{/if}</div>
 
                    {if $status_id >= TaskStatusEnum::IN_PROGRESS && !empty(TaskTypeEnum::$enum_to_UI[$type_id]['bookstack_url_1']) && empty(TaskTypeEnum::$enum_to_UI[$type_id]['bookstack_url_2'])}
