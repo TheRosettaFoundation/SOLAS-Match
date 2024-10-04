@@ -1413,6 +1413,10 @@ CREATE TABLE IF NOT EXISTS `task_type_details` (
   convert_to_words                  FLOAT        NOT NULL DEFAULT 0,
   convert_to_hours                  FLOAT        NOT NULL DEFAULT 0.0166667,
   convert_to_hours_for_cert         FLOAT        NOT NULL DEFAULT 0,
+  bookstack_url_1                   VARCHAR(250) NOT NULL DEFAULT '',
+  bookstack_url_2                   VARCHAR(250) NOT NULL DEFAULT '',
+  bookstack_words_1                 VARCHAR(100) NOT NULL DEFAULT '',
+  bookstack_words_2                 VARCHAR(100) NOT NULL DEFAULT '',
   PRIMARY KEY (type_enum),
           KEY FK_type_category (type_category),
   CONSTRAINT FK_type_category FOREIGN KEY (type_category) REFERENCES task_type_categorys (type_category) ON DELETE CASCADE ON UPDATE CASCADE
@@ -1618,6 +1622,46 @@ UPDATE task_type_details SET convert_to_hours_for_cert=0.005     WHERE type_enum
 UPDATE task_type_details SET convert_to_hours_for_cert=0.0166667 WHERE type_enum=22;
 UPDATE task_type_details SET convert_to_hours_for_cert=0.0166667 WHERE type_enum=23;
 UPDATE task_type_details SET convert_to_hours_for_cert=0.0166667 WHERE type_enum=24;
+
+# Bookstack links and optional wording
+ALTER TABLE task_type_details ADD bookstack_url_1   VARCHAR(250) NOT NULL DEFAULT '' AFTER convert_to_hours_for_cert;
+ALTER TABLE task_type_details ADD bookstack_url_2   VARCHAR(250) NOT NULL DEFAULT '' AFTER bookstack_url_1;
+ALTER TABLE task_type_details ADD bookstack_words_1 VARCHAR(100) NOT NULL DEFAULT '' AFTER bookstack_url_2;
+ALTER TABLE task_type_details ADD bookstack_words_2 VARCHAR(100) NOT NULL DEFAULT '' AFTER bookstack_words_1;
+
+UPDATE task_type_details SET bookstack_url_1='https://communitylibrary.translatorswb.org/books/09-audiovisual-services-instructions/page/captioning-instructions' WHERE type_enum=12;
+UPDATE task_type_details SET bookstack_url_1='https://communitylibrary.translatorswb.org/books/09-audiovisual-services-instructions/page/subtitling-instructions' WHERE type_enum=11;
+UPDATE task_type_details SET bookstack_url_1='https://communitylibrary.translatorswb.org/books/09-audiovisual-services-instructions/page/subtitling-instructions' WHERE type_enum=10;
+UPDATE task_type_details SET bookstack_url_1='https://communitylibrary.translatorswb.org/books/09-audiovisual-services-instructions/page/transcription-instructions' WHERE type_enum=13;
+UPDATE task_type_details SET bookstack_url_1='https://communitylibrary.translatorswb.org/books/09-audiovisual-services-instructions/page/voice-over-instructions' WHERE type_enum=9;
+UPDATE task_type_details SET bookstack_url_1='https://communitylibrary.translatorswb.org/books/09-audiovisual-services-instructions/page/voice-over-instructions' WHERE type_enum=14;
+UPDATE task_type_details SET bookstack_url_1='https://communitylibrary.translatorswb.org/books/10-support-activities-instructions/page/desktop-publishing-dtp-linguistic-sign-off-instructions' WHERE type_enum=8;
+UPDATE task_type_details SET bookstack_url_1='https://communitylibrary.translatorswb.org/books/07-translation-and-editing-instructions/page/plain-language-editing-instructions' WHERE type_enum=23;
+UPDATE task_type_details SET bookstack_url_1='https://communitylibrary.translatorswb.org/books/07-translation-and-editing-instructions/page/revision-instructions' WHERE type_enum=3;
+UPDATE task_type_details SET bookstack_url_1='https://communitylibrary.translatorswb.org/books/07-translation-and-editing-instructions/page/proofreadingapproval-tasks-instructions' WHERE type_enum=6;
+UPDATE task_type_details SET bookstack_url_1='https://communitylibrary.translatorswb.org/books/07-translation-and-editing-instructions/page/translation-instructions' WHERE type_enum=2;
+UPDATE task_type_details SET bookstack_url_1='https://communitylibrary.translatorswb.org/books/10-support-activities-instructions/page/terminology-translation-instructions' WHERE type_enum=25;
+UPDATE task_type_details SET bookstack_url_1='https://communitylibrary.translatorswb.org/books/10-support-activities-instructions/page/terminology-translation-instructions' WHERE type_enum=7;
+
+UPDATE task_type_details SET bookstack_url_1='https://communitylibrary.translatorswb.org/books/10-support-activities-instructions/page/alignment-project-instructions-spreadsheets' WHERE type_enum=16;
+UPDATE task_type_details SET bookstack_url_2='https://communitylibrary.translatorswb.org/books/10-support-activities-instructions/page/alignment-project-instructions-matecat' WHERE type_enum=16;
+UPDATE task_type_details SET bookstack_words_1='Alignment in Spreadsheet' WHERE type_enum=16;
+UPDATE task_type_details SET bookstack_words_2='Alignment in Matecat' WHERE type_enum=16;
+
+UPDATE task_type_details SET bookstack_url_1='https://communitylibrary.translatorswb.org/books/07-translation-and-editing-instructions/page/language-quality-inspection-lqi-in-phrase-tms-instructions' WHERE type_enum=19;
+UPDATE task_type_details SET bookstack_url_1='https://communitylibrary.translatorswb.org/books/07-translation-and-editing-instructions/page/lexiqa-instructions' WHERE type_enum=15;
+
+
+UPDATE task_type_details SET bookstack_url_1='https://communitylibrary.translatorswb.org/books/07-translation-and-editing-instructions/page/monolingual-proofreading-native-edit-instructions' WHERE type_enum=20;
+UPDATE task_type_details SET bookstack_url_2='https://communitylibrary.translatorswb.org/books/07-translation-and-editing-instructions/page/monolingual-proofreading-phrase-tms-edit-instructions' WHERE type_enum=20;
+UPDATE task_type_details SET bookstack_words_1='Monolingual Proofreading - Native Edit' WHERE type_enum=20;
+UPDATE task_type_details SET bookstack_words_2='Monolingual Proofreading - Phrase TMS' WHERE type_enum=20;
+
+UPDATE task_type_details SET bookstack_url_1='https://communitylibrary.translatorswb.org/books/07-translation-and-editing-instructions/page/post-editing-machine-translation-tips-and-best-practice' WHERE type_enum=21;
+UPDATE task_type_details SET bookstack_url_1='https://communitylibrary.translatorswb.org/books/06-phrase-tms/page/how-to-run-qa-quality-assurance-checks-in-phrase-tms' WHERE type_enum=18;
+UPDATE task_type_details SET bookstack_url_1='https://communitylibrary.translatorswb.org/books/07-translation-and-editing-instructions/page/subject-matter-expert-sme-review-instructions' WHERE type_enum=17;
+UPDATE task_type_details SET bookstack_url_1='https://communitylibrary.translatorswb.org/books/07-translation-and-editing-instructions/page/translation-instructions' WHERE type_enum=26;
+UPDATE task_type_details SET bookstack_url_1='https://communitylibrary.translatorswb.org/books/07-translation-and-editing-instructions/page/revision-instructions' WHERE type_enum=27;
 */
 
 
