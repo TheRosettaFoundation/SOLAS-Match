@@ -241,7 +241,7 @@
                         {/if}
                         {if !isset($site_admin)}
                              <li {if isset($current_page) && $current_page == 'faq'}class="active" {/if}>
-                                <a href="https://community.translatorswb.org/t/the-translators-toolkit/3138" target="_blank">{Localisation::getTranslation('common_faq')}</a>
+                                <a href="https://communitylibrary.translatorswb.org/login" target="_blank">Library</a>
                             </li>
                         {/if}
                            	{if Settings::get('site.forum_enabled') == 'y'}

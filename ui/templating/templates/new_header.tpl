@@ -126,7 +126,7 @@
 
                  {if !isset($site_admin)}
                              <li {if isset($current_page) && $current_page == 'faq'}" {/if} class="nav-item ">
-                                <a href="https://community.translatorswb.org/t/the-translators-toolkit/3138" target="_blank" class=" fs-5 nav-link fw-bold">{Localisation::getTranslation('common_faq')} </a>
+                                <a href="https://communitylibrary.translatorswb.org/login" target="_blank" class=" fs-5 nav-link fw-bold">Library</a>
                             </li>
                 {/if}
                 {if Settings::get('site.forum_enabled') == 'y'}
