@@ -169,18 +169,26 @@
             </thead>
             <tbody class="fs-4">
             <tr>
-                <td class="w-100 d-flex flex-column">
-                   <div class="pb-0 bg-dark rounded-2"> {if !preg_match('/^Test.{4}$/', $task->getTitle())}<a href="https://community.translatorswb.org/t/{$discourse_slug}" class="btngray-lg" target="_blank">Discuss task</a>{/if}</div>
-
-                   {if $status_id >= TaskStatusEnum::IN_PROGRESS && !empty(TaskTypeEnum::$enum_to_UI[$type_id]['bookstack_url_1']) && empty(TaskTypeEnum::$enum_to_UI[$type_id]['bookstack_url_2'])}
-                   <div class="pb-0 bg-dark rounded-2"><a href="{TaskTypeEnum::$enum_to_UI[$type_id]['bookstack_url_1']}" class="btngray-lg" target="_blank">Check the standard instructions for {TaskTypeEnum::$enum_to_UI[$type_id]['type_text']} here</a></div>
-                   {/if}
-
-                   {if $status_id >= TaskStatusEnum::IN_PROGRESS && !empty(TaskTypeEnum::$enum_to_UI[$type_id]['bookstack_url_1']) && !empty(TaskTypeEnum::$enum_to_UI[$type_id]['bookstack_url_2'])}
-                   <div class="pb-0 bg-dark rounded-2"><a href="{TaskTypeEnum::$enum_to_UI[$type_id]['bookstack_url_1']}" class="btngray-lg" target="_blank">Check the standard instructions for {TaskTypeEnum::$enum_to_UI[$type_id]['bookstack_url_words_1']} here</a></div>
-                   <div class="pb-0 bg-dark rounded-2"><a href="{TaskTypeEnum::$enum_to_UI[$type_id]['bookstack_url_2']}" class="btngray-lg" target="_blank">Check the standard instructions for {TaskTypeEnum::$enum_to_UI[$type_id]['bookstack_url_words_2']} here</a></div>
-                   {/if}
+                {if $status_id < TaskStatusEnum::IN_PROGRESS || empty(TaskTypeEnum::$enum_to_UI[$type_id]['bookstack_url_1'])}
+                <td class="w-50 d-flex">
+                   <div class="pb-0 bg-dark rounded-2">{if !preg_match('/^Test.{4}$/', $task->getTitle())}<a href="https://community.translatorswb.org/t/{$discourse_slug}" class="btngray-lg" target="_blank">Discuss task</a>{/if}</div>
                 </td>
+                {/if}
+
+                {if $status_id >= TaskStatusEnum::IN_PROGRESS && !empty(TaskTypeEnum::$enum_to_UI[$type_id]['bookstack_url_1']) && empty(TaskTypeEnum::$enum_to_UI[$type_id]['bookstack_url_2'])}
+                <td class="w-100 d-flex flex-column">
+                   <div class="pb-2 bg-dark rounded-2">{if !preg_match('/^Test.{4}$/', $task->getTitle())}<a href="https://community.translatorswb.org/t/{$discourse_slug}" class="btngray-lg" target="_blank">Discuss task</a>{/if}</div>
+                   <div class="pb-0 bg-dark rounded-2"><a href="{TaskTypeEnum::$enum_to_UI[$type_id]['bookstack_url_1']}" class="btngray-lg" target="_blank">Check the standard instructions for {TaskTypeEnum::$enum_to_UI[$type_id]['type_text']} here</a></div>
+                </td>
+                {/if}
+
+                {if $status_id >= TaskStatusEnum::IN_PROGRESS && !empty(TaskTypeEnum::$enum_to_UI[$type_id]['bookstack_url_1']) && !empty(TaskTypeEnum::$enum_to_UI[$type_id]['bookstack_url_2'])}
+                <td class="w-100 d-flex flex-column">
+                   <div class="pb-2 bg-dark rounded-2">{if !preg_match('/^Test.{4}$/', $task->getTitle())}<a href="https://community.translatorswb.org/t/{$discourse_slug}" class="btngray-lg" target="_blank">Discuss task</a>{/if}</div>
+                   <div class="pb-2 bg-dark rounded-2"><a href="{TaskTypeEnum::$enum_to_UI[$type_id]['bookstack_url_1']}" class="btngray-lg" target="_blank">Check the standard instructions for {TaskTypeEnum::$enum_to_UI[$type_id]['bookstack_url_words_1']} here</a></div>
+                   <div class="pb-0 bg-dark rounded-2"><a href="{TaskTypeEnum::$enum_to_UI[$type_id]['bookstack_url_2']}" class="btngray-lg" target="_blank">Check the standard instructions for {TaskTypeEnum::$enum_to_UI[$type_id]['bookstack_url_words_2']} here</a></div>
+                </td>
+                {/if}
 
                 <td class="w-50 ">
                   <div class="d-flex">
