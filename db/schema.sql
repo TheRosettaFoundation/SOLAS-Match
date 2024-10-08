@@ -12856,6 +12856,7 @@ CREATE TABLE IF NOT EXISTS `linguist_payment_informations` (
   country_id        INT UNSIGNED NOT NULL,
   google_drive_link VARCHAR(255) NOT NULL,
   linguist_name     VARCHAR(256) NOT NULL,
+  linguist_t_code   VARCHAR(255) NOT NULL DEFAULT '',
   PRIMARY KEY (user_id),
   KEY FK_linguist_payment_informations_country (country_id),
   CONSTRAINT FK_linguist_payment_informations_country FOREIGN KEY (country_id) REFERENCES Countries (id) ON DELETE CASCADE ON UPDATE CASCADE,
@@ -12865,12 +12866,12 @@ CREATE TABLE IF NOT EXISTS `linguist_payment_informations` (
 
 DROP PROCEDURE IF EXISTS `insert_update_linguist_payment_information`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_update_linguist_payment_information`(IN uID INT UNSIGNED, IN aID INT UNSIGNED, IN country INT UNSIGNED, IN link VARCHAR(255), IN name VARCHAR(256))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_update_linguist_payment_information`(IN uID INT UNSIGNED, IN aID INT UNSIGNED, IN country INT UNSIGNED, IN link VARCHAR(255), IN name VARCHAR(256), IN tcode VARCHAR(255))
 BEGIN
     DELETE FROM linguist_payment_informations WHERE user_id=uID;
 
-    INSERT INTO linguist_payment_informations (user_id,   admin_id, country_id, google_drive_link, linguist_name)
-    VALUES                                    (    uID,        aID,    country,              link,          name);
+    INSERT INTO linguist_payment_informations (user_id,   admin_id, country_id, google_drive_link, linguist_name, linguist_t_code)
+    VALUES                                    (    uID,        aID,    country,              link,          name, tcode);
 END//
 DELIMITER ;
 
@@ -13123,6 +13124,7 @@ CREATE TABLE IF NOT EXISTS `invoices` (
   invoice_paid_date DATETIME,
   linguist_id    INT UNSIGNED NOT NULL,
   linguist_name  VARCHAR(256) NOT NULL,
+  linguist_t_code VARCHAR(255) NOT NULL DEFAULT '',
   amount         FLOAT NOT NULL,
   filename       VARCHAR(255),
   google_id      VARCHAR(50) DEFAULT '',
@@ -13134,9 +13136,9 @@ CREATE TABLE IF NOT EXISTS `invoices` (
 
 DROP PROCEDURE IF EXISTS `insert_invoice`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_invoice`(IN stat INT, IN date DATETIME, IN lID INT UNSIGNED, IN lNAME VARCHAR(256), IN a FLOAT, IN aID INT UNSIGNED)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_invoice`(IN stat INT, IN date DATETIME, IN lID INT UNSIGNED, IN lNAME VARCHAR(256), IN lTCODE VARCHAR(255), IN a FLOAT, IN aID INT UNSIGNED)
 BEGIN
-    INSERT INTO invoices (status, invoice_date, linguist_id, linguist_name, amount, admin_id) VALUES (stat, date, lID, lNAME, a, aID);
+    INSERT INTO invoices (status, invoice_date, linguist_id, linguist_name, linguist_t_code, amount, admin_id) VALUES (stat, date, lID, lNAME, lTCODE, a, aID);
     SELECT LAST_INSERT_ID() AS id;
 END//
 DELIMITER ;
