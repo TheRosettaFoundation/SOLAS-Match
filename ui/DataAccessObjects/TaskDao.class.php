@@ -1075,15 +1075,15 @@ error_log("total_expected_cost: $total_expected_cost, divide_rate_by_60 " . $tas
         return $result[0];
     }
 
-    public function insert_update_linguist_payment_information($user_id, $admin_id, $country_id, $google_drive_link, $linguist_name)
+    public function insert_update_linguist_payment_information($user_id, $admin_id, $country_id, $google_drive_link, $linguist_name, $linguist_t_code)
     {
-        LibAPI\PDOWrapper::call('insert_update_linguist_payment_information', LibAPI\PDOWrapper::cleanse($user_id) . ',' . LibAPI\PDOWrapper::cleanse($admin_id) . ',' . LibAPI\PDOWrapper::cleanse($country_id) . ',' . LibAPI\PDOWrapper::cleanseWrapStr($google_drive_link) . ',' . LibAPI\PDOWrapper::cleanseWrapStr($linguist_name));
+        LibAPI\PDOWrapper::call('insert_update_linguist_payment_information', LibAPI\PDOWrapper::cleanse($user_id) . ',' . LibAPI\PDOWrapper::cleanse($admin_id) . ',' . LibAPI\PDOWrapper::cleanse($country_id) . ',' . LibAPI\PDOWrapper::cleanseWrapStr($google_drive_link) . ',' . LibAPI\PDOWrapper::cleanseWrapStr($linguist_name) . ',' . LibAPI\PDOWrapper::cleanseWrapStr($linguist_t_code));
     }
 
     public function get_linguist_payment_information($user_id)
     {
         $result = LibAPI\PDOWrapper::call('get_linguist_payment_information', LibAPI\PDOWrapper::cleanse($user_id));
-        if (empty($result)) return ['admin_id' => 0, 'admin_name' => '', 'country_id' => 0, 'google_drive_link' => ''];
+        if (empty($result)) return ['admin_id' => 0, 'admin_name' => '', 'country_id' => 0, 'google_drive_link' => '', 'linguist_t_code' => ''];
         return $result[0];
     }
 
