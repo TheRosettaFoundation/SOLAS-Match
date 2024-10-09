@@ -166,6 +166,8 @@
     <table class="table table-borderless" >
         <thead class="fs-5">
             <th>Deal ID</th>
+            <th>Sun Project T-Code</th>
+            <th>Sun Purchase Requisition</th>
             <th>Project Price</th>
             <th>Allocated Budget</th>
             <th>Project Cost</th>
@@ -175,6 +177,8 @@
         <tbody class="fs-4">
             <tr style="overflow-wrap: break-word;">
                 <td>{if $project_complete_date['deal_id'] > 0}<a href="{urlFor name="deal_id_report" options="deal_id.{$project_complete_date['deal_id']}"}" class="custom-link" target="_blank">{$project_complete_date['deal_id']}</a>{else}{$project_complete_date['deal_id']}{/if}</td>
+                <td>{$project_complete_date['project_t_code']}</td>
+                <td>{$project_complete_date['purchase_requisition']}</td>
                 <td><div >${round($total_expected_price, 2)}</div></td>
                 <td>${round($project_complete_date['allocated_budget'], 2)}</td>
                 <td>${round($total_expected_cost, 2)}</td>
