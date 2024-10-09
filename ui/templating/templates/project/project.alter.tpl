@@ -168,6 +168,12 @@
 
                     <label for="project_allocated_budget" style="font-size: large"><strong>Allocated Budget</strong></label>
                     <input type="text" name="project_allocated_budget" id="project_allocated_budget" value="{$project_complete_date['allocated_budget']}" style="width: 400px" />
+
+                    <label for="project_t_code" style="font-size: large"><strong>Sun Project T-Code</strong></label>
+                    <input type="text" name="project_t_code" id="project_t_code" value="{$project_complete_date['project_t_code']}" style="width: 400px" />
+
+                    <label for="purchase_requisition" style="font-size: large"><strong>Sun Purchase Requisition</strong></label>
+                    <input type="text" name="purchase_requisition" id="purchase_requisition" value="{$project_complete_date['purchase_requisition']}" style="width: 400px" />
                     {/if}
                 </td>
             </tr>
