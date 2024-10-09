@@ -1036,6 +1036,20 @@ error_log("total_expected_cost: $total_expected_cost, divide_rate_by_60 " . $tas
             LibAPI\PDOWrapper::cleanse($allocated_budget));
     }
 
+    public function update_project_t_code($project_id, $project_t_code)
+    {
+        LibAPI\PDOWrapper::call('update_project_t_code',
+            LibAPI\PDOWrapper::cleanse($project_id) . ',' .
+            LibAPI\PDOWrapper::cleanseWrapStr($project_t_code));
+    }
+
+    public function update_project_purchase_requisition($project_id, $purchase_requisition)
+    {
+        LibAPI\PDOWrapper::call('update_project_purchase_requisition',
+            LibAPI\PDOWrapper::cleanse($project_id) . ',' .
+            LibAPI\PDOWrapper::cleanseWrapStr($purchase_requisition));
+    }
+
     public function insert_task_url($task_id, $url)
     {
         LibAPI\PDOWrapper::call('insert_task_url',

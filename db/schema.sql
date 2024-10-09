@@ -10872,6 +10872,22 @@ BEGIN
 END//
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `update_project_t_code`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `update_project_t_code`(IN pID INT UNSIGNED, IN tcode VARCHAR(255))
+BEGIN
+    UPDATE project_complete_dates SET project_t_code=tcode WHERE project_id=pID;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `update_project_purchase_requisition`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `update_project_purchase_requisition`(IN pID INT UNSIGNED, IN pr VARCHAR(255))
+BEGIN
+    UPDATE project_complete_dates SET purchase_requisition=pr WHERE project_id=pID;
+END//
+DELIMITER ;
+
 DROP PROCEDURE IF EXISTS `get_selections`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `get_selections`()
