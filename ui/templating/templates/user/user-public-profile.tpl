@@ -1520,21 +1520,24 @@ If a language is to be removed from this list, the community will be informed be
 <div class="table-responsive fs-5">
 <table class="table" >
     <tr valign="top">
-        <td style="width: 20%"><h4 class="fw-bold">Linguist Payment Information</h4></td>
+        <td style="width: 15%"><h4 class="fw-bold">Linguist Payment Information</h4></td>
         <td style="width: 20%"></td>
         <td style="width: 20%"></td>
-        <td style="width: 40%"></td>
+        <td style="width: 15%"></td>
+        <td style="width: 30%"></td>
     </tr>
     <tr valign="top">
-        <td style="width: 20%"><strong>Admin</strong></td>
+        <td style="width: 15%"><strong>Admin</strong></td>
         <td style="width: 20%"><strong>Official Name</strong></td>
-        <td style="width: 20%"><strong>Billing Country</strong></td>
-        <td style="width: 40%"><strong>Google Drive Folder Link</strong></td>
+        <td style="width: 20%"><strong>Sun Linguist T-Code</strong></td>
+        <td style="width: 15%"><strong>Billing Country</strong></td>
+        <td style="width: 30%"><strong>Google Drive Folder Link</strong></td>
     </tr>
     <tr valign="top">
-        <td style="width: 20%"><a href="{urlFor name="user-public-profile" options="user_id.{$linguist_payment_information['admin_id']}"}" target="_blank">{TemplateHelper::uiCleanseHTML($linguist_payment_information['admin_name'])}</a>{if empty($linguist_payment_information['admin_name'])}-{/if}</td>
+        <td style="width: 15%"><a href="{urlFor name="user-public-profile" options="user_id.{$linguist_payment_information['admin_id']}"}" target="_blank">{TemplateHelper::uiCleanseHTML($linguist_payment_information['admin_name'])}</a>{if empty($linguist_payment_information['admin_name'])}-{/if}</td>
         <td style="width: 20%"><input class="form-control form-control-sm" type='text' value="{if !empty($linguist_payment_information['linguist_name'])}{$linguist_payment_information['linguist_name']}{else}{if isset($userPersonalInfo) && !empty($userPersonalInfo->getFirstName())}{$userPersonalInfo->getFirstName()}{/if}{if isset($userPersonalInfo) && !empty($userPersonalInfo->getLastName())} {$userPersonalInfo->getLastName()}{/if}{/if}" name="linguist_name" id="linguist_name" /></td>
-        <td style="width: 20%">
+        <td style="width: 20%"><input class="form-control form-control-sm" type='text' value="{if !empty($linguist_payment_information['linguist_t_code'])}{$linguist_payment_information['linguist_t_code']}{/if}" name="linguist_t_code" id="linguist_t_code" /></td>
+        <td style="width: 15%">
             <select class="form-select form-select-sm" name="country_id" id="country">
                 <option value="">--Select--</option>
                 {foreach $countries as $country}
@@ -1544,7 +1547,7 @@ If a language is to be removed from this list, the community will be informed be
                 {/foreach}
             </select>
         </td>
-        <td style="width: 40%"><input class="form-control form-control-sm" type='text' value="{$linguist_payment_information['google_drive_link']}" name="google_drive_link" id="google_drive_link" /></td>
+        <td style="width: 30%"><input class="form-control form-control-sm" type='text' value="{$linguist_payment_information['google_drive_link']}" name="google_drive_link" id="google_drive_link" /></td>
     </tr>
     {if $roles & ($SITE_ADMIN + $COMMUNITY_OFFICER)}
     <tr valign="top">
