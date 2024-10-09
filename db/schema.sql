@@ -1351,6 +1351,8 @@ CREATE TABLE IF NOT EXISTS `project_complete_dates` (
   complete_date DATETIME NOT NULL,
   deal_id       BIGINT UNSIGNED NOT NULL DEFAULT 0,
   allocated_budget INT UNSIGNED NOT NULL DEFAULT 0,
+  project_t_code       VARCHAR(255) NOT NULL DEFAULT '',
+  purchase_requisition VARCHAR(255) NOT NULL DEFAULT '',
   PRIMARY KEY (project_id),
   KEY key_complete_date (complete_date),
   KEY (deal_id),
