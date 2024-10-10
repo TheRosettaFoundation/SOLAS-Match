@@ -11305,6 +11305,8 @@ BEGIN
         CONCAT(l1.code, '-', c1.code) AS language_pair,
         o.name,
         pcd.deal_id,
+        pcd.project_t_code,
+        pcd.purchase_requisition,
         pcd.allocated_budget,
         SUM(                           IF(t.`word-count`>1, IF(ttd.divide_rate_by_60, t.`word-count`*tp.unit_rate/60, t.`word-count`*tp.unit_rate), 0)    ) AS total_expected_cost,
         SUM(IF(tc.user_id IS NOT NULL, IF(t.`word-count`>1, IF(ttd.divide_rate_by_60, t.`word-count`*tp.unit_rate/60, t.`word-count`*tp.unit_rate), 0), 0)) AS total_expected_cost_claimed,
