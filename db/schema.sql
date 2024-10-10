@@ -13242,6 +13242,7 @@ BEGIN
     SELECT
         IFNULL(tc.user_id, 0) AS user_id,
         IFNULL(i.linguist_name, IFNULL(lpi.linguist_name, IFNULL(CONCAT(upi.`first-name`, ' ', upi.`last-name`), ''))) AS linguist,
+        IFNULL(i.linguist_t_code, IFNULL(lpi.linguist_t_code, '')) AS linguist_t_code,
         lpi.google_drive_link,
         p.organisation_id,
         o.name,
@@ -13256,6 +13257,8 @@ BEGIN
         ttd.type_text,
         CONCAT(l1.code, '-', c1.code, '<br />', l2.code, '-', c2.code) AS language_pair,
         pcd.deal_id,
+        pcd.project_t_code,
+        pcd.purchase_requisition,
         '2.9.2' AS budget_code,
         tp.purchase_order,
         pos.status AS po_status,

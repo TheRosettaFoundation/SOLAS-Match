@@ -1136,7 +1136,7 @@ error_log("total_expected_cost: $total_expected_cost, divide_rate_by_60 " . $tas
                 $amount += $row['total_expected_cost'];
                 if ($row['total_expected_cost'] >= 600) $proforma = 1;
             }
-            $result = LibAPI\PDOWrapper::call('insert_invoice', LibAPI\PDOWrapper::cleanse($proforma) . ',' . LibAPI\PDOWrapper::cleanseWrapStr($invoice_date) . ',' . LibAPI\PDOWrapper::cleanse($row['user_id']) . ',' . LibAPI\PDOWrapper::cleanseWrapStr($row['linguist']) . ',' . LibAPI\PDOWrapper::cleanse($amount) . ',' . LibAPI\PDOWrapper::cleanse(Common\Lib\UserSession::getCurrentUserID()));
+            $result = LibAPI\PDOWrapper::call('insert_invoice', LibAPI\PDOWrapper::cleanse($proforma) . ',' . LibAPI\PDOWrapper::cleanseWrapStr($invoice_date) . ',' . LibAPI\PDOWrapper::cleanse($row['user_id']) . ',' . LibAPI\PDOWrapper::cleanseWrapStr($row['linguist']) . ',' . LibAPI\PDOWrapper::cleanseWrapStr($row['linguist_t_code']) . ',' . LibAPI\PDOWrapper::cleanse($amount) . ',' . LibAPI\PDOWrapper::cleanse(Common\Lib\UserSession::getCurrentUserID()));
             $invoice_number = $result[0]['id'];
 
             foreach ($invoice as $row) {
