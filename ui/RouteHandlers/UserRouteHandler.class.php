@@ -3375,18 +3375,7 @@ EOF;
         EOF;
 
 foreach ($rows as $index => $row) {
-[[[
-In the invoice, include all the current information, plus:
-NEED Linguist T-Code in the header along with their name
-Project T-Code & PR # along with HS Deal #
-            <th>Sun Project T-Code</th>
-            <th>Sun Purchase Requisition</th>
-NEED                <td>{$project_complete_date['project_t_code']}</td>
-NEED                <td>{$project_complete_date['purchase_requisition']}</td>
-
-
-]]]
-    $purchase_order = $row['purchase_order'];
+    $purchase_order = "{$row['purchase_order']} ({$row['purchase_requisition']})";
     $deal_id = $row['deal_id'];
     $description = "{$row['title']} ({$row['task_id']})";
     $type = $row['type_text'];
