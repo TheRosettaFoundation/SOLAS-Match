@@ -3273,7 +3273,7 @@ EOF;
 
         $invoice_number = 'TWB-' . str_pad($invoice_number, 4, '0', STR_PAD_LEFT);
 
-        $name = $invoice['linguist_name'];
+        $name = "{$invoice['linguist_name']} ($invoice['linguist_t_code'])";
 
         $status = $invoice['status'];
         $paid = $status&2 ? 'PAID' : '';
@@ -3375,12 +3375,23 @@ EOF;
         EOF;
 
 foreach ($rows as $index => $row) {
+[[[
+In the invoice, include all the current information, plus:
+NEED Linguist T-Code in the header along with their name
+Project T-Code & PR # along with HS Deal #
+            <th>Sun Project T-Code</th>
+            <th>Sun Purchase Requisition</th>
+NEED                <td>{$project_complete_date['project_t_code']}</td>
+NEED                <td>{$project_complete_date['purchase_requisition']}</td>
+
+
+]]]
     $purchase_order = $row['purchase_order'];
     $deal_id = $row['deal_id'];
-    $description = $row['title'];
+    $description = "{$row['title']} ({$row['task_id']})";
     $type = $row['type_text'];
     $language = $row['language_pair_name'];
-    $project = $row['project_title'];
+    $project = "{$row['project_title']} ($row['project_t_code']})";
     $org = $row['name'];
     $row_amount = '$' . round($row['row_amount'], 2);
     $unit = $row['pricing_and_recognition_unit_text_hours'];
