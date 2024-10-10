@@ -13207,6 +13207,8 @@ BEGIN
         p.title AS project_title,
         o.name,
         pcd.deal_id,
+        pcd.project_t_code,
+        pcd.purchase_requisition,
         ttd.type_text,
         CONCAT(l1.code, '-', l2.code) AS language_pair,
         CONCAT(l1.`en-name`, '-', l2.`en-name`) AS language_pair_name,
