@@ -3,7 +3,7 @@
 
     <string name="common_faq">FAQ</string>
     <string name="common_forum">TWB Community</string>
-    <string name="common_discuss_on_community">Questions or Comments on this task?</string>
+    <string name="common_discuss_on_community">Questions or comments on this task?</string>
 	<string name="common_banned_by">Banned By</string>
 	<string name="common_ban_duration">Ban Duration</string>
 	<string name="common_ban_reason">Ban Reason</string>
@@ -163,7 +163,7 @@
 	<string name="common_here_is_what_will_now_happen">Here is what will now happen</string>
 	<string name="common_back_to_home_page">Back to Home Page</string>
 	<string name="common_create_new_task">Create new Task</string>
-	<string name="common_project_description">Project Description</string>
+	<string name="common_project_description">Project description</string>
 	<string name="common_due_by">Due by <strong>%s</strong></string>
 	<string name="common_source">Source</string>
 	<string name="common_target">Target</string>
