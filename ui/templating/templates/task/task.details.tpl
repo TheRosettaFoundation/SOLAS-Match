@@ -162,8 +162,8 @@
                 </th>
              
                 <th class="w-50" >
-                    {if ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)) && !empty($matecat_url)}<strong>{if !empty($memsource_task)}{if !TaskTypeEnum::$enum_to_UI[$type_id]['shell_task']}Phrase TMS{/if}{else}Kató TM{/if} URL for Task:</strong>
-                    {elseif in_array($project->getOrganisationId(), $ORG_EXCEPTIONS) && $roles & ($NGO_ADMIN + $NGO_PROJECT_OFFICER) && !empty($matecat_url) && TaskTypeEnum::$enum_to_UI[$type_id]['shell_task']}<strong>URL for Task:</strong>{/if}
+                    {if ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)) && !empty($matecat_url)}<strong>{if !empty($memsource_task)}{if !TaskTypeEnum::$enum_to_UI[$type_id]['shell_task']}Phrase TMS{/if}{else}Kató TM{/if} URL for task:</strong>
+                    {elseif in_array($project->getOrganisationId(), $ORG_EXCEPTIONS) && $roles & ($NGO_ADMIN + $NGO_PROJECT_OFFICER) && !empty($matecat_url) && TaskTypeEnum::$enum_to_UI[$type_id]['shell_task']}<strong>URL for task:</strong>{/if}
                 </th>
               </tr>  
             </thead>
