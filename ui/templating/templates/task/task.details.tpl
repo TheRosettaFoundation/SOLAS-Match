@@ -106,14 +106,14 @@
             <tr>
                 {if !empty(TaskTypeEnum::$enum_to_UI[$type_id]['bookstack_url_1']) && empty(TaskTypeEnum::$enum_to_UI[$type_id]['bookstack_url_2'])}
                 <td class="w-100 d-flex flex-column">
-                    <div class="pb-0      bg-dark rounded-2"><a href="{TaskTypeEnum::$enum_to_UI[$type_id]['bookstack_url_1']}" class="btngray-lg" target="_blank">Check the standard instructions for {TaskTypeEnum::$enum_to_UI[$type_id]['type_text']} here</a></div>
+                    <div class="pb-0      bg-dark rounded-2"><a href="{TaskTypeEnum::$enum_to_UI[$type_id]['bookstack_url_1']}" class="btngray-lg" target="_blank">Click here for "{TaskTypeEnum::$enum_to_UI[$type_id]['type_text']}" instructions</a></div>
                 </td>
                 {/if}
 
                 {if !empty(TaskTypeEnum::$enum_to_UI[$type_id]['bookstack_url_1']) && !empty(TaskTypeEnum::$enum_to_UI[$type_id]['bookstack_url_2'])}
                 <td class="w-100 d-flex flex-column">
-                    <div class="pb-0 mb-2 bg-dark rounded-2"><a href="{TaskTypeEnum::$enum_to_UI[$type_id]['bookstack_url_1']}" class="btngray-lg" target="_blank">Check the standard instructions for {TaskTypeEnum::$enum_to_UI[$type_id]['bookstack_words_1']} here</a></div>
-                    <div class="pb-0      bg-dark rounded-2"><a href="{TaskTypeEnum::$enum_to_UI[$type_id]['bookstack_url_2']}" class="btngray-lg" target="_blank">Check the standard instructions for {TaskTypeEnum::$enum_to_UI[$type_id]['bookstack_words_2']} here</a></div>
+                    <div class="pb-0 mb-2 bg-dark rounded-2"><a href="{TaskTypeEnum::$enum_to_UI[$type_id]['bookstack_url_1']}" class="btngray-lg" target="_blank">Click here for "{TaskTypeEnum::$enum_to_UI[$type_id]['bookstack_words_1']}" instructions</a></div>
+                    <div class="pb-0      bg-dark rounded-2"><a href="{TaskTypeEnum::$enum_to_UI[$type_id]['bookstack_url_2']}" class="btngray-lg" target="_blank">Click here for "{TaskTypeEnum::$enum_to_UI[$type_id]['bookstack_words_2']}" instructions</a></div>
                 </td>
                 {/if}
             </tr>
