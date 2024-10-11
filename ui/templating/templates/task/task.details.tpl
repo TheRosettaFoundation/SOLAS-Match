@@ -105,7 +105,7 @@
             </tr>
             <tr>
                 {if !empty(TaskTypeEnum::$enum_to_UI[$type_id]['bookstack_url_1']) && empty(TaskTypeEnum::$enum_to_UI[$type_id]['bookstack_url_2'])}
-                <td class="w-100 d-flex flex-column">
+                <td class="w-100 d-flex">
                     <div class="pb-0      bg-dark rounded-2"><a href="{TaskTypeEnum::$enum_to_UI[$type_id]['bookstack_url_1']}" class="btngray-lg" target="_blank">Click here for "{TaskTypeEnum::$enum_to_UI[$type_id]['type_text']}" instructions</a></div>
                 </td>
                 {/if}
@@ -142,7 +142,7 @@
 {/if}
 
 {assign var="tags" value=$project->getTag()}
-{if ($project->getImpact() != '' && $project->getImpact() != '-') && !empty($tags)}
+{if ($project->getImpact() != '' && $project->getImpact() != '-') || !empty($tags)}
     <div class="table-responsive">
     <table class="table table-borderless ">
         <thead class="fs-5">        
