@@ -85,8 +85,8 @@
 </div>
 
 <div class="bg-body p-2 border-secondary rounded-3 mt-2 mb-2">
-<div class="table-responsive  ">
-    <table class="table table-borderless ">
+<div class="table-responsive">
+    <table class="table table-borderless">
        <tr class="">
             <thead class="fs-5">
             <th class="w-100" >{Localisation::getTranslation('common_project_description')}</th>
@@ -106,55 +106,48 @@
             <tr>
                 {if !empty(TaskTypeEnum::$enum_to_UI[$type_id]['bookstack_url_1']) && empty(TaskTypeEnum::$enum_to_UI[$type_id]['bookstack_url_2'])}
                 <td class="w-100 d-flex flex-column">
-                   <div class="pb-0 mb-2 bg-dark rounded-2">{if !preg_match('/^Test.{4}$/', $task->getTitle())}<a href="https://community.translatorswb.org/t/{$discourse_slug}" class="btngray-lg" target="_blank">Discuss task</a>{/if}</div>
-                   <div class="pb-0      bg-dark rounded-2"><a href="{TaskTypeEnum::$enum_to_UI[$type_id]['bookstack_url_1']}" class="btngray-lg" target="_blank">Check the standard instructions for {TaskTypeEnum::$enum_to_UI[$type_id]['type_text']} here</a></div>
+                    <div class="pb-0      bg-dark rounded-2"><a href="{TaskTypeEnum::$enum_to_UI[$type_id]['bookstack_url_1']}" class="btngray-lg" target="_blank">Check the standard instructions for {TaskTypeEnum::$enum_to_UI[$type_id]['type_text']} here</a></div>
                 </td>
                 {/if}
 
                 {if !empty(TaskTypeEnum::$enum_to_UI[$type_id]['bookstack_url_1']) && !empty(TaskTypeEnum::$enum_to_UI[$type_id]['bookstack_url_2'])}
                 <td class="w-100 d-flex flex-column">
-                   <div class="pb-0 mb-2 bg-dark rounded-2">{if !preg_match('/^Test.{4}$/', $task->getTitle())}<a href="https://community.translatorswb.org/t/{$discourse_slug}" class="btngray-lg" target="_blank">Discuss task</a>{/if}</div>
-                   <div class="pb-0 mb-2 bg-dark rounded-2"><a href="{TaskTypeEnum::$enum_to_UI[$type_id]['bookstack_url_1']}" class="btngray-lg" target="_blank">Check the standard instructions for {TaskTypeEnum::$enum_to_UI[$type_id]['bookstack_words_1']} here</a></div>
-                   <div class="pb-0      bg-dark rounded-2"><a href="{TaskTypeEnum::$enum_to_UI[$type_id]['bookstack_url_2']}" class="btngray-lg" target="_blank">Check the standard instructions for {TaskTypeEnum::$enum_to_UI[$type_id]['bookstack_words_2']} here</a></div>
+                    <div class="pb-0 mb-2 bg-dark rounded-2"><a href="{TaskTypeEnum::$enum_to_UI[$type_id]['bookstack_url_1']}" class="btngray-lg" target="_blank">Check the standard instructions for {TaskTypeEnum::$enum_to_UI[$type_id]['bookstack_words_1']} here</a></div>
+                    <div class="pb-0      bg-dark rounded-2"><a href="{TaskTypeEnum::$enum_to_UI[$type_id]['bookstack_url_2']}" class="btngray-lg" target="_blank">Check the standard instructions for {TaskTypeEnum::$enum_to_UI[$type_id]['bookstack_words_2']} here</a></div>
                 </td>
                 {/if}
+
+
+
+
+
             </tr>
         </tbody>
     </table>
    </div>
-[[[
-<div class="table-responsive  ">
-    <table class="table table-borderless ">
+
+{if $task->getComment() != ''}
+<div class="table-responsive">
+    <table class="table table-borderless">
        <tr class="">
             <thead class="fs-5">
-            <th class="w-50" >{Localisation::getTranslation('common_task_comment')}</th>
-            <th class="w-50" >{Localisation::getTranslation('common_project_description')}</th>
+            <th class="w-100">{Localisation::getTranslation('common_task_comment')}</th>
             </thead>
        </tr>
 
         <tbody class="fs-4">
             <tr>
-                <td class="w-50">
-                        {if $task->getComment() != ''}
-                            {TemplateHelper::uiCleanseHTMLNewlineAndTabs($task->getComment())}
-                        {else}
-                            {Localisation::getTranslation('common_no_comment_has_been_listed')}
-                        {/if}
-                </td>
-
-                <td class="w-50">
-                        {if $project->getDescription() != ''}
-                            <div class="ql-editor">{TemplateHelper::clean_project_description($project->getDescription())}</div>
-                        {else}
-                            {Localisation::getTranslation('common_no_description_has_been_listed')}
-                        {/if}
+                <td class="w-100">
+                    {TemplateHelper::uiCleanseHTMLNewlineAndTabs($task->getComment())}
                 </td>
             </tr>
         </tbody>
     </table>
    </div>  
-]]]
+{/if}
 
+{assign var="tags" value=$project->getTag()}
+{if ($project->getImpact() != '' && $project->getImpact() != '-') && !empty($tags)}
     <div class="table-responsive">
     <table class="table table-borderless ">
         <thead class="fs-5">        
@@ -181,7 +174,7 @@
                 </td>    
 
                 <td class="w-50">
-                    {foreach from=$project->getTag() item=tag}
+                    {foreach from=$tags item=tag}
                         <a class="tag label" href="{urlFor name="tag-details" options="id.{$tag->getId()}"}">{TemplateHelper::uiCleanseHTML($tag->getLabel())}</a>
                     {/foreach}
                 </td>                    
@@ -189,6 +182,7 @@
         </tbody>
        </table>
        </div> 
+{/if}
 
             {if $task->getProjectId() > Settings::get("discourse.pre_discourse") && isset($discourse_slug)}
 
