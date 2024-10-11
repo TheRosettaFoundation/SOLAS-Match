@@ -116,11 +116,6 @@
                     <div class="pb-0      bg-dark rounded-2"><a href="{TaskTypeEnum::$enum_to_UI[$type_id]['bookstack_url_2']}" class="btngray-lg" target="_blank">Check the standard instructions for {TaskTypeEnum::$enum_to_UI[$type_id]['bookstack_words_2']} here</a></div>
                 </td>
                 {/if}
-
-
-
-
-
             </tr>
         </tbody>
     </table>
