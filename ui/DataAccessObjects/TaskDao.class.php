@@ -883,7 +883,8 @@ error_log("createTaskDirectly: $args");
             }
             if ($insert != -1) {
                 $args = LibAPI\PDOWrapper::cleanse($row[0]) . ',';
-                if (preg_match('/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/', $row[2])) $args .= LibAPI\PDOWrapper::cleanseWrapStr($row[2]) . ',';
+                if     (preg_match('/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/', $row[2])) $args .= LibAPI\PDOWrapper::cleanseWrapStr($row[2]) . ',';
+                elseif (preg_match('/^\d{4}-\d{2}-\d{2} \d{1}:\d{2}:\d{2}$/', $row[2])) $args .= LibAPI\PDOWrapper::cleanseWrapStr(substr($row[2], 0, 11) . '0' . substr($row[2], 11)) . ',';
                 else $args .= 'NULL,';
                 $args .= LibAPI\PDOWrapper::cleanseWrapStr($row[3]) . ',';
                 $args .= LibAPI\PDOWrapper::cleanseWrapStr($row[4]) . ',';
@@ -894,7 +895,8 @@ error_log("createTaskDirectly: $args");
                 $args .= LibAPI\PDOWrapper::cleanseWrapStr($row[13]) . ',';
                 $args .= LibAPI\PDOWrapper::cleanseWrapStr($row[10]) . ',';
                 $args .= LibAPI\PDOWrapper::cleanseWrapStr($row[14]) . ',';
-                if (preg_match('/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/', $row[11])) $args .= LibAPI\PDOWrapper::cleanseWrapStr($row[11]) . ',';
+                if     (preg_match('/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/', $row[11])) $args .= LibAPI\PDOWrapper::cleanseWrapStr($row[11]) . ',';
+                elseif (preg_match('/^\d{4}-\d{2}-\d{2} \d{1}:\d{2}:\d{2}$/', $row[11])) $args .= LibAPI\PDOWrapper::cleanseWrapStr(substr($row[11], 0, 11) . '0' . substr($row[11], 11)) . ',';
                 else $args .= 'NULL,';
                 $args .= LibAPI\PDOWrapper::cleanseWrapStr(md5($hash));
                 LibAPI\PDOWrapper::call('insert_update_zahara_purchase_orders', "$insert,$args");

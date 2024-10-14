@@ -38,6 +38,7 @@
         <th>PO #</th>
         <th>Supplier</th>
         <th>Status</th>
+        <th>Creation date</th>
         <th>Approver mail</th>
         <th>Approval date</th>
         <th>Total Zahara</th>
@@ -52,6 +53,7 @@
             <td><a href="{urlFor name="sow_report"}?po={$po['purchase_order']}" target="_blank">{$po['purchase_order']}</a></td>
             <td>{$po['supplier']}</td>
             <td>{$po['status']}</td>
+            <td>{$po['creation_date']}</td>
             <td>{$po['approver_mail']}</td>
             <td>{$po['approval_date']}</td>
             <td>{$po['total']} {$po['currency']}</td>
