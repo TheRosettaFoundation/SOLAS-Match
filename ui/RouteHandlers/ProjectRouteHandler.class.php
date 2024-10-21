@@ -2803,6 +2803,8 @@ error_log("get_queue_asana_projects: $projectId");//(**)
 
             $taskDao->update_native_matching();
 
+            $projectDao->poll_sun();
+
             flock($fp_for_lock, LOCK_UN); // Release the lock
         }
         fclose($fp_for_lock);
