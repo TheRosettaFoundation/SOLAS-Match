@@ -13665,6 +13665,30 @@ BEGIN
 END//
 DELIMITER ;
 
+CREATE TABLE IF NOT EXISTS `poll_sun` (
+  poll       INT NOT NULL,
+  poll_count INT NOT NULL,
+  PRIMARY KEY (poll)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+INSERT INTO poll_sun VALUES (0, 0);
+
+DROP PROCEDURE IF EXISTS `get_poll_sun`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_poll_sun`()
+BEGIN
+    SET @count=0;
+    SELECT poll_count INTO @count FROM poll_sun WHERE poll=0;
+
+    IF @count>=60 THEN # We want to cycle around the clock by an extra minute every 60
+    UPDATE poll_sun SET poll_count=0 WHERE poll=0;
+    SELECT 1 AS result;
+  ELSE
+    UPDATE poll_sun SET poll_count=poll_count+1 WHERE poll=0;
+    SELECT 0 AS result;
+  END IF;
+END//
+DELIMITER ;
+
 
 /*---------------------------------------end of procs----------------------------------------------*/
 

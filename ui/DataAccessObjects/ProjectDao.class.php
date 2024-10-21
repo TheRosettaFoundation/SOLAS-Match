@@ -1797,4 +1797,64 @@ error_log("Sync update_task_from_job() task_id: $task_id, status: $status, job: 
         }
         return $max_translation_deadline;
     }
+
+    public function poll_sun()
+    {
+        if (!LibAPI\PDOWrapper::call('get_poll_sun', '')[0]['result']) return;
+
+        $sun_purchase_requisitions = LibAPI\PDOWrapper::call('get_sun_purchase_requisitions', '');
+        if (empty($sun_purchase_requisitions)) $sun_purchase_requisitions = [];
+        error_log('count(sun_purchase_requisitions): ' . count($sun_purchase_requisitions));
+
+        $access_token = $this->get_sun_access_token();
+
+        for ($page = 0;; $page++) {
+            $ch = curl_init("https://mingle-ionapi.eu3.inforcloudsuite.com/VGK6STV88YNKAKGZ_TST/SUN/businessobject-v1/api/businessobject/v1/CLG/purchase-requisition-lines?page=$page");
+//(**) eventually add for Language Services: &purchaseTransactionType=PO002
+            curl_setopt($ch, CURLOPT_HTTPHEADER, ["Authorization: Bearer $access_token"]);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_TIMEOUT, 300);
+            $result = curl_exec($ch);
+            curl_close($ch);
+            if (empty($result)) {error_log("FATAL Failure purchase-requisition-lines?page=$page"); break;}
+            $res = json_decode($result, true);
+            if (empty($res['_embedded'])) break;
+            $res = $res['_embedded'];
+
+            if (empty($res['purchaseRequisitionLineList'])) break;
+            foreach ($res['purchaseRequisitionLineList'] as $line) {
+                if (empty($sun_purchase_requisitions[$line['purchaseRequisitionTxnRef']]) || $line['dateTimeLastUpdated'] != $sun_purchase_requisitions[$line['purchaseRequisitionTxnRef']]['dateTimeLastUpdated']) {
+                    LibAPI\PDOWrapper::call('insert_update_sun_purchase_requisition',
+                        LibAPI\PDOWrapper::cleanseWrapStr($line['purchaseRequisitionTxnRef']) . ',' .
+                        LibAPI\PDOWrapper::cleanseWrapStr($line['i01']) . ',' .
+                        LibAPI\PDOWrapper::cleanseWrapStr($line['i03']) . ',' .
+                        LibAPI\PDOWrapper::cleanseWrapStr($line['miscellaneousDescription2']) . ',' .
+                        LibAPI\PDOWrapper::cleanseWrapStr($line['dateTimeLastUpdated']) . ',' .
+                        LibAPI\PDOWrapper::cleanseWrapStr($line['grossValue_baseValueLabel_value_amount']) . ',' .
+                        LibAPI\PDOWrapper::cleanse($line['approvalStatus']['code']) . ',' .
+                        LibAPI\PDOWrapper::cleanse($line['status']['code']));
+                }
+            }
+        }
+    }
+
+    public function get_sun_access_token()
+    {
+        $ch = curl_init('https://mingle-sso.eu3.inforcloudsuite.com:443/VGK6STV88YNKAKGZ_TST/as/token.oauth2');
+        $data = [
+            'client_id' => Common\Lib\Settings::get('sun.client_id'),
+            'client_secret' => Common\Lib\Settings::get('sun.client_secret'),
+            'grant_type' => 'password',
+            'username' => Common\Lib\Settings::get('sun.username'),
+            'password' => Common\Lib\Settings::get('sun.password'),
+        ];
+        curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($data));
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_TIMEOUT, 300);
+        $result = curl_exec($ch);
+        curl_close($ch);
+        $res = json_decode($result, true);
+        return $res['access_token'];
+    }
 }
