@@ -13599,6 +13599,73 @@ END//
 DELIMITER ;
 
 
+CREATE TABLE IF NOT EXISTS `sun_purchase_requisitions` (
+  purchase_requisition VARCHAR(255) NOT NULL,
+  project_t_code       VARCHAR(255) NOT NULL DEFAULT '',
+  budget_line          VARCHAR(255) NOT NULL DEFAULT '',
+  creator              VARCHAR(255) NOT NULL DEFAULT '',
+  dateTimeLastUpdated  DATETIME NOT NULL,
+  requisitionDate      DATETIME NOT NULL DEFAULT '1000-01-01 00:00:00',
+  total                FLOAT NOT NULL DEFAULT 0.0,
+  approvalStatus       INT NOT NULL default 0,
+  status               INT NOT NULL default 0,
+  PRIMARY KEY (purchase_requisition)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+DROP PROCEDURE IF EXISTS `get_sun_purchase_requisitions`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_sun_purchase_requisitions`()
+BEGIN
+    SELECT * FROM sun_purchase_requisitions ORDER BY purchase_requisition;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `insert_update_sun_purchase_requisition`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_update_sun_purchase_requisition`(
+    IN p_purchase_requisition VARCHAR(255),
+    IN p_project_t_code       VARCHAR(255),
+    IN p_budget_line          VARCHAR(255),
+    IN p_creator              VARCHAR(255),
+    IN p_dateTimeLastUpdated  DATETIME,
+    IN p_total                FLOAT,
+    IN p_approvalStatus       INT,
+    IN p_status               INT)
+BEGIN
+    IF NOT EXISTS (SELECT 1 FROM sun_purchase_requisitions WHERE purchase_requisition=p_purchase_requisition) THEN
+        INSERT INTO sun_purchase_requisitions (
+            purchase_requisition,
+            project_t_code,
+            budget_line,
+            creator,
+            dateTimeLastUpdated,
+            total,
+            approvalStatus,
+            status)
+        VALUES (
+            p_purchase_requisition,
+            p_project_t_code,
+            p_budget_line,
+            p_creator,
+            p_dateTimeLastUpdated,
+            p_total,
+            p_approvalStatus,
+            p_status);
+    ELSE
+        UPDATE sun_purchase_requisitions SET
+            project_t_code=p_project_t_code,
+            budget_line=p_budget_line,
+            creator=p_creator,
+            dateTimeLastUpdated=p_dateTimeLastUpdated,
+            total=p_total,
+            approvalStatus=p_approvalStatus,
+            status=p_status
+        WHERE purchase_requisition=p_purchase_requisition;
+    END IF;
+END//
+DELIMITER ;
+
+
 /*---------------------------------------end of procs----------------------------------------------*/
 
 
