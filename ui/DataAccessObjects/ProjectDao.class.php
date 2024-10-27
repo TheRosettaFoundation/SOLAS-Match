@@ -1809,8 +1809,7 @@ error_log("Sync update_task_from_job() task_id: $task_id, status: $status, job: 
         $access_token = $this->get_sun_access_token();
 
         for ($page = 0;; $page++) {
-            $ch = curl_init("https://mingle-ionapi.eu3.inforcloudsuite.com/VGK6STV88YNKAKGZ_TST/SUN/businessobject-v1/api/businessobject/v1/CLG/purchase-requisition-lines?page=$page");
-//(**) eventually add for Language Services: &purchaseTransactionType=PO002
+            $ch = curl_init("https://mingle-ionapi.eu3.inforcloudsuite.com/VGK6STV88YNKAKGZ_TST/SUN/businessobject-v1/api/businessobject/v1/CLG/purchase-requisition-lines?purchaseTransactionType=PO002&page=$page");
             curl_setopt($ch, CURLOPT_HTTPHEADER, ["Authorization: Bearer $access_token"]);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
             curl_setopt($ch, CURLOPT_TIMEOUT, 300);
