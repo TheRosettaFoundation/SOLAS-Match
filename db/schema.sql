@@ -1761,7 +1761,8 @@ CREATE TABLE IF NOT EXISTS `zahara_purchase_orders` (
   approver_mail      VARCHAR(255) COLLATE utf8mb4_unicode_ci DEFAULT '',
   approval_date      DATETIME,
   md5_hash           BINARY(32) DEFAULT '00000000000000000000000000000000',
-  PRIMARY KEY (purchase_order)
+  PRIMARY KEY (purchase_order),
+  KEY (creation_date)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
@@ -10671,7 +10672,7 @@ DELIMITER ;
 
 DROP PROCEDURE IF EXISTS `update_paid_status`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `update_paid_status`(IN tID BIGINT, IN po INT, IN status VARCHAR(30), IN rate FLOAT, IN rate_pricing FLOAT, IN changed DATETIME)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `update_paid_status`(IN tID BIGINT, IN po VARCHAR(255), IN status VARCHAR(30), IN rate FLOAT, IN rate_pricing FLOAT, IN changed DATETIME)
 BEGIN
     UPDATE TaskPaids SET purchase_order=po, payment_status=status, unit_rate=rate, unit_rate_pricing=rate_pricing, status_changed=changed
     WHERE task_id=tID;
@@ -11351,7 +11352,7 @@ DROP PROCEDURE IF EXISTS `insert_update_zahara_purchase_orders`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_update_zahara_purchase_orders`(
     IN do_insert            INT UNSIGNED,
-    IN p_purchase_order     INT UNSIGNED,
+    IN p_purchase_order     VARCHAR(255),
     IN p_creation_date      DATETIME,
     IN p_supplier           VARCHAR(255),
     IN p_supplier_reference VARCHAR(50),
@@ -11515,7 +11516,7 @@ BEGIN
     LEFT JOIN TaskClaims              tc ON t.id=tc.task_id
     LEFT JOIN UserPersonalInformation upi ON tc.user_id=upi.user_id
     LEFT JOIN TaskCompleteDates       tcd ON t.id=tcd.task_id
-    LEFT JOIN zahara_purchase_orders  pos ON tp.purchase_order=pos.purchase_order AND pos.purchase_order!=0
+    LEFT JOIN zahara_purchase_orders  pos ON tp.purchase_order=pos.purchase_order AND pos.purchase_order!='0'
     WHERE
         hd.deal_id=dID
     ORDER BY p.id, l1.code, c1.code, l2.code, c2.code, t.title, t.`task-type_id`;
@@ -13291,7 +13292,7 @@ BEGIN
     LEFT JOIN TaskCompleteDates             tcd ON t.id=tcd.task_id
     LEFT JOIN UserPersonalInformation       upi ON tc.user_id=upi.user_id
     LEFT JOIN linguist_payment_informations lpi ON tc.user_id=lpi.user_id
-    LEFT JOIN zahara_purchase_orders        pos ON tp.purchase_order=pos.purchase_order AND pos.purchase_order!=0
+    LEFT JOIN zahara_purchase_orders        pos ON tp.purchase_order=pos.purchase_order AND pos.purchase_order!='0'
     LEFT JOIN MemsourceUsers                 mu ON mp.owner_uid=memsource_user_uid
     LEFT JOIN Users                           u ON mu.user_id=u.id
     LEFT JOIN ProjectFiles                   pf ON mp.project_id=pf.project_id
@@ -13341,7 +13342,7 @@ BEGIN
     JOIN task_type_details                  ttd ON t.`task-type_id`=ttd.type_enum
     LEFT JOIN linguist_payment_informations lpi ON tc.user_id=lpi.user_id
     LEFT JOIN Countries                       c ON lpi.country_id=c.id
-    LEFT JOIN zahara_purchase_orders        pos ON tp.purchase_order=pos.purchase_order AND pos.purchase_order!=0
+    LEFT JOIN zahara_purchase_orders        pos ON tp.purchase_order=pos.purchase_order AND pos.purchase_order!='0'
     LEFT JOIN invoices                        i ON tp.invoice_number=i.invoice_number
     WHERE
         tp.processed>=0 AND
@@ -13386,7 +13387,7 @@ BEGIN
     JOIN Tasks                    t ON tp.task_id=t.id
     JOIN task_type_details      ttd ON t.`task-type_id`=ttd.type_enum
     WHERE
-        pos.purchase_order>=6450 AND
+        pos.creation_date>='2024-06-18 10:18:16' AND
         tp.processed>=0
     GROUP BY pos.purchase_order
     ORDER BY pos.purchase_order;
