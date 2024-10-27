@@ -788,7 +788,7 @@ error_log("createTaskDirectly: $args");
     {
         LibAPI\PDOWrapper::call('update_paid_status',
             LibAPI\PDOWrapper::cleanse($paid_status['task_id']) . ',' .
-            LibAPI\PDOWrapper::cleanse($paid_status['purchase_order']) . ',' .
+            LibAPI\PDOWrapper::cleanseWrapStr($paid_status['purchase_order']) . ',' .
             LibAPI\PDOWrapper::cleanseWrapStr($paid_status['payment_status']) . ',' .
             LibAPI\PDOWrapper::cleanse($paid_status['unit_rate']) . ',' .
             LibAPI\PDOWrapper::cleanse($paid_status['unit_rate_pricing']) . ',' .
@@ -882,7 +882,7 @@ error_log("createTaskDirectly: $args");
                 error_log('Updating PO: ' . $row[0]);
             }
             if ($insert != -1) {
-                $args = LibAPI\PDOWrapper::cleanse($row[0]) . ',';
+                $args = LibAPI\PDOWrapper::cleanseWrapStr($row[0]) . ',';
                 if     (preg_match('/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/', $row[2])) $args .= LibAPI\PDOWrapper::cleanseWrapStr($row[2]) . ',';
                 elseif (preg_match('/^\d{4}-\d{2}-\d{2} \d{1}:\d{2}:\d{2}$/', $row[2])) $args .= LibAPI\PDOWrapper::cleanseWrapStr(substr($row[2], 0, 11) . '0' . substr($row[2], 11)) . ',';
                 else $args .= 'NULL,';
