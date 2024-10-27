@@ -1283,7 +1283,7 @@ CREATE TABLE IF NOT EXISTS `prozdata` (
 CREATE TABLE IF NOT EXISTS `TaskPaids` (
   task_id           BIGINT UNSIGNED NOT NULL,
   level             INT UNSIGNED NOT NULL,
-  purchase_order    INT UNSIGNED NOT NULL DEFAULT 0,
+  purchase_order    VARCHAR(255) NOT NULL DEFAULT '0',
   payment_status    VARCHAR(30) COLLATE utf8mb4_unicode_ci DEFAULT 'Unsettled',
   unit_rate         FLOAT NOT NULL DEFAULT 0.0,
   unit_rate_pricing FLOAT NOT NULL DEFAULT 0.0,
@@ -1749,7 +1749,7 @@ CREATE TABLE IF NOT EXISTS `UserRequest` (
 
 
 CREATE TABLE IF NOT EXISTS `zahara_purchase_orders` (
-  purchase_order     INT UNSIGNED NOT NULL DEFAULT 0,
+  purchase_order     VARCHAR(255) NOT NULL DEFAULT '0',
   creation_date      DATETIME,
   supplier           VARCHAR(255) COLLATE utf8mb4_unicode_ci DEFAULT '',
   supplier_reference VARCHAR(50) COLLATE utf8mb4_unicode_ci DEFAULT '',
