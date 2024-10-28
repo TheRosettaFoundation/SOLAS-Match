@@ -556,6 +556,8 @@ error_log("createTaskDirectly: $args");
 
             LibAPI\PDOWrapper::call('update_tasks_status_claimant', LibAPI\PDOWrapper::cleanse($task_id) . ',10,' . LibAPI\PDOWrapper::cleanse($user_id) . ',NULL');
         }
+
+        $this->email_finance($task_id, $user_id);
       }
         return $success;
     }
@@ -589,8 +591,17 @@ error_log("createTaskDirectly: $args");
             $projectDao->make_tasks_claimable($task->getProjectId());
 
             LibAPI\PDOWrapper::call('update_tasks_status_claimant', LibAPI\PDOWrapper::cleanse($task_id) . ',10,' . LibAPI\PDOWrapper::cleanse($user_id) . ',NULL');
+
+            $this->email_finance($task_id, $user_id);
         }
         return $success;
+    }
+
+    public function email_finance($task_id, $user_id)
+    {
+        $paid_status = $this->get_paid_status($task_id);
+        if ($paid_status && !in_array($paid_status['payment_status'], ['In-kind', 'In-house', 'Waived']) && !$this->get_linguist_payment_information($user_id)['linguist_t_code'])
+            LibAPI\PDOWrapper::call('insert_queue_request', '3,39,0,0,0,0,' . LibAPI\PDOWrapper::cleanse($task_id) . ',' . LibAPI\PDOWrapper::cleanse($user_id) . ",''");
     }
 
     public function update_task_rate_from_user($task_id, $user_id)
