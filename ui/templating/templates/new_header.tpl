@@ -151,6 +151,11 @@
                             <li class="nav-item">
                                 <a href="https://form.asana.com?k=dlsF11XkOwpfFllbq325dg&d=170818793545926" target="_blank" class=" fs-5 nav-link fw-bold">Feedback?</a>
                             </li>
+                            {if isset($user) && Settings::get('banner.enabled') == 'v'}
+                            <li class="nav-item">
+                                <a href="https://lanco.twbplatform.org" target="_blank" class=" fs-5 nav-link fw-bold">TWB Voice</a>
+                            </li>
+                            {/if}
                         {else}
                             <li class="nav-item">
                                 <a href="https://elearn.translatorswb.org/auth/saml2/login.php?wants&idp=bd3eb3e6241260ee537b9a55145d852d&passive=off" target="_blank" class=" fs-5 nav-link fw-bold">Learn. Center</a>
@@ -189,15 +194,27 @@
             </div>
         </div>
         </nav>
-        {if ((Settings::get('banner.enabled') == 'y') and (isset($user) ))}
-		    <div id="banner-container" class="container">
-		    	<div id="banner-container-blocks" class="d-flex justify-content-center" >
-			    <a href="https://drive.google.com/file/d/1FQNRR-iilpB8Yn8fjT5iF2e0nyqUBub3/view?usp=sharing" >
-			    	<div id="banner-mid">
-              <img src="{urlFor name='home'}ui/img/banner.png" alt="{Settings::get('banner.info')}">
-			    	</div>
-                </a>
-		    </div>
+        {if isset($user) && Settings::get('banner.enabled') == 'y'}
+            <div id="banner-container" class="container">
+                <div id="banner-container-blocks" class="d-flex justify-content-center">
+                    <a href="https://drive.google.com/file/d/1FQNRR-iilpB8Yn8fjT5iF2e0nyqUBub3/view?usp=sharing">
+                        <div id="banner-mid">
+                           <img src="{urlFor name='home'}ui/img/banner.png" alt="{Settings::get('banner.info')}">
+                        </div>
+                    </a>
+                </div>
             </div>
-		{/if}
+        {/if}
+        {if isset($user) && Settings::get('banner.enabled') == 'v'}
+            <div id="banner-container" class="container">
+                <div id="banner-container-blocks" class="d-flex justify-content-center" >
+                    <a href="https://lanco.twbplatform.org" target="_blank">
+                        <div id="banner-mid">
+                           <img src="{urlFor name='home'}ui/img/voice.png" alt="TWB Voice">
+                        </div>
+                    </a>
+                </div>
+            </div>
+        {/if}
+
         <main class="flex-grow-1">
