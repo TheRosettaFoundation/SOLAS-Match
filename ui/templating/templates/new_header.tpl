@@ -210,7 +210,7 @@
                 <div id="banner-container-blocks" class="d-flex justify-content-center" >
                     <a href="https://lanco.twbplatform.org" target="_blank">
                         <div id="banner-mid">
-                           <img src="{urlFor name='home'}ui/img/voice.png" alt="TWB Voice">
+                           <img src="{urlFor name='home'}ui/img/voice.png" style="width: 925px; height:118px" alt="TWB Voice">
                         </div>
                     </a>
                 </div>
