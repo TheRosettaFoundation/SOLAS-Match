@@ -13691,6 +13691,56 @@ BEGIN
 END//
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `get_next_po_to_create`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_next_po_to_create`()
+BEGIN
+    SELECT
+        tc.user_id AS user_id,
+        lpi.linguist_t_code,
+        pcd.purchase_requisition,
+        pcd.project_t_code,
+        t.id AS task_id,
+        t.title,
+        t.project_id,
+        p.organisation_id,
+        o.name,
+        IF(ttd.divide_rate_by_60, t.`word-count`/60, t.`word-count`) AS total_paid_words,
+        tp.unit_rate,
+        IF(ttd.divide_rate_by_60, t.`word-count`*tp.unit_rate/60, t.`word-count`*tp.unit_rate) AS total_expected_cost,
+        ttd.pricing_and_recognition_unit_text_hours,
+        ps.po_number
+    FROM TaskPaids                      tp
+    JOIN Tasks                           t ON tp.task_id=t.id
+    JOIN task_type_details             ttd ON t.`task-type_id`=ttd.type_enum
+    JOIN Projects                        p ON t.project_id=p.id
+    JOIN Organisations                   o ON p.organisation_id=o.id
+    JOIN project_complete_dates        pcd ON p.id=pcd.project_id
+    JOIN TaskClaims                     tc ON t.id=tc.task_id
+    JOIN linguist_payment_informations lpi ON tc.user_id=lpi.user_id
+    JOIN sun_purchase_requisitions     spr ON pcd.purchase_requisition=spr.purchase_requisition
+    JOIN poll_sun                       ps ON ps.poll=0
+    WHERE
+        pcd.purchase_requisition!='' AND
+        spr.approvalStatus=1 AND
+        tp.purchase_order='0' AND
+        tp.payment_status NOT IN ('In-kind', 'In-house', 'Waived') AND
+        lpi.linguist_t_code!='' AND
+        t.`task-status_id`=4
+    ORDER BY
+        t.id
+    LIMIT 1;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `update_po_number`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `update_po_number`()
+BEGIN
+  UPDATE poll_sun SET po_number=po_number+1 WHERE poll=0;
+END//
+DELIMITER ;
+
 
 /*---------------------------------------end of procs----------------------------------------------*/
 
