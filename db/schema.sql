@@ -13733,9 +13733,9 @@ BEGIN
 END//
 DELIMITER ;
 
-DROP PROCEDURE IF EXISTS `update_po_number`;
+DROP PROCEDURE IF EXISTS `increment_po_number`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `update_po_number`()
+CREATE DEFINER=`root`@`localhost` PROCEDURE `increment_po_number`()
 BEGIN
   UPDATE poll_sun SET po_number=po_number+1 WHERE poll=0;
 END//
