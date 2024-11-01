@@ -13669,9 +13669,10 @@ DELIMITER ;
 CREATE TABLE IF NOT EXISTS `poll_sun` (
   poll       INT NOT NULL,
   poll_count INT NOT NULL,
+  po_number  INT NOT NULL,
   PRIMARY KEY (poll)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-INSERT INTO poll_sun VALUES (0, 0);
+INSERT INTO poll_sun VALUES (0, 0, 1);
 
 DROP PROCEDURE IF EXISTS `get_poll_sun`;
 DELIMITER //
