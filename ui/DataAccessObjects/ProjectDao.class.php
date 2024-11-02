@@ -1800,6 +1800,106 @@ error_log("Sync update_task_from_job() task_id: $task_id, status: $status, job: 
 
     public function poll_sun()
     {
+        if ($result = LibAPI\PDOWrapper::call('get_queue_po_response', '')) {
+            $po = $result[0];
+            $po_number = $po['po_number'];
+            $response = $po['response'];
+            $task_id = $po['task_id'];
+
+            $access_token = $this->get_sun_access_token();
+            $ch = curl_init("https://mingle-ionapi.eu3.inforcloudsuite.com/VGK6STV88YNKAKGZ_TST/SUN/payload-v1/api/payload/v1/response?storeResponse=true");
+            curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PUT');
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $response);
+            curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json', "Authorization: Bearer $access_token"]);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_TIMEOUT, 300);
+            $result = curl_exec($ch);
+error_log("Create PO response: $result");
+
+            if (!empty($result) && strpos($result, 'status="success"') {
+                LibAPI\PDOWrapper::call('insert_purchase_order', LibAPI\PDOWrapper::cleanseWrapStr($po_number) . ',' . LibAPI\PDOWrapper::cleanse($task_id));
+error_log("Create PO success: $po_number, $task_id");
+            } elseif (!empty($result) && strpos($result, '"statusCode":404')) {
+                LibAPI\PDOWrapper::call('queue_po_response', LibAPI\PDOWrapper::cleanseWrapStr($po_number) . ',' . LibAPI\PDOWrapper::cleanseWrapStr($result), LibAPI\PDOWrapper::cleanse($task_id)); // Retry in 1 minute
+error_log("Create PO wait: $po_number, $task_id");
+            } else {
+                $data = [
+                    'requestReference' => $po_number,
+                    'component' => 'PurchaseOrder',
+                    'method' => 'DeleteWholeOrder',
+                    'payloadURI' => "storage://SSC/{$po_number}.xml",
+                    'outputURI' => "storage://SSC/{$po_number}_output.xml",
+                    'uniqueOutputURI' => true,
+                    'errorOutputURI' => "storage://SSC/{$po_number}_errors.json",
+                    'uniqueErrorOutputURI' => true,
+                ];
+                $xml = urlencode('<?xml version="1.0" encoding="UTF-8"?><SSC><SunSystemsContext><BusinessUnit>CLG</BusinessUnit></SunSystemsContext><Payload><PurchaseOrder><PurchaseOrderReference>' . $po_number . '</PurchaseOrderReference></PurchaseOrder></Payload></SSC>');
+                $ch = curl_init("https://mingle-ionapi.eu3.inforcloudsuite.com/VGK6STV88YNKAKGZ_TST/SUN/payload-v1/api/payload/v1/request-text?overwritePayloadURI=false&payload=$xml");
+                curl_setopt($ch, CURLOPT_POSTFIELDS, "--l0H0X8tcUK3pm\r\nContent-Disposition: form-data; name=\"request\"\r\nContent-Type: application/json\r\n\r\n" . json_encode($data) . "\r\n--l0H0X8tcUK3pm--\r\n");
+                curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: multipart/form-data; boundary=l0H0X8tcUK3pm', 'Accept: application/json', "Authorization: Bearer $access_token"]);
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                $result = curl_exec($ch);
+
+                LibAPI\PDOWrapper::call('increment_po_create_failed', LibAPI\PDOWrapper::cleanse($task_id));
+error_log("Create PO fail: $po_number, $task_id");
+error_log("Create PO fail delete: $result");
+            }
+        }
+        if ($result = LibAPI\PDOWrapper::call('get_next_po_to_create', '')) {
+            $po = $result[0];
+            $task_id = $po['task_id'];
+            if (!$po['po_create_failed'] || $po['po_create_failed'] > 65) {
+                LibAPI\PDOWrapper::call('increment_po_number', '');
+
+                $access_token = $this->get_sun_access_token();
+                $po_number = 'TO-' . sprintf('%06d', $po['po_number']);
+                $data = [
+                    'requestReference' => $po_number,
+                    'component' => 'PurchaseOrder',
+                    'method' => 'CreateOrAmend',
+                    'payloadURI' => "storage://SSC/{$po_number}.xml",
+                    'outputURI' => "storage://SSC/{$po_number}_output.xml",
+                    'uniqueOutputURI' => true,
+                    'errorOutputURI' => "storage://SSC/{$po_number}_errors.json",
+                    'uniqueErrorOutputURI' => true,
+                ];
+                $linguist_t_code = $po['linguist_t_code'];
+                $title = mb_substr($po['title'], 0, 50);
+                $purchase_requisition = $po['purchase_requisition'];
+                $project_t_code = $po['project_t_code'];
+                $total_paid_words = $po['total_paid_words'];
+                $unit_rate = $po['unit_rate'];
+                $EA = ['Words' => 'WORD', 'Terms' => 'TERM', 'Labor hours' => 'HR'][$po['pricing_and_recognition_unit_text_hours']];
+                $date = date("dmY");
+$xml = '<?xml version="1.0" encoding="UTF-8"?><SSC><SunSystemsContext><BusinessUnit>CLG</BusinessUnit></SunSystemsContext><Payload><PurchaseOrder><PurchaseTransactionType>PO002</PurchaseTransactionType>' .
+"<PurchaseOrderReference>$po_number</PurchaseOrderReference><SupplierCode>$linguist_t_code</SupplierCode><PurchaseOrderLine><LineNumber>1</LineNumber><ItemCode>2.9.2</ItemCode>" .
+"<Description>$title</Description><UnitOfPurchase>$EA</UnitOfPurchase><CurrencyCode>USD</CurrencyCode>" .
+"<OrderDate>$date</OrderDate><OwnDueDate>$date</OwnDueDate><PurchaseRequisitionTransRef>$purchase_requisition</PurchaseRequisitionTransRef><MiscellaneousReference1>$purchase_requisition</MiscellaneousReference1><MiscellaneousInput2>$task_id</MiscellaneousInput2><AnalysisQuantity>" .
+"<Analysis1><VPolCatAnalysis_AnlCatId>01</VPolCatAnalysis_AnlCatId><VPolCatAnalysis_AnlCode>$project_t_code</VPolCatAnalysis_AnlCode></Analysis1>" .
+'<Analysis5><VPolCatAnalysis_AnlCatId>05</VPolCatAnalysis_AnlCatId><VPolCatAnalysis_AnlCode>LST</VPolCatAnalysis_AnlCode></Analysis5>' .
+'<Analysis6><VPolCatAnalysis_AnlCatId>06</VPolCatAnalysis_AnlCatId><VPolCatAnalysis_AnlCode>GLOB</VPolCatAnalysis_AnlCode></Analysis6>' .
+'<Analysis9><VPolCatAnalysis_AnlCatId>19</VPolCatAnalysis_AnlCatId><VPolCatAnalysis_AnlCode>LST</VPolCatAnalysis_AnlCode></Analysis9></AnalysisQuantity>' .
+"<VLAB1><Base><VPolVlabEntry_Val>$total_paid_words</VPolVlabEntry_Val><VPolVlabEntry_VlabId>1</VPolVlabEntry_VlabId></Base></VLAB1>" .
+"<VLAB2><Trans><VPolVlabEntry_Val>$unit_rate</VPolVlabEntry_Val><VPolVlabEntry_VlabId>2</VPolVlabEntry_VlabId></Trans></VLAB2>" .
+"<VLAB3><Trans><VPolVlabEntry_Val>$unit_rate</VPolVlabEntry_Val><VPolVlabEntry_VlabId>3</VPolVlabEntry_VlabId></Trans></VLAB3>" .
+"<VLAB4><Trans><VPolVlabEntry_Val>$unit_rate</VPolVlabEntry_Val><VPolVlabEntry_VlabId>4</VPolVlabEntry_VlabId></Trans></VLAB4>" .
+"<VLAB7><Base><VPolVlabEntry_Val>$unit_rate</VPolVlabEntry_Val><VPolVlabEntry_VlabId>7</VPolVlabEntry_VlabId><VPolVlabEntry_UserOverridden>1</VPolVlabEntry_UserOverridden><VPolVlabEntry_UlabCode>$EA</VPolVlabEntry_UlabCode></Base></VLAB7>" .
+'</PurchaseOrderLine></PurchaseOrder></Payload></SSC>';
+error_log("Create PO: $xml");
+                $xml = urlencode($xml);
+                $ch = curl_init("https://mingle-ionapi.eu3.inforcloudsuite.com/VGK6STV88YNKAKGZ_TST/SUN/payload-v1/api/payload/v1/request-text?overwritePayloadURI=false&payload=$xml");
+                curl_setopt($ch, CURLOPT_POSTFIELDS, "--l0H0X8tcUK3pm\r\nContent-Disposition: form-data; name=\"request\"\r\nContent-Type: application/json\r\n\r\n" . json_encode($data) . "\r\n--l0H0X8tcUK3pm--\r\n");
+                curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: multipart/form-data; boundary=l0H0X8tcUK3pm', 'Accept: application/json', "Authorization: Bearer $access_token"]);
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                curl_setopt($ch, CURLOPT_TIMEOUT, 300);
+                $result = curl_exec($ch);
+error_log("Create PO ref: $result");
+                LibAPI\PDOWrapper::call('queue_po_response', LibAPI\PDOWrapper::cleanseWrapStr($po_number) . ',' . LibAPI\PDOWrapper::cleanseWrapStr($result), LibAPI\PDOWrapper::cleanse($task_id));
+            } else {
+                LibAPI\PDOWrapper::call('increment_po_create_failed', LibAPI\PDOWrapper::cleanse($task_id));
+            }
+        }
+
         if (!LibAPI\PDOWrapper::call('get_poll_sun', '')[0]['result']) return;
 
         $sun_purchase_requisitions = LibAPI\PDOWrapper::call('get_sun_purchase_requisitions', '');
