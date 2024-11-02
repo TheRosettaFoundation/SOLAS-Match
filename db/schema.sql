@@ -13612,7 +13612,8 @@ CREATE TABLE IF NOT EXISTS `sun_purchase_requisitions` (
   total                FLOAT NOT NULL DEFAULT 0.0,
   approvalStatus       INT NOT NULL default 0,
   status               INT NOT NULL default 0,
-  PRIMARY KEY (purchase_requisition)
+  PRIMARY KEY (purchase_requisition),
+          KEY (project_t_code)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 DROP PROCEDURE IF EXISTS `get_sun_purchase_requisitions`;
