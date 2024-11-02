@@ -1838,6 +1838,7 @@ error_log("Create PO wait: $po_number, $task_id");
                 curl_setopt($ch, CURLOPT_POSTFIELDS, "--l0H0X8tcUK3pm\r\nContent-Disposition: form-data; name=\"request\"\r\nContent-Type: application/json\r\n\r\n" . json_encode($data) . "\r\n--l0H0X8tcUK3pm--\r\n");
                 curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: multipart/form-data; boundary=l0H0X8tcUK3pm', 'Accept: application/json', "Authorization: Bearer $access_token"]);
                 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                curl_setopt($ch, CURLOPT_TIMEOUT, 300);
                 $result = curl_exec($ch);
 
                 LibAPI\PDOWrapper::call('increment_po_create_failed', LibAPI\PDOWrapper::cleanse($task_id));
