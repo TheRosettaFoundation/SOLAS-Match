@@ -1355,6 +1355,7 @@ CREATE TABLE IF NOT EXISTS `project_complete_dates` (
   project_t_code       VARCHAR(255) NOT NULL DEFAULT '',
   purchase_requisition VARCHAR(255) NOT NULL DEFAULT '',
   PRIMARY KEY (project_id),
+          KEY (project_t_code),
   KEY key_complete_date (complete_date),
   KEY (deal_id),
   CONSTRAINT `FK_project_complete_dates_project_id` FOREIGN KEY (`project_id`) REFERENCES `Projects` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
