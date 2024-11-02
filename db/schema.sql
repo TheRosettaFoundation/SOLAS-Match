@@ -13753,6 +13753,35 @@ END//
 DELIMITER ;
 
 
+CREATE TABLE IF NOT EXISTS `queue_po_responses` (
+  task_id   BIGINT UNSIGNED NOT NULL,
+  po_number VARCHAR(50) NOT NULL,
+  response  VARCHAR(2000) NOT NULL,
+  PRIMARY KEY (task_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+DROP PROCEDURE IF EXISTS `queue_po_response`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `queue_po_response`(IN po VARCHAR(50), IN res VARCHAR(2000), IN tID BIGINT UNSIGNED)
+BEGIN
+    INSERT INTO queue_po_responses VALUES (po, res, tID);
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `get_queue_po_response`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_queue_po_response`()
+BEGIN
+    SET @tID=NULL;
+    SELECT task_id, po_number, response INTO @tID, @po, @res FROM queue_po_responses ORDER BY task_id LIMIT 1;
+    IF @tID IS NOT NULL THEN
+        DELETE FROM queue_po_responses WHERE task_id=@tID;
+        SELECT @tID AS task_id, @po AS po_number, @res AS response;
+    END IF;
+END//
+DELIMITER ;
+
+
 /*---------------------------------------end of procs----------------------------------------------*/
 
 
