@@ -1284,6 +1284,7 @@ CREATE TABLE IF NOT EXISTS `TaskPaids` (
   task_id           BIGINT UNSIGNED NOT NULL,
   level             INT UNSIGNED NOT NULL,
   purchase_order    VARCHAR(255) NOT NULL DEFAULT '0',
+  po_create_failed  INT NOT NULL DEFAULT 0,
   payment_status    VARCHAR(30) COLLATE utf8mb4_unicode_ci DEFAULT 'Unsettled',
   unit_rate         FLOAT NOT NULL DEFAULT 0.0,
   unit_rate_pricing FLOAT NOT NULL DEFAULT 0.0,
