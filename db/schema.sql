@@ -13781,6 +13781,51 @@ BEGIN
 END//
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `insert_purchase_order`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_purchase_order`(IN po VARCHAR(50), IN tID BIGINT UNSIGNED)
+BEGIN
+    SELECT
+        lpi.linguist_name,
+        lpi.linguist_t_code,
+        IF(ttd.divide_rate_by_60, t.`word-count`*tp.unit_rate/60, t.`word-count`*tp.unit_rate),
+        CONCAT(l1.code, '-', l2.code, ', ', ttd.type_text, ', ', t.title, ', ', p.title, ', ', o.name)
+        INTO @supplier, @supplier_reference, @total, @description
+    FROM TaskPaids                      tp
+    JOIN Tasks                           t ON tp.task_id=t.id
+    JOIN task_type_details             ttd ON t.`task-type_id`=ttd.type_enum
+    JOIN Projects                        p ON t.project_id=p.id
+    JOIN Organisations                   o ON p.organisation_id=o.id
+    JOIN TaskClaims                     tc ON t.id=tc.task_id
+    JOIN linguist_payment_informations lpi ON tc.user_id=lpi.user_id
+    JOIN Languages                      l1 ON t.`language_id-source`=l1.id
+    JOIN Languages                      l2 ON t.`language_id-target`=l2.id
+    WHERE
+        t.id=tID;
+
+    INSERT INTO zahara_purchase_orders (
+        purchase_order,
+        creation_date,
+        supplier,
+        supplier_reference,
+        total,
+        currency,
+        description,
+        division_name)
+    VALUES (
+        po,
+        NOW(),
+        @supplier,
+        @supplier_reference,
+        @total,
+        'USD',
+        @description,
+        'Language Service Team (LST)');
+
+    UPDATE TaskPaids SET purchase_order=po WHERE task_id=tID;
+END//
+DELIMITER ;
+
 
 /*---------------------------------------end of procs----------------------------------------------*/
 
