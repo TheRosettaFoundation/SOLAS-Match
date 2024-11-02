@@ -13744,6 +13744,14 @@ BEGIN
 END//
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `increment_po_create_failed`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `increment_po_create_failed`(IN tID BIGINT)
+BEGIN
+    UPDATE TaskPaids SET po_create_failed=po_create_failed + 1 WHERE task_id=tID;
+END//
+DELIMITER ;
+
 
 /*---------------------------------------end of procs----------------------------------------------*/
 
