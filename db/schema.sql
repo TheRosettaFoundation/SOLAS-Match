@@ -13710,7 +13710,8 @@ BEGIN
         tp.unit_rate,
         IF(ttd.divide_rate_by_60, t.`word-count`*tp.unit_rate/60, t.`word-count`*tp.unit_rate) AS total_expected_cost,
         ttd.pricing_and_recognition_unit_text_hours,
-        ps.po_number
+        ps.po_number,
+        tp.po_create_failed
     FROM TaskPaids                      tp
     JOIN Tasks                           t ON tp.task_id=t.id
     JOIN task_type_details             ttd ON t.`task-type_id`=ttd.type_enum
@@ -13729,7 +13730,8 @@ BEGIN
         lpi.linguist_t_code!='' AND
         t.`task-status_id`=4
     ORDER BY
-        t.id
+        IF(tp.po_create_failed=0, t.id, 0) ASC,
+        tp.po_create_failed DESC
     LIMIT 1;
 END//
 DELIMITER ;
