@@ -15,7 +15,7 @@
     <script type="text/javascript">
       $(document).ready(function(){
         var table = $('#myTable').DataTable({ "paging": false });
-        table.order([14, 'asc'], [15, 'desc'], [0, 'asc'], [16, 'asc'], [1, 'asc'], [2, 'asc'], [3, 'asc'], [4, 'asc']).draw();
+        table.order([0, 'asc'], [1, 'asc'], [2, 'asc'], [3, 'asc'], [4, 'asc']).draw();
       });
     </script>
 
@@ -59,10 +59,10 @@
             <td><a href="{urlFor name="task-view" options="task_id.{$task['task_id']}"}" target="_blank">{$task['task_id']}</a></td>
             <td>{$task['type_text']}</td>
             <td>{$task['language_pair']}</td>
-            <td>{if !empty($task['deal_id'])}<a href="{urlFor name="deal_id_report" options="deal_id.{$task['deal_id']}"}" target="_blank">{$task['deal_id']}</a>{/if}</td>
-<td>ADD SOEMWHERE???
+            <td>{if !empty($task['deal_id'])}<a href="{urlFor name="deal_id_report" options="deal_id.{$task['deal_id']}"}" target="_blank">{$task['deal_id']}</a>{/if}
                 {if empty($task['deal_id'])}<br /><span style="color: red;">No HS Deal</span>{/if}
-                {if empty($task['project_t_code'])}<br /><span style="color: red;">No Project T-Code</span>{/if}
+                {if empty($task['project_t_code'])}<br /><span style="color: red;">No Project T-Code</span>
+                {elseif !empty($task['pr_created']) && ($task['project_t_code'] != $task['pr_project_t_code'])}<br /><span style="color: red;">Project T-Code Different in Project and Purchase Requisition</span>{/if}
                 {if empty($task['purchase_requisition'])}<br /><span style="color: red;">No Purchase Requisition</span>
                 {elseif empty($task['pr_created'])}<br /><span style="color: red;">No Matching Purchase Requisition</span>
                 {elseif empty($task['approvalStatus'])}<br /><span style="color: red;">Purchase Requisition Not Approved</span>{/if}
@@ -72,10 +72,7 @@
                     {if $task['task-status_id'] < 4}<span style="color: red;">Task NOT Complete</span>
                     {elseif empty($task['po_created'])<span style="color: red;">Purchase Order Creation Failure</span>{/if}
                 {/if}
-
-spr.project_t_code AS pr_project_t_code
-
-</td>
+            </td>
             <td>$task['purchase_requisition']}{if !empty($task['pr_total'])}<br />PR Total: ${round($task['pr_total'], 2)}{/if}</td>
             <td>{round($task['total_paid_words'], 2)} {$task['pricing_and_recognition_unit_text_hours']}</td>
             <td>{round($task['unit_rate'], 2)}</td>
