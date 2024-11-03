@@ -50,7 +50,6 @@
     </thead>    
     <tbody>
         {foreach $tasks as $task}
-        {if (!$claimed && !$po && $task['completed']) || ($claimed && $task['claimed']) || ($po && $po==$task['purchase_order'])}
         <tr>
             <td><a href="{urlFor name="user-public-profile" options="user_id.{$task['user_id']}"}" target="_blank">{TemplateHelper::uiCleanseHTML($task['linguist'])}</a></td>
             <td><a href="{urlFor name="org-public-profile" options="org_id.{$task['organisation_id']}"}" target="_blank">{TemplateHelper::uiCleanseHTML($task['name'])}</a></td>
@@ -60,48 +59,38 @@
             <td>{$task['type_text']}</td>
             <td>{$task['language_pair']}</td>
             <td>{if !empty($task['deal_id'])}<a href="{urlFor name="deal_id_report" options="deal_id.{$task['deal_id']}"}" target="_blank">{$task['deal_id']}</a>{/if}</td>
-
-
-<td>NO
+<td>NO OR
+                {if empty($task['deal_id'])}<br /><span style="color: red;">No HS Deal</span>{/if}
+                {if empty($task['project_t_code'])}<br /><span style="color: red;">No Project T-Code</span>{/if}
+                {if empty($task['purchase_requisition'])}<br /><span style="color: red;">No Purchase Requisition</span>{/if}
+                {if empty($task['linguist_t_code'])}<br /><span style="color: red;">No Linguist T-Code</span>{/if}
+                {if empty($task['google_drive_link'])}<br /><span style="color: red;">No Linguist Payment Information</span>{/if}
 MISSING HIARARCHY...
-pcd.deal_id 0
-pcd.project_t_code ''
-pcd.purchase_requisition ''
-lpi.linguist_t_code ''
-lpi.google_drive_link ''
+
 tp.purchase_order '0'
 po_created 0
                 {if !empty($task['purchase_order'])}<a href="{urlFor name="sow_report"}?po={$task['purchase_order']}" target="_blank">{$task['purchase_order']}</a>{else}{$task['purchase_order']}{/if}
                 {if !empty($task['total'])}<br />Total: ${round($task['total'], 2)}{/if}
-                <br />{if !empty($task['po_status'])}{if $task['po_status'] == 'Completed' || $task['po_status'] == 'Approved'}{$task['po_status']}{else}<span style="color: red;">{$task['po_status']}, Not Completed</span>{/if}{else}<span style="color: red;">No PO</span>{/if}
+                <br /><span style="color: red;">No PO</span>
                 {if !empty($task['approver_mail'])}<br />{substr($task['approver_mail'], 0, strpos($task['approver_mail'], '@'))}{/if}
                 {if empty($task['google_drive_link'])}<br /><span style="color: red;">No Linguist Payment Information</span>{/if}
-                {if empty($task['deal_id'])}<br /><span style="color: red;">No HS Deal</span>{/if}
-</td>
-            <td>{round($task['total_paid_words'], 2)} {$task['pricing_and_recognition_unit_text_hours']}</td>
-            <td>{round($task['unit_rate'], 2)}</td>
-            <td>${round($task['total_expected_cost'], 2)}</td>
-            <td>{if !empty($task['complete_date']) && $task['completed']}{substr($task['complete_date'], 0, 10)}{/if}</td>
-            <td>{$task['payment_status']}</td>
+
 [[[[
         pcd.project_t_code,
         pcd.purchase_requisition,
         IFNULL(lpi.linguist_t_code, '') AS linguist_t_code,
         tp.purchase_order,
         IFNULL(pos.purchase_order, 0) AS po_created,
-        spr.budget_line,
-        spr.creator,
-        spr.dateTimeLastUpdated,
-        spr.requisitionDate,
-        spr.total AS pr_total,
         spr.approvalStatus,
-        spr.status,
-        IF(t.`task-status_id`=3, 1, 0) AS claimed,
         IF(t.`task-status_id`=4, 1, 0) AS completed,
-        IF(tcd.complete_date IS NOT NULL AND tcd.complete_date<CAST(DATE_FORMAT(NOW(), '%Y-%m-01 00:00:01') as DATETIME), 1, 0) AS before_current_month,
 ]]]]
+</td>
+            <td>{round($task['total_paid_words'], 2)} {$task['pricing_and_recognition_unit_text_hours']}</td>
+            <td>{round($task['unit_rate'], 2)}</td>
+            <td>${round($task['total_expected_cost'], 2)}</td>
+            <td>{if !empty($task['complete_date']) && $task['completed']}{substr($task['complete_date'], 0, 10)}{/if}</td>
+            <td>{$task['payment_status']}</td>
         </tr>
-        {/if}
         {/foreach}
     </tbody>
 </table>
