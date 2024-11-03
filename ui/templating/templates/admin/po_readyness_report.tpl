@@ -42,17 +42,11 @@
         <th>Task Type</th>
         <th>Languages</th>
         <th>Deal #</th>
-   <!-- <th>Budget Code</th> -->
-        <th>PO #</th>
         <th>Unit Count</th>
         <th>Unit Rate (Linguist)</th>
         <th>Total</th>
         <th>Completed Date</th>
         <th>Payment Status</th>
-        <th>Proc<br />essed?</th>
-        <th>Invoice Date</th>
-        <th>Invoice Status</th>
-        <th>Invoice Number</th>
     </thead>    
     <tbody>
         {foreach $tasks as $task}
@@ -66,35 +60,46 @@
             <td>{$task['type_text']}</td>
             <td>{$task['language_pair']}</td>
             <td>{if !empty($task['deal_id'])}<a href="{urlFor name="deal_id_report" options="deal_id.{$task['deal_id']}"}" target="_blank">{$task['deal_id']}</a>{/if}</td>
-       <!-- <td>{$task['budget_code']}</td> -->
-            <td>
+
+
+<td>NO
+MISSING HIARARCHY...
+pcd.deal_id 0
+pcd.project_t_code ''
+pcd.purchase_requisition ''
+lpi.linguist_t_code ''
+lpi.google_drive_link ''
+tp.purchase_order '0'
+po_created 0
                 {if !empty($task['purchase_order'])}<a href="{urlFor name="sow_report"}?po={$task['purchase_order']}" target="_blank">{$task['purchase_order']}</a>{else}{$task['purchase_order']}{/if}
                 {if !empty($task['total'])}<br />Total: ${round($task['total'], 2)}{/if}
                 <br />{if !empty($task['po_status'])}{if $task['po_status'] == 'Completed' || $task['po_status'] == 'Approved'}{$task['po_status']}{else}<span style="color: red;">{$task['po_status']}, Not Completed</span>{/if}{else}<span style="color: red;">No PO</span>{/if}
                 {if !empty($task['approver_mail'])}<br />{substr($task['approver_mail'], 0, strpos($task['approver_mail'], '@'))}{/if}
                 {if empty($task['google_drive_link'])}<br /><span style="color: red;">No Linguist Payment Information</span>{/if}
                 {if empty($task['deal_id'])}<br /><span style="color: red;">No HS Deal</span>{/if}
-           </td>
+</td>
             <td>{round($task['total_paid_words'], 2)} {$task['pricing_and_recognition_unit_text_hours']}</td>
             <td>{round($task['unit_rate'], 2)}</td>
             <td>${round($task['total_expected_cost'], 2)}</td>
             <td>{if !empty($task['complete_date']) && $task['completed']}{substr($task['complete_date'], 0, 10)}{/if}</td>
             <td>{$task['payment_status']}</td>
-            <td>{if $task['processed'] > 0}Yes{/if}</td>
-            <td>{if !empty($task['invoice_date'])}{$task['invoice_date']}{else}None{/if}</td>
-            <td>
-                {if is_null($task['status'])}
-                {elseif $task['status'] == 0}0-Invoice
-                {elseif $task['status'] == 1}1-Draft
-                {elseif $task['status'] == 4}2-Invoice Bounced
-                {elseif $task['status'] == 5}3-Draft Bounced
-                {elseif $task['status'] == 6}2-Invoice Bounced
-                {elseif $task['status'] == 7}3-Draft Bounced
-                {elseif $task['status'] == 2}4-Invoice Paid
-                {elseif $task['status'] == 3}5-Draft Paid
-                {/if}
-            </td>
-            <td>{if $task['invoice_number'] > 0}<a href="{urlFor name="get-invoice" options="invoice_number.{$task['invoice_number']}"}" target="_blank">TWB-{str_pad($task['invoice_number'], 4, '0', STR_PAD_LEFT)}</a>{/if}</td>
+[[[[
+        pcd.project_t_code,
+        pcd.purchase_requisition,
+        IFNULL(lpi.linguist_t_code, '') AS linguist_t_code,
+        tp.purchase_order,
+        IFNULL(pos.purchase_order, 0) AS po_created,
+        spr.budget_line,
+        spr.creator,
+        spr.dateTimeLastUpdated,
+        spr.requisitionDate,
+        spr.total AS pr_total,
+        spr.approvalStatus,
+        spr.status,
+        IF(t.`task-status_id`=3, 1, 0) AS claimed,
+        IF(t.`task-status_id`=4, 1, 0) AS completed,
+        IF(tcd.complete_date IS NOT NULL AND tcd.complete_date<CAST(DATE_FORMAT(NOW(), '%Y-%m-01 00:00:01') as DATETIME), 1, 0) AS before_current_month,
+]]]]
         </tr>
         {/if}
         {/foreach}
