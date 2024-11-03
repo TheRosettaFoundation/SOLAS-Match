@@ -13830,6 +13830,79 @@ BEGIN
 END//
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `po_readyness_report`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `po_readyness_report`()
+BEGIN
+    SELECT
+        pcd.deal_id,
+        pcd.project_t_code,
+        pcd.purchase_requisition,
+        IFNULL(lpi.linguist_t_code, '') AS linguist_t_code,
+        IFNULL(lpi.google_drive_link, '') AS google_drive_link,
+        tp.purchase_order,
+        IFNULL(pos.purchase_order, 0) AS po_created,
+        spr.budget_line,
+        spr.creator,
+        spr.dateTimeLastUpdated,
+        spr.requisitionDate,
+        spr.total AS pr_total,
+        spr.approvalStatus,
+        spr.status,
+        t.id AS task_id,
+        IF(t.`task-status_id`=3, 1, 0) AS claimed,
+        IF(t.`task-status_id`=4, 1, 0) AS completed,
+        t.project_id,
+        p.title,
+        p.organisation_id,
+        o.name,
+        IFNULL(tc.user_id, 0) AS user_id,
+        IFNULL(lpi.linguist_name, IFNULL(CONCAT(upi.`first-name`, ' ', upi.`last-name`), '')) AS linguist,
+        IF(mu.user_id IS NOT NULL AND mu.user_id!=99269, mu.user_id, IFNULL(pf.user_id, u3.id)) AS creator_id,
+        IF( u.email   IS NOT NULL AND  u.email!='projects@translatorswithoutborders.org', u.email, IFNULL(u2.email, u3.email)) AS creator_email,
+        IF(tcd.complete_date IS NOT NULL AND tcd.complete_date<CAST(DATE_FORMAT(NOW(), '%Y-%m-01 00:00:01') as DATETIME), 1, 0) AS before_current_month,
+        ttd.type_text,
+        CONCAT(l1.code, '-', c1.code, '<br />', l2.code, '-', c2.code) AS language_pair,
+        IF(t.`word-count`>1, IF(ttd.divide_rate_by_60, t.`word-count`             /60, t.`word-count`             ), 0) AS total_paid_words,
+        ttd.pricing_and_recognition_unit_text_hours,
+        tp.unit_rate,
+        IF(t.`word-count`>1, IF(ttd.divide_rate_by_60, t.`word-count`*tp.unit_rate/60, t.`word-count`*tp.unit_rate), 0) AS total_expected_cost,
+        tcd.complete_date,
+        tp.payment_status
+    FROM TaskPaids                           tp
+    JOIN Tasks                                t ON tp.task_id=t.id
+    JOIN Projects                             p ON t.project_id=p.id
+    JOIN Organisations                        o ON p.organisation_id=o.id
+    JOIN project_complete_dates             pcd ON p.id=pcd.project_id
+    JOIN MemsourceProjects                   mp ON p.id=mp.project_id
+    JOIN task_type_details                  ttd ON t.`task-type_id`=ttd.type_enum
+    JOIN Languages                           l1 ON t.`language_id-source`=l1.id
+    JOIN Languages                           l2 ON t.`language_id-target`=l2.id
+    JOIN Countries                           c1 ON t.`country_id-source`=c1.id
+    JOIN Countries                           c2 ON t.`country_id-target`=c2.id
+    LEFT JOIN TaskClaims                     tc ON t.id=tc.task_id
+    LEFT JOIN TaskCompleteDates             tcd ON t.id=tcd.task_id
+    LEFT JOIN UserPersonalInformation       upi ON tc.user_id=upi.user_id
+    LEFT JOIN linguist_payment_informations lpi ON tc.user_id=lpi.user_id
+    LEFT JOIN zahara_purchase_orders        pos ON tp.purchase_order=pos.purchase_order AND pos.purchase_order!='0'
+    LEFT JOIN MemsourceUsers                 mu ON mp.owner_uid=memsource_user_uid
+    LEFT JOIN Users                           u ON mu.user_id=u.id
+    LEFT JOIN ProjectFiles                   pf ON mp.project_id=pf.project_id
+    LEFT JOIN Users                          u2 ON pf.user_id=u2.id
+    LEFT JOIN Users                          u3 ON LENGTH(mp.owner_uid)<22 AND mp.owner_uid=u3.id
+    LEFT JOIN sun_purchase_requisitions     spr ON pcd.project_t_code=spr.project_t_code
+    WHERE
+        pos.purchase_order IS NULL AND
+        tp.processed>=0 AND
+        tp.payment_status NOT IN ('In-kind', 'In-house', 'Waived')
+    ORDER BY
+        IFNULL(lpi.linguist_name, IFNULL(CONCAT(upi.`first-name`, ' ', upi.`last-name`), '')),
+        o.name,
+        p.title,
+        t.id;
+END//
+DELIMITER ;
+
 
 /*---------------------------------------end of procs----------------------------------------------*/
 
