@@ -13726,6 +13726,8 @@ BEGIN
     JOIN poll_sun                       ps ON ps.poll=0
     WHERE
         pcd.purchase_requisition!='' AND
+        pcd.deal_id!=0 AND
+        pcd.project_t_code!='' AND
         spr.approvalStatus=1 AND
         tp.purchase_order='0' AND
         tp.payment_status NOT IN ('In-kind', 'In-house', 'Waived') AND
