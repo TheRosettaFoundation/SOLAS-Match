@@ -42,6 +42,7 @@
         <th>Task Type</th>
         <th>Languages</th>
         <th>Deal #</th>
+        <th>Purchase Requisition</th>
         <th>Unit Count</th>
         <th>Unit Rate (Linguist)</th>
         <th>Total</th>
@@ -62,20 +63,17 @@
 <td>ADD SOEMWHERE???
                 {if empty($task['deal_id'])}<br /><span style="color: red;">No HS Deal</span>{/if}
                 {if empty($task['project_t_code'])}<br /><span style="color: red;">No Project T-Code</span>{/if}
-                {if empty($task['purchase_requisition'])}<br /><span style="color: red;">No Purchase Requisition</span>{/if}
-                {if !empty($task['purchase_requisition']) && empty($task['approvalStatus'])}<br /><span style="color: red;">Purchase Requisition Not Approved</span>{/if}
+                {if empty($task['purchase_requisition'])}<br /><span style="color: red;">No Purchase Requisition</span>
+                {elseif empty($task['pr_created'])}<br /><span style="color: red;">No Matching Purchase Requisition</span>
+                {elseif empty($task['approvalStatus'])}<br /><span style="color: red;">Purchase Requisition Not Approved</span>{/if}
                 {if empty($task['linguist_t_code'])}<br /><span style="color: red;">No Linguist T-Code</span>{/if}
                 {if empty($task['google_drive_link'])}<br /><span style="color: red;">No Linguist Payment Information</span>{/if}
                 {if !empty($task['deal_id']) && !empty($task['project_t_code']) && !empty($task['purchase_requisition']) && !empty($task['approvalStatus']) && !empty($task['linguist_t_code']) && !empty($task['google_drive_link']))}
                     {if $task['task-status_id'] < 4}<span style="color: red;">Task NOT Complete</span>
                     {elseif empty($task['po_created'])<span style="color: red;">Purchase Order Creation Failure</span>{/if}
                 {/if}
-
-[[[[display???....
-        pcd.purchase_requisition,
-                {if !empty($task['pr_total'])}<br />PR Total: ${round($task['pr_total'], 2)}{/if}
-]]]]
 </td>
+            <td>$task['purchase_requisition']}{if !empty($task['pr_total'])}<br />PR Total: ${round($task['pr_total'], 2)}{/if}</td>
             <td>{round($task['total_paid_words'], 2)} {$task['pricing_and_recognition_unit_text_hours']}</td>
             <td>{round($task['unit_rate'], 2)}</td>
             <td>${round($task['total_expected_cost'], 2)}</td>

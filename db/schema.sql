@@ -13838,6 +13838,7 @@ BEGIN
         pcd.deal_id,
         pcd.project_t_code,
         pcd.purchase_requisition,
+        IFNULL(spr.purchase_requisition, 0) AS pr_created,
         IFNULL(lpi.linguist_t_code, '') AS linguist_t_code,
         IFNULL(lpi.google_drive_link, '') AS google_drive_link,
         tp.purchase_order,
@@ -13889,7 +13890,7 @@ BEGIN
     LEFT JOIN ProjectFiles                   pf ON mp.project_id=pf.project_id
     LEFT JOIN Users                          u2 ON pf.user_id=u2.id
     LEFT JOIN Users                          u3 ON LENGTH(mp.owner_uid)<22 AND mp.owner_uid=u3.id
-    LEFT JOIN sun_purchase_requisitions     spr ON pcd.project_t_code=spr.project_t_code
+    LEFT JOIN sun_purchase_requisitions     spr ON pcd.purchase_requisition=spr.purchase_requisition
     WHERE
         pos.purchase_order IS NULL AND
         tp.processed>=0 AND
