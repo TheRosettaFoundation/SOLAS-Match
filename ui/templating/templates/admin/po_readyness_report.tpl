@@ -51,57 +51,29 @@
     <tbody>
         {foreach $tasks as $task}
         <tr>
-            <td><a href="{urlFor name="user-public-profile" options="user_id.{$task['user_id']}"}" target="_blank">{TemplateHelper::uiCleanseHTML($task['linguist'])}</a></td>
+            <td><a href="{urlFor name="user-public-profile" options="user_id.{$task['user_id']}"}" target="_blank">{TemplateHelper::uiCleanseHTML($task['linguist'])}</a>{if !empty($task['linguist_t_code']) ({$task['linguist_t_code']}){/if}</td>
             <td><a href="{urlFor name="org-public-profile" options="org_id.{$task['organisation_id']}"}" target="_blank">{TemplateHelper::uiCleanseHTML($task['name'])}</a></td>
-            <td><a href="{urlFor name="project-view" options="project_id.{$task['project_id']}"}" target="_blank">{TemplateHelper::uiCleanseHTMLNewlineAndTabs($task['title'])}</a></td>
+            <td><a href="{urlFor name="project-view" options="project_id.{$task['project_id']}"}" target="_blank">{TemplateHelper::uiCleanseHTMLNewlineAndTabs($task['title'])}</a>{if !empty($task['project_t_code']) ({$task['project_t_code']}){/if}</td>
             <td>{substr($task['creator_email'], 0, strpos($task['creator_email'], '@'))}</td>
             <td><a href="{urlFor name="task-view" options="task_id.{$task['task_id']}"}" target="_blank">{$task['task_id']}</a></td>
             <td>{$task['type_text']}</td>
             <td>{$task['language_pair']}</td>
             <td>{if !empty($task['deal_id'])}<a href="{urlFor name="deal_id_report" options="deal_id.{$task['deal_id']}"}" target="_blank">{$task['deal_id']}</a>{/if}</td>
-<td>NO OR
+<td>ADD SOEMWHERE???
                 {if empty($task['deal_id'])}<br /><span style="color: red;">No HS Deal</span>{/if}
                 {if empty($task['project_t_code'])}<br /><span style="color: red;">No Project T-Code</span>{/if}
                 {if empty($task['purchase_requisition'])}<br /><span style="color: red;">No Purchase Requisition</span>{/if}
                 {if !empty($task['purchase_requisition']) && empty($task['approvalStatus'])}<br /><span style="color: red;">Purchase Requisition Not Approved</span>{/if}
                 {if empty($task['linguist_t_code'])}<br /><span style="color: red;">No Linguist T-Code</span>{/if}
                 {if empty($task['google_drive_link'])}<br /><span style="color: red;">No Linguist Payment Information</span>{/if}
-
-MISSING HIARARCHY...
-
-{if !empty($task['deal_id']) && !empty($task['project_t_code']) && !empty($task['purchase_requisition']) && !empty($task['approvalStatus']) && !empty($task['linguist_t_code']) && !empty($task['google_drive_link']))}
-
-{if $task['task-status_id'] < 4}<span style="color: red;">Task NOT Complete</span>
-{elseif empty($task['po_created'])<span style="color: red;">Purchase Order Creation Failure</span>{/if}
-
-
-{/if}
-
-
- 
-t.`task-status_id`=4
-
-                {if !empty(tp.purchase_order) &&empty($task['google_drive_link'])}<br /><span style="color: red;">No Linguist Payment Information</span>{/if}
- BUT NOT  0
-
-
-
-        spr.,
-
-
-                {if !empty($task['purchase_order'])}<a href="{urlFor name="sow_report"}?po={$task['purchase_order']}" target="_blank">{$task['purchase_order']}</a>{else}{$task['purchase_order']}{/if}
-                {if !empty($task['total'])}<br />Total: ${round($task['total'], 2)}{/if}
-                <br /><span style="color: red;">No PO</span>
-                {if !empty($task['approver_mail'])}<br />{substr($task['approver_mail'], 0, strpos($task['approver_mail'], '@'))}{/if}
-                {if empty($task['google_drive_link'])}<br /><span style="color: red;">No Linguist Payment Information</span>{/if}
+                {if !empty($task['deal_id']) && !empty($task['project_t_code']) && !empty($task['purchase_requisition']) && !empty($task['approvalStatus']) && !empty($task['linguist_t_code']) && !empty($task['google_drive_link']))}
+                    {if $task['task-status_id'] < 4}<span style="color: red;">Task NOT Complete</span>
+                    {elseif empty($task['po_created'])<span style="color: red;">Purchase Order Creation Failure</span>{/if}
+                {/if}
 
 [[[[display???....
-        pcd.project_t_code,
         pcd.purchase_requisition,
-        IFNULL(lpi.linguist_t_code, '') AS linguist_t_code,
-        tp.purchase_order,
-        spr.approvalStatus,
-        IF(t.`task-status_id`=4, 1, 0) AS completed,
+                {if !empty($task['pr_total'])}<br />PR Total: ${round($task['pr_total'], 2)}{/if}
 ]]]]
 </td>
             <td>{round($task['total_paid_words'], 2)} {$task['pricing_and_recognition_unit_text_hours']}</td>
