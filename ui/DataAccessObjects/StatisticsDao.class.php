@@ -169,6 +169,13 @@ class StatisticsDao extends BaseDao
         return $deals;
     }
 
+    public function po_readyness_report()
+    {
+        $result = LibAPI\PDOWrapper::call('po_readyness_report', '');
+        if (empty($result)) return [];
+        return $result;
+    }
+
     public function sow_report()
     {
         $result = LibAPI\PDOWrapper::call('sow_report', '');
