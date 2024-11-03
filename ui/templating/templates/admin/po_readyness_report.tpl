@@ -63,24 +63,43 @@
                 {if empty($task['deal_id'])}<br /><span style="color: red;">No HS Deal</span>{/if}
                 {if empty($task['project_t_code'])}<br /><span style="color: red;">No Project T-Code</span>{/if}
                 {if empty($task['purchase_requisition'])}<br /><span style="color: red;">No Purchase Requisition</span>{/if}
+                {if !empty($task['purchase_requisition']) && empty($task['approvalStatus'])}<br /><span style="color: red;">Purchase Requisition Not Approved</span>{/if}
                 {if empty($task['linguist_t_code'])}<br /><span style="color: red;">No Linguist T-Code</span>{/if}
                 {if empty($task['google_drive_link'])}<br /><span style="color: red;">No Linguist Payment Information</span>{/if}
+
 MISSING HIARARCHY...
 
-tp.purchase_order '0'
-po_created 0
+{if !empty($task['deal_id']) && !empty($task['project_t_code']) && !empty($task['purchase_requisition']) && !empty($task['approvalStatus']) && !empty($task['linguist_t_code']) && !empty($task['google_drive_link']))}
+
+{if $task['task-status_id'] < 4}<span style="color: red;">Task NOT Complete</span>
+{elseif empty($task['po_created'])<span style="color: red;">Purchase Order Creation Failure</span>{/if}
+
+
+{/if}
+
+
+ 
+t.`task-status_id`=4
+
+                {if !empty(tp.purchase_order) &&empty($task['google_drive_link'])}<br /><span style="color: red;">No Linguist Payment Information</span>{/if}
+ BUT NOT  0
+
+
+
+        spr.,
+
+
                 {if !empty($task['purchase_order'])}<a href="{urlFor name="sow_report"}?po={$task['purchase_order']}" target="_blank">{$task['purchase_order']}</a>{else}{$task['purchase_order']}{/if}
                 {if !empty($task['total'])}<br />Total: ${round($task['total'], 2)}{/if}
                 <br /><span style="color: red;">No PO</span>
                 {if !empty($task['approver_mail'])}<br />{substr($task['approver_mail'], 0, strpos($task['approver_mail'], '@'))}{/if}
                 {if empty($task['google_drive_link'])}<br /><span style="color: red;">No Linguist Payment Information</span>{/if}
 
-[[[[
+[[[[display???....
         pcd.project_t_code,
         pcd.purchase_requisition,
         IFNULL(lpi.linguist_t_code, '') AS linguist_t_code,
         tp.purchase_order,
-        IFNULL(pos.purchase_order, 0) AS po_created,
         spr.approvalStatus,
         IF(t.`task-status_id`=4, 1, 0) AS completed,
 ]]]]
