@@ -2475,6 +2475,7 @@ error_log("result: $result");//(**)
             }
 
             if (($roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER)) && !empty($post['mark_linguist_payment_information'])) {
+                if (!empty($post['linguist_t_code'])) $post['linguist_t_code'] = trim($post['linguist_t_code']);
                 if (empty($post['country_id'])) UserRouteHandler::flashNow('error', 'You must enter a valid Country');
                 elseif (empty($post['linguist_name'])) UserRouteHandler::flashNow('error', 'You must enter an Official Name');
                 elseif (empty($post['linguist_t_code'])) UserRouteHandler::flashNow('error', 'You must enter a Sun Linguist T-Code');
