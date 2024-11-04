@@ -73,7 +73,7 @@
                     {elseif empty($task['po_created'])}<span style="color: red;">Purchase Order Creation Failure</span>{/if}
                 {/if}
             </td>
-            <td>$task['purchase_requisition']}{if !empty($task['pr_total'])}<br />PR Total: ${round($task['pr_total'], 2)}{/if}</td>
+            <td>{$task['purchase_requisition']}{if !empty($task['pr_total'])}<br />PR Total: ${round($task['pr_total'], 2)}{/if}</td>
             <td>{round($task['total_paid_words'], 2)} {$task['pricing_and_recognition_unit_text_hours']}</td>
             <td>{round($task['unit_rate'], 2)}</td>
             <td>${round($task['total_expected_cost'], 2)}</td>
