@@ -1816,7 +1816,7 @@ error_log("Sync update_task_from_job() task_id: $task_id, status: $status, job: 
             $result = curl_exec($ch);
 error_log("Create PO response: $result");
 
-            if (!empty($result) && strpos($result, 'status="success"') {
+            if (!empty($result) && strpos($result, 'status="success"')) {
                 LibAPI\PDOWrapper::call('insert_purchase_order', LibAPI\PDOWrapper::cleanseWrapStr($po_number) . ',' . LibAPI\PDOWrapper::cleanse($task_id));
 error_log("Create PO success: $po_number, $task_id");
             } elseif (!empty($result) && strpos($result, '"statusCode":404')) {
