@@ -13838,7 +13838,7 @@ BEGIN
     SELECT
         pcd.deal_id,
         pcd.project_t_code,
-        spr.project_t_code AS pr_project_t_code
+        spr.project_t_code AS pr_project_t_code,
         pcd.purchase_requisition,
         IFNULL(spr.purchase_requisition, 0) AS pr_created,
         IFNULL(lpi.linguist_t_code, '') AS linguist_t_code,
