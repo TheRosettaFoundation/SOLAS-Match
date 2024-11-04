@@ -77,7 +77,7 @@
             <td>{round($task['total_paid_words'], 2)} {$task['pricing_and_recognition_unit_text_hours']}</td>
             <td>{round($task['unit_rate'], 2)}</td>
             <td>${round($task['total_expected_cost'], 2)}</td>
-            <td>{if !empty($task['complete_date']) && $task['completed']}{substr($task['complete_date'], 0, 10)}{/if}</td>
+            <td>{if !empty($task['complete_date']) && $task['task-status_id'] >= 4}{substr($task['complete_date'], 0, 10)}{/if}</td>
             <td>{$task['payment_status']}</td>
         </tr>
         {/foreach}
