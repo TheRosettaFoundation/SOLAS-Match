@@ -1926,11 +1926,11 @@ error_log("Create PO ref: $result");
                 if (empty($sun_purchase_requisitions[$line['purchaseRequisitionTxnRef']]) || $line['dateTimeLastUpdated'] != $sun_purchase_requisitions[$line['purchaseRequisitionTxnRef']]['dateTimeLastUpdated']) {
                     LibAPI\PDOWrapper::call('insert_update_sun_purchase_requisition',
                         LibAPI\PDOWrapper::cleanseWrapStr($line['purchaseRequisitionTxnRef']) . ',' .
-                        LibAPI\PDOWrapper::cleanseWrapStr($line['i01']) . ',' .
-                        LibAPI\PDOWrapper::cleanseWrapStr($line['i03']) . ',' .
+                        LibAPI\PDOWrapper::cleanseWrapStr($line['userDefinedFields']['i01']) . ',' .
+                        LibAPI\PDOWrapper::cleanseWrapStr($line['userDefinedFields']['i03']) . ',' .
                         LibAPI\PDOWrapper::cleanseWrapStr($line['miscellaneousDescription2']) . ',' .
                         LibAPI\PDOWrapper::cleanseWrapStr($line['dateTimeLastUpdated']) . ',' .
-                        LibAPI\PDOWrapper::cleanseWrapStr($line['grossValue_baseValueLabel_value_amount']) . ',' .
+                        LibAPI\PDOWrapper::cleanse($line['userDefinedFields']['grossValue_baseValueLabel_value_amount']) . ',' .
                         LibAPI\PDOWrapper::cleanse($line['approvalStatus']['code']) . ',' .
                         LibAPI\PDOWrapper::cleanse($line['status']['code']));
                 }
