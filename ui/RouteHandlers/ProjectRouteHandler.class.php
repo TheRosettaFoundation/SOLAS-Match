@@ -1437,9 +1437,11 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                                      if (!empty($post['project_allocated_budget']) && is_numeric($post['project_allocated_budget']) && ($post['project_allocated_budget'] = (int)$post['project_allocated_budget']) > 0) {
                                          if ($post['project_allocated_budget'] != $taskDao->get_project_complete_date($project_id)['allocated_budget']) $taskDao->update_project_allocated_budget($project_id, $post['project_allocated_budget']);
                                      }
+                                     if (!empty($post['project_t_code'])) $post['project_t_code'] = trim($post['project_t_code']);
                                      if (!empty($post['project_t_code']) && $post['project_t_code'] != $taskDao->get_project_complete_date($project_id)['project_t_code']) {
                                          $taskDao->update_project_t_code($project_id, $post['project_t_code']);
                                      }
+                                     if (!empty($post['purchase_requisition'])) $post['purchase_requisition'] = trim($post['purchase_requisition']);
                                      if (!empty($post['purchase_requisition']) && $post['purchase_requisition'] != $taskDao->get_project_complete_date($project_id)['purchase_requisition']) {
                                          $taskDao->update_project_purchase_requisition($project_id, $post['purchase_requisition']);
                                      }
