@@ -1840,8 +1840,6 @@ error_log("Create PO wait: $po_number, $task_id");
                 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
                 curl_setopt($ch, CURLOPT_TIMEOUT, 300);
                 $result = curl_exec($ch);
-
-                LibAPI\PDOWrapper::call('increment_po_create_failed', LibAPI\PDOWrapper::cleanse($task_id));
 error_log("Create PO fail: $po_number, $task_id");
 error_log("Create PO fail delete: $result");
             }
@@ -1895,6 +1893,7 @@ error_log("Create PO: $xml");
                 curl_setopt($ch, CURLOPT_TIMEOUT, 300);
                 $result = curl_exec($ch);
 error_log("Create PO ref: $result");
+                LibAPI\PDOWrapper::call('reset_po_create_failed', LibAPI\PDOWrapper::cleanse($task_id));
                 LibAPI\PDOWrapper::call('queue_po_response', LibAPI\PDOWrapper::cleanseWrapStr($po_number) . ',' . LibAPI\PDOWrapper::cleanseWrapStr($result) . ',' . LibAPI\PDOWrapper::cleanse($task_id));
             } else {
                 LibAPI\PDOWrapper::call('increment_po_create_failed', LibAPI\PDOWrapper::cleanse($task_id));
