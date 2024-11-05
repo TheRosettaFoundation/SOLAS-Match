@@ -13769,7 +13769,7 @@ DROP PROCEDURE IF EXISTS `queue_po_response`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `queue_po_response`(IN po VARCHAR(50), IN res VARCHAR(2000), IN tID BIGINT UNSIGNED)
 BEGIN
-    INSERT INTO queue_po_responses VALUES (po, res, tID);
+    INSERT INTO queue_po_responses VALUES (tID, po, res);
 END//
 DELIMITER ;
 
