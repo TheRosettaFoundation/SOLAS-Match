@@ -1820,7 +1820,7 @@ error_log("Create PO response: $result");
                 LibAPI\PDOWrapper::call('insert_purchase_order', LibAPI\PDOWrapper::cleanseWrapStr($po_number) . ',' . LibAPI\PDOWrapper::cleanse($task_id));
 error_log("Create PO success: $po_number, $task_id");
             } elseif (!empty($result) && strpos($result, '"statusCode":404')) {
-                LibAPI\PDOWrapper::call('queue_po_response', LibAPI\PDOWrapper::cleanseWrapStr($po_number) . ',' . LibAPI\PDOWrapper::cleanseWrapStr($result), LibAPI\PDOWrapper::cleanse($task_id)); // Retry in 1 minute
+                LibAPI\PDOWrapper::call('queue_po_response', LibAPI\PDOWrapper::cleanseWrapStr($po_number) . ',' . LibAPI\PDOWrapper::cleanseWrapStr($result) . ',' . LibAPI\PDOWrapper::cleanse($task_id)); // Retry in 1 minute
 error_log("Create PO wait: $po_number, $task_id");
             } else {
                 $data = [
@@ -1895,7 +1895,7 @@ error_log("Create PO: $xml");
                 curl_setopt($ch, CURLOPT_TIMEOUT, 300);
                 $result = curl_exec($ch);
 error_log("Create PO ref: $result");
-                LibAPI\PDOWrapper::call('queue_po_response', LibAPI\PDOWrapper::cleanseWrapStr($po_number) . ',' . LibAPI\PDOWrapper::cleanseWrapStr($result), LibAPI\PDOWrapper::cleanse($task_id));
+                LibAPI\PDOWrapper::call('queue_po_response', LibAPI\PDOWrapper::cleanseWrapStr($po_number) . ',' . LibAPI\PDOWrapper::cleanseWrapStr($result) . ',' . LibAPI\PDOWrapper::cleanse($task_id));
             } else {
                 LibAPI\PDOWrapper::call('increment_po_create_failed', LibAPI\PDOWrapper::cleanse($task_id));
             }
