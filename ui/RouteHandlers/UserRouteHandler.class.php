@@ -3274,7 +3274,7 @@ EOF;
 
         $invoice_number = 'TWB-' . str_pad($invoice_number, 4, '0', STR_PAD_LEFT);
 
-        $name = "{$invoice['linguist_name']}"
+        $name = "{$invoice['linguist_name']}";
         if (!empty($invoice['linguist_t_code'])) $name .= " ({$invoice['linguist_t_code']})";
 
         $status = $invoice['status'];
