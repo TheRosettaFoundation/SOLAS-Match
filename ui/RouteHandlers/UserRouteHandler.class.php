@@ -3378,7 +3378,7 @@ EOF;
 
 foreach ($rows as $index => $row) {
     $purchase_order = $row['purchase_order'];
-    if (!empty({$row['purchase_requisition'])) $purchase_order .= " ({$row['purchase_requisition']})";
+    if (!empty($row['purchase_requisition'])) $purchase_order .= " ({$row['purchase_requisition']})";
     $deal_id = $row['deal_id'];
     $description = "{$row['title']} ({$row['task_id']})";
     $type = $row['type_text'];
