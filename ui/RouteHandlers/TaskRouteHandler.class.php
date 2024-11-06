@@ -1296,15 +1296,6 @@ class TaskRouteHandler
                     UserRouteHandler::flashNow('error', Lib\Localisation::getTranslation('task_org_feedback_5'));
                 }
             }
-            if (($roles & (SITE_ADMIN | PROJECT_OFFICER)) && isset($post['mark_purchase_order'])) {
-                    if ($paid_status['purchase_order'] != $post['purchase_order']) {
-                        $paid_status['payment_status'] = 'Unsettled';
-                        $paid_status['status_changed'] = date('Y-m-d H:i:s');
-                    }
-                    $paid_status['purchase_order'] = $post['purchase_order'];
-                    $taskDao->update_paid_status($paid_status);
-                    UserRouteHandler::flashNow('success', 'Purchase Order updated.');
-            }
             if (($roles & (SITE_ADMIN | PROJECT_OFFICER)) && isset($post['mark_payment_status'])) {
                 if ($paid_status['payment_status'] == 'Ready for payment'     && $post['mark_payment_status'] == 'Pending documentation'
                         ||
