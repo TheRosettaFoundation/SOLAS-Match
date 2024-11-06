@@ -32,7 +32,6 @@ function select() {
             $("[name=complete_selected_tasks]").val(arr);
             $("[name=uncomplete_selected_tasks]").val(arr);
             $("[name=unpublish_selected__translation_tasks]").val(arr);
-            $("[name=ponum]").val(arr);
             $("[name=ready_payment]").val(arr);
             $("[name=pending_documentation]").val(arr);
             $("[name=tasks_settled]").val(arr);
@@ -56,7 +55,6 @@ function select() {
             $("[name=cancel]").val(arr);
             $("[name=complete_selected_tasks]").val(arr);
             $("[name=uncomplete_selected_tasks]").val(arr);
-            $("[name=ponum]").val(arr);
             $("[name=ready_payment]").val(arr);
             $("[name=pending_documentation]").val(arr);
             $("[name=tasks_settled]").val(arr);
@@ -80,7 +78,6 @@ function select() {
             $("[name=cancel]").val(arr);
             $("[name=complete_selected_tasks]").val(arr);
             $("[name=uncomplete_selected_tasks]").val(arr);
-            $("[name=ponum]").val(arr);
             $("[name=ready_payment]").val(arr);
             $("[name=pending_documentation]").val(arr);
             $("[name=tasks_settled]").val(arr);
@@ -104,7 +101,6 @@ function select() {
             $("[name=cancel]").val(arr);
             $("[name=complete_selected_tasks]").val(arr);
             $("[name=uncomplete_selected_tasks]").val(arr);
-            $("[name=ponum]").val(arr);
             $("[name=ready_payment]").val(arr);
             $("[name=pending_documentation]").val(arr);
             $("[name=tasks_settled]").val(arr);
@@ -129,7 +125,6 @@ function select() {
             $("[name=cancel]").val(arr);
             $("[name=complete_selected_tasks]").val(arr);
             $("[name=uncomplete_selected_tasks]").val(arr);
-            $("[name=ponum]").val(arr);
             $("[name=ready_payment]").val(arr);
             $("[name=pending_documentation]").val(arr);
             $("[name=tasks_settled]").val(arr);
@@ -153,7 +148,6 @@ function select() {
             $("[name=cancel]").val(arr);
             $("[name=complete_selected_tasks]").val(arr);
             $("[name=uncomplete_selected_tasks]").val(arr);
-            $("[name=ponum]").val(arr);
             $("[name=ready_payment]").val(arr);
             $("[name=pending_documentation]").val(arr);
             $("[name=tasks_settled]").val(arr);
@@ -177,7 +171,6 @@ function select() {
             $("[name=cancel]").val(arr);
             $("[name=complete_selected_tasks]").val(arr);
             $("[name=uncomplete_selected_tasks]").val(arr);
-            $("[name=ponum]").val(arr);
             $("[name=ready_payment]").val(arr);
             $("[name=pending_documentation]").val(arr);
             $("[name=tasks_settled]").val(arr);
@@ -198,7 +191,6 @@ function select() {
             $("[name=cancel]").val(arr);
             $("[name=complete_selected_tasks]").val(arr);
             $("[name=uncomplete_selected_tasks]").val(arr);
-            $("[name=ponum]").val(arr);
             $("[name=ready_payment]").val(arr);
             $("[name=pending_documentation]").val(arr);
             $("[name=tasks_settled]").val(arr);
@@ -238,7 +230,6 @@ function select() {
         $("[name=cancel]").val(select_all_tasks);
         $("[name=complete_selected_tasks]").val(select_all_tasks);
         $("[name=uncomplete_selected_tasks]").val(select_all_tasks);
-        $("[name=ponum]").val(select_all_tasks);
         $("[name=ready_payment]").val(select_all_tasks);
         $("[name=pending_documentation]").val(select_all_tasks);
         $("[name=tasks_settled]").val(select_all_tasks);
@@ -264,7 +255,6 @@ function select() {
         $("[name=cancel]").val(arr_select_task);
         $("[name=complete_selected_tasks]").val(arr_select_task);
         $("[name=uncomplete_selected_tasks]").val(arr_select_task);
-        $("[name=ponum]").val(arr_select_task);
         $("[name=ready_payment]").val(arr_select_task);
         $("[name=pending_documentation]").val(arr_select_task);
         $("[name=tasks_settled]").val(arr_select_task);
@@ -343,7 +333,6 @@ function select() {
             $("[name=cancel]").val(arr);
             $("[name=complete_selected_tasks]").val(arr);
             $("[name=uncomplete_selected_tasks]").val(arr);
-            $("[name=ponum]").val(arr);
             $("[name=ready_payment]").val(arr);
             $("[name=pending_documentation]").val(arr);
             $("[name=tasks_settled]").val(arr);
@@ -368,7 +357,6 @@ function select() {
             $("[name=cancel]").val(arr);
             $("[name=complete_selected_tasks]").val(arr);
             $("[name=uncomplete_selected_tasks]").val(arr);
-            $("[name=ponum]").val(arr);
             $("[name=ready_payment]").val(arr);
             $("[name=pending_documentation]").val(arr);
             $("[name=tasks_settled]").val(arr);
@@ -393,7 +381,6 @@ function select() {
             $("[name=cancel]").val(arr);
             $("[name=complete_selected_tasks]").val(arr);
             $("[name=uncomplete_selected_tasks]").val(arr);
-            $("[name=ponum]").val(arr);
             $("[name=ready_payment]").val(arr);
             $("[name=pending_documentation]").val(arr);
             $("[name=tasks_settled]").val(arr);
@@ -418,7 +405,6 @@ function select() {
             $("[name=cancel]").val(arr);
             $("[name=complete_selected_tasks]").val(arr);
             $("[name=uncomplete_selected_tasks]").val(arr);
-            $("[name=ponum]").val(arr);
             $("[name=ready_payment]").val(arr);
             $("[name=pending_documentation]").val(arr);
             $("[name=tasks_settled]").val(arr);
@@ -444,7 +430,6 @@ function select() {
             $("[name=cancel]").val(arr);
             $("[name=complete_selected_tasks]").val(arr);
             $("[name=uncomplete_selected_tasks]").val(arr);
-            $("[name=ponum]").val(arr);
             $("[name=ready_payment]").val(arr);
             $("[name=pending_documentation]").val(arr);
             $("[name=tasks_settled]").val(arr);
@@ -469,7 +454,6 @@ function select() {
             $("[name=cancel]").val(arr);
             $("[name=complete_selected_tasks]").val(arr);
             $("[name=uncomplete_selected_tasks]").val(arr);
-            $("[name=ponum]").val(arr);
             $("[name=ready_payment]").val(arr);
             $("[name=pending_documentation]").val(arr);
             $("[name=tasks_settled]").val(arr);
@@ -487,7 +471,6 @@ function select() {
             $("[name=cancel]").val(arr);
             $("[name=complete_selected_tasks]").val(arr);
             $("[name=uncomplete_selected_tasks]").val(arr);
-            $("[name=ponum]").val(arr);
             $("[name=ready_payment]").val(arr);
             $("[name=pending_documentation]").val(arr);
             $("[name=tasks_settled]").val(arr);
@@ -547,19 +530,6 @@ function select() {
         e.preventDefault();
         $("[name=cancelled]").val($(this).attr("data-cancelled"));
     });
-
-    $('#ponummodal').on('shown.bs.modal', function () {
-        $("#ponumbtn").prop('disabled', true);
-        $("[name=po]").on("focus", function(){
-            $(this).on("change paste keyup", function() {
-                if($(this).val().length == 0) {
-                    $("#ponumbtn").prop('disabled', true);
-              }else {
-                $("#ponumbtn").prop('disabled', false);
-              }
-             });
-        });
-      });
 
       $('#wordcountmodal').on('hide.bs.modal', function () {
         $("#wordCount_error").addClass("d-none");
