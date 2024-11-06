@@ -87,7 +87,7 @@
             <td>
                 {if !empty($task['purchase_order'])}<a href="{urlFor name="sow_report"}?po={$task['purchase_order']}" target="_blank">{$task['purchase_order']}</a>{else}{$task['purchase_order']}{/if}
                 {if !empty($task['total'])}<br />Total: ${round($task['total'], 2)}{/if}
-                <br />{if !empty($task['po_status'])}{if strpos($task['purchase_requisition'], 'TO-') !== false}{if $task['po_status'] == 'Completed' || $task['po_status'] == 'Approved'}{$task['po_status']}{else}<span style="color: red;">{$task['po_status']}, Not Completed</span>{/if}{/if}{else}<span style="color: red;">No PO</span>{/if}
+                {if !empty($task['po_status'])}{if strpos($task['purchase_requisition'], 'TO-') === false}<br />{if $task['po_status'] == 'Completed' || $task['po_status'] == 'Approved'}{$task['po_status']}{else}<span style="color: red;">{$task['po_status']}, Not Completed</span>{/if}{/if}{else}<br /><span style="color: red;">No PO</span>{/if}
                 {if !empty($task['approver_mail'])}<br />{substr($task['approver_mail'], 0, strpos($task['approver_mail'], '@'))}{/if}
                 {if empty($task['google_drive_link'])}<br /><span style="color: red;">No Linguist Payment Information</span>{/if}
                 {if empty($task['deal_id'])}<br /><span style="color: red;">No HS Deal</span>{/if}
