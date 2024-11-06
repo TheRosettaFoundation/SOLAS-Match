@@ -160,15 +160,6 @@ class AdminRouteHandler
                 }
             }
 
-            if (($roles & (SITE_ADMIN | PROJECT_OFFICER)) && isset($post['sync_po'])) {
-                if ($number = $taskDao->sync_po()) {
-                    $number--;
-                    UserRouteHandler::flashNow('sync_po_success', "Purchase Orders Synchronized (Payment Status for $number Tasks Changed)");
-                } else {
-                    UserRouteHandler::flashNow('sync_po_error', 'Purchase Orders NOT Synchronized');
-                }
-            }
-
             if (($roles & (SITE_ADMIN | PROJECT_OFFICER)) && isset($post['sync_hubspot'])) {
                 if ($taskDao->update_hubspot_deals(0)) {
                     UserRouteHandler::flashNow('sync_hubspot_success', 'HubSpot Synchronized');
