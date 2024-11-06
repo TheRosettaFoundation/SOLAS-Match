@@ -1074,23 +1074,6 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                     UserRouteHandler::flashNow('success', "$updated tasks now marked as settled.");
                 }
 
-                if (!empty($post['ponum']) && !empty($post['po'])) {
-                    if (is_numeric($post['po'])) {
-                        $task_ids = preg_split ("/\,/", $post['ponum']);
-                        foreach ($task_ids as $id) {
-                            $paid_status = $taskDao->get_paid_status($id);
-                            if ($paid_status && $paid_status['purchase_order'] != $post['po']) {
-                                $updated++;
-                                $paid_status['payment_status'] = 'Unsettled';
-                                $paid_status['status_changed'] = date('Y-m-d H:i:s');
-                                $paid_status['purchase_order'] = $post['po'];
-                                $taskDao->update_paid_status($paid_status);
-                            }
-                        }
-                        UserRouteHandler::flashNow('success', "$updated tasks purchase order number set.");
-                    } else UserRouteHandler::flashNow('error', 'Purchase Order must be an integer.');
-                }
-
                 if (!empty($post['wordnum']) && !empty($post['word_count'])) {
                     $total_wordCount = $post['word_count'];
                     $task_ids = preg_split("/\,/", $post['wordnum']);
