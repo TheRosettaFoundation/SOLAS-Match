@@ -13349,7 +13349,7 @@ BEGIN
     WHERE
         tp.processed>=0 AND
         pos.status IS NOT NULL AND
-        (pos.status='Completed' OR pos.status='Approved') AND
+        (LOCATE('TO-', tp.purchase_order)=1 OR pos.status='Completed' OR pos.status='Approved') AND
         t.`task-status_id`=4 AND
         tcd.complete_date<CAST(DATE_FORMAT(NOW(), '%Y-%m-01 00:00:01') as DATETIME) AND
         tp.payment_status NOT IN ('In-kind', 'In-house', 'Waived')
