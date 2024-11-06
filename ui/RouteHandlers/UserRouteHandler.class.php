@@ -3274,7 +3274,7 @@ EOF;
 
         $invoice_number = 'TWB-' . str_pad($invoice_number, 4, '0', STR_PAD_LEFT);
 
-        $name = "{$invoice['linguist_name']}";
+        $name = $invoice['linguist_name'];
         if (!empty($invoice['linguist_t_code'])) $name .= " ({$invoice['linguist_t_code']})";
 
         $status = $invoice['status'];
@@ -3377,7 +3377,8 @@ EOF;
         EOF;
 
 foreach ($rows as $index => $row) {
-    $purchase_order = "{$row['purchase_order']} ({$row['purchase_requisition']})";
+    $purchase_order = $row['purchase_order'];
+    if (!empty({$row['purchase_requisition'])) $purchase_order .= " ({$row['purchase_requisition']})";
     $deal_id = $row['deal_id'];
     $description = "{$row['title']} ({$row['task_id']})";
     $type = $row['type_text'];
