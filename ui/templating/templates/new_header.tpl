@@ -151,7 +151,7 @@
                             <li class="nav-item">
                                 <a href="https://form.asana.com?k=dlsF11XkOwpfFllbq325dg&d=170818793545926" target="_blank" class=" fs-5 nav-link fw-bold">Feedback?</a>
                             </li>
-                            {if isset($user) && Settings::get('banner.enabled') == 'v'}
+                            {if isset($user) && Settings::get('banner.enabled') == 'v' && in_array($user->getNativeLocale()->getLanguageCode(), ['ha', 'kr', 'shu'])}
                             <li class="nav-item">
                                 <a href="https://lanco.twbplatform.org" target="_blank" class=" fs-5 nav-link fw-bold">TWB Voice</a>
                             </li>
@@ -205,7 +205,7 @@
                 </div>
             </div>
         {/if}
-        {if isset($user) && Settings::get('banner.enabled') == 'v'}
+        {if isset($user) && Settings::get('banner.enabled') == 'v' && in_array($user->getNativeLocale()->getLanguageCode(), ['ha', 'kr', 'shu'])}
             <div id="banner-container" class="container">
                 <div id="banner-container-blocks" class="d-flex justify-content-center" >
                     <a href="https://lanco.twbplatform.org" target="_blank">
