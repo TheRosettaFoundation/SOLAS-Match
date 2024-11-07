@@ -11342,6 +11342,7 @@ BEGIN
 END//
 DELIMITER ;
 
+# Not currently used...
 DROP PROCEDURE IF EXISTS `get_zahara_purchase_orders`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `get_zahara_purchase_orders`()
@@ -11350,6 +11351,7 @@ BEGIN
 END//
 DELIMITER ;
 
+# Not currently used...
 DROP PROCEDURE IF EXISTS `insert_update_zahara_purchase_orders`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_update_zahara_purchase_orders`(
@@ -11412,6 +11414,7 @@ BEGIN
 END//
 DELIMITER ;
 
+# Not currently used...
 DROP PROCEDURE IF EXISTS `insert_sync_po_event`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_sync_po_event`(IN UID INT UNSIGNED, IN number INT UNSIGNED, IN ID_s TEXT)
@@ -11420,6 +11423,7 @@ BEGIN
 END//
 DELIMITER ;
 
+# Not currently used...
 DROP PROCEDURE IF EXISTS `get_completed_paid_tasks`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `get_completed_paid_tasks`()
@@ -11433,6 +11437,7 @@ BEGIN
 END//
 DELIMITER ;
 
+# Not currently used...
 DROP PROCEDURE IF EXISTS `update_paid_status_status`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `update_paid_status_status`(IN tID BIGINT, IN status VARCHAR(30))
