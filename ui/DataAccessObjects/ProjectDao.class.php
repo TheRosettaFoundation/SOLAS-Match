@@ -1868,6 +1868,7 @@ error_log("Create PO fail delete: $result");
                 $project_t_code = $po['project_t_code'];
                 $total_paid_words = $po['total_paid_words'];
                 $unit_rate = $po['unit_rate'];
+                $amount = $total_paid_words*$unit_rate;
                 $EA = ['Words' => 'WORD', 'Terms' => 'TERM', 'Labor hours' => 'HR'][$po['pricing_and_recognition_unit_text_hours']];
                 $date = date("dmY");
 $xml = '<?xml version="1.0" encoding="UTF-8"?><SSC><SunSystemsContext><BusinessUnit>CLG</BusinessUnit></SunSystemsContext><Payload><PurchaseOrder><PurchaseTransactionType>PO002</PurchaseTransactionType>' .
@@ -1882,7 +1883,8 @@ $xml = '<?xml version="1.0" encoding="UTF-8"?><SSC><SunSystemsContext><BusinessU
 "<VLAB2><Trans><VPolVlabEntry_Val>$unit_rate</VPolVlabEntry_Val><VPolVlabEntry_VlabId>2</VPolVlabEntry_VlabId><VPolVlabEntry_UserOverridden>1</VPolVlabEntry_UserOverridden></Trans></VLAB2>" .
 "<VLAB3><Trans><VPolVlabEntry_Val>$unit_rate</VPolVlabEntry_Val><VPolVlabEntry_VlabId>3</VPolVlabEntry_VlabId></Trans></VLAB3>" .
 "<VLAB4><Trans><VPolVlabEntry_Val>$unit_rate</VPolVlabEntry_Val><VPolVlabEntry_VlabId>4</VPolVlabEntry_VlabId></Trans></VLAB4>" .
-"<VLAB7><Base><VPolVlabEntry_Val>$unit_rate</VPolVlabEntry_Val><VPolVlabEntry_VlabId>7</VPolVlabEntry_VlabId><VPolVlabEntry_UserOverridden>1</VPolVlabEntry_UserOverridden><VPolVlabEntry_UlabCode>$EA</VPolVlabEntry_UlabCode></Base></VLAB7>" .
+"<VLAB7><Base><VPolVlabEntry_Val>$amount</VPolVlabEntry_Val><VPolVlabEntry_VlabId>7</VPolVlabEntry_VlabId><VPolVlabEntry_UserOverridden>1</VPolVlabEntry_UserOverridden><VPolVlabEntry_UlabCode>$EA</VPolVlabEntry_UlabCode></Base></VLAB7>" .
+"<VLAB8><Trans><VPolVlabEntry_Val>$unit_rate</VPolVlabEntry_Val><VPolVlabEntry_VlabId>8</VPolVlabEntry_VlabId><VPolVlabEntry_UserOverridden>1</VPolVlabEntry_UserOverridden></Trans></VLAB8>" .
 '</PurchaseOrderLine></PurchaseOrder></Payload></SSC>';
 error_log("Create PO: $xml");
                 $xml = urlencode($xml);
