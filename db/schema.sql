@@ -13919,6 +13919,21 @@ END//
 DELIMITER ;
 
 
+CREATE TABLE IF NOT EXISTS linguist_t_code_maps (
+  user_id         INT UNSIGNED,
+  linguist_t_code VARCHAR(255),
+  PRIMARY KEY (user_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+DROP PROCEDURE IF EXISTS `get_linguist_t_code_map`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_linguist_t_code_map`(IN uID INT UNSIGNED)
+BEGIN
+    SELECT * FROM linguist_t_code_maps WHERE user_id=uID;
+END//
+DELIMITER ;
+
+
 /*---------------------------------------end of procs----------------------------------------------*/
 
 
