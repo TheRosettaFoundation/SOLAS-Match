@@ -1551,10 +1551,11 @@ If a language is to be removed from this list, the community will be informed be
     </tr>
     {if $roles & ($SITE_ADMIN + $COMMUNITY_OFFICER)}
     <tr valign="top">
-        <td style="width: 20%"><input type="submit" class="btn btn-primary text-white  border-0" name="mark_linguist_payment_information" value="Submit" /></td>
+        <td style="width: 15%"><input type="submit" class="btn btn-primary text-white  border-0" name="mark_linguist_payment_information" value="Submit" /></td>
         <td style="width: 20%"></td>
         <td style="width: 20%"></td>
-        <td style="width: 40%"></td>
+        <td style="width: 15%"></td>
+        <td style="width: 30%"></td>
     </tr>
     {/if}
 </table>
