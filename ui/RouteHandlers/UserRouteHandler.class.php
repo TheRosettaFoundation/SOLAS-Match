@@ -2696,7 +2696,6 @@ error_log("result: $result");//(**)
             'user_task_limitation_current_user' => $taskDao->get_user_task_limitation($loggedInUserId),
             'sent_contracts' => $userDao->get_sent_contracts($user_id),
             'user_invoices'  => $userDao->getUserInvoices($user_id),
-            'linguist_t_code' => $userDao->get_linguist_t_code_map($user_id),
         ));
         return UserRouteHandler::render("user/user-public-profile.tpl", $response);
     }

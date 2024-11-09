@@ -1529,14 +1529,14 @@ If a language is to be removed from this list, the community will be informed be
     <tr valign="top">
         <td style="width: 15%"><strong>Admin</strong></td>
         <td style="width: 20%"><strong>Official Name</strong></td>
-        <td style="width: 20%"><strong>Sun Linguist T-Code</strong></td>
+        <td style="width: 20%"><strong>Sun Linguist T-Code{if !empty($linguist_payment_information['linguist_t_code_import'])}( imported value pre-populated below){/if}</strong></td>
         <td style="width: 15%"><strong>Billing Country</strong></td>
         <td style="width: 30%"><strong>Google Drive Folder Link</strong></td>
     </tr>
     <tr valign="top">
         <td style="width: 15%"><a href="{urlFor name="user-public-profile" options="user_id.{$linguist_payment_information['admin_id']}"}" target="_blank">{TemplateHelper::uiCleanseHTML($linguist_payment_information['admin_name'])}</a>{if empty($linguist_payment_information['admin_name'])}-{/if}</td>
         <td style="width: 20%"><input class="form-control form-control-sm" type='text' value="{if !empty($linguist_payment_information['linguist_name'])}{$linguist_payment_information['linguist_name']}{else}{if isset($userPersonalInfo) && !empty($userPersonalInfo->getFirstName())}{$userPersonalInfo->getFirstName()}{/if}{if isset($userPersonalInfo) && !empty($userPersonalInfo->getLastName())} {$userPersonalInfo->getLastName()}{/if}{/if}" name="linguist_name" id="linguist_name" /></td>
-        <td style="width: 20%"><input class="form-control form-control-sm" type='text' value="{if !empty($linguist_payment_information['linguist_t_code'])}{$linguist_payment_information['linguist_t_code']}{/if}" name="linguist_t_code" id="linguist_t_code" /></td>
+        <td style="width: 20%"><input class="form-control form-control-sm" type='text' value="{if !empty($linguist_payment_information['linguist_t_code'])}{$linguist_payment_information['linguist_t_code']}{/if}{if !empty($linguist_payment_information['linguist_t_code_import'])}{$linguist_payment_information['linguist_t_code_import']}{/if}" name="linguist_t_code" id="linguist_t_code" /></td>
         <td style="width: 15%">
             <select class="form-select form-select-sm" name="country_id" id="country">
                 <option value="">--Select--</option>

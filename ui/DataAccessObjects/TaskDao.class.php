@@ -1011,8 +1011,13 @@ error_log("createTaskDirectly: $args");
     public function get_linguist_payment_information($user_id)
     {
         $result = LibAPI\PDOWrapper::call('get_linguist_payment_information', LibAPI\PDOWrapper::cleanse($user_id));
-        if (empty($result)) return ['admin_id' => 0, 'admin_name' => '', 'country_id' => 0, 'google_drive_link' => '', 'linguist_t_code' => ''];
-        return $result[0];
+        if (empty($result)) $lpi = ['admin_id' => 0, 'admin_name' => '', 'country_id' => 0, 'google_drive_link' => '', 'linguist_t_code' => ''];
+        else                $lpi = $result[0];
+        if (empty($lpi['linguist_t_code'])) {
+            $result = LibAPI\PDOWrapper::call('get_linguist_t_code_map', LibAPI\PDOWrapper::cleanse($user_id));
+            if (!empty($result)) $lpi['linguist_t_code_import'] = $result[0]['linguist_t_code'];
+        }
+        return $lpi;
     }
 
     public function get_active_languages($user_id)
