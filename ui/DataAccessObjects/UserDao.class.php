@@ -2580,4 +2580,11 @@ error_log(print_r($result, true));//(**)
             curl_close($ch);
         } else error_log("update_phrase_field($project_uid, $field_uid, $value, $timeout): No fields content");
     }
+
+    public function get_linguist_t_code_map($user_id)
+    {
+        $result = LibAPI\PDOWrapper::call('get_linguist_t_code_map', LibAPI\PDOWrapper::cleanse($user_id));
+        if (empty($result)) '';
+        return $result[0]['linguist_t_code'];
+    }
 }
