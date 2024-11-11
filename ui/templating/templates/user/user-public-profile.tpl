@@ -1529,7 +1529,7 @@ If a language is to be removed from this list, the community will be informed be
     <tr valign="top">
         <td style="width: 15%"><strong>Admin</strong></td>
         <td style="width: 20%"><strong>Official Name</strong></td>
-        <td style="width: 20%"><strong>Sun Linguist T-Code{if !empty($linguist_payment_information['linguist_t_code_import'])}( imported value pre-populated below){/if}</strong></td>
+        <td style="width: 20%"><strong>Sun Linguist T-Code{if !empty($linguist_payment_information['linguist_t_code_import'])} (imported value pre-populated below){/if}</strong></td>
         <td style="width: 15%"><strong>Billing Country</strong></td>
         <td style="width: 30%"><strong>Google Drive Folder Link</strong></td>
     </tr>
