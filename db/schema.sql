@@ -10889,6 +10889,13 @@ DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `update_project_purchase_requisition`(IN pID INT UNSIGNED, IN pr VARCHAR(255))
 BEGIN
     UPDATE project_complete_dates SET purchase_requisition=pr WHERE project_id=pID;
+
+    UPDATE project_complete_dates  pcd
+    JOIN sun_purchase_requisitions spr ON spr.purchase_requisition=pr
+    SET
+        pcd.project_t_code=spr.project_t_code
+    WHERE
+        pcd.purchase_requisition=pr;
 END//
 DELIMITER ;
 
