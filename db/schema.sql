@@ -10876,6 +10876,7 @@ BEGIN
 END//
 DELIMITER ;
 
+# Not currently used...
 DROP PROCEDURE IF EXISTS `update_project_t_code`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `update_project_t_code`(IN pID INT UNSIGNED, IN tcode VARCHAR(255))

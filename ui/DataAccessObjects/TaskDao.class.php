@@ -950,13 +950,6 @@ error_log("createTaskDirectly: $args");
             LibAPI\PDOWrapper::cleanse($allocated_budget));
     }
 
-    public function update_project_t_code($project_id, $project_t_code)
-    {
-        LibAPI\PDOWrapper::call('update_project_t_code',
-            LibAPI\PDOWrapper::cleanse($project_id) . ',' .
-            LibAPI\PDOWrapper::cleanseWrapStr($project_t_code));
-    }
-
     public function update_project_purchase_requisition($project_id, $purchase_requisition)
     {
         LibAPI\PDOWrapper::call('update_project_purchase_requisition',
