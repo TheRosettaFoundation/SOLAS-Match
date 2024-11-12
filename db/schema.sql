@@ -13672,6 +13672,8 @@ BEGIN
             status=p_status
         WHERE purchase_requisition=p_purchase_requisition;
     END IF;
+
+    UPDATE project_complete_dates pcd SET pcd.project_t_code=p_project_t_code WHERE pcd.purchase_requisition=p_purchase_requisition;
 END//
 DELIMITER ;
 
