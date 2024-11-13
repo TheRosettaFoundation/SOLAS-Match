@@ -72,7 +72,6 @@
                     {if $task['task-status_id'] < 4}<span style="color: red;">Task NOT Complete</span>
                     {elseif empty($task['po_created'])}<span style="color: red;">Purchase Order Creation Failure{if $task['purchase_order'] != '0'}; Old format PO Previously Specified: {$task['purchase_order']}{/if}</span>{/if}
                 {/if}
-{if $task['purchase_order'] != '0'}; Old format PO Previously Specified: {$task['purchase_order']}{/if}
             </td>
             <td>{$task['purchase_requisition']}{if !empty($task['pr_total'])}<br />PR Total: ${round($task['pr_total'], 2)}{/if}</td>
             <td>{round($task['total_paid_words'], 2)} {$task['pricing_and_recognition_unit_text_hours']}</td>
