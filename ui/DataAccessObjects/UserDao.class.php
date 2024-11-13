@@ -2186,7 +2186,8 @@ error_log("Language added: $result");//(**)
                         }
                     }
 
-                    // Add TM to project
+                  foreach ($workflowSteps as $workflowStep) {
+                    // Add TM to project for this $workflowStep (all languages)
                     $url = "https://cloud.memsource.com/web/api2/v3/projects/{$project_result['uid']}/transMemories";
                     $ch = curl_init($url);
                     $data = [
@@ -2196,12 +2197,13 @@ error_log("Language added: $result");//(**)
                             [
                                 'transMemory' => ['uid' => $working_tm_uid],
                                 'readMode' => true,
-                                'writeMode' => true,
+                                'writeMode' => !in_array($workflowStep['id'], ['cFUVHSAAmsVrftA3GC0Ak6', 'MyL6Z9IF6ZqQexoZ1OLAS3']),  // Translation needs this false
                                 'penalty' => 0,
                                 'applyPenaltyTo101Only' => false,
                                 'order' => 0
                             ]
                           ],
+                          'workflowStep' => ['uid' => $workflowStep['id']],
                           'orderEnabled' => true
                         ]
                       ]
@@ -2217,6 +2219,7 @@ error_log("TM added: $result");//(**)
                     $responseCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
                     if ($responseCode > 204) error_log("Add TM $url responseCode: $responseCode");
                     curl_close($ch);
+                  }
                 }
             } else {
                 error_log("Failed to list TMs: $url responseCode: $responseCode");
