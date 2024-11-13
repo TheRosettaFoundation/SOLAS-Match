@@ -70,8 +70,9 @@
                 {if empty($task['google_drive_link'])}<br /><span style="color: red;">No Linguist Payment Information</span>{/if}
                 {if !empty($task['deal_id']) && !empty($task['project_t_code']) && !empty($task['purchase_requisition']) && !empty($task['approvalStatus']) && !empty($task['linguist_t_code']) && !empty($task['google_drive_link'])}
                     {if $task['task-status_id'] < 4}<span style="color: red;">Task NOT Complete</span>
-                    {elseif empty($task['po_created'])}<span style="color: red;">Purchase Order Creation Failure</span>{/if}
+                    {elseif empty($task['po_created'])}<span style="color: red;">Purchase Order Creation Failure{if $task['purchase_order'] != '0'}; Old format PO Previously Specified{/if}</span>{/if}
                 {/if}
+{if $task['purchase_order'] != '0'}; Old format PO Previously Specified{/if}
             </td>
             <td>{$task['purchase_requisition']}{if !empty($task['pr_total'])}<br />PR Total: ${round($task['pr_total'], 2)}{/if}</td>
             <td>{round($task['total_paid_words'], 2)} {$task['pricing_and_recognition_unit_text_hours']}</td>
