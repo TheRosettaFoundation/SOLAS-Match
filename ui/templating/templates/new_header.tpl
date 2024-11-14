@@ -153,7 +153,7 @@
                             </li>
                             {if isset($user) && Settings::get('banner.enabled') == 'v' && in_array($user->getNativeLocale()->getLanguageCode(), ['ha', 'kr', 'shu'])}
                             <li class="nav-item">
-                                <a href="https://lanco.twbplatform.org" target="_blank" class=" fs-5 nav-link fw-bold">TWB Voice</a>
+                                <a href="https://dev.twbvoice.org" target="_blank" class=" fs-5 nav-link fw-bold">TWB Voice</a>
                             </li>
                             {/if}
                         {else}
@@ -208,7 +208,7 @@
         {if isset($user) && Settings::get('banner.enabled') == 'v' && in_array($user->getNativeLocale()->getLanguageCode(), ['ha', 'kr', 'shu'])}
             <div id="banner-container" class="container">
                 <div id="banner-container-blocks" class="d-flex justify-content-center" >
-                    <a href="https://lanco.twbplatform.org" target="_blank">
+                    <a href="https://dev.twbvoice.org" target="_blank">
                         <div id="banner-mid">
                            <img src="{urlFor name='home'}ui/img/voice.png" style="width: 925px; height:118px" alt="TWB Voice">
                         </div>
