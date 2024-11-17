@@ -122,6 +122,10 @@
                 <button type="submit" value="1" name="revokeTask" class="btn btn-inverse">
                     <i class="icon-remove icon-white"></i> {Localisation::getTranslation('task_org_feedback_2')}
                 </button>
+
+                <label class="checkbox clear_brand">
+                    <input type="checkbox" name="deny_user" value="1" /> Add user to deny list
+                </label>
             </span>
             <span style="float: right; position: relative;">
                 <button type="submit" value="Submit" name="submit" class="btn btn-success">

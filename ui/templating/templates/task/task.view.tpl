@@ -174,6 +174,10 @@
                                     <button type="submit" value="1" name="revokeTask" class="btngray-sm">
                                         {Localisation::getTranslation('task_org_feedback_2')}
                                     </button>
+
+                                    <label class="checkbox clear_brand">
+                                        <input type="checkbox" name="deny_user" value="1" /> Add user to deny list
+                                    </label>
                                 </span>
                                 <span class="" >
                                     <button type="submit" value="Submit" name="submit" class="btngray-sm me-2">
