@@ -497,7 +497,7 @@
             {/if}
             <tr>
                 <td colspan="2">
-                    {Localisation::getTranslation('site_admin_dashboard_revoke_task_from_user')}
+                    {Localisation::getTranslation('site_admin_dashboard_revoke_task_from_user')} (User will not be added to deny list.)
                 </td>
             </tr>
             <tr>
