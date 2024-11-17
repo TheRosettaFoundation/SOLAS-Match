@@ -6141,6 +6141,16 @@ BEGIN
 END//
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `add_to_deny`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `add_to_deny`(IN tID BIGINT, IN uID INT)
+BEGIN
+    IF EXISTS (SELECT 1 FROM TaskClaims tc WHERE tc.task_id=tID AND tc.user_id=uID) THEN
+        INSERT INTO TaskTranslatorBlacklist (task_id, user_id) VALUES (tID, uID);
+    END IF;
+END//
+DELIMITER ;
+
 DROP PROCEDURE IF EXISTS `userHasBadge`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `userHasBadge`(IN `userID` INT, IN `badgeID` INT)
