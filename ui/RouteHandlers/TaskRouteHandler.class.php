@@ -1279,7 +1279,7 @@ class TaskRouteHandler
                        $task->setTaskStatus(Common\Enums\TaskStatusEnum::PENDING_CLAIM);
                        error_log("taskView revokeTask: $task_id by $user_id");
                        $taskDao->updateTask($task);
-                       $userDao->unclaimTask($details_claimant->getId(), $task_id, null);
+                       $userDao->unclaimTask($details_claimant->getId(), $task_id, null, !empty($post['deny_user']));
                        UserRouteHandler::flash(
                            'taskSuccess',
                            sprintf(
@@ -1676,7 +1676,7 @@ class TaskRouteHandler
                         error_log("taskOrgFeedback revokeTask: $task_id by $user_id");
                         $taskDao->updateTask($task);
                         if ($claimant != null) {
-                            $taskRevoke = $userDao->unclaimTask($claimant->getId(), $task_id, null);
+                            $taskRevoke = $userDao->unclaimTask($claimant->getId(), $task_id, null, !empty($post['deny_user']));
                         } else {
                             $taskRevoke = true;
                             $taskDao->setTaskStatus($task_id, Common\Enums\TaskStatusEnum::PENDING_CLAIM); // updateTask() has already set this, but need setTaskStatus() for tasks_status table

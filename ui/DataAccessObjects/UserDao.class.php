@@ -768,8 +768,10 @@ error_log("claimTask_shell($userId, $taskId)");
         LibAPI\PDOWrapper::call('queue_claim_task', LibAPI\PDOWrapper::cleanse($user_id) . ',' . LibAPI\PDOWrapper::cleanse($task_id));
     }
 
-    public function unclaimTask($userId, $taskId, $feedback)
+    public function unclaimTask($userId, $taskId, $feedback, $deny_user = false)
     {
+        if ($deny_user) LibAPI\PDOWrapper::call('add_to_deny', LibAPI\PDOWrapper::cleanse($taskId) . ',' . LibAPI\PDOWrapper::cleanse($userId));
+
         $ret = null;
         $request = "{$this->siteApi}v0/users/$userId/tasks/$taskId";
         $ret = $this->client->call(null, $request, Common\Enums\HttpMethodEnum::DELETE, $feedback);
