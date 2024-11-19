@@ -1883,7 +1883,7 @@ $xml = '<?xml version="1.0" encoding="UTF-8"?><SSC><SunSystemsContext><BusinessU
 "<VLAB2><Trans><VPolVlabEntry_Val>$unit_rate</VPolVlabEntry_Val><VPolVlabEntry_VlabId>2</VPolVlabEntry_VlabId><VPolVlabEntry_UserOverridden>1</VPolVlabEntry_UserOverridden></Trans></VLAB2>" .
 "<VLAB3><Trans><VPolVlabEntry_Val>$unit_rate</VPolVlabEntry_Val><VPolVlabEntry_VlabId>3</VPolVlabEntry_VlabId></Trans></VLAB3>" .
 "<VLAB4><Trans><VPolVlabEntry_Val>$unit_rate</VPolVlabEntry_Val><VPolVlabEntry_VlabId>4</VPolVlabEntry_VlabId></Trans></VLAB4>" .
-"<VLAB7><Base><VPolVlabEntry_Val>$amount</VPolVlabEntry_Val><VPolVlabEntry_VlabId>7</VPolVlabEntry_VlabId><VPolVlabEntry_UserOverridden>1</VPolVlabEntry_UserOverridden><VPolVlabEntry_UlabCode>$EA</VPolVlabEntry_UlabCode></Base></VLAB7>" .
+"<VLAB7><Base><VPolVlabEntry_Val>$amount</VPolVlabEntry_Val><VPolVlabEntry_VlabId>7</VPolVlabEntry_VlabId><VPolVlabEntry_UserOverridden>0</VPolVlabEntry_UserOverridden><VPolVlabEntry_UlabCode>$EA</VPolVlabEntry_UlabCode></Base></VLAB7>" .
 "<VLAB8><Trans><VPolVlabEntry_Val>$unit_rate</VPolVlabEntry_Val><VPolVlabEntry_VlabId>8</VPolVlabEntry_VlabId><VPolVlabEntry_UserOverridden>1</VPolVlabEntry_UserOverridden></Trans></VLAB8>" .
 '</PurchaseOrderLine></PurchaseOrder></Payload></SSC>';
 error_log("Create PO: $xml");
