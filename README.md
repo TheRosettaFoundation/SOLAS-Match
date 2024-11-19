@@ -40,6 +40,13 @@ For full terms see License.txt or http://www.gnu.org/licenses/lgpl-3.0.txt
 
 # Release Notes
 
+## Version 16.4
+
+- Admins now have an option via a checkbox, when revoking a task, to add the linguist to the deny list.
+- TMs for Translation steps in Phase are now readonly for self service.
+- Maximum translation deadline is now displayed in a revision task. It is the maximum of those translation tasks that a revision task is dependent on.
+- Standard termbases are added for self service projects.
+
 ## Version 16.3
 
 - A new item has been added to the Admin page "List purchase orders." ( https://twbplatform.org/po_report/ ) shows all purchase orders. Each "PO #" has a link to a version of the SoW Report which contains all tasks of any status for that PO.
