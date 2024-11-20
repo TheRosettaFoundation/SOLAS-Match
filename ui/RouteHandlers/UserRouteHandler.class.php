@@ -1336,9 +1336,7 @@ class UserRouteHandler
                     if (!empty($post['communications_consent'])) $userDao->insert_communications_consent($user_id, 1);
                     else                                         $userDao->insert_communications_consent($user_id, 0);
 
-error_log("count_pairs: $count_pairs");//(**)TEST CODE DELETE
-if (true) {//(**)TEST CODE DELETE AND REMOVE NEXT //
-//                    if ($count_pairs == 0) {
+                    if ($count_pairs == 0) {
                         error_log("Redirecting to edit profile because $user_id has no count_pairs");
                         UserRouteHandler::flash('error', 'You must enter at least one language "I can translate from"/"To", but first click "next" to get to second tab');
                         return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('user-private-profile', ['user_id' => $user_id]));
