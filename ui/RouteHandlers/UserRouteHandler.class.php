@@ -1174,7 +1174,6 @@ class UserRouteHandler
             if (empty($post['sesskey']) || $post['sesskey'] !== $sesskey || empty($post['displayName'])) {
                 UserRouteHandler::flashNow('error', Lib\Localisation::getTranslation('user_private_profile_2'));
             } else {
-                // error_log("POST" . print_r($post, true));
                 $user->setDisplayName($post['displayName']);
                 $user->setBiography($post['biography']);
 
@@ -1208,6 +1207,7 @@ class UserRouteHandler
                 }
 
                 try {
+                    $count_pairs = count($userQualifiedPairs);
                     for ($i = 0; $i < 121; $i++) {
                       if (!empty($post["language_code_source_$i"]) && !empty($post["language_code_target_$i"])) {
                         list($language_code_source, $country_code_source) = $projectDao->convert_selection_to_language_country($post["language_code_source_$i"]);
@@ -1252,7 +1252,7 @@ class UserRouteHandler
                                     }
                                 }
                             }
-
+                            $count_pairs++;
                             $userDao->createUserQualifiedPair(
                                 $user_id,
                                 $language_code_source,
@@ -1282,6 +1282,7 @@ class UserRouteHandler
                           }
                         }
                         if (!$found && !$user_task_limitation_current_user['limit_profile_changes']) {
+                            $count_pairs--;
                             $userDao->removeUserQualifiedPair(
                                 $user_id,
                                 $userQualifiedPair['language_code_source'],
@@ -1335,6 +1336,13 @@ class UserRouteHandler
                     if (!empty($post['communications_consent'])) $userDao->insert_communications_consent($user_id, 1);
                     else                                         $userDao->insert_communications_consent($user_id, 0);
 
+error_log("count_pairs: $count_pairs");//(**)TEST CODE DELETE
+if (true) {//(**)TEST CODE DELETE AND REMOVE NEXT //
+//                    if ($count_pairs == 0) {
+                        error_log("Redirecting to edit profile because $user_id has no count_pairs");
+                        UserRouteHandler::flash('error', 'You must enter at least one language "I can translate from"/"To"');
+                        return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('user-private-profile', ['user_id' => $user_id]));
+                    }
                     $notify = $userDao->terms_accepted($user_id) < 3;
                     $userDao->update_terms_accepted($user_id, 3);
                     if ($notify) $userDao->NotifyRegistered($user_id);
