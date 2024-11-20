@@ -1340,7 +1340,7 @@ error_log("count_pairs: $count_pairs");//(**)TEST CODE DELETE
 if (true) {//(**)TEST CODE DELETE AND REMOVE NEXT //
 //                    if ($count_pairs == 0) {
                         error_log("Redirecting to edit profile because $user_id has no count_pairs");
-                        UserRouteHandler::flash('error', 'You must enter at least one language "I can translate from"/"To"');
+                        UserRouteHandler::flash('error', 'You must enter at least one language "I can translate from"/"To", first click "next" to get to second tab)');
                         return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('user-private-profile', ['user_id' => $user_id]));
                     }
                     $notify = $userDao->terms_accepted($user_id) < 3;
