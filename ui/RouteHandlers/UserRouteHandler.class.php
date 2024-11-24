@@ -1174,7 +1174,6 @@ class UserRouteHandler
             if (empty($post['sesskey']) || $post['sesskey'] !== $sesskey || empty($post['displayName'])) {
                 UserRouteHandler::flashNow('error', Lib\Localisation::getTranslation('user_private_profile_2'));
             } else {
-                // error_log("POST" . print_r($post, true));
                 $user->setDisplayName($post['displayName']);
                 $user->setBiography($post['biography']);
 
