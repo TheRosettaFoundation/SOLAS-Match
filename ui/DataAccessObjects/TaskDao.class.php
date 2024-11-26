@@ -1050,6 +1050,7 @@ error_log("createTaskDirectly: $args");
             }
             $result = LibAPI\PDOWrapper::call('insert_invoice', LibAPI\PDOWrapper::cleanse($proforma) . ',' . LibAPI\PDOWrapper::cleanseWrapStr($invoice_date) . ',' . LibAPI\PDOWrapper::cleanse($row['user_id']) . ',' . LibAPI\PDOWrapper::cleanseWrapStr($row['linguist']) . ',' . LibAPI\PDOWrapper::cleanseWrapStr($row['linguist_t_code']) . ',' . LibAPI\PDOWrapper::cleanse($amount) . ',' . LibAPI\PDOWrapper::cleanse(Common\Lib\UserSession::getCurrentUserID()));
             $invoice_number = $result[0]['id'];
+            if ($proforma) LibAPI\PDOWrapper::call('insert_queue_request', '3,38,' . LibAPI\PDOWrapper::cleanse($row['user_id']) . ',' . LibAPI\PDOWrapper::cleanse($invoice_number) . ",0,0,0,0,''"); // email Linguist asking to send in invoice
 
             foreach ($invoice as $row) {
                 LibAPI\PDOWrapper::call('update_invoice_processed', LibAPI\PDOWrapper::cleanse($row['task_id']) . ',' . LibAPI\PDOWrapper::cleanse($invoice_number));
