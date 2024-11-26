@@ -1800,14 +1800,17 @@ error_log("Sync update_task_from_job() task_id: $task_id, status: $status, job: 
 
     public function poll_sun()
     {
+        if (strpos($this->siteApi, 'twbplatform')) $PRD = 'PRD';
+        else                                       $PRD = 'TST';
+
         if ($result = LibAPI\PDOWrapper::call('get_queue_po_response', '')) {
             $po = $result[0];
             $po_number = $po['po_number'];
             $response = $po['response'];
             $task_id = $po['task_id'];
 
-            $access_token = $this->get_sun_access_token();
-            $ch = curl_init("https://mingle-ionapi.eu3.inforcloudsuite.com/VGK6STV88YNKAKGZ_TST/SUN/payload-v1/api/payload/v1/response?storeResponse=true");
+            $access_token = $this->get_sun_access_token($PRD);
+            $ch = curl_init("https://mingle-ionapi.eu3.inforcloudsuite.com/VGK6STV88YNKAKGZ_$PRD/SUN/payload-v1/api/payload/v1/response?storeResponse=true");
             curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PUT');
             curl_setopt($ch, CURLOPT_POSTFIELDS, $response);
             curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json', "Authorization: Bearer $access_token"]);
@@ -1834,7 +1837,7 @@ error_log("Create PO wait: $po_number, $task_id");
                     'uniqueErrorOutputURI' => true,
                 ];
                 $xml = urlencode('<?xml version="1.0" encoding="UTF-8"?><SSC><SunSystemsContext><BusinessUnit>CLG</BusinessUnit></SunSystemsContext><Payload><PurchaseOrder><PurchaseOrderReference>' . $po_number . '</PurchaseOrderReference></PurchaseOrder></Payload></SSC>');
-                $ch = curl_init("https://mingle-ionapi.eu3.inforcloudsuite.com/VGK6STV88YNKAKGZ_TST/SUN/payload-v1/api/payload/v1/request-text?overwritePayloadURI=false&payload=$xml");
+                $ch = curl_init("https://mingle-ionapi.eu3.inforcloudsuite.com/VGK6STV88YNKAKGZ_$PRD/SUN/payload-v1/api/payload/v1/request-text?overwritePayloadURI=false&payload=$xml");
                 curl_setopt($ch, CURLOPT_POSTFIELDS, "--l0H0X8tcUK3pm\r\nContent-Disposition: form-data; name=\"request\"\r\nContent-Type: application/json\r\n\r\n" . json_encode($data) . "\r\n--l0H0X8tcUK3pm--\r\n");
                 curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: multipart/form-data; boundary=l0H0X8tcUK3pm', 'Accept: application/json', "Authorization: Bearer $access_token"]);
                 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -1850,7 +1853,7 @@ error_log("Create PO fail delete: $result");
             if (!$po['po_create_failed'] || $po['po_create_failed'] > 65) {
                 LibAPI\PDOWrapper::call('increment_po_number', '');
 
-                $access_token = $this->get_sun_access_token();
+                $access_token = $this->get_sun_access_token($PRD);
                 $po_number = 'TO-' . sprintf('%06d', $po['po_number']);
                 $data = [
                     'requestReference' => $po_number,
@@ -1888,7 +1891,7 @@ $xml = '<?xml version="1.0" encoding="UTF-8"?><SSC><SunSystemsContext><BusinessU
 '</PurchaseOrderLine></PurchaseOrder></Payload></SSC>';
 error_log("Create PO: $xml");
                 $xml = urlencode($xml);
-                $ch = curl_init("https://mingle-ionapi.eu3.inforcloudsuite.com/VGK6STV88YNKAKGZ_TST/SUN/payload-v1/api/payload/v1/request-text?overwritePayloadURI=false&payload=$xml");
+                $ch = curl_init("https://mingle-ionapi.eu3.inforcloudsuite.com/VGK6STV88YNKAKGZ_$PRD/SUN/payload-v1/api/payload/v1/request-text?overwritePayloadURI=false&payload=$xml");
                 curl_setopt($ch, CURLOPT_POSTFIELDS, "--l0H0X8tcUK3pm\r\nContent-Disposition: form-data; name=\"request\"\r\nContent-Type: application/json\r\n\r\n" . json_encode($data) . "\r\n--l0H0X8tcUK3pm--\r\n");
                 curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: multipart/form-data; boundary=l0H0X8tcUK3pm', 'Accept: application/json', "Authorization: Bearer $access_token"]);
                 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -1908,10 +1911,10 @@ error_log("Create PO ref: $result");
         if (empty($sun_purchase_requisitions)) $sun_purchase_requisitions = [];
         error_log('count(sun_purchase_requisitions): ' . count($sun_purchase_requisitions));
 
-        $access_token = $this->get_sun_access_token();
+        $access_token = $this->get_sun_access_token($PRD);
 
         for ($page = 0;; $page++) {
-            $ch = curl_init("https://mingle-ionapi.eu3.inforcloudsuite.com/VGK6STV88YNKAKGZ_TST/SUN/businessobject-v1/api/businessobject/v1/CLG/purchase-requisition-lines?purchaseTransactionType=PO002&page=$page");
+            $ch = curl_init("https://mingle-ionapi.eu3.inforcloudsuite.com/VGK6STV88YNKAKGZ_$PRD/SUN/businessobject-v1/api/businessobject/v1/CLG/purchase-requisition-lines?purchaseTransactionType=PO002&page=$page");
             curl_setopt($ch, CURLOPT_HTTPHEADER, ["Authorization: Bearer $access_token"]);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
             curl_setopt($ch, CURLOPT_TIMEOUT, 300);
@@ -1939,9 +1942,9 @@ error_log("Create PO ref: $result");
         }
     }
 
-    public function get_sun_access_token()
+    public function get_sun_access_token($PRD)
     {
-        $ch = curl_init('https://mingle-sso.eu3.inforcloudsuite.com:443/VGK6STV88YNKAKGZ_TST/as/token.oauth2');
+        $ch = curl_init("https://mingle-sso.eu3.inforcloudsuite.com:443/VGK6STV88YNKAKGZ_$PRD/as/token.oauth2");
         $data = [
             'client_id' => Common\Lib\Settings::get('sun.client_id'),
             'client_secret' => Common\Lib\Settings::get('sun.client_secret'),
