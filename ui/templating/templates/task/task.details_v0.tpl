@@ -322,32 +322,6 @@
                         {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
                     </form>
                 {/if}
-
-                {if $paid_status['payment_status'] == 'Pending documentation' || $paid_status['payment_status'] == 'Ready for payment'}
-                    <form method="post" action="{urlFor name="task-view" options="task_id.$task_id"}">
-                        {if $paid_status['payment_status'] == 'Pending documentation'}
-                            <input type="submit" class="btn btn-primary" name="payment_status_submit" value="Change to Ready for payment" />
-                            <input type="hidden" name="mark_payment_status" value="Ready for payment" />
-                        {/if}
-                        {if $paid_status['payment_status'] == 'Ready for payment'}
-                            <input type="submit" class="btn btn-primary" name="payment_status_submit" value="Change to Pending documentation" />
-                            <input type="hidden" name="mark_payment_status" value="Pending documentation" />
-                        {/if}
-                        {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
-                    </form>
-                {/if}
-                {if $paid_status['payment_status'] == 'Ready for payment'}
-                    <form method="post" action="{urlFor name="task-view" options="task_id.$task_id"}">
-                            <input type="submit" class="btn btn-primary" name="payment_status_submit" value="Change to Settled" />
-                            <input type="hidden" name="mark_payment_status" value="Settled" />
-                        {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
-                    </form>
-                    <form method="post" action="{urlFor name="task-view" options="task_id.$task_id"}">
-                        <input type="submit" class="btn btn-primary" name="payment_status_submit" value="Change to Waived" />
-                        <input type="hidden" name="mark_payment_status" value="Waived" />
-                        {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
-                    </form>
-                {/if}
             </td>
             <td>
                 <form method="post" action="{urlFor name="task-view" options="task_id.$task_id"}">

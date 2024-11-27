@@ -1010,49 +1010,6 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
             }
 
             if ($roles & (SITE_ADMIN | PROJECT_OFFICER)) {
-                $updated = 0;
-                if (!empty($post['ready_payment'])) {
-                    $task_ids = preg_split ("/\,/", $post['ready_payment']);
-                    foreach ($task_ids as $id) {                      
-                        $paid_status = $taskDao->get_paid_status($id);
-                        if ($paid_status && $paid_status['payment_status'] == 'Pending documentation') {
-                            $updated++;
-                            $paid_status['payment_status'] = 'Ready for payment';
-                            $paid_status['status_changed'] = date('Y-m-d H:i:s');
-                            $taskDao->update_paid_status($paid_status);
-                        }
-                    }
-                    UserRouteHandler::flashNow('success', "$updated tasks now marked as ready for payment.");
-                }
-
-                if (!empty($post['pending_documentation'])) {
-                    $task_ids = preg_split ("/\,/", $post['pending_documentation']);
-                    foreach ($task_ids as $id) {
-                        $paid_status = $taskDao->get_paid_status($id);
-                        if ($paid_status && $paid_status['payment_status'] == 'Ready for payment') {
-                            $updated++;
-                            $paid_status['payment_status'] = 'Pending documentation';
-                            $paid_status['status_changed'] = date('Y-m-d H:i:s');
-                            $taskDao->update_paid_status($paid_status);
-                        }
-                    }
-                    UserRouteHandler::flashNow('success', "$updated tasks now marked as pending documentation.");
-                }
-
-                if (!empty($post['tasks_settled'])) {
-                    $task_ids = preg_split ("/\,/", $post['tasks_settled']);
-                    foreach ($task_ids as $id) {
-                        $paid_status = $taskDao->get_paid_status($id);
-                        if ($paid_status && $paid_status['payment_status'] == 'Ready for payment') {
-                            $updated++;
-                            $paid_status['payment_status'] = 'Settled';
-                            $paid_status['status_changed'] = date('Y-m-d H:i:s');
-                            $taskDao->update_paid_status($paid_status);
-                        }
-                    }
-                    UserRouteHandler::flashNow('success', "$updated tasks now marked as settled.");
-                }
-
                 if (!empty($post['wordnum']) && !empty($post['word_count'])) {
                     $total_wordCount = $post['word_count'];
                     $task_ids = preg_split("/\,/", $post['wordnum']);

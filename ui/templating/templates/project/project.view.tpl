@@ -358,7 +358,6 @@
                         <option value="all_approval_tasks" id="all_approval_tasks">Select all Approval Tasks</option>
                         {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER)}
                         <option value="all_paid_tasks" id="all_paid_tasks">Select all Paid Tasks</option>
-                        <option value="all_tasks_ready_payment" id="all_tasks_ready_payment">Select all Tasks Ready for Payment</option>
                         {/if}
                         <option value="delesect_all">Deselect all</option>
                     </select>
@@ -466,31 +465,6 @@
         </div>
         <div class="d-flex mt-4 flex-wrap">
         {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER)}
-            <form id="ready_payment" class="bg-light-subtle d-flex flex-column justify-content-center form_action me-2  mb-4 mb-lg-0" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" style="margin-bottom: 2px;">
-            <a class="d-flex p-1 text-muted fs-6 text-decoration-none" onclick="$('#ready_payment').submit();" style="color:#000000;" role="button">
-                <i class="fa-solid fa-money-bill me-2" aria-hidden="true"></i> <span>Set tasks to Ready for Payment</span>
-            </a>
-                <input type="hidden" name="ready_payment" value="" />
-                <input type="hidden" name="ready_payment_status" value="Ready for payment" />
-                {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
-            </form>
-            <form id="pending_documentation" class="bg-light-subtle d-flex flex-column justify-content-center form_action me-2  mb-4 mb-lg-0" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" style="margin-bottom: 2px;">
-            <a class="d-flex p-2 text-muted fs-6 text-decoration-none" onclick="$('#pending_documentation').submit();" style="color:#000000;" role="button">
-                <i class="fa fa-book me-2"  aria-hidden="true"></i> <span> Set tasks to Pending Documentation </span>
-            </a>
-                <input type="hidden" name="pending_documentation" value="" />
-                <input type="hidden" name="ready_payment_status" value="Pending documentation" />
-                {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
-            </form>
-            <form id="tasks_settled" class="bg-light-subtle d-flex flex-column justify-content-center form_action me-2  mb-4 mb-lg-0" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
-            <a class="d-flex  p-1 text-muted fs-6 text-decoration-none" onclick="$('#tasks_settled').submit();" style="color:#000000;" role="button">
-                <i class="fa fa-check-square me-2"  aria-hidden="true"></i><span> Set tasks to Settled </span>
-            </a>
-                <input type="hidden" name="tasks_settled" value="" />
-                <input type="hidden" name="ready_payment_status" value="Settled" />
-                {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
-            </form>
-
             <div class="bg-light-subtle d-flex flex-column justify-content-center form_action me-2  mb-4 mb-lg-0">
             <a class="d-flex p-1 text-muted fs-6 text-decoration-none "  data-bs-toggle="modal" href="#wordcountmodal" role="button">
             <i class="fa-solid fa-check me-2 "></i> <span> Distribute Word Count </span>

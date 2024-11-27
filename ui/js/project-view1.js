@@ -32,9 +32,6 @@ function select() {
             $("[name=complete_selected_tasks]").val(arr);
             $("[name=uncomplete_selected_tasks]").val(arr);
             $("[name=unpublish_selected__translation_tasks]").val(arr);
-            $("[name=ready_payment]").val(arr);
-            $("[name=pending_documentation]").val(arr);
-            $("[name=tasks_settled]").val(arr);
             $("[name=wordnum]").val(arr);
         } else if (valueSelected == "all_revision_tasks") {
             $(":checkbox[data-task-type='3']").prop("checked", true);
@@ -55,9 +52,6 @@ function select() {
             $("[name=cancel]").val(arr);
             $("[name=complete_selected_tasks]").val(arr);
             $("[name=uncomplete_selected_tasks]").val(arr);
-            $("[name=ready_payment]").val(arr);
-            $("[name=pending_documentation]").val(arr);
-            $("[name=tasks_settled]").val(arr);
             $("[name=wordnum]").val(arr);
         } else if (valueSelected == "all_tasks") {
             $('[name=select_task]').prop("checked", true);
@@ -78,9 +72,6 @@ function select() {
             $("[name=cancel]").val(arr);
             $("[name=complete_selected_tasks]").val(arr);
             $("[name=uncomplete_selected_tasks]").val(arr);
-            $("[name=ready_payment]").val(arr);
-            $("[name=pending_documentation]").val(arr);
-            $("[name=tasks_settled]").val(arr);
             $("[name=wordnum]").val(arr);
         } else if (valueSelected == "all_approval_tasks") {
             $(":checkbox[data-task-type='6']").prop("checked", true);
@@ -101,9 +92,6 @@ function select() {
             $("[name=cancel]").val(arr);
             $("[name=complete_selected_tasks]").val(arr);
             $("[name=uncomplete_selected_tasks]").val(arr);
-            $("[name=ready_payment]").val(arr);
-            $("[name=pending_documentation]").val(arr);
-            $("[name=tasks_settled]").val(arr);
             $("[name=wordnum]").val(arr);
         } else if (valueSelected == "all_revtrans_tasks") {
             $(":checkbox[data-task-type='2']").prop("checked", true);
@@ -125,9 +113,6 @@ function select() {
             $("[name=cancel]").val(arr);
             $("[name=complete_selected_tasks]").val(arr);
             $("[name=uncomplete_selected_tasks]").val(arr);
-            $("[name=ready_payment]").val(arr);
-            $("[name=pending_documentation]").val(arr);
-            $("[name=tasks_settled]").val(arr);
             $("[name=wordnum]").val(arr);
         } else if (valueSelected == "all_paid_tasks") {
             $(":checkbox[data-paid='1']").prop("checked", true);
@@ -148,32 +133,6 @@ function select() {
             $("[name=cancel]").val(arr);
             $("[name=complete_selected_tasks]").val(arr);
             $("[name=uncomplete_selected_tasks]").val(arr);
-            $("[name=ready_payment]").val(arr);
-            $("[name=pending_documentation]").val(arr);
-            $("[name=tasks_settled]").val(arr);
-            $("[name=wordnum]").val(arr);
-        } else if (valueSelected == "all_tasks_ready_payment") {
-            $(":checkbox[data-payment-status='Ready for payment']").prop("checked", true);
-            $(':checkbox:checked').each(function () {
-                if ($(this).val() != "on") {
-                arr.push($(this).val());
-                }
-            });
-            $("[name=unpublish_selected_tasks]").val(arr);
-            $("[name=publish_selected_tasks]").val(arr);
-            $("[name=tasks_as_paid]").val(arr);
-            $("[name=tasks_as_unpaid]").val(arr);
-            $("[name=restrict_native_language_and_variant]").val(arr);
-            $("[name=restrict_native_language_only]").val(arr);
-            $("[name=restrict_native_language_none]").val(arr);
-            $("[name=status_as_unclaimed]").val(arr);
-            $("[name=status_as_waiting]").val(arr);
-            $("[name=cancel]").val(arr);
-            $("[name=complete_selected_tasks]").val(arr);
-            $("[name=uncomplete_selected_tasks]").val(arr);
-            $("[name=ready_payment]").val(arr);
-            $("[name=pending_documentation]").val(arr);
-            $("[name=tasks_settled]").val(arr);
             $("[name=wordnum]").val(arr);
         }
         else {
@@ -191,9 +150,6 @@ function select() {
             $("[name=cancel]").val(arr);
             $("[name=complete_selected_tasks]").val(arr);
             $("[name=uncomplete_selected_tasks]").val(arr);
-            $("[name=ready_payment]").val(arr);
-            $("[name=pending_documentation]").val(arr);
-            $("[name=tasks_settled]").val(arr);
             $("[name=wordnum]").val(arr);
         }
     });
@@ -230,9 +186,6 @@ function select() {
         $("[name=cancel]").val(select_all_tasks);
         $("[name=complete_selected_tasks]").val(select_all_tasks);
         $("[name=uncomplete_selected_tasks]").val(select_all_tasks);
-        $("[name=ready_payment]").val(select_all_tasks);
-        $("[name=pending_documentation]").val(select_all_tasks);
-        $("[name=tasks_settled]").val(select_all_tasks);
         $("[name=wordnum]").val(select_all_tasks);
     });
 
@@ -255,9 +208,6 @@ function select() {
         $("[name=cancel]").val(arr_select_task);
         $("[name=complete_selected_tasks]").val(arr_select_task);
         $("[name=uncomplete_selected_tasks]").val(arr_select_task);
-        $("[name=ready_payment]").val(arr_select_task);
-        $("[name=pending_documentation]").val(arr_select_task);
-        $("[name=tasks_settled]").val(arr_select_task);
         $("[name=wordnum]").val(arr_select_task);
     });
 
@@ -333,9 +283,6 @@ function select() {
             $("[name=cancel]").val(arr);
             $("[name=complete_selected_tasks]").val(arr);
             $("[name=uncomplete_selected_tasks]").val(arr);
-            $("[name=ready_payment]").val(arr);
-            $("[name=pending_documentation]").val(arr);
-            $("[name=tasks_settled]").val(arr);
             $("[name=wordnum]").val(arr);
         } else if (valueSelected == "all_translation_tasks_"+$(this).attr("data-select-name")) {
             $(':checkbox[data-lang="'+$(this).attr("data-select-name")+'"][data-task-type="2"]').prop("checked", true);
@@ -357,9 +304,6 @@ function select() {
             $("[name=cancel]").val(arr);
             $("[name=complete_selected_tasks]").val(arr);
             $("[name=uncomplete_selected_tasks]").val(arr);
-            $("[name=ready_payment]").val(arr);
-            $("[name=pending_documentation]").val(arr);
-            $("[name=tasks_settled]").val(arr);
             $("[name=wordnum]").val(arr);
         } else if (valueSelected == "all_revision_tasks_"+$(this).attr("data-select-name")) {
             $(':checkbox[data-lang="'+$(this).attr("data-select-name")+'"][data-task-type="3"]').prop("checked", true);
@@ -381,9 +325,6 @@ function select() {
             $("[name=cancel]").val(arr);
             $("[name=complete_selected_tasks]").val(arr);
             $("[name=uncomplete_selected_tasks]").val(arr);
-            $("[name=ready_payment]").val(arr);
-            $("[name=pending_documentation]").val(arr);
-            $("[name=tasks_settled]").val(arr);
             $("[name=wordnum]").val(arr);
         } else if (valueSelected == "all_approval_tasks_"+$(this).attr("data-select-name")) {
             $(':checkbox[data-lang="'+$(this).attr("data-select-name")+'"][data-task-type="6"]').prop("checked", true);
@@ -405,9 +346,6 @@ function select() {
             $("[name=cancel]").val(arr);
             $("[name=complete_selected_tasks]").val(arr);
             $("[name=uncomplete_selected_tasks]").val(arr);
-            $("[name=ready_payment]").val(arr);
-            $("[name=pending_documentation]").val(arr);
-            $("[name=tasks_settled]").val(arr);
             $("[name=wordnum]").val(arr);
         } else if (valueSelected == "all_revtrans_tasks_"+$(this).attr("data-select-name")) {
             $(':checkbox[data-lang="'+$(this).attr("data-select-name")+'"][data-task-type="2"]').prop("checked", true);
@@ -430,9 +368,6 @@ function select() {
             $("[name=cancel]").val(arr);
             $("[name=complete_selected_tasks]").val(arr);
             $("[name=uncomplete_selected_tasks]").val(arr);
-            $("[name=ready_payment]").val(arr);
-            $("[name=pending_documentation]").val(arr);
-            $("[name=tasks_settled]").val(arr);
             $("[name=wordnum]").val(arr);
         }
          else if (valueSelected == "delesect_all_"+$(this).attr("data-select-name")) {
@@ -454,9 +389,6 @@ function select() {
             $("[name=cancel]").val(arr);
             $("[name=complete_selected_tasks]").val(arr);
             $("[name=uncomplete_selected_tasks]").val(arr);
-            $("[name=ready_payment]").val(arr);
-            $("[name=pending_documentation]").val(arr);
-            $("[name=tasks_settled]").val(arr);
             $("[name=wordnum]").val(arr);
         } else {
             $("[name=unpublish_selected_tasks]").val(arr);
@@ -471,9 +403,6 @@ function select() {
             $("[name=cancel]").val(arr);
             $("[name=complete_selected_tasks]").val(arr);
             $("[name=uncomplete_selected_tasks]").val(arr);
-            $("[name=ready_payment]").val(arr);
-            $("[name=pending_documentation]").val(arr);
-            $("[name=tasks_settled]").val(arr);
             $("[name=wordnum]").val(arr);
         }
     });
