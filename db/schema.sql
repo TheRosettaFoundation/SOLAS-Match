@@ -8736,19 +8736,18 @@ DROP PROCEDURE IF EXISTS `inheritRequiredTaskQualificationLevel`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `inheritRequiredTaskQualificationLevel`(IN taskID BIGINT)
 BEGIN
-    INSERT INTO RequiredTaskQualificationLevels
-        (task_id, required_qualification_level, native_matching)
-    VALUES (
-        taskID,
-        IFNULL(
-            (
-                SELECT oql.required_qualification_level
-                FROM Tasks t
-                JOIN Projects p ON t.project_id=p.id
-                JOIN RequiredOrgQualificationLevels oql ON p.organisation_id=oql.org_id
-                WHERE t.id=taskID
-            ),
-            1),
+    SELECT
+        IFNULL((
+            SELECT oql.required_qualification_level
+            FROM Tasks t
+            JOIN Projects p ON t.project_id=p.id
+            JOIN RequiredOrgQualificationLevels oql ON p.organisation_id=oql.org_id
+            WHERE t.id=taskID
+        ),
+        0)
+    INTO @qualification_level;
+
+    SELECT
         IFNULL(
             (
                 SELECT enl.native_matching_default
@@ -8757,7 +8756,64 @@ BEGIN
                 WHERE t.id=taskID
             ),
             0)
-    );
+    INTO @matching_default;
+
+    IF @matching_default>0 THEN
+        SET @NGO_LINGUIST=2;
+        SET @LINGUIST=1;
+
+        SELECT
+            SUM(users_task_native_matching.native_matching_active_0),
+            SUM(users_task_native_matching.native_matching_active_1),
+            SUM(users_task_native_matching.native_matching_active_2)
+        INTO @matching_0, @matching_1, @matching_2
+        FROM (
+            SELECT
+                t.id AS task_id,
+                1 AS native_matching_active_0,
+                IF(t.`language_id-target`=u.language_id, 1, 0) AS native_matching_active_1,
+                IF(t.`language_id-target`=u.language_id AND (t.`country_id-target`=MAX(ucv.variant_id) OR t.`country_id-target`=MAX(ucv.variant_id0) OR t.`country_id-target`=MAX(ucv.variant_id1)), 1, 0) AS native_matching_active_2
+            FROM Tasks                          t
+            JOIN Projects                       p ON t.project_id=p.id
+            JOIN task_type_details            ttd ON t.`task-type_id`=ttd.type_enum
+            JOIN UserQualifiedPairs           uqp ON
+                t.`language_id-target`=uqp.language_id_target AND
+                t.`country_id-target`=uqp.country_id_target AND
+                (t.`language_id-source`=uqp.language_id_source OR ttd.source_and_target=0) AND
+                uqp.qualification_level>=@qualification_level
+            JOIN Users                          u ON uqp.user_id=u.id
+            JOIN user_country_id_to_variant   ucv ON u.country_id<=>ucv.country_id
+            JOIN TaskClaims                    tc ON u.id=tc.user_id AND tc.`claimed-time`>DATE_SUB(NOW(), INTERVAL 1 YEAR)
+            JOIN Admins                         a ON uqp.user_id=a.user_id
+            LEFT JOIN TaskTranslatorBlacklist  dl ON dl.task_id=taskID AND uqp.user_id=dl.user_id
+            LEFT JOIN SpecialTranslators       st ON u.id=st.user_id
+            LEFT JOIN Badges                    b ON p.organisation_id=b.owner_id AND b.title='Qualified'
+            LEFT JOIN RestrictedTasks           r ON t.id=r.restricted_task_id
+            WHERE
+                t.id=taskID AND
+                (a.roles=@LINGUIST OR ((a.roles=@NGO_LINGUIST OR a.roles=(@NGO_LINGUIST + @LINGUIST)) AND p.organisation_id=a.organisation_id)) AND
+                dl.user_id IS NULL AND
+                (st.user_id IS NULL OR st.type=0) AND
+                (
+                    r.restricted_task_id IS NULL OR
+                    b.id IS NULL OR
+                    b.id IN (SELECT ub.badge_id FROM UserBadges ub WHERE ub.user_id=uqp.user_id)
+                )
+            GROUP BY t.id, uqp.user_id
+        ) AS users_task_native_matching
+        GROUP BY users_task_native_matching.task_id;
+
+        IF @matching_0=0 THEN
+            SET @matching_default=0;
+        ELSEIF @matching_1=0 THEN
+            SET @matching_default=0;
+        ELSEIF @matching_2=0 THEN
+            SET @matching_default=1;
+        END IF;
+    END IF;
+
+    INSERT INTO RequiredTaskQualificationLevels (task_id, required_qualification_level,   native_matching)
+                                         VALUES (taskID,          @qualification_level, @matching_default);
 END//
 DELIMITER ;
 
