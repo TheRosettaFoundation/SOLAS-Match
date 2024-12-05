@@ -151,7 +151,7 @@
                             <li class="nav-item">
                                 <a href="https://form.asana.com?k=dlsF11XkOwpfFllbq325dg&d=170818793545926" target="_blank" class=" fs-5 nav-link fw-bold">Feedback?</a>
                             </li>
-                            {if !empty($user) && Settings::get('banner.enabled') == 'v' && in_array($user->getNativeLocale()->getLanguageCode(), ['ha', 'kr', 'shu']) && in_array($user->getId(), [184722,39794,39707,38260,29387,39223,21773,28600,73316,35154,22929,101194,21221,38255,58843,184885,45796,33415,30433,72412,32887,30925,32886,24797,26079,96332,24688,24697,26843,25241, 26170])}
+                            {if !empty($user) && Settings::get('banner.enabled') == 'v' && $user->getNativeLocale() != null && in_array($user->getNativeLocale()->getLanguageCode(), ['ha', 'kr', 'shu']) && in_array($user->getId(), [184722,39794,39707,38260,29387,39223,21773,28600,73316,35154,22929,101194,21221,38255,58843,184885,45796,33415,30433,72412,32887,30925,32886,24797,26079,96332,24688,24697,26843,25241, 26170])}
                             <li class="nav-item">
                                 <a href="https://dev.twbvoice.org" target="_blank" class=" fs-5 nav-link fw-bold">TWB Voice</a>
                             </li>
@@ -205,7 +205,7 @@
                 </div>
             </div>
         {/if}
-        {if !empty($user) && Settings::get('banner.enabled') == 'v' && in_array($user->getNativeLocale()->getLanguageCode(), ['ha', 'kr', 'shu']) && in_array($user->getId(), [184722,39794,39707,38260,29387,39223,21773,28600,73316,35154,22929,101194,21221,38255,58843,184885,45796,33415,30433,72412,32887,30925,32886,24797,26079,96332,24688,24697,26843,25241, 26170])}
+        {if !empty($user) && Settings::get('banner.enabled') == 'v' && $user->getNativeLocale() != null && in_array($user->getNativeLocale()->getLanguageCode(), ['ha', 'kr', 'shu']) && in_array($user->getId(), [184722,39794,39707,38260,29387,39223,21773,28600,73316,35154,22929,101194,21221,38255,58843,184885,45796,33415,30433,72412,32887,30925,32886,24797,26079,96332,24688,24697,26843,25241, 26170])}
             <div id="banner-container" class="container">
                 <div id="banner-container-blocks" class="d-flex justify-content-center" >
                     <a href="https://dev.twbvoice.org" target="_blank">
