@@ -1667,6 +1667,9 @@ class OrgRouteHandler
                     if (preg_match('/^\d*$/', $post['asana_board'])) $userDao->set_asana_board_for_org($org_id, $post['asana_board']);
                     else UserRouteHandler::flash('error', 'Asana ID must consist only of decimal digits.');
                 }
+                if (isset($post['set_mt_for_org'])) {
+                    $userDao->set_mt_for_org($org_id, empty($post['mt_for_org']) ? 0 : 1);
+                }
             }
         }
         $orgMemberList = $adminDao->getOrgMembers($org_id);
@@ -1717,6 +1720,7 @@ class OrgRouteHandler
                 'no_subscription' => $no_subscription,
                 'subscription' => $subscription,
                 'asana_board_for_org' => $userDao->get_asana_board_for_org($org_id),
+                'mt_for_org' => $userDao->get_mt_for_org($org_id),
                 'required_qualification_level' => $userDao->getRequiredOrgQualificationLevel($org_id),
                 'siteName' => $siteName,
         ));

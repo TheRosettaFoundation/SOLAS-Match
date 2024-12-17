@@ -739,6 +739,26 @@
         {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
     </form>
 
+    <p style="margin-bottom: 40px"></p>
+    <h1 class="page-header">Resources</h1>
+    <form method="post" action="{urlFor name="org-public-profile" options="org_id.$org_id"}">
+        <table>
+            <tr>
+                <td>
+                    <input type="checkbox" name="mt_for_org" id="mt_for_org" value="1" {if $mt_for_org}checked="checked"{/if} /> Use machine translation in projects for this organization
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <button type="submit" value="set_mt_for_org" name="set_mt_for_org" class="btn btn-primary">
+                        <i class="icon-refresh icon-white"></i> Update Resources
+                    </button>
+                </td>
+            </tr>
+        </table>
+        {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
+    </form>
+
     <p style="margin-bottom: 40px" />
     <h1 class="page-header">
         Subscription
