@@ -2282,6 +2282,28 @@ error_log("TM added: $result");//(**)
         curl_close($ch);
         error_log("termBases: $result");
 
+        $mtSettingsPerLangList = [];
+        $sources = ['en_gb', 'en_us'];
+        $targets = ['ar_sa', 'es_419', 'es_co', 'es_es', 'fr_ca', 'fr_cd', 'fr_fr', 'pt_br', 'pt_mz', 'pt_pt', 'zh_cn', 'zh_tw'];
+        foreach ($langs as $language) {
+            if (in_array($sourceLang, $sources) && in_array($language, $targets) || in_array($language, $sources) && in_array($sourceLang, $targets)) {
+                // Add MT for $language
+                $mtSettingsPerLangList[] = ['targetLang' => $language, 'machineTranslateSettings' => ['id' => '1618122']]; // uid: l70q1FxAYWDLC4Eug90aJl, name: Main MT
+            }
+        }
+        if (!empty($mtSettingsPerLangList) && $this->get_mt_for_org($project->getOrganisationId())) {
+            $payload = json_encode(['mtSettingsPerLangList' => $mtSettingsPerLangList]);
+            error_log("Add MT $payload");
+            $ch = curl_init("https://cloud.memsource.com/web/api2/v1/projects/{$project_result['uid']}/mtSettingsPerLanguage");
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
+            curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PUT');
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json', $authorization]);
+            $result = curl_exec($ch);
+            curl_close($ch);
+            error_log("mtSettingsPerLanguage: $result");
+        }
+
         // Create Job
         $url = "https://cloud.memsource.com/web/api2/v1/projects/{$project_result['uid']}/jobs";
         $ch = curl_init($url);
@@ -2526,6 +2548,17 @@ error_log(print_r($result, true));//(**)
     public function set_asana_board_for_org($org_id, $asana_board)
     {
         LibAPI\PDOWrapper::call('set_asana_board_for_org', LibAPI\PDOWrapper::cleanse($org_id) . ',' . LibAPI\PDOWrapper::cleanse($asana_board));
+    }
+
+    public function get_mt_for_org($org_id)
+    {
+        $result = LibAPI\PDOWrapper::call('get_mt_for_org', LibAPI\PDOWrapper::cleanse($org_id));
+        return empty($result) ? 1 : 0;
+    }
+
+    public function set_mt_for_org($org_id, $val)
+    {
+        LibAPI\PDOWrapper::call('set_mt_for_org', LibAPI\PDOWrapper::cleanse($org_id) . ',' . LibAPI\PDOWrapper::cleanse($val));
     }
 
     public function update_phrase_field($project_uid, $field, $value, $timeout)

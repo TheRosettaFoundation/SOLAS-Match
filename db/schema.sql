@@ -13036,6 +13036,9 @@ DELIMITER ;
 CREATE TABLE task_resource_infos (
   task_id   BIGINT UNSIGNED NOT NULL,
   MT_name   VARCHAR(128) COLLATE utf8mb4_unicode_ci NOT NULL,
+  MT_id     BIGINT UNSIGNED NOT NULL DEFAULT 0,
+  MT_uid    VARCHAR(30) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  MT_type   VARCHAR(128) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
   TB_number INT NOT NULL,
   TM_number INT NOT NULL,
   md5_hash  BINARY(32) DEFAULT '00000000000000000000000000000000',
@@ -13056,6 +13059,9 @@ DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_task_resource_info`(
     IN p_task_id   BIGINT UNSIGNED,
     IN p_MT_name   VARCHAR(128),
+    IN p_MT_id     BIGINT UNSIGNED,
+    IN p_MT_uid    VARCHAR(30),
+    IN p_MT_type   VARCHAR(128),
     IN p_TB_number INT,
     IN p_TM_number INT,
     IN p_md5_hash  BINARY(32))
@@ -13063,12 +13069,18 @@ BEGIN
     INSERT INTO task_resource_infos (
         task_id,
         MT_name,
+        MT_id,
+        MT_uid,
+        MT_type,
         TB_number,
         TM_number,
         md5_hash)
     VALUES (
         p_task_id,
         p_MT_name,
+        p_MT_id,
+        p_MT_uid,
+        p_MT_type,
         p_TB_number,
         p_TM_number,
         p_md5_hash);
@@ -13678,6 +13690,33 @@ DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `set_asana_board_for_org`(IN oID INT UNSIGNED, IN aID BIGINT UNSIGNED)
 BEGIN
     REPLACE INTO asana_board_for_org (org_id, asana_board) VALUES (oID, aID);
+END//
+DELIMITER ;
+
+
+CREATE TABLE IF NOT EXISTS `no_mt_for_orgs` (
+  org_id INT UNSIGNED NOT NULL,
+  PRIMARY KEY (org_id),
+  CONSTRAINT FK_no_mt_for_orgs_org_id FOREIGN KEY (org_id) REFERENCES Organisations (id) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+DROP PROCEDURE IF EXISTS `get_mt_for_org`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_mt_for_org`(IN oID INT UNSIGNED)
+BEGIN
+    SELECT * FROM no_mt_for_orgs WHERE org_id=oID;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `set_mt_for_org`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `set_mt_for_org`(IN oID INT UNSIGNED, IN val INT)
+BEGIN
+    IF val=1 THEN
+        DELETE FROM no_mt_for_orgs WHERE org_id=oID;
+    ELSE
+        INSERT INTO no_mt_for_orgs (org_id) VALUES (oID);
+    END IF;
 END//
 DELIMITER ;
 

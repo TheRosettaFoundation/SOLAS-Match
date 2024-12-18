@@ -2502,7 +2502,7 @@ error_log("fields: $fields targetlanguages: $targetlanguages");//(**)
                 $memsource_project_uid = $memsource_project['memsource_project_uid'];
 
                 $url = "https://cloud.memsource.com/web/api2/v1/projects/$memsource_project_uid/jobs/$memsource_task_uid/translationResources";
-                $ch = curl_init("https://cloud.memsource.com/web/api2/v1/projects/$memsource_project_uid/jobs/$memsource_task_uid/translationResources");
+                $ch = curl_init($url);
                 curl_setopt($ch, CURLOPT_HTTPHEADER, ["Authorization: Bearer $memsourceApiToken"]);
                 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
                 curl_setopt($ch, CURLOPT_TIMEOUT, 300); // Just so it does not hang forever and block because of file lock
@@ -2512,8 +2512,15 @@ error_log("fields: $fields targetlanguages: $targetlanguages");//(**)
                 if ($responseCode == 200) {
                     $resultset = json_decode($result, true);
                     $MT_name = '';
-                    if (!empty($resultset['machineTranslateSettings'])) $MT_name = !empty($resultset['machineTranslateSettings']['name']) ? mb_substr($resultset['machineTranslateSettings']['name'], 0, 128) : '';
-
+                    $MT_id = 0;
+                    $MT_uid = '';
+                    $MT_type = '';
+                    if (!empty($resultset['machineTranslateSettings'])) {
+                        $MT_name = !empty($resultset['machineTranslateSettings']['name']) ? mb_substr($resultset['machineTranslateSettings']['name'], 0, 128) : '';
+                        $MT_id   = !empty($resultset['machineTranslateSettings']['id'])   ?           $resultset['machineTranslateSettings']['id']            : 0;
+                        $MT_uid  = !empty($resultset['machineTranslateSettings']['uid'])  ?           $resultset['machineTranslateSettings']['uid']           : '';
+                        $MT_type = !empty($resultset['machineTranslateSettings']['type']) ? mb_substr($resultset['machineTranslateSettings']['type'], 0, 128) : '';
+                    }
                         $task_resource_TBs = [];
                         if (empty($resultset['termBases'])) $resultset['termBases'] = [];
                         foreach ($resultset['termBases'] as $item) {
@@ -2537,7 +2544,7 @@ error_log("fields: $fields targetlanguages: $targetlanguages");//(**)
                                 'targetLang' => "{$language_code}-{$country_code}"
                             ];
                         }
-                        $projectDao->update_task_resource_info($task_id, $MT_name, $task_resource_TBs, $task_resource_TMs, $url);
+                        $projectDao->update_task_resource_info($task_id, $MT_name, $MT_id, $MT_uid, $MT_type, $task_resource_TBs, $task_resource_TMs, $url);
                 } else error_log("$task_id $url responseCode: $responseCode $result");
                 if (++$count >= 20) break;
             }
