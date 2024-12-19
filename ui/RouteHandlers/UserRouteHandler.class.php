@@ -2352,6 +2352,8 @@ class UserRouteHandler
         $supported_ngos_paid = $userDao->supported_ngos_paid($user_id);
 
         $show_create_memsource_user = ($roles & SITE_ADMIN) && !$userDao->get_memsource_user($user_id) && ($adminDao->get_roles($user_id) & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER));
+        if (!$show_create_memsource_user && ($roles & SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER) && !$userDao->get_memsource_user($user_id) && in_array($adminDao->get_roles($user_id), [LINGUIST, NGO_LINGUIST, LINGUIST | NGO_LINGUIST]))
+            $show_create_memsource_user = 2;
 
         if ($request->getMethod() === 'POST') {
             $post = $request->getParsedBody();
@@ -2454,7 +2456,7 @@ error_log("result: $result");//(**)
             }
 
             if ($show_create_memsource_user && !empty($post['mark_create_memsource_user'])) {
-                if ($memsource_user_uid = $userDao->create_memsource_user($user_id)) {
+                if ($memsource_user_uid = $userDao->create_memsource_user($user_id, $show_create_memsource_user)) {
                     UserRouteHandler::flashNow('success', "Memsource user $memsource_user_uid created");
                     $show_create_memsource_user = 0;
                 } else UserRouteHandler::flashNow('error', "Unable to create Memsource user for $user_id");

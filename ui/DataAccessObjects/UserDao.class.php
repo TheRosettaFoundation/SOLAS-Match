@@ -689,7 +689,7 @@ error_log("claimTask_shell($userId, $taskId)");
         }
     }
 
-    public function create_memsource_user($user_id)
+    public function create_memsource_user($user_id, $show_create_memsource_user)
     {
         $ch = curl_init('https://cloud.memsource.com/web/api2/v3/users');
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -698,6 +698,23 @@ error_log("claimTask_shell($userId, $taskId)");
         $user_country = $this->getUserPersonalInformation($user_id)->country;
         $timezones = Common\Lib\MemsourceTimezone::timezones();
         $timezone = !empty($timezones[$user_country]) ? $timezones[$user_country] : 'Europe/Rome';
+        if ($show_create_memsource_user === 2) {
+            $data = [
+                'email' => $user_info->email,
+                'password' => 'Ab#0' . uniqid(),
+                'firstName' => str_replace(['<', '>', '&', '%', '{', '}', '[', ']', '^', '#', '*', '$'], '_', $user_personal_info->firstName),
+                'lastName'  => str_replace(['<', '>', '&', '%', '{', '}', '[', ']', '^', '#', '*', '$'], '_', $user_personal_info->lastName),
+                'role' => Common\Enums\MemsourceRoleEnum::LINGUIST,
+                'timezone' => $timezone,
+                'userName' => $this->usernamePrefix . str_replace(['<', '>', '&', '%', '{', '}', '[', ']', '^', '#', '*', '$'], '', $user_info->display_name) . "_$user_id",
+                'receiveNewsletter' => false,
+                'active' => true,
+                'editAllTermsInTB' => false,
+                'editTranslationsInTM' => false,
+                'enableMT' => true,
+                'mayRejectJobs' => false,
+            ];
+        } else {
         $data = array(
             'email' => $user_info->email,
             'password' => 'Ab#0' . uniqid(),
@@ -744,6 +761,7 @@ error_log("claimTask_shell($userId, $taskId)");
             'dashboardSetting' => 'OWN_DATA',
             'setupServer' => false,
         );
+        }
         $payload = json_encode($data);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
         $authorization = 'Authorization: Bearer ' . $this->memsourceApiToken;
