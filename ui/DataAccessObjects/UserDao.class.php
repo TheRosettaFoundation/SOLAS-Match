@@ -2254,7 +2254,7 @@ error_log("TM added: $result");//(**)
         $data = [
             'translationMemorySettings' => [
                 'useTranslationMemory' => true,
-                'translationMemoryThreshold' => .7,
+                'translationMemoryThreshold' => .8,
                 'confirm100PercentMatches' => false,
                 'confirm101PercentMatches' => true,
                 'lock100PercentMatches' => false,
@@ -2265,7 +2265,7 @@ error_log("TM added: $result");//(**)
                 'confirmRepetitions' => true,
             ],
             'machineTranslationSettings' => [
-                'machineTranslation' => false,
+                'machineTranslation' => true,
             ],
             'nonTranslatableSettings' => [
                 'preTranslateNonTranslatables' => true,
