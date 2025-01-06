@@ -1666,9 +1666,8 @@ $sql = 'SELECT u.id AS userid, u.email, u.firstname, u.lastname, c.id AS coursei
      JOIN mdl_course              c ON e.courseid=c.id
      JOIN mdl_user                u ON ue.userid=u.id
 LEFT JOIN mdl_course_completions cc ON c.id=cc.course AND u.id=cc.userid
-LEFT JOIN mdl_user_lastaccess    la ON c.id=la.courseid AND u.id=la.userid'
-WHERE deleted!=1;
-NEED TO GROUP SO ONLUY ONE id, c.id IF MULT course completions
+LEFT JOIN mdl_user_lastaccess    la ON c.id=la.courseid AND u.id=la.userid
+WHERE deleted!=1';
             if ($result = $conn->query($sql)) {
                 foreach ($result as $row) {
                     if (!empty($row['email'])) {
