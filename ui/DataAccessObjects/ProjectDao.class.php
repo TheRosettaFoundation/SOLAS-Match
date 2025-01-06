@@ -1651,6 +1651,57 @@ error_log("Sync update_task_from_job() task_id: $task_id, status: $status, job: 
         }
     }
 
+    public function moodle_db()
+    {
+        $data = LibAPI\PDOWrapper::call('get_moodle_datas', '');
+        if (empty($data)) $data = [];
+        $moodle_hashs = [];
+        foreach ($data as $datum) $moodle_hashs[$datum['userid'] . '#' . $datum['courseid']] = $datum['md5_hash'];
+        unset($data);
+        try {
+            $conn = new \PDO('mysql:host=88.198.8.249;dbname=moodle;port=3306', 'moodle', Common\Lib\Settings::get('moodle.db_pw'), [\PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8']);
+$sql = 'SELECT u.id AS userid, u.email, u.firstname, u.lastname, c.id AS courseid, c.fullname, ue.timestart, cc.timeenrolled, cc.timestarted, cc.timecompleted, la.timeaccess
+     FROM mdl_user_enrolments    ue
+     JOIN mdl_enrol               e ON ue.enrolid=e.id
+     JOIN mdl_course              c ON e.courseid=c.id
+     JOIN mdl_user                u ON ue.userid=u.id
+LEFT JOIN mdl_course_completions cc ON c.id=cc.course AND u.id=cc.userid
+LEFT JOIN mdl_user_lastaccess    la ON c.id=la.courseid AND u.id=la.userid'
+WHERE deleted!=1;
+NEED TO GROUP SO ONLUY ONE id, c.id IF MULT course completions
+            if ($result = $conn->query($sql)) {
+                foreach ($result as $row) {
+                    if (!empty($row['email'])) {
+                        $hash = '';
+                        foreach ($row as $v) $hash .= $v;
+                        $insert = -1;
+                        $index = $row['userid'] . '#' . $row['courseid'];
+                        if (empty($moodle_hashs[$index])) $insert = 1;
+                        elseif ($moodle_hashs[$index] != md5($hash)) $insert = 0;
+                        if ($insert != -1) {
+                            $args =
+                            LibAPI\PDOWrapper::cleanse($row['userid']) . ',' .
+                            LibAPI\PDOWrapper::cleanseWrapStr($row['email']) . ',' .
+                            LibAPI\PDOWrapper::cleanseNullOrWrapStr($row['firstname']) . ',' .
+                            LibAPI\PDOWrapper::cleanseNullOrWrapStr($row['lastname']) . ',' .
+                            LibAPI\PDOWrapper::cleanse($row['courseid']) . ',' .
+                            LibAPI\PDOWrapper::cleanseNullOrWrapStr($row['fullname']) . ',' .
+                            LibAPI\PDOWrapper::cleanseNull($row['timestart'] . ',' .
+                            LibAPI\PDOWrapper::cleanseNull($row['timeenrolled'] . ',' .
+                            LibAPI\PDOWrapper::cleanseNull($row['timestarted'] . ',' .
+                            LibAPI\PDOWrapper::cleanseNull($row['timecompleted'] . ',' .
+                            LibAPI\PDOWrapper::cleanseNull($row['timeaccess'] . ',' .
+                            LibAPI\PDOWrapper::cleanseWrapStr(md5($hash));
+                            LibAPI\PDOWrapper::call('insert_update_moodle_data', "$insert,$args");
+                        }
+                    }
+                }
+                $result = null;
+            }
+        } catch (PDOException $e) {}
+        $conn = null;
+    }
+
     public function follow_asana_tasks($project_id, $user_id)
     {
         $this->follow_unfollow_asana_tasks('addFollowers', $project_id, $user_id);
