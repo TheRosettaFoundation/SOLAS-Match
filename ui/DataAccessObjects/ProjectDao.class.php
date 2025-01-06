@@ -1685,11 +1685,11 @@ WHERE deleted!=1';
                             LibAPI\PDOWrapper::cleanseNullOrWrapStr($row['lastname']) . ',' .
                             LibAPI\PDOWrapper::cleanse($row['courseid']) . ',' .
                             LibAPI\PDOWrapper::cleanseNullOrWrapStr($row['fullname']) . ',' .
-                            LibAPI\PDOWrapper::cleanseNull($row['timestart'] . ',' .
-                            LibAPI\PDOWrapper::cleanseNull($row['timeenrolled'] . ',' .
-                            LibAPI\PDOWrapper::cleanseNull($row['timestarted'] . ',' .
-                            LibAPI\PDOWrapper::cleanseNull($row['timecompleted'] . ',' .
-                            LibAPI\PDOWrapper::cleanseNull($row['timeaccess'] . ',' .
+                            LibAPI\PDOWrapper::cleanseNull($row['timestart']) . ',' .
+                            LibAPI\PDOWrapper::cleanseNull($row['timeenrolled']) . ',' .
+                            LibAPI\PDOWrapper::cleanseNull($row['timestarted']) . ',' .
+                            LibAPI\PDOWrapper::cleanseNull($row['timecompleted']) . ',' .
+                            LibAPI\PDOWrapper::cleanseNull($row['timeaccess']) . ',' .
                             LibAPI\PDOWrapper::cleanseWrapStr(md5($hash));
                             LibAPI\PDOWrapper::call('insert_update_moodle_data', "$insert,$args");
                         }
