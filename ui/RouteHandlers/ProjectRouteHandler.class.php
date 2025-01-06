@@ -89,6 +89,11 @@ class ProjectRouteHandler
             ->setName('task_cron_1_minute');
 
         $app->get(
+            '/cron_every_hour',
+            '\SolasMatch\UI\RouteHandlers\ProjectRouteHandler:cron_every_hour')
+            ->setName('cron_every_hour');
+
+        $app->get(
             '/project/{project_id}/getwordcount[/]',
             '\SolasMatch\UI\RouteHandlers\ProjectRouteHandler:project_get_wordcount')
             ->setName('project_get_wordcount');
@@ -2808,6 +2813,13 @@ error_log("get_queue_asana_projects: $projectId");//(**)
         }
         fclose($fp_for_lock);
 
+        die;
+    }
+
+    public function cron_every_hour(Request $request)
+    {
+        $projectDao = new DAO\ProjectDao();
+        $projectDao->moodle_db();
         die;
     }
 

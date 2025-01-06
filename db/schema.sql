@@ -2336,6 +2336,7 @@ BEGIN
 
         SELECT email INTO @email FROM Users WHERE id=userId;
         DELETE FROM GoogleUserDetails WHERE email=@email;
+        DELETE FROM moodle_datas WHERE email=@email;
 
         UPDATE UserPersonalInformation SET
            `first-name`='',
