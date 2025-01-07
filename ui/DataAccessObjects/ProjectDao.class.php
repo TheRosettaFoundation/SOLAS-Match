@@ -1660,14 +1660,17 @@ error_log("Sync update_task_from_job() task_id: $task_id, status: $status, job: 
         unset($data);
         try {
             $conn = new \PDO('mysql:host=88.198.8.249;dbname=moodle;port=3306', 'moodle', Common\Lib\Settings::get('moodle.db_pw'), [\PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8']);
-$sql = 'SELECT u.id AS userid, u.email, u.firstname, u.lastname, c.id AS courseid, c.fullname, ue.timestart, cc.timeenrolled, cc.timestarted, cc.timecompleted, la.timeaccess
-     FROM mdl_user_enrolments    ue
-     JOIN mdl_enrol               e ON ue.enrolid=e.id
-     JOIN mdl_course              c ON e.courseid=c.id
-     JOIN mdl_user                u ON ue.userid=u.id
-LEFT JOIN mdl_course_completions cc ON c.id=cc.course AND u.id=cc.userid
-LEFT JOIN mdl_user_lastaccess    la ON c.id=la.courseid AND u.id=la.userid
-WHERE deleted=0';
+$sql = 'SELECT u.id AS userid, u.email, u.firstname, u.lastname, c.id AS courseid, c.fullname, ue.timestart, cc.timeenrolled, cc.timestarted, cc.timecompleted, la.timeaccess,
+               SUM(IF(cr.id IS NOT NULL, 1, 0)) AS completions
+     FROM mdl_user_enrolments              ue
+     JOIN mdl_enrol                         e ON ue.enrolid=e.id
+     JOIN mdl_course                        c ON e.courseid=c.id
+     JOIN mdl_user                          u ON ue.userid=u.id
+LEFT JOIN mdl_course_completions           cc ON c.id=cc.course AND u.id=cc.userid
+LEFT JOIN mdl_user_lastaccess              la ON c.id=la.courseid AND u.id=la.userid
+LEFT JOIN mdl_course_completion_crit_compl cr ON c.id=cr.course AND u.id=cr.userid
+WHERE deleted=0
+GROUP BY c.id, u.id';
             if ($result = $conn->query($sql)) {
                 $max_criteria = [];
                 foreach ($result as $row) {
