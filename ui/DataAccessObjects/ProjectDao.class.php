@@ -1672,14 +1672,17 @@ LEFT JOIN mdl_course_completion_crit_compl cr ON c.id=cr.course AND u.id=cr.user
 WHERE deleted=0
 GROUP BY c.id, u.id';
             if ($result = $conn->query($sql)) {
+                $data = [];
                 $max_criteria = [];
                 foreach ($result as $row) {
+                    $data[] = $row;
                     if (!empty($row['completions'])) {
                         if (empty($max_criteria[$row['courseid']])) $max_criteria[$row['courseid']] = $row['completions'];
                         else                                        $max_criteria[$row['courseid']] = max($row['completions'], $max_criteria[$row['courseid']]);
                     }
                 }
-                foreach ($result as $row) {
+                $result = null;
+                foreach ($data as $row) {
                     if (!empty($row['email'])) {
                         $hash = '';
                         foreach ($row as $v) $hash .= $v;
@@ -1707,7 +1710,6 @@ GROUP BY c.id, u.id';
                         }
                     }
                 }
-                $result = null;
             }
         } catch (PDOException $e) {}
         $conn = null;
