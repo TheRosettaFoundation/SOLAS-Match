@@ -1700,6 +1700,8 @@ GROUP BY c.id, u.id';
                             LibAPI\PDOWrapper::cleanseNull($row['timestarted']) . ',' .
                             LibAPI\PDOWrapper::cleanseNull($row['timecompleted']) . ',' .
                             LibAPI\PDOWrapper::cleanseNull($row['timeaccess']) . ',' .
+                            LibAPI\PDOWrapper::cleanse($row['completions']) . ',' .
+                            LibAPI\PDOWrapper::cleanse(!empty($max_criteria[$row['courseid']]) ? round($row['completions']/$max_criteria[$row['courseid']]) : 0) . ',' .
                             LibAPI\PDOWrapper::cleanseWrapStr(md5($hash));
                             LibAPI\PDOWrapper::call('insert_update_moodle_data', "$insert,$args");
                         }
