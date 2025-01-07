@@ -1667,7 +1667,7 @@ $sql = 'SELECT u.id AS userid, u.email, u.firstname, u.lastname, c.id AS coursei
      JOIN mdl_user                u ON ue.userid=u.id
 LEFT JOIN mdl_course_completions cc ON c.id=cc.course AND u.id=cc.userid
 LEFT JOIN mdl_user_lastaccess    la ON c.id=la.courseid AND u.id=la.userid
-WHERE deleted!=1';
+WHERE deleted=0';
             if ($result = $conn->query($sql)) {
                 foreach ($result as $row) {
                     if (!empty($row['email'])) {
