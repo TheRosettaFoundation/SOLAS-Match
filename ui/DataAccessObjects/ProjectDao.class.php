@@ -1669,6 +1669,13 @@ LEFT JOIN mdl_course_completions cc ON c.id=cc.course AND u.id=cc.userid
 LEFT JOIN mdl_user_lastaccess    la ON c.id=la.courseid AND u.id=la.userid
 WHERE deleted=0';
             if ($result = $conn->query($sql)) {
+                $max_criteria = [];
+                foreach ($result as $row) {
+                    if (!empty($row['completions'])) {
+                        if (empty($max_criteria[$row['courseid']])) $max_criteria[$row['courseid']] = $row['completions'];
+                        else                                        $max_criteria[$row['courseid']] = max($row['completions'], $max_criteria[$row['courseid']]);
+                    }
+                }
                 foreach ($result as $row) {
                     if (!empty($row['email'])) {
                         $hash = '';
