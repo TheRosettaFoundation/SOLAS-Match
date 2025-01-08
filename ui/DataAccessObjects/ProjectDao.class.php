@@ -1653,6 +1653,9 @@ error_log("Sync update_task_from_job() task_id: $task_id, status: $status, job: 
 
     public function moodle_db()
     {
+        $count_inserted = 0;
+        $count_updated = 0;
+        $count_skipped = 0;
         $data = LibAPI\PDOWrapper::call('get_moodle_datas', '');
         if (empty($data)) $data = [];
         $moodle_hashs = [];
@@ -1660,16 +1663,29 @@ error_log("Sync update_task_from_job() task_id: $task_id, status: $status, job: 
         unset($data);
         try {
             $conn = new \PDO('mysql:host=88.198.8.249;dbname=moodle;port=3306', 'moodle', Common\Lib\Settings::get('moodle.db_pw'), [\PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8']);
-$sql = 'SELECT u.id AS userid, u.email, u.firstname, u.lastname, c.id AS courseid, c.fullname, ue.timestart, cc.timeenrolled, cc.timestarted, cc.timecompleted, la.timeaccess
-     FROM mdl_user_enrolments    ue
-     JOIN mdl_enrol               e ON ue.enrolid=e.id
-     JOIN mdl_course              c ON e.courseid=c.id
-     JOIN mdl_user                u ON ue.userid=u.id
-LEFT JOIN mdl_course_completions cc ON c.id=cc.course AND u.id=cc.userid
-LEFT JOIN mdl_user_lastaccess    la ON c.id=la.courseid AND u.id=la.userid
-WHERE deleted!=1';
+$sql = 'SELECT u.id AS userid, u.email, u.firstname, u.lastname, c.id AS courseid, c.fullname, ue.timestart, cc.timeenrolled, cc.timestarted, cc.timecompleted, la.timeaccess,
+               SUM(IF(cr.id IS NOT NULL, 1, 0)) AS completions
+     FROM mdl_user_enrolments              ue
+     JOIN mdl_enrol                         e ON ue.enrolid=e.id
+     JOIN mdl_course                        c ON e.courseid=c.id
+     JOIN mdl_user                          u ON ue.userid=u.id
+LEFT JOIN mdl_course_completions           cc ON c.id=cc.course AND u.id=cc.userid
+LEFT JOIN mdl_user_lastaccess              la ON c.id=la.courseid AND u.id=la.userid
+LEFT JOIN mdl_course_completion_crit_compl cr ON c.id=cr.course AND u.id=cr.userid
+WHERE deleted=0
+GROUP BY c.id, u.id';
             if ($result = $conn->query($sql)) {
+                $data = [];
+                $max_criteria = [];
                 foreach ($result as $row) {
+                    $data[] = $row;
+                    if (!empty($row['completions'])) {
+                        if (empty($max_criteria[$row['courseid']])) $max_criteria[$row['courseid']] = $row['completions'];
+                        else                                        $max_criteria[$row['courseid']] = max($row['completions'], $max_criteria[$row['courseid']]);
+                    }
+                }
+                $result = null;
+                foreach ($data as $row) {
                     if (!empty($row['email'])) {
                         $hash = '';
                         foreach ($row as $v) $hash .= $v;
@@ -1690,15 +1706,18 @@ WHERE deleted!=1';
                             LibAPI\PDOWrapper::cleanseNull($row['timestarted']) . ',' .
                             LibAPI\PDOWrapper::cleanseNull($row['timecompleted']) . ',' .
                             LibAPI\PDOWrapper::cleanseNull($row['timeaccess']) . ',' .
+                            LibAPI\PDOWrapper::cleanse($row['completions']) . ',' .
+                            LibAPI\PDOWrapper::cleanse(!empty($max_criteria[$row['courseid']]) ? round(($row['completions']*100)/$max_criteria[$row['courseid']]) : 0) . ',' .
                             LibAPI\PDOWrapper::cleanseWrapStr(md5($hash));
                             LibAPI\PDOWrapper::call('insert_update_moodle_data', "$insert,$args");
-                        }
+                            if ($insert) $count_inserted++; else $count_updated++;
+                        } else $count_skipped++;
                     }
                 }
-                $result = null;
             }
-        } catch (PDOException $e) {}
+        } catch (PDOException $e) {error_log('Unable to connect to Moodle: ' . $e->getMessage());}
         $conn = null;
+        error_log("Moodle count_inserted: $count_inserted, count_updated: $count_updated, count_skipped: $count_skipped");
     }
 
     public function follow_asana_tasks($project_id, $user_id)

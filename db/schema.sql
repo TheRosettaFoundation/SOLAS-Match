@@ -13695,6 +13695,105 @@ END//
 DELIMITER ;
 
 
+CREATE TABLE IF NOT EXISTS `moodle_datas` (
+  userid        BIGINT NOT NULL,
+  email         VARCHAR(100) COLLATE utf8mb4_unicode_ci,
+  firstname     VARCHAR(100) COLLATE utf8mb4_unicode_ci,
+  lastname      VARCHAR(100) COLLATE utf8mb4_unicode_ci,
+  courseid      BIGINT NOT NULL,
+  fullname      VARCHAR(254) COLLATE utf8mb4_unicode_ci,
+  timestart     BIGINT,
+  timeenrolled  BIGINT,
+  timestarted   BIGINT,
+  timecompleted BIGINT,
+  timeaccess    BIGINT,
+  completions   INT,
+  compl_percent INT,
+  md5_hash      BINARY(32) DEFAULT '00000000000000000000000000000000',
+  KEY (email),
+  KEY (fullname)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+DROP PROCEDURE IF EXISTS `insert_update_moodle_data`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_update_moodle_data`(
+    IN do_insert       INT UNSIGNED,
+    IN p_userid        BIGINT,
+    IN p_email         VARCHAR(100),
+    IN p_firstname     VARCHAR(100),
+    IN p_lastname      VARCHAR(100),
+    IN p_courseid      BIGINT,
+    IN p_fullname      VARCHAR(254),
+    IN p_timestart     BIGINT,
+    IN p_timeenrolled  BIGINT,
+    IN p_timestarted   BIGINT,
+    IN p_timecompleted BIGINT,
+    IN p_timeaccess    BIGINT,
+    IN p_completions   INT,
+    IN p_compl_percent INT,
+    IN p_md5_hash      BINARY(32))
+BEGIN
+    IF do_insert=1 THEN
+        INSERT INTO moodle_datas (
+            userid,
+            email,
+            firstname,
+            lastname,
+            courseid,
+            fullname,
+            timestart,
+            timeenrolled,
+            timestarted,
+            timecompleted,
+            timeaccess,
+            completions,
+            compl_percent,
+            md5_hash)
+        VALUES (
+            p_userid,
+            p_email,
+            p_firstname,
+            p_lastname,
+            p_courseid,
+            p_fullname,
+            p_timestart,
+            p_timeenrolled,
+            p_timestarted,
+            p_timecompleted,
+            p_timeaccess,
+            p_completions,
+            p_compl_percent,
+            p_md5_hash);
+    ELSE
+        UPDATE moodle_datas SET
+            email=p_email,
+            firstname=p_firstname,
+            lastname=p_lastname,
+            fullname=p_fullname,
+            timestart=p_timestart,
+            timeenrolled=p_timeenrolled,
+            timestarted=p_timestarted,
+            timecompleted=p_timecompleted,
+            timeaccess=p_timeaccess,
+            completions=p_completions,
+            compl_percent=p_compl_percent,
+            md5_hash=p_md5_hash
+        WHERE
+            userid=p_userid AND
+            courseid=p_courseid;
+    END IF;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `get_moodle_datas`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_moodle_datas`()
+BEGIN
+    SELECT * FROM moodle_datas;
+END//
+DELIMITER ;
+
+
 CREATE TABLE IF NOT EXISTS `no_mt_for_orgs` (
   org_id INT UNSIGNED NOT NULL,
   PRIMARY KEY (org_id),
