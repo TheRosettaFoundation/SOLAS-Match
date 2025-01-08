@@ -1653,6 +1653,9 @@ error_log("Sync update_task_from_job() task_id: $task_id, status: $status, job: 
 
     public function moodle_db()
     {
+        $count_inserted = 0;
+        $count_updated = 0;
+        $count_skipped = 0;
         $data = LibAPI\PDOWrapper::call('get_moodle_datas', '');
         if (empty($data)) $data = [];
         $moodle_hashs = [];
@@ -1704,15 +1707,17 @@ GROUP BY c.id, u.id';
                             LibAPI\PDOWrapper::cleanseNull($row['timecompleted']) . ',' .
                             LibAPI\PDOWrapper::cleanseNull($row['timeaccess']) . ',' .
                             LibAPI\PDOWrapper::cleanse($row['completions']) . ',' .
-                            LibAPI\PDOWrapper::cleanse(!empty($max_criteria[$row['courseid']]) ? round($row['completions']/$max_criteria[$row['courseid']]) : 0) . ',' .
+                            LibAPI\PDOWrapper::cleanse(!empty($max_criteria[$row['courseid']]) ? round(($row['completions']*100)/$max_criteria[$row['courseid']]) : 0) . ',' .
                             LibAPI\PDOWrapper::cleanseWrapStr(md5($hash));
                             LibAPI\PDOWrapper::call('insert_update_moodle_data', "$insert,$args");
-                        }
+                            if ($insert) $count_inserted++; else $count_updated++;
+                        } else $count_skipped++;
                     }
                 }
             }
-        } catch (PDOException $e) {}
+        } catch (PDOException $e) {error_log('Unable to connect to Moodle: ' . $e->getMessage());}
         $conn = null;
+        error_log("Moodle count_inserted: $count_inserted, count_updated: $count_updated, count_skipped: $count_skipped");
     }
 
     public function follow_asana_tasks($project_id, $user_id)
