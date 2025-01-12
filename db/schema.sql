@@ -13693,6 +13693,18 @@ BEGIN
 END//
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `get_moodle_data_for_user`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_moodle_data_for_user`(IN uID INT UNSIGNED)
+BEGIN
+    SELECT md.*
+    FROM Users         u
+    JOIN moodle_datas md ON u.email=md.email
+    WHERE u.id=uID
+    ORDER BY fullname;
+END//
+DELIMITER ;
+
 
 CREATE TABLE IF NOT EXISTS `no_mt_for_orgs` (
   org_id INT UNSIGNED NOT NULL,

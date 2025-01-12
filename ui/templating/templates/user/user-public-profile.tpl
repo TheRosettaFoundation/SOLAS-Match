@@ -375,6 +375,44 @@
                             </div>
                             <hr class="bg-light-subtle"/>
 
+                            {if !empty($moodle_datas)}
+                                {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
+                                    <h4 class="mb-3 fw-bold">Learning Center Courses</h4>
+                                    <div>
+                                        <ul>
+                                            {foreach from=$moodle_datas item=moodle_data}
+                                                {if $moodle_data['compl_percent'] == 100}
+                                                    <li><a href="https://elearn.translatorswb.org/course/view.php?id={$moodle_data['courseid']}" class="custom-link">{$moodle_data['fullname']|escape:'html':'UTF-8'}</a> Completed</li>
+                                                {else}
+                                                    <li><a href="https://elearn.translatorswb.org/course/view.php?id={$moodle_data['courseid']}" class="custom-link">{$moodle_data['fullname']|escape:'html':'UTF-8'}</a> {$moodle_data['compl_percent']}% Completed</li>
+                                                {/if}
+                                            {/foreach}
+                                        </ul>
+                                    </div>
+                                    <hr class="bg-light-subtle" />
+                                {else}
+                                    {assign var="completed" value=0}
+                                    {foreach from=$moodle_datas item=moodle_data}
+                                        {if $moodle_data['compl_percent'] == 100}
+                                            {assign var="completed" value=1}
+                                        {/if}
+                                    {/foreach}
+                                    {if $completed}
+                                    <h4 class="mb-3 fw-bold">Learning Center Courses Completed</h4>
+                                    <div>
+                                        <ul>
+                                            {foreach from=$moodle_datas item=moodle_data}
+                                                {if $moodle_data['compl_percent'] == 100}
+                                                    <li><a href="https://elearn.translatorswb.org/course/view.php?id={$moodle_data['courseid']}" class="custom-link">{$moodle_data['fullname']|escape:'html':'UTF-8'}</a></li>
+                                                {/if}
+                                            {/foreach}
+                                        </ul>
+                                    </div>
+                                    <hr class="bg-light-subtle" />
+                                    {/if}
+                                {/if}
+                            {/if}
+
                             {if $private_access || ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER))}
                             <div>
                                 
