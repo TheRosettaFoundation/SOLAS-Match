@@ -382,9 +382,9 @@
                                         <ul>
                                             {foreach from=$moodle_datas item=moodle_data}
                                                 {if $moodle_data['compl_percent'] == 100}
-                                                    <li><a href="https://elearn.translatorswb.org/course/view.php?id={$moodle_data['courseid']}" class="custom-link">{$moodle_data['fullname']|escape:'html':'UTF-8'}</a> Completed</li>
+                                                    <li><a href="https://elearn.translatorswb.org/course/view.php?id={$moodle_data['courseid']}" class="custom-link" target="_blank">{$moodle_data['fullname']|escape:'html':'UTF-8'}</a> Completed</li>
                                                 {else}
-                                                    <li><a href="https://elearn.translatorswb.org/course/view.php?id={$moodle_data['courseid']}" class="custom-link">{$moodle_data['fullname']|escape:'html':'UTF-8'}</a> {$moodle_data['compl_percent']}% Completed</li>
+                                                    <li><a href="https://elearn.translatorswb.org/course/view.php?id={$moodle_data['courseid']}" class="custom-link" target="_blank">{$moodle_data['fullname']|escape:'html':'UTF-8'}</a> {$moodle_data['compl_percent']}% Completed</li>
                                                 {/if}
                                             {/foreach}
                                         </ul>
@@ -403,7 +403,7 @@
                                         <ul>
                                             {foreach from=$moodle_datas item=moodle_data}
                                                 {if $moodle_data['compl_percent'] == 100}
-                                                    <li><a href="https://elearn.translatorswb.org/course/view.php?id={$moodle_data['courseid']}" class="custom-link">{$moodle_data['fullname']|escape:'html':'UTF-8'}</a></li>
+                                                    <li><a href="https://elearn.translatorswb.org/course/view.php?id={$moodle_data['courseid']}" class="custom-link" target="_blank">{$moodle_data['fullname']|escape:'html':'UTF-8'}</a></li>
                                                 {/if}
                                             {/foreach}
                                         </ul>
