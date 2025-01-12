@@ -2579,6 +2579,13 @@ error_log(print_r($result, true));//(**)
         LibAPI\PDOWrapper::call('set_mt_for_org', LibAPI\PDOWrapper::cleanse($org_id) . ',' . LibAPI\PDOWrapper::cleanse($val));
     }
 
+    public function get_moodle_data_for_user($user_id)
+    {
+        $result = LibAPI\PDOWrapper::call('get_moodle_data_for_user', LibAPI\PDOWrapper::cleanse($user_id));
+        if (empty($result)) return [];
+        return $result;
+    }
+
     public function update_phrase_field($project_uid, $field, $value, $timeout)
     {
         $field_uid = [ // Live Phrase fields

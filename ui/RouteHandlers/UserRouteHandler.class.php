@@ -2704,6 +2704,7 @@ error_log("result: $result");//(**)
             'user_task_limitation_current_user' => $taskDao->get_user_task_limitation($loggedInUserId),
             'sent_contracts' => $userDao->get_sent_contracts($user_id),
             'user_invoices'  => $userDao->getUserInvoices($user_id),
+            'moodle_datas'   => $userDao->get_moodle_data_for_user($user_id),
         ));
         return UserRouteHandler::render("user/user-public-profile.tpl", $response);
     }
@@ -3050,6 +3051,7 @@ EOF;
             'quality_score'          => $userDao->quality_score($user_id),
             'certifications'         => $userDao->getUserCertifications($user_id),
             'show_create_memsource_user' => 0,
+            'moodle_datas' => $userDao->get_moodle_data_for_user($user_id),
         ));
 
         return UserRouteHandler::render('user/user-public-profile.tpl', $response);
