@@ -2302,9 +2302,14 @@ error_log("TM added: $result");//(**)
 
         $mtSettingsPerLangList = [];
         $sources = ['en_gb', 'en_us'];
-        $targets = ['ar_sa', 'es_419', 'es_co', 'es_es', 'fr_ca', 'fr_cd', 'fr_fr', 'pt_br', 'pt_mz', 'pt_pt', 'zh_cn', 'zh_tw'];
+        $targets = ['ar_sa', 'es_419', 'es_co', 'es_es', 'fr_ca', 'fr_cd', 'fr_fr', 'pt_br', 'pt_mz', 'pt_pt', 'zh_cn', 'zh_tw', 'ru_ru', 'it', 'de', 'uk_ua', 'ro', 'tr', 'pl', 'hr', 'cs', 'da', 'et', 'fi', 'el', 'hu', 'ga', 'lv', 'lt', 'mt_mt', 'nb', 'sl', 'sk', 'nl', 'sv', 'sq', 'sr_cyrl_rs', 'ko_kr', 'vi_vn', 'bg', 'he'];
         foreach ($langs as $language) {
-            if (in_array($sourceLang, $sources) && in_array($language, $targets) || in_array($language, $sources) && in_array($sourceLang, $targets)) {
+            if (in_array($sourceLang, $sources) && in_array($language, $targets) || in_array($language, $sources) && in_array($sourceLang, $targets) ||
+                in_array($sourceLang, ['es_419', 'es_co', 'es_es']) && in_array($language, ['ar_sa', 'fr_ca', 'fr_cd', 'fr_fr', 'pt_br', 'pt_mz', 'pt_pt']) ||
+                in_array($sourceLang, ['fr_ca', 'fr_cd', 'fr_fr']) && in_array($language, ['es_419', 'es_co', 'es_es', 'pt_br', 'pt_mz', 'pt_pt']) ||
+                in_array($sourceLang, ['pt_br', 'pt_mz', 'pt_pt']) && in_array($language, ['es_419', 'es_co', 'es_es', 'fr_ca', 'fr_cd', 'fr_fr']) ||
+                in_array($sourceLang, ['ar_sa']) && in_array($language, ['es_419', 'es_co', 'es_es'])
+                ) {
                 // Add MT for $language
                 $mtSettingsPerLangList[] = ['targetLang' => $language, 'machineTranslateSettings' => ['id' => '1618122']]; // uid: l70q1FxAYWDLC4Eug90aJl, name: Main MT
             }
