@@ -1659,7 +1659,11 @@ error_log("Sync update_task_from_job() task_id: $task_id, status: $status, job: 
         $data = LibAPI\PDOWrapper::call('get_moodle_datas', '');
         if (empty($data)) $data = [];
         $moodle_hashs = [];
-        foreach ($data as $datum) $moodle_hashs[$datum['userid'] . '#' . $datum['courseid']] = $datum['md5_hash'];
+        $old_completions = [];
+        foreach ($data as $datum) {
+            $moodle_hashs[$datum['userid'] . '#' . $datum['courseid']] = $datum['md5_hash'];
+            $old_completions[$datum['userid'] . '#' . $datum['courseid']] = $datum['completions'];
+        }
         unset($data);
         try {
             $conn = new \PDO('mysql:host=88.198.8.249;dbname=moodle;port=3306', 'moodle', Common\Lib\Settings::get('moodle.db_pw'), [\PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8']);
@@ -1710,7 +1714,50 @@ GROUP BY c.id, u.id';
                             LibAPI\PDOWrapper::cleanse(!empty($max_criteria[$row['courseid']]) ? round(($row['completions']*100)/$max_criteria[$row['courseid']]) : 0) . ',' .
                             LibAPI\PDOWrapper::cleanseWrapStr(md5($hash));
                             LibAPI\PDOWrapper::call('insert_update_moodle_data', "$insert,$args");
-                            if ($insert) $count_inserted++; else $count_updated++;
+
+                            $courseid = $row['courseid'];
+                            if ($insert) {
+                                $count_inserted++;
+                                $task = new Common\Protobufs\Models\Task();
+
+                                $projects = [2 => 36065, 4 => 36066, 5 => 36067, 7 => 36068, 9 => 36068, 11 => 36072, 12 => 36070, 15 => 36069, 16 => 36071, 17 => 36073, 18 => 36074, 20 => 36075];
+                                if (empty($projects[$courseid])) $project_id = 36076;
+                                else $project_id = $projects[$courseid];
+                                $task->setProjectId($project_id);
+                                $task->setTitle($row['fullname']);
+                                $task->setTaskType(29);
+                                $quantity = 60;
+                                $task->setWordCount($quantity);
+                                $task->set_word_count_partner_weighted($quantity);
+                                $task->set_word_count_original($quantity);
+                                $task->set_source_quantity($quantity);
+                                $task->setDeadline(gmdate('Y-m-d H:i:s', strtotime('31 days')));
+                                $task->setPublished(0);
+
+                                $taskSourceLocale = new Common\Protobufs\Models\Locale();
+                                $taskSourceLocale->setLanguageCode('en');
+                                $taskSourceLocale->setCountryCode('GB');
+                                $task->setSourceLocale($taskSourceLocale);
+
+                                $taskTargetLocale = new Common\Protobufs\Models\Locale();
+                                $taskTargetLocale->setLanguageCode('en');
+                                $taskTargetLocale->setCountryCode('GB');
+                                $task->setTargetLocale($taskTargetLocale);
+
+                                $task->setTaskStatus(Common\Enums\TaskStatusEnum::IN_PROGRESS);
+
+                                $task_id = $taskDao->createTaskDirectly($task);
+
+                                $taskDao->insert_task_url($task_id, "https://elearn.translatorswb.org/course/view.php?id=$courseid");
+
+                                $projectDao->set_memsource_task($task_id, 0, $task_id, '', 0, 0, 0, 0, 0);
+
+                                LibAPI\PDOWrapper::call('claim_moodle_task_by_email', LibAPI\PDOWrapper::cleanse($task_id) . ',' . LibAPI\PDOWrapper::cleanseWrapStr($email) . ',' . LibAPI\PDOWrapper::cleanse($courseid) . ',' . LibAPI\PDOWrapper::cleanse($row['userid']));
+                            } else $count_updated++;
+                            if (!empty($max_criteria[$courseid]) && (empty($old_completions[$index]) || $row['completions'] != $old_completions[$index]) && $row['completions'] == $max_criteria[$courseid]) {
+                                LibAPI\PDOWrapper::call('complete_moodle_task', LibAPI\PDOWrapper::cleanse($courseid) . ',' . LibAPI\PDOWrapper::cleanse($row['userid']));
+                                error_log("Moodle completed courseid: $courseid, userid: " . $row['userid']);
+                            }
                         } else $count_skipped++;
                     }
                 }

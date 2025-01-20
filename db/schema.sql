@@ -579,6 +579,8 @@ INSERT INTO TaskTypes (id, name) VALUES
   (26,'Translation Outside Phrase'),
   (27,'Revision Outside Phrase'),
   (28,'Audiovisual Sign Off');
+INSERT INTO TaskTypes (id, name) VALUES
+  (29,'Course');
 
 
 # Be very carefull of deleteing any of these they will cascade DELETEs
@@ -594,6 +596,8 @@ INSERT INTO task_type_categorys VALUES
 (4, 'Audiovisual Services'),
 (5, 'Translation Services'),
 (6, 'Editing');
+INSERT INTO task_type_categorys VALUES
+(7, 'Training');
 
 
 CREATE TABLE IF NOT EXISTS `TaskUnclaims` (
@@ -1451,6 +1455,8 @@ INSERT INTO task_type_details VALUES
 (27,1,1,0,1,1,1,0,0,'Revision Outside Phrase',    'Revision Outside Phrase',    '#1064C4','',                                    'SHELLTASK',    'ZZ',                       'Word Count',   'words',  'Words',        'Words',      'Words',  0.025,     0.5,1,        0,0.002),
 (28,4,1,0,1,1,0,1,1,'Audiovisual Sign Off',       'Audiovisual Sign Off',       '#B02323','',                                    'SHELLTASK',    'ZZ',                       'Labor minutes','minutes','Labor minutes','Labor hours','Minutes',   20, 8.33333,0,0.0166667,0.0166667)
 ;
+INSERT INTO task_type_details VALUES
+(29,7,1,0,1,1,0,1,1,'Course',                     'Course',                     '#B02323','',                                    'SHELLTASK',    'ZZ',                       'Labor minutes','minutes','Labor minutes','Labor hours','Minutes',    0,  0, 0, 0, 0.0166667, 0.0166667, '', '', '', '');
 /*
 # "Labour Hours" or "Words" etc. for when user enters pricing rates
 UPDATE task_type_details SET pricing_and_recognition_unit_text_hours='Words' WHERE type_enum=1;
@@ -13702,6 +13708,39 @@ BEGIN
     JOIN moodle_datas md ON u.email=md.email
     WHERE u.id=uID
     ORDER BY fullname;
+END//
+DELIMITER ;
+
+CREATE TABLE IF NOT EXISTS `moodle_task_users` (
+  task_id   BIGINT UNSIGNED NOT NULL,
+  user_id   INT UNSIGNED NOT NULL,
+  courseid  BIGINT NOT NULL,
+  userid    BIGINT NOT NULL,
+  PRIMARY KEY (userid, courseid),
+  CONSTRAINT FK_moodle_task_users_task_id FOREIGN KEY (task_id) REFERENCES Tasks (id) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT FK_moodle_task_users_user_id FOREIGN KEY (user_id) REFERENCES Users (id) ON UPDATE CASCADE ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+DROP PROCEDURE IF EXISTS `claim_moodle_task_by_email`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `claim_moodle_task_by_email`(IN tID BIGINT, IN mail VARCHAR(100), IN mcID BIGINT, IN muID BIGINT)
+BEGIN
+    SELECT id INTO @uID FROM Users WHERE email=mail;
+    INSERT INTO TaskClaims (task_id, user_id, `claimed-time`)
+                    VALUES (    tID,    @uID,          NOW());
+    INSERT INTO moodle_task_users (task_id, user_id, courseid, userid)
+                           VALUES (    tID,    @uID,     mcID,   muID);
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `complete_moodle_task`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `complete_moodle_task`(IN mcID BIGINT, IN muID BIGINT)
+BEGIN
+    UPDATE Tasks               t
+    JOIN   moodle_task_users mtu ON t.id=mtu.task_id
+    SET t.`task-status_id`=4
+    WHERE mtu.courseid=mcID AND mtu.userid=muID;
 END//
 DELIMITER ;
 
