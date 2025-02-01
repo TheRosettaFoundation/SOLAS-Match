@@ -2291,7 +2291,7 @@ error_log("TM added: $result");//(**)
 
         // Set Termbases
         $ch = curl_init("https://cloud.memsource.com/web/api2/v1/projects/{$project_result['uid']}/termBases");
-        $bases = [['id' => 'fc1RG1AtuxC9zA5w11eZZp'], ['id' => 'RX38uI1mE3Tl6WcclmOOy4'], ['id' => 'zTVphV3E75FK8BUExAJMf1']];
+        $bases = [['id' => 'fc1RG1AtuxC9zA5w11eZZp'], ['id' => 'RX38uI1mE3Tl6WcclmOOy4'], ['id' => 'zTVphV3E75FK8BUExAJMf1'], ['id' => 'HTYp6XCWFPqe9xcZrV6Yl2']];
         curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode(['readTermBases' => $bases, 'qualityAssuranceTermBases' => $bases]));
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PUT');
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
