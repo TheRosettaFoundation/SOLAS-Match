@@ -2249,7 +2249,7 @@ error_log("TM added: $result");//(**)
         }
 
         // Pre-Translate Settings
-        $url = "https://cloud.memsource.com/web/api2/v3/projects/{$project_result['uid']}/preTranslateSettings";
+        $url = "https://cloud.memsource.com/web/api2/v4/projects/{$project_result['uid']}/preTranslateSettings";
         $ch = curl_init($url);
         $data = [
             'translationMemorySettings' => [
@@ -2265,7 +2265,9 @@ error_log("TM added: $result");//(**)
                 'confirmRepetitions' => true,
             ],
             'machineTranslationSettings' => [
-                'machineTranslation' => true,
+                'useMachineTranslation' => true,
+                'mtQeMatchesInEditors' => true,
+                'mtSuggestionOnlyTmBelowThreshold' => .8,
             ],
             'nonTranslatableSettings' => [
                 'preTranslateNonTranslatables' => true,
