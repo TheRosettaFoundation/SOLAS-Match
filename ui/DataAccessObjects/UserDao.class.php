@@ -1199,12 +1199,13 @@ error_log("claimTask_shell($userId, $taskId)");
         error_log("changeEmail($user_id, $email, $old_email)");
         LibAPI\PDOWrapper::call('changeEmail', LibAPI\PDOWrapper::cleanse($user_id) . ',' . LibAPI\PDOWrapper::cleanseNullOrWrapStr($email));
 
-        $error = '';
+        $phrase_error = '';
+        $moodle_error = '';
         $record = $this->get_memsource_user_record($old_email);
         if ($record) $this->change_memsource_user_email($user_id, $record, $email);
         else {
             error_log("changeEmail($user_id, $email, $old_email), can't find email in Phrase");
-            $error =  "<br />Can't find $old_email in Phrase.";
+            $phrase_error = "No user found with old email ($old_email)";
         }
 
         $ip = Common\Lib\Settings::get('moodle.ip');
@@ -1217,20 +1218,25 @@ error_log("claimTask_shell($userId, $taskId)");
         try {
         $results = $MoodleRest->request('core_user_get_users_by_field', ['field' => 'email', 'values' => [$old_email]]);
         error_log('core_user_get_users_by_field: ' . print_r($results, 1));
-        if (empty($results) || !empty($results['warnings'])) $error .= "<br />Can't find $old_email in Moodle.";
+        if (empty($results) || !empty($results['warnings'])) $moodle_error = "No user found with old email ($old_email)";
         else {
-            if (count($results) > 1) $error .= "<br />Duplicate $old_email in Moodle.";
+            if (count($results) > 1) $moodle_error = "Duplicate $old_email";
             else {
                 $results = $MoodleRest->request('core_user_update_users', ['users' => [['id' => $results[0]['id'], 'email' => $email]]]);
                 error_log('core_user_update_users: ' . print_r($results, 1));
-                if (empty($results) || !empty($results['warnings'])) $error .= "<br />Did not change email in Moodle.";
+                if (empty($results) || !empty($results['warnings'])) $moodle_error = 'Did not change email';
             }
         }
         } catch (\Exception $e) {
-            $error = '<br />Access to Moodle failed: ' . $e->getMessage();
-            error_log($error);
+            $moodle_error = 'Access to Moodle failed: ' . $e->getMessage();
+            error_log($moodle_error);
         }
-        if ($error) return "Changed email in TWB Platform but...$error";
+        if ($phrase_error || $moodle_error) {
+            $error  = 'TWB Platform email change successful! Integrated systems:<br />Phrase TMS: ';
+            $error .= $phrase_error ? $phrase_error : 'User email updated successfully';
+            $error .= '<br />Learning Center: ' . $moodle_error ? $moodle_error : 'User email updated successfully';
+            return $error;
+        }
         return '';
     }
 
@@ -2249,7 +2255,7 @@ error_log("TM added: $result");//(**)
         }
 
         // Pre-Translate Settings
-        $url = "https://cloud.memsource.com/web/api2/v3/projects/{$project_result['uid']}/preTranslateSettings";
+        $url = "https://cloud.memsource.com/web/api2/v4/projects/{$project_result['uid']}/preTranslateSettings";
         $ch = curl_init($url);
         $data = [
             'translationMemorySettings' => [
@@ -2265,7 +2271,9 @@ error_log("TM added: $result");//(**)
                 'confirmRepetitions' => true,
             ],
             'machineTranslationSettings' => [
-                'machineTranslation' => true,
+                'useMachineTranslation' => true,
+                'mtQeMatchesInEditors' => true,
+                'mtSuggestionOnlyTmBelowThreshold' => .8,
             ],
             'nonTranslatableSettings' => [
                 'preTranslateNonTranslatables' => true,
@@ -2291,7 +2299,7 @@ error_log("TM added: $result");//(**)
 
         // Set Termbases
         $ch = curl_init("https://cloud.memsource.com/web/api2/v1/projects/{$project_result['uid']}/termBases");
-        $bases = [['id' => 'fc1RG1AtuxC9zA5w11eZZp'], ['id' => 'RX38uI1mE3Tl6WcclmOOy4'], ['id' => 'zTVphV3E75FK8BUExAJMf1']];
+        $bases = [['id' => 'fc1RG1AtuxC9zA5w11eZZp'], ['id' => 'RX38uI1mE3Tl6WcclmOOy4'], ['id' => 'zTVphV3E75FK8BUExAJMf1'], ['id' => 'HTYp6XCWFPqe9xcZrV6Yl2']];
         curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode(['readTermBases' => $bases, 'qualityAssuranceTermBases' => $bases]));
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PUT');
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -2311,6 +2319,9 @@ error_log("TM added: $result");//(**)
                 in_array($sourceLang, ['ar_sa']) && in_array($language, ['es_419', 'es_co', 'es_es'])
                 ) {
                 // Add MT for $language
+              if (in_array($sourceLang, $sources) && in_array($language, ['es_419', 'es_co', 'es_es', 'ar_sa', 'fr_ca', 'fr_cd', 'fr_fr', 'pt_br', 'pt_mz', 'pt_pt', 'nl']))
+                $mtSettingsPerLangList[] = ['targetLang' => $language, 'machineTranslateSettings' => ['id' => '3932668']]; // uid: IuJTYKTrmzXV0OjDKT7y06, name: DeepL In-Kind
+              else
                 $mtSettingsPerLangList[] = ['targetLang' => $language, 'machineTranslateSettings' => ['id' => '1618122']]; // uid: l70q1FxAYWDLC4Eug90aJl, name: Main MT
             }
         }
