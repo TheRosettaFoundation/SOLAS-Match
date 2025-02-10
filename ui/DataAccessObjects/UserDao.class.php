@@ -1232,9 +1232,9 @@ error_log("claimTask_shell($userId, $taskId)");
             error_log($moodle_error);
         }
         if ($phrase_error || $moodle_error) {
-            $error  = 'TWB Platform email change successful! Integrated systems:<br />Phrase TMS: ';
+            $error  = 'TWB Platform email change successful!<br />Integrated systems...<br />Phrase TMS: ';
             $error .= $phrase_error ? $phrase_error : 'User email updated successfully';
-            $error .= '<br />Learning Center: ' . $moodle_error ? $moodle_error : 'User email updated successfully';
+            $error .= '<br />Learning Center: ' . ($moodle_error ? $moodle_error : 'User email updated successfully');
             return $error;
         }
         return '';

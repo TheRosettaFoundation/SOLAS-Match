@@ -616,7 +616,7 @@ class UserRouteHandler
                 if (!($error = $userDao->changeEmail($user_id, $post['email'], $user->getEmail()))) {
                     UserRouteHandler::flashNow('success', '');
                 } else {
-                    UserRouteHandler::flashNow('error', $error);
+                    UserRouteHandler::flashNow('success', $error);
                 }
             }
         }
