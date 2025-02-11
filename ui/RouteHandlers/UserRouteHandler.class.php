@@ -613,10 +613,10 @@ class UserRouteHandler
 
             if (!$error && ($adminDao->get_roles($loggedInUserId) & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER))) {
                 $user = $userDao->getUser($user_id);
-                if (!($error = $userDao->changeEmail($user_id, $post['email'], $user->getEmail()))) {
+                if (!($success = $userDao->changeEmail($user_id, $post['email'], $user->getEmail()))) {
                     UserRouteHandler::flashNow('success', '');
                 } else {
-                    UserRouteHandler::flashNow('error', $error);
+                    UserRouteHandler::flashNow('success', $success);
                 }
             }
         }
