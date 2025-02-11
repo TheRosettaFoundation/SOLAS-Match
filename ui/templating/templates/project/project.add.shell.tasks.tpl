@@ -154,7 +154,7 @@ function task_type_changed_{$count}() {
                                     <option value="0"></option>
                                     {assign var="type_category_text" value="Terminology"}
                                     {foreach from=TaskTypeEnum::$enum_to_UI key=task_type item=ui}
-                                        {if $ui['shell_task']}
+                                        {if $ui['shell_task'] && $task_type != 29}
                                             {if $ui['type_category_text'] != $type_category_text}
                                             <option value="0">=======================</option>
                                             {assign var="type_category_text" value=$ui['type_category_text']}
