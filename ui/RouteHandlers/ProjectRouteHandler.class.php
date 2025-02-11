@@ -763,7 +763,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
         $project_tags = $projectDao->getProjectTags($project_id);
         $roles = $adminDao->get_roles($user_id, $project->getOrganisationId());
 
-        if ($taskDao->isUserRestrictedFromProject($project_id, $user_id)) {
+        if ($taskDao->isUserRestrictedFromProject($project_id, $user_id) || in_array($project_id, [36065, 36066, 36067, 36068, 36068, 36072, 36070, 36069, 36071, 36073, 36074, 36075, 36076])) { // or Moodle
             UserRouteHandler::flash('error', 'You cannot access this project!');
             return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('home'));
         }
