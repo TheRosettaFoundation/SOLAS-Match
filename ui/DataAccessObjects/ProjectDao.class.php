@@ -1688,9 +1688,9 @@ GROUP BY c.id, u.id';
 */
 if (true) {
 $result = [
-['userid' => 111, 'email' => 'alanabarrett0@gmail.com', 'courseid' => 'alan', 'lastname' => 'barrett', 'courseid' => 990, 'fullname' => 'full course1', 'timestart' => 99999999999, 'timeenrolled' => 99999999999, 'timestarted' => 99999999999, 'timecompleted' => 99999999999, 'timeaccess' => NULL, 'completions' => 0],
-['userid' => 111, 'email' => 'alanabarrett0@gmail.com', 'courseid' => 'alan', 'lastname' => 'barrett', 'courseid' => 991, 'fullname' => 'full course2', 'timestart' => 99999999999, 'timeenrolled' => 99999999999, 'timestarted' => 99999999999, 'timecompleted' => 99999999999, 'timeaccess' => NULL, 'completions' => 6],
-['userid' => 222, 'email' => 'mariamyorkp@gmail.com',   'courseid' =>  'mar', 'lastname' =>     'moh', 'courseid' => 991, 'fullname' => 'full course2', 'timestart' => 99999999999, 'timeenrolled' => 99999999999, 'timestarted' => 99999999999, 'timecompleted' => 99999999999, 'timeaccess' => NULL, 'completions' => 5],
+['userid' => 111, 'email' => 'alanabarrett0@gmail.com', 'firstname' => 'alan', 'lastname' => 'barrett', 'courseid' => 990, 'fullname' => 'full course NEW1', 'timestart' => 99999999999, 'timeenrolled' => 99999999999, 'timestarted' => 99999999999, 'timecompleted' => 99999999999, 'timeaccess' => NULL, 'completions' => 0],
+['userid' => 111, 'email' => 'alanabarrett0@gmail.com', 'firstname' => 'alan', 'lastname' => 'barrett', 'courseid' => 991, 'fullname' => 'full course NEW2', 'timestart' => 99999999999, 'timeenrolled' => 99999999999, 'timestarted' => 99999999999, 'timecompleted' => 99999999999, 'timeaccess' => NULL, 'completions' => 6],
+['userid' => 222, 'email' => 'mariamyorkp@gmail.com',   'firstname' =>  'mar', 'lastname' =>     'moh', 'courseid' => 991, 'fullname' => 'full course NEW2', 'timestart' => 99999999999, 'timeenrolled' => 99999999999, 'timestarted' => 99999999999, 'timecompleted' => 99999999999, 'timeaccess' => NULL, 'completions' => 5],
 ];
                 $data = [];
                 $max_criteria = [];
@@ -1768,7 +1768,7 @@ $project_id = 9644;
 
                                 $projectDao->set_memsource_task($task_id, 0, $task_id, '', 0, 0, 0, 0, 0);
 
-                                LibAPI\PDOWrapper::call('claim_moodle_task_by_email', LibAPI\PDOWrapper::cleanse($task_id) . ',' . LibAPI\PDOWrapper::cleanseWrapStr($email) . ',' . LibAPI\PDOWrapper::cleanse($courseid) . ',' . LibAPI\PDOWrapper::cleanse($row['userid']));
+                                LibAPI\PDOWrapper::call('claim_moodle_task_by_email', LibAPI\PDOWrapper::cleanse($task_id) . ',' . LibAPI\PDOWrapper::cleanseWrapStr($row['email']) . ',' . LibAPI\PDOWrapper::cleanse($courseid) . ',' . LibAPI\PDOWrapper::cleanse($row['userid']));
                             } else $count_updated++;
                             if (!empty($max_criteria[$courseid]) && (empty($old_completions[$index]) || $row['completions'] != $old_completions[$index]) && $row['completions'] == $max_criteria[$courseid]) {
                                 LibAPI\PDOWrapper::call('complete_moodle_task', LibAPI\PDOWrapper::cleanse($courseid) . ',' . LibAPI\PDOWrapper::cleanse($row['userid']));
