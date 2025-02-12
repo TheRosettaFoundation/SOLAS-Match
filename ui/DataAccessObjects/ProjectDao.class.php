@@ -1738,7 +1738,9 @@ error_log('max_criteria' . print_r($max_criteria, 1));
                                 $projects = [2 => 36065, 4 => 36066, 5 => 36067, 7 => 36068, 9 => 36068, 11 => 36072, 12 => 36070, 15 => 36069, 16 => 36071, 17 => 36073, 18 => 36074, 20 => 36075];
                                 if (empty($projects[$courseid])) $project_id = 36076;
                                 else $project_id = $projects[$courseid];
-$project_id = 9644;
+$projects = [990 => 9644, 4 => 36066, 5 => 36067, 7 => 36068, 9 => 36068, 11 => 36072, 12 => 36070, 15 => 36069, 16 => 36071, 17 => 36073, 18 => 36074, 991 => 9644];
+if (empty($projects[$courseid])) {$project_id = 9644; error_log("SHOULD NOT BE");}
+else $project_id = $projects[$courseid];
                                 $task->setProjectId($project_id);
                                 $task->setTitle($row['fullname']);
                                 $task->setTaskType(29);
