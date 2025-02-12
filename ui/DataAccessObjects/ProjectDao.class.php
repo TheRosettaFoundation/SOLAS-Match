@@ -1686,9 +1686,9 @@ GROUP BY c.id, u.id';
 */
 if (true) {
 $result = [
-[111, 'alanabarrett0@gmail.com', 'alan', 'barrett', 990, 'full course1', 99999999999, 99999999999, 99999999999, 99999999999, NULL, 0],
-[111, 'alanabarrett0@gmail.com', 'alan', 'barrett', 991, 'full course2', 99999999999, 99999999999, 99999999999, 99999999999, NULL, 6],
-[991, 'mariamyorkp@gmail.com',    'mar',     'moh', 991, 'full course2', 99999999999, 99999999999, 99999999999, 99999999999, NULL, 5],
+['userid' => 111, 'email' => 'alanabarrett0@gmail.com', 'courseid' => 'alan', 'lastname' => 'barrett', 'courseid' => 990, 'fullname' => 'full course1', 'timestart' => 99999999999, 'timeenrolled' => 99999999999, 'timestarted' => 99999999999, 'timecompleted' => 99999999999, 'timeaccess' => NULL, 'completions' => 0],
+['userid' => 111, 'email' => 'alanabarrett0@gmail.com', 'courseid' => 'alan', 'lastname' => 'barrett', 'courseid' => 991, 'fullname' => 'full course2', 'timestart' => 99999999999, 'timeenrolled' => 99999999999, 'timestarted' => 99999999999, 'timecompleted' => 99999999999, 'timeaccess' => NULL, 'completions' => 6],
+['userid' => 222, 'email' => 'mariamyorkp@gmail.com',   'courseid' =>  'mar', 'lastname' =>     'moh', 'courseid' => 991, 'fullname' => 'full course2', 'timestart' => 99999999999, 'timeenrolled' => 99999999999, 'timestarted' => 99999999999, 'timecompleted' => 99999999999, 'timeaccess' => NULL, 'completions' => 5],
 ];
                 $data = [];
                 $max_criteria = [];
