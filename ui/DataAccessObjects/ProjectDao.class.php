@@ -1666,7 +1666,9 @@ error_log("Sync update_task_from_job() task_id: $task_id, status: $status, job: 
         }
         unset($data);
         try {
+/*
             $conn = new \PDO('mysql:host=88.198.8.249;dbname=moodle;port=3306', 'moodle', Common\Lib\Settings::get('moodle.db_pw'), [\PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8']);
+*/
 $sql = 'SELECT u.id AS userid, u.email, u.firstname, u.lastname, c.id AS courseid, c.fullname, ue.timestart, cc.timeenrolled, cc.timestarted, cc.timecompleted, la.timeaccess,
                SUM(IF(cr.id IS NOT NULL, 1, 0)) AS completions
      FROM mdl_user_enrolments              ue
@@ -1678,7 +1680,16 @@ LEFT JOIN mdl_user_lastaccess              la ON c.id=la.courseid AND u.id=la.us
 LEFT JOIN mdl_course_completion_crit_compl cr ON c.id=cr.course AND u.id=cr.userid
 WHERE deleted=0
 GROUP BY c.id, u.id';
+/*
             if ($result = $conn->query($sql)) {
+}
+*/
+if (true)
+$result = [
+[111, 'alanabarrett0@gmail.com', 'alan', 'barrett', 990, 'full course1', 99999999999, 99999999999, 99999999999, 99999999999, NULL, 0],
+[111, 'alanabarrett0@gmail.com', 'alan', 'barrett', 991, 'full course2', 99999999999, 99999999999, 99999999999, 99999999999, NULL, 6],
+[991, 'mariamyorkp@gmail.com',    'mar',     'moh', 991, 'full course2', 99999999999, 99999999999, 99999999999, 99999999999, NULL, 5],
+];
                 $data = [];
                 $max_criteria = [];
                 foreach ($result as $row) {
@@ -1688,6 +1699,8 @@ GROUP BY c.id, u.id';
                         else                                        $max_criteria[$row['courseid']] = max($row['completions'], $max_criteria[$row['courseid']]);
                     }
                 }
+error_log('old_completions' . print_r($old_completions, 1));
+error_log('max_criteria' . print_r($max_criteria, 1));
                 $result = null;
                 foreach ($data as $row) {
                     if (!empty($row['email'])) {
@@ -1723,6 +1736,7 @@ GROUP BY c.id, u.id';
                                 $projects = [2 => 36065, 4 => 36066, 5 => 36067, 7 => 36068, 9 => 36068, 11 => 36072, 12 => 36070, 15 => 36069, 16 => 36071, 17 => 36073, 18 => 36074, 20 => 36075];
                                 if (empty($projects[$courseid])) $project_id = 36076;
                                 else $project_id = $projects[$courseid];
+$project_id = 9644;
                                 $task->setProjectId($project_id);
                                 $task->setTitle($row['fullname']);
                                 $task->setTaskType(29);
