@@ -1684,7 +1684,7 @@ GROUP BY c.id, u.id';
             if ($result = $conn->query($sql)) {
 }
 */
-if (true)
+if (true) {
 $result = [
 [111, 'alanabarrett0@gmail.com', 'alan', 'barrett', 990, 'full course1', 99999999999, 99999999999, 99999999999, 99999999999, NULL, 0],
 [111, 'alanabarrett0@gmail.com', 'alan', 'barrett', 991, 'full course2', 99999999999, 99999999999, 99999999999, 99999999999, NULL, 6],
