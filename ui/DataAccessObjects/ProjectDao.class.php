@@ -1755,8 +1755,48 @@ GROUP BY c.id, u.id';
 //(**)DISABLE                                $projectDao->set_memsource_task($task_id, 0, $task_id, '', 0, 0, 0, 0, 0);
 
 //(**)DISABLE                                LibAPI\PDOWrapper::call('claim_moodle_task_by_email', LibAPI\PDOWrapper::cleanse($task_id) . ',' . LibAPI\PDOWrapper::cleanseWrapStr($row['email']) . ',' . LibAPI\PDOWrapper::cleanse($courseid) . ',' . LibAPI\PDOWrapper::cleanse($row['userid']));
-error_log("Moodle WOULD CREATE AND CLAIM courseid: $courseid, userid: " . $row['userid']);//(**)DISABLE
+error_log("Moodle INSERT WOULD CREATE AND CLAIM courseid: $courseid, userid: " . $row['userid']);//(**)DISABLE
                             } else $count_updated++;
+//(**)DISABLE ... from HERE
+                            if (!$insert) {
+                                $task = new Common\Protobufs\Models\Task();
+
+                                $projects = [2 => 36065, 4 => 36066, 5 => 36067, 7 => 36068, 9 => 36068, 11 => 36072, 12 => 36070, 15 => 36069, 16 => 36071, 17 => 36073, 18 => 36074, 20 => 36075];
+                                if (empty($projects[$courseid])) $project_id = 36076;
+                                else $project_id = $projects[$courseid];
+                                $task->setProjectId($project_id);
+                                $task->setTitle($row['fullname']);
+                                $task->setTaskType(29);
+                                $quantity = 60;
+                                $task->setWordCount($quantity);
+                                $task->set_word_count_partner_weighted($quantity);
+                                $task->set_word_count_original($quantity);
+                                $task->set_source_quantity($quantity);
+                                $task->setDeadline(gmdate('Y-m-d H:i:s', strtotime('31 days')));
+                                $task->setPublished(0);
+
+                                $taskSourceLocale = new Common\Protobufs\Models\Locale();
+                                $taskSourceLocale->setLanguageCode('en');
+                                $taskSourceLocale->setCountryCode('GB');
+                                $task->setSourceLocale($taskSourceLocale);
+
+                                $taskTargetLocale = new Common\Protobufs\Models\Locale();
+                                $taskTargetLocale->setLanguageCode('en');
+                                $taskTargetLocale->setCountryCode('GB');
+                                $task->setTargetLocale($taskTargetLocale);
+
+                                $task->setTaskStatus(Common\Enums\TaskStatusEnum::IN_PROGRESS);
+
+//(**)DISABLE                                $task_id = $taskDao->createTaskDirectly($task);
+
+//(**)DISABLE                                $taskDao->insert_task_url($task_id, "https://elearn.translatorswb.org/course/view.php?id=$courseid");
+
+//(**)DISABLE                                $projectDao->set_memsource_task($task_id, 0, $task_id, '', 0, 0, 0, 0, 0);
+
+//(**)DISABLE                                LibAPI\PDOWrapper::call('claim_moodle_task_by_email', LibAPI\PDOWrapper::cleanse($task_id) . ',' . LibAPI\PDOWrapper::cleanseWrapStr($row['email']) . ',' . LibAPI\PDOWrapper::cleanse($courseid) . ',' . LibAPI\PDOWrapper::cleanse($row['userid']));
+error_log("Moodle UPDATE WOULD CREATE AND CLAIM courseid: $courseid, userid: " . $row['userid']);//(**)DISABLE
+                            }
+//(**)DISABLE to HERE
                             if (!empty($max_criteria[$courseid]) && (empty($old_completions[$index]) || $row['completions'] != $old_completions[$index]) && $row['completions'] == $max_criteria[$courseid]) {
 //(**)DISABLE                                LibAPI\PDOWrapper::call('complete_moodle_task', LibAPI\PDOWrapper::cleanse($courseid) . ',' . LibAPI\PDOWrapper::cleanse($row['userid']));
                                 error_log("Moodle completed courseid: $courseid, userid: " . $row['userid']);
