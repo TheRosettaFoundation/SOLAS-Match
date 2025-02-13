@@ -1668,9 +1668,7 @@ error_log("Sync update_task_from_job() task_id: $task_id, status: $status, job: 
         }
         unset($data);
         try {
-/*
             $conn = new \PDO('mysql:host=88.198.8.249;dbname=moodle;port=3306', 'moodle', Common\Lib\Settings::get('moodle.db_pw'), [\PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8']);
-*/
 $sql = 'SELECT u.id AS userid, u.email, u.firstname, u.lastname, c.id AS courseid, c.fullname, ue.timestart, cc.timeenrolled, cc.timestarted, cc.timecompleted, la.timeaccess,
                SUM(IF(cr.id IS NOT NULL, 1, 0)) AS completions
      FROM mdl_user_enrolments              ue
@@ -1682,16 +1680,7 @@ LEFT JOIN mdl_user_lastaccess              la ON c.id=la.courseid AND u.id=la.us
 LEFT JOIN mdl_course_completion_crit_compl cr ON c.id=cr.course AND u.id=cr.userid
 WHERE deleted=0
 GROUP BY c.id, u.id';
-/*
             if ($result = $conn->query($sql)) {
-}
-*/
-if (true) {
-$result = [
-['userid' => 111, 'email' => 'alanabarrett0@gmail.com', 'firstname' => 'alan', 'lastname' => 'barrett', 'courseid' => 990, 'fullname' => 'full course NEW1', 'timestart' => 99999999999, 'timeenrolled' => 99999999999, 'timestarted' => 99999999999, 'timecompleted' => 99999999999, 'timeaccess' => NULL, 'completions' => 0],
-['userid' => 111, 'email' => 'alanabarrett0@gmail.com', 'firstname' => 'alan', 'lastname' => 'barrett', 'courseid' => 991, 'fullname' => 'full course NEW2', 'timestart' => 99999999999, 'timeenrolled' => 99999999999, 'timestarted' => 99999999999, 'timecompleted' => 99999999999, 'timeaccess' => NULL, 'completions' => 6],
-['userid' => 222, 'email' => 'mariamyorkp@gmail.com',   'firstname' =>  'mar', 'lastname' =>     'moh', 'courseid' => 991, 'fullname' => 'full course NEW2', 'timestart' => 99999999999, 'timeenrolled' => 99999999999, 'timestarted' => 99999999999, 'timecompleted' => 99999999999, 'timeaccess' => NULL, 'completions' => 6],
-];
                 $data = [];
                 $max_criteria = [];
                 foreach ($result as $row) {
@@ -1701,8 +1690,6 @@ $result = [
                         else                                        $max_criteria[$row['courseid']] = max($row['completions'], $max_criteria[$row['courseid']]);
                     }
                 }
-error_log('old_completions' . print_r($old_completions, 1));
-error_log('max_criteria' . print_r($max_criteria, 1));
                 $result = null;
                 foreach ($data as $row) {
                     if (!empty($row['email'])) {
@@ -1738,9 +1725,6 @@ error_log('max_criteria' . print_r($max_criteria, 1));
                                 $projects = [2 => 36065, 4 => 36066, 5 => 36067, 7 => 36068, 9 => 36068, 11 => 36072, 12 => 36070, 15 => 36069, 16 => 36071, 17 => 36073, 18 => 36074, 20 => 36075];
                                 if (empty($projects[$courseid])) $project_id = 36076;
                                 else $project_id = $projects[$courseid];
-$projects = [990 => 9644, 4 => 36066, 5 => 36067, 7 => 36068, 9 => 36068, 11 => 36072, 12 => 36070, 15 => 36069, 16 => 36071, 17 => 36073, 18 => 36074, 991 => 9644];
-if (empty($projects[$courseid])) {$project_id = 9644; error_log("SHOULD NOT BE");}
-else $project_id = $projects[$courseid];
                                 $task->setProjectId($project_id);
                                 $task->setTitle($row['fullname']);
                                 $task->setTaskType(29);
