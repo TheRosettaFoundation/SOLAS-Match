@@ -1748,16 +1748,17 @@ GROUP BY c.id, u.id';
 
                                 $task->setTaskStatus(Common\Enums\TaskStatusEnum::IN_PROGRESS);
 
-                                $task_id = $taskDao->createTaskDirectly($task);
+//(**)DISABLE                                $task_id = $taskDao->createTaskDirectly($task);
 
-                                $taskDao->insert_task_url($task_id, "https://elearn.translatorswb.org/course/view.php?id=$courseid");
+//(**)DISABLE                                $taskDao->insert_task_url($task_id, "https://elearn.translatorswb.org/course/view.php?id=$courseid");
 
-                                $projectDao->set_memsource_task($task_id, 0, $task_id, '', 0, 0, 0, 0, 0);
+//(**)DISABLE                                $projectDao->set_memsource_task($task_id, 0, $task_id, '', 0, 0, 0, 0, 0);
 
-                                LibAPI\PDOWrapper::call('claim_moodle_task_by_email', LibAPI\PDOWrapper::cleanse($task_id) . ',' . LibAPI\PDOWrapper::cleanseWrapStr($row['email']) . ',' . LibAPI\PDOWrapper::cleanse($courseid) . ',' . LibAPI\PDOWrapper::cleanse($row['userid']));
+//(**)DISABLE                                LibAPI\PDOWrapper::call('claim_moodle_task_by_email', LibAPI\PDOWrapper::cleanse($task_id) . ',' . LibAPI\PDOWrapper::cleanseWrapStr($row['email']) . ',' . LibAPI\PDOWrapper::cleanse($courseid) . ',' . LibAPI\PDOWrapper::cleanse($row['userid']));
+error_log("Moodle WOULD CREATE AND CLAIM courseid: $courseid, userid: " . $row['userid']);//(**)DISABLE
                             } else $count_updated++;
                             if (!empty($max_criteria[$courseid]) && (empty($old_completions[$index]) || $row['completions'] != $old_completions[$index]) && $row['completions'] == $max_criteria[$courseid]) {
-                                LibAPI\PDOWrapper::call('complete_moodle_task', LibAPI\PDOWrapper::cleanse($courseid) . ',' . LibAPI\PDOWrapper::cleanse($row['userid']));
+//(**)DISABLE                                LibAPI\PDOWrapper::call('complete_moodle_task', LibAPI\PDOWrapper::cleanse($courseid) . ',' . LibAPI\PDOWrapper::cleanse($row['userid']));
                                 error_log("Moodle completed courseid: $courseid, userid: " . $row['userid']);
                             }
                         } else $count_skipped++;
