@@ -91,6 +91,12 @@ class AdminRouteHandler
             '\SolasMatch\UI\RouteHandlers\AdminRouteHandler:set_invoice_revoked')
             ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin_or_FINANCE')
             ->setName('set_invoice_revoked');
+
+        $app->map(['GET', 'POST'],
+            '/designsystem[/]',
+            '\SolasMatch\UI\RouteHandlers\AdminRouteHandler:design_system')
+            ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin_or_FINANCE')
+            ->setName('design_system');
     }
 
     public function adminDashboard(Request $request, Response $response)

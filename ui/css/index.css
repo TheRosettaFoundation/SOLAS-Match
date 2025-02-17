@@ -1,0 +1,247 @@
+
+
+/* ------------------- */
+/* Custom properties   */
+/* ------------------- */
+
+:root {
+
+    /* colors */
+
+    --clr-core:218, 71%, 27%;
+    --clr-tech: 240, 61%, 65%;
+    --clr-insight:18, 77%, 58%;
+    --clr-twb: 37, 82%, 51%;
+    --clr-white:0, 0%, 100%
+    --clr-shadow-core:
+
+
+     /* Shadows */
+
+
+
+
+    /* font-sizes -font-base is 400*/
+  
+    --fs-900: clamp(5rem, 8vw + 1rem, 9.375rem);
+    --fs-800: 3.5rem;
+    --fs-700: 1.5rem;
+    --fs-600: 1rem;
+    --fs-500: 1rem;
+    --fs-400: 1rem;
+    --fs-300: 1rem;
+    --fs-200: 0.875rem ;
+
+    /* font-weight */
+
+    --fw-800: 800 ;
+    --fw-700:700;
+    --fw-600:600 ;
+    --fw-500:500;
+    --fw-400:400;
+    --fw-300:300 ;
+    --fw-200:200 ;
+
+    /* font-families */
+ 
+    --ff-sans-serif_premium: "Haclom", sans-serif;
+    --ff-sans-serif_normal: "Helvitica neue,", sans-serif;
+
+     /* space sizes */
+
+    
+}
+
+/* ------------------- */
+/* Reset               */
+/* ------------------- */
+
+/* https://piccalil.li/blog/a-modern-css-reset/ */
+
+/* Box sizing */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+/* Reset margins */
+body,
+h1,
+h2,
+h3,
+h4,
+h5,
+p,
+figure,
+picture {
+    margin: 0; 
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
+    font-weight: 400;
+}
+
+/* set up the body */
+body {
+    font-family: var(--ff-sans-normal);
+    font-size: var(--fs-400);
+    color: hsl( var(--clr-white) );
+    background-color: hsl( var(--clr-dark) );
+    line-height: 1.5;
+    min-height: 100vh;
+    
+    display: grid;
+    grid-template-rows: min-content 1fr;
+    
+    overflow-x: hidden;
+}
+
+/* make images easier to work with */
+img,
+picutre {
+    max-width: 100%;
+    display: block;
+}
+
+/* make form elements easier to work with */
+input,
+button,
+textarea,
+select {
+    font: inherit;
+}
+
+
+/* ------------------- */
+/* Utility classes     */
+/* ------------------- */
+
+/* general */
+
+.flex {
+    display: flex;
+    gap: var(--gap, 1rem);
+}
+
+
+.grid {
+    display: grid;
+    gap: var(--gap, 1rem);
+}
+
+.d-block {
+    display: block;
+}
+
+.container {
+
+    padding-inline:2em;
+    max-width:80rem;
+    margin-inline:auto;
+
+}
+
+.sr-only {
+    position: absolute; 
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px; 
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap; /* added line */
+    border: 0;
+  }
+
+/* colors */
+
+.bg-core{
+    background-color:hsl(var(--clr-core));
+}
+
+.bg-twb{
+    background-color:hsl(var(--clr-twb));
+}
+.bg-tech{
+    background-color: hsl(var(--clr-tech));
+
+}
+.bg-insight{
+    background-color: hsl(var(--clr-insight));
+}
+
+.text-core{
+   color:hsl(var(--clr-core));
+}
+
+.text-twb{
+    color:hsl(var(--clr-twb))
+}
+.text-tech{
+    color: hsl(var(--clr-tech));
+
+}
+.text-insight{
+    color: hsl(var(--clr-insight));
+}
+
+/* Typography */
+
+
+.ff-normal { font-family: var(--ff-sans-serif_normal); } 
+.ff-premium { font-family: var(--ff-sans-serif_premium); } 
+
+
+.letter-spacing-1 { letter-spacing: 4.75px; } 
+.letter-spacing-2 { letter-spacing: 2.7px; } 
+.letter-spacing-3 { letter-spacing: 2.35px; } 
+
+.uppercase { text-transform: uppercase; }
+
+.fs-900 { font-size: var(--fs-900); }
+.fs-800 { font-size: var(--fs-800); }
+.fs-700 { font-size: var(--fs-700); }
+.fs-600 { font-size: var(--fs-600); }
+.fs-500 { font-size: var(--fs-500); }
+.fs-400 { font-size: var(--fs-400); }
+.fs-300 { font-size: var(--fs-300); }
+.fs-200 { font-size: var(--fs-200); }
+
+.fs-900,
+.fs-800,
+.fs-700,
+.fs-600 {
+    line-height: 1.1;
+}
+
+/* this will add margin on all children except the first one  */
+/* use case ex 
+<div class="flow" style="--flow-space:4rem">
+</div> */
+
+.flow > *:where(:not(:first-child)) {
+    margin-top: var(--flow-space , 1rem);
+    
+}
+
+
+/* ------------------- */
+/* Component classes     */
+/* ------------------- */
+
+
+.dashboard{
+    display:flex;
+    justify-content: space-between;
+}
+
+
+
+
