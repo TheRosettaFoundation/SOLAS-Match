@@ -13538,6 +13538,167 @@ INSERT INTO enforce_native_languages VALUES( 9, 5716, 254, 2);
 INSERT INTO enforce_native_languages VALUES(10, 5716,  50, 2);
 INSERT INTO enforce_native_languages VALUES(11, 5093, 179, 2);
 INSERT INTO enforce_native_languages VALUES(12, 5093,  33, 2);
+INSERT INTO enforce_native_languages VALUES(17, 2292, 104, 2);
+INSERT INTO enforce_native_languages VALUES(18, 2669, 1, 2);
+INSERT INTO enforce_native_languages VALUES(19, 3046, 120, 2);
+INSERT INTO enforce_native_languages VALUES(20, 5087, 1, 2);
+INSERT INTO enforce_native_languages VALUES(21, 5355, 1, 2);
+INSERT INTO enforce_native_languages VALUES(22, 5844, 1, 2);
+INSERT INTO enforce_native_languages VALUES(23, 5846, 53, 2);
+INSERT INTO enforce_native_languages VALUES(24, 6540, 243, 2);
+INSERT INTO enforce_native_languages VALUES(25, 6321, 1, 2);
+INSERT INTO enforce_native_languages VALUES(26,  989, 1, 2);
+INSERT INTO enforce_native_languages VALUES(27, 1140, 1, 2);
+INSERT INTO enforce_native_languages VALUES(28, 2366, 1, 2);
+INSERT INTO enforce_native_languages VALUES(29, 1198, 1, 2);
+INSERT INTO enforce_native_languages VALUES(30, 1448, 1, 2);
+INSERT INTO enforce_native_languages VALUES(31, 1819, 1, 2);
+INSERT INTO enforce_native_languages VALUES(32, 1872, 1, 2);
+INSERT INTO enforce_native_languages VALUES(33, 1760, 1, 2);
+INSERT INTO enforce_native_languages VALUES(34, 2391, 1, 2);
+INSERT INTO enforce_native_languages VALUES(35, 2080, 1, 2);
+INSERT INTO enforce_native_languages VALUES(36, 2538, 1, 2);
+INSERT INTO enforce_native_languages VALUES(37, 3336, 1, 2);
+INSERT INTO enforce_native_languages VALUES(38, 3453, 1, 2);
+INSERT INTO enforce_native_languages VALUES(39, 3917, 139, 2);
+INSERT INTO enforce_native_languages VALUES(40, 4557, 1, 2);
+INSERT INTO enforce_native_languages VALUES(41, 5640, 1, 2);
+INSERT INTO enforce_native_languages VALUES(42, 5630,  1, 2);
+INSERT INTO enforce_native_languages VALUES(43, 1695, 1, 2);
+INSERT INTO enforce_native_languages VALUES(44, 5847, 1, 2);
+INSERT INTO enforce_native_languages VALUES(45,  217, 1, 2);
+INSERT INTO enforce_native_languages VALUES(46, 2272, 1, 2);
+INSERT INTO enforce_native_languages VALUES(47, 5448, 253, 2);
+INSERT INTO enforce_native_languages VALUES(48, 5448, 252, 2);
+INSERT INTO enforce_native_languages VALUES(49, 2500, 105, 2);
+INSERT INTO enforce_native_languages VALUES(50, 6046, 222, 2);
+INSERT INTO enforce_native_languages VALUES(51, 6032, 1, 2);
+INSERT INTO enforce_native_languages VALUES(52, 2255, 1, 2);
+INSERT INTO enforce_native_languages VALUES(53, 5127, 2, 2);
+INSERT INTO enforce_native_languages VALUES(54, 6468, 169, 2);
+INSERT INTO enforce_native_languages VALUES(55, 995, 154, 2);
+
+# additional only...
+# Urdu PK Pakistan, India
+UPDATE user_country_id_to_variant SET variant_id0=169 WHERE country_id=104;
+UPDATE user_country_id_to_variant SET variant_id0=104 WHERE country_id=169;
+
+# Korean KR South Korea, North Korea
+UPDATE user_country_id_to_variant SET variant_id0=119 WHERE country_id=120;
+UPDATE user_country_id_to_variant SET variant_id0=120 WHERE country_id=119;
+
+# Serbian CYRL, LATN Serbia, Bosnia and Herzegovina, Montenegro
+UPDATE user_country_id_to_variant SET variant_id0=252 WHERE country_id=198;
+UPDATE user_country_id_to_variant SET variant_id1=253 WHERE country_id=198;
+UPDATE user_country_id_to_variant SET variant_id0=252 WHERE country_id=30;
+UPDATE user_country_id_to_variant SET variant_id1=253 WHERE country_id=30;
+UPDATE user_country_id_to_variant SET variant_id0=252 WHERE country_id=150;
+UPDATE user_country_id_to_variant SET variant_id1=253 WHERE country_id=150;
+
+# Czech -- Czech Republic
+UPDATE user_country_id_to_variant SET variant_id0=1 WHERE country_id=61;
+
+# Japanese -- Japan
+UPDATE user_country_id_to_variant SET variant_id0=1 WHERE country_id=113;
+
+# Polish -- Poland
+UPDATE user_country_id_to_variant SET variant_id0=1 WHERE country_id=178;
+
+# Bulgarian -- Bulgaria
+UPDATE user_country_id_to_variant SET variant_id0=1 WHERE country_id=36;
+
+# Estonian -- Estonia
+UPDATE user_country_id_to_variant SET variant_id0=1 WHERE country_id=71;
+
+# Finnish -- Finland
+UPDATE user_country_id_to_variant SET variant_id0=1 WHERE country_id=76;
+
+# Hungarian -- Hungary
+UPDATE user_country_id_to_variant SET variant_id0=1 WHERE country_id=102;
+
+# Latvian -- Latvia
+UPDATE user_country_id_to_variant SET variant_id0=1 WHERE country_id=124;
+
+# Lithuanian -- Lithuania
+UPDATE user_country_id_to_variant SET variant_id0=1 WHERE country_id=130;
+
+# Slovenian -- Slovenia
+UPDATE user_country_id_to_variant SET variant_id0=1 WHERE country_id=204;
+
+# Slovak -- Slovakia
+UPDATE user_country_id_to_variant SET variant_id0=1 WHERE country_id=203;
+
+# Hebrew -- Israel
+UPDATE user_country_id_to_variant SET variant_id0=1 WHERE country_id=110;
+
+# Tagalog -- Philippines
+UPDATE user_country_id_to_variant SET variant_id0=1 WHERE country_id=176;
+
+# Romanian -- Romania, Moldova
+UPDATE user_country_id_to_variant SET variant_id0=1 WHERE country_id=183;
+UPDATE user_country_id_to_variant SET variant_id0=1 WHERE country_id=147;
+
+# Swahili --  Kenya, Tanzania, Uganda, Rwanda, Mozambique, Burundi
+UPDATE user_country_id_to_variant SET variant_id0=1 WHERE country_id=117;
+UPDATE user_country_id_to_variant SET variant_id0=1 WHERE country_id=221;
+UPDATE user_country_id_to_variant SET variant_id0=1 WHERE country_id=233;
+UPDATE user_country_id_to_variant SET variant_id0=1 WHERE country_id=185;
+UPDATE user_country_id_to_variant SET variant_id0=1 WHERE country_id=153;
+UPDATE user_country_id_to_variant SET variant_id0=1 WHERE country_id=38;
+
+# Turkish -- Türkiye, Cyprus
+UPDATE user_country_id_to_variant SET variant_id0=1 WHERE country_id=229;
+UPDATE user_country_id_to_variant SET variant_id0=1 WHERE country_id=60;
+
+# Catalan -- Andorra, Spain
+UPDATE user_country_id_to_variant SET variant_id0=1 WHERE country_id=7;
+UPDATE user_country_id_to_variant SET variant_id0=1 WHERE country_id=210;
+
+# Croatian -- Croatia, Bosnia and Herzegovina
+UPDATE user_country_id_to_variant SET variant_id0=1 WHERE country_id=57;
+UPDATE user_country_id_to_variant SET variant_id=1 WHERE country_id=30;
+
+# Danish -- Kingdom of Denmark (Denmark, Faroe Islands)
+UPDATE user_country_id_to_variant SET variant_id0=1 WHERE country_id=62;
+UPDATE user_country_id_to_variant SET variant_id0=1 WHERE country_id=74;
+
+# Greek -- Greece, Cyprus
+UPDATE user_country_id_to_variant SET variant_id0=1 WHERE country_id=87;
+
+# Irish Gaelic -- Republic of Ireland, United Kingdom (Northern Ireland)
+UPDATE user_country_id_to_variant SET variant_id0=1 WHERE country_id=108;
+
+# Italian -- Italy, Switzerland, San Marino, Vatican City
+UPDATE user_country_id_to_variant SET variant_id0=1 WHERE country_id=111;
+UPDATE user_country_id_to_variant SET variant_id0=1 WHERE country_id=194;
+UPDATE user_country_id_to_variant SET variant_id0=1 WHERE country_id=99;
+
+# Norwegian Bokmål -- Norway
+UPDATE user_country_id_to_variant SET variant_id0=1 WHERE country_id=167;
+
+# Dutch -- Netherlands, Belgium, Suriname
+UPDATE user_country_id_to_variant SET variant_id0=1 WHERE country_id=158;
+UPDATE user_country_id_to_variant SET variant_id0=1 WHERE country_id=213;
+
+# Swedish -- Sweden, Finland
+UPDATE user_country_id_to_variant SET variant_id0=1 WHERE country_id=216;
+
+# Albanian -- Albania, North Macedonia, Montenegro
+UPDATE user_country_id_to_variant SET variant_id0=1 WHERE country_id=4;
+UPDATE user_country_id_to_variant SET variant_id0=1 WHERE country_id=133;
+UPDATE user_country_id_to_variant SET variant_id=1 WHERE country_id=150;
+
+# Hausa -- Nigeria, Niger, Benin, Burkina Faso, Cameroon, Chad, Ghana, Côte d'Ivoire
+UPDATE user_country_id_to_variant SET variant_id0=1 WHERE country_id=163;
+UPDATE user_country_id_to_variant SET variant_id0=1 WHERE country_id=162;
+UPDATE user_country_id_to_variant SET variant_id0=1 WHERE country_id=25;
+UPDATE user_country_id_to_variant SET variant_id0=1 WHERE country_id=37;
+UPDATE user_country_id_to_variant SET variant_id0=1 WHERE country_id=40;
+UPDATE user_country_id_to_variant SET variant_id0=1 WHERE country_id=45;
+UPDATE user_country_id_to_variant SET variant_id0=1 WHERE country_id=85;
+UPDATE user_country_id_to_variant SET variant_id0=1 WHERE country_id=56;
+
+# German  --  Germany, Belgium, Luxembourg, Austria, Switzerland, Liechtenstein
 
 DROP PROCEDURE IF EXISTS `update_native_matching_phase_1`;
 DELIMITER //
