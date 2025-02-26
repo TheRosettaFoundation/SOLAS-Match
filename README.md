@@ -40,6 +40,19 @@ For full terms see License.txt or http://www.gnu.org/licenses/lgpl-3.0.txt
 
 # Release Notes
 
+## Version 17.0
+
+- Sun integration
+  - PRs are imported
+  - POs in Sun are generated when all data is available: https://twbplatform.org/po_readyness_report/
+- In Project View it is now possible to Revoke selected tasks.
+- Strict sourcing has been expanded to a number of new languages.
+- Terminology, pre translation and MT settings have been changed for self service projects.
+- Learning Center
+  - All user courses are imported from Moodle.
+  - Shell tasks are created for these and marked complete when completion criteria are met.
+- There is a button for the creation of a Phrase linguist (in the profile of those who are either a LINGUIST or NGO_LINGUIST or both but not anything else and don't yet have a Phrase account). It looks the same as the button for creating a PROJECT_MANAGER ("Create Matching Phrase TMS User"), which will only appear for users who are TWB admin/PO/CO.
+
 ## Version 16.4
 
 - Admins now have an option via a checkbox, when revoking a task, to add the linguist to the deny list.
