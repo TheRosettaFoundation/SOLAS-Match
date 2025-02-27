@@ -2486,7 +2486,6 @@ error_log("result: $result");//(**)
                 if (!empty($post['linguist_t_code'])) $post['linguist_t_code'] = trim($post['linguist_t_code']);
                 if (empty($post['country_id'])) UserRouteHandler::flashNow('error', 'You must enter a valid Country');
                 elseif (empty($post['linguist_name'])) UserRouteHandler::flashNow('error', 'You must enter an Official Name');
-                elseif (empty($post['linguist_t_code'])) UserRouteHandler::flashNow('error', 'You must enter a Sun Linguist T-Code');
                 elseif (substr($post['google_drive_link'], 0, 25) != 'https://drive.google.com/') UserRouteHandler::flashNow('error', 'You must enter a valid Google Drive Folder Link');
                 else {
                     $taskDao->insert_update_linguist_payment_information($user_id, $loggedInUserId, $post['country_id'], $post['google_drive_link'], $post['linguist_name'], $post['linguist_t_code']);
