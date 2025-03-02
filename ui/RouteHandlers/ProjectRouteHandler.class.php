@@ -943,6 +943,20 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                     error_log("$number Tasks Marked Cancelled($cancelled) by $user_id, IDs: " . $post['cancel']);
                     UserRouteHandler::flashNow('success', $cancelled ? "$number tasks cancelled." : "$number tasks uncancelled.");
                 }
+                if (!empty($post['revoke_task_id_list']) && !empty($post['revoke_task_feedback'])) {
+                    $task_ids = preg_split ("/\,/", $post['revoke_task_id_list']);
+                    $number = 0;
+                    foreach ($task_ids as $id) {
+                        if ($details_claimant = $taskDao->getUserClaimedTask($id)) {
+                            $number++;
+                            $taskDao->sendOrgFeedback($id, $user_id, $details_claimant->getId(), $post['revoke_task_feedback']);
+                            error_log("projectView revokeTask: $id");
+                            $userDao->unclaimTask($details_claimant->getId(), $id, null, !empty($post['revoke_task_deny_user']));
+                        }
+                    }
+                    error_log("$number Tasks Revoked by $user_id, IDs: " . $post['revoke_task_id_list']);
+                    UserRouteHandler::flashNow('success', "$number tasks revoked.");
+                }
             }
             if ($roles & (SITE_ADMIN | PROJECT_OFFICER) || in_array($project->getOrganisationId(), ORG_EXCEPTIONS) && $roles & (NGO_ADMIN + NGO_PROJECT_OFFICER)) {
                 $number = 0;

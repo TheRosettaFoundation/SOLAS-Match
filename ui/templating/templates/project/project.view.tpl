@@ -1001,7 +1001,6 @@
           <br />
           <input type="checkbox" name="revoke_task_deny_user" value="1" /> Add user to deny list
           <input type="hidden" name="revoke_task_id_list" value="" />
-          <input type="hidden" name="mark_revoke_task" value="1" />
           {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
         </div>
         <div class="modal-footer">
