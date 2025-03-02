@@ -461,6 +461,13 @@
                 <input type="hidden" name="cancelled" value="0" />
                 {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
              </form>
+            <br />
+
+            <div class="bg-light-subtle d-flex flex-column justify-content-center form_action me-2 mb-4 mb-lg-0">
+              <a class="d-flex p-1 text-muted fs-6 text-decoration-none open_revoke_task_modal p-1" data-bs-toggle="modal" data-id="1" href="#revoke_task_modal" role="button">
+                <i class="fa fa-ban me-2" aria-hidden="true"></i> <span>Revoke selected tasks</span>
+              </a>
+            </div>
         {/if}
         </div>
         <div class="d-flex mt-4 flex-wrap">
@@ -975,6 +982,34 @@
 
   </form>
   </div>
+  </div>
+</div>
+
+
+<!-- Revoke Task Modal -->
+<div id="revoke_task_modal" class="modal fade" tabindex="-1" aria-labelledby="revoke_task_modal_label" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title fs-4 fw-bold me-4" id="revoke_task_modal_label">Revoke Task and Submit Feedback</h3>
+        <strong id="revoke_task_no_tasks" class="btn btn-danger me-4">No task has been selected</strong>
+        <strong id="revoke_task_no_feedback" class="btn btn-danger me-4">No feedback has been entered</strong>
+      </div>
+      <form id="revoke_task" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}">
+        <div class="modal-body">
+          <textarea rows="10" cols="40" name="revoke_task_feedback" id="revoke_task_feedback" style="width:auto;" wrap="soft" maxlength="4096" placeholder="Provide direct feedback to the translators who claimed these tasks here"></textarea>
+          <br />
+          <input type="checkbox" name="revoke_task_deny_user" value="1" /> Add user to deny list
+          <input type="hidden" name="revoke_task_id_list" value="" />
+          <input type="hidden" name="mark_revoke_task" value="1" />
+          {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-light" data-bs-dismiss="modal" aria-label="Close"> Close</button>
+          <button class="btn btn-danger" id="revoke_task_submit_button" onclick="$('#revoke_task').submit();">Revoke Task and Submit Feedback</button>
+        </div>
+      </form>
+    </div>
   </div>
 </div>
 

@@ -29,6 +29,7 @@ function select() {
             $("[name=status_as_unclaimed]").val(arr);
             $("[name=status_as_waiting]").val(arr);
             $("[name=cancel]").val(arr);
+            $("[name=revoke_task_id_list]").val(arr);
             $("[name=complete_selected_tasks]").val(arr);
             $("[name=uncomplete_selected_tasks]").val(arr);
             $("[name=unpublish_selected__translation_tasks]").val(arr);
@@ -50,6 +51,7 @@ function select() {
             $("[name=status_as_unclaimed]").val(arr);
             $("[name=status_as_waiting]").val(arr);
             $("[name=cancel]").val(arr);
+            $("[name=revoke_task_id_list]").val(arr);
             $("[name=complete_selected_tasks]").val(arr);
             $("[name=uncomplete_selected_tasks]").val(arr);
             $("[name=wordnum]").val(arr);
@@ -70,6 +72,7 @@ function select() {
             $("[name=status_as_unclaimed]").val(arr);
             $("[name=status_as_waiting]").val(arr);
             $("[name=cancel]").val(arr);
+            $("[name=revoke_task_id_list]").val(arr);
             $("[name=complete_selected_tasks]").val(arr);
             $("[name=uncomplete_selected_tasks]").val(arr);
             $("[name=wordnum]").val(arr);
@@ -90,6 +93,7 @@ function select() {
             $("[name=status_as_unclaimed]").val(arr);
             $("[name=status_as_waiting]").val(arr);
             $("[name=cancel]").val(arr);
+            $("[name=revoke_task_id_list]").val(arr);
             $("[name=complete_selected_tasks]").val(arr);
             $("[name=uncomplete_selected_tasks]").val(arr);
             $("[name=wordnum]").val(arr);
@@ -111,6 +115,7 @@ function select() {
             $("[name=status_as_unclaimed]").val(arr);
             $("[name=status_as_waiting]").val(arr);
             $("[name=cancel]").val(arr);
+            $("[name=revoke_task_id_list]").val(arr);
             $("[name=complete_selected_tasks]").val(arr);
             $("[name=uncomplete_selected_tasks]").val(arr);
             $("[name=wordnum]").val(arr);
@@ -131,6 +136,7 @@ function select() {
             $("[name=status_as_unclaimed]").val(arr);
             $("[name=status_as_waiting]").val(arr);
             $("[name=cancel]").val(arr);
+            $("[name=revoke_task_id_list]").val(arr);
             $("[name=complete_selected_tasks]").val(arr);
             $("[name=uncomplete_selected_tasks]").val(arr);
             $("[name=wordnum]").val(arr);
@@ -148,6 +154,7 @@ function select() {
             $("[name=status_as_unclaimed]").val(arr);
             $("[name=status_as_waiting]").val(arr);
             $("[name=cancel]").val(arr);
+            $("[name=revoke_task_id_list]").val(arr);
             $("[name=complete_selected_tasks]").val(arr);
             $("[name=uncomplete_selected_tasks]").val(arr);
             $("[name=wordnum]").val(arr);
@@ -184,6 +191,7 @@ function select() {
         $("[name=status_as_unclaimed]").val(select_all_tasks);
         $("[name=status_as_waiting]").val(select_all_tasks);
         $("[name=cancel]").val(select_all_tasks);
+        $("[name=revoke_task_id_list]").val(select_all_tasks);
         $("[name=complete_selected_tasks]").val(select_all_tasks);
         $("[name=uncomplete_selected_tasks]").val(select_all_tasks);
         $("[name=wordnum]").val(select_all_tasks);
@@ -206,6 +214,7 @@ function select() {
         $("[name=status_as_unclaimed]").val(arr_select_task);
         $("[name=status_as_waiting]").val(arr_select_task);
         $("[name=cancel]").val(arr_select_task);
+        $("[name=revoke_task_id_list]").val(arr_select_task);
         $("[name=complete_selected_tasks]").val(arr_select_task);
         $("[name=uncomplete_selected_tasks]").val(arr_select_task);
         $("[name=wordnum]").val(arr_select_task);
@@ -281,6 +290,7 @@ function select() {
             $("[name=status_as_unclaimed]").val(arr);
             $("[name=status_as_waiting]").val(arr);
             $("[name=cancel]").val(arr);
+            $("[name=revoke_task_id_list]").val(arr);
             $("[name=complete_selected_tasks]").val(arr);
             $("[name=uncomplete_selected_tasks]").val(arr);
             $("[name=wordnum]").val(arr);
@@ -302,6 +312,7 @@ function select() {
             $("[name=status_as_unclaimed]").val(arr);
             $("[name=status_as_waiting]").val(arr);
             $("[name=cancel]").val(arr);
+            $("[name=revoke_task_id_list]").val(arr);
             $("[name=complete_selected_tasks]").val(arr);
             $("[name=uncomplete_selected_tasks]").val(arr);
             $("[name=wordnum]").val(arr);
@@ -323,6 +334,7 @@ function select() {
             $("[name=status_as_unclaimed]").val(arr);
             $("[name=status_as_waiting]").val(arr);
             $("[name=cancel]").val(arr);
+            $("[name=revoke_task_id_list]").val(arr);
             $("[name=complete_selected_tasks]").val(arr);
             $("[name=uncomplete_selected_tasks]").val(arr);
             $("[name=wordnum]").val(arr);
@@ -344,6 +356,7 @@ function select() {
             $("[name=status_as_unclaimed]").val(arr);
             $("[name=status_as_waiting]").val(arr);
             $("[name=cancel]").val(arr);
+            $("[name=revoke_task_id_list]").val(arr);
             $("[name=complete_selected_tasks]").val(arr);
             $("[name=uncomplete_selected_tasks]").val(arr);
             $("[name=wordnum]").val(arr);
@@ -366,6 +379,7 @@ function select() {
             $("[name=status_as_unclaimed]").val(arr);
             $("[name=status_as_waiting]").val(arr);
             $("[name=cancel]").val(arr);
+            $("[name=revoke_task_id_list]").val(arr);
             $("[name=complete_selected_tasks]").val(arr);
             $("[name=uncomplete_selected_tasks]").val(arr);
             $("[name=wordnum]").val(arr);
@@ -387,6 +401,7 @@ function select() {
             $("[name=status_as_unclaimed]").val(arr);
             $("[name=status_as_waiting]").val(arr);
             $("[name=cancel]").val(arr);
+            $("[name=revoke_task_id_list]").val(arr);
             $("[name=complete_selected_tasks]").val(arr);
             $("[name=uncomplete_selected_tasks]").val(arr);
             $("[name=wordnum]").val(arr);
@@ -401,6 +416,7 @@ function select() {
             $("[name=status_as_unclaimed]").val(arr);
             $("[name=status_as_waiting]").val(arr);
             $("[name=cancel]").val(arr);
+            $("[name=revoke_task_id_list]").val(arr);
             $("[name=complete_selected_tasks]").val(arr);
             $("[name=uncomplete_selected_tasks]").val(arr);
             $("[name=wordnum]").val(arr);
@@ -477,5 +493,30 @@ function select() {
             isValid = true;
         }
      })
+
+    // Revoke Task
+    $('#revoke_task_modal').on('hidden.bs.modal', function () {
+      $(this).find('form').trigger('reset');
+    });
+
+    // Validation
+    $('#revoke_task_modal').on('shown.bs.modal', function () {
+      $("#revoke_task_no_tasks").hide();
+      $("#revoke_task_no_feedback").hide();
+
+      if ($("[name=revoke_task_id_list]").val().length == 0) {
+        $("#revoke_task_submit_button").prop('disabled', true);
+        $("#revoke_task_no_tasks").show();
+      }
+
+      if ($("[name=revoke_task_feedback]").val().length == 0) {
+            $("#revoke_task_submit_button").prop('disabled', true);
+            $("#revoke_task_no_feedback").show();
+      }
+    });
+
+    $('.open_revoke_task_modal').on('click', function (e) {
+        e.preventDefault();
+    });
 }
 </script>
