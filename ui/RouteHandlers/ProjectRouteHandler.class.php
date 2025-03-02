@@ -938,7 +938,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                     $cancelled = $post['cancelled'] ? 1 : 0;
                     $number = 0;
                     foreach ($task_ids as $id) {
-                        $number += $userDao->propagate_cancelled($cancelled, $memsource_project, $id, $comment, empty($post['cancel_selected_only']) ? 1 : 0);
+                        if ($id) $number += $userDao->propagate_cancelled($cancelled, $memsource_project, $id, $comment, empty($post['cancel_selected_only']) ? 1 : 0);
                     }
                     error_log("$number Tasks Marked Cancelled($cancelled) by $user_id, IDs: " . $post['cancel']);
                     UserRouteHandler::flashNow('success', $cancelled ? "$number tasks cancelled." : "$number tasks uncancelled.");
