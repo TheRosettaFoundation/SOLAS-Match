@@ -496,24 +496,29 @@ function select() {
 
     // Revoke Task
     $('#revoke_task_modal').on('hidden.bs.modal', function () {
-      $(this).find('form').trigger('reset');
+        $(this).find('form').trigger('reset');
     });
 
     // Validation
     $('#revoke_task_modal').on('shown.bs.modal', function () {
-      $("#revoke_task_no_tasks").hide();
-      $("#revoke_task_no_feedback").hide();
-
-      if ($("[name=revoke_task_id_list]").val().length == 0) {
         $("#revoke_task_submit_button").prop('disabled', true);
-        $("#revoke_task_no_tasks").show();
-      }
+        $("#revoke_task_no_tasks").hide();
+        $("#revoke_task_no_feedback").hide();
 
-      if ($("[name=revoke_task_feedback]").val().length == 0) {
+        if ($("[name=revoke_task_id_list]").val().length == 0) {
+            $("#revoke_task_no_tasks").show();
+        }
+    });
+    $('#revoke_task_feedback').on('change paste keyup', function () {
+        if ($("[name=revoke_task_feedback]").val().length != 0 && $("[name=revoke_task_id_list]").val().length != 0) {
+            $("#revoke_task_submit_button").prop('disabled', false);
+            $("#revoke_task_no_feedback").hide();
+        } else {
             $("#revoke_task_submit_button").prop('disabled', true);
             $("#revoke_task_no_feedback").show();
-      }
+        }
     });
+
 
     $('.open_revoke_task_modal').on('click', function (e) {
         e.preventDefault();
