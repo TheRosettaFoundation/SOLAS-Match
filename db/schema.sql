@@ -14127,6 +14127,7 @@ BEGIN
         tp.purchase_order='0' AND
         tp.payment_status NOT IN ('In-kind', 'In-house', 'Waived') AND
         lpi.linguist_t_code!='' AND
+        lpi.google_drive_link!='' AND
         t.`task-status_id`=4
     ORDER BY
         IF(tp.po_create_failed=0, t.id, 0) ASC,
