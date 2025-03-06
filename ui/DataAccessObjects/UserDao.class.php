@@ -1269,6 +1269,7 @@ error_log("claimTask_shell($userId, $taskId)");
     public function change_memsource_user_email($user_id, $record, $email)
     {
         if ($record['role'] === Common\Enums\MemsourceRoleEnum::LINGUIST) {
+            error_log("change_memsource_user_email($user_id, ..., $email) {$record['uid']}");
             $ch = curl_init("https://cloud.memsource.com/web/api2/v3/users/{$record['uid']}");
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
             $user_personal_info = $this->getUserPersonalInformation($user_id);
@@ -1295,18 +1296,20 @@ error_log("claimTask_shell($userId, $taskId)");
             $data['domains'] = [];
             $data['subDomains'] = [];
             $payload = json_encode($data);
+            error_log($payload);
             curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PUT');
             curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
             $authorization = 'Authorization: Bearer ' . $this->memsourceApiToken;
             curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json', $authorization));
             $result_exec = curl_exec($ch);
+            error_log($result_exec);
             $result = json_decode($result_exec, true);
             curl_close($ch);
             if (empty($result['email'])) {
                 error_log("No email returned from Memsource in change_memsource_user_email($user_id, ..., $email) {$record['uid']}");
                 error_log(print_r($result, true));
             }
-        }
+        } else error_log('Not a LINGUIST');
     }
 
     public function createPersonalInfo($userId, $personalInfo)
