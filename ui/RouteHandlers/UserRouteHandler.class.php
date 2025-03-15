@@ -3288,7 +3288,7 @@ EOF;
 
         $status = $invoice['status'];
         $paid = $status&2 ? 'PAID' : '';
-        $draft_message = $status == 1 ? 'After review, please download and send invoice to <a href="mailto:linguistspayments@translatorswithoutborders.org?subject=' . rawurlencode('Invoice to Clear Global') . '" target="_blank">linguistspayments@translatorswithoutborders.org</a>' : '';
+        $draft_message = $status == 1 ? 'After review, please download and send invoice to <a href="mailto:linguistinvoices@clearglobal.org?subject=' . rawurlencode('Invoice to Clear Global') . '" target="_blank">linguistinvoices@clearglobal.org</a>' : '';
         if ($status&4) $paid = 'BOUNCED';
 
         $email = $invoice['email'];
