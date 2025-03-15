@@ -1729,6 +1729,7 @@ CREATE TABLE IF NOT EXISTS `email_sents` (
   KEY (recipient_id),
   KEY (task_id),
   KEY (project_id),
+  KEY (translator_id),
   KEY (logged_time)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -12991,6 +12992,18 @@ BEGIN
     JOIN Countries                       c ON lpi.country_id=c.id
     LEFT JOIN UserPersonalInformation    i ON lpi.admin_id=i.user_id
     WHERE lpi.user_id=uID;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `get_email_sent_for_linguist_payment_information`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_email_sent_for_linguist_payment_information`(IN uID INT UNSIGNED)
+BEGIN
+    SELECT *
+    FROM email_sents
+    WHERE
+        translator_id=uID AND
+        topic='need_linguist_t_code_to_admin';
 END//
 DELIMITER ;
 
