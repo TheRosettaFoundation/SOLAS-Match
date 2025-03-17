@@ -81,6 +81,12 @@ class AdminRouteHandler
             ->setName('sow_linguist_report');
 
         $app->get(
+            '/pr_report[/]',
+            '\SolasMatch\UI\RouteHandlers\AdminRouteHandler:pr_report')
+            ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin_any_or_FINANCE')
+            ->setName('pr_report');
+
+        $app->get(
             '/po_report[/]',
             '\SolasMatch\UI\RouteHandlers\AdminRouteHandler:po_report')
             ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin_any_or_FINANCE')
@@ -532,6 +538,15 @@ class AdminRouteHandler
         $template_data['roles'] = $adminDao->get_roles(Common\Lib\UserSession::getCurrentUserID());
         $template_data['sesskey'] = Common\Lib\UserSession::getCSRFKey();
         return UserRouteHandler::render('admin/sow_linguist_report.tpl', $response);
+    }
+
+    public function pr_report(Request $request, Response $response)
+    {
+        global $template_data;
+        $statsDao = new DAO\StatisticsDao();
+
+        $template_data['prs'] = $statsDao->pr_report();
+        return UserRouteHandler::render('admin/pr_report.tpl', $response);
     }
 
     public function po_report(Request $request, Response $response)

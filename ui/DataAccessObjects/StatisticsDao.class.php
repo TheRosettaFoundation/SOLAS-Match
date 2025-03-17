@@ -190,6 +190,11 @@ class StatisticsDao extends BaseDao
         return $result;
     }
 
+    public function pr_report()
+    {
+        return LibAPI\PDOWrapper::call('pr_report', '');
+    }
+
     public function po_report()
     {
         return LibAPI\PDOWrapper::call('po_report', '');
