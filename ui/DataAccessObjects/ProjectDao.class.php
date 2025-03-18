@@ -1983,8 +1983,7 @@ error_log("Create PO ref: $result");
         $access_token = $this->get_sun_access_token($PRD);
 
         for ($page = 0;; $page++) {
-//            $ch = curl_init("https://mingle-ionapi.eu3.inforcloudsuite.com/VGK6STV88YNKAKGZ_$PRD/SUN/businessobject-v1/api/businessobject/v1/CLG/purchase-requisition-lines?purchaseTransactionType=PR002&page=$page");
-            $ch = curl_init("https://mingle-ionapi.eu3.inforcloudsuite.com/VGK6STV88YNKAKGZ_$PRD/SUN/businessobject-v1/api/businessobject/v1/CLG/purchase-requisition-lines?requisitionType=PO002&page=$page");
+            $ch = curl_init("https://mingle-ionapi.eu3.inforcloudsuite.com/VGK6STV88YNKAKGZ_$PRD/SUN/businessobject-v1/api/businessobject/v1/CLG/purchase-requisition-lines?purchaseTransactionType=PO002&page=$page");
             curl_setopt($ch, CURLOPT_HTTPHEADER, ["Authorization: Bearer $access_token"]);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
             curl_setopt($ch, CURLOPT_TIMEOUT, 300);
@@ -1997,7 +1996,24 @@ error_log("Create PO ref: $result");
 
             if (empty($res['purchaseRequisitionLineList'])) break;
             foreach ($res['purchaseRequisitionLineList'] as $line) {
+//(**)DEL
+error_log("purchaseRequisitionTxnRef: " . $line['purchaseRequisitionTxnRef']);
+error_log("purchaseTransactionType: " . $line['purchaseTransactionType']);
+error_log("purchaseTransactionType: " . $line['purchaseTransactionType']);
+//(**)DEL ABOVE
                 if (empty($sun_purchase_requisitions[$line['purchaseRequisitionTxnRef']]) || $line['dateTimeLastUpdated'] != $sun_purchase_requisitions[$line['purchaseRequisitionTxnRef']]['dateTimeLastUpdated']) {
+//(**)DEL
+error_log(
+                        LibAPI\PDOWrapper::cleanseWrapStr($line['purchaseRequisitionTxnRef']) . ',' .
+                        LibAPI\PDOWrapper::cleanseWrapStr($line['userDefinedFields']['i01']) . ',' .
+                        LibAPI\PDOWrapper::cleanseWrapStr($line['userDefinedFields']['i03']) . ',' .
+                        LibAPI\PDOWrapper::cleanseWrapStr($line['miscellaneousDescription2']) . ',' .
+                        LibAPI\PDOWrapper::cleanseWrapStr($line['dateTimeLastUpdated']) . ',' .
+                        LibAPI\PDOWrapper::cleanse($line['userDefinedFields']['grossValue_baseValueLabel_value_amount']) . ',' .
+                        LibAPI\PDOWrapper::cleanse($line['approvalStatus']['code']) . ',' .
+                        LibAPI\PDOWrapper::cleanse($line['status']['code'])
+);
+//(**)DEL ABOVE
                     LibAPI\PDOWrapper::call('insert_update_sun_purchase_requisition',
                         LibAPI\PDOWrapper::cleanseWrapStr($line['purchaseRequisitionTxnRef']) . ',' .
                         LibAPI\PDOWrapper::cleanseWrapStr($line['userDefinedFields']['i01']) . ',' .
