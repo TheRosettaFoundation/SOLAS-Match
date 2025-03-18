@@ -13502,6 +13502,29 @@ BEGIN
 END//
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `pr_report`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `pr_report`()
+BEGIN
+    SELECT
+        spr.*,
+        SUM(IF(tp.payment_status NOT IN ('In-kind', 'In-house', 'Waived')                                   , IF(t.`word-count`>1, IF(ttd.divide_rate_by_60, t.`word-count`*tp.unit_rate/60, t.`word-count`*tp.unit_rate), 0), 0)) AS total_tasks_for_pr,
+        SUM(IF(tp.payment_status NOT IN ('In-kind', 'In-house', 'Waived') AND t.`task-status_id`=4          , IF(t.`word-count`>1, IF(ttd.divide_rate_by_60, t.`word-count`*tp.unit_rate/60, t.`word-count`*tp.unit_rate), 0), 0)) AS total_completed_tasks_for_pr,
+        SUM(IF(tp.payment_status     IN ('In-kind', 'In-house', 'Waived')                                   , IF(t.`word-count`>1, IF(ttd.divide_rate_by_60, t.`word-count`*tp.unit_rate/60, t.`word-count`*tp.unit_rate), 0), 0)) AS total_waived_tasks_for_pr,
+        SUM(IF(tp.payment_status NOT IN ('In-kind', 'In-house', 'Waived') AND pos.purchase_order IS NOT NULL, pos.total, 0)) AS total_po
+    FROM sun_purchase_requisitions   spr
+    JOIN project_complete_dates      pcd ON spr.project_t_code=pcd.project_t_code
+    JOIN Projects                      p ON pcd.project_id=p.id
+    JOIN Organisations                 o ON p.organisation_id=o.id
+    JOIN Tasks                         t ON p.id=t.project_id
+    JOIN task_type_details           ttd ON t.`task-type_id`=ttd.type_enum
+    JOIN TaskPaids                    tp ON t.id=tp.task_id
+    LEFT JOIN zahara_purchase_orders pos ON tp.purchase_order=pos.purchase_order AND pos.purchase_order!='0'
+    GROUP BY spr.purchase_requisition
+    ORDER BY spr.purchase_requisition;
+END//
+DELIMITER ;
+
 DROP PROCEDURE IF EXISTS `set_invoice_paid`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `set_invoice_paid`(IN inv INT, IN aID INT UNSIGNED)

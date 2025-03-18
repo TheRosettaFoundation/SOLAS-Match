@@ -35,32 +35,32 @@
 
 <table id="myTable" style="overflow-wrap: break-word;" class="container table table-striped">
     <thead>
-        <th>PO #</th>
-        <th>Supplier</th>
-        <th>Status</th>
-        <th>Creation date</th>
-        <th>Approver mail</th>
-        <th>Approval date</th>
-        <th>Total Zahara</th>
-        <th>Total Tasks Assigned to PO</th>
-        <th>Difference</th>
-        <th>Total Tasks Completed for PO</th>
-        <th>Total Tasks Waived for PO</th>
+        <th>PR #</th>
+        <th>creator</th>
+        <th>requisitionDate</th>
+        <th>approvalStatus</th>
+        <th>status</th>
+        <th>total</th>
+        <th>Total Tasks for PR</th>
+        <th>Total Tasks Completed for PR</th>
+        <th>Total Tasks Waived for PR</th>
+        <th>Total PO</th>
+        <th>Difference PR less POs</th>
     </thead>
     <tbody>
         {foreach $prs as $pr}
         <tr>
-            <td><a href="{urlFor name="sow_report"}?po={$pr['purchase_order']}" target="_blank">{$pr['purchase_order']}</a></td>
-            <td>{$pr['supplier']}</td>
+            <td>{$pr['purchase_requisition']}</td>
+            <td>{$pr['creator']}</td>
+            <td>{$pr['requisitionDate']}</td>
+            <td>{$pr['approvalStatus']}</td>
             <td>{$pr['status']}</td>
-            <td>{$pr['creation_date']}</td>
-            <td>{$pr['approver_mail']}</td>
-            <td>{$pr['approval_date']}</td>
-            <td>{$pr['total']} {$pr['currency']}</td>
-            <td>${round($pr['total_tasks_for_po'], 2)}</td>
-            <td>{if round($pr['total'] - $pr['total_tasks_for_po'], 2) != 0}<strong><span style="color: red">{round($pr['total'] - $pr['total_tasks_for_po'], 2)}</span></strong>{/if}</td>
-            <td>${round($pr['total_completed_tasks_for_po'], 2)}</td>
-            <td>${round($pr['total_waived_tasks_for_po'], 2)}</td>
+            <td>{$pr['total']}</td>
+            <td>${round($pr['total_tasks_for_pr'], 2)}</td>
+            <td>${round($pr['total_completed_tasks_for_pr'], 2)}</td>
+            <td>${round($pr['total_waived_tasks_for_pr'], 2)}</td>
+            <td>${round($pr['total_po'], 2)}</td>
+            <td>{if round($pr['total'] - $pr['total_po'], 2) != 0}<strong><span style="color: red">{round($pr['total'] - $pr['total_po'], 2)}</span></strong>{/if}</td>
         {/foreach}
     </tbody>
 </table>
