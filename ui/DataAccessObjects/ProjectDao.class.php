@@ -1983,7 +1983,7 @@ error_log("Create PO ref: $result");
         $access_token = $this->get_sun_access_token($PRD);
 
         for ($page = 0;; $page++) {
-            $ch = curl_init("https://mingle-ionapi.eu3.inforcloudsuite.com/VGK6STV88YNKAKGZ_$PRD/SUN/businessobject-v1/api/businessobject/v1/CLG/purchase-requisition-lines?purchaseTransactionType=PO002&page=$page");
+            $ch = curl_init("https://mingle-ionapi.eu3.inforcloudsuite.com/VGK6STV88YNKAKGZ_$PRD/SUN/businessobject-v1/api/businessobject/v1/CLG/purchase-requisition-lines?purchaseTransactionType=PR002&page=$page");
             curl_setopt($ch, CURLOPT_HTTPHEADER, ["Authorization: Bearer $access_token"]);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
             curl_setopt($ch, CURLOPT_TIMEOUT, 300);
