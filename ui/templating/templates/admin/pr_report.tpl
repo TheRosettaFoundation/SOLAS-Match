@@ -36,23 +36,23 @@
 <table id="myTable" style="overflow-wrap: break-word;" class="container table table-striped">
     <thead>
         <th>PR #</th>
-        <th>creator</th>
-        <th>requisitionDate</th>
+        <th>Creator</th>
+        <th>Date</th>
         <th>approvalStatus</th>
         <th>status</th>
-        <th>total</th>
+        <th>Total</th>
         <th>Total Tasks for PR</th>
         <th>Total Tasks Completed for PR</th>
         <th>Total Tasks Waived for PR</th>
         <th>Total PO</th>
-        <th>Difference PR less POs</th>
+        <th>Total PR less POs</th>
     </thead>
     <tbody>
         {foreach $prs as $pr}
         <tr>
             <td>{$pr['purchase_requisition']}</td>
             <td>{$pr['creator']}</td>
-            <td>{$pr['requisitionDate']}</td>
+            <td>{substr($pr['requisitionDate'], 0, 10)}</td>
             <td>{$pr['approvalStatus']}</td>
             <td>{$pr['status']}</td>
             <td>{$pr['total']}</td>
