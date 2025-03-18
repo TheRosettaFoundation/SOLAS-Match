@@ -52,7 +52,7 @@
         <tr>
             <td>{$pr['purchase_requisition']}</td>
             <td>{$pr['creator']}</td>
-            <td>{substr($pr['requisitionDate'], 0, 10)}</td>
+            <td>{substr($pr['dateTimeLastUpdated'], 0, 10)}</td>
             <td>{$pr['approvalStatus']}</td>
             <td>{$pr['status']}</td>
             <td>{$pr['total']}</td>
