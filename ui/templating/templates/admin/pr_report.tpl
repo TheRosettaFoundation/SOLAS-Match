@@ -38,8 +38,8 @@
         <th>PR #</th>
         <th>Creator</th>
         <th>Date</th>
-        <th>approvalStatus</th>
-        <th>status</th>
+        <th>Approval</th>
+        <th>Status</th>
         <th>Total</th>
         <th>Total Tasks for PR</th>
         <th>Total Tasks Completed for PR</th>
@@ -53,14 +53,14 @@
             <td>{$pr['purchase_requisition']}</td>
             <td>{$pr['creator']}</td>
             <td>{substr($pr['dateTimeLastUpdated'], 0, 10)}</td>
-            <td>{$pr['approvalStatus']}</td>
-            <td>{$pr['status']}</td>
-            <td>{$pr['total']}</td>
+            <td>{if $pr['approvalStatus'] == 0}Not Approved{/if}{if $pr['approvalStatus'] == 1}Approved{/if}{if $pr['approvalStatus'] == 99}Not Applicable{/if}</td>
+            <td>{if $pr['status'] == 0}Open{/if}{if $pr['status'] == 1}1{/if}{if $pr['status'] == 2}Awaiting Approval{/if}{if $pr['status'] == 3}Awaiting Purchasing{/if}{if $pr['status'] == 4}PO Generated{/if}</td>
+            <td>${$pr['total']}</td>
             <td>${round($pr['total_tasks_for_pr'], 2)}</td>
             <td>${round($pr['total_completed_tasks_for_pr'], 2)}</td>
             <td>${round($pr['total_waived_tasks_for_pr'], 2)}</td>
             <td>${round($pr['total_po'], 2)}</td>
-            <td>{if round($pr['total'] - $pr['total_po'], 2) != 0}<strong><span style="color: red">{round($pr['total'] - $pr['total_po'], 2)}</span></strong>{/if}</td>
+            <td>{if $pr['total_po'] != 0 AND round($pr['total'] - $pr['total_po'], 2) != 0}<strong><span style="color: red">${round($pr['total'] - $pr['total_po'], 2)}</span></strong>{/if}</td>
         {/foreach}
     </tbody>
 </table>
