@@ -13521,7 +13521,7 @@ BEGIN
     JOIN TaskPaids                    tp ON t.id=tp.task_id
     LEFT JOIN zahara_purchase_orders pos ON tp.purchase_order=pos.purchase_order AND pos.purchase_order!='0'
     GROUP BY spr.purchase_requisition
-    ORDER BY spr.purchase_requisition;
+    ORDER BY spr.purchase_requisition DESC;
 END//
 DELIMITER ;
 
