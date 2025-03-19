@@ -1999,7 +1999,6 @@ error_log("Create PO ref: $result");
 //(**)DEL
 error_log("purchaseRequisitionTxnRef: " . $line['purchaseRequisitionTxnRef']);
 error_log("purchaseTransactionType: " . $line['purchaseTransactionType']);
-error_log("purchaseTransactionType: " . $line['purchaseTransactionType']);
 //(**)DEL ABOVE
                 if (empty($sun_purchase_requisitions[$line['purchaseRequisitionTxnRef']]) || $line['dateTimeLastUpdated'] != $sun_purchase_requisitions[$line['purchaseRequisitionTxnRef']]['dateTimeLastUpdated']) {
 //(**)DEL
