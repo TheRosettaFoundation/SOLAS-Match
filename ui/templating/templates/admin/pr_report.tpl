@@ -40,10 +40,11 @@
         <th>Date</th>
         <th>Approval</th>
         <th>Status</th>
-        <th>Total</th>
-        <th>Total Tasks for PR</th>
-        <th>Total Tasks Completed for PR</th>
-        <th>Total Tasks Waived for PR</th>
+        <th>Total (SUN)</th>
+        <th>Total Paid</th>
+        <th>Total Unwaived</th>
+        <th>Total Complete Unwaived</th>
+        <th>Total Tasks Waived</th>
         <th>Total PO</th>
         <th>Total PR less POs</th>
     </thead>
@@ -56,6 +57,7 @@
             <td>{if $pr['approvalStatus'] == 0}Not Approved{/if}{if $pr['approvalStatus'] == 1}Approved{/if}{if $pr['approvalStatus'] == 99}Not Applicable{/if}</td>
             <td>{if $pr['status'] == 0}Open{/if}{if $pr['status'] == 1}1{/if}{if $pr['status'] == 2}Awaiting Approval{/if}{if $pr['status'] == 3}Awaiting Purchasing{/if}{if $pr['status'] == 4}PO Generated{/if}</td>
             <td>${$pr['total']}</td>
+            <td>${round($pr['total_tasks_for_pr'] + $pr['total_waived_tasks_for_pr'], 2)}</td>
             <td>${round($pr['total_tasks_for_pr'], 2)}</td>
             <td>${round($pr['total_completed_tasks_for_pr'], 2)}</td>
             <td>${round($pr['total_waived_tasks_for_pr'], 2)}</td>
