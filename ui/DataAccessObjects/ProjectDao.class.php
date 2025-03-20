@@ -1976,8 +1976,12 @@ error_log("Create PO ref: $result");
 
         if (!LibAPI\PDOWrapper::call('get_poll_sun', '')[0]['result']) return;
 
-        $sun_purchase_requisitions = LibAPI\PDOWrapper::call('get_sun_purchase_requisitions', '');
-        if (empty($sun_purchase_requisitions)) $sun_purchase_requisitions = [];
+        $result = LibAPI\PDOWrapper::call('get_sun_purchase_requisitions', '');
+        if (empty($result)) $result = [];
+        $sun_purchase_requisitions = [];
+        foreach ($result as $row) {
+            $sun_purchase_requisitions[$row['purchaseRequisitionTxnRef']] = $row;
+        }
         error_log('count(sun_purchase_requisitions): ' . count($sun_purchase_requisitions));
 
         $access_token = $this->get_sun_access_token($PRD);
