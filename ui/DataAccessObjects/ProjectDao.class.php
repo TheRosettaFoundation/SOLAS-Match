@@ -1980,7 +1980,7 @@ error_log("Create PO ref: $result");
         if (empty($result)) $result = [];
         $sun_purchase_requisitions = [];
         foreach ($result as $row) {
-            $sun_purchase_requisitions[$row['purchaseRequisitionTxnRef']] = $row;
+            $sun_purchase_requisitions[$row['purchase_requisition']] = $row;
         }
         error_log('count(sun_purchase_requisitions): ' . count($sun_purchase_requisitions));
 
