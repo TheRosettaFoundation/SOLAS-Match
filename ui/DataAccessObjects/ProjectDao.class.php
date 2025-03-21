@@ -1988,6 +1988,7 @@ error_log("Create PO ref: $result");
 
         $lines = [];
         $totals = [];
+        $first_lines = [];
         for ($page = 0;; $page++) {
             $ch = curl_init("https://mingle-ionapi.eu3.inforcloudsuite.com/VGK6STV88YNKAKGZ_$PRD/SUN/businessobject-v1/api/businessobject/v1/CLG/purchase-requisition-lines?purchaseTransactionType=PO002&page=$page");
             curl_setopt($ch, CURLOPT_HTTPHEADER, ["Authorization: Bearer $access_token"]);
@@ -2004,17 +2005,22 @@ error_log("Create PO ref: $result");
             foreach ($res['purchaseRequisitionLineList'] as $line) {
                 $lines[] = $line;
                 $pr = $line['purchaseRequisitionTxnRef'];
+
+                $lineNumber = $line['lineNumber'];
+                if (empty($first_lines[$pr])) $first_lines[$pr] = $lineNumber;
+                else                          $first_lines[$pr] = min($lineNumber, $first_lines[$pr]);
+
                 $amount = empty($line['userDefinedFields']['grossValue_baseValueLabel_value_amount']) ? 0 : $line['userDefinedFields']['grossValue_baseValueLabel_value_amount'];
                 if (empty($totals[$pr])) $totals[$pr]  = $amount;
                 else {
                                          $totals[$pr] += $amount;
-                    error_log("More than one line for: $pr ({$line['lineNumber']}), value: $amount");
+                    error_log("More than one line for: $pr ($lineNumber, min({$first_lines[$pr]})), value: $amount");
                 }
             }
         }
         foreach ($lines as $line) {
             $pr = $line['purchaseRequisitionTxnRef'];
-            if ($line['lineNumber'] == 1 && (empty($sun_purchase_requisitions[$pr]) || $line['dateTimeLastUpdated'] != $sun_purchase_requisitions[$pr]['dateTimeLastUpdated'])) {
+            if ($line['lineNumber'] == $first_lines[$pr] && (empty($sun_purchase_requisitions[$pr]) || $line['dateTimeLastUpdated'] != $sun_purchase_requisitions[$pr]['dateTimeLastUpdated'])) {
                 $parms =
                     LibAPI\PDOWrapper::cleanseWrapStr($pr) . ',' .
                     LibAPI\PDOWrapper::cleanseWrapStr($line['userDefinedFields']['i01']) . ',' .
