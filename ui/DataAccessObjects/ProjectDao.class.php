@@ -1986,6 +1986,8 @@ error_log("Create PO ref: $result");
 
         $access_token = $this->get_sun_access_token($PRD);
 
+        $lines = [];
+        $totals = [];
         for ($page = 0;; $page++) {
             $ch = curl_init("https://mingle-ionapi.eu3.inforcloudsuite.com/VGK6STV88YNKAKGZ_$PRD/SUN/businessobject-v1/api/businessobject/v1/CLG/purchase-requisition-lines?purchaseTransactionType=PO002&page=$page");
             curl_setopt($ch, CURLOPT_HTTPHEADER, ["Authorization: Bearer $access_token"]);
@@ -2000,19 +2002,30 @@ error_log("Create PO ref: $result");
 
             if (empty($res['purchaseRequisitionLineList'])) break;
             foreach ($res['purchaseRequisitionLineList'] as $line) {
-                if (empty($sun_purchase_requisitions[$line['purchaseRequisitionTxnRef']]) || $line['dateTimeLastUpdated'] != $sun_purchase_requisitions[$line['purchaseRequisitionTxnRef']]['dateTimeLastUpdated']) {
-                    $parms =
-                        LibAPI\PDOWrapper::cleanseWrapStr($line['purchaseRequisitionTxnRef']) . ',' .
-                        LibAPI\PDOWrapper::cleanseWrapStr($line['userDefinedFields']['i01']) . ',' .
-                        LibAPI\PDOWrapper::cleanseWrapStr($line['userDefinedFields']['i03']) . ',' .
-                        LibAPI\PDOWrapper::cleanseWrapStr($line['miscellaneousDescription2']) . ',' .
-                        LibAPI\PDOWrapper::cleanseWrapStr($line['dateTimeLastUpdated']) . ',' .
-                        LibAPI\PDOWrapper::cleanse($line['userDefinedFields']['grossValue_baseValueLabel_value_amount']) . ',' .
-                        LibAPI\PDOWrapper::cleanse($line['approvalStatus']['code']) . ',' .
-                        LibAPI\PDOWrapper::cleanse($line['status']['code']);
-                    error_log("insert_update_sun_purchase_requisition $parms");
-                    LibAPI\PDOWrapper::call('insert_update_sun_purchase_requisition', $parms);
+                $lines[] = $line;
+                $pr = $line['purchaseRequisitionTxnRef'];
+                $amount = empty($line['userDefinedFields']['grossValue_baseValueLabel_value_amount']) ? 0 : $line['userDefinedFields']['grossValue_baseValueLabel_value_amount'];
+                if (empty($totals[$pr])) $totals[$pr]  = $amount;
+                else {
+                                         $totals[$pr] += $amount;
+                    error_log("More than one line for: $pr ({$line['lineNumber']}), value: $amount");
                 }
+            }
+        }
+        foreach ($lines as $line) {
+            $pr = $line['purchaseRequisitionTxnRef'];
+            if ($line['lineNumber'] == 1 && (empty($sun_purchase_requisitions[$pr]) || $line['dateTimeLastUpdated'] != $sun_purchase_requisitions[$pr]['dateTimeLastUpdated'])) {
+                $parms =
+                    LibAPI\PDOWrapper::cleanseWrapStr($pr) . ',' .
+                    LibAPI\PDOWrapper::cleanseWrapStr($line['userDefinedFields']['i01']) . ',' .
+                    LibAPI\PDOWrapper::cleanseWrapStr($line['userDefinedFields']['i03']) . ',' .
+                    LibAPI\PDOWrapper::cleanseWrapStr($line['miscellaneousDescription2']) . ',' .
+                    LibAPI\PDOWrapper::cleanseWrapStr($line['dateTimeLastUpdated']) . ',' .
+                    LibAPI\PDOWrapper::cleanse($totals[$pr]) . ',' .
+                    LibAPI\PDOWrapper::cleanse($line['approvalStatus']['code']) . ',' .
+                    LibAPI\PDOWrapper::cleanse($line['status']['code']);
+                error_log("insert_update_sun_purchase_requisition $parms");
+                LibAPI\PDOWrapper::call('insert_update_sun_purchase_requisition', $parms);
             }
         }
     }
