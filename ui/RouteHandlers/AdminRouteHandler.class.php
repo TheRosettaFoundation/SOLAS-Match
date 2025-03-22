@@ -524,6 +524,7 @@ class AdminRouteHandler
 
         $template_data['tasks']   = $statsDao->sow_report();
         $template_data['po']      = !empty($parms['po']) ? $parms['po'] : 0;
+        $template_data['pr']      = !empty($parms['pr']) ? $parms['pr'] : 0;
         $template_data['claimed'] = !empty($parms['claimed']) ? 1 : 0;
         return UserRouteHandler::render('admin/sow_report.tpl', $response);
     }
