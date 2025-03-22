@@ -85,7 +85,7 @@
             <td>{if !empty($task['deal_id'])}<a href="{urlFor name="deal_id_report" options="deal_id.{$task['deal_id']}"}" target="_blank">{$task['deal_id']}</a>{/if}</td>
        <!-- <td>{$task['budget_code']}</td> -->
             <td>
-                {if !empty($task['purchase_requisition'])}<a href="{urlFor name="sow_report"}?pr={$task['purchase_requisition']}" target="_blank">{$task['purchase_requisition']}</a>{else}<span style="color: red;">No PO</span>{/if}
+                {if !empty($task['purchase_requisition'])}<a href="{urlFor name="sow_report"}?pr={$task['purchase_requisition']}" target="_blank">{$task['purchase_requisition']}</a>{else}<span style="color: red;">No PR</span>{/if}
                 <br />
                 {if !empty($task['purchase_order'])}<a href="{urlFor name="sow_report"}?po={$task['purchase_order']}" target="_blank">{$task['purchase_order']}</a>{else}{$task['purchase_order']}{/if}
                 {if !empty($task['total'])}<br />Total: ${round($task['total'], 2)}{/if}
