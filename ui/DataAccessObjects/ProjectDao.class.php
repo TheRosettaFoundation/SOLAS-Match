@@ -2020,7 +2020,8 @@ error_log("Create PO ref: $result");
         }
         foreach ($lines as $line) {
             $pr = $line['purchaseRequisitionTxnRef'];
-            if ($line['lineNumber'] == $first_lines[$pr] && (empty($sun_purchase_requisitions[$pr]) || $line['dateTimeLastUpdated'] != $sun_purchase_requisitions[$pr]['dateTimeLastUpdated'])) {
+error_log("totals[$pr]: {$totals[$pr]}, sun_purchase_requisitions[$pr]['total']: {$sun_purchase_requisitions[$pr]['total']}");
+            if ($line['lineNumber'] == $first_lines[$pr] && (empty($sun_purchase_requisitions[$pr]) || $line['dateTimeLastUpdated'] != $sun_purchase_requisitions[$pr]['dateTimeLastUpdated'] || $totals[$pr] != $sun_purchase_requisitions[$pr]['total'])) {
                 $parms =
                     LibAPI\PDOWrapper::cleanseWrapStr($pr) . ',' .
                     LibAPI\PDOWrapper::cleanseWrapStr($line['userDefinedFields']['i01']) . ',' .
