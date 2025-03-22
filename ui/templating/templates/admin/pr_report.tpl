@@ -44,7 +44,7 @@
         <th>Total Paid</th>
         <th>Total Unwaived</th>
         <th>Total Complete Unwaived</th>
-        <th>Total Tasks Waived</th>
+        <th>Total Waived</th>
         <th>Total PO</th>
         <th>Total PR less POs</th>
     </thead>
