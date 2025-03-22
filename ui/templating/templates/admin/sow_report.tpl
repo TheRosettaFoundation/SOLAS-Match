@@ -60,7 +60,7 @@
         <th>Languages</th>
         <th>Deal #</th>
    <!-- <th>Budget Code</th> -->
-        <th>PO #</th>
+        <th>PR #</th>
         <th>Unit Count</th>
         <th>Unit Rate (Linguist)</th>
         <th>Total</th>
@@ -73,7 +73,7 @@
     </thead>    
     <tbody>
         {foreach $tasks as $task}
-        {if (!$claimed && !$po && $task['completed']) || ($claimed && $task['claimed']) || ($po && $po==$task['purchase_order'])}
+        {if (!$claimed && !$po && !$pr && $task['completed']) || ($claimed && $task['claimed']) || ($po && $po==$task['purchase_order']) || ($pr && $pr==$task['purchase_requisition'])}
         <tr>
             <td><a href="{urlFor name="user-public-profile" options="user_id.{$task['user_id']}"}" target="_blank">{TemplateHelper::uiCleanseHTML($task['linguist'])}</a></td>
             <td><a href="{urlFor name="org-public-profile" options="org_id.{$task['organisation_id']}"}" target="_blank">{TemplateHelper::uiCleanseHTML($task['name'])}</a></td>
@@ -85,6 +85,8 @@
             <td>{if !empty($task['deal_id'])}<a href="{urlFor name="deal_id_report" options="deal_id.{$task['deal_id']}"}" target="_blank">{$task['deal_id']}</a>{/if}</td>
        <!-- <td>{$task['budget_code']}</td> -->
             <td>
+                {if !empty($task['purchase_requisition'])}<a href="{urlFor name="sow_report"}?pr={$task['purchase_requisition']}" target="_blank">{$task['purchase_requisition']}</a>{else}<span style="color: red;">No PO</span>{/if}
+                <br />
                 {if !empty($task['purchase_order'])}<a href="{urlFor name="sow_report"}?po={$task['purchase_order']}" target="_blank">{$task['purchase_order']}</a>{else}{$task['purchase_order']}{/if}
                 {if !empty($task['total'])}<br />Total: ${round($task['total'], 2)}{/if}
                 {if !empty($task['po_status'])}{if strpos($task['purchase_order'], 'TO-') === false}<br />{if $task['po_status'] == 'Completed' || $task['po_status'] == 'Approved'}{$task['po_status']}{else}<span style="color: red;">{$task['po_status']}, Not Completed</span>{/if}{/if}{else}<br /><span style="color: red;">No PO</span>{/if}

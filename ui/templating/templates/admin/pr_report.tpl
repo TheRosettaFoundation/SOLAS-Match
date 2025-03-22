@@ -51,7 +51,7 @@
     <tbody>
         {foreach $prs as $pr}
         <tr>
-            <td>{$pr['purchase_requisition']}</td>
+            <td><a href="{urlFor name="sow_report"}?pr={$pr['purchase_requisition']}" target="_blank">{$pr['purchase_requisition']}</a></td>
             <td>{$pr['creator']}</td>
             <td>{substr($pr['dateTimeLastUpdated'], 0, 10)}</td>
             <td>{if $pr['approvalStatus'] == 0}Not Approved{/if}{if $pr['approvalStatus'] == 1}Approved{/if}{if $pr['approvalStatus'] == 99}Not Applicable{/if}</td>

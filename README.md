@@ -40,6 +40,11 @@ For full terms see License.txt or http://www.gnu.org/licenses/lgpl-3.0.txt
 
 # Release Notes
 
+## Version 17.1
+
+- A new item has been added to the Admin page "List purchase requisitions." ( https://twbplatform.org/pr_report/ ) shows all purchase requisitions. Each "PR #" has a link to a version of the SoW Report which contains all tasks of any status for that PR.
+- An email is sent out requesting a T-Code when a new linguist is assigned a first paid task.
+
 ## Version 17.0
 
 - Sun integration
