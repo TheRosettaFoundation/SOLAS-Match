@@ -44,7 +44,7 @@ function gc($maxlifetime)
     return true;
 }
 
-require_once __DIR__ . '/ui/vendor/autoload.php';
+require_once __DIR__ . '/vendor/autoload.php';
 
 define('FINANCE',           128);
 define('SITE_ADMIN',         64);
