@@ -71,13 +71,9 @@
     </p>
 {/if}
 
-
-    {if isset($this_user) && ($private_access || ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER + 128)) || $receive_credit)}
-  
+    {if isset($this_user) && ($private_access || ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER + 128)) || $receive_credit || !empty($linguist_orgs_for_admin))}
         <div class="row g-4 ">    
-
         <div class="bg-body p-4 rounded-3 text-body col-12 col-md-7  >
-   
        
         <span class="d-none">
         <div id="dialog_for_verification" title="Perform a translation test?" class="d-none">
@@ -1734,6 +1730,8 @@ If a language is to be removed from this list, the community will be informed be
 {/if}
 </div> 
 
+{/if}
+{if $private_access || ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)) || !empty($linguist_orgs_for_admin)}
 {if isset($user_orgs)}
     {if count($user_orgs) > 0}
     <div class="mt-4 rounded-3 p-4 bg-body fs-5">
@@ -1753,6 +1751,7 @@ If a language is to be removed from this list, the community will be informed be
     {/if}
 
         {foreach $user_orgs as $org}
+          {if !empty($linguist_orgs_for_admin[$org['id'])}
             <div class="row">
                 {assign var="org_id" value=$org['id']}
                 {assign var="user_id" value=$this_user->getId()}
@@ -1797,12 +1796,13 @@ If a language is to be removed from this list, the community will be informed be
             </div>
            
             <hr class="bg-light-subtle"/>
+          {/if}
         {/foreach}
-        
         </div>
     {/if} 
 {/if}
 
+{if $private_access || ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER))}
 {if isset($archivedJobs)}
     {if count($archivedJobs) > 0}
     <div class="mt-4 rounded-3 p-4 bg-body fs-5">
@@ -1821,25 +1821,12 @@ If a language is to be removed from this list, the community will be informed be
         {/foreach}
         
     </div>
-    
-
     {/if}
-
-    
-   
 {/if}
-
 {/if}
-
-
-
+{/if}
    </div>
    </div>
-   
-  
-   
 {/if}
-
-
 
 {include file='footer2.tpl'}

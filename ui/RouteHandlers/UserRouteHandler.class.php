@@ -2503,6 +2503,18 @@ error_log("result: $result");//(**)
         $archivedJobs = $userDao->getUserArchivedTasks($user_id, 0, 10);
         $user_tags = $userDao->getUserTags($user_id);
         $user_orgs = $userDao->find_all_orgs_for_user($user_id);
+        $linguist_orgs_for_admin = [];
+        if ($user_orgs) {
+            $logged_in_user_orgs = $userDao->find_all_orgs_for_user($loggedInUserId);
+            $admin_orgs = [];
+            foreach ($logged_in_user_orgs as $logged_in_user_org)
+               if ($logged_in_user_org['roles']&(NGO_ADMIN | NGO_PROJECT_OFFICER)) $admin_orgs[$logged_in_user_org['id']] = 1;
+            foreach ($user_orgs as $user_org)
+                if (!empty($admin_orgs[$user_org['id']])) $linguist_orgs_for_admin[] = $user_org['id'];
+error_log('$admin_orgs: ' . print_r($admin_orgs, 1));//(**)
+        }
+error_log('$linguist_orgs_for_admin: ' . print_r($linguist_orgs_for_admin, 1));//(**)
+
         $badges = $userDao->getUserBadges($user_id);
         $userQualifiedPairs = $userDao->getUserQualifiedPairs($user_id);
 
@@ -2704,6 +2716,7 @@ error_log("result: $result");//(**)
             'sent_contracts' => $userDao->get_sent_contracts($user_id),
             'user_invoices'  => $userDao->getUserInvoices($user_id),
             'moodle_datas'   => $userDao->get_moodle_data_for_user($user_id),
+            'linguist_orgs_for_admin' => $linguist_orgs_for_admin,
         ));
         return UserRouteHandler::render("user/user-public-profile.tpl", $response);
     }
