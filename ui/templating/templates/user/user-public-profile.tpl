@@ -1751,7 +1751,7 @@ If a language is to be removed from this list, the community will be informed be
     {/if}
 
         {foreach $user_orgs as $org}
-          {if !empty($linguist_orgs_for_admin[$org['id'])}
+          {if !empty($linguist_orgs_for_admin[$org['id']])}
             <div class="row">
                 {assign var="org_id" value=$org['id']}
                 {assign var="user_id" value=$this_user->getId()}
