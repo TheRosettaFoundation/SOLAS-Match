@@ -1751,7 +1751,7 @@ If a language is to be removed from this list, the community will be informed be
     {/if}
 
         {foreach $user_orgs as $org}
-          {if !empty($linguist_orgs_for_admin[$org['id']])}
+          {if $private_access || ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)) || in_array($org['id'], $linguist_orgs_for_admin)}
             <div class="row">
                 {assign var="org_id" value=$org['id']}
                 {assign var="user_id" value=$this_user->getId()}
