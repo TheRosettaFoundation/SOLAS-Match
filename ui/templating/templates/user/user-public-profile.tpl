@@ -1,6 +1,4 @@
 {include file='new_header.tpl'}
-
-{if isset($this_user)}
  <div class="container-fluid bg-light-subtle py-2">
    <div class="container px-4  py-4">
 
@@ -53,12 +51,7 @@
                             </form>
                         {/if}
     </div> 
-
-     
      </div>
-         {else} 
-       <div class='fw-bold'><h1>{Localisation::getTranslation('common_user_profile')} </h1> <small class="text-muted">{Localisation::getTranslation('user_public_profile_2')}</small></div>
-{/if}
 
 {if isset($flash['error'])}
     <p class="alert alert-error" style="margin-bottom: 50px">
