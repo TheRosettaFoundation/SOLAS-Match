@@ -1794,8 +1794,8 @@ If a language is to be removed from this list, the community will be informed be
 {/if}
 {/if}
 {/if}
-   </div>
-   </div>
 {/if}
+</div>
+</div>
 
 {include file='footer2.tpl'}
