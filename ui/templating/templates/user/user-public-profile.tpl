@@ -1571,12 +1571,8 @@ If a language is to be removed from this list, the community will be informed be
 {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
 </form>
 {/if}
-
-</div>
 </div>
 {/if}
-
-
 
 {if $private_access}
     <div class="mt-4 rounded-3 p-4 bg-body fs-5">
