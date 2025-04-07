@@ -2511,9 +2511,7 @@ error_log("result: $result");//(**)
                if ($logged_in_user_org['roles']&(NGO_ADMIN | NGO_PROJECT_OFFICER)) $admin_orgs[$logged_in_user_org['id']] = 1;
             foreach ($user_orgs as $user_org)
                 if (!empty($admin_orgs[$user_org['id']])) $linguist_orgs_for_admin[] = $user_org['id'];
-error_log('$admin_orgs: ' . print_r($admin_orgs, 1));//(**)
         }
-error_log('$linguist_orgs_for_admin: ' . print_r($linguist_orgs_for_admin, 1));//(**)
 
         $badges = $userDao->getUserBadges($user_id);
         $userQualifiedPairs = $userDao->getUserQualifiedPairs($user_id);
