@@ -1,4 +1,5 @@
 {include file='new_header.tpl'}
+{if !empty($this_user)}
  <div class="container-fluid bg-light-subtle py-2">
    <div class="container px-4  py-4">
 
@@ -1798,4 +1799,5 @@ If a language is to be removed from this list, the community will be informed be
 </div>
 </div>
 
+{/if}
 {include file='footer2.tpl'}
