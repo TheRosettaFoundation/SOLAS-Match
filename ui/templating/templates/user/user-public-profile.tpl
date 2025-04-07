@@ -1239,14 +1239,8 @@ If a language is to be removed from this list, the community will be informed be
 
     </table>
 </div>
-    
-
-
-{/if}
-
 </div>
-
-
+{/if}
 
 {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
     <div class="mt-2 p-4 rounded-3 bg-body">
