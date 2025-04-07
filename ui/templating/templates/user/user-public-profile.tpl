@@ -911,8 +911,7 @@ If a language is to be removed from this list, the community will be informed be
          <div class="flex-grow-1 text-end" > 750 USD bank transfer</div>
         </div>
         </div>
-        
-
+        </div>
         {else}
 
         <div class="border border-1 border-primaryDark rounded-3 col-xs-12 col-md-6 fs-5">
@@ -1168,30 +1167,17 @@ If a language is to be removed from this list, the community will be informed be
         <div class=" me-4 fw-bold  " > TWB Explorer</div>
          <div class="flex-grow-1  text-end fw-bold" > 20 USD bank transfer</div>
         </div>
-
-</div>
-
-
+        </div>
 {/if}
 </div>
-
-
+{/if}
 </div>
 {/if}
-
-{/if}
-
 
 {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
-
 {/if}
 
-
-
 {if $roles & ($SITE_ADMIN + $COMMUNITY_OFFICER)}
-
-
-
 <div class="mt-2 p-4 rounded-3 bg-body">
 <div class="d-flex justify-content-between mb-4 flex-wrap ">
 {if !empty($valid_key_certificate)}
