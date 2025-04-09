@@ -14160,6 +14160,7 @@ BEGIN
         pcd.project_t_code!='' AND
         pcd.project_t_code=spr.project_t_code AND
         spr.approvalStatus=1 AND
+        t.`word-count`>1 AND
         tp.purchase_order='0' AND
         tp.payment_status NOT IN ('In-kind', 'In-house', 'Waived') AND
         lpi.linguist_t_code!='' AND
