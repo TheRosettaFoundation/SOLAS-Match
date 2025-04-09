@@ -13513,7 +13513,7 @@ BEGIN
         SUM(IF(tp.payment_status IS NOT NULL AND tp.payment_status     IN ('In-kind', 'In-house', 'Waived')                                   , IF(t.`word-count`>1, IF(ttd.divide_rate_by_60, t.`word-count`*tp.unit_rate/60, t.`word-count`*tp.unit_rate), 0), 0)) AS total_waived_tasks_for_pr,
         SUM(IF(tp.payment_status IS NOT NULL AND tp.payment_status NOT IN ('In-kind', 'In-house', 'Waived') AND pos.purchase_order IS NOT NULL, pos.total, 0)) AS total_po
     FROM sun_purchase_requisitions   spr
-    LEFT JOIN project_complete_dates pcd ON spr.project_t_code=pcd.project_t_code
+    LEFT JOIN project_complete_dates pcd ON spr.purchase_requisition=pcd.purchase_requisition
     LEFT JOIN Projects                 p ON pcd.project_id=p.id
     LEFT JOIN Organisations            o ON p.organisation_id=o.id
     LEFT JOIN Tasks                    t ON p.id=t.project_id
