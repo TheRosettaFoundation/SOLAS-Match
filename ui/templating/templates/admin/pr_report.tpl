@@ -36,6 +36,7 @@
 <table id="myTable" style="overflow-wrap: break-word;" class="container table table-striped">
     <thead>
         <th>PR #</th>
+        <th>Project T-Code</th>
         <th>Creator</th>
         <th>Date</th>
         <th>Approval</th>
@@ -52,10 +53,11 @@
         {foreach $prs as $pr}
         <tr>
             <td><a href="{urlFor name="sow_report"}?pr={$pr['purchase_requisition']}" target="_blank">{$pr['purchase_requisition']}</a></td>
+            <td>{$pr['project_t_code']}</td>
             <td>{$pr['creator']}</td>
             <td>{substr($pr['dateTimeLastUpdated'], 0, 10)}</td>
             <td>{if $pr['approvalStatus'] == 0}Not Approved{/if}{if $pr['approvalStatus'] == 1}Approved{/if}{if $pr['approvalStatus'] == 99}Not Applicable{/if}</td>
-            <td>{if $pr['status'] == 0}Open{/if}{if $pr['status'] == 1}1{/if}{if $pr['status'] == 2}Awaiting Approval{/if}{if $pr['status'] == 3}Awaiting Purchasing{/if}{if $pr['status'] == 4}PO Generated{/if}{if $pr['status'] == 5}5{/if}</td>
+            <td>{if $pr['status'] == 0}Open{/if}{if $pr['status'] == 1}1{/if}{if $pr['status'] == 2}Awaiting Approval{/if}{if $pr['status'] == 3}Awaiting Purchasing{/if}{if $pr['status'] == 4}PO Generated{/if}{if $pr['status'] == 5}Open(5){/if}</td>
             <td>${$pr['total']}</td>
             <td>${round($pr['total_tasks_for_pr'] + $pr['total_waived_tasks_for_pr'], 2)}</td>
             <td>${round($pr['total_tasks_for_pr'], 2)}</td>
