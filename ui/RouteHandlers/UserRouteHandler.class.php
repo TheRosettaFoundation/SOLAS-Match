@@ -2488,7 +2488,7 @@ error_log("result: $result");//(**)
                 elseif (empty($post['linguist_name'])) UserRouteHandler::flashNow('error', 'You must enter an Official Name');
                 elseif (substr($post['google_drive_link'], 0, 25) != 'https://drive.google.com/') UserRouteHandler::flashNow('error', 'You must enter a valid Google Drive Folder Link');
                 else {
-                    $taskDao->insert_update_linguist_payment_information($user_id, $loggedInUserId, $post['country_id'], $post['google_drive_link'], $post['linguist_name'], $post['linguist_t_code']);
+                    $taskDao->insert_update_linguist_payment_information($user_id, $loggedInUserId, $post['country_id'], preg_replace('/\?.*/', '', $post['google_drive_link']), $post['linguist_name'], $post['linguist_t_code']);
                     UserRouteHandler::flashNow('success', 'Success');
                 }
             }
