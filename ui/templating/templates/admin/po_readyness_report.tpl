@@ -60,7 +60,7 @@
             <td>{$task['type_text']}</td>
             <td>{$task['language_pair']}</td>
             <td>{if !empty($task['deal_id'])}<a href="{urlFor name="deal_id_report" options="deal_id.{$task['deal_id']}"}" target="_blank">{$task['deal_id']}</a>{/if}
-                {if empty($task['total_paid_words'])}<br /><span style="color: red;">Task has No {$task['pricing_and_recognition_unit_text_hours']}</span>{/if}
+                {if $task['total_paid_words'] == 0}<br /><span style="color: red;">Task has No {$task['pricing_and_recognition_unit_text_hours']}</span>{/if}
                 {if empty($task['deal_id'])}<br /><span style="color: red;">No HS Deal</span>{/if}
                 {if empty($task['project_t_code'])}<br /><span style="color: red;">No Project T-Code</span>
                 {elseif !empty($task['pr_created']) && ($task['project_t_code'] != $task['pr_project_t_code'])}<br /><span style="color: red;">Project T-Code Different in Project and Purchase Requisition</span>{/if}
