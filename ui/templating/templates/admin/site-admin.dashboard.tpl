@@ -25,7 +25,7 @@
   {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER)}
     <p><a href="{urlFor name="all_deals_report"}" target="_blank">List all deals.</a></p>
     <p><a href="{urlFor name="paid_projects"}" target="_blank">List all paid projects.</a></p>
-    <p><a href="{urlFor name="po_readyness_report"}" target="_blank">Purchase Order Readyness Report.</a></p>
+    <p><a href="{urlFor name="po_readyness_report"}" target="_blank">Purchase Order Readiness Report.</a></p>
     <p><a href="{urlFor name="pr_report"}" target="_blank">List purchase requisitions.</a></p>
     <p><a href="{urlFor name="po_report"}" target="_blank">List purchase orders.</a></p>
   {/if}

@@ -30,7 +30,7 @@
 <body>
 {if !empty($tasks)}
 
-<h2 style="text-align:center;">Purchase Order Readyness Report</h2>
+<h2 style="text-align:center;">Purchase Order Readiness Report</h2>
 
 <table id="myTable" style="overflow-wrap: break-word;" class="container table table-striped">
     <thead>
