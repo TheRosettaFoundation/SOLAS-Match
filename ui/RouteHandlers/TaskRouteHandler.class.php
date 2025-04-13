@@ -1215,6 +1215,12 @@ class TaskRouteHandler
                     if (is_null($userToBeAssigned)) {
                         UserRouteHandler::flashNow('error', Lib\Localisation::getTranslation('task_view_assign_id_error'));
                         $errorOccured = True;
+                    } else {
+                        $nativeLocale = $userToBeAssigned->getNativeLocale();
+                        if ($userDao->terms_accepted($userToBeAssigned->getId()) < 3 || !$nativeLocale || !$nativeLocale->getLanguageCode()) {
+                            $errorOccured = true;
+                            UserRouteHandler::flashNow('error', 'The task could not be assigned: User has not fully completed registration.');
+                        }
                     }
                 } else if (Lib\Validator::validateEmail($emailOrUserId)) {
                     $userToBeAssigned = $userDao->getUserByEmail($emailOrUserId);
