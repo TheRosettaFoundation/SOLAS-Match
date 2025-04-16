@@ -69,7 +69,7 @@
                     <form>
                         <input type="hidden" class="piem_invoice_number" name="piem_invoice_number" value="{$task['invoice_number']}" />
                         <input type="checkbox" class="piem_checkbox" checked disabled /><textarea class="piem_text" name="piem_text" cols='20' rows='2' style="width: 90%">{TemplateHelper::uiCleanseHTMLReinsertNewlineAndTabs($task['piem_text'])}</textarea>
-                        {if isset($sesskey)}<input type="hidden" class="sesskey" name="sesskey" value="{$sesskey}" />{/if}
+                        {if isset($sesskey)}<input type="hidden" class="piem_sesskey" name="piem_sesskey" value="{$sesskey}" />{/if}
                     </form>
                 {else}
                     {TemplateHelper::uiCleanseHTMLNewlineAndTabs($task['piem_text'])}
@@ -290,9 +290,9 @@ if (piem_texts_array.length > 0) {
         function run_set_piem_text(e) {
             e.preventDefault();
             let parent = curr.parentElement;
-            let invoice_number = parent.querySelector(".invoice_number").value;
+            let invoice_number = parent.querySelector(".piem_invoice_number").value;
             let piem_text      = parent.querySelector(".piem_text").value;
-            let sesskey        = parent.querySelector(".sesskey").value;
+            let sesskey        = parent.querySelector(".piem_sesskey").value;
             let piem_checkbox  = parent.querySelector(".piem_checkbox");
             piem_checkbox.checked = false;
 
