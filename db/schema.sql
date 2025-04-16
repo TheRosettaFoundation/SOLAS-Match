@@ -13258,6 +13258,7 @@ CREATE TABLE IF NOT EXISTS `invoices` (
   filename       VARCHAR(255),
   google_id      VARCHAR(50) DEFAULT '',
   admin_id       INT UNSIGNED,
+  piem_text      TEXT COLLATE utf8mb4_unicode_ci,
   PRIMARY KEY (invoice_number),
   KEY (linguist_id),
   CONSTRAINT FK_invoices_linguist_id FOREIGN KEY (linguist_id) REFERENCES Users (id) ON DELETE CASCADE ON UPDATE CASCADE
@@ -13439,6 +13440,7 @@ BEGIN
         MIN(tp.processed) AS processed,
         i.invoice_date,
         i.invoice_paid_date,
+        i.piem_text,
         MAX(IF(IF(t.`word-count`>1, IF(ttd.divide_rate_by_60, t.`word-count`*tp.unit_rate/60, t.`word-count`*tp.unit_rate), 0)>=600, 1, 0)) AS proforma
     FROM TaskPaids                           tp
     JOIN Tasks                                t ON tp.task_id=t.id
@@ -13549,6 +13551,14 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `set_invoice_revoked`(IN inv INT, IN
 BEGIN
     UPDATE invoices SET revoked=1, invoice_paid_date=NOW(), admin_id=aID WHERE invoice_number=inv;
     UPDATE TaskPaids SET invoice_number=0, processed=0 WHERE invoice_number=inv;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `set_piem_text`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `set_piem_text`(IN number INT, IN pt TEXT)
+BEGIN
+    UPDATE invoices SET piem_text=pt WHERE invoice_number=number;
 END//
 DELIMITER ;
 

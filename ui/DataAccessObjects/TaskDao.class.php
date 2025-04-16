@@ -1140,6 +1140,11 @@ error_log("createTaskDirectly: $args");
         LibAPI\PDOWrapper::call('set_invoice_revoked', LibAPI\PDOWrapper::cleanse($invoice_number) . ',' . LibAPI\PDOWrapper::cleanse(Common\Lib\UserSession::getCurrentUserID()));
     }
 
+    public function set_piem_text($invoice_number, $piem_text)
+    {
+        LibAPI\PDOWrapper::call('set_piem_text', LibAPI\PDOWrapper::cleanse($invoice_number) . ',' . LibAPI\PDOWrapper::cleanseWrapStr($piem_text));
+    }
+
     public function get_google_access_token()
     {
         $ch = curl_init('https://www.googleapis.com/oauth2/v4/token');

@@ -109,6 +109,12 @@ class AdminRouteHandler
             '\SolasMatch\UI\RouteHandlers\AdminRouteHandler:set_invoice_revoked')
             ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin_or_FINANCE')
             ->setName('set_invoice_revoked');
+
+        $app->map(['GET', 'POST'],
+            '/set_piem_text/{invoice_number}[/]',
+            '\SolasMatch\UI\RouteHandlers\AdminRouteHandler:set_piem_text')
+            ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin_or_FINANCE')
+            ->setName('set_piem_text');
     }
 
     public function adminDashboard(Request $request, Response $response)
@@ -590,6 +596,18 @@ class AdminRouteHandler
         $result = 1;
         if (Common\Lib\UserSession::checkCSRFKey($request->getParsedBody(), 'set_invoice_revoked')) $result = 0;
         if ($result) $taskDao->set_invoice_revoked($args['invoice_number']);
+        $results = json_encode(['result'=> $result]);
+        $response->getBody()->write($results);
+        return $response->withHeader('Content-Type', 'application/json');
+    }
+
+    public function set_piem_text(Request $request, Response $response, $args)
+    {
+        $taskDao = new DAO\TaskDao();
+
+        $result = 1;
+        if (Common\Lib\UserSession::checkCSRFKey($request->getParsedBody(), 'set_piem_text')) $result = 0;
+        if ($result) $taskDao->set_piem_text($args['invoice_number'], $request->getParsedBody()['piem_text']);
         $results = json_encode(['result'=> $result]);
         $response->getBody()->write($results);
         return $response->withHeader('Content-Type', 'application/json');

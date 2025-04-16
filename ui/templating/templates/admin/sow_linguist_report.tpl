@@ -43,7 +43,7 @@
         <th>Invoice Type</th>
         <th>Invoice Number</th>
         <th>Invoice Name</th>
-        <th>Status (filled by Finance)</th>
+        <th>Status (filled by Finance)<br />PIEM</th>
         <th>Processed?</th>
         <th>Invoice Date</th>
         {if $roles&($SITE_ADMIN + 128)}
@@ -62,8 +62,17 @@
             <td>{if !empty($task['google_id'])}<a href="https://drive.google.com/file/d/{$task['google_id']}/view" target="_blank">{$task['filename']}</a>{else}{$task['filename']}{/if}</td>
             <td>
                 {if is_null($task['status'])}
-                {elseif $task['status']&4}Bounced
-                {elseif $task['status']&2}Paid
+                {elseif $task['status']&4}Bounced<br />
+                {elseif $task['status']&2}Paid<br />
+                {/if}
+                {if $roles&($SITE_ADMIN + 128)}
+                    <form>
+                        <input type="hidden" class="piem_invoice_number" name="piem_invoice_number" value="{$task['invoice_number']}" />
+                        <input type="checkbox" class="piem_checkbox" checked disabled /><textarea class="piem_text" name="piem_text" cols='20' rows='2' style="width: 90%">{TemplateHelper::uiCleanseHTMLReinsertNewlineAndTabs($task['piem_text'])}</textarea>
+                        {if isset($sesskey)}<input type="hidden" class="sesskey" name="sesskey" value="{$sesskey}" />{/if}
+                    </form>
+                {else}
+                    {TemplateHelper::uiCleanseHTMLNewlineAndTabs($task['piem_text'])}
                 {/if}
             </td>
             <td>{if $task['processed'] > 0}Yes{/if}</td>
@@ -241,6 +250,59 @@ if (revoke_buttons_array.length > 0) {
 
             set_invoice_revoked(codes);
           }
+        });
+    });
+}
+
+
+const piem_texts = document.querySelectorAll("form .piem_text");
+
+async function set_piem_text({ invoice_number, piem_text, sesskey }) {
+    let url = `/set_piem_text/${ invoice_number }/`;
+    const key = { piem_text, sesskey };
+    try {
+        const response = await fetch(url, {
+            method: "POST",
+            body: new URLSearchParams(key),
+        });
+
+        if (!response.ok) {
+            throw new Error("error");
+        }
+
+        const piem_checkboxs = document.querySelectorAll("form .piem_checkbox");
+        const piem_checkboxs_array = [...piem_checkboxs];
+        if (piem_checkboxs_array.length > 0) {
+            piem_checkboxs_array.forEach(function (curr, index, piem_checkboxs_array) {
+                curr.checked = true;
+            });
+        }
+    } catch (error) {
+        console.error(error);
+    }
+}
+
+const piem_texts_array = [...piem_texts];
+
+if (piem_texts_array.length > 0) {
+    piem_texts_array.forEach(function (curr, index, piem_texts_array) {
+        let codes = {};
+        curr.addEventListener("change paste keyup", function (e) {
+            e.preventDefault();
+            let parent = curr.parentElement;
+            let invoice_number = parent.querySelector(".invoice_number").value;
+            let piem_text      = parent.querySelector(".piem_text").value;
+            let sesskey        = parent.querySelector(".sesskey").value;
+            let piem_checkbox  = parent.querySelector(".piem_checkbox");
+            piem_checkbox.checked = false;
+
+            codes = {
+                invoice_number,
+                piem_text,
+                sesskey,
+            };
+
+            set_piem_text(codes);
         });
     });
 }
