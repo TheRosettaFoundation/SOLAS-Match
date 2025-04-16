@@ -282,28 +282,31 @@ async function set_piem_text({ invoice_number, piem_text, sesskey }) {
     }
 }
 
+function run_set_piem_text(e) {
+    e.preventDefault();
+    let parent = curr.parentElement;
+    let invoice_number = parent.querySelector(".invoice_number").value;
+    let piem_text      = parent.querySelector(".piem_text").value;
+    let sesskey        = parent.querySelector(".sesskey").value;
+    let piem_checkbox  = parent.querySelector(".piem_checkbox");
+    piem_checkbox.checked = false;
+
+    let codes = {
+        invoice_number,
+        piem_text,
+        sesskey,
+    };
+
+    set_piem_text(codes);
+}
+
 const piem_texts_array = [...piem_texts];
 
 if (piem_texts_array.length > 0) {
     piem_texts_array.forEach(function (curr, index, piem_texts_array) {
-        let codes = {};
-        curr.addEventListener("change paste keyup", function (e) {
-            e.preventDefault();
-            let parent = curr.parentElement;
-            let invoice_number = parent.querySelector(".invoice_number").value;
-            let piem_text      = parent.querySelector(".piem_text").value;
-            let sesskey        = parent.querySelector(".sesskey").value;
-            let piem_checkbox  = parent.querySelector(".piem_checkbox");
-            piem_checkbox.checked = false;
-
-            codes = {
-                invoice_number,
-                piem_text,
-                sesskey,
-            };
-
-            set_piem_text(codes);
-        });
+        curr.addEventListener("change", run_set_piem_text);
+        curr.addEventListener("paste",  run_set_piem_text);
+        curr.addEventListener("keyup",  run_set_piem_text);
     });
 }
 </script>
