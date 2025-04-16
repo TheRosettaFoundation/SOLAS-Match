@@ -305,9 +305,7 @@ if (piem_texts_array.length > 0) {
             set_piem_text(codes);
         }
 
-        curr.addEventListener("change", run_set_piem_text);
-        curr.addEventListener("paste",  run_set_piem_text);
-        curr.addEventListener("keyup",  run_set_piem_text);
+        curr.addEventListener("input", run_set_piem_text);
     });
 }
 </script>
