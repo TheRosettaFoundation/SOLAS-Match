@@ -14177,7 +14177,7 @@ BEGIN
         lpi.google_drive_link!='' AND
         t.`task-status_id`=4
     ORDER BY
-        IF(tp.po_create_failed=0, t.id, 0) ASC,
+        IF(tp.po_create_failed=0, t.id, 999999999) ASC,
         tp.po_create_failed DESC
     LIMIT 1;
 END//
