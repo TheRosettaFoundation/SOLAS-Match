@@ -1934,10 +1934,10 @@ error_log("Create PO fail delete: $result");
                     'errorOutputURI' => "storage://SSC/{$po_number}_errors.json",
                     'uniqueErrorOutputURI' => true,
                 ];
-                $linguist_t_code = $po['linguist_t_code'];
-                $title = mb_substr($po['title'], 0, 50);
-                $purchase_requisition = $po['purchase_requisition'];
-                $project_t_code = $po['project_t_code'];
+                $linguist_t_code      = str_replace(['&', '<', '>'], ['&amp;', '&lt;', '&gt;'], $po['linguist_t_code']);
+                $title                = str_replace(['&', '<', '>'], ['&amp;', '&lt;', '&gt;'], mb_substr($po['title'], 0, 50));
+                $purchase_requisition = str_replace(['&', '<', '>'], ['&amp;', '&lt;', '&gt;'], $po['purchase_requisition']);
+                $project_t_code       = str_replace(['&', '<', '>'], ['&amp;', '&lt;', '&gt;'], $po['project_t_code']);
                 $total_paid_words = $po['total_paid_words'];
                 $unit_rate = $po['unit_rate'];
                 $amount = $total_paid_words*$unit_rate;
