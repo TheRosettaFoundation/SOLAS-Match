@@ -44,6 +44,12 @@ For full terms see License.txt or http://www.gnu.org/licenses/lgpl-3.0.txt
 
 - A new item has been added to the Admin page "List purchase requisitions." ( https://twbplatform.org/pr_report/ ) shows all purchase requisitions. Each "PR #" has a link to a version of the SoW Report which contains all tasks of any status for that PR.
 - An email is sent out requesting a T-Code when a new linguist is assigned a first paid task.
+- Added Purchase Requisition report.
+- Added support for multi-line Purchase Requisitions.
+- Enabled Phrase 3 MT for managed partners.
+- NGO Admins and POs will be able to see the profiles for linguist in their organizations.
+- PIEM field for finance added to invoices.
+- New Shell task "DTP Processing" added.
 
 ## Version 17.0
 
