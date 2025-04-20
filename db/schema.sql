@@ -1129,6 +1129,7 @@ CREATE TABLE IF NOT EXISTS `MemsourceUsers` (
   user_id           INT(10) UNSIGNED NOT NULL,
   memsource_user_id BIGINT(20) UNSIGNED NOT NULL,
   memsource_user_uid VARCHAR(30) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  memsource_user_userName VARCHAR(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
   PRIMARY KEY FK_MemsourceUsers_user_id (user_id),
           KEY memsource_user_uid        (memsource_user_uid),
   CONSTRAINT FK_MemsourceUsers_user_id FOREIGN KEY (user_id) REFERENCES Users (id) ON DELETE CASCADE ON UPDATE CASCADE
@@ -10097,9 +10098,9 @@ DELIMITER ;
 
 DROP PROCEDURE IF EXISTS `set_memsource_user`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `set_memsource_user`(IN userID INT, IN memsourceID BIGINT, IN memsourceUID VARCHAR(30))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `set_memsource_user`(IN userID INT, IN memsourceID BIGINT, IN memsourceUID VARCHAR(30), IN memsourceUName VARCHAR(255))
 BEGIN
-    INSERT INTO MemsourceUsers (user_id, memsource_user_id, memsource_user_uid) VALUES (userID, memsourceID, memsourceUID);
+    INSERT INTO MemsourceUsers (user_id, memsource_user_id, memsource_user_uid, memsource_user_userName) VALUES (userID, memsourceID, memsourceUID, memsourceUName);
 END//
 DELIMITER ;
 
