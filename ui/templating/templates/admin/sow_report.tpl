@@ -75,7 +75,7 @@
         {foreach $tasks as $task}
         {if (!$claimed && !$po && !$pr && $task['completed']) || ($claimed && $task['claimed']) || ($po && $po==$task['purchase_order']) || ($pr && $pr==$task['purchase_requisition'])}
         <tr>
-            <td><a href="{urlFor name="user-public-profile" options="user_id.{$task['user_id']}"}" target="_blank">{TemplateHelper::uiCleanseHTML($task['linguist'])}</a></td>
+            <td><a href="{urlFor name="user-public-profile" options="user_id.{$task['user_id']}"}" target="_blank">{TemplateHelper::uiCleanseHTML($task['linguist'])}</a>{if !empty($task['linguist_t_code'])} ({$task['linguist_t_code']}){/if}</td>
             <td><a href="{urlFor name="org-public-profile" options="org_id.{$task['organisation_id']}"}" target="_blank">{TemplateHelper::uiCleanseHTML($task['name'])}</a></td>
             <td><a href="{urlFor name="project-view" options="project_id.{$task['project_id']}"}" target="_blank">{TemplateHelper::uiCleanseHTMLNewlineAndTabs($task['title'])}</a></td>
             <td>{substr($task['creator_email'], 0, strpos($task['creator_email'], '@'))}</td>
