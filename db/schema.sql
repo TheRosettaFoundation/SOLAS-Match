@@ -579,6 +579,8 @@ INSERT INTO TaskTypes (id, name) VALUES
   (26,'Translation Outside Phrase'),
   (27,'Revision Outside Phrase'),
   (28,'Audiovisual Sign Off');
+INSERT INTO TaskTypes (id, name) VALUES
+  (30,'DTP Processing');
 
 
 # Be very carefull of deleteing any of these they will cascade DELETEs
@@ -1457,6 +1459,8 @@ INSERT INTO task_type_details VALUES
 (27,1,1,0,1,1,1,0,0,'Revision Outside Phrase',    'Revision Outside Phrase',    '#1064C4','',                                    'SHELLTASK',    'ZZ',                       'Word Count',   'words',  'Words',        'Words',      'Words',  0.025,     0.5,1,        0,0.002),
 (28,4,1,0,1,1,0,1,1,'Audiovisual Sign Off',       'Audiovisual Sign Off',       '#B02323','',                                    'SHELLTASK',    'ZZ',                       'Labor minutes','minutes','Labor minutes','Labor hours','Minutes',   20, 8.33333,0,0.0166667,0.0166667)
 ;
+INSERT INTO task_type_details VALUES
+(30,3,1,0,1,1,1,2,1,'DTP Processing',             'DTP Processing',             '#B02323','',                                    'SHELLTASK',    'ZZ',                       'Labor minutes','minutes','Labor minutes','Labor hours','Pages',     10, 12.5, 4.16667, 0, 0.0166667, 0.0166667, '', '', '', '');
 /*
 # "Labour Hours" or "Words" etc. for when user enters pricing rates
 UPDATE task_type_details SET pricing_and_recognition_unit_text_hours='Words' WHERE type_enum=1;
