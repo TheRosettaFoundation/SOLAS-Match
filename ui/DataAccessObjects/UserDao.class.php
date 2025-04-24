@@ -435,7 +435,7 @@ error_log("claimTask($userId, $taskId, ..., $project_id, ...)");
                 curl_close($ch);
                 if (!empty($result['uid'])) {
                     $memsource_user_uid = $result['uid'];
-                    $this->set_memsource_user($userId, 0, $memsource_user_uid);
+                    $this->set_memsource_user($userId, 0, $memsource_user_uid, $this->usernamePrefix . str_replace(['<', '>', '&', '%', '{', '}', '[', ']', '^', '#', '*', '$'], '', $user_info->display_name) . "_$userId");
                     error_log("LINGUIST memsource user $memsource_user_uid created for $userId");
                 } else {
                     error_log("No memsource user created for $userId");
@@ -771,7 +771,7 @@ error_log("claimTask_shell($userId, $taskId)");
         curl_close($ch);
         if (!empty($result['uid'])) {
             $memsource_user_uid = $result['uid'];
-            $this->set_memsource_user($user_id, 0, $memsource_user_uid);
+            $this->set_memsource_user($user_id, 0, $memsource_user_uid, $this->usernamePrefix . str_replace(['<', '>', '&', '%', '{', '}', '[', ']', '^', '#', '*', '$'], '', $user_info->display_name) . "_$user_id");
             error_log("PROJECT_MANAGER memsource user $memsource_user_uid created for $user_id");
             return $memsource_user_uid;
         } else {
@@ -1199,15 +1199,7 @@ error_log("claimTask_shell($userId, $taskId)");
         error_log("changeEmail($user_id, $email, $old_email)");
         LibAPI\PDOWrapper::call('changeEmail', LibAPI\PDOWrapper::cleanse($user_id) . ',' . LibAPI\PDOWrapper::cleanseNullOrWrapStr($email));
 
-        $phrase_error = '';
         $moodle_error = '';
-        $record = $this->get_memsource_user_record($old_email);
-        if ($record) $this->change_memsource_user_email($user_id, $record, $email);
-        else {
-            error_log("changeEmail($user_id, $email, $old_email), can't find email in Phrase");
-            $phrase_error = "No user found with old email ($old_email)";
-        }
-
         $ip = Common\Lib\Settings::get('moodle.ip');
         $token = Common\Lib\Settings::get('moodle.token');
         $MoodleRest = new Common\Lib\MoodleRest();
@@ -1231,85 +1223,12 @@ error_log("claimTask_shell($userId, $taskId)");
             $moodle_error = 'Access to Moodle failed: ' . $e->getMessage();
             error_log($moodle_error);
         }
-        if ($phrase_error || $moodle_error) {
-            $error  = 'TWB Platform email change successful!<br />Integrated systems...<br />Phrase TMS: ';
-            $error .= $phrase_error ? $phrase_error : 'User email updated successfully';
+        if ($moodle_error) {
+            $error  = 'TWB Platform email change successful!<br />Integrated systems...';
             $error .= '<br />Learning Center: ' . ($moodle_error ? $moodle_error : 'User email updated successfully');
             return $error;
         }
         return '';
-    }
-
-    public function get_memsource_user_record($old_email)
-    {
-        $ch = curl_init("https://cloud.memsource.com/web/api2/v1/users?email=$old_email");
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        $authorization = 'Authorization: Bearer ' . $this->memsourceApiToken;
-        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json', $authorization));
-        $result = curl_exec($ch);
-        curl_close($ch);
-        if (empty($result)) {
-            error_log("No data returned from Memsource in get_memsource_user_record($old_email)");
-            return 0;
-        }
-        $response_data = json_decode($result, true);
-        if (empty($response_data['content'])) {
-            error_log("No ['content'] returned from Memsource in get_memsource_user_record($old_email)");
-            error_log(print_r($response_data, true));
-            return 0;
-        }
-        foreach ($response_data['content'] as $user) {
-            if ($user['email'] === $old_email) return $user;
-        }
-        error_log("No matching email returned from Memsource in get_memsource_user_record($old_email)");
-        error_log(print_r($response_data, true));
-        return 0;
-    }
-
-    public function change_memsource_user_email($user_id, $record, $email)
-    {
-        if ($record['role'] === Common\Enums\MemsourceRoleEnum::LINGUIST) {
-            error_log("change_memsource_user_email($user_id, ..., $email) {$record['uid']}");
-            $ch = curl_init("https://cloud.memsource.com/web/api2/v3/users/{$record['uid']}");
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-            $user_personal_info = $this->getUserPersonalInformation($user_id);
-            $data = array(
-                'email' => $email,
-                'firstName' => str_replace(['<', '>', '&', '%', '{', '}', '[', ']', '^', '#', '*', '$'], '_', $user_personal_info->firstName),
-                'lastName'  => str_replace(['<', '>', '&', '%', '{', '}', '[', ']', '^', '#', '*', '$'], '_', $user_personal_info->lastName),
-                'role' => Common\Enums\MemsourceRoleEnum::LINGUIST,
-                'timezone' => $record['timezone'],
-                'userName' => $record['userName'],
-                'receiveNewsletter' => false,
-                'active' => true,
-                'editAllTermsInTB' => false,
-                'editTranslationsInTM' => false,
-                'enableMT' => true,
-                'mayRejectJobs' => false,
-            );
-            if (!empty($record['note'])) $data['note'] = $record['note'];
-            // Linguists should not have any of these
-            $data['sourceLocales'] = [];
-            $data['targetLocales'] = [];
-            $data['workflowSteps'] = [];
-            $data['clients'] = [];
-            $data['domains'] = [];
-            $data['subDomains'] = [];
-            $payload = json_encode($data);
-            error_log($payload);
-            curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PUT');
-            curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
-            $authorization = 'Authorization: Bearer ' . $this->memsourceApiToken;
-            curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json', $authorization));
-            $result_exec = curl_exec($ch);
-            error_log($result_exec);
-            $result = json_decode($result_exec, true);
-            curl_close($ch);
-            if (empty($result['email'])) {
-                error_log("No email returned from Memsource in change_memsource_user_email($user_id, ..., $email) {$record['uid']}");
-                error_log(print_r($result, true));
-            }
-        } else error_log('Not a LINGUIST');
     }
 
     public function createPersonalInfo($userId, $personalInfo)
@@ -1921,9 +1840,9 @@ error_log("claimTask_shell($userId, $taskId)");
         return $result[0]['memsource_user_uid'];
     }
 
-    public function set_memsource_user($user_id, $memsource_user_id, $memsource_user_uid)
+    public function set_memsource_user($user_id, $memsource_user_id, $memsource_user_uid, $memsource_user_userName)
     {
-        LibAPI\PDOWrapper::call('set_memsource_user', LibAPI\PDOWrapper::cleanse($user_id) . ',' . LibAPI\PDOWrapper::cleanse($memsource_user_id) . ',' . LibAPI\PDOWrapper::cleanseWrapStr($memsource_user_uid));
+        LibAPI\PDOWrapper::call('set_memsource_user', LibAPI\PDOWrapper::cleanse($user_id) . ',' . LibAPI\PDOWrapper::cleanse($memsource_user_id) . ',' . LibAPI\PDOWrapper::cleanseWrapStr($memsource_user_uid) . ',' . LibAPI\PDOWrapper::cleanseWrapStr($memsource_user_userName));
     }
 
     public function memsource_list_jobs($memsource_project_uid, $project_id)

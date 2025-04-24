@@ -618,55 +618,32 @@ class UserDao
         $old_email = $user->getEmail();
 
         Lib\PDOWrapper::call('deleteUser', Lib\PDOWrapper::cleanseNull($user_id));
-        $deleted_user = self::getUser($user_id);
-        $deleted_email = $deleted_user->getEmail();
 
-        $ch = curl_init("https://cloud.memsource.com/web/api2/v1/users?email=$old_email");
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        $authorization = 'Authorization: Bearer ' . Common\Lib\Settings::get('memsource.memsource_api_token');
-        curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json', $authorization]);
-        $result = curl_exec($ch);
-        curl_close($ch);
+        $result = Lib\PDOWrapper::call('get_memsource_user', Lib\PDOWrapper::cleanseNull($user_id));
         if (empty($result)) {
-            error_log("No data returned from Phrase for $old_email in deleteUser($user_id)");
+            error_log("No get_memsource_user($user_id) in deleteUser");
         } else {
-            $response_data = json_decode($result, true);
-            if (empty($response_data['content'])) {
-                error_log("No ['content'] returned from Phrase for $old_email in deleteUser($user_id)");
-                error_log(print_r($response_data, 1));
-            } else {
-                $uid = 0;
-                foreach ($response_data['content'] as $phrase_user) {
-                    if ($phrase_user['email'] === $old_email) {
-                        $uid = $phrase_user['uid'];
-                        break;
-                    }
-                }
-                if (!$uid) {
-                    error_log("No matching email returned from Phrase for $old_email in deleteUser($user_id)");
-                    error_log(print_r($response_data, 1));
-                } else {
+                    $uid = $result[0]['memsource_user_uid'];
                     $ch = curl_init("https://cloud.memsource.com/web/api2/v3/users/$uid");
                     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
                     $data = [
-                        'email' => $deleted_email,
+                        'email' => $old_email,
                         'firstName' => 'xxx',
                         'lastName'  => 'xxx',
                         'role' => 'LINGUIST',
                         'timezone' => 'Europe/Rome',
-                        'userName' => 'TWB_' . substr($deleted_email, 0, strpos($deleted_email, '@')) . "_$user_id",
+                        'userName' => $result[0]['memsource_user_userName'],
                         'receiveNewsletter' => false,
                         'active' => false,
                         'note' => 'xxx',
                     ];
                     curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PUT');
                     curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+                    $authorization = 'Authorization: Bearer ' . Common\Lib\Settings::get('memsource.memsource_api_token');
                     curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json', $authorization]);
                     $result = curl_exec($ch);
                     curl_close($ch);
                     error_log($result);
-                }
-            }
         }
 
         $ip = Common\Lib\Settings::get('moodle.ip');
