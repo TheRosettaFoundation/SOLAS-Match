@@ -18,6 +18,7 @@ CREATE TABLE IF NOT EXISTS `Admins` (
   user_id         INT UNSIGNED NOT NULL,
   organisation_id INT UNSIGNED NOT NULL,
   roles           BIGINT UNSIGNED NOT NULL DEFAULT 0,
+  source_of_user  INT NOT NULL DEFAULT 0, # 1 => this linguist was invited to this NGO by the NGO itself
   UNIQUE INDEX user_id (user_id, organisation_id),
   KEY          organisation_id (organisation_id),
   KEY          roles (roles),
@@ -12792,6 +12793,18 @@ BEGIN
             VALUES             (    uID,             oID,   add_roles | @roles);
         END IF;
     END IF;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `adjust_org_admin_source_of_user`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `adjust_org_admin_source_of_user`(IN uID INT UNSIGNED, IN oID INT UNSIGNED, IN source INT)
+BEGIN
+    UPDATE Admins
+    SET source_of_user=source
+    WHERE
+        user_id=uID AND
+        organisation_id=oID;
 END//
 DELIMITER ;
 

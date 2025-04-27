@@ -676,6 +676,7 @@ class UserRouteHandler
                 if ($userExist) {
                     if ($userDao->isUserVerified($userExist->getId())) {
                         $adminDao->adjust_org_admin($userExist->getId(), $org_id, 0, $post['role']&~LINGUIST);
+                        $adminDao->adjust_org_admin_source_of_user($userExist->getId(), $org_id, 1, $admin_id);
                         UserRouteHandler::flashNow('success', 'A user with this email already exists and they have now been given the requested role.');
                     } else {
                         UserRouteHandler::flashNow('error', 'This user is not verified, please verify them first, if you trust them.');

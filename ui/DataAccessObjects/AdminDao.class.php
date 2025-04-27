@@ -141,6 +141,12 @@ error_log("adjust_org_admin($user_id, $org_id, $remove, $add)");
         LibAPI\PDOWrapper::call('adjust_org_admin', LibAPI\PDOWrapper::cleanse($user_id) . ',' .  LibAPI\PDOWrapper::cleanse($org_id) . ',' . LibAPI\PDOWrapper::cleanse($remove) . ',' . LibAPI\PDOWrapper::cleanse($add));
     }
 
+    public function adjust_org_admin_source_of_user($user_id, $org_id, $source_of_user, $admin_id)
+    {
+        if (!($this->get_roles($admin_id)&(SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER)))
+            LibAPI\PDOWrapper::call('adjust_org_admin_source_of_user', LibAPI\PDOWrapper::cleanse($user_id) . ',' .  LibAPI\PDOWrapper::cleanse($org_id) . ',' . LibAPI\PDOWrapper::cleanse($source_of_user));
+    }
+
     public function current_user_is_NGO_admin_or_PO_for_special_registration_email($user_id, $email)
     {
         return LibAPI\PDOWrapper::call('current_user_is_NGO_admin_or_PO_for_special_registration_email', LibAPI\PDOWrapper::cleanse($user_id) . ',' . LibAPI\PDOWrapper::cleanseWrapStr($email));
@@ -205,6 +211,7 @@ error_log("copy_roles_from_special_registration($user_id, $email)");
             $this->adjust_org_admin($user_id, $special_registration['org_id'], 0, NGO_LINGUIST);
             $this->adjust_org_admin($user_id,                               0, 0, LINGUIST);
         }
+        $this->adjust_org_admin_source_of_user($user_id, $special_registration['org_id'], 1, $special_registration['admin_id']);
         return 0;
     }
 }
