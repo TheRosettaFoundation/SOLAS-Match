@@ -3633,6 +3633,10 @@ DROP PROCEDURE IF EXISTS `getVolunteerProjectTasks`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getVolunteerProjectTasks`(IN `projectID` INT, IN `uID` INT)
 BEGIN
+    SET @NGO_LINGUIST = 2;
+    SET @NGO_list = '';
+    SELECT GROUP_CONCAT(organisation_id) INTO @NGO_list FROM Admins WHERE user_id=uID AND roles&@NGO_LINGUIST!=0 GROUP BY user_id;
+
     SELECT
         t.id AS task_id,
         t.title,
@@ -3663,8 +3667,11 @@ BEGIN
             (tq.native_matching=1 AND t.`language_id-target`=u.language_id)))) AND
         (
             r.restricted_task_id IS NULL OR
-            b.id IS NULL OR
-            b.id IN (SELECT ub.badge_id FROM UserBadges ub WHERE ub.user_id=uID)
+            (
+                b.id IS NOT NULL AND
+                b.id IN (SELECT ub.badge_id FROM UserBadges ub WHERE ub.user_id=uID)
+            ) OR
+            FIND_IN_SET(p.organisation_id, @NGO_list)>0
         )
     GROUP BY t.id
     ORDER BY target_language_name, target_country_name, t.`task-type_id`, t.id;
@@ -11292,6 +11299,10 @@ DROP PROCEDURE IF EXISTS `get_user_earthquake_tasks`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `get_user_earthquake_tasks`(IN uID INT)
 BEGIN
+    SET @NGO_LINGUIST = 2;
+    SET @NGO_list = '';
+    SELECT GROUP_CONCAT(organisation_id) INTO @NGO_list FROM Admins WHERE user_id=uID AND roles&@NGO_LINGUIST!=0 GROUP BY user_id;
+
     SELECT
         t.id, t.project_id as projectId, t.title, t.`word-count` AS wordCount,
         (SELECT `en-name` FROM Languages l WHERE l.id=t.`language_id-source`) AS `sourceLanguageName`,
@@ -11330,8 +11341,11 @@ BEGIN
         (tq.native_matching=1 AND t.`language_id-target`=u.language_id))) AND
         (
             r.restricted_task_id IS NULL OR
-            b.id IS NULL OR
-            b.id IN (SELECT ub.badge_id FROM UserBadges ub WHERE ub.user_id=uID)
+            (
+                b.id IS NOT NULL AND
+                b.id IN (SELECT ub.badge_id FROM UserBadges ub WHERE ub.user_id=uID)
+            ) OR
+            FIND_IN_SET(p.organisation_id, @NGO_list)>0
         )
     GROUP BY t.id
     HAVING
