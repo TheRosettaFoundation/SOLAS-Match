@@ -1474,13 +1474,13 @@ INSERT INTO task_type_details VALUES
 INSERT INTO task_type_details VALUES
 (31,3,1,0,1,1,1,2,1,'DTP Advanced Processing',             'DTP Advanced Processing',             '#B02323','',                           'SHELLTASK',    'ZZ',                       'Labor minutes','minutes','Labor minutes','Labor hours','Pages',     20,   25, 8.33333, 0, 0.0166667, 0.0166667, '', '', '', '');
 INSERT INTO task_type_details VALUES
-(32,8,1,0,1,1,1,0,1,'Simultaneous in-person Interpreting', 'Simultaneous in-person Interpreting', '#B02323','',                           'SHELLTASK',    'ZZ',                       'Labor minutes','minutes','Labor minutes','Labor hours','Pages',   1000, 2000, 8.33333, 0, 0.0166667, 0.0166667, '', '', '', '');
+(32,8,1,0,1,1,1,0,1,'Simultaneous in-person Interpreting', 'Simultaneous in-person Interpreting', '#B02323','',                           'SHELLTASK',    'ZZ',                       'Labor minutes','minutes','Labor minutes','Labor hours','Minutes', 1000, 2000, 8.33333, 0, 0.0166667, 0.0166667, '', '', '', '');
 INSERT INTO task_type_details VALUES
-(33,8,1,0,1,1,1,0,1,'Simultaneous remote Interpreting',    'Simultaneous remote Interpreting',    '#B02323','',                           'SHELLTASK',    'ZZ',                       'Labor minutes','minutes','Labor minutes','Labor hours','Pages',   1000, 2000, 8.33333, 0, 0.0166667, 0.0166667, '', '', '', '');
+(33,8,1,0,1,1,1,0,1,'Simultaneous remote Interpreting',    'Simultaneous remote Interpreting',    '#B02323','',                           'SHELLTASK',    'ZZ',                       'Labor minutes','minutes','Labor minutes','Labor hours','Minutes', 1000, 2000, 8.33333, 0, 0.0166667, 0.0166667, '', '', '', '');
 INSERT INTO task_type_details VALUES
-(34,8,1,0,1,1,1,0,1,'Consecutive in-person Interpreting',  'Consecutive in-person Interpreting',  '#B02323','',                           'SHELLTASK',    'ZZ',                       'Labor minutes','minutes','Labor minutes','Labor hours','Pages',   1000, 2000, 8.33333, 0, 0.0166667, 0.0166667, '', '', '', '');
+(34,8,1,0,1,1,1,0,1,'Consecutive in-person Interpreting',  'Consecutive in-person Interpreting',  '#B02323','',                           'SHELLTASK',    'ZZ',                       'Labor minutes','minutes','Labor minutes','Labor hours','Minutes', 1000, 2000, 8.33333, 0, 0.0166667, 0.0166667, '', '', '', '');
 INSERT INTO task_type_details VALUES
-(35,8,1,0,1,1,1,0,1,'Consecutive remote Interpreting',     'Consecutive remote Interpreting',     '#B02323','',                           'SHELLTASK',    'ZZ',                       'Labor minutes','minutes','Labor minutes','Labor hours','Pages',   1000, 2000, 8.33333, 0, 0.0166667, 0.0166667, '', '', '', '');
+(35,8,1,0,1,1,1,0,1,'Consecutive remote Interpreting',     'Consecutive remote Interpreting',     '#B02323','',                           'SHELLTASK',    'ZZ',                       'Labor minutes','minutes','Labor minutes','Labor hours','Minutes', 1000, 2000, 8.33333, 0, 0.0166667, 0.0166667, '', '', '', '');
 /*
 # "Labour Hours" or "Words" etc. for when user enters pricing rates
 UPDATE task_type_details SET pricing_and_recognition_unit_text_hours='Words' WHERE type_enum=1;
