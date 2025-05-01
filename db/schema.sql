@@ -2563,9 +2563,8 @@ BEGIN
     SET @site_linguist = 0;
     IF EXISTS (SELECT 1 FROM Admins WHERE user_id=uID AND organisation_id=0 AND roles&@LINGUIST!=0) THEN
         SET @site_linguist = 1;
-    ELSE
-        SELECT GROUP_CONCAT(organisation_id) INTO @NGO_list FROM Admins WHERE user_id=uID AND roles&@NGO_LINGUIST!=0 GROUP BY user_id;
     END IF;
+    SELECT GROUP_CONCAT(organisation_id) INTO @NGO_list FROM Admins WHERE user_id=uID AND roles&@NGO_LINGUIST!=0 GROUP BY user_id;
 
     SET @max_not_comlete_tasks = 1000000;
     SET @allowed_types = '1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35';
@@ -2617,8 +2616,11 @@ BEGIN
         (
             @isSiteAdmin=1 OR
             r.restricted_task_id IS NULL OR
-            b.id IS NULL OR
-            b.id IN (SELECT ub.badge_id FROM UserBadges ub WHERE ub.user_id=uID)
+            (
+                b.id IS NOT NULL AND
+                b.id IN (SELECT ub.badge_id FROM UserBadges ub WHERE ub.user_id=uID)
+            ) OR
+            FIND_IN_SET(p.organisation_id, @NGO_list)>0
         )
     GROUP BY
         ls.code,
@@ -4201,9 +4203,8 @@ BEGIN
     SET @site_linguist = 0;
     IF EXISTS (SELECT 1 FROM Admins WHERE user_id=uID AND organisation_id=0 AND roles&@LINGUIST!=0) THEN
         SET @site_linguist = 1;
-    ELSE
-        SELECT GROUP_CONCAT(organisation_id) INTO @NGO_list FROM Admins WHERE user_id=uID AND roles&@NGO_LINGUIST!=0 GROUP BY user_id;
     END IF;
+    SELECT GROUP_CONCAT(organisation_id) INTO @NGO_list FROM Admins WHERE user_id=uID AND roles&@NGO_LINGUIST!=0 GROUP BY user_id;
 
     SET @max_not_comlete_tasks = 1000000;
     SET @allowed_types = '1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35';
@@ -4264,8 +4265,11 @@ BEGIN
         (
             @isSiteAdmin=1 OR
             r.restricted_task_id IS NULL OR
-            b.id IS NULL OR
-            b.id IN (SELECT ub.badge_id FROM UserBadges ub WHERE ub.user_id=uID)
+            (
+                b.id IS NOT NULL AND
+                b.id IN (SELECT ub.badge_id FROM UserBadges ub WHERE ub.user_id=uID)
+            ) OR
+            FIND_IN_SET(p.organisation_id, @NGO_list)>0
         )
     GROUP BY t.id
     ORDER BY
@@ -4313,9 +4317,8 @@ BEGIN
     SET @site_linguist = 0;
     IF EXISTS (SELECT 1 FROM Admins WHERE user_id=uID AND organisation_id=0 AND roles&@LINGUIST!=0) THEN
         SET @site_linguist = 1;
-    ELSE
-        SELECT GROUP_CONCAT(organisation_id) INTO @NGO_list FROM Admins WHERE user_id=uID AND roles&@NGO_LINGUIST!=0 GROUP BY user_id;
     END IF;
+    SELECT GROUP_CONCAT(organisation_id) INTO @NGO_list FROM Admins WHERE user_id=uID AND roles&@NGO_LINGUIST!=0 GROUP BY user_id;
 
     SET @max_not_comlete_tasks = 1000000;
     SET @allowed_types = '1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35';
@@ -4366,8 +4369,11 @@ BEGIN
         (
             @isSiteAdmin=1 OR
             r.restricted_task_id IS NULL OR
-            b.id IS NULL OR
-            b.id IN (SELECT ub.badge_id FROM UserBadges ub WHERE ub.user_id=uID)
+            (
+                b.id IS NOT NULL AND
+                b.id IN (SELECT ub.badge_id FROM UserBadges ub WHERE ub.user_id=uID)
+            ) OR
+            FIND_IN_SET(p.organisation_id, @NGO_list)>0
         )
         GROUP BY t.id
     ) AS tasks_to_be_counted;
