@@ -6985,6 +6985,9 @@ BEGIN
     SET @NGO_LINGUIST=        2;
     SET @LINGUIST=            1;
 
+    SET @NGO_list = '';
+    SELECT GROUP_CONCAT(organisation_id) INTO @NGO_list FROM Admins WHERE user_id=userID AND roles&@NGO_LINGUIST!=0 GROUP BY user_id;
+
     IF EXISTS (
         SELECT 1
         FROM Admins
@@ -7007,25 +7010,15 @@ BEGIN
     ) THEN
         SELECT 0 AS result;
 
-    ELSEIF EXISTS (
-        SELECT t.id
-        FROM Tasks            t
-        JOIN RestrictedTasks  r ON t.id=r.restricted_task_id
-        JOIN Projects         p ON t.project_id=p.id
-        JOIN Badges           b ON p.organisation_id=b.owner_id AND b.title='Qualified'
-        LEFT JOIN UserBadges ub ON b.id=ub.badge_id AND ub.user_id=userID
-        WHERE
-            t.id=taskID AND
-            ub.badge_id IS NULL
-    ) THEN
-        SELECT 1 AS result;
-
     ELSEIF NOT EXISTS (
         SELECT t.id
         FROM Tasks t
+        JOIN Projects                         p ON t.project_id=p.id
         JOIN Users                            u ON u.id=userID
         JOIN user_country_id_to_variant     ucv ON u.country_id<=>ucv.country_id
         JOIN RequiredTaskQualificationLevels tq ON t.id=tq.task_id
+        LEFT JOIN Badges                      b ON p.organisation_id=b.owner_id AND b.title='Qualified'
+        LEFT JOIN RestrictedTasks             r ON t.id=r.restricted_task_id
         JOIN UserQualifiedPairs uqp ON
             uqp.user_id=userID AND
             t.`language_id-source`=uqp.language_id_source AND
@@ -7037,6 +7030,15 @@ BEGIN
             (tq.native_matching=2 AND t.`language_id-target`=u.language_id AND (t.`country_id-target`=ucv.variant_id OR t.`country_id-target`=ucv.variant_id0 OR t.`country_id-target`=ucv.variant_id1)) OR
             (tq.native_matching=1 AND t.`language_id-target`=u.language_id)
             ))
+            AND
+            (
+                r.restricted_task_id IS NULL OR
+                (
+                    b.id IS NOT NULL AND
+                    b.id IN (SELECT ub.badge_id FROM UserBadges ub WHERE ub.user_id=userID)
+                ) OR
+                FIND_IN_SET(p.organisation_id, @NGO_list)>0
+            )
     ) THEN
         SELECT 1 AS result;
 
