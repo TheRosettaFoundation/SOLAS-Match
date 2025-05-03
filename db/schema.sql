@@ -7165,6 +7165,9 @@ BEGIN
     SET @NGO_LINGUIST=        2;
     SET @LINGUIST=            1;
 
+    SET @NGO_list = '';
+    SELECT GROUP_CONCAT(organisation_id) INTO @NGO_list FROM Admins WHERE user_id=userID AND roles&@NGO_LINGUIST!=0 GROUP BY user_id;
+
     IF EXISTS (
         SELECT 1
         FROM Admins
@@ -7209,8 +7212,11 @@ BEGIN
             (tq.native_matching=1 AND t.`language_id-target`=u.language_id))))) AND
             (
                 r.restricted_task_id IS NULL OR
-                b.id IS NULL OR
-                b.id IN (SELECT ub.badge_id FROM UserBadges ub WHERE ub.user_id=userID)
+                (
+                    b.id IS NOT NULL AND
+                    b.id IN (SELECT ub.badge_id FROM UserBadges ub WHERE ub.user_id=userID)
+                ) OR
+                FIND_IN_SET(p.organisation_id, @NGO_list)>0
             )
         GROUP BY t.id
     ) THEN
