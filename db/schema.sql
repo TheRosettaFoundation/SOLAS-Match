@@ -9106,12 +9106,15 @@ BEGIN
         t.id=taskID AND
         tis.user_id IS NULL AND
         (st.user_id IS NULL OR st.type=0) AND
-        ((site_admin>0 AND a.roles=@LINGUIST) OR ((a.roles=@NGO_LINGUIST || a.roles=(@NGO_LINGUIST + @LINGUIST)) AND p.organisation_id=a.organisation_id)) AND
+        ((site_admin>0 AND a.roles=@LINGUIST) OR ((a.roles=@NGO_LINGUIST OR a.roles=(@NGO_LINGUIST + @LINGUIST)) AND p.organisation_id=a.organisation_id)) AND
         NOT EXISTS (SELECT 1 FROM TaskTranslatorBlacklist tbl WHERE tbl.user_id=uqp.user_id AND tbl.task_id=t.id) AND
         (
             r.restricted_task_id IS NULL OR
-            b.id IS NULL OR
-            b.id IN (SELECT ub.badge_id FROM UserBadges ub WHERE ub.user_id=uqp.user_id)
+            (
+                b.id IS NOT NULL AND
+                b.id IN (SELECT ub.badge_id FROM UserBadges ub WHERE ub.user_id=uqp.user_id)
+            ) OR
+            (a.roles&@NGO_LINGUIST AND p.organisation_id=a.organisation_id)
         )
     GROUP BY uqp.user_id
     ORDER BY uqp.user_id DESC;
@@ -9163,12 +9166,15 @@ BEGIN
         t.id=taskID AND
         tis.user_id IS NULL AND
         (st.user_id IS NULL OR st.type=0) AND
-        ((site_admin>0 AND a.roles=@LINGUIST) OR ((a.roles=@NGO_LINGUIST || a.roles=(@NGO_LINGUIST + @LINGUIST)) AND p.organisation_id=a.organisation_id)) AND
+        ((site_admin>0 AND a.roles=@LINGUIST) OR ((a.roles=@NGO_LINGUIST OR a.roles=(@NGO_LINGUIST + @LINGUIST)) AND p.organisation_id=a.organisation_id)) AND
         NOT EXISTS (SELECT 1 FROM TaskTranslatorBlacklist tbl WHERE tbl.user_id=uqp.user_id AND tbl.task_id=t.id) AND
         (
             r.restricted_task_id IS NULL OR
-            b.id IS NULL OR
-            b.id IN (SELECT ub.badge_id FROM UserBadges ub WHERE ub.user_id=uqp.user_id)
+            (
+                b.id IS NOT NULL AND
+                b.id IN (SELECT ub.badge_id FROM UserBadges ub WHERE ub.user_id=uqp.user_id)
+            ) OR
+            (a.roles&@NGO_LINGUIST AND p.organisation_id=a.organisation_id)
         )
     GROUP BY uqp.user_id
     ORDER BY uqp.user_id DESC;
@@ -9268,12 +9274,15 @@ BEGIN
         t.id=taskID AND
         tis.user_id IS NULL AND
         (st.user_id IS NULL OR st.type=0) AND
-        ((site_admin>0 AND a.roles=@LINGUIST) OR ((a.roles=@NGO_LINGUIST || a.roles=(@NGO_LINGUIST + @LINGUIST)) AND p.organisation_id=a.organisation_id)) AND
+        ((site_admin>0 AND a.roles=@LINGUIST) OR ((a.roles=@NGO_LINGUIST OR a.roles=(@NGO_LINGUIST + @LINGUIST)) AND p.organisation_id=a.organisation_id)) AND
         NOT EXISTS (SELECT 1 FROM TaskTranslatorBlacklist tbl WHERE tbl.user_id=uqp.user_id AND tbl.task_id=t.id) AND
         (
             r.restricted_task_id IS NULL OR
-            b.id IS NULL OR
-            b.id IN (SELECT ub.badge_id FROM UserBadges ub WHERE ub.user_id=uqp.user_id)
+            (
+                b.id IS NOT NULL AND
+                b.id IN (SELECT ub.badge_id FROM UserBadges ub WHERE ub.user_id=uqp.user_id)
+            ) OR
+            (a.roles&@NGO_LINGUIST AND p.organisation_id=a.organisation_id)
         )
     GROUP BY uqp.user_id
     ORDER BY uqp.user_id DESC;
@@ -9324,12 +9333,15 @@ BEGIN
         t.id=taskID AND
         tis.user_id IS NULL AND
         (st.user_id IS NULL OR st.type=0) AND
-        ((site_admin>0 AND a.roles=@LINGUIST) OR ((a.roles=@NGO_LINGUIST || a.roles=(@NGO_LINGUIST + @LINGUIST)) AND p.organisation_id=a.organisation_id)) AND
+        ((site_admin>0 AND a.roles=@LINGUIST) OR ((a.roles=@NGO_LINGUIST OR a.roles=(@NGO_LINGUIST + @LINGUIST)) AND p.organisation_id=a.organisation_id)) AND
         NOT EXISTS (SELECT 1 FROM TaskTranslatorBlacklist tbl WHERE tbl.user_id=uqp.user_id AND tbl.task_id=t.id) AND
         (
             r.restricted_task_id IS NULL OR
-            b.id IS NULL OR
-            b.id IN (SELECT ub.badge_id FROM UserBadges ub WHERE ub.user_id=uqp.user_id)
+            (
+                b.id IS NOT NULL AND
+                b.id IN (SELECT ub.badge_id FROM UserBadges ub WHERE ub.user_id=uqp.user_id)
+            ) OR
+            (a.roles&@NGO_LINGUIST AND p.organisation_id=a.organisation_id)
         )
     GROUP BY uqp.user_id
     ORDER BY uqp.user_id DESC;
@@ -13938,8 +13950,11 @@ BEGIN
             NOT EXISTS (SELECT 1 FROM TaskTranslatorBlacklist tbl WHERE tbl.user_id=uqp.user_id AND tbl.task_id=t.id) AND
             (
                 r.restricted_task_id IS NULL OR
-                b.id IS NULL OR
-                b.id IN (SELECT ub.badge_id FROM UserBadges ub WHERE ub.user_id=uqp.user_id)
+                (
+                    b.id IS NOT NULL AND
+                    b.id IN (SELECT ub.badge_id FROM UserBadges ub WHERE ub.user_id=uqp.user_id)
+                ) OR
+                (a.roles&@NGO_LINGUIST AND p.organisation_id=a.organisation_id)
             )
         GROUP BY t.id, uqp.user_id
     ) AS users_task_native_matching
