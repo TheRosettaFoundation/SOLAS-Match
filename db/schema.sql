@@ -8856,7 +8856,7 @@ BEGIN
         ) AS users_task_native_matching
         GROUP BY users_task_native_matching.task_id;
 
-        IF @matching_0=0 THEN
+        IF @matching_0=0 OR @matching_0 IS NULL THEN
             SET @matching_default=0;
         ELSEIF @matching_1=0 THEN
             SET @matching_default=0;
