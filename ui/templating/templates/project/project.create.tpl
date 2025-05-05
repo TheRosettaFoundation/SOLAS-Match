@@ -297,6 +297,7 @@
 
     </div>
 
+<!--
     <br /><br />
     <div>
         <button onclick="setTemplateLanguages(1); return false;" class="btn btn-success">
@@ -311,5 +312,6 @@
             Set Source and Target Languages from Template 2
         </button>
     </div>
+-->
 
 {include file="footer.tpl"}
