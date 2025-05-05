@@ -65,7 +65,7 @@
                 {elseif $task['status']&4}Bounced<br />
                 {elseif $task['status']&2}Paid<br />
                 {/if}
-                {if $roles&($SITE_ADMIN + 128) && !empty($task['invoice_number'])}
+                {if $roles&($SITE_ADMIN + 128) && !empty($task['invoice_number']) && (is_null($task['status']) || $task['status']&4 || !($task['status']&2))}
                     <form>
                         <input type="hidden" class="piem_invoice_number" name="piem_invoice_number" value="{$task['invoice_number']}" />
                         <input type="checkbox" class="piem_checkbox" checked disabled /><textarea class="piem_text" name="piem_text" cols='20' rows='2' style="width: 90%">{TemplateHelper::uiCleanseHTMLReinsertNewlineAndTabs($task['piem_text'])}</textarea>
