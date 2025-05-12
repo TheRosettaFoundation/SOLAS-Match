@@ -313,5 +313,9 @@
         </button>
     </div>
 -->
+<script>
+    var ngo_linguists_by_language_pair = [];
+        ngo_linguists_by_language_pair["en|fr-FR"] = 3;
+</script>
 
 {include file="footer.tpl"}
