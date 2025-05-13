@@ -281,6 +281,7 @@ translationRequiredDiv.appendChild(translationCheckbox)
 
     var translationRequiredDiv = document.createElement("div");
     translationRequiredDiv.className = "pull-left proj-task-type-checkbox";
+    translationRequiredDiv.id   = "translationRequiredDiv_" + targetCount;
 
     var translationCheckbox = document.createElement("input");
     translationCheckbox.setAttribute("type", "checkbox");
@@ -293,6 +294,7 @@ translationRequiredDiv.appendChild(translationCheckbox)
 
     var proofreadingRequiredDiv = document.createElement("div");
     proofreadingRequiredDiv.className = "pull-left proj-task-type-checkbox";
+    proofreadingRequiredDiv.id   = "proofreadingRequiredDiv_" + targetCount;
 
     var proofreadingCheckbox = document.createElement("input");
     proofreadingCheckbox.setAttribute("type", "checkbox");
