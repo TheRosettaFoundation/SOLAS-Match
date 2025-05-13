@@ -218,6 +218,32 @@ function loadingComplete()
  */
 function addMoreTargetLanguages(index)
 {
+  const snapshot_target_count = targetCount;
+
+function target_language_selected(event) {
+    let source_code = document.getElementById("sourceLanguageSelect").value;
+    if (source_code == "0") {
+        e.preventDefault();
+        alert("You must select the source language first");
+        return;
+    }
+    source_code = substr(source_code, 0, index(source_code, '-'));
+
+    let target_code = document.getElementById("target_language_" + snapshot_target_count).value;
+    if (target_code == "0") {
+        e.preventDefault();
+        alert("You must select a target language");
+        return;
+    }
+
+    let language_pair = source_code + "|" + event.target.value;
+
+document.getElementById("target_language_" + snapshot_target_count)
+IF GOOD...
+translationRequiredDiv.appendChild(translationCheckbox)
+
+}
+
   // Unless the targetCount is less than the maxTargetLanguages, don't do anything.
   // On the UI this shouldn't be an issue anyway because this function will disable the add button when
   // adding a language pushes the targetCount to the max, so this is an extra safeguard.
@@ -236,6 +262,7 @@ function addMoreTargetLanguages(index)
     targetLanguageSelect.name = "target_language_" + targetCount;
     targetLanguageSelect.id   = "target_language_" + targetCount;
     targetLanguageSelect.innerHTML = document.getElementById("template_language_options").innerHTML;
+    targetLanguageSelect.addEventListener("input", target_language_selected);
 
     var taskTypesRow = document.createElement("div"); // Sub-div for task type checkboxes, holds individual divs for each checkox
     taskTypesRow.id = "task-type-checkboxes";
