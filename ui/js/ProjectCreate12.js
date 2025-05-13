@@ -238,10 +238,26 @@ function target_language_selected(event) {
 
     let language_pair = source_code + "|" + event.target.value;
 
-document.getElementById("target_language_" + snapshot_target_count)
-IF GOOD...
-translationRequiredDiv.appendChild(translationCheckbox)
+IF GOOD OR WHATEVER...
+None...
+!ngo_linguists_by_language_pair[language_pair]
 
+
+    if () {
+        let translation_sourcing = document.createElement("select");
+        translation_sourcing.name = "translation_sourcing_" + targetCount;
+        translation_sourcing.id   = "translation_sourcing_" + targetCount;
+        translation_sourcing.innerHTML = '<option value="0">Full TWB Community</option><option value="1">Organization members (' + ngo_linguists_by_language_pair[language_pair] + ')</option>';
+        translationRequiredDiv.appendChild(translation_sourcing);
+document.getElementById("translationRequiredDiv_" + snapshot_target_count).appendChild(translation_sourcing);
+
+        let revision_sourcing = document.createElement("select");
+        revision_sourcing.name = "revision_sourcing_" + targetCount;
+        revision_sourcing.id   = "revision_sourcing_" + targetCount;
+        revision_sourcing.innerHTML = '<option value="0">Full TWB Community</option><option value="1">Organization members (' + ngo_linguists_by_language_pair[language_pair] + ')</option>';
+        proofreadingRequiredDiv.appendChild(revision_sourcing);
+document.getElementById("proofreadingRequiredDiv_" + snapshot_target_count).appendChild(revision_sourcing);
+    }
 }
 
   // Unless the targetCount is less than the maxTargetLanguages, don't do anything.
