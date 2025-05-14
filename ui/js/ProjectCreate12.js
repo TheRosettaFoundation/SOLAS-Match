@@ -223,7 +223,7 @@ function addMoreTargetLanguages(index)
 function target_language_selected(event) {
     let source_code = document.getElementById("sourceLanguageSelect").value;
     if (source_code == "0") {
-        e.preventDefault();
+        event.preventDefault();
         alert("You must select the source language first");
         return;
     }
@@ -231,7 +231,7 @@ function target_language_selected(event) {
 
     let target_code = document.getElementById("target_language_" + snapshot_target_count).value;
     if (target_code == "0") {
-        e.preventDefault();
+        event.preventDefault();
         alert("You must select a target language");
         return;
     }
