@@ -251,10 +251,10 @@
                         </div>
                         -->
                         <div class="proj-task-type-text pull-left" title="{Localisation::getTranslation('common_create_a_translation_task_for_volunteer_translators_to_pick_up')}">
-                            <strong>{Localisation::getTranslation('common_translation')}</strong>
+                            <strong>Translation Task Sourcing</strong>
                         </div>
                         <div class="proj-task-type-text pull-left" title="{Localisation::getTranslation('common_create_a_proofreading_task_for_evaluating_the_translation_provided_by_a_volunteer')}">
-                            <strong>{Localisation::getTranslation('common_proofreading')}</strong>
+                            <strong>Revision Task Sourcing</strong>
                         </div>
                     </div>
                 </div> <!-- </table> -->
