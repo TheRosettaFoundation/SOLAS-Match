@@ -227,7 +227,7 @@ function target_language_selected(event) {
         alert("You must select the source language first");
         return;
     }
-    source_code = substr(source_code, 0, index(source_code, '-'));
+    source_code = source_code.substring(0, index(source_code, '-'));
 
     let target_code = document.getElementById("target_language_" + snapshot_target_count).value;
     if (target_code == "0") {
