@@ -313,9 +313,12 @@
         </button>
     </div>
 -->
+
 <script>
     var ngo_linguists_by_language_pair = [];
-        ngo_linguists_by_language_pair["en|fr-FR"] = 3;
+    {foreach from=$ngo_linguists_by_language_pair key=language_pair item=ngo_linguists}
+        ngo_linguists_by_language_pair["{$language_pair}"] = {$ngo_linguists};
+    {/foreach}
 </script>
 
 {include file="footer.tpl"}
