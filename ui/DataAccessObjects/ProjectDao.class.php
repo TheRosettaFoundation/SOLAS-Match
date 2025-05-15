@@ -1867,6 +1867,17 @@ GROUP BY c.id, u.id';
         return $max_translation_deadline;
     }
 
+    public function ngo_linguists_by_language_pair($org_id)
+    {
+        $result = LibAPI\PDOWrapper::call('ngo_linguists_by_language_pair', LibAPI\PDOWrapper::cleanse($org_id));
+        if (empty($result)) return [];
+        $ngo_linguists_by_language_pair = [];
+        foreach ($result as $row) {
+            $ngo_linguists_by_language_pair[$row['language_pair']] = $row['number'];
+        }
+        return $ngo_linguists_by_language_pair;
+    }
+
     public function poll_sun()
     {
         if (strpos($this->siteApi, 'twbplatform')) $PRD = 'PRD';

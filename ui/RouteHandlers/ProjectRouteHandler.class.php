@@ -1816,6 +1816,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
             'create_memsource'=> $create_memsource,
             'languages'      => $projectDao->generate_language_selection($create_memsource),
             'showRestrictTask' => $taskDao->organisationHasQualifiedBadge($org_id),
+            'ngo_linguists_by_language_pair' => $projectDao->ngo_linguists_by_language_pair($org_id),
             'roles'          => $adminDao->get_roles($user_id, $org_id),
             'sesskey'        => $sesskey,
             'template1'      => '{"source": "en-GB", "targets": ["zh-CN", "zh-TW", "th-TH", "vi-VN", "id-ID", "tl-PH", "ko-KR", "ja-JP", "ms-MY", "my-MM", "hi-IN", "bn-IN"]}',
