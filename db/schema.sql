@@ -4388,6 +4388,27 @@ BEGIN
 END//
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `ngo_linguists_by_language_pair`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `ngo_linguists_by_language_pair`(IN oID INT)
+BEGIN
+    SELECT
+        CONCAT(pairs.s, '|', pairs.t, '-', pairs.r) AS language_pair,
+        COUNT(*) AS number
+    FROM
+        (SELECT
+            MAX(uqp.language_code_source) AS s, MAX(uqp.language_code_target) AS t, MAX(uqp.country_code_target) AS r
+        FROM Admins               a
+        JOIN UserQualifiedPairs uqp ON a.user_id=uqp.user_id
+        WHERE
+            a.roles&2 AND
+            a.organisation_id=oID
+        GROUP BY a.user_id, uqp.language_id_source, uqp.language_id_target, uqp.country_id_target
+        ) AS pairs
+    GROUP BY pairs.s, pairs.t, pairs.r;
+END//
+DELIMITER ;
+
 DROP PROCEDURE IF EXISTS `getNumberOfChunks`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getNumberOfChunks`(IN task_id_1 BIGINT, IN task_id_2 BIGINT, IN task_id_3 BIGINT, IN task_id_4 BIGINT, IN task_id_5 BIGINT, IN task_id_6 BIGINT)
