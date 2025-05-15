@@ -265,7 +265,6 @@ table {
 }
 
 #task-type-checkboxes {
-    margin-top: 25px;
     text-align: center;
 }
 
@@ -275,7 +274,7 @@ table {
 
 .proj-task-type-checkbox,
 .proj-task-type-text {
-    width: 33.333%;
+    width: 40%;
 }
 
 .width-50 {
