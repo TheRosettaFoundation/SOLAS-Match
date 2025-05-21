@@ -13932,6 +13932,7 @@ BEGIN
 
     SELECT
         users_task_native_matching.task_id,
+        SUM(users_task_native_matching.ngo_only) AS ngo_only,
         SUM(users_task_native_matching.native_matching_0) AS native_matching_0,
         SUM(users_task_native_matching.native_matching_1) AS native_matching_1,
         SUM(users_task_native_matching.native_matching_2) AS native_matching_2,
@@ -13942,6 +13943,7 @@ BEGIN
         SELECT
             u.id AS user_id,
             t.id AS task_id,
+            IF(MAX(a.roles)&@NGO_LINGUIST AND p.organisation_id=MAX(a.organisation_id), 1, 0) AS ngo_only,
             1 AS native_matching_0,
             IF(t.`language_id-target`=u.language_id, 1, 0) AS native_matching_1,
             IF(t.`language_id-target`=u.language_id AND (t.`country_id-target`=MAX(ucv.variant_id) OR t.`country_id-target`=MAX(ucv.variant_id0) OR t.`country_id-target`=MAX(ucv.variant_id1)), 1, 0) AS native_matching_2,
@@ -13968,15 +13970,7 @@ BEGIN
             t.id=taskID AND
             (st.user_id IS NULL OR st.type=0) AND
             (a.roles=@LINGUIST OR ((a.roles=@NGO_LINGUIST OR a.roles=(@NGO_LINGUIST + @LINGUIST)) AND p.organisation_id=a.organisation_id)) AND
-            NOT EXISTS (SELECT 1 FROM TaskTranslatorBlacklist tbl WHERE tbl.user_id=uqp.user_id AND tbl.task_id=t.id) AND
-            (
-                r.restricted_task_id IS NULL OR
-                (
-                    b.id IS NOT NULL AND
-                    b.id IN (SELECT ub.badge_id FROM UserBadges ub WHERE ub.user_id=uqp.user_id)
-                ) OR
-                (a.roles&@NGO_LINGUIST AND p.organisation_id=a.organisation_id)
-            )
+            NOT EXISTS (SELECT 1 FROM TaskTranslatorBlacklist tbl WHERE tbl.user_id=uqp.user_id AND tbl.task_id=t.id)
         GROUP BY t.id, uqp.user_id
     ) AS users_task_native_matching
     GROUP BY users_task_native_matching.task_id;
