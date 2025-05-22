@@ -225,9 +225,6 @@ class ProjectRouteHandler
             $projectDao->record_memsource_project_languages($project_id, $source_language_pair, $target_languages);
         }
 
-         $taskDao = new DAO\TaskDao();
-         if ($taskDao->organisationHasQualifiedBadge($memsource_client['org_id'])) $taskDao->insert_project_restrictions($project_id, true, true);
-
         $org_id = $memsource_client['org_id'];
         if ($org_id != 790 && ($old_project_id = $projectDao->get_project_id_for_latest_org_image($org_id))) {
             $image_files = glob(Common\Lib\Settings::get('files.upload_path') . "proj-$old_project_id/image/image.*");
