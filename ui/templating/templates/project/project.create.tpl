@@ -201,17 +201,13 @@
                     </div>
                 </div>
                 {/if}
-                {if $showRestrictTask}
                 <div class="projFormInput">
                     <div style="margin-bottom:25px;">
                         <h2>{Localisation::getTranslation('restrict_tasks')}:</h2>
                         <p class="desc">If checked, translation tasks will only be shown to qualified volunteers.</p>
                         <input type="checkbox" name="restrict_translate_tasks" id="restrict_translate_tasks" value="1" checked />
-                        <p class="desc">{Localisation::getTranslation('restrict_tasks_long')}</p>
-                        <input type="checkbox" name="restrict_revise_tasks" id="restrict_revise_tasks" value="1" checked />
                     </div>
                 </div>
-                {/if}
                 {if ($roles & ($SITE_ADMIN + $PROJECT_OFFICER)) && !$create_memsource}
                 <div class="projFormInput">
                     <div style="margin-bottom:25px;">
@@ -241,8 +237,10 @@
                 <h2>{Localisation::getTranslation('project_create_target_languages')}: <span style="color: red">*</span></h2>
             </div>
             <div id="projFormBottomBlockRight">
+                <!--
                 <h2>{Localisation::getTranslation('common_task_type')}: <span style="color: red">*</span></h2>
                 <p class="desc" style ="margin-bottom:63px">{Localisation::getTranslation('project_create_9')}</p>
+                -->
                 <div> <!-- <table border="0" width="100%"> -->
                     <div>
                         <!--
