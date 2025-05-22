@@ -136,17 +136,6 @@
                         <input type="text" name="tagList" id="tagList" style="width: 400px" />
                     </div>
                 </div>
-                {if $showRestrictTask}
-                <div class="projFormInput">
-                    <div style="margin-bottom:25px;">
-                        <h2>{Localisation::getTranslation('restrict_tasks')}:</h2>
-                        <p class="desc">If checked, translation tasks will only be shown to qualified volunteers.</p>
-                        <input type="checkbox" name="restrict_translate_tasks" id="restrict_translate_tasks" value="1" checked />
-                        <p class="desc">{Localisation::getTranslation('restrict_tasks_long')}</p>
-                        <input type="checkbox" name="restrict_revise_tasks" id="restrict_revise_tasks" value="1" checked />
-                    </div>
-                </div>
-                {/if}
             </div>
         </div>
         <div id ="projFormBottom">

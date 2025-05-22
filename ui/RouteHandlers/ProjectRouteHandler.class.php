@@ -1815,7 +1815,6 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
             'selected_minute'=> $selected_minute,
             'create_memsource'=> $create_memsource,
             'languages'      => $projectDao->generate_language_selection($create_memsource),
-            'showRestrictTask' => $taskDao->organisationHasQualifiedBadge($org_id),
             'ngo_linguists_by_language_pair' => $projectDao->ngo_linguists_by_language_pair($org_id),
             'roles'          => $adminDao->get_roles($user_id, $org_id),
             'sesskey'        => $sesskey,
@@ -1995,10 +1994,6 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                     } else {
                         // Continue here whether there is, or is not, an image file uploaded as long as there was not an explicit failure
                         try {
-                            $restrict_translate_tasks = !empty($post['restrict_translate_tasks']);
-                            $restrict_revise_tasks    = !empty($post['restrict_revise_tasks']);
-                            if ($restrict_translate_tasks || $restrict_revise_tasks) $taskDao->insert_project_restrictions($project_id, $restrict_translate_tasks, $restrict_revise_tasks);
-
                             // Create a topic in the Community forum (Discourse)
                             error_log("projectCreate create_discourse_topic($project_id ...)");
                             try {
@@ -2084,7 +2079,6 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
             'minute_list'    => $minute_list,
             'selected_minute'=> $selected_minute,
             'languages'      => $projectDao->generate_language_selection(1),
-            'showRestrictTask' => $taskDao->organisationHasQualifiedBadge($org_id),
             'roles'          => $adminDao->get_roles($user_id, $org_id),
             'sesskey'        => $sesskey,
         ]);
