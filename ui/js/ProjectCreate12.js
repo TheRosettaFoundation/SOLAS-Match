@@ -309,7 +309,7 @@ function target_language_selected(event) {
     translationCheckbox.id   = "translation_" + targetCount;
     translationCheckbox.value = "1";
     translationCheckbox.checked = true;
-    if (create_memsource == 1 && index != 0) translationCheckbox.disabled = true;
+    if (create_memsource == 1 && (true || index != 0)) translationCheckbox.disabled = true;
 
     var proofreadingRequiredDiv = document.createElement("div");
     proofreadingRequiredDiv.className = "pull-left proj-task-type-checkbox";
@@ -322,9 +322,9 @@ function target_language_selected(event) {
     proofreadingCheckbox.id = "proofreading_" + targetCount;
     proofreadingCheckbox.value = "1";
     proofreadingCheckbox.checked = true;
-    if (create_memsource == 1 && index != 0) proofreadingCheckbox.disabled = true;
+    if (create_memsource == 1 && (true || index != 0)) proofreadingCheckbox.disabled = true;
 
-    if (!userIsAdmin) {
+    if (true || !userIsAdmin) {
       translationCheckbox.name = "disabled_translation_" + targetCount;
       translationCheckbox.disabled = true;
 
@@ -352,7 +352,7 @@ function target_language_selected(event) {
 
     // Put the checkbox Input Elements into their own divs
     segmentationRequiredDiv.appendChild(segmentationCheckbox);
-    if (create_memsource != 1 || index == 0) {
+    if (create_memsource != 1 || (false && index == 0)) {
     translationRequiredDiv.appendChild(translationCheckbox);
     proofreadingRequiredDiv.appendChild(proofreadingCheckbox);
     }
