@@ -201,13 +201,16 @@
                     </div>
                 </div>
                 {/if}
+                {if !empty($ngo_linguists_by_language_pair)}
                 <div class="projFormInput">
                     <div style="margin-bottom:25px;">
-                        <h2>{Localisation::getTranslation('restrict_tasks')}:</h2>
-                        <p class="desc">If checked, translation tasks will only be shown to qualified volunteers.</p>
-                        <input type="checkbox" name="restrict_translate_tasks" id="restrict_translate_tasks" value="1" checked />
+                        <h2>Incremental Sourcing:</h2>
+                        <p class="desc">If checked, incremental sourcing will apply. That means if you choose sourcing to "Organization members", then after 24 hours those tasks will be visible and claimable by the "Full TWB Community".
+                        If not checked, then sourcing will not open up after 24 hours unless you manually change it later.</p>
+                        <input type="checkbox" name="incremental_sourcing" id="incremental_sourcing" value="1" checked />
                     </div>
                 </div>
+                {/if}
                 {if ($roles & ($SITE_ADMIN + $PROJECT_OFFICER)) && !$create_memsource}
                 <div class="projFormInput">
                     <div style="margin-bottom:25px;">
