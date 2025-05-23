@@ -487,15 +487,6 @@ error_log("set_memsource_task($task_id... {$part['uid']}...), success: $success"
 
             if($projectDao->is_task_claimable($task_id)) $taskDao->setTaskStatus($task_id, Common\Enums\TaskStatusEnum::PENDING_CLAIM);
 
-gET project_complete_dates
-DEL            $project_restrictions = $taskDao->get_project_restrictions($project_id);
-            if ($project_restrictions && (
-                    ($task->getTaskType() == Common\Enums\TaskTypeEnum::TRANSLATION  && $project_restrictions['restrict_translate_tasks'])
-                        ||
-                    ($task->getTaskType() == Common\Enums\TaskTypeEnum::PROOFREADING && $project_restrictions['restrict_revise_tasks']))) {
-                $taskDao->setRestrictedTask($task_id);
-            }
-
             if ($self_service_project) {
                 $creator = $taskDao->get_self_creator_from_project_file($project_id);
                 error_log("Tracking for Self Service Creator: {$creator['id']}");
@@ -1724,7 +1715,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                                             $targetCount++;
                                         }
 
-                                        if (!empty($ngo_list)) $projectDao->update_project_restriction_JSON($project->getId(), '[' . implode(',', $ngo_list) . ']');
+                                        if (!empty($ngo_list)) $projectDao->update_project_restriction_JSON($project->getId(), !empty($post['incremental_sourcing']) ? 1 : 0, '[' . implode(',', $ngo_list) . ']');
 
                                         // Create a topic in the Community forum (Discourse)
                                         error_log('projectCreate create_discourse_topic(' . $project->getId() . ", $target_languages)");

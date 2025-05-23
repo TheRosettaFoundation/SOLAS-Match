@@ -1085,14 +1085,6 @@ error_log("set_memsource_task($task_id, 0, {$job['uid']}...), success: $success"
 
         if ($this->is_task_claimable($task_id)) $taskDao->setTaskStatus($task_id, Common\Enums\TaskStatusEnum::PENDING_CLAIM);
 
-DEL        $project_restrictions = $taskDao->get_project_restrictions($project_id);
-        if ($project_restrictions && (
-                ($task->getTaskType() == Common\Enums\TaskTypeEnum::TRANSLATION  && $project_restrictions['restrict_translate_tasks'])
-                    ||
-                ($task->getTaskType() == Common\Enums\TaskTypeEnum::PROOFREADING && $project_restrictions['restrict_revise_tasks']))) {
-            $taskDao->setRestrictedTask($task_id);
-        }
-
         if ($this->get_memsource_self_service_project($memsource_project['memsource_project_id'])) {
             $creator = $taskDao->get_self_creator_from_project_file($project_id);
             error_log("Sync Tracking for Self Service Creator: {$creator['id']}");
