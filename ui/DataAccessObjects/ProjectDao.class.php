@@ -1085,7 +1085,7 @@ error_log("set_memsource_task($task_id, 0, {$job['uid']}...), success: $success"
 
         if ($this->is_task_claimable($task_id)) $taskDao->setTaskStatus($task_id, Common\Enums\TaskStatusEnum::PENDING_CLAIM);
 
-        $project_restrictions = $taskDao->get_project_restrictions($project_id);
+DEL        $project_restrictions = $taskDao->get_project_restrictions($project_id);
         if ($project_restrictions && (
                 ($task->getTaskType() == Common\Enums\TaskTypeEnum::TRANSLATION  && $project_restrictions['restrict_translate_tasks'])
                     ||

@@ -387,23 +387,6 @@ error_log("createTaskDirectly: $args");
         return false;
     }
 
-    public function insert_project_restrictions($project_id, $restrict_translate_tasks, $restrict_revise_tasks)
-    {
-        LibAPI\PDOWrapper::call('insert_project_restrictions',
-            LibAPI\PDOWrapper::cleanse($project_id) . ',' .
-            LibAPI\PDOWrapper::cleanse($restrict_translate_tasks) . ',' .
-            LibAPI\PDOWrapper::cleanse($restrict_revise_tasks));
-    }
-
-    public function get_project_restrictions($project_id)
-    {
-        $result = LibAPI\PDOWrapper::call('get_project_restrictions', LibAPI\PDOWrapper::cleanse($project_id));
-        if ($result) {
-            return $result[0];
-        }
-        return false;
-    }
-
     public function getTaskChunk($task_id)
     {
         $result = LibAPI\PDOWrapper::call('getTaskChunk', LibAPI\PDOWrapper::cleanse($task_id));

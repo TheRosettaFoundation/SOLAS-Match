@@ -10161,6 +10161,7 @@ BEGIN
 END//
 DELIMITER ;
 
+# Not currently used...
 DROP PROCEDURE IF EXISTS `insert_project_restrictions`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_project_restrictions`(IN projectID INT, IN translate INT, IN revise INT)
@@ -10169,6 +10170,7 @@ BEGIN
 END//
 DELIMITER ;
 
+# Not currently used...
 DROP PROCEDURE IF EXISTS `get_project_restrictions`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `get_project_restrictions`(IN projectID INT)

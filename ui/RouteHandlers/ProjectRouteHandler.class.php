@@ -487,7 +487,8 @@ error_log("set_memsource_task($task_id... {$part['uid']}...), success: $success"
 
             if($projectDao->is_task_claimable($task_id)) $taskDao->setTaskStatus($task_id, Common\Enums\TaskStatusEnum::PENDING_CLAIM);
 
-            $project_restrictions = $taskDao->get_project_restrictions($project_id);
+gET project_complete_dates
+DEL            $project_restrictions = $taskDao->get_project_restrictions($project_id);
             if ($project_restrictions && (
                     ($task->getTaskType() == Common\Enums\TaskTypeEnum::TRANSLATION  && $project_restrictions['restrict_translate_tasks'])
                         ||
@@ -1707,20 +1708,23 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                                     try {
                                         $target_languages = '';
                                         $targetCount = 0;
+                                        $ngo_list = [];
                                         if (!empty($post["target_language_$targetCount"])) {
                                             list($trommons_language_code, $trommons_country_code) = $projectDao->convert_selection_to_language_country($post["target_language_$targetCount"]);
                                             $target_languages = $trommons_language_code . '-' . $trommons_country_code;
+
+                                            if (!empty($post["translation_sourcing_$targetCount"])) $ngo_list[] = $post['sourceLanguageSelect'] . '|' . $post["target_language_$targetCount"];
                                         }
                                         $targetCount++;
                                         while (!empty($post["target_language_$targetCount"])) {
                                             list($trommons_language_code, $trommons_country_code) = $projectDao->convert_selection_to_language_country($post["target_language_$targetCount"]);
                                             $target_languages .= ',' . $trommons_language_code . '-' . $trommons_country_code;
+
+                                            if (!empty($post["translation_sourcing_$targetCount"])) $ngo_list[] = $post['sourceLanguageSelect'] . '|' . $post["target_language_$targetCount"];
                                             $targetCount++;
                                         }
 
-                                        $restrict_translate_tasks = !empty($post['restrict_translate_tasks']);
-                                        $restrict_revise_tasks    = !empty($post['restrict_revise_tasks']);
-                                        if ($restrict_translate_tasks || $restrict_revise_tasks) $taskDao->insert_project_restrictions($project->getId(), $restrict_translate_tasks, $restrict_revise_tasks);
+                                        if (!empty($ngo_list)) $projectDao->update_project_restriction_JSON($project->getId(), implode(',', $ngo_list));
 
                                         // Create a topic in the Community forum (Discourse)
                                         error_log('projectCreate create_discourse_topic(' . $project->getId() . ", $target_languages)");
