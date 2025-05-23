@@ -1724,7 +1724,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                                             $targetCount++;
                                         }
 
-                                        if (!empty($ngo_list)) $projectDao->update_project_restriction_JSON($project->getId(), implode(',', $ngo_list));
+                                        if (!empty($ngo_list)) $projectDao->update_project_restriction_JSON($project->getId(), '[' . implode(',', $ngo_list) . ']');
 
                                         // Create a topic in the Community forum (Discourse)
                                         error_log('projectCreate create_discourse_topic(' . $project->getId() . ", $target_languages)");
