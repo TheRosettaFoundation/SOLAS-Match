@@ -6962,6 +6962,7 @@ BEGIN
 END//
 DELIMITER ;
 
+# Not currently used...
 DROP PROCEDURE IF EXISTS `organisationHasQualifiedBadge`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `organisationHasQualifiedBadge`(IN `ownerID` INT)
@@ -6970,6 +6971,7 @@ BEGIN
 END//
 DELIMITER ;
 
+# Not currently used...
 DROP PROCEDURE IF EXISTS `setRestrictedTask`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `setRestrictedTask`(IN `taskID` INT)
@@ -6978,6 +6980,7 @@ BEGIN
 END//
 DELIMITER ;
 
+# Not currently used...
 DROP PROCEDURE IF EXISTS `removeRestrictedTask`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `removeRestrictedTask`(IN `taskID` INT)
@@ -6986,6 +6989,7 @@ BEGIN
 END//
 DELIMITER ;
 
+# Not currently used...
 DROP PROCEDURE IF EXISTS `getRestrictedTask`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getRestrictedTask`(IN `taskID` INT)

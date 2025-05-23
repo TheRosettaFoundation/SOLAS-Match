@@ -108,13 +108,6 @@
                         <p class="desc">{Localisation::getTranslation('common_if_checked_tasks_will_appear_in_the_tasks_stream')}</p>
                         <input type="checkbox" id="publishTask" name="publishTask" value="{$task->getPublished()}" {$publishStatus} {if $task_status_id > TaskStatusEnum::PENDING_CLAIM}disabled{/if}/>
                     </div>
-                    {if $showRestrictTask}
-                    <div >
-                        <label for="restrictTask" style="font-size: large"><strong>{Localisation::getTranslation('restrict_task')}</strong></label>
-                        <p class="desc">{Localisation::getTranslation('restrict_task_long')}</p>
-                        <input class="form-check-input" type="checkbox" name="restrictTask" value="1" {$restrictTaskStatus} />
-                    </div>
-                    {/if}
                     {if !empty($languages)}
                     <p>
                         <label for="target" class="form-label"><strong>{Localisation::getTranslation('common_target_language')}</strong></label>

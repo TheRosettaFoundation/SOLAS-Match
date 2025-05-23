@@ -314,16 +314,6 @@ error_log("createTaskDirectly: $args");
         }
     }
 
-    public function organisationHasQualifiedBadge($org_id)
-    {
-        $ret = 0;
-        $result = LibAPI\PDOWrapper::call('organisationHasQualifiedBadge', LibAPI\PDOWrapper::cleanse($org_id));
-        if (!empty($result)) {
-            $ret = 1;
-        }
-        return $ret;
-    }
-
     public function update_native_matching()
     {
         LibAPI\PDOWrapper::call('update_native_matching_phase_1', '');
@@ -336,26 +326,6 @@ error_log("createTaskDirectly: $args");
         $result = LibAPI\PDOWrapper::call('count_users_who_can_claim', LibAPI\PDOWrapper::cleanse($task_id));
         if (!empty($result)) {
             $ret = $result;
-        }
-        return $ret;
-    }
-
-    public function setRestrictedTask($task_id)
-    {
-        LibAPI\PDOWrapper::call('setRestrictedTask', LibAPI\PDOWrapper::cleanse($task_id));
-    }
-
-    public function removeRestrictedTask($task_id)
-    {
-        LibAPI\PDOWrapper::call('removeRestrictedTask', LibAPI\PDOWrapper::cleanse($task_id));
-    }
-
-    public function getRestrictedTask($task_id)
-    {
-        $ret = 0;
-        $result = LibAPI\PDOWrapper::call('getRestrictedTask', LibAPI\PDOWrapper::cleanse($task_id));
-        if (!empty($result)) {
-            $ret = 1;
         }
         return $ret;
     }

@@ -956,12 +956,6 @@ class TaskRouteHandler
                     $task->setPublished(0);
                 }
 
-                if (!empty($post['restrictTask'])) {
-                    $taskDao->setRestrictedTask($task_id);
-                } else {
-                    $taskDao->removeRestrictedTask($task_id);
-                }
-
                 $targetLocale = new Common\Protobufs\Models\Locale();
 
                 if (isset($post['target']) && $post['target'] != "") {
@@ -1073,11 +1067,6 @@ class TaskRouteHandler
             $publishStatus="checked";
         }
 
-        $restrictTaskStatus = '';
-        if ($taskDao->getRestrictedTask($task_id)) {
-            $restrictTaskStatus = 'checked';
-        }
-
         if ($copy_task->getTaskStatus() == Common\Enums\TaskStatusEnum::IN_PROGRESS && $projectDao->are_translations_not_all_complete($copy_task, $memsource_task)) $copy_task->setTaskStatus(Common\Enums\TaskStatusEnum::CLAIMED);
 
         $template_data = array_merge($template_data, array(
@@ -1093,8 +1082,6 @@ class TaskRouteHandler
             "word_count_err"      => $word_count_err,
             "deadline_error"      => $deadlineError,
             "publishStatus"      => $publishStatus,
-            'showRestrictTask'    => $taskDao->organisationHasQualifiedBadge($project->getOrganisationId()),
-            'restrictTaskStatus'  => $restrictTaskStatus,
             'roles'               => $roles,
             'required_qualification_level' => $taskDao->getRequiredTaskQualificationLevel($task_id),
             'shell_task_url'      => $taskDao->get_task_url($task_id),
