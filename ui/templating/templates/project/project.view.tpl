@@ -544,8 +544,10 @@
                             </div>
                           </div>
                         </div>
-{if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
+{if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER + $NGO_ADMIN + $NGO_PROJECT_OFFICER)}
+                  <span data-bs-toggle="tooltip" data-bs-placement="right" data-bs-html="true" data-bs-title="This allows you to specify whether a task will be available to the <strong>Full TWB Community</strong> or to <strong>Organization members</strong> only. If you set select one of these any incremental sourcing will stop and sourcing will remain at this level.">
                   <button class="btn btn-primary text-white mt-2 mt-md-0 restrictions" data-bs-target="#exampleModalToggle" data-bs-toggle="modal">Restrict Task</button>
+                  </span>
 {/if}
                       </div>
                     {* endofModal *}
