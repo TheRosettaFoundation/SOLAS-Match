@@ -20,6 +20,7 @@
                         <span class="d-none">
                     <!-- Parameters... -->
                         <div id="isSiteAdmin">{if $roles & ($SITE_ADMIN + $PROJECT_OFFICER)}1{else}0{/if}</div>
+                        <div id="isNGOAdmin">{if $roles & ($NGO_ADMIN + $NGO_PROJECT_OFFICER)}1{else}0{/if}</div>
                     </span>
 
                     <span style="height: auto; overflow-wrap: break-word; display: inline-block;">
