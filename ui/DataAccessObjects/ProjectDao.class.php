@@ -626,6 +626,11 @@ $replace = array(
         LibAPI\PDOWrapper::call('update_project_owner_id_only', LibAPI\PDOWrapper::cleanse($project_id) . ',' . LibAPI\PDOWrapper::cleanse($this->get_user_id_from_memsource_user($owner_uid)));
     }
 
+    public function update_project_restriction_JSON($project_id, $incremental_sourcing, $restriction_JSON)
+    {
+        LibAPI\PDOWrapper::call('update_project_restriction_JSON', LibAPI\PDOWrapper::cleanse($project_id) . ',' . LibAPI\PDOWrapper::cleanse($incremental_sourcing) . ',' . LibAPI\PDOWrapper::cleanseWrapStr($restriction_JSON));
+    }
+
     public function record_memsource_project_languages($project_id, $source_language_pair, $target_languages)
     {
         LibAPI\PDOWrapper::call('record_memsource_project_languages',

@@ -10268,6 +10268,14 @@ BEGIN
 END//
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `update_project_restriction_JSON`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `update_project_restriction_JSON`(IN pID INT UNSIGNED, IN i INT, IN r JSON)
+BEGIN
+    UPDATE project_complete_dates SET incremental_sourcing=i, restriction_JSON=r WHERE project_id=pID;
+END//
+DELIMITER ;
+
 DROP PROCEDURE IF EXISTS `update_memsource_project`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `update_memsource_project`(IN projectID INT, IN workflow1 VARCHAR(30), IN workflow2 VARCHAR(30), IN workflow3 VARCHAR(30), IN workflow4 VARCHAR(30), IN workflow5 VARCHAR(30), IN workflow6 VARCHAR(30), IN workflow7 VARCHAR(30), IN workflow8 VARCHAR(30), IN workflow9 VARCHAR(30), IN workflow10 VARCHAR(30), IN workflow11 VARCHAR(30), IN workflow12 VARCHAR(30))
