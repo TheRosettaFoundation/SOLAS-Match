@@ -299,6 +299,10 @@ restrictionsB.forEach((elt) => {
                                         />
                                     </span>`;
                                 break;
+
+                            default:
+                                newNative.innerHTML = "";
+                                break;
                         }
                     }
                 });
