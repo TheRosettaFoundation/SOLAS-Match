@@ -33,6 +33,8 @@ myModalEl.addEventListener("shown.bs.modal", (event) => {
         );
         modalDescShow.classList.add("d-none");
     } else {
+        if (!parseInt(document.getElementById("isSiteAdmin").innerHTML) modalDescShow.classList.add("d-none");
+        else
         modalDescShow.classList.remove("d-none");
     }
 });
@@ -188,6 +190,7 @@ restrictionsB.forEach((elt) => {
                     elt[0].native_matching_active_1;
                 nativeMatching[taskId].native_matching_active_2 =
                     elt[0].native_matching_active_2;
+                nativeMatching[taskId].ngo_only = elt[0].ngo_only;
             } else {
                 nativeMatching = 0;
             }
