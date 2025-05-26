@@ -1048,6 +1048,12 @@
 </div>
 
 <script>
+     var ngo_linguists_by_language_pair = [];
+    {foreach from=$ngo_linguists_by_language_pair key=language_pair item=ngo_linguists}
+        ngo_linguists_by_language_pair["{$language_pair}"] = {$ngo_linguists};
+    {/foreach}
+
+
 function handle_click_track() {
     let link = document.getElementById('handle_click_track');
     link.style.pointerEvents = 'none'; // This prevents further clicks
