@@ -13872,6 +13872,84 @@ UPDATE user_country_id_to_variant SET variant_id0=1 WHERE country_id=56;
 
 # German  --  Germany, Belgium, Luxembourg, Austria, Switzerland, Liechtenstein
 
+DROP PROCEDURE IF EXISTS `update_sourcing_level_phase_0`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `update_sourcing_level_phase_0`()
+BEGIN
+    DELETE FROM RestrictedTasks WHERE restricted_task_id IN (
+        SELECT tq.task_id
+        FROM RequiredTaskQualificationLevels tq
+        JOIN tasks_status_audit_trail       tsa ON tq.task_id=tsa.task_id
+        JOIN Tasks                            t ON tsa.task_id=t.id
+        WHERE
+            tq.incremental_sourcing=1 AND
+            tq.sourcing_level=3 AND
+            tq.NGO_sourcing=1 AND
+            t.published=1 AND
+            t.`task-status_id`!=1 AND
+            tsa.`status_id`!=1 AND
+            tsa.changed_time < DATE_SUB(NOW(), INTERVAL 1 DAY)
+    );
+
+    UPDATE RequiredTaskQualificationLevels tq
+    JOIN   tasks_status_audit_trail       tsa ON tq.task_id=tsa.task_id
+    JOIN   Tasks                            t ON tsa.task_id=t.id
+    SET
+        tq.native_matching=tq.matching_default_before_NGO,
+        tq.sourcing_level=2
+    WHERE
+        tq.incremental_sourcing=1 AND
+        tq.sourcing_level=3 AND
+        tq.NGO_sourcing=1 AND
+        t.published=1 AND
+        t.`task-status_id`!=1 AND
+        tsa.`status_id`!=1 AND
+        tsa.changed_time < DATE_SUB(NOW(), INTERVAL 1 DAY);
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `update_sourcing_level_phase_1`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `update_sourcing_level_phase_1`()
+BEGIN
+    UPDATE RequiredTaskQualificationLevels tq
+    JOIN   tasks_status_audit_trail       tsa ON tq.task_id=tsa.task_id
+    JOIN   Tasks                            t ON tsa.task_id=t.id
+    SET
+        tq.native_matching=LEAST(1, tq.matching_default_before_NGO),
+        tq.sourcing_level=1
+    WHERE
+        tq.incremental_sourcing=1 AND
+        tq.sourcing_level=2 AND
+        tq.NGO_sourcing=1 AND
+        t.published=1 AND
+        t.`task-status_id`!=1 AND
+        tsa.`status_id`!=1 AND
+        tsa.changed_time < DATE_SUB(NOW(), INTERVAL 2 DAY);
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `update_sourcing_level_phase_2`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `update_sourcing_level_phase_2`()
+BEGIN
+    UPDATE RequiredTaskQualificationLevels tq
+    JOIN   tasks_status_audit_trail       tsa ON tq.task_id=tsa.task_id
+    JOIN   Tasks                            t ON tsa.task_id=t.id
+    SET
+        tq.native_matching=0,
+        tq.sourcing_level=0
+    WHERE
+        tq.incremental_sourcing=1 AND
+        tq.sourcing_level=1 AND
+        tq.NGO_sourcing=1 AND
+        t.published=1 AND
+        t.`task-status_id`!=1 AND
+        tsa.`status_id`!=1 AND
+        tsa.changed_time < DATE_SUB(NOW(), INTERVAL 3 DAY);
+END//
+DELIMITER ;
+
 DROP PROCEDURE IF EXISTS `update_native_matching_phase_1`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `update_native_matching_phase_1`()
@@ -13879,12 +13957,13 @@ BEGIN
     UPDATE RequiredTaskQualificationLevels tq
     JOIN   tasks_status_audit_trail       tsa ON tq.task_id=tsa.task_id
     JOIN   Tasks                            t ON tsa.task_id=t.id
-    JOIN   MemsourceProjects               mp ON t.project_id=mp.project_id
-    JOIN   MemsourceSelfServiceProjects   msp ON mp.memsource_project_id=msp.memsource_project_id
     SET
-        tq.native_matching=1
+        tq.native_matching=1,
+        tq.sourcing_level=1
     WHERE
+        tq.incremental_sourcing=1 AND
         tq.native_matching=2 AND
+        tq.NGO_sourcing=0 AND
         t.published=1 AND
         t.`task-status_id`!=1 AND
         tsa.`status_id`!=1 AND
@@ -13899,16 +13978,34 @@ BEGIN
     UPDATE RequiredTaskQualificationLevels tq
     JOIN   tasks_status_audit_trail       tsa ON tq.task_id=tsa.task_id
     JOIN   Tasks                            t ON tsa.task_id=t.id
-    JOIN   MemsourceProjects               mp ON t.project_id=mp.project_id
-    JOIN   MemsourceSelfServiceProjects   msp ON mp.memsource_project_id=msp.memsource_project_id
     SET
-        tq.native_matching=0
+        tq.native_matching=0,
+        tq.sourcing_level=0
     WHERE
+        tq.incremental_sourcing=1 AND
         tq.native_matching=1 AND
+        tq.NGO_sourcing=0 AND
         t.published=1 AND
         t.`task-status_id`!=1 AND
         tsa.`status_id`!=1 AND
         tsa.changed_time < DATE_SUB(NOW(), INTERVAL 2 DAY);
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `update_sourcing_level_phase_finish`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `update_sourcing_level_phase_finish`()
+BEGIN
+    UPDATE RequiredTaskQualificationLevels tq
+    JOIN   tasks_status_audit_trail       tsa ON tq.task_id=tsa.task_id
+    JOIN   Tasks                            t ON tsa.task_id=t.id
+    SET
+        tq.incremental_sourcing=0
+    WHERE
+        tq.incremental_sourcing=1 AND
+        t.`task-status_id`!=1 AND
+        tsa.`status_id`!=1 AND
+        tsa.changed_time < DATE_SUB(NOW(), INTERVAL 10 DAY);
 END//
 DELIMITER ;
 
