@@ -1875,6 +1875,17 @@ GROUP BY c.id, u.id';
         return $ngo_linguists_by_language_pair;
     }
 
+    public function get_language_pairs_with_ngo_linguists($project_id)
+    {
+        $result = LibAPI\PDOWrapper::call('get_language_pairs_with_ngo_linguists', LibAPI\PDOWrapper::cleanse($project_id));
+        if (empty($result)) return [];
+        $language_pairs = [];
+        foreach ($result as $row) {
+            $language_pairs[$row['language_pair']] = 1;
+        }
+        return $language_pairs;
+    }
+
     public function poll_sun()
     {
         if (strpos($this->siteApi, 'twbplatform')) $PRD = 'PRD';
