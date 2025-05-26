@@ -8897,8 +8897,35 @@ BEGIN
         END IF;
     END IF;
 
-    INSERT INTO RequiredTaskQualificationLevels (task_id, required_qualification_level,   native_matching)
-                                         VALUES (taskID,          @qualification_level, @matching_default);
+    SET @matching_default_before_NGO=@matching_default;
+
+    IF EXISTS (
+        SELECT 1
+        FROM Tasks t
+        JOIN project_complete_dates pcd ON t.project_id=pcd.id
+        WHERE
+            t.id=taskID AND
+            CONCAT((select code from Languages l where l.id=t.`language_id-source`), '-', (select code from Languages l where l.id=t.`language_id-target`), '|', (select code from Countries c where c.id=t.`country_id-source`), '-', (select code from Countries c where c.id=t.`country_id-target`))
+            MEMBER OF(pcd.restriction_JSON)
+    ) THEN
+        SET @NGO_sourcing=1;
+        SET @sourcing_level=3;
+        SET @matching_default=0;
+        REPLACE INTO RestrictedTasks (`restricted_task_id`) VALUES (taskID);
+    ELSE
+        SET @NGO_sourcing=0;
+        SET @sourcing_level=@matching_default
+        DELETE FROM RestrictedTasks WHERE restricted_task_id=taskID;
+    END IF;
+
+    SELECT pcd.incremental_sourcing INTO @incremental_sourcing
+    FROM Tasks                    t
+    JOIN project_complete_dates pcd ON t.project_id=pcd.id
+    WHERE
+        t.id=taskID;
+
+    INSERT INTO RequiredTaskQualificationLevels (task_id, required_qualification_level,  incremental_sourcing,   native_matching,  matching_default_before_NGO,  NGO_sourcing,  sourcing_level)
+                                         VALUES (taskID,          @qualification_level, @incremental_sourcing, @matching_default, @matching_default_before_NGO, @NGO_sourcing, @sourcing_level);
 END//
 DELIMITER ;
 
