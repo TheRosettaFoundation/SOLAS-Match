@@ -316,8 +316,12 @@ error_log("createTaskDirectly: $args");
 
     public function update_native_matching()
     {
+        LibAPI\PDOWrapper::call('update_sourcing_level_phase_0', '');
+        LibAPI\PDOWrapper::call('update_sourcing_level_phase_1', '');
+        LibAPI\PDOWrapper::call('update_sourcing_level_phase_2', '');
         LibAPI\PDOWrapper::call('update_native_matching_phase_1', '');
         LibAPI\PDOWrapper::call('update_native_matching_phase_2', '');
+        LibAPI\PDOWrapper::call('update_sourcing_level_phase_finish', '');
     }
 
     public function count_users_who_can_claim($task_id)
