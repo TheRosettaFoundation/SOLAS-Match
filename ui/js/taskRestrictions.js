@@ -33,7 +33,7 @@ myModalEl.addEventListener("shown.bs.modal", (event) => {
         );
         modalDescShow.classList.add("d-none");
     } else {
-        if (!parseInt(document.getElementById("isSiteAdmin").innerHTML) modalDescShow.classList.add("d-none");
+        if (!parseInt(document.getElementById("isSiteAdmin").innerHTML)) modalDescShow.classList.add("d-none");
         else
         modalDescShow.classList.remove("d-none");
     }
@@ -203,7 +203,7 @@ restrictionsB.forEach((elt) => {
 
         uniqueElements.forEach((elt) => {
             let taskId = tobefetched[elt];
-          if (parseInt(document.getElementById("isSiteAdmin").innerHTML) {
+          if (parseInt(document.getElementById("isSiteAdmin").innerHTML)) {
             let extendedEL = nativeMatching[taskId]
                 ? `<div class="d-flex mt-4 mb-2 align-items-center justify-content-between extended fs-4">
                 <div class="me-4 elt text-break textwrap"></div>
