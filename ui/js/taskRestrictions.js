@@ -203,8 +203,9 @@ restrictionsB.forEach((elt) => {
 
         uniqueElements.forEach((elt) => {
             let taskId = tobefetched[elt];
+          let extendedEL;
           if (parseInt(document.getElementById("isSiteAdmin").innerHTML)) {
-            let extendedEL = nativeMatching[taskId]
+            extendedEL = nativeMatching[taskId]
                 ? `<div class="d-flex mt-4 mb-2 align-items-center justify-content-between extended fs-4">
                 <div class="me-4 elt text-break textwrap"></div>
 
@@ -239,7 +240,7 @@ restrictionsB.forEach((elt) => {
 
                 </div>`;
           } else {
-            let extendedEL = nativeMatching[taskId]
+            extendedEL = nativeMatching[taskId]
                 ? `<div class="d-flex mt-4 mb-2 align-items-center justify-content-between extended fs-4">
                 <div class="me-4 elt text-break textwrap"></div>
 
