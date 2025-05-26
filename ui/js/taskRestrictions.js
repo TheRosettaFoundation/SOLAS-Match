@@ -115,7 +115,7 @@ async function getUsersCount(taskIds) {
 }
 
 restrictionsB.forEach((elt) => {
-    if (!parseInt(document.getElementById("isSiteAdmin").innerHTML && !ngo_linguists_by_language_pair[elt.getAttribute("language_pair")]) {
+    if (!parseInt(document.getElementById("isSiteAdmin").innerHTML) && !ngo_linguists_by_language_pair[elt.getAttribute("language_pair")]) {
         elt.disabled = true;
         elt.data-bs-title = "This is grayed out because you have no eligible <strong>Organization members</strong> and so task will be available to the <strong>Full TWB Community</strong>.";
     }
