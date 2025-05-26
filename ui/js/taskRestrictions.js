@@ -222,7 +222,7 @@ restrictionsB.forEach((elt) => {
                         <span class="sCM">Active CMs: ${nativeMatching[taskId].native_matching_active_2}</span></option>
                     ` +
 
-                    (nativeMatching[taskId].ngo_only ? `<option value="3">Organization members (Total: ${nativeMatching[taskId].ngo_only})</option>` : "")
+                    (parseInt(nativeMatching[taskId].ngo_only) ? `<option value="3">Organization members (Total: ${nativeMatching[taskId].ngo_only})</option>` : "")
 
                 + `</select>
 
@@ -250,7 +250,7 @@ restrictionsB.forEach((elt) => {
                     <option value="0"> <br />Full TWB Community</option>
                     ` +
 
-                    (nativeMatching[taskId].ngo_only ? `<option value="3">Organization members (Total: ${nativeMatching[taskId].ngo_only})</option>` : "")
+                    parseInt((nativeMatching[taskId].ngo_only) ? `<option value="3">Organization members (Total: ${nativeMatching[taskId].ngo_only})</option>` : "")
 
                 + `</select>
 
