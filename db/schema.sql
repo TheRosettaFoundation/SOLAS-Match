@@ -13991,6 +13991,32 @@ BEGIN
 END//
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `get_language_pairs_with_ngo_linguists`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_language_pairs_with_ngo_linguists`(IN pID INT UNSIGNED)
+BEGIN
+    SET @NGO_LINGUIST=        2;
+
+    SELECT
+        CONCAT(MAX(uqp.language_code_source), '|', MAX(uqp.language_code_target), '-', MAX(uqp.country_code_target)) AS language_pair
+    FROM Projects                         p
+    JOIN Tasks                            t ON p.id=t.project_id
+    JOIN task_type_details              ttd ON t.`task-type_id`=ttd.type_enum
+    JOIN RequiredTaskQualificationLevels tq ON t.id=tq.task_id
+    JOIN UserQualifiedPairs             uqp ON
+        t.`language_id-target`=uqp.language_id_target AND
+        t.`country_id-target`=uqp.country_id_target AND
+        (t.`language_id-source`=uqp.language_id_source OR ttd.source_and_target=0) AND
+        tq.required_qualification_level<=uqp.qualification_level
+    JOIN Admins                           a ON uqp.user_id=a.user_id
+    WHERE
+        p.id=pID AND
+        a.roles&@NGO_LINGUIST AND
+        p.organisation_id=a.organisation_id
+    GROUP BY uqp.language_id_source, uqp.language_id_target, uqp.country_id_target;
+END//
+DELIMITER ;
+
 
 CREATE TABLE IF NOT EXISTS `asana_board_for_org` (
   org_id      INT UNSIGNED NOT NULL,
