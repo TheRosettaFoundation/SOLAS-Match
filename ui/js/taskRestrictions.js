@@ -118,7 +118,11 @@ restrictionsB.forEach((elt) => {
     if (!parseInt(document.getElementById("isSiteAdmin").innerHTML) && !ngo_linguists_by_language_pair[elt.getAttribute("language_pair")]) {
         elt.disabled = true;
         elt.setAttribute("data-bs-title", "This is grayed out because you have no eligible <strong>Organization members</strong> and so task will be available to the <strong>Full TWB Community</strong>.");
-        const tooltip = new bootstrap.Tooltip.getInstance(elt);
+console.log(elt);
+console.log(bootstrap.Tooltip);
+console.log(bootstrap.Tooltip.getInstance(elt));
+        const tooltip = bootstrap.Tooltip.getInstance(elt);
+console.log(tooltip);
         tooltip.setContent({ '.tooltip-inner': 'another title' })
     }
     else
