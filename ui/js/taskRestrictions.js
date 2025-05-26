@@ -120,7 +120,7 @@ restrictionsB.forEach((elt) => {
         //elt.setAttribute("data-bs-title", "This is grayed out because you have no eligible <strong>Organization members</strong> and so task will be available to the <strong>Full TWB Community</strong>.");
         const tooltip_element = document.getElementById(elt.getAttribute("language_pair"));
         const tooltip_instance = bootstrap.Tooltip.getInstance(tooltip_element);
-console.log(tooltip-instance);
+console.log(tooltip_instance);
         tooltip_instance.setContent({ '.tooltip-inner': 'another title' })
 //[[[
 //const tooltip = bootstrap.Tooltip.getInstance('#example') // Returns a Bootstrap tooltip instance
