@@ -121,8 +121,6 @@ restrictionsB.forEach((elt) => {
         // const tooltip_instance = bootstrap.Tooltip.getInstance('#' + elt.getAttribute("language_pair"));
         // console.log(tooltip_instance);
         // tooltip_instance.setContent({ '.tooltip-inner': 'another title' })
-//console.log(tooltip_instance);
-//        tooltip_instance.setContent({ '.tooltip-inner': 'another title' })
     }
     else
     elt.addEventListener("click", async (e) => {
