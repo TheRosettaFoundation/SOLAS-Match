@@ -8907,7 +8907,9 @@ DROP PROCEDURE IF EXISTS `updateRequiredTaskNativeMatching`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `updateRequiredTaskNativeMatching`(IN taskID BIGINT, IN matching INT)
 BEGIN
-    UPDATE RequiredTaskQualificationLevels SET native_matching=matching WHERE task_id=taskID;
+    IF EXISTS (SELECT 1 FROM RequiredTaskQualificationLevels WHERE task_id=taskID AND native_matching!=matching) THEN
+        UPDATE RequiredTaskQualificationLevels SET native_matching=matching, incremental_sourcing=0 WHERE task_id=taskID;
+    END IF;
 END//
 DELIMITER ;
 
