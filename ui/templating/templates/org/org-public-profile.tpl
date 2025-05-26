@@ -817,7 +817,7 @@
     </form>
 {/if}
 
-{if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
+{if 0 & $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
     <p style="margin-bottom: 40px" />
     <h1 class="page-header">
         {Localisation::getTranslation('required_qualification_level')}<br />
