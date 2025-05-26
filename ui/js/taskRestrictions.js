@@ -203,6 +203,7 @@ restrictionsB.forEach((elt) => {
 
         uniqueElements.forEach((elt) => {
             let taskId = tobefetched[elt];
+          if (parseInt(document.getElementById("isSiteAdmin").innerHTML) {
             let extendedEL = nativeMatching[taskId]
                 ? `<div class="d-flex mt-4 mb-2 align-items-center justify-content-between extended fs-4">
                 <div class="me-4 elt text-break textwrap"></div>
@@ -218,7 +219,11 @@ restrictionsB.forEach((elt) => {
 
                     <option value="2">Matching Native Language and Locale/Country: <span class="mCM">Matching CMs: ${nativeMatching[taskId].native_matching_2}</span> //
                         <span class="sCM">Active CMs: ${nativeMatching[taskId].native_matching_active_2}</span></option>
-                </select>
+                    ` +
+
+                    (nativeMatching[taskId].ngo_only ? `<option value="3">Organization members (Total: ${nativeMatching[taskId].ngo_only})</option>` : "")
+
+                + `</select>
 
                 </div>`
 
@@ -233,6 +238,33 @@ restrictionsB.forEach((elt) => {
                 </select>
 
                 </div>`;
+          } else {
+            let extendedEL = nativeMatching[taskId]
+                ? `<div class="d-flex mt-4 mb-2 align-items-center justify-content-between extended fs-4">
+                <div class="me-4 elt text-break textwrap"></div>
+
+                <select class="form-select ms-2 w-75 selectedId fs-4" aria-label="Default select example">
+                    <option selected value="no"> Select Restriction</option>
+
+                    <option value="0"> <br />Full TWB Community</option>
+                    ` +
+
+                    (nativeMatching[taskId].ngo_only ? `<option value="3">Organization members (Total: ${nativeMatching[taskId].ngo_only})</option>` : "")
+
+                + `</select>
+
+                </div>`
+
+                : `<div class="d-flex mt-4 mb-2 align-items-center justify-content-between extended fs-4">
+                <div class="me-4 elt text-break textwrap"></div>
+
+                <select class="form-select ms-2 w-75 selectedId fs-4" aria-label="Default select example">
+                <option selected value="no"> Select Restriction</option>
+                    <option value="0">Full TWB Community</span></option>
+                </select>
+
+                </div>`;
+          }
 
             let extendedHtml = document
                 .createRange()
