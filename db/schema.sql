@@ -920,9 +920,14 @@ CREATE TABLE IF NOT EXISTS `RequiredOrgQualificationLevels` (
 CREATE TABLE IF NOT EXISTS `RequiredTaskQualificationLevels` (
   task_id                      BIGINT UNSIGNED NOT NULL,
   required_qualification_level INT    UNSIGNED NOT NULL,
+  incremental_sourcing         INT NOT NULL DEFAULT 0,
   native_matching              INT    NOT NULL DEFAULT 0,
+  matching_default_before_NGO  INT NOT NULL DEFAULT 0,
+  NGO_sourcing                 INT NOT NULL DEFAULT 0,
+  sourcing_level               INT NOT NULL DEFAULT 0,
   PRIMARY KEY (task_id),
           KEY (native_matching),
+          KEY (incremental_sourcing),
   CONSTRAINT `FK_RequiredTaskQualificationLevels_task_id` FOREIGN KEY (`task_id`) REFERENCES `Tasks` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
