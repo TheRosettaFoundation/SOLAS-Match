@@ -8914,7 +8914,7 @@ BEGIN
         REPLACE INTO RestrictedTasks (`restricted_task_id`) VALUES (taskID);
     ELSE
         SET @NGO_sourcing=0;
-        SET @sourcing_level=@matching_default
+        SET @sourcing_level=@matching_default;
         DELETE FROM RestrictedTasks WHERE restricted_task_id=taskID;
     END IF;
 
