@@ -1075,6 +1075,7 @@ console.log(tooltip_instance);
 //const tooltip = bootstrap.Tooltip.getInstance('#example') // Returns a Bootstrap tooltip instance
 //tooltip.setContent({ '.tooltip-inner': 'another title' })
 ///]]]
+}
 });
 </script>
 {include file="footer2.tpl"}
