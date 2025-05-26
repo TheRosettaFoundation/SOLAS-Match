@@ -1175,6 +1175,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                 'total_expected_cost_waived'   => $total_expected_cost_waived,
                 'one_paid'                     => $one_paid,
                 'linguist_summary'             => $linguist_summary,
+                'ngo_linguists_by_language_pair' => $projectDao->get_language_pairs_with_ngo_linguists($project_id),
                 'task_type_list'               => $task_type_list
         ));
 
