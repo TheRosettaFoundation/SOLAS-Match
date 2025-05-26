@@ -119,9 +119,10 @@ restrictionsB.forEach((elt) => {
         elt.disabled = true;
         //elt.setAttribute("data-bs-title", "This is grayed out because you have no eligible <strong>Organization members</strong> and so task will be available to the <strong>Full TWB Community</strong>.");
         const tooltip_element = document.getElementById(elt.getAttribute("language_pair"));
+//console.log(tooltip_element);
         const tooltip_instance = bootstrap.Tooltip.getInstance(tooltip_element);
-console.log(tooltip_instance);
-        tooltip_instance.setContent({ '.tooltip-inner': 'another title' })
+//console.log(tooltip_instance);
+//        tooltip_instance.setContent({ '.tooltip-inner': 'another title' })
 //[[[
 //const tooltip = bootstrap.Tooltip.getInstance('#example') // Returns a Bootstrap tooltip instance
 //tooltip.setContent({ '.tooltip-inner': 'another title' })
