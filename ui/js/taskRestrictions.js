@@ -244,7 +244,7 @@ restrictionsB.forEach((elt) => {
                 <div class="me-4 elt text-break textwrap"></div>
 
                 <select class="form-select ms-2 w-75 selectedId fs-4" aria-label="Default select example">
-                    <option selected value="no"> Select Restriction</option>
+                    <option selected value="no"> Select Restriction**${nativeMatching[taskId].native_matching_0}--${nativeMatching[taskId].ngo_only}</option>
 
                     <option value="0"> <br />Full TWB Community</option>
                     ` +
