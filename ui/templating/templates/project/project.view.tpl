@@ -547,7 +547,10 @@
                         </div>
 {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER + $NGO_ADMIN + $NGO_PROJECT_OFFICER)}
 
-{assign var="pair" value=$project->getSourceLocale()->getLanguageCode() . "|" . {$languageCountry|replace:',':'-'}}
+
+{assign var="pair" value="`$project->getSourceLocale()->getLanguageCode()`|`$languageCountry`"}
+{$pair}
+{assign var="pair" value={$pair|replace:',':'-'}}
 {$pair}
 {if !empty($ngo_linguists_by_language_pair[$pair])}NOT EMPTY{else}EMPTY{/if}
 
