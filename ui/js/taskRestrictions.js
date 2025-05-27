@@ -129,7 +129,7 @@ console.log(tooltip_instance);
         //elt.setAttribute("data-bs-title", "This is grayed out because you have no eligible <strong>Organization members</strong> and so task will be available to the <strong>Full TWB Community</strong>.");
         // const tooltip_instance = bootstrap.Tooltip.getInstance('#' + elt.getAttribute("language_pair"));
         // console.log(tooltip_instance);
-        // tooltip_instance.setContent({ '.tooltip-inner': 'another title' })
+tooltip_instance.setContent({ ".tooltip-inner": "This is grayed out because you have no eligible <strong>Organization members</strong> and so task will be available to the <strong>Full TWB Community</strong>." })
     }
     else
     elt.addEventListener("click", async (e) => {
