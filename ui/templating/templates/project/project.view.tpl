@@ -549,9 +549,9 @@
     {assign var="pair" value="`$project->getSourceLocale()->getLanguageCode()`|`$languageCountry`"}
     {assign var="pair" value={$pair|replace:',':'-'}}
     {if !empty($ngo_linguists_by_language_pair[$pair])}
-                  <span data-bs-toggle="tooltip" data-bs-placement="right" data-bs-html="true" data-bs-title="This allows you to specify whether a task will be available to the <strong>Full TWB Community</strong> or to <strong>Organization members</strong> only. If you set select one of these any incremental sourcing will stop and sourcing will remain at this level.">
+                  <span data-bs-toggle="tooltip" data-bs-placement="right" data-bs-html="true" data-bs-title="This allows you to specify whether a task will be available to the <strong>Full TWB Community</strong> or to <strong>Organization Members</strong> only. If you set select one of these any incremental sourcing will stop and sourcing will remain at this level.">
     {else}
-                  <span data-bs-toggle="tooltip" data-bs-placement="right" data-bs-html="true" data-bs-title="This is grayed out because you have no eligible <strong>Organization members</strong> and so the task will be available to the <strong>Full TWB Community</strong>.">
+                  <span data-bs-toggle="tooltip" data-bs-placement="right" data-bs-html="true" data-bs-title="This is grayed out because you have no eligible <strong>Organization Members</strong> and so the task will be available to the <strong>Full TWB Community</strong>.">
     {/if}
                   <button class="btn btn-primary text-white mt-2 mt-md-0 restrictions" data-bs-target="#exampleModalToggle" data-bs-toggle="modal" language_pair="{$project->getSourceLocale()->getLanguageCode()}|{$languageCountry|replace:',':'-'}">Restrict Task</button>
                   </span>
