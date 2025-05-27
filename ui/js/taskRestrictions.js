@@ -117,20 +117,6 @@ async function getUsersCount(taskIds) {
 restrictionsB.forEach((elt) => {
     if (!parseInt(document.getElementById("isSiteAdmin").innerHTML) && !ngo_linguists_by_language_pair[elt.getAttribute("language_pair")]) {
         elt.disabled = true;
-
-//        const tooltip_element = document.getElementById("tooltip-id");
-//        const tooltip_instance = bootstrap.Tooltip.getOrCreateInstance(tooltip_element);
-
-
-//        const tooltip_element = document.getElementById("tooltip-id");
-        //const tooltip_instance = bootstrap.Tooltip.getOrCreateInstance('#' + elt.getAttribute("language_pair"));
-        const tooltip_instance = bootstrap.Tooltip.getOrCreateInstance(elt);
-console.log(tooltip_instance);
-
-        //elt.setAttribute("data-bs-title", "This is grayed out because you have no eligible <strong>Organization members</strong> and so task will be available to the <strong>Full TWB Community</strong>.");
-        // const tooltip_instance = bootstrap.Tooltip.getInstance('#' + elt.getAttribute("language_pair"));
-        // console.log(tooltip_instance);
-//tooltip_instance.setContent({ ".tooltip-inner": "This is grayed out because you have no eligible <strong>Organization members</strong> and so task will be available to the <strong>Full TWB Community</strong>." })
     }
     else
     elt.addEventListener("click", async (e) => {
