@@ -249,7 +249,7 @@ restrictionsB.forEach((elt) => {
                     <option value="0"> <br />Full TWB Community</option>
                     ` +
 
-                    parseInt((nativeMatching[taskId].ngo_only) ? `<option value="3">Organization members (Total: ${nativeMatching[taskId].ngo_only})</option>` : `FALSE${nativeMatching[taskId].ngo_only}XX`)
+                    (parseInt(nativeMatching[taskId].ngo_only) ? `<option value="3">Organization members (Total: ${nativeMatching[taskId].ngo_only})</option>` : "")
 
                 + `</select>
 
