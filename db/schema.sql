@@ -8939,10 +8939,18 @@ DELIMITER ;
 
 DROP PROCEDURE IF EXISTS `updateRequiredTaskNativeMatching`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `updateRequiredTaskNativeMatching`(IN taskID BIGINT, IN matching INT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `updateRequiredTaskNativeMatching`(IN taskID BIGINT, IN sourcing INT)
 BEGIN
-    IF EXISTS (SELECT 1 FROM RequiredTaskQualificationLevels WHERE task_id=taskID AND native_matching!=matching) THEN
-        UPDATE RequiredTaskQualificationLevels SET native_matching=matching, incremental_sourcing=0 WHERE task_id=taskID;
+    IF sourcing=3 THEN
+        IF EXISTS (SELECT 1 FROM RequiredTaskQualificationLevels WHERE task_id=taskID AND (sourcing_level!=sourcing OR native_matching!=0)) THEN
+            UPDATE RequiredTaskQualificationLevels SET sourcing_level=sourcing, native_matching=0, NGO_sourcing=1, incremental_sourcing=0 WHERE task_id=taskID;
+            REPLACE INTO RestrictedTasks (restricted_task_id) VALUES (taskID);
+        END IF;
+    ELSE
+        IF EXISTS (SELECT 1 FROM RequiredTaskQualificationLevels WHERE task_id=taskID AND (sourcing_level!=sourcing OR native_matching!=sourcing)) THEN
+            UPDATE RequiredTaskQualificationLevels SET sourcing_level=sourcing, native_matching=sourcing, NGO_sourcing=0, incremental_sourcing=0 WHERE task_id=taskID;
+            DELETE FROM RestrictedTasks WHERE restricted_task_id=taskID;
+        END IF;
     END IF;
 END//
 DELIMITER ;
