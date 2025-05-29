@@ -663,7 +663,7 @@ function validateLocalValues()
   for (var i = 0; i < targetCount; i++) {
     // segmentationRequired[i] = document.getElementById("segmentation_" + i).checked;
     segmentationRequired[i] = false;
-    if (create_memsource != 1 || i == 0) {
+    if (create_memsource != 1 || (false && i == 0)) {
     translationRequired [i] = document.getElementById("translation_" + i).checked;
     proofreadingRequired[i] = document.getElementById("proofreading_" + i).checked;
     } else {
