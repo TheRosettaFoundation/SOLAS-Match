@@ -8902,7 +8902,7 @@ BEGIN
     IF EXISTS (
         SELECT 1
         FROM Tasks t
-        JOIN project_complete_dates pcd ON t.project_id=pcd.id
+        JOIN project_complete_dates pcd ON t.project_id=pcd.project_id
         WHERE
             t.id=taskID AND
             CONCAT((select code from Languages l where l.id=t.`language_id-source`), '-', (select code from Languages l where l.id=t.`language_id-target`), '|', (select code from Countries c where c.id=t.`country_id-source`), '-', (select code from Countries c where c.id=t.`country_id-target`))
@@ -8920,7 +8920,7 @@ BEGIN
 
     SELECT pcd.incremental_sourcing INTO @incremental_sourcing
     FROM Tasks                    t
-    JOIN project_complete_dates pcd ON t.project_id=pcd.id
+    JOIN project_complete_dates pcd ON t.project_id=pcd.project_id
     WHERE
         t.id=taskID;
 
