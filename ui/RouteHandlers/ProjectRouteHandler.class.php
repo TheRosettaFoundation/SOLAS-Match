@@ -1705,14 +1705,14 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                                             list($trommons_language_code, $trommons_country_code) = $projectDao->convert_selection_to_language_country($post["target_language_$targetCount"]);
                                             $target_languages = $trommons_language_code . '-' . $trommons_country_code;
 
-                                            if (!empty($post["translation_sourcing_$targetCount"])) $ngo_list[] = $post['sourceLanguageSelect'] . '|' . $post["target_language_$targetCount"];
+                                            if (!empty($post["translation_sourcing_$targetCount"])) $ngo_list[] = '"' . $post['sourceLanguageSelect'] . '|' . $post["target_language_$targetCount"] . '"';
                                         }
                                         $targetCount++;
                                         while (!empty($post["target_language_$targetCount"])) {
                                             list($trommons_language_code, $trommons_country_code) = $projectDao->convert_selection_to_language_country($post["target_language_$targetCount"]);
                                             $target_languages .= ',' . $trommons_language_code . '-' . $trommons_country_code;
 
-                                            if (!empty($post["translation_sourcing_$targetCount"])) $ngo_list[] = $post['sourceLanguageSelect'] . '|' . $post["target_language_$targetCount"];
+                                            if (!empty($post["translation_sourcing_$targetCount"])) $ngo_list[] = '"' . $post['sourceLanguageSelect'] . '|' . $post["target_language_$targetCount"] . '"';
                                             $targetCount++;
                                         }
 
