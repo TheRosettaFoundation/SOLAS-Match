@@ -8905,7 +8905,7 @@ BEGIN
         JOIN project_complete_dates pcd ON t.project_id=pcd.project_id
         WHERE
             t.id=taskID AND
-            CONCAT((select code from Languages l where l.id=t.`language_id-source`), '-', (select code from Languages l where l.id=t.`language_id-target`), '|', (select code from Countries c where c.id=t.`country_id-source`), '-', (select code from Countries c where c.id=t.`country_id-target`))
+            CONCAT((select code from Languages l where l.id=t.`language_id-source`), '-', (select code from Countries c where c.id=t.`country_id-source`), '|', (select code from Languages l where l.id=t.`language_id-target`), '-', (select code from Countries c where c.id=t.`country_id-target`))
             MEMBER OF(pcd.restriction_JSON)
     ) THEN
         SET @NGO_sourcing=1;
