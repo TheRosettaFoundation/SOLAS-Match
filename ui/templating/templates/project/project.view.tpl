@@ -607,7 +607,7 @@
                                             <div class="text-secondary-sublte fs-6 fw-bold ">
                                               {if $get_payment_status_for_project[$task_id]['sourcing_level'] == 3}
                                                   <i class="fa-solid fa-users mt-2" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Available to organization members"></i>
-                                              {elseif $roles&($NGO_ADMIN + $NGO_PROJECT_OFFICER) || $get_payment_status_for_project[$task_id]['native_matching'] == 0}
+                                              {elseif ($roles&($NGO_ADMIN + $NGO_PROJECT_OFFICER) && !($roles&($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER))) || $get_payment_status_for_project[$task_id]['native_matching'] == 0}
                                                   <i class="fa-solid fa-globe mt-2" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Available to full TWB community"></i>
                                               {elseif $get_payment_status_for_project[$task_id]['native_matching'] == 1}
                                               <span data-bs-toggle="tooltip" data-bs-placement="top" class="mt-2"
@@ -625,7 +625,7 @@
                                             <div class="text-secondary-sublte fs-6 fw-bold">
                                               {if $get_payment_status_for_project[$task_id]['sourcing_level'] == 3}
                                                   <i class="fa-solid fa-users mt-2" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Available to organization members"></i>
-                                              {elseif $roles&($NGO_ADMIN + $NGO_PROJECT_OFFICER) || $get_payment_status_for_project[$task_id]['native_matching'] == 0}
+                                              {elseif ($roles&($NGO_ADMIN + $NGO_PROJECT_OFFICER) && !($roles&($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER))) || $get_payment_status_for_project[$task_id]['native_matching'] == 0}
                                                   <i class="fa-solid fa-globe mt-2" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Available to full TWB community"></i>
                                                 {elseif $get_payment_status_for_project[$task_id]['native_matching'] == 1}
                                                 <span data-bs-toggle="tooltip" data-bs-placement="top" class="mt-2"
