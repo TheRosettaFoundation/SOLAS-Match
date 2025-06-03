@@ -207,7 +207,7 @@
                         <h2>Incremental Sourcing:</h2>
                         Incremental Sourcing
                         <input type="checkbox" name="incremental_sourcing" id="incremental_sourcing" value="1" checked />
-                        <a href="{$siteLocation}org/dashboard">
+                        <a href="{$siteLocation}org/dashboard" target="_blank">
                             <i class="icon-question-sign" data-toggle="tooltip" title="Learn more"></i>
                         </a>
                     </div>
