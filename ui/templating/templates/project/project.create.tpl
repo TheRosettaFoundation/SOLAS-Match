@@ -205,9 +205,11 @@
                 <div class="projFormInput">
                     <div style="margin-bottom:25px;">
                         <h2>Incremental Sourcing:</h2>
-                        <p class="desc">If checked, incremental sourcing will apply. That means if you choose sourcing to "Organization members", then after 24 hours those tasks will be visible and claimable by the "Full TWB Community".
-                        If not checked, then sourcing will not open up after 24 hours unless you manually change it later.</p>
+                        Incremental Sourcing
                         <input type="checkbox" name="incremental_sourcing" id="incremental_sourcing" value="1" checked />
+                        <a href="{$siteLocation}org/dashboard">
+                            <i class="icon-question-sign" data-toggle="tooltip" title="Learn more"></i>
+                        </a>
                     </div>
                 </div>
                 {/if}
