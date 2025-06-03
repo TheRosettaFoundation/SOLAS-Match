@@ -303,7 +303,7 @@ restrictionsB.forEach((elt) => {
                     if (statusText == "Unclaimed" || statusText == "Waiting") {
                         switch (matching) {
                             case "0":
-                                newNative.innerHTML = "";
+                                newNative.innerHTML = '<i class="fa-solid fa-globe mt-2" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Available to full TWB community"></i>';
                                 break;
 
                             case "1":
@@ -338,6 +338,10 @@ restrictionsB.forEach((elt) => {
                                             height="20%"
                                         />
                                     </span>`;
+                                break;
+
+                            case "3":
+                                newNative.innerHTML = '<i class="fa-solid fa-users mt-2" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Available to organization members"></i>';
                                 break;
 
                             default:
