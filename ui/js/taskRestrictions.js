@@ -211,7 +211,7 @@ restrictionsB.forEach((elt) => {
                 <select class="form-select ms-2 w-75 selectedId fs-4" aria-label="Default select example">
                     <option selected value="no"> Select Restriction</option>
 
-                    <option value="0"> <br />No restriction: <span class="nocm">Matching CMs: ${nativeMatching[taskId].native_matching_0}</span> //
+                    <option value="0">No restriction: <span class="nocm">Matching CMs: ${nativeMatching[taskId].native_matching_0}</span> //
                         <span class="nosm">Active CMs: ${nativeMatching[taskId].native_matching_active_0}</span></option>
 
                     <option value="1">Matching Native Language: <span class="mlCM">Matching CMs: ${nativeMatching[taskId].native_matching_1}</span> //
@@ -246,7 +246,7 @@ restrictionsB.forEach((elt) => {
                 <select class="form-select ms-2 w-75 selectedId fs-4" aria-label="Default select example">
                     <option selected value="no"> Select Restriction</option>
 
-                    <option value="0"> <br />Full TWB Community</option>
+                    <option value="0">Full TWB Community</option>
                     ` +
 
                     (parseInt(nativeMatching[taskId].ngo_only) ? `<option value="3">Organization Members (Total: ${nativeMatching[taskId].ngo_only})</option>` : "")
