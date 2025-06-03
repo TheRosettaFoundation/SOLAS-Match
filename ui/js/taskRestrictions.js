@@ -206,7 +206,7 @@ restrictionsB.forEach((elt) => {
           if (parseInt(document.getElementById("isSiteAdmin").innerHTML)) {
             extendedEL = nativeMatching[taskId]
                 ? `<div class="d-flex mt-4 mb-2 align-items-center justify-content-between extended fs-4">
-                <div class="me-4 elt text-break textwrap"></div>
+                <div class="me-4 elt textwrap"></div>
 
                 <select class="form-select ms-2 w-75 selectedId fs-4" aria-label="Default select example">
                     <option selected value="no"> Select Restriction</option>
@@ -228,7 +228,7 @@ restrictionsB.forEach((elt) => {
                 </div>`
 
                 : `<div class="d-flex mt-4 mb-2 align-items-center justify-content-between extended fs-4">
-                <div class="me-4 elt text-break textwrap"></div>
+                <div class="me-4 elt textwrap"></div>
 
                 <select class="form-select ms-2 w-75 selectedId fs-4" aria-label="Default select example">
                 <option selected value="no"> Select Restriction</option>
@@ -241,7 +241,7 @@ restrictionsB.forEach((elt) => {
           } else {
             extendedEL = nativeMatching[taskId]
                 ? `<div class="d-flex mt-4 mb-2 align-items-center justify-content-between extended fs-4">
-                <div class="me-4 elt text-break textwrap"></div>
+                <div class="me-4 elt textwrap"></div>
 
                 <select class="form-select ms-2 w-75 selectedId fs-4" aria-label="Default select example">
                     <option selected value="no"> Select Restriction</option>
@@ -256,7 +256,7 @@ restrictionsB.forEach((elt) => {
                 </div>`
 
                 : `<div class="d-flex mt-4 mb-2 align-items-center justify-content-between extended fs-4">
-                <div class="me-4 elt text-break textwrap"></div>
+                <div class="me-4 elt textwrap"></div>
 
                 <select class="form-select ms-2 w-75 selectedId fs-4" aria-label="Default select example">
                 <option selected value="no"> Select Restriction</option>
