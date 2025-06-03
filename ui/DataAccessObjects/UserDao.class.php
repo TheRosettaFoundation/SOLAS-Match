@@ -2248,7 +2248,7 @@ error_log("TM added: $result");//(**)
                 $mtSettingsPerLangList[] = ['targetLang' => $language, 'machineTranslateSettings' => ['id' => '1618122']]; // uid: l70q1FxAYWDLC4Eug90aJl, name: Main MT
             }
         }
-        if (!empty($mtSettingsPerLangList) && $this->get_mt_for_org($project->getOrganisationId())) {
+        if (!$this->get_mt_for_org($project->getOrganisationId())) $mtSettingsPerLangList = [];
             $payload = json_encode(['mtSettingsPerLangList' => $mtSettingsPerLangList]);
             error_log("Add MT $payload");
             $ch = curl_init("https://cloud.memsource.com/web/api2/v1/projects/{$project_result['uid']}/mtSettingsPerLanguage");
@@ -2259,7 +2259,6 @@ error_log("TM added: $result");//(**)
             $result = curl_exec($ch);
             curl_close($ch);
             error_log("mtSettingsPerLanguage: $result");
-        }
 
         // Create Job
         $url = "https://cloud.memsource.com/web/api2/v1/projects/{$project_result['uid']}/jobs";
