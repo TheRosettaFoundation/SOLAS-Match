@@ -13956,7 +13956,7 @@ BEGIN
         tq.incremental_sourcing=1 AND
         tq.sourcing_level=2 AND
         tq.NGO_sourcing=1 AND
-        tq.sourcing_timer>60*24*2
+        tq.sourcing_timer>60*24*2;
 END//
 DELIMITER ;
 
