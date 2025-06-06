@@ -187,6 +187,9 @@ error_log("createTaskDirectly: $args");
             LibAPI\PDOWrapper::cleanse($task->getPublished()) . ',' .
             LibAPI\PDOWrapper::cleanseNull($task->get_cancelled());
         error_log("call taskInsertAndUpdate($args)");
+
+        LibAPI\PDOWrapper::call('updateRequiredTaskClaimable', LibAPI\PDOWrapper::cleanse($task->getId()));
+
         return LibAPI\PDOWrapper::call('taskInsertAndUpdate', $args);
     }
 
@@ -478,6 +481,8 @@ error_log("createTaskDirectly: $args");
             LibAPI\PDOWrapper::cleanse($status));
 
         LibAPI\PDOWrapper::call('update_tasks_status', LibAPI\PDOWrapper::cleanse($task_id) . ',' . LibAPI\PDOWrapper::cleanse($status) . ',NULL');
+
+        LibAPI\PDOWrapper::call('updateRequiredTaskClaimable', LibAPI\PDOWrapper::cleanse($task_id));
     }
 
     public function setTaskWordCount($task_id, $word_count)
