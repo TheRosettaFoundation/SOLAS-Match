@@ -13915,24 +13915,19 @@ DROP PROCEDURE IF EXISTS `update_sourcing_level_phase_0`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `update_sourcing_level_phase_0`()
 BEGIN
+    UPDATE RequiredTaskQualificationLevels SET sourcing_timer=sourcing_timer+1 WHERE incremental_sourcing=1 AND claimable=1;
+
     DELETE FROM RestrictedTasks WHERE restricted_task_id IN (
         SELECT tq.task_id
         FROM RequiredTaskQualificationLevels tq
-        JOIN tasks_status_audit_trail       tsa ON tq.task_id=tsa.task_id
-        JOIN Tasks                            t ON tsa.task_id=t.id
         WHERE
             tq.incremental_sourcing=1 AND
             tq.sourcing_level=3 AND
             tq.NGO_sourcing=1 AND
-            t.published=1 AND
-            t.`task-status_id`!=1 AND
-            tsa.`status_id`!=1 AND
-            tsa.changed_time < DATE_SUB(NOW(), INTERVAL 1 DAY)
+            tq.sourcing_timer>60*24
     );
 
     UPDATE RequiredTaskQualificationLevels tq
-    JOIN   tasks_status_audit_trail       tsa ON tq.task_id=tsa.task_id
-    JOIN   Tasks                            t ON tsa.task_id=t.id
     SET
         tq.native_matching=tq.matching_default_before_NGO,
         tq.sourcing_level=2
@@ -13940,10 +13935,7 @@ BEGIN
         tq.incremental_sourcing=1 AND
         tq.sourcing_level=3 AND
         tq.NGO_sourcing=1 AND
-        t.published=1 AND
-        t.`task-status_id`!=1 AND
-        tsa.`status_id`!=1 AND
-        tsa.changed_time < DATE_SUB(NOW(), INTERVAL 1 DAY);
+        tq.sourcing_timer>60*24;
 END//
 DELIMITER ;
 
@@ -13952,8 +13944,6 @@ DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `update_sourcing_level_phase_1`()
 BEGIN
     UPDATE RequiredTaskQualificationLevels tq
-    JOIN   tasks_status_audit_trail       tsa ON tq.task_id=tsa.task_id
-    JOIN   Tasks                            t ON tsa.task_id=t.id
     SET
         tq.native_matching=LEAST(1, tq.matching_default_before_NGO),
         tq.sourcing_level=1
@@ -13961,10 +13951,7 @@ BEGIN
         tq.incremental_sourcing=1 AND
         tq.sourcing_level=2 AND
         tq.NGO_sourcing=1 AND
-        t.published=1 AND
-        t.`task-status_id`!=1 AND
-        tsa.`status_id`!=1 AND
-        tsa.changed_time < DATE_SUB(NOW(), INTERVAL 2 DAY);
+        tq.sourcing_timer>60*24*2
 END//
 DELIMITER ;
 
@@ -13973,8 +13960,6 @@ DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `update_sourcing_level_phase_2`()
 BEGIN
     UPDATE RequiredTaskQualificationLevels tq
-    JOIN   tasks_status_audit_trail       tsa ON tq.task_id=tsa.task_id
-    JOIN   Tasks                            t ON tsa.task_id=t.id
     SET
         tq.native_matching=0,
         tq.sourcing_level=0
@@ -13982,10 +13967,7 @@ BEGIN
         tq.incremental_sourcing=1 AND
         tq.sourcing_level=1 AND
         tq.NGO_sourcing=1 AND
-        t.published=1 AND
-        t.`task-status_id`!=1 AND
-        tsa.`status_id`!=1 AND
-        tsa.changed_time < DATE_SUB(NOW(), INTERVAL 3 DAY);
+        tq.sourcing_timer>60*24*3;
 END//
 DELIMITER ;
 
@@ -13994,8 +13976,6 @@ DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `update_native_matching_phase_1`()
 BEGIN
     UPDATE RequiredTaskQualificationLevels tq
-    JOIN   tasks_status_audit_trail       tsa ON tq.task_id=tsa.task_id
-    JOIN   Tasks                            t ON tsa.task_id=t.id
     SET
         tq.native_matching=1,
         tq.sourcing_level=1
@@ -14003,10 +13983,7 @@ BEGIN
         tq.incremental_sourcing=1 AND
         tq.native_matching=2 AND
         tq.NGO_sourcing=0 AND
-        t.published=1 AND
-        t.`task-status_id`!=1 AND
-        tsa.`status_id`!=1 AND
-        tsa.changed_time < DATE_SUB(NOW(), INTERVAL 1 DAY);
+        tq.sourcing_timer>60*24;
 END//
 DELIMITER ;
 
@@ -14015,8 +13992,6 @@ DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `update_native_matching_phase_2`()
 BEGIN
     UPDATE RequiredTaskQualificationLevels tq
-    JOIN   tasks_status_audit_trail       tsa ON tq.task_id=tsa.task_id
-    JOIN   Tasks                            t ON tsa.task_id=t.id
     SET
         tq.native_matching=0,
         tq.sourcing_level=0
@@ -14024,10 +13999,7 @@ BEGIN
         tq.incremental_sourcing=1 AND
         tq.native_matching=1 AND
         tq.NGO_sourcing=0 AND
-        t.published=1 AND
-        t.`task-status_id`!=1 AND
-        tsa.`status_id`!=1 AND
-        tsa.changed_time < DATE_SUB(NOW(), INTERVAL 2 DAY);
+        tq.sourcing_timer>60*24*3;
 END//
 DELIMITER ;
 
@@ -14035,16 +14007,30 @@ DROP PROCEDURE IF EXISTS `update_sourcing_level_phase_finish`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `update_sourcing_level_phase_finish`()
 BEGIN
+    DELETE FROM RestrictedTasks WHERE restricted_task_id IN (
+        SELECT tq.task_id
+        FROM RequiredTaskQualificationLevels tq
+        JOIN tasks_status_audit_trail       tsa ON tq.task_id=tsa.task_id
+        JOIN Tasks                            t ON tsa.task_id=t.id
+        WHERE
+            tq.incremental_sourcing=1 AND
+            t.`task-status_id`!=1 AND
+            tsa.`status_id`!=1 AND
+            tsa.changed_time < DATE_SUB(NOW(), INTERVAL 100 DAY);
+    );
+
     UPDATE RequiredTaskQualificationLevels tq
     JOIN   tasks_status_audit_trail       tsa ON tq.task_id=tsa.task_id
     JOIN   Tasks                            t ON tsa.task_id=t.id
     SET
+        tq.native_matching=0,
+        tq.sourcing_level=0
         tq.incremental_sourcing=0
     WHERE
         tq.incremental_sourcing=1 AND
         t.`task-status_id`!=1 AND
         tsa.`status_id`!=1 AND
-        tsa.changed_time < DATE_SUB(NOW(), INTERVAL 10 DAY);
+        tsa.changed_time < DATE_SUB(NOW(), INTERVAL 100 DAY);
 END//
 DELIMITER ;
 
