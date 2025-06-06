@@ -14021,7 +14021,7 @@ BEGIN
             tq.incremental_sourcing=1 AND
             t.`task-status_id`!=1 AND
             tsa.`status_id`!=1 AND
-            tsa.changed_time < DATE_SUB(NOW(), INTERVAL 100 DAY);
+            tsa.changed_time < DATE_SUB(NOW(), INTERVAL 100 DAY)
     );
 
     UPDATE RequiredTaskQualificationLevels tq
@@ -14029,7 +14029,7 @@ BEGIN
     JOIN   Tasks                            t ON tsa.task_id=t.id
     SET
         tq.native_matching=0,
-        tq.sourcing_level=0
+        tq.sourcing_level=0,
         tq.incremental_sourcing=0
     WHERE
         tq.incremental_sourcing=1 AND
