@@ -8923,14 +8923,14 @@ BEGIN
         DELETE FROM RestrictedTasks WHERE restricted_task_id=taskID;
     END IF;
 
-    SELECT pcd.incremental_sourcing INTO @incremental_sourcing
+    SELECT pcd.incremental_sourcing, IF(t.`task-status_id`>1 AND t.published=1, 1, 0) INTO @incremental_sourcing, @claimable
     FROM Tasks                    t
     JOIN project_complete_dates pcd ON t.project_id=pcd.project_id
     WHERE
         t.id=taskID;
 
-    INSERT INTO RequiredTaskQualificationLevels (task_id, required_qualification_level,  incremental_sourcing,   native_matching,  matching_default_before_NGO,  NGO_sourcing,  sourcing_level)
-                                         VALUES (taskID,          @qualification_level, @incremental_sourcing, @matching_default, @matching_default_before_NGO, @NGO_sourcing, @sourcing_level);
+    INSERT INTO RequiredTaskQualificationLevels (task_id, required_qualification_level,  incremental_sourcing,   native_matching,  matching_default_before_NGO,  NGO_sourcing,  sourcing_level,  claimable, claimable_date)
+                                         VALUES (taskID,          @qualification_level, @incremental_sourcing, @matching_default, @matching_default_before_NGO, @NGO_sourcing, @sourcing_level, @claimable,          NOW());
 END//
 DELIMITER ;
 
@@ -8956,6 +8956,21 @@ BEGIN
             UPDATE RequiredTaskQualificationLevels SET sourcing_level=sourcing, native_matching=sourcing, NGO_sourcing=0, incremental_sourcing=0 WHERE task_id=taskID;
             DELETE FROM RestrictedTasks WHERE restricted_task_id=taskID;
         END IF;
+    END IF;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `updateRequiredTaskClaimable`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `updateRequiredTaskClaimable`(IN taskID BIGINT)
+BEGIN
+    IF (
+        SELECT IF(t.`task-status_id`>1 AND t.published=1 AND tq.claimable=0, 1, 0)
+        FROM Tasks                            t
+        JOIN RequiredTaskQualificationLevels tq ON t.id=tq.task_id
+        WHERE task_id=taskID
+       )=1 THEN
+        UPDATE RequiredTaskQualificationLevels SET claimable=1, claimable_date=NOW() WHERE task_id=taskID;
     END IF;
 END//
 DELIMITER ;
