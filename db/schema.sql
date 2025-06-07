@@ -14019,7 +14019,7 @@ BEGIN
         tq.incremental_sourcing=1 AND
         tq.native_matching=1 AND
         tq.NGO_sourcing=0 AND
-        tq.sourcing_timer>60*24*3;
+        tq.sourcing_timer>60*24*2;
 END//
 DELIMITER ;
 
