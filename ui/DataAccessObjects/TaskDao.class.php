@@ -187,10 +187,11 @@ error_log("createTaskDirectly: $args");
             LibAPI\PDOWrapper::cleanse($task->getPublished()) . ',' .
             LibAPI\PDOWrapper::cleanseNull($task->get_cancelled());
         error_log("call taskInsertAndUpdate($args)");
+        $ret = LibAPI\PDOWrapper::call('taskInsertAndUpdate', $args);
 
         LibAPI\PDOWrapper::call('updateRequiredTaskClaimable', LibAPI\PDOWrapper::cleanse($task->getId()));
 
-        return LibAPI\PDOWrapper::call('taskInsertAndUpdate', $args);
+        return $ret;
     }
 
     public function deleteTask($taskId)
