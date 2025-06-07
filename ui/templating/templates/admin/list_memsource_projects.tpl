@@ -7,7 +7,7 @@
     <link rel="stylesheet" type="text/css" media="all" href="{urlFor name="home"}resources/bootstrap/css/bootstrap.min1.css"/>
     <link rel="stylesheet" type="text/css" media="all" href="{urlFor name="home"}resources/css/style.1.css"/>
     <link rel="stylesheet" href="{urlFor name="home"}resources/css/jquery-ui.css"/>
-    <link rel="stylesheet" href="{urlFor name="home"}resources/css/solas2.css"/>
+    <link rel="stylesheet" href="{urlFor name="home"}resources/css/solas3.css"/>
     <script type="text/javascript" src="{urlFor name="home"}ui/js/lib/jquery-1.9.0.js"></script>
     <script type="text/javascript" src="{urlFor name="home"}ui/js/lib/jquery-ui.js"></script>
 </head>

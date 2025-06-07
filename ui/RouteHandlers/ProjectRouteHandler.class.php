@@ -1097,7 +1097,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
 
           
             $extra_scripts  = "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}resources/bootstrap/js/bootstrap.min.js\"></script>";
-            $extra_scripts .= "<script defer type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/taskRestrictions.js\"></script>";
+            $extra_scripts .= "<script defer type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/taskRestrictions1.js\"></script>";
             $extra_scripts .= "<script defer type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/projectDescClean.js\"></script>";
             $extra_scripts .= '<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.2/jquery.validate.min.js" type="text/javascript"></script>';
             $extra_scripts .= file_get_contents(__DIR__."/../js/project-view1.js");
@@ -1786,7 +1786,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
         $deadline_timestamp = gmmktime($selected_hour, $selected_minute, 0, $selected_month, $selected_day, $selected_year);
 
         $extraScripts  = "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/Parameters.js\"></script>";
-        $extraScripts .= "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/ProjectCreate12.js\"></script>";
+        $extraScripts .= "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/ProjectCreate13.js\"></script>";
 
         $template_data = array_merge($template_data, array(
             "siteLocation"          => Common\Lib\Settings::get('site.location'),

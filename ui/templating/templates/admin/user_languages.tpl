@@ -6,7 +6,7 @@
     <link rel="stylesheet" type="text/css" media="all" href="{urlFor name="home"}resources/bootstrap/css/bootstrap.min1.css"/>
     <link rel="stylesheet" type="text/css" media="all" href="{urlFor name="home"}resources/css/style.1.css"/>
     <link rel="stylesheet" href="{urlFor name="home"}resources/css/jquery-ui.css"/>
-    <link rel="stylesheet" href="{urlFor name="home"}resources/css/solas2.css"/>
+    <link rel="stylesheet" href="{urlFor name="home"}resources/css/solas3.css"/>
 </head>
 
 <body>
