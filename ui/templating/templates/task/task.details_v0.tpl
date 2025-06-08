@@ -313,9 +313,14 @@
                         <input type="hidden" name="mark_payment_status" value="Waived" />
                         {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
                     </form>
+                    <form method="post" action="{urlFor name="task-view" options="task_id.$task_id"}">
+                        <input type="submit" class="btn btn-primary" name="payment_status_submit" value="Change to Company" />
+                        <input type="hidden" name="mark_payment_status" value="Company" />
+                        {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
+                    </form>
                 {/if}
 
-                {if $paid_status['payment_status'] == 'In-kind' || $paid_status['payment_status'] == 'In-house' || $paid_status['payment_status'] == 'Waived'}
+                {if $paid_status['payment_status'] == 'In-kind' || $paid_status['payment_status'] == 'In-house' || $paid_status['payment_status'] == 'Waived' || $paid_status['payment_status'] == 'Company'}
                     <form method="post" action="{urlFor name="task-view" options="task_id.$task_id"}">
                         <input type="submit" class="btn btn-primary" name="payment_status_submit" value="Change to Unsettled" />
                         <input type="hidden" name="mark_payment_status" value="Unsettled" />
