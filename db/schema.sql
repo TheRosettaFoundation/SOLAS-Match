@@ -12842,6 +12842,14 @@ BEGIN
 END//
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `get_all_roles`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_all_roles`(IN uID INT UNSIGNED)
+BEGIN
+    SELECT * FROM Admins WHERE user_id=uID ORDER BY organisation_id;
+END//
+DELIMITER ;
+
 DROP PROCEDURE IF EXISTS `adjust_org_admin`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `adjust_org_admin`(IN uID INT UNSIGNED, IN oID INT UNSIGNED, IN remove_roles BIGINT UNSIGNED, IN add_roles BIGINT UNSIGNED)
