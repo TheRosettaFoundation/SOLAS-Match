@@ -58,7 +58,7 @@
             <td><a href="{$task['google_drive_link']}"}" target="_blank">Link to Documentation</a></td>
             <td>${round($task['total_expected_cost'], 2)}</td>
             <td>{if !is_null($task['status'])}{if $task['status']&1}Draft{else}Invoice{/if}{/if}</td>
-            <td>{if !is_null($task['invoice_number'])}<a href="{urlFor name="get-invoice" options="invoice_number.{$task['invoice_number']}"}" target="_blank">TWB-{str_pad($task['invoice_number'], 4, '0', STR_PAD_LEFT)}</a>
+            <td>{if !is_null($task['invoice_number'])}{if substr($task['payment_status'], 0, 7) != 'Company'}<a href="{urlFor name="get-invoice" options="invoice_number.{$task['invoice_number']}"}" target="_blank">TWB-{str_pad($task['invoice_number'], 4, '0', STR_PAD_LEFT)}</a>{else}TWB-{str_pad($task['invoice_number'], 4, '0', STR_PAD_LEFT)}{/if}
                 <br /><a href="{urlFor name="sow_report"}?invoice={$task['invoice_number']}" target="_blank">Details</a>
                 {/if}
             </td>

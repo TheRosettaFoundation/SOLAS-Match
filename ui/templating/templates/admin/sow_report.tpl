@@ -124,7 +124,7 @@
                 {elseif $task['status'] == 3}5-Draft Paid
                 {/if}
             </td>
-            <td>{if $task['invoice_number'] > 0}<a href="{urlFor name="get-invoice" options="invoice_number.{$task['invoice_number']}"}" target="_blank">TWB-{str_pad($task['invoice_number'], 4, '0', STR_PAD_LEFT)}</a>{/if}</td>
+            <td>{if $task['invoice_number'] > 0}{if substr($task['payment_status'], 0, 7) != 'Company'}<a href="{urlFor name="get-invoice" options="invoice_number.{$task['invoice_number']}"}" target="_blank">TWB-{str_pad($task['invoice_number'], 4, '0', STR_PAD_LEFT)}</a>{else}TWB-{str_pad($task['invoice_number'], 4, '0', STR_PAD_LEFT)}{/if}{/if}</td>
         </tr>
         {/if}
         {/foreach}
