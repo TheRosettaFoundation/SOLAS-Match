@@ -1033,7 +1033,6 @@ error_log("createTaskDirectly: $args");
             if ($row['processed'] == 0 && $row['completed'] && $row['before_current_month'] && !empty($row['linguist_t_code']) && !empty($row['google_drive_link']) && !empty($row['po_status']) && (strpos($row['purchase_order'], 'TO-') !== false || $row['po_status'] == 'Completed' || $row['po_status'] == 'Approved')) {
                 $i = $row['user_id'];
                 if ($row['total_expected_cost'] >= 600) $i = "$i-P";
-                if (substr($row['payment_status'], 0, 7) == 'Company') $i = "$i-C";
                 if (empty($invoices[$i])) $invoices[$i]   = [$row];
                 else                      $invoices[$i][] = $row;
                 $tasks++;
@@ -1045,13 +1044,10 @@ error_log("createTaskDirectly: $args");
         foreach ($invoices as $invoice) {
             $amount = 0;
             $proforma = 0;
-            $company = 0;
             foreach ($invoice as $row) {
                 $amount += $row['total_expected_cost'];
-                if (substr($row['payment_status'], 0, 7) == 'Company') $company = 1;
                 if ($row['total_expected_cost'] >= 600) $proforma = 1;
             }
-            if ($company) $proforma = 0;
             $result = LibAPI\PDOWrapper::call('insert_invoice', LibAPI\PDOWrapper::cleanse($proforma) . ',' . LibAPI\PDOWrapper::cleanseWrapStr($invoice_date) . ',' . LibAPI\PDOWrapper::cleanse($row['user_id']) . ',' . LibAPI\PDOWrapper::cleanseWrapStr($row['linguist']) . ',' . LibAPI\PDOWrapper::cleanseWrapStr($row['linguist_t_code']) . ',' . LibAPI\PDOWrapper::cleanse($amount) . ',' . LibAPI\PDOWrapper::cleanse(Common\Lib\UserSession::getCurrentUserID()));
             $invoice_number = $result[0]['id'];
             if ($proforma) LibAPI\PDOWrapper::call('insert_queue_request', '3,38,' . LibAPI\PDOWrapper::cleanse($row['user_id']) . ',' . LibAPI\PDOWrapper::cleanse($invoice_number) . ",0,0,0,0,''"); // email Linguist asking to send in invoice
@@ -1059,8 +1055,6 @@ error_log("createTaskDirectly: $args");
             foreach ($invoice as $row) {
                 LibAPI\PDOWrapper::call('update_invoice_processed', LibAPI\PDOWrapper::cleanse($row['task_id']) . ',' . LibAPI\PDOWrapper::cleanse($invoice_number));
             }
-
-            if ($company) return [$tasks, count($invoices)];
 
             $filename = date('Ym') . '-TWB-' . str_pad($invoice_number, 4, '0', STR_PAD_LEFT) . '.pdf';
 
