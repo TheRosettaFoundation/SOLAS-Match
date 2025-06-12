@@ -1180,4 +1180,21 @@ error_log("createTaskDirectly: $args");
         if (empty($result)) return ['', ''];
         return [$result[0]['filename'], $result[0]['google_id']];
     }
+
+    public function get_user_type($user_id)
+    {
+        $result = LibAPI\PDOWrapper::call('get_user_type', LibAPI\PDOWrapper::cleanse($user_id));
+        if (empty($result)) return 0;
+        return $result[0]['type'];
+    }
+
+    public function set_user_type($user_id, $type)
+    {
+        LibAPI\PDOWrapper::call('set_user_type', LibAPI\PDOWrapper::cleanse($user_id) . ',' . LibAPI\PDOWrapper::cleanse($type));
+    }
+
+    public function remove_user_type($user_id)
+    {
+        LibAPI\PDOWrapper::call('remove_user_type', LibAPI\PDOWrapper::cleanse($user_id));
+    }
 }

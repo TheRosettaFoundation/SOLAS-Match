@@ -205,10 +205,29 @@
                     {assign var="native_language_code" value=""}
                     {if $this_user->getNativeLocale() != null}
                     {assign var="native_language_code" value=$this_user->getNativeLocale()->getLanguageCode()}
+
                     <div class="mb-3">
-                        
+                        <div class="d-flex justify-content-between align-items-center">
+                            <p class="w-50">
                             Native in <strong>{TemplateHelper::getLanguageAndCountry($this_user->getNativeLocale())}</strong>
-                        
+                            </p>
+                            <p class="flex-grow-1">
+                                <form class="d-flex flex-column align-items-center justify-content-center">
+                                    <span class="user d-none">{$user_id}</span>
+                                    {if $roles&($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
+                                        <select class="form-select border border-primary user_type text-primary" aria-label="Select Individual or Company">
+                                            <option value="0" {if $get_user_type == 0}selected{/if}>Individual</option>
+                                            <option value="1" {if $get_user_type == 1}selected{/if}>Company</option>
+                                        </select>
+                                    {elseif $roles&(128)}
+                                        {if     $get_user_type == 0}<div class="bg-yellowish p-1 fs-5 text-primary text-uppercase rounded-2">Individual</div>
+                                        {elseif $get_user_type == 1}<div class="bg-yellowish p-1 fs-5 text-primary text-uppercase rounded-2">Company</div>
+                                        {/if}
+                                    {/if}
+                                    {if isset($sesskey)}<span class="sesskey d-none">{$sesskey}</span>{/if}
+                                </form>
+                            </p>
+                        </div>
                     </div>
 
                     <hr class="bg-light-subtle"/>

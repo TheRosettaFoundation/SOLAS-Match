@@ -4175,6 +4175,39 @@ BEGIN
 END//
 DELIMITER ;
 
+
+CREATE TABLE IF NOT EXISTS `user_types` (
+  user_id            INT UNSIGNED NOT NULL,
+  type               INT NOT NULL
+  KEY FK_user_type_user (user_id),
+  CONSTRAINT FK_user_type_user FOREIGN KEY (user_id) REFERENCES Users (id) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+DROP PROCEDURE IF EXISTS `get_user_type`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_user_type`(IN userID INT)
+BEGIN
+    SELECT * FROM user_types WHERE user_id=userID;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `set_user_type`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `set_user_type`(IN userID INT, IN typeID INT)
+BEGIN
+    REPLACE INTO user_types (user_id, type) VALUES (userID, typeID);
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `remove_user_type`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `remove_user_type`(IN userID INT)
+BEGIN
+    DELETE FROM user_types WHERE user_id=userID;
+END//
+DELIMITER ;
+
+
 DROP PROCEDURE IF EXISTS `getUserTaskScore`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getUserTaskScore`(IN `uID` INT, IN `tID` INT)

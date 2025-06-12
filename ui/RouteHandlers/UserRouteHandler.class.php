@@ -98,6 +98,12 @@ class UserRouteHandler
             ->setName('set_paid_eligible_pair');
 
         $app->map(['GET', 'POST'],
+            '/set_user_type/{user_id}/type/{type}[/]',
+            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:set_user_type')
+            ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin_any')
+            ->setName('set_user_type');
+
+        $app->map(['GET', 'POST'],
             '/{user_id}/privateProfile[/]',
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:userPrivateProfile')
             ->add('\SolasMatch\UI\Lib\Middleware:authUserIsLoggedInNoProfile')
@@ -1094,6 +1100,21 @@ class UserRouteHandler
         if ($result) {
             if ($args['eligible'] > 0) $taskDao->create_user_paid_eligible_pair($args['user_id'], $args['sl'], $args['sc'], $args['tl'], $args['tc'], $args['eligible']);
             else                       $taskDao->remove_user_paid_eligible_pair($args['user_id'], $args['sl'], $args['sc'], $args['tl'], $args['tc']);
+        }
+        $results = json_encode(['result'=> $result]);
+        $response->getBody()->write($results);
+        return $response->withHeader('Content-Type', 'application/json');
+    }
+
+    public function set_user_type(Request $request, Response $response, $args)
+    {
+        $taskDao = new DAO\TaskDao();
+
+        $result = 1;
+        if (Common\Lib\UserSession::checkCSRFKey($request->getParsedBody(), 'set_user_type')) $result = 0;
+        if ($result) {
+            if ($args['type']) $taskDao->set_user_type($args['user_id'], $args['type']);
+            else               $taskDao->remove_user_type($args['user_id']);
         }
         $results = json_encode(['result'=> $result]);
         $response->getBody()->write($results);
@@ -2532,6 +2553,7 @@ error_log("result: $result");//(**)
         $extra_scripts = "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}";
         $extra_scripts .= "resources/bootstrap/js/confirm-remove-badge.js\"></script>";
         $extra_scripts .= "<script type=\"text/javascript\"  src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/eligible.js\" defer ></script>";
+        $extra_scripts .= "<script type=\"text/javascript\"  src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/user_type.js\" defer ></script>";
         $extra_scripts .= file_get_contents(__DIR__ . "/../js/profile.js");
         $extra_scripts .= "<script type=\"text/javascript\" src=\"https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js\"></script>";
         $extra_scripts .= '<script type="text/javascript">
@@ -2716,6 +2738,7 @@ error_log("result: $result");//(**)
             'user_invoices'  => $userDao->getUserInvoices($user_id),
             'moodle_datas'   => $userDao->get_moodle_data_for_user($user_id),
             'linguist_orgs_for_admin' => $linguist_orgs_for_admin,
+            'get_user_type' => $taskDao->get_user_type($user_id),
         ));
         return UserRouteHandler::render("user/user-public-profile.tpl", $response);
     }
