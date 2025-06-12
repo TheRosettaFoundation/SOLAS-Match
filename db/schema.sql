@@ -4178,7 +4178,7 @@ DELIMITER ;
 
 CREATE TABLE IF NOT EXISTS `user_types` (
   user_id            INT UNSIGNED NOT NULL,
-  type               INT NOT NULL
+  type               INT NOT NULL,
   KEY FK_user_type_user (user_id),
   CONSTRAINT FK_user_type_user FOREIGN KEY (user_id) REFERENCES Users (id) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
