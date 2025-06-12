@@ -1055,7 +1055,6 @@ error_log("createTaskDirectly: $args");
             foreach ($invoice as $row) {
                 LibAPI\PDOWrapper::call('update_invoice_processed', LibAPI\PDOWrapper::cleanse($row['task_id']) . ',' . LibAPI\PDOWrapper::cleanse($invoice_number));
             }
-
             $filename = date('Ym') . '-TWB-' . str_pad($invoice_number, 4, '0', STR_PAD_LEFT) . '.pdf';
 
             [$fn, $file] = $RH->get_invoice_pdf($invoice_number);
