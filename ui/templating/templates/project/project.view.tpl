@@ -550,9 +550,9 @@
     {assign var="pair" value={$pair|replace:',':'-'}}
     {if !empty($ngo_linguists_by_language_pair[$pair])}
         {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
-                  <span data-bs-toggle="tooltip" data-bs-placement="right" data-bs-html="true" data-bs-title="This allows you to specify whether a task will be available to the <strong>Full TWB Community</strong> with various levels of native language matching or to <strong>Organization Members</strong> only. If you select any of these any incremental sourcing will stop and sourcing will remain at that level.">
+                  <span data-bs-toggle="tooltip" data-bs-placement="right" data-bs-html="true" data-bs-title="This allows you to specify whether a task will be available to the <strong>Full TWB Community</strong> with various levels of native language matching or to <strong>Organization Members</strong> only. If you select any of these any incremental matching will stop and sourcing will remain at that level.">
         {else}
-                  <span data-bs-toggle="tooltip" data-bs-placement="right" data-bs-html="true" data-bs-title="This allows you to specify whether a task will be available to the <strong>Full TWB Community</strong> or to <strong>Organization Members</strong> only. If you select one of these any incremental sourcing will stop and sourcing will remain at this level.">
+                  <span data-bs-toggle="tooltip" data-bs-placement="right" data-bs-html="true" data-bs-title="This allows you to specify whether a task will be available to the <strong>Full TWB Community</strong> or to <strong>Organization Members</strong> only. If you select one of these any incremental matching will stop and sourcing will remain at this level.">
         {/if}
     {else}
         {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}

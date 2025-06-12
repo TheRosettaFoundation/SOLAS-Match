@@ -44,7 +44,7 @@ For full terms see License.txt or http://www.gnu.org/licenses/lgpl-3.0.txt
 
 - NGO Admins and POs will be able to set that a task is only available to their own organisation linguists.
 - They can also request that this limit disappears after 24 hours, the default (or not).
-- Task Access Control with gradually widening access (based on Native Language/Region) called incremental sourcing applies to all tasks unless overridden.
+- Task Access Control with gradually widening access (based on Native Language/Region) called incremental matching applies to all tasks unless overridden.
 - A field has been added to indicate when a task becomes claimable (including being published). It is in "claimable_date" in the table "RequiredTaskQualificationLevels". It is only valid when the field "claimable" is set to 1. It will only be useful forward in time.
 - Phrase user SSO is now based on username not email.
 

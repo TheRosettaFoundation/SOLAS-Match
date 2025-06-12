@@ -204,8 +204,8 @@
                 {if !empty($ngo_linguists_by_language_pair)}
                 <div class="projFormInput">
                     <div style="margin-bottom:25px;">
-                        <h2>Incremental Sourcing:</h2>
-                        Incremental Sourcing
+                        <h2>Incremental Matching:</h2>
+                        Incremental Matching
                         <input type="checkbox" name="incremental_sourcing" id="incremental_sourcing" value="1" checked />
                         <a href="https://communitylibrary.translatorswb.org/books/12-self-managed-partners/page/who-can-work-on-your-project" target="_blank">
                             <i class="icon-question-sign" data-toggle="tooltip" title="Learn more"></i>
