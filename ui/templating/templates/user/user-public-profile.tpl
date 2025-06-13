@@ -1320,13 +1320,19 @@ If a language is to be removed from this list, the community will be informed be
         </tr>
     </thead>
     {foreach $user_invoices as $invoice}
+      {if $roles&($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER + 128) || $invoice['company'] == 0}
         <tr>
             <td>
+              {if $invoice['company'] == 0}
                 <a class="link link-primary text-primary" href="{urlFor name="get-invoice" options="invoice_number.{$invoice['invoice_number']}"}" target="_blank">TWB-{str_pad($invoice['invoice_number'], 4, '0', STR_PAD_LEFT)}</a>
+              {else}
+                TWB-{str_pad($invoice['invoice_number'], 4, '0', STR_PAD_LEFT)}
+              {/if}
             </td>
             <td>{substr($invoice['invoice_date'], 0, 10)}</td>
             <td>${round($invoice['amount'], 2)}</td>
             <td>
+              {if $invoice['company'] == 0}
                 {if     $invoice['status'] == 0}Invoice
                 {elseif $invoice['status'] == 1}Please review invoice and send it to <a href="mailto:linguistinvoices@clearglobal.org?subject={rawurlencode('Invoice to Clear Global')}" target="_blank">linguistinvoices@clearglobal.org</a>
                 {elseif $invoice['status'] == 2}Invoice Paid
@@ -1336,8 +1342,20 @@ If a language is to be removed from this list, the community will be informed be
                 {elseif $invoice['status'] == 6}Invoice Bounced
                 {elseif $invoice['status'] == 7}Draft Bounced
                 {/if}
+              {else}
+                {if     $invoice['status'] == 0}Invoice (Company)
+                {elseif $invoice['status'] == 1}Draft (Company)
+                {elseif $invoice['status'] == 2}Invoice Paid (Company)
+                {elseif $invoice['status'] == 3}Draft Paid (Company)
+                {elseif $invoice['status'] == 4}Invoice Bounced (Company)
+                {elseif $invoice['status'] == 5}Draft Bounced (Company)
+                {elseif $invoice['status'] == 6}Invoice Bounced (Company)
+                {elseif $invoice['status'] == 7}Draft Bounced (Company)
+                {/if}
+              {/if}
             </td>
         </tr>
+      {/if}
     {/foreach}
 </table>
 </div>
