@@ -1093,6 +1093,8 @@ error_log("createTaskDirectly: $args");
 
         $access_token = $this->get_google_access_token();
         [$fn, $google_id] = $this->get_invoice_file_id($invoice_number);
+        if (empty($google_id)) return;
+
         [$fn, $file] = $RH->get_invoice_pdf($invoice_number);
 
         $ch = curl_init("https://www.googleapis.com/upload/drive/v3/files/$google_id?&uploadType=media&supportsAllDrives=true");
@@ -1114,6 +1116,8 @@ error_log("createTaskDirectly: $args");
 
         $access_token = $this->get_google_access_token();
         [$fn, $google_id] = $this->get_invoice_file_id($invoice_number);
+        if (empty($google_id)) return;
+
         [$fn, $file] = $RH->get_invoice_pdf($invoice_number);
 
         $ch = curl_init("https://www.googleapis.com/upload/drive/v3/files/$google_id?&uploadType=media&supportsAllDrives=true");
@@ -1133,7 +1137,7 @@ error_log("createTaskDirectly: $args");
 
         $access_token = $this->get_google_access_token();
         [$filename, $google_id] = $this->get_invoice_file_id($invoice_number);
-
+        if (!empty($google_id)) {
         $ch = curl_init("https://www.googleapis.com/drive/v3/files/$google_id?supportsAllDrives=true");
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PATCH');
         curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode(['name' => str_replace('.pdf', '-REVOKED.pdf', $filename)]));
@@ -1143,7 +1147,7 @@ error_log("createTaskDirectly: $args");
         curl_close($ch);
         $res = json_decode($result, true);
         if (empty($res['id'])) error_log("Failed to read data from Google (rename): $result");
-
+        }
         LibAPI\PDOWrapper::call('set_invoice_revoked', LibAPI\PDOWrapper::cleanse($invoice_number) . ',' . LibAPI\PDOWrapper::cleanse(Common\Lib\UserSession::getCurrentUserID()));
     }
 
