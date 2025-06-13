@@ -122,7 +122,7 @@
                 {elseif $task['status'] == 7}3-Draft Bounced
                 {elseif $task['status'] == 2}4-Invoice Paid
                 {elseif $task['status'] == 3}5-Draft Paid
-                {/if}
+                {/if}{if substr($task['payment_status'], 0, 7) == 'Company'} (Company){/if}
             </td>
             <td>{if $task['invoice_number'] > 0}{if substr($task['payment_status'], 0, 7) != 'Company'}<a href="{urlFor name="get-invoice" options="invoice_number.{$task['invoice_number']}"}" target="_blank">TWB-{str_pad($task['invoice_number'], 4, '0', STR_PAD_LEFT)}</a>{else}TWB-{str_pad($task['invoice_number'], 4, '0', STR_PAD_LEFT)}{/if}{/if}</td>
         </tr>
