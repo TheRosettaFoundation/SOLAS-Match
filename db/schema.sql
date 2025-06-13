@@ -13424,15 +13424,15 @@ DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `get_user_invoices`(IN uID INT UNSIGNED)
 BEGIN
     SELECT
-        invoice_number,
-        status,
-        invoice_date,
-        amount
-    FROM invoices
+        i.*,
+        MAX(IF(SUBSTRING(IFNULL(tp.payment_status, ''), 1, 7)='Company', 1, 0)) AS company
+    FROM      invoices   i
+    LEFT JOIN TaskPaids tp ON i.invoice_number=tp.invoice_number
     WHERE
-        linguist_id=uID AND
-        revoked=0
-    ORDER BY invoice_date DESC;
+        i.linguist_id=uID AND
+        i.revoked=0
+    GROUP BY i.invoice_number
+    ORDER BY i.invoice_date DESC;
 END//
 DELIMITER ;
 
