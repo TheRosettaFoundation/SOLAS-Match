@@ -13568,6 +13568,7 @@ BEGIN
         i.filename,
         i.google_id,
         MIN(tp.processed) AS processed,
+        MIN(tp.payment_status) AS payment_status,
         i.invoice_date,
         i.invoice_paid_date,
         i.piem_text,
