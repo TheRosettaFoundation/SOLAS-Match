@@ -25,7 +25,7 @@ if (arr.length > 0) {
         curr.addEventListener("change", function (e) {
             e.preventDefault();
             let parent = curr.parentElement;
-            let user = parent.querySelector(".user").textContent;
+            let user = parent.querySelector(".user_for_type").textContent;
             let type = curr.value;
             let sesskey = parent.querySelector(".sesskey").textContent;
 
