@@ -431,6 +431,21 @@
                         {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
                     </form>
                 {/if}
+
+                {if $paid_status['payment_status'] == 'Company'}
+                    <form method="post" action="{urlFor name="task-view" options="task_id.$task_id"}">
+                        <input type="submit" class="btngray-sm mt-2" name="payment_status_submit" value="Change to In-kind" />
+                        <input type="hidden" name="mark_payment_status" value="In-kind" />
+                        {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
+                    </form>
+                {/if}
+                {if $paid_status['payment_status'] == 'In-kind'}
+                    <form method="post" action="{urlFor name="task-view" options="task_id.$task_id"}">
+                        <input type="submit" class="btngray-sm mt-2" name="payment_status_submit" value="Change to Company" />
+                        <input type="hidden" name="mark_payment_status" value="Company" />
+                        {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
+                    </form>
+                {/if}
             </td>
             <td>
                 <form method="post" action="{urlFor name="task-view" options="task_id.$task_id"}">
