@@ -1319,7 +1319,11 @@ class TaskRouteHandler
                         ||
                     $paid_status['payment_status'] == 'In-house'              && $post['mark_payment_status'] == 'Unsettled'
                         ||
-                    $paid_status['payment_status'] == 'Waived'                && $post['mark_payment_status'] == 'Unsettled')
+                    $paid_status['payment_status'] == 'Waived'                && $post['mark_payment_status'] == 'Unsettled'
+                        ||
+                    $paid_status['payment_status'] == 'Company'               && $post['mark_payment_status'] == 'In-kind'
+                        ||
+                    $paid_status['payment_status'] == 'In-kind'               && $post['mark_payment_status'] == 'Company')
                 {
                     $paid_status['payment_status'] = $post['mark_payment_status'];
                     $paid_status['status_changed'] = date('Y-m-d H:i:s');
