@@ -1060,8 +1060,8 @@ error_log("createTaskDirectly: $args");
                 LibAPI\PDOWrapper::call('update_invoice_processed', LibAPI\PDOWrapper::cleanse($row['task_id']) . ',' . LibAPI\PDOWrapper::cleanse($invoice_number));
             }
 
-            if ($company) return [$tasks, count($invoices)];
-
+          if ($company) error_log("Company Invoice: $invoice_number");
+          else {
             $filename = date('Ym') . '-TWB-' . str_pad($invoice_number, 4, '0', STR_PAD_LEFT) . '.pdf';
 
             [$fn, $file] = $RH->get_invoice_pdf($invoice_number);
@@ -1081,6 +1081,7 @@ error_log("createTaskDirectly: $args");
                 $res['id'] = '';
             }
             LibAPI\PDOWrapper::call('update_invoice_filename', LibAPI\PDOWrapper::cleanse($invoice_number) . ',' . LibAPI\PDOWrapper::cleanseWrapStr($filename) . ',' . LibAPI\PDOWrapper::cleanseWrapStr($res['id']));
+          }
         }
         return [$tasks, count($invoices)];
     }
