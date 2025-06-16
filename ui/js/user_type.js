@@ -17,10 +17,10 @@ async function set_user_type({ user, type, sesskey }) {
     }
 }
 
-const arr = [...user_types];
+const array_user_types = [...user_types];
 
-if (arr.length > 0) {
-    arr.forEach(function (curr, index, arr) {
+if (array_user_types.length > 0) {
+    array_user_types.forEach(function (curr, index, array_user_types) {
         let codes = {};
         curr.addEventListener("change", function (e) {
             e.preventDefault();
