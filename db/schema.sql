@@ -13663,7 +13663,7 @@ DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `set_invoice_paid`(IN inv INT, IN aID INT UNSIGNED)
 BEGIN
     UPDATE invoices SET status=(status&~4)|2, invoice_paid_date=NOW(), admin_id=aID WHERE invoice_number=inv;
-    UPDATE TaskPaids SET payment_status='Settled', status_changed=NOW() WHERE invoice_number=inv;
+    UPDATE TaskPaids SET payment_status=IF(LOCATE('Company', payment_status)=0, 'Settled', 'Company Settled'), status_changed=NOW() WHERE invoice_number=inv;
 END//
 DELIMITER ;
 
@@ -13672,7 +13672,7 @@ DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `set_invoice_bounced`(IN inv INT, IN aID INT UNSIGNED)
 BEGIN
     UPDATE invoices SET status=status|4, invoice_paid_date=NOW(), admin_id=aID WHERE invoice_number=inv;
-    UPDATE TaskPaids SET payment_status='Ready for payment', status_changed=NOW() WHERE invoice_number=inv;
+    UPDATE TaskPaids SET payment_status=IF(LOCATE('Company', payment_status)=0, 'Ready for payment', 'Company Ready for payment'), status_changed=NOW() WHERE invoice_number=inv;
 END//
 DELIMITER ;
 
