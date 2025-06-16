@@ -693,12 +693,18 @@
                                      {if $get_paid_for_project[$task_id] == 1}
                                          {if $get_payment_status_for_project[$task_id]['payment_status'] == 'Unsettled'}
                                           <span data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Unsettled">PO#: {$get_payment_status_for_project[$task_id]['purchase_order']} <i class="fa fa-solid fa-x" ></i> </span>
+                                         {elseif $get_payment_status_for_project[$task_id]['payment_status'] == 'Company'}
+                                          <span data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Company">PO#: {$get_payment_status_for_project[$task_id]['purchase_order']} <i class="fa fa-solid fa-building" ></i> </span>
                                          {elseif $get_payment_status_for_project[$task_id]['payment_status'] == 'Ready for payment'}
                                           <span data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Ready for payment">PO#: {$get_payment_status_for_project[$task_id]['purchase_order']} <i class="fa-solid fa-money-bill" style="font-size: 15px !important;padding:0 !important;width:12px !important;margin-left:-2px;"></i> </span>
+                                         {elseif $get_payment_status_for_project[$task_id]['payment_status'] == 'Company Ready for Payment'}
+                                          <span data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Company Ready for Payment">PO#: {$get_payment_status_for_project[$task_id]['purchase_order']} <i class="fa fa-solid fa-building" style="font-size: 15px !important;padding:0 !important;width:12px !important;margin-left:-2px;"></i> </span>
                                          {elseif $get_payment_status_for_project[$task_id]['payment_status'] == 'Pending documentation'}
                                           <span data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Pending documentation">PO#: {$get_payment_status_for_project[$task_id]['purchase_order']} <i class="fa fa-book" style="font-size: 15px !important;padding:0 !important;width:12px !important;margin-left:-2px;" ></i> </span>
                                          {elseif $get_payment_status_for_project[$task_id]['payment_status'] == 'Settled'}
                                           <span data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Settled">PO#: {$get_payment_status_for_project[$task_id]['purchase_order']} <i class="fa fa-check-circle" style="font-size: 15px !important;padding:0 !important;width:12px !important;margin-left:-2px;" ></i> </span> </span>
+                                         {elseif $get_payment_status_for_project[$task_id]['payment_status'] == 'Company Settled'}
+                                          <span data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Company Settled">PO#: {$get_payment_status_for_project[$task_id]['purchase_order']} <i class="fa fa-solid fa-building" style="font-size: 15px !important;padding:0 !important;width:12px !important;margin-left:-2px;" ></i> </span> </span>
                                           {else}
                                           PO#: {$get_payment_status_for_project[$task_id]['purchase_order']}<br />{$get_payment_status_for_project[$task_id]['payment_status']} 
                                           {/if}
