@@ -2227,6 +2227,13 @@ BEGIN
     insert into TaskClaims  (task_id,user_id,`claimed-time`) values (tID,uID,now());
     update Tasks set `task-status_id`=3 where id = tID;
     COMMIT;
+
+    IF EXISTS (SELECT 1 FROM user_types WHERE user_id=uID AND type=1) THEN
+        IF EXISTS (SELECT 1 FROM TaskPaids WHERE task_id=tID) THEN
+            UPDATE TaskPaids SET payment_status='Company' WHERE task_id=tID;
+        END IF;
+    END IF;
+
     select 1 as result;
   else
   select 0 as result;
