@@ -211,7 +211,7 @@
                             Native in <strong>{TemplateHelper::getLanguageAndCountry($this_user->getNativeLocale())}</strong>
                         {else}
                             <div class="d-flex justify-content-between align-items-center">
-                                <p class="w-50">
+                                <p class="w-70">
                                     Native in <strong>{TemplateHelper::getLanguageAndCountry($this_user->getNativeLocale())}</strong>
                                 </p>
                                 <p class="flex-grow-1">
