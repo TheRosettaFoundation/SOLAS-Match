@@ -588,6 +588,8 @@ INSERT INTO TaskTypes (id, name) VALUES
   (33,'Simultaneous remote Interpreting'),
   (34,'Consecutive in-person Interpreting'),
   (35,'Consecutive remote Interpreting');
+INSERT INTO TaskTypes (id, name) VALUES
+  (36,'Community Recognition Program');
 
 
 # Be very carefull of deleteing any of these they will cascade DELETEs
@@ -606,6 +608,9 @@ INSERT INTO task_type_categorys VALUES
 
 INSERT INTO task_type_categorys VALUES
 (8, 'Interpreting');
+
+INSERT INTO task_type_categorys VALUES
+(9, 'Recognition');
 
 
 CREATE TABLE IF NOT EXISTS `TaskUnclaims` (
@@ -1493,6 +1498,8 @@ INSERT INTO task_type_details VALUES
 (34,8,1,0,1,1,1,0,1,'Consecutive in-person Interpreting',  'Consecutive in-person Interpreting',  '#B02323','',                           'SHELLTASK',    'ZZ',                       'Labor minutes','minutes','Labor minutes','Labor hours','Minutes', 1000, 2000, 8.33333, 0, 0.0166667, 0.0166667, '', '', '', '');
 INSERT INTO task_type_details VALUES
 (35,8,1,0,1,1,1,0,1,'Consecutive remote Interpreting',     'Consecutive remote Interpreting',     '#B02323','',                           'SHELLTASK',    'ZZ',                       'Labor minutes','minutes','Labor minutes','Labor hours','Minutes', 1000, 2000, 8.33333, 0, 0.0166667, 0.0166667, '', '', '', '');
+INSERT INTO task_type_details VALUES
+(36,9,1,0,1,1,0,1,0,'Community Recognition Program',       'Community Recognition Program',       '#B02323','',                           'SHELLTASK',    'ZZ',                       'Terms',        'terms',  'Terms',        'Terms',      'Terms',      1,    0,       0, 0,         0,         0, '', '', '', '');
 /*
 # "Labour Hours" or "Words" etc. for when user enters pricing rates
 UPDATE task_type_details SET pricing_and_recognition_unit_text_hours='Words' WHERE type_enum=1;
@@ -2232,6 +2239,13 @@ BEGIN
     insert into TaskClaims  (task_id,user_id,`claimed-time`) values (tID,uID,now());
     update Tasks set `task-status_id`=3 where id = tID;
     COMMIT;
+
+    IF EXISTS (SELECT 1 FROM user_types WHERE user_id=uID AND type=1) THEN
+        IF EXISTS (SELECT 1 FROM TaskPaids WHERE task_id=tID) THEN
+            UPDATE TaskPaids SET payment_status='Company' WHERE task_id=tID;
+        END IF;
+    END IF;
+
     select 1 as result;
   else
   select 0 as result;
@@ -4179,6 +4193,39 @@ BEGIN
     SELECT * FROM SpecialTranslators WHERE user_id=userID;
 END//
 DELIMITER ;
+
+
+CREATE TABLE IF NOT EXISTS `user_types` (
+  user_id            INT UNSIGNED NOT NULL,
+  type               INT NOT NULL,
+  KEY FK_user_type_user (user_id),
+  CONSTRAINT FK_user_type_user FOREIGN KEY (user_id) REFERENCES Users (id) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+DROP PROCEDURE IF EXISTS `get_user_type`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_user_type`(IN userID INT)
+BEGIN
+    SELECT * FROM user_types WHERE user_id=userID;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `set_user_type`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `set_user_type`(IN userID INT, IN typeID INT)
+BEGIN
+    REPLACE INTO user_types (user_id, type) VALUES (userID, typeID);
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `remove_user_type`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `remove_user_type`(IN userID INT)
+BEGIN
+    DELETE FROM user_types WHERE user_id=userID;
+END//
+DELIMITER ;
+
 
 DROP PROCEDURE IF EXISTS `getUserTaskScore`;
 DELIMITER //
@@ -12938,6 +12985,14 @@ BEGIN
 END//
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `get_all_roles`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_all_roles`(IN uID INT UNSIGNED)
+BEGIN
+    SELECT * FROM Admins WHERE user_id=uID ORDER BY organisation_id;
+END//
+DELIMITER ;
+
 DROP PROCEDURE IF EXISTS `adjust_org_admin`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `adjust_org_admin`(IN uID INT UNSIGNED, IN oID INT UNSIGNED, IN remove_roles BIGINT UNSIGNED, IN add_roles BIGINT UNSIGNED)
@@ -13479,15 +13534,15 @@ DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `get_user_invoices`(IN uID INT UNSIGNED)
 BEGIN
     SELECT
-        invoice_number,
-        status,
-        invoice_date,
-        amount
-    FROM invoices
+        i.*,
+        MAX(IF(SUBSTRING(IFNULL(tp.payment_status, ''), 1, 7)='Company', 1, 0)) AS company
+    FROM      invoices   i
+    LEFT JOIN TaskPaids tp ON i.invoice_number=tp.invoice_number
     WHERE
-        linguist_id=uID AND
-        revoked=0
-    ORDER BY invoice_date DESC;
+        i.linguist_id=uID AND
+        i.revoked=0
+    GROUP BY i.invoice_number
+    ORDER BY i.invoice_date DESC;
 END//
 DELIMITER ;
 
@@ -13623,6 +13678,7 @@ BEGIN
         i.filename,
         i.google_id,
         MIN(tp.processed) AS processed,
+        MIN(tp.payment_status) AS payment_status,
         i.invoice_date,
         i.invoice_paid_date,
         i.piem_text,
@@ -13717,7 +13773,7 @@ DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `set_invoice_paid`(IN inv INT, IN aID INT UNSIGNED)
 BEGIN
     UPDATE invoices SET status=(status&~4)|2, invoice_paid_date=NOW(), admin_id=aID WHERE invoice_number=inv;
-    UPDATE TaskPaids SET payment_status='Settled', status_changed=NOW() WHERE invoice_number=inv;
+    UPDATE TaskPaids SET payment_status=IF(LOCATE('Company', payment_status)=0, 'Settled', 'Company Settled'), status_changed=NOW() WHERE invoice_number=inv;
 END//
 DELIMITER ;
 
@@ -13726,7 +13782,7 @@ DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `set_invoice_bounced`(IN inv INT, IN aID INT UNSIGNED)
 BEGIN
     UPDATE invoices SET status=status|4, invoice_paid_date=NOW(), admin_id=aID WHERE invoice_number=inv;
-    UPDATE TaskPaids SET payment_status='Ready for payment', status_changed=NOW() WHERE invoice_number=inv;
+    UPDATE TaskPaids SET payment_status=IF(LOCATE('Company', payment_status)=0, 'Ready for payment', 'Company Ready for payment'), status_changed=NOW() WHERE invoice_number=inv;
 END//
 DELIMITER ;
 

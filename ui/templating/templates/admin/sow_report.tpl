@@ -34,6 +34,8 @@
 <h2 style="text-align:center;">SoW Report - Ongoing Paid Tasks</h2>
 {elseif $po}
 <h2 style="text-align:center;">SoW Report - All Tasks for Purchase Order: {$po}</h2>
+{elseif $invoice}
+<h2 style="text-align:center;">SoW Report - All Tasks for Invoice Number: TWB-{str_pad($invoice, 4, '0', STR_PAD_LEFT)}</h2>
 {else}
 <h2 style="text-align:center;">SoW Report - Completed Paid</h2>
 {/if}
@@ -41,6 +43,8 @@
 {if $claimed}
 <a href="{urlFor name="sow_report"}" target="_blank">SoW Report - Completed Paid</a>
 {elseif $po}
+<a href="{urlFor name="sow_report"}" target="_blank">SoW Report - Completed Paid</a>
+{elseif $invoice}
 <a href="{urlFor name="sow_report"}" target="_blank">SoW Report - Completed Paid</a>
 {else}
 <a href="{urlFor name="sow_report"}?claimed=1" target="_blank">SoW Report - Ongoing Paid Tasks</a>
@@ -73,7 +77,12 @@
     </thead>    
     <tbody>
         {foreach $tasks as $task}
-        {if (!$claimed && !$po && !$pr && $task['completed']) || ($claimed && $task['claimed']) || ($po && $po==$task['purchase_order']) || ($pr && $pr==$task['purchase_requisition'])}
+        {if (!$claimed && !$po && !$invoice && !$pr && $task['completed']) ||
+            ( $claimed && $task['claimed']) ||
+            ( $po      && $po==$task['purchase_order']) ||
+            ( $invoice && $invoice==$task['invoice_number']) ||
+            ( $pr      && $pr==$task['purchase_requisition'])
+        }
         <tr>
             <td><a href="{urlFor name="user-public-profile" options="user_id.{$task['user_id']}"}" target="_blank">{TemplateHelper::uiCleanseHTML($task['linguist'])}</a>{if !empty($task['linguist_t_code'])} ({$task['linguist_t_code']}){/if}</td>
             <td><a href="{urlFor name="org-public-profile" options="org_id.{$task['organisation_id']}"}" target="_blank">{TemplateHelper::uiCleanseHTML($task['name'])}</a></td>
@@ -113,9 +122,9 @@
                 {elseif $task['status'] == 7}3-Draft Bounced
                 {elseif $task['status'] == 2}4-Invoice Paid
                 {elseif $task['status'] == 3}5-Draft Paid
-                {/if}
+                {/if}{if substr($task['payment_status'], 0, 7) == 'Company'} (Company){/if}
             </td>
-            <td>{if $task['invoice_number'] > 0}<a href="{urlFor name="get-invoice" options="invoice_number.{$task['invoice_number']}"}" target="_blank">TWB-{str_pad($task['invoice_number'], 4, '0', STR_PAD_LEFT)}</a>{/if}</td>
+            <td>{if $task['invoice_number'] > 0}{if substr($task['payment_status'], 0, 7) != 'Company'}<a href="{urlFor name="get-invoice" options="invoice_number.{$task['invoice_number']}"}" target="_blank">TWB-{str_pad($task['invoice_number'], 4, '0', STR_PAD_LEFT)}</a>{else}TWB-{str_pad($task['invoice_number'], 4, '0', STR_PAD_LEFT)}{/if}{/if}</td>
         </tr>
         {/if}
         {/foreach}

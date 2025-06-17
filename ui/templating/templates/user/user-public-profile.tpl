@@ -205,10 +205,33 @@
                     {assign var="native_language_code" value=""}
                     {if $this_user->getNativeLocale() != null}
                     {assign var="native_language_code" value=$this_user->getNativeLocale()->getLanguageCode()}
+
                     <div class="mb-3">
-                        
+                        {if !($roles&($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER + 128))}
                             Native in <strong>{TemplateHelper::getLanguageAndCountry($this_user->getNativeLocale())}</strong>
-                        
+                        {else}
+                            <div class="d-flex justify-content-between align-items-center">
+                                <p class="w-70">
+                                    Native in <strong>{TemplateHelper::getLanguageAndCountry($this_user->getNativeLocale())}</strong>
+                                </p>
+                                <p class="flex-grow-1">
+                                    <form class="d-flex flex-column align-items-center justify-content-center">
+                                        <span class="user_for_type d-none">{$user_id}</span>
+                                        {if $roles&($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
+                                            <select class="form-select border border-primary user_type text-primary" aria-label="Select Individual or Company">
+                                                <option value="0" {if $get_user_type == 0}selected{/if}>Individual</option>
+                                                <option value="1" {if $get_user_type == 1}selected{/if}>Company</option>
+                                            </select>
+                                        {elseif $roles&(128)}
+                                            {if     $get_user_type == 0}<div class="bg-yellowish p-1 fs-5 text-primary text-uppercase rounded-2">Individual</div>
+                                            {elseif $get_user_type == 1}<div class="bg-yellowish p-1 fs-5 text-primary text-uppercase rounded-2">Company</div>
+                                            {/if}
+                                        {/if}
+                                        {if isset($sesskey)}<span class="sesskey d-none">{$sesskey}</span>{/if}
+                                    </form>
+                                </p>
+                            </div>
+                        {/if}
                     </div>
 
                     <hr class="bg-light-subtle"/>
@@ -1301,13 +1324,19 @@ If a language is to be removed from this list, the community will be informed be
         </tr>
     </thead>
     {foreach $user_invoices as $invoice}
+      {if $roles&($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER + 128) || $invoice['company'] == 0}
         <tr>
             <td>
+              {if $invoice['company'] == 0}
                 <a class="link link-primary text-primary" href="{urlFor name="get-invoice" options="invoice_number.{$invoice['invoice_number']}"}" target="_blank">TWB-{str_pad($invoice['invoice_number'], 4, '0', STR_PAD_LEFT)}</a>
+              {else}
+                TWB-{str_pad($invoice['invoice_number'], 4, '0', STR_PAD_LEFT)}
+              {/if}
             </td>
             <td>{substr($invoice['invoice_date'], 0, 10)}</td>
             <td>${round($invoice['amount'], 2)}</td>
             <td>
+              {if $invoice['company'] == 0}
                 {if     $invoice['status'] == 0}Invoice
                 {elseif $invoice['status'] == 1}Please review invoice and send it to <a href="mailto:linguistinvoices@clearglobal.org?subject={rawurlencode('Invoice to Clear Global')}" target="_blank">linguistinvoices@clearglobal.org</a>
                 {elseif $invoice['status'] == 2}Invoice Paid
@@ -1317,8 +1346,20 @@ If a language is to be removed from this list, the community will be informed be
                 {elseif $invoice['status'] == 6}Invoice Bounced
                 {elseif $invoice['status'] == 7}Draft Bounced
                 {/if}
+              {else}
+                {if     $invoice['status'] == 0}Invoice (Company)
+                {elseif $invoice['status'] == 1}Draft (Company)
+                {elseif $invoice['status'] == 2}Invoice Paid (Company)
+                {elseif $invoice['status'] == 3}Draft Paid (Company)
+                {elseif $invoice['status'] == 4}Invoice Bounced (Company)
+                {elseif $invoice['status'] == 5}Draft Bounced (Company)
+                {elseif $invoice['status'] == 6}Invoice Bounced (Company)
+                {elseif $invoice['status'] == 7}Draft Bounced (Company)
+                {/if}
+              {/if}
             </td>
         </tr>
+      {/if}
     {/foreach}
 </table>
 </div>
