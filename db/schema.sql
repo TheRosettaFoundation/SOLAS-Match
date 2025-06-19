@@ -590,6 +590,8 @@ INSERT INTO TaskTypes (id, name) VALUES
   (35,'Consecutive remote Interpreting');
 INSERT INTO TaskTypes (id, name) VALUES
   (36,'Community Recognition Program');
+INSERT INTO TaskTypes (id, name) VALUES
+  (37,'TWB Voice');
 
 
 # Be very carefull of deleteing any of these they will cascade DELETEs
@@ -611,6 +613,8 @@ INSERT INTO task_type_categorys VALUES
 
 INSERT INTO task_type_categorys VALUES
 (9, 'Recognition');
+INSERT INTO task_type_categorys VALUES
+(10, 'TWB Voice');
 
 
 CREATE TABLE IF NOT EXISTS `TaskUnclaims` (
@@ -1500,6 +1504,8 @@ INSERT INTO task_type_details VALUES
 (35,8,1,0,1,1,1,0,1,'Consecutive remote Interpreting',     'Consecutive remote Interpreting',     '#B02323','',                           'SHELLTASK',    'ZZ',                       'Labor minutes','minutes','Labor minutes','Labor hours','Minutes', 1000, 2000, 8.33333, 0, 0.0166667, 0.0166667, '', '', '', '');
 INSERT INTO task_type_details VALUES
 (36,9,1,0,1,1,0,1,0,'Community Recognition Program',       'Community Recognition Program',       '#B02323','',                           'SHELLTASK',    'ZZ',                       'Terms',        'terms',  'Terms',        'Terms',      'Terms',      1,    0,       0, 0,         0,         0, '', '', '', '');
+INSERT INTO task_type_details VALUES
+(37,10,1,0,1,1,0,1,0,'TWB Voice',                          'TWB Voice',                           '#B02323','',                           'SHELLTASK',    'ZZ',                       'Terms',        'terms',  'Terms',        'Terms',      'Terms',      1,    0,       0, 0,         0,         0, '', '', '', '');
 /*
 # "Labour Hours" or "Words" etc. for when user enters pricing rates
 UPDATE task_type_details SET pricing_and_recognition_unit_text_hours='Words' WHERE type_enum=1;
