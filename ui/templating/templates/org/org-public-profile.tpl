@@ -642,7 +642,7 @@
 
       {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER + $NGO_ADMIN + $NGO_PROJECT_OFFICER)}
         <a href="{urlFor name="invite_admins" options="org_id.$org_id"}" class='pull-right btn btn-success'>
-            <i class="icon-star icon-white"></i> Invite New User to be Assigned Role
+            <i class="icon-star icon-white"></i> Add users and assign roles
         </a>
       {/if}
     </h1>

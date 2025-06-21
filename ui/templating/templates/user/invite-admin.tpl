@@ -1,7 +1,7 @@
 {include file="header.tpl"}
 
     <div class="page-header">
-            <h1>Invite a new User to TWB Platform to be Assigned a Role for {$orgName}</h1>
+            <h1>User Management for {$orgName}</h1>
     </div>
 
     {if isset($flash['error'])}
@@ -25,7 +25,7 @@
         </div>
     {/if}
 <div class="row-fluid">
-        
+    <div class="span5>
         <form method="post" action="{urlFor name="invite_admins" options="org_id.$org_id"}" accept-charset="utf-8">
             <label for="role"><strong>Select Role</strong></label>
             <select name ="role" style="width: 300px">
@@ -46,6 +46,11 @@
                 </button>
             </div>
         </form>
+    </div>
+    <div class="span3">
+        Introduce the email and select a role for the user. Existing users will be given the new role, new users will be invited to join the system. Read more 
+        <a href="https://communitylibrary.translatorswb.org/books/12-self-managed-partners/page/twb-platform" target="_blank">here</a>
+    </div>
 </div>
 
 {include file="invitations.tpl"}        
