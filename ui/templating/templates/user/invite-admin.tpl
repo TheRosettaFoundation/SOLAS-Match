@@ -25,7 +25,7 @@
         </div>
     {/if}
 <div class="row-fluid">
-    <div class="span5">
+    <div class="span4">
         <form method="post" action="{urlFor name="invite_admins" options="org_id.$org_id"}" accept-charset="utf-8">
             <label for="role"><strong>Select Role</strong></label>
             <select name ="role" style="width: 300px">
@@ -47,7 +47,7 @@
             </div>
         </form>
     </div>
-    <div class="span3">
+    <div class="span2">
         Introduce the email and select a role for the user. Existing users will be given the new role, new users will be invited to join the system. Read more 
         <a href="https://communitylibrary.translatorswb.org/books/12-self-managed-partners/page/twb-platform" target="_blank">here</a>
     </div>
