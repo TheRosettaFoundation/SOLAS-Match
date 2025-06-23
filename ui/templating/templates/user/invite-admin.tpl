@@ -48,8 +48,8 @@
         </form>
     </div>
     <div class="span2">
-        Introduce the email and select a role for the user. Existing users will be given the new role, new users will be invited to join the system. Read more 
-        <a href="https://communitylibrary.translatorswb.org/books/12-self-managed-partners/page/twb-platform" target="_blank">here</a>
+        Introduce the email and select a role for the user. Existing users will be given the new role, new users will be invited to join the system.
+        <a href="https://communitylibrary.translatorswb.org/books/12-self-managed-partners/page/twb-platform" target="_blank">Read more here</a>
     </div>
 </div>
 
