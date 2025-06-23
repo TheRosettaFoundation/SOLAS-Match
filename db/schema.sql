@@ -7100,6 +7100,11 @@ BEGIN
     ) THEN
         SELECT 0 AS result;
 
+    ELSEIF EXISTS (
+        SELECT 1 FROM TaskClaims WHERE task_id=taskID AND user_id=userID
+    ) THEN
+        SELECT 0 AS result;
+
     ELSEIF NOT EXISTS (
         SELECT t.id
         FROM Tasks t
@@ -7173,6 +7178,11 @@ BEGIN
             t.id=taskID AND
             oa.user_id=userID AND
             roles&(@SITE_ADMIN | @PROJECT_OFFICER | @COMMUNITY_OFFICER | @NGO_ADMIN | @NGO_PROJECT_OFFICER)!=0
+    ) THEN
+        SELECT 0 AS result;
+
+    ELSEIF EXISTS (
+        SELECT 1 FROM TaskClaims WHERE task_id=taskID AND user_id=userID
     ) THEN
         SELECT 0 AS result;
 
@@ -7276,6 +7286,14 @@ BEGIN
             p.id=projectID AND
             oa.user_id=userID AND
             roles&(@SITE_ADMIN | @PROJECT_OFFICER | @COMMUNITY_OFFICER | @NGO_ADMIN | @NGO_PROJECT_OFFICER)!=0
+    ) THEN
+        SELECT 0 AS result;
+
+    ELSEIF EXISTS (
+        SELECT 1
+        FROM Tasks       t
+        JOIN TaskClaims tc ON t.id=tc.task_id AND user_id=userID
+        WHERE t.project_id=projectID
     ) THEN
         SELECT 0 AS result;
 
