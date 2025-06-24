@@ -164,8 +164,8 @@ class AdminRouteHandler
             }
             }
 
-            if (isset($post['verify']) && (($roles & (SITE_ADMIN | COMMUNITY_OFFICER)) || (($roles & (NGO_ADMIN)) && $adminDao->current_user_is_NGO_admin_or_PO_for_special_registration_email($userId, $post['userEmail'])))) {
-                if ($userDao->finishRegistrationManually($post['userEmail'])) {
+            if (isset($post['verify']) && (($roles & (SITE_ADMIN | COMMUNITY_OFFICER)) || (($roles & (NGO_ADMIN)) && $adminDao->current_user_is_NGO_admin_or_PO_for_special_registration_email($userId, trim($post['userEmail']))))) {
+                if ($userDao->finishRegistrationManually(trim($post['userEmail']))) {
                     UserRouteHandler::flashNow('verifySuccess', 'Email verified, the user can now login with email and password.');
                 } else {
                     UserRouteHandler::flashNow('verifyError', 'Not found, either the user never registered with email and password or they have already been verified.');
@@ -190,7 +190,7 @@ class AdminRouteHandler
             }
 
             if (($roles & SITE_ADMIN) && isset($post['addAdmin'])) {
-                $user = $userDao->getUserByEmail($post['userEmail']);
+                $user = $userDao->getUserByEmail(trim($post['userEmail']));
                 if (is_object($user)) {
                     $adminDao->adjust_org_admin($user->getId(), 0, 0, $post['admin_type']);
                     UserRouteHandler::flashNow('add_admin_success', 'Role Added Successfully');
@@ -216,7 +216,7 @@ class AdminRouteHandler
             }
             if (($roles & (SITE_ADMIN | COMMUNITY_OFFICER)) && isset($post['banUser']) && $post['userEmail'] != '') {
                 $bannedUser = new Common\Protobufs\Models\BannedUser();
-                $user = $userDao->getUserByEmail(urlencode($post['userEmail']));
+                $user = $userDao->getUserByEmail(urlencode(trim($post['userEmail'])));
                 
                 $bannedUser->setUserId($user->getId());
                 $bannedUser->setUserIdAdmin($userId);
@@ -234,7 +234,7 @@ class AdminRouteHandler
                 $adminDao->unBanUser($post['userId']);
             }
             if (($roles & (SITE_ADMIN | COMMUNITY_OFFICER)) && isset($post['deleteUser']) && $post['userEmail'] != '') {
-                $user = $userDao->getUserByEmail(urlencode($post['userEmail']));
+                $user = $userDao->getUserByEmail(urlencode(trim($post['userEmail'])));
                 if (!is_null($user)) {
                     $userDao->deleteUser($user->getId());
                     UserRouteHandler::flashNow(
@@ -250,7 +250,7 @@ class AdminRouteHandler
             }
             if (($roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER)) && isset($post['revokeTask']) && $post['revokeTask'] != '') {
                 $taskId = filter_var($post['taskId'], FILTER_VALIDATE_INT);
-                $userToRevokeFrom = $userDao->getUserByEmail(urlencode($post['userEmail']));
+                $userToRevokeFrom = $userDao->getUserByEmail(urlencode(trim($post['userEmail'])));
                 if ($taskId && !is_null($userToRevokeFrom)) {
                     $task = $taskDao->getTask($taskId);
                     $projectDao = new DAO\projectDao();
