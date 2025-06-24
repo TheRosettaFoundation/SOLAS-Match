@@ -14742,6 +14742,43 @@ END//
 DELIMITER ;
 
 
+DROP PROCEDURE IF EXISTS `insert_paid_assigned_completed_shell_task`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_paid_assigned_completed_shell_task`(IN uID INT, IN type INT, IN pID INT, IN name VARCHAR(128), IN wc INT, IN sCode VARCHAR(3), IN sCC VARCHAR(4), IN tCode VARCHAR(3), IN tCC VARCHAR(4), IN taskComment VARCHAR(4096))
+BEGIN
+    SELECT l.id INTO @sID  FROM Languages l WHERE l.code=sCode;
+    SELECT l.id INTO @tID  FROM Languages l WHERE l.code=tCode;
+    SELECT c.id INTO @scid FROM Countries c WHERE c.code=sCC;
+    SELECT c.id INTO @tcid FROM Countries c WHERE c.code=tCC;
+
+    INSERT INTO Tasks (project_id, title, `word-count`, word_count_partner_weighted, word_count_original, source_quantity, `language_id-source`, `language_id-target`, `created-time`,     comment, `country_id-source`, `country_id-target`, `deadline`, `task-type_id`, `task-status_id`, published)
+    VALUES            (       pID,  name,           wc,                          wc,                  wc,              wc,                 @sID,                 @tID,          NOW(), taskComment,               @scid,               @tcid,      NOW(),           type,                4,         0);
+    SELECT LAST_INSERT_ID() INTO @id;
+
+    INSERT INTO RequiredTaskQualificationLevels (task_id, required_qualification_level)
+                                         VALUES (    @id,                            1);
+    CALL set_paid_status(@id);
+
+    INSERT INTO TaskClaims (task_id, user_id, `claimed-time`) VALUES (@id, uID, NOW());
+
+    INSERT INTO tasks_status             (task_id, status_id, claimant_id)
+    VALUES                               (    @id,         4,         uID);
+    INSERT INTO tasks_status_audit_trail (task_id, status_id, claimant_id, changed_time)
+    VALUES                               (    @id,         4,         uID,        NOW());
+
+    REPLACE INTO TaskCompleteDates (task_id, complete_date) VALUES (@id, NOW());
+
+    SET @linguist_t_code=NULL;
+    SELECT linguist_t_code INTO @linguist_t_code FROM linguist_payment_informations lpi WHERE lpi.user_id=uID;
+    IF @linguist_t_code IS NULL OR @linguist_t_code='' THEN
+        CALL insert_queue_request(3, 39, 0, 0, 0, 0, @id, uID, ''); # Request linguist_t_code
+    END IF;
+
+    CALL insert_queue_request(3, 101, 0, 0, 0, 0, @id, 0, ''); # sendTaskUploadNotifications
+END//
+DELIMITER ;
+
+
 /*---------------------------------------end of procs----------------------------------------------*/
 
 
