@@ -91,7 +91,7 @@
                     </div>
                   </div>
 
-                    {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER)}
+                    {if $roles&($SITE_ADMIN + $PROJECT_OFFICER) && $task->getTaskType() != TaskTypeEnum::TRANSLATION}
                     <div >
                         <label for="required_qualification_level" class="form-label"><strong>{Localisation::getTranslation('required_qualification_level')}</strong></label>
                         <select class="form-control" name="required_qualification_level" id="required_qualification_level" {if $task_status_id > TaskStatusEnum::PENDING_CLAIM}disabled{/if} style="width: 400px">
