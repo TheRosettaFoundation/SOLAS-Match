@@ -621,7 +621,7 @@ error_log("createTaskDirectly: $args");
     public function getRequiredTaskQualificationLevel($task_id)
     {
         $result = LibAPI\PDOWrapper::call('getRequiredTaskQualificationLevel', LibAPI\PDOWrapper::cleanse($task_id));
-        if (empty($result)) return 1;
+        if (empty($result) || $result[0]['required_qualification_level'] == 0) return 1;
         return $result[0]['required_qualification_level'];
     }
 
