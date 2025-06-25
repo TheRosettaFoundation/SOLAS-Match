@@ -140,7 +140,7 @@
                 </td>
             </tr>
             {/if}
-            {if false && !empty($required_qualification_for_details)}
+            {if !empty($required_qualification_for_details)}
             <tr>
                 <td colspan="3" style="padding-bottom: 40px"/>
             </tr>

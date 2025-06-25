@@ -216,7 +216,7 @@
 
             {/if}
 
-            {if false && !empty($required_qualification_for_details)}
+            {if !empty($required_qualification_for_details)}
 
             <div class="table-responsive mt-4">
             <table class="table table-borderless">
