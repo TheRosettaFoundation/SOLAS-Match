@@ -1447,6 +1447,7 @@ class TaskRouteHandler
                 'user_within_limitations' => $taskDao->user_within_limitations($user_id, $task_id),
                 'complete_date' => $task->getTaskStatus() == Common\Enums\TaskStatusEnum::COMPLETE ? $taskDao->get_task_complete_date($task_id): 0,
                 'max_translation_deadline' => $projectDao->max_translation_deadline($task),
+                'required_qualification_for_details' => $taskDao->getRequiredTaskQualificationLevel($task_id),
         ));
 
         return UserRouteHandler::render("task/task.view.tpl", $response);
