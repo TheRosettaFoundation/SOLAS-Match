@@ -2739,6 +2739,8 @@ error_log("result: $result");//(**)
             'moodle_datas'   => $userDao->get_moodle_data_for_user($user_id),
             'linguist_orgs_for_admin' => $linguist_orgs_for_admin,
             'get_user_type' => $taskDao->get_user_type($user_id),
+            'user_verified' => $userDao->isUserVerified($user_id),
+            'terms_accepted' => $userDao->terms_accepted($user_id),
         ));
         return UserRouteHandler::render("user/user-public-profile.tpl", $response);
     }
