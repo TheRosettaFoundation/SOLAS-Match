@@ -41,7 +41,7 @@
     <tbody>
         {foreach $errors as $error}
         <tr>
-            <td>$error['error_date']</td>
+            <td>{$error['error_date']}</td>
             <td><a href="{urlFor name="task-view" options="task_id.{$error['task_id']}"}" target="_blank">{$error['task_id']}</a></td>
             <td>{$error['message']}</td>
         </tr>
