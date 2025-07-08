@@ -532,7 +532,7 @@ class AdminRouteHandler
         global $template_data;
         $statsDao = new DAO\StatisticsDao();
 
-        $template_data['errors'] = $statsDao->sun_po_errors();
+        $template_data['errors'] = $statsDao->get_sun_po_errors();
         return UserRouteHandler::render('admin/sun_po_errors.tpl', $response);
     }
 
