@@ -1914,6 +1914,10 @@ error_log("Create PO success: $po_number, $task_id");
                 LibAPI\PDOWrapper::call('queue_po_response', LibAPI\PDOWrapper::cleanseWrapStr($po_number) . ',' . LibAPI\PDOWrapper::cleanseWrapStr($result) . ',' . LibAPI\PDOWrapper::cleanse($task_id)); // Retry in 1 minute
 error_log("Create PO wait: $po_number, $task_id");
             } else {
+                $matches = [];
+                if (preg_match('#<Message>(.*?)</Message>#', $result, $matches)) {
+                    LibAPI\PDOWrapper::call('insert_sun_po_error', LibAPI\PDOWrapper::cleanse($task_id) . ',' . LibAPI\PDOWrapper::cleanseWrapStr($matches[1]));
+                }
                 $data = [
                     'requestReference' => $po_number,
                     'component' => 'PurchaseOrder',

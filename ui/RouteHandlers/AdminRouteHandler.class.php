@@ -69,6 +69,12 @@ class AdminRouteHandler
             ->setName('po_readyness_report');
 
         $app->get(
+            '/sun_po_errors[/]',
+            '\SolasMatch\UI\RouteHandlers\AdminRouteHandler:sun_po_errors')
+            ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin_any_or_FINANCE')
+            ->setName('sun_po_errors');
+
+        $app->get(
             '/sow_report[/]',
             '\SolasMatch\UI\RouteHandlers\AdminRouteHandler:sow_report')
             ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin_any_or_FINANCE')
@@ -519,6 +525,15 @@ class AdminRouteHandler
 
         $template_data['tasks'] = $statsDao->po_readyness_report();
         return UserRouteHandler::render('admin/po_readyness_report.tpl', $response);
+    }
+
+    public function sun_po_errors(Request $request, Response $response)
+    {
+        global $template_data;
+        $statsDao = new DAO\StatisticsDao();
+
+        $template_data['errors'] = $statsDao->sun_po_errors();
+        return UserRouteHandler::render('admin/sun_po_errors.tpl', $response);
     }
 
     public function sow_report(Request $request, Response $response)

@@ -14727,6 +14727,32 @@ END//
 DELIMITER ;
 
 
+CREATE TABLE IF NOT EXISTS `sun_po_errors` (
+  task_id    BIGINT UNSIGNED NOT NULL,
+  message    TEXT COLLATE utf8mb4_unicode_ci,
+  error_date DATETIME NOT NULL,
+  KEY (task_id),
+  KEY (error_date)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+DROP PROCEDURE IF EXISTS `insert_sun_po_error`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_sun_po_error`(IN tID BIGINT UNSIGNED, IN m TEXT)
+BEGIN
+    INSERT INTO sun_po_errors (task_id, message, error_date)
+    VALUES                    (    tID,       m,      NOW());
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `get_sun_po_errors`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_sun_po_errors`()
+BEGIN
+    SELECT * FROM sun_po_errors ORDER BY error_date DESC;
+END//
+DELIMITER ;
+
+
 CREATE TABLE IF NOT EXISTS linguist_t_code_maps (
   user_id         INT UNSIGNED,
   linguist_t_code VARCHAR(255),

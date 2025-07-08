@@ -31,6 +31,8 @@
 {if !empty($tasks)}
 
 <h2 style="text-align:center;">Purchase Order Readiness Report</h2>
+<a href="{urlFor name="sun_po_errors"}" target="_blank">Sun Purchase Order Errors</a>
+<br />
 
 <table id="myTable" style="overflow-wrap: break-word;" class="container table table-striped">
     <thead>
