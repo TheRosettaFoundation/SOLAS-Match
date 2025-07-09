@@ -1915,9 +1915,12 @@ error_log("Create PO success: $po_number, $task_id");
 error_log("Create PO wait: $po_number, $task_id");
             } else {
                 $matches = [];
+error_log("AGAIN PO response: $result");
                 if (preg_match('#<Message>(.*?)</Message>#', $result, $matches)) {
+error_log('Parms: " . LibAPI\PDOWrapper::cleanse($task_id) . ',' . LibAPI\PDOWrapper::cleanseWrapStr($matches[1]));
                     LibAPI\PDOWrapper::call('insert_sun_po_error', LibAPI\PDOWrapper::cleanse($task_id) . ',' . LibAPI\PDOWrapper::cleanseWrapStr($matches[1]));
                 }
+else error_log("NO MATCH");
                 $data = [
                     'requestReference' => $po_number,
                     'component' => 'PurchaseOrder',
