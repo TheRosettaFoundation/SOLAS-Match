@@ -1916,7 +1916,7 @@ error_log("Create PO wait: $po_number, $task_id");
             } else {
                 $matches = [];
                 if (preg_match('#<Message>(.*?)</Message>#s', $result, $matches)) {
-                    LibAPI\PDOWrapper::call('insert_sun_po_error', LibAPI\PDOWrapper::cleanse($task_id) . ',' . LibAPI\PDOWrapper::cleanseWrapStr($matches[1]));
+                    LibAPI\PDOWrapper::call('insert_sun_po_error', LibAPI\PDOWrapper::cleanse($task_id) . ',' . LibAPI\PDOWrapper::cleanseWrapStr(str_replace("\n", '<br />', $matches[1])));
                 }
                 $data = [
                     'requestReference' => $po_number,
