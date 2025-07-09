@@ -82,7 +82,7 @@
                             <div class="mb-3 ">
                                     {if !empty($userPersonalInfo->getFirstName()) && !empty($userPersonalInfo->getLastName())}<h3 class="fw-bold mb-3">{TemplateHelper::uiCleanseHTML($userPersonalInfo->getFirstName())} {TemplateHelper::uiCleanseHTML($userPersonalInfo->getLastName())}
                                         {if $roles&($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
-                                            {if !$user_verified}(Not verified){elseif $terms_accepted < 3}(Registration not fully complete){/if}
+                                            {if !$user_verified}(Email not verified){elseif $terms_accepted < 3}(Registration not fully complete){/if}
                                         {/if}
                                     </h3>{/if}
 
