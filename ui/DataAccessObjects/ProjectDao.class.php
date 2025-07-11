@@ -1915,7 +1915,7 @@ error_log("Create PO success: $po_number, $task_id");
 error_log("Create PO wait: $po_number, $task_id");
             } else {
                 $matches = [];
-                if (preg_match('#<Message>(.*?)</Message>#s', $result, $matches)) {
+                if (preg_match('#<Message>(.*?)</Message>#s', $result, $matches) || preg_match('#"errors":\[(.*?)\]#s', $result, $matches)) {
                     LibAPI\PDOWrapper::call('insert_sun_po_error', LibAPI\PDOWrapper::cleanse($task_id) . ',' . LibAPI\PDOWrapper::cleanseWrapStr(str_replace("\n", '<br />', $matches[1])));
                 }
                 $data = [
