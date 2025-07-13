@@ -54,6 +54,7 @@ class UserSession
     
     public static function setReferer($ref)
     {
+error_log("AUTH... _SESSION['ref']: {$_SESSION['ref']}, new referer for redirect: $ref");
         $_SESSION['ref'] = (string)$ref;
     }
 
