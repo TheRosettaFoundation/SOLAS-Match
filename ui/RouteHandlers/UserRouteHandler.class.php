@@ -837,12 +837,10 @@ class UserRouteHandler
                     );
                     UserRouteHandler::flashNow('error', $error);
                 }
-if (is_null($user)) error_log("login fail... login template");
                 if (!is_null($user)) {
                     error_log("Password, Login: {$post['email']}");
                     Common\Lib\UserSession::setSession($user->getId());
                     $request_url = Common\Lib\UserSession::getReferer();
-error_log("login success getReferer, redirect to: $request_url ... clearReferer()");
                     Common\Lib\UserSession::clearReferer();
 
                     // Check have we previously been redirected from SAML to do login, if so get return address so we can redirect to it below

@@ -156,7 +156,6 @@ class Middleware
         if (!Common\Lib\UserSession::getCurrentUserID()) {
             Common\Lib\UserSession::setReferer($request->getUri());
             \SolasMatch\UI\RouteHandlers\UserRouteHandler::flash('error', Localisation::getTranslation('common_login_required_to_access_page'));
-error_log("authUserIsLoggedIn setReferer({$request->getUri()}) ... login route handler");
             return $app->getResponseFactory()->createResponse()->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('login'));
         }
 
@@ -234,7 +233,6 @@ error_log("authUserIsLoggedIn setReferer({$request->getUri()}) ... login route h
 
         \SolasMatch\UI\RouteHandlers\UserRouteHandler::flash('error', 'Site Admin login required to access page.');
 
-error_log("authIsSiteAdmin setReferer({$request->getUri()}) ... login route handler");
         Common\Lib\UserSession::setReferer($request->getUri());
         return $app->getResponseFactory()->createResponse()->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('login'));
     }
