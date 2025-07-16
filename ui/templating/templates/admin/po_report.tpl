@@ -25,6 +25,9 @@
             margin-left: auto;
             margin-right: auto;
         }
+        td {
+            text-align: left;
+        }
     </style>
 </head>
 <body>
@@ -39,13 +42,8 @@
         <th>Supplier</th>
         <th>Status</th>
         <th>Creation date</th>
-        <th>Approver mail</th>
-        <th>Approval date</th>
-        <th>Total Zahara</th>
-        <th>Total Tasks Assigned to PO</th>
-        <th>Difference</th>
-        <th>Total Tasks Completed for PO</th>
-        <th>Total Tasks Waived for PO</th>
+        <th>Total</th>
+        <th>PR #</th>
     </thead>
     <tbody>
         {foreach $pos as $po}
@@ -54,13 +52,8 @@
             <td>{$po['supplier']}</td>
             <td>{$po['status']}</td>
             <td>{$po['creation_date']}</td>
-            <td>{$po['approver_mail']}</td>
-            <td>{$po['approval_date']}</td>
-            <td>{$po['total']} {$po['currency']}</td>
-            <td>${round($po['total_tasks_for_po'], 2)}</td>
-            <td>{if round($po['total'] - $po['total_tasks_for_po'], 2) != 0}<strong><span style="color: red">{round($po['total'] - $po['total_tasks_for_po'], 2)}</span></strong>{/if}</td>
-            <td>${round($po['total_completed_tasks_for_po'], 2)}</td>
-            <td>${round($po['total_waived_tasks_for_po'], 2)}</td>
+            <td>${$po['total']}</td>
+            <td><a href="{urlFor name="sow_report"}?pr={$po['purchase_requisition']}" target="_blank">{$po['purchase_requisition']}</a></td>
         {/foreach}
     </tbody>
 </table>

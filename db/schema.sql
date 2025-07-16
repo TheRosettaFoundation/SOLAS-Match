@@ -13751,9 +13751,10 @@ BEGIN
         MAX(currency)           AS currency,
         MAX(description)        AS description,
         MAX(division_name)      AS division_name,
-        MAX(status)             AS status,
+        MAX(pos.status)         AS status,
         MAX(approver_mail)      AS approver_mail,
         MAX(approval_date)      AS approval_date,
+        MAX(pcd.purchase_requisition) AS purchase_requisition,
         SUM(IF(1                                                     , IF(t.`word-count`>1, IF(ttd.divide_rate_by_60, t.`word-count`*tp.unit_rate/60, t.`word-count`*tp.unit_rate), 0), 0)) AS total_tasks_for_po,
         SUM(IF(t.`task-status_id`=4                                  , IF(t.`word-count`>1, IF(ttd.divide_rate_by_60, t.`word-count`*tp.unit_rate/60, t.`word-count`*tp.unit_rate), 0), 0)) AS total_completed_tasks_for_po,
         SUM(IF(tp.payment_status IN ('In-kind', 'In-house', 'Waived'), IF(t.`word-count`>1, IF(ttd.divide_rate_by_60, t.`word-count`*tp.unit_rate/60, t.`word-count`*tp.unit_rate), 0), 0)) AS total_waived_tasks_for_po
@@ -13761,6 +13762,7 @@ BEGIN
     JOIN TaskPaids               tp ON pos.purchase_order=tp.purchase_order
     JOIN Tasks                    t ON tp.task_id=t.id
     JOIN task_type_details      ttd ON t.`task-type_id`=ttd.type_enum
+    JOIN project_complete_dates pcd ON t.project_id=pcd.project_id
     WHERE
         pos.creation_date>='2024-06-18 10:18:16' AND
         tp.processed>=0
