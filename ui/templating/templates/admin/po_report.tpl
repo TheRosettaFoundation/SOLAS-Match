@@ -25,7 +25,7 @@
             margin-left: auto;
             margin-right: auto;
         }
-        td {
+        .make_left {
             text-align: left;
         }
     </style>
@@ -48,12 +48,12 @@
     <tbody>
         {foreach $pos as $po}
         <tr>
-            <td><a href="{urlFor name="sow_report"}?po={$po['purchase_order']}" target="_blank">{$po['purchase_order']}</a></td>
-            <td>{$po['supplier']}</td>
-            <td>{$po['status']}</td>
-            <td>{$po['creation_date']}</td>
-            <td>${$po['total']}</td>
-            <td><a href="{urlFor name="sow_report"}?pr={$po['purchase_requisition']}" target="_blank">{$po['purchase_requisition']}</a></td>
+            <td class="make_left"><a href="{urlFor name="sow_report"}?po={$po['purchase_order']}" target="_blank">{$po['purchase_order']}</a></td>
+            <td class="make_left">{$po['supplier']}</td>
+            <td class="make_left">{$po['status']}</td>
+            <td class="make_left">{$po['creation_date']}</td>
+            <td class="make_left">${$po['total']}</td>
+            <td class="make_left"><a href="{urlFor name="sow_report"}?pr={$po['purchase_requisition']}" target="_blank">{$po['purchase_requisition']}</a></td>
         {/foreach}
     </tbody>
 </table>
