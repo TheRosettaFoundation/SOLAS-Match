@@ -26,7 +26,7 @@
             margin-right: auto;
         }
         .make_left {
-            text-align: left;
+            text-align: left !important;
         }
     </style>
 </head>
