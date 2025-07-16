@@ -15,7 +15,7 @@
     <script type="text/javascript">
       $(document).ready(function(){
         var table = $('#myTable').DataTable({ "paging": false });
-        table.order([0, 'asc']).draw();
+        table.order([0, 'desc']).draw();
       });
     </script>
 
