@@ -40,6 +40,7 @@
     <thead>
         <th>PO #</th>
         <th>Supplier</th>
+        <th>T-Code</th>
         <th>Status</th>
         <th>Creation date</th>
         <th>Total</th>
@@ -50,6 +51,7 @@
         <tr>
             <td class="make_left"><a href="{urlFor name="sow_report"}?po={$po['purchase_order']}" target="_blank">{$po['purchase_order']}</a></td>
             <td class="make_left">{$po['supplier']}</td>
+            <td class="make_left">{$po['linguist_t_code']}</td>
             <td class="make_left">{$po['status']}</td>
             <td class="make_left">{$po['creation_date']}</td>
             <td class="make_left">${$po['total']}</td>

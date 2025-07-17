@@ -13695,6 +13695,7 @@ BEGIN
         tc.user_id,
         IFNULL(i.linguist_name, IFNULL(lpi.linguist_name, IFNULL(CONCAT(upi.`first-name`, ' ', upi.`last-name`), ''))) AS linguist,
         c.`en-name` AS country,
+        lpi.linguist_t_code,
         lpi.google_drive_link,
         IFNULL(i.amount, SUM(IF(t.`word-count`>1, IF(ttd.divide_rate_by_60, t.`word-count`*tp.unit_rate/60, t.`word-count`*tp.unit_rate), 0))) AS total_expected_cost,
         i.status,
@@ -13746,6 +13747,7 @@ BEGIN
         pos.purchase_order,
         MAX(pos.creation_date)  AS creation_date,
         MAX(supplier)           AS supplier,
+        MAX(lpi.linguist_t_code) AS linguist_t_code,
         MAX(supplier_reference) AS supplier_reference,
         MAX(total)              AS total,
         MAX(currency)           AS currency,
@@ -13763,6 +13765,8 @@ BEGIN
     JOIN Tasks                    t ON tp.task_id=t.id
     JOIN task_type_details      ttd ON t.`task-type_id`=ttd.type_enum
     JOIN project_complete_dates pcd ON t.project_id=pcd.project_id
+    LEFT JOIN TaskClaims         tc ON t.id=tc.task_id
+    LEFT JOIN linguist_payment_informations lpi ON tc.user_id=lpi.user_id
     WHERE
         pos.creation_date>='2024-06-18 10:18:16' AND
         tp.processed>=0

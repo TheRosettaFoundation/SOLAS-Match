@@ -53,7 +53,7 @@
     <tbody>
         {foreach $tasks as $task}
         <tr>
-            <td><a href="{urlFor name="user-public-profile" options="user_id.{$task['user_id']}"}" target="_blank">{TemplateHelper::uiCleanseHTML($task['linguist'])}</a></td>
+            <td><a href="{urlFor name="user-public-profile" options="user_id.{$task['user_id']}"}" target="_blank">{TemplateHelper::uiCleanseHTML($task['linguist'])}</a><br />({$task['linguist_t_code']})</td>
             <td>{$task['country']}</td>
             <td><a href="{$task['google_drive_link']}"}" target="_blank">Link to Documentation</a></td>
             <td>${round($task['total_expected_cost'], 2)}</td>
