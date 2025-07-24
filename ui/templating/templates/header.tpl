@@ -216,6 +216,13 @@
                             <a href="{urlFor name="home"}">{Localisation::getTranslation('header_home')}</a>
                         </li> 
                         {/if}
+                        <li> D<select class="form-select" aria-label="Default select example">
+                        <option selected> Dropdown Menu</option>
+                        <option value="1">One</option>
+                        <option value="2">Two</option>
+                        <option value="3">Three</option>
+                        </select>
+                        </li>
                         {if isset($dashboard)}
                              <li {if isset($current_page) && $current_page == 'org-dashboard'}class="active"{/if} >
                                  <a href="{urlFor name="org-dashboard"}">{Localisation::getTranslation('header_dashboard')}</a>
