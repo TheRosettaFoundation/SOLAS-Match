@@ -651,7 +651,6 @@ class UserRouteHandler
                 if ($userDao->finishRegistration($uuid)) {
                     $email = $user->getEmail();
                     error_log("email verification, Login: $email");
-                    UserRouteHandler::flash('success', 'Registration finished, please complete your profile.');
                     return $response->withStatus(302)->withHeader('Location', $userDao->requestAuthCode($email));
                 } else {
                     UserRouteHandler::flash('error', 'Failed to finish registration');  // TODO: remove inline text

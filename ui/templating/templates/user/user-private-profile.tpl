@@ -43,11 +43,6 @@
             {TemplateHelper::uiCleanseHTMLKeepMarkup($flash['error'])}
         </p>
     {/if}
-    {if isset($flash['success'])}
-        <p class="alert alert-success">
-            {TemplateHelper::uiCleanseHTMLKeepMarkup($flash['success'])}
-        </p>
-    {/if}
 
     <h2 class="twb_color">Please complete your profile <span class="tabcounter twb_color tabcounter1"></span></h2>
 
