@@ -2374,7 +2374,7 @@ class UserRouteHandler
         $supported_ngos_paid = $userDao->supported_ngos_paid($user_id);
 
         $show_create_memsource_user = ($roles & SITE_ADMIN) && !$userDao->get_memsource_user($user_id) && ($adminDao->get_roles($user_id) & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER));
-        if (!$show_create_memsource_user && ($roles & SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER) && !$userDao->get_memsource_user($user_id) && in_array($adminDao->get_roles($user_id), [LINGUIST, NGO_LINGUIST, LINGUIST | NGO_LINGUIST]))
+        if (!$show_create_memsource_user && ($roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER)) && !$userDao->get_memsource_user($user_id) && in_array($adminDao->get_roles($user_id), [LINGUIST, NGO_LINGUIST, LINGUIST | NGO_LINGUIST]))
             $show_create_memsource_user = 2;
 
         if ($request->getMethod() === 'POST') {
