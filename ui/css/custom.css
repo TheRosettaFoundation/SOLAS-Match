@@ -144,6 +144,12 @@ a[href^="mailto:"] {
   border-radius: 4px;
 }
 
+/* Show dropdown menu on hover  */
+.nav-item.dropdown:hover .dropdown-menu {
+  display: block;
+  margin-top: 0;
+}
+
 .dropdown-menu a:hover {
   background-color: #eee;
   color: #de8e16;
