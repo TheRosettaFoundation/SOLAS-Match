@@ -2,7 +2,7 @@
 *php~
 *~
 composer.phar
-vendor
+# vendor
 /nbproject/
 /ui/templating/templates_compiled/
 /ui/templating/cache/
