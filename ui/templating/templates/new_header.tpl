@@ -111,9 +111,9 @@
                 </a>
                 <ul class="dropdown-menu" aria-labelledby="hoverDropdown">
                     <li><a class="dropdown-item" href="#">Action -1</a></li>
-                    <li><a class="dropdown-item" href="#">Another -2</a></li>
-                    <li><a class="dropdown-item" href="#">Action -1</a></li>
-                    <li><a class="dropdown-item" href="#">Another -2</a></li>
+                    <li><a class="dropdown-item" href="#">Action -2</a></li>
+                    <li><a class="dropdown-item" href="#">Action -3</a></li>
+                    <li><a class="dropdown-item" href="#">Action -4</a></li>
                 </ul>
                  </li>
                  {/if}
