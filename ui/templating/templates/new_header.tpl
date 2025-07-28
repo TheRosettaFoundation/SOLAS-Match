@@ -104,6 +104,15 @@
                     </li>
                 {/if} 
 
+                <li class="nav-item ms-md-6 fw-bold">
+                <select class="form-select" aria-label="Default select example">
+                                    <option selected>Open this select menu</option>
+                                    <option value="1">One</option>
+                                    <option value="2">Two</option>
+                                    <option value="3">Three</option>
+                    </select>
+                </li>
+
                  {if isset($dashboard)}
                              <li {if isset($current_page) && $current_page == 'org-dashboard'} class="nav-item fw-bold"{/if} >
                                  <a href="{urlFor name="org-dashboard"}" class="fs-5 nav-link fw-bold">{Localisation::getTranslation('header_dashboard')}</a>
