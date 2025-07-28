@@ -185,9 +185,9 @@ a[href^="mailto:"] {
   overflow-y: scroll;
 }
 
-.nav-item.dropdown:hover .dropdown-menu {
-  display: block;
-  margin-top: 0;
+.nav-item.dropdown:hover {
+  color: red;
+  background-color: #f8f9fa;
 }
 
 @media (min-width: 768px) {
