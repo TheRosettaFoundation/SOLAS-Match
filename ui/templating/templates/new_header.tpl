@@ -103,16 +103,20 @@
                     <a href="{urlFor name="home"}" class="fs-5 nav-link fw-bold" {if isset($current_page) && $current_page == 'home'} {/if}>{Localisation::getTranslation('header_home')}</a>
                     </li>
                 {/if} 
+                 {if isset($user)}
 
                 <li class="nav-item dropdown">
-      <a class="nav-link dropdown-toggle" href="#" id="hoverDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-        Dropdown menu
-      </a>
-      <ul class="dropdown-menu" aria-labelledby="hoverDropdown">
-        <li><a class="dropdown-item" href="#">Action</a></li>
-        <li><a class="dropdown-item" href="#">Another action</a></li>
-      </ul>
-    </li>
+                <a class="nav-link dropdown-toggle no-caret " href="#" id="hoverDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    Dropdown menu
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="hoverDropdown">
+                    <li><a class="dropdown-item" href="#">Action -1</a></li>
+                    <li><a class="dropdown-item" href="#">Another -2</a></li>
+                    <li><a class="dropdown-item" href="#">Action -1</a></li>
+                    <li><a class="dropdown-item" href="#">Another -2</a></li>
+                </ul>
+                 </li>
+                 {/if}
 
                  {if isset($dashboard)}
                              <li {if isset($current_page) && $current_page == 'org-dashboard'} class="nav-item fw-bold"{/if} >

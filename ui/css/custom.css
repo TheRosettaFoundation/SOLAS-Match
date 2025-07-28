@@ -191,6 +191,10 @@ a[href^="mailto:"] {
   margin-top: 0;
 }
 
+.no-caret::after {
+  display: none !important;
+}
+
 @media (min-width: 768px) {
   .menu_list {
     height: 100%;
