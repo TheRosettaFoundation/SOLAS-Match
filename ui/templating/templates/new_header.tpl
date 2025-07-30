@@ -150,7 +150,7 @@
                      </li>
                     {* {/if} *}
                     {if !isset($site_admin)}
-                    <li {if isset($current_page) && $current_page == 'faq'}" {/if} > <a  href="https://communitylibrary.translatorswb.org/login" target="_blank" class="dropdown-item">CommunityLibrary</a></li>
+                    <li {if isset($current_page) && $current_page == 'faq'}" {/if} > <a  href="https://communitylibrary.translatorswb.org/login" target="_blank" class="dropdown-item">Community Library</a></li>
                     {/if}
                   
                 </ul>
