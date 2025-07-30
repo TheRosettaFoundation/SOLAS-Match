@@ -200,7 +200,8 @@ a[href^="mailto:"] {
 
 /* Override active/focus style */
 .navbar .nav-link.dropdown-toggle:not(.active):not(:hover):not(:focus) {
-  background-color: transparent;
+  color: inherit !important;
+  background-color: transparent !important;
 }
 
 @media (min-width: 768px) {
