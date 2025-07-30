@@ -272,6 +272,12 @@ a[href^="mailto:"] {
 .dropdown-toggle {
     color: #133978;
 }
+/* Override active/focus style */
+.navbar .nav-link.dropdown-toggle:not(.active):not(:hover):not(:focus) {
+    color: #133978 !important; /* or whatever the default non-active color is */
+    background-color: transparent;
+    font-weight: normal;
+}
 
 @media (min-width: 768px) {
     .menu_list {
