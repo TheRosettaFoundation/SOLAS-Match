@@ -138,7 +138,7 @@
                 </a>
                 <ul class="dropdown-menu" aria-labelledby="hoverDropdown">
                    {if Settings::get('site.forum_enabled') == 'y'}
-                    <li><a href="{Settings::get('site.forum_link')}"  class=" dropdown-item ">{Localisation::getTranslation('common_forum')}</a></li>
+                    <li><a href="{Settings::get('site.forum_link')}" target="_blank" class=" dropdown-item ">{Localisation::getTranslation('common_forum')}</a></li>
                     {/if}
                     {if !isset($site_admin)}
                     <li>
