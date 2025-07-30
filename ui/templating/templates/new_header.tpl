@@ -103,20 +103,7 @@
                     <a href="{urlFor name="home"}" class="fs-5 nav-link fw-bold" {if isset($current_page) && $current_page == 'home'} {/if}>{Localisation::getTranslation('header_home')}</a>
                     </li>
                 {/if} 
-                 {if isset($user)}
-
-                <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle no-caret " href="#" id="hoverDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                    Dropdown menu
-                </a>
-                <ul class="dropdown-menu" aria-labelledby="hoverDropdown">
-                    <li><a class="dropdown-item" href="#">Action -1</a></li>
-                    <li><a class="dropdown-item" href="#">Action -2</a></li>
-                    <li><a class="dropdown-item" href="#">Action -3</a></li>
-                    <li><a class="dropdown-item" href="#">Action -4</a></li>
-                </ul>
-                 </li>
-                 {/if}
+               
 
                  {if isset($dashboard)}
                              <li {if isset($current_page) && $current_page == 'org-dashboard'} class="nav-item fw-bold"{/if} >
@@ -143,6 +130,20 @@
                                 <a href="https://communitylibrary.translatorswb.org/login" target="_blank" class=" fs-5 nav-link fw-bold">Library</a>
                             </li>
                 {/if}
+                  {if isset($user)}
+
+                <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle no-caret " href="#" id="hoverDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    Resources
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="hoverDropdown">
+                    <li><a href="{Settings::get('site.forum_link')}"  class=" dropdown-item ">{Localisation::getTranslation('common_forum')}</a></li>
+                    <li> <a href="https://elearn.translatorswb.org/" target="_blank" class="dropdown-item">TWB Learning Center</a></li>
+                    <li> <a href="https://communitylibrary.translatorswb.org/login" target="_blank" class="dropdown-item">Library</a></li>
+                  
+                </ul>
+                 </li>
+                 {/if}
                 {if Settings::get('site.forum_enabled') == 'y'}
                     <li>
                         <a href="{Settings::get('site.forum_link')}"  class=" fs-5 nav-link fw-bold">{Localisation::getTranslation('common_forum')}</a>
@@ -185,6 +186,18 @@
                            
                                <img src="{urlFor name='home'}ui/img/night.svg" class="d-none" alt="theme button" id="night">
                             </li>
+                             <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle no-caret " href="#" id="hoverDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                   <img src="https://www.gravatar.com/avatar/{md5( strtolower( trim($user->getEmail())))}?s=20{urlencode("&")}r=g" alt="" />
+                                       {TemplateHelper::uiCleanseHTML($user->getDisplayName())}
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="hoverDropdown">
+                    <li><a href="{urlFor name="user-public-profile" options="user_id.$user_id"}"   class=" dropdown-item ">Profile</a></li>
+                    <li> <a href="{urlFor name="user-public-profile" options="user_id.$user_id"}"  class="dropdown-item">{Localisation::getTranslation('header_log_out')}</a></li>
+                   
+          
+                </ul>
+                 </li>
                             <li class="profile nav-item">
                                 <a href="{urlFor name="user-public-profile" options="user_id.$user_id"}"  class=" fs-5 nav-link fw-bold">
                                     <img src="https://www.gravatar.com/avatar/{md5( strtolower( trim($user->getEmail())))}?s=20{urlencode("&")}r=g" alt="" />
@@ -192,7 +205,7 @@
                                 </a>
                             </li>
                             <li class="logout nav-item" >
-                                <a href="{urlFor name="logout"}" class=" fs-5 nav-link fw-bold">{Localisation::getTranslation('header_log_out')}</a>
+                                <a href="{urlFor name="user-public-profile" options="user_id.$user_id"}"  class=" fs-5 nav-link fw-bold">{Localisation::getTranslation('header_log_out')}</a>
                             </li>
                         {else}
                             <li class="nav-item"><a href="{urlFor name="register"}" class="nav-link fw-bold">Join</a></li>
