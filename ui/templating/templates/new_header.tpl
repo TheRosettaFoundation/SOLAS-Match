@@ -111,12 +111,12 @@
                              </li>
                 {/if}
 
-                {if isset($user_has_active_tasks)}
+                {* {if isset($user_has_active_tasks)}
                     {assign var="tmp_id" value=$user->getId()}
                     <li class="nav-item fw-bold" >
                         <a href="{urlFor name="claimed-tasks" options="user_id.$tmp_id"}" class="fs-5 nav-link fw-bold"  {if isset($current_page) && $current_page == 'claimed-tasks'} class="nav-link " {/if}>{Localisation::getTranslation('header_claimed_tasks')}</a>
                     </li>
-                {/if} 
+                {/if}  *}
 
                 {if isset($show_admin_dashboard)}
                 {assign var="user_id" value=$user->getId()}
@@ -206,6 +206,14 @@
                 <ul class="dropdown-menu" aria-labelledby="hoverDropdown">
                     <li><a href="{urlFor name="user-public-profile" options="user_id.$user_id"}"   class=" dropdown-item ">Profile</a></li>
                     <li> <a href="{urlFor name="logout"}" class="dropdown-item">{Localisation::getTranslation('header_log_out')}</a></li>
+                    
+                    {if isset($user_has_active_tasks)}
+                    {assign var="tmp_id" value=$user->getId()}
+                    <li class="nav-item fw-bold" >
+                        <a href="{urlFor name="claimed-tasks" options="user_id.$tmp_id"}" class="dropdown-item"  {if isset($current_page) && $current_page == 'claimed-tasks'} class="nav-link " {/if}>My Tasks</a>
+                    </li>
+                {/if} 
+                    
                    
           
                 </ul>
