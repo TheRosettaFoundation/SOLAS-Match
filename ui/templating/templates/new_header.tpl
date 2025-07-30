@@ -141,13 +141,13 @@
                     <li><a href="{Settings::get('site.forum_link')}" target="_blank" class=" dropdown-item ">{Localisation::getTranslation('common_forum')}</a></li>
                     {/if}
                     {* {if !isset($site_admin)} *}
-                    {* <li>
+                    <li>
                     {if isset($user)}
                     <a href="https://elearn.translatorswb.org/auth/saml2/login.php?wants&idp=bd3eb3e6241260ee537b9a55145d852d&passive=off" target="_blank" class="dropdown-item">TWB Learning Center</a>
                     {else}
                     <a href="https://elearn.translatorswb.org/" target="_blank" class="dropdown-item">TWB Learning Center</a>
                     {/if}
-                     </li> *}
+                     </li>
                     {* {/if} *}
                     {if !isset($site_admin)}
                     <li {if isset($current_page) && $current_page == 'faq'}" {/if} > <a  href="https://communitylibrary.translatorswb.org/login" target="_blank" class="dropdown-item">Library</a></li>
@@ -183,10 +183,10 @@
                                 <a href="https://twbvoice.org" target="_blank" class=" fs-5 nav-link fw-bold">TWB Voice</a>
                             </li>
                             {/if}
-                        {else}
+                        {* {else}
                             <li class="nav-item">
                                 <a href="https://elearn.translatorswb.org/auth/saml2/login.php?wants&idp=bd3eb3e6241260ee537b9a55145d852d&passive=off" target="_blank" class=" fs-5 nav-link fw-bold">Learn. Center</a>
-                            </li>
+                            </li> *}
                         {/if}
             </ul>
 
