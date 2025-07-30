@@ -168,13 +168,13 @@
                             </li>
                         {/if}
                  {if !isset($site_admin)}
-                            <li class="nav-item">
+                            {* <li class="nav-item">
                                 {if isset($user)}
                                 <a href="https://elearn.translatorswb.org/auth/saml2/login.php?wants&idp=bd3eb3e6241260ee537b9a55145d852d&passive=off" target="_blank" class="fs-5 nav-link fw-bold">TWB Learning Center</a>
                                 {else}
                                 <a href="https://elearn.translatorswb.org/" target="_blank" class=" fs-5 nav-link fw-bold">TWB Learning Center</a>
                                 {/if}
-                            </li>
+                            </li> *}
                             <li class="nav-item">
                                 <a href="https://form.asana.com?k=dlsF11XkOwpfFllbq325dg&d=170818793545926" target="_blank" class=" fs-5 nav-link fw-bold">Feedback?</a>
                             </li>
