@@ -194,6 +194,10 @@ a[href^="mailto:"] {
   display: none !important;
 }
 
+.dropdown-toggle {
+  color: #133978;
+}
+
 @media (min-width: 768px) {
   .menu_list {
     height: 100%;

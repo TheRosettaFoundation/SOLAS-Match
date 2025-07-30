@@ -269,6 +269,9 @@ a[href^="mailto:"] {
 .no-caret::after {
     display: none !important;
 }
+.dropdown-toggle {
+    color: #133978;
+}
 
 @media (min-width: 768px) {
     .menu_list {
