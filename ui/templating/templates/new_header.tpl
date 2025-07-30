@@ -97,7 +97,7 @@
            
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <div class="d-md-flex align-items-center justify-content-around w-100">
-            <ul class="navbar-nav  d-flex align-items-center ">
+            <ul class="navbar-nav   d-flex align-items-center ">
                 {if !isset($admin)}
                     <li class="nav-item ms-md-6 fw-bold">
                     <a href="{urlFor name="home"}" class="fs-5 nav-link fw-bold" {if isset($current_page) && $current_page == 'home'} {/if}>{Localisation::getTranslation('header_home')}</a>
@@ -132,7 +132,7 @@
                 {/if} *}
                
 
-                <li class="nav-item dropdown fw-bold">
+                <li class="nav-item dropdown fw-bold text-primary">
                 <a class="nav-link dropdown-toggle fs-5  fw-bold no-caret " href="#" id="hoverDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                     Resources
                 </a>
