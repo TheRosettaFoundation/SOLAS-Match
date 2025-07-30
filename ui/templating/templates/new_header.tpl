@@ -205,7 +205,7 @@
                 </a>
                 <ul class="dropdown-menu" aria-labelledby="hoverDropdown">
                     <li><a href="{urlFor name="user-public-profile" options="user_id.$user_id"}"   class=" dropdown-item ">Profile</a></li>
-                    <li> <a href="{urlFor name="user-public-profile" options="user_id.$user_id"}"  class="dropdown-item">{Localisation::getTranslation('header_log_out')}</a></li>
+                    <li> <a href="{urlFor name="logout"}" class="dropdown-item">{Localisation::getTranslation('header_log_out')}</a></li>
                    
           
                 </ul>
@@ -217,7 +217,7 @@
                                 </a>
                             </li> *}
                             <li class="logout nav-item" >
-                                <a href="{urlFor name="user-public-profile" options="user_id.$user_id"}"  class=" fs-5 nav-link fw-bold">{Localisation::getTranslation('header_log_out')}</a>
+                                <a href="{urlFor name="logout"}"   class=" fs-5 nav-link fw-bold">{Localisation::getTranslation('header_log_out')}</a>
                             </li>
                         {else}
                             <li class="nav-item"><a href="{urlFor name="register"}" class="nav-link fw-bold">Join</a></li>
