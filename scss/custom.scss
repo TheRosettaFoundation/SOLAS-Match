@@ -269,15 +269,18 @@ a[href^="mailto:"] {
 .no-caret::after {
     display: none !important;
 }
-.dropdown-toggle {
-    color: #133978;
-}
+// .dropdown-toggle {
+//     color: #133978;
+// }
 /* Override active/focus style */
 .navbar .nav-link.dropdown-toggle:not(.active):not(:hover):not(:focus) {
     // color: #133978 !important; /* or whatever the default non-active color is */
 
     color: inherit !important;
     background-color: transparent !important;
+}
+[data-bs-theme="dark"] #hoverDropdown {
+    color: #f8f9fa !important;
 }
 
 @media (min-width: 768px) {

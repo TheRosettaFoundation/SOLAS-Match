@@ -194,14 +194,14 @@ a[href^="mailto:"] {
   display: none !important;
 }
 
-.dropdown-toggle {
-  color: #133978;
-}
-
 /* Override active/focus style */
 .navbar .nav-link.dropdown-toggle:not(.active):not(:hover):not(:focus) {
   color: inherit !important;
   background-color: transparent !important;
+}
+
+[data-bs-theme=dark] #hoverDropdown {
+  color: #f8f9fa !important;
 }
 
 @media (min-width: 768px) {
