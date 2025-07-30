@@ -132,7 +132,7 @@
                 {/if} *}
                   {if isset($user)}
 
-                <li class="nav-item dropdown">
+                <li class="nav-item dropdown fw-bold">
                 <a class="nav-link dropdown-toggle no-caret " href="#" id="hoverDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                     Resources
                 </a>
@@ -168,13 +168,13 @@
                             </li>
                         {/if}
                  {if !isset($site_admin)}
-                            {* <li class="nav-item">
+                            <li class="nav-item">
                                 {if isset($user)}
                                 <a href="https://elearn.translatorswb.org/auth/saml2/login.php?wants&idp=bd3eb3e6241260ee537b9a55145d852d&passive=off" target="_blank" class="fs-5 nav-link fw-bold">TWB Learning Center</a>
                                 {else}
                                 <a href="https://elearn.translatorswb.org/" target="_blank" class=" fs-5 nav-link fw-bold">TWB Learning Center</a>
                                 {/if}
-                            </li> *}
+                            </li>
                             <li class="nav-item">
                                 <a href="https://form.asana.com?k=dlsF11XkOwpfFllbq325dg&d=170818793545926" target="_blank" class=" fs-5 nav-link fw-bold">Feedback?</a>
                             </li>
@@ -216,9 +216,9 @@
                                        {TemplateHelper::uiCleanseHTML($user->getDisplayName())}
                                 </a>
                             </li> *}
-                            {* <li class="logout nav-item" >
+                            <li class="logout nav-item" >
                                 <a href="{urlFor name="user-public-profile" options="user_id.$user_id"}"  class=" fs-5 nav-link fw-bold">{Localisation::getTranslation('header_log_out')}</a>
-                            </li> *}
+                            </li>
                         {else}
                             <li class="nav-item"><a href="{urlFor name="register"}" class="nav-link fw-bold">Join</a></li>
                             <li class="nav-item"><a href="{urlFor name="login"}" class="nav-link fw-bold">{Localisation::getTranslation('common_log_in')}</a></li>
