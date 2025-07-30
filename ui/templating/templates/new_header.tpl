@@ -133,7 +133,7 @@
                
 
                 <li class="nav-item dropdown fw-bold">
-                <a class="nav-link dropdown-toggle no-caret " href="#" id="hoverDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <a class="nav-link dropdown-toggle fs-5  fw-bold no-caret " href="#" id="hoverDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                     Resources
                 </a>
                 <ul class="dropdown-menu" aria-labelledby="hoverDropdown">

@@ -276,7 +276,6 @@ a[href^="mailto:"] {
 .navbar .nav-link.dropdown-toggle:not(.active):not(:hover):not(:focus) {
     color: #133978 !important; /* or whatever the default non-active color is */
     background-color: transparent;
-    font-weight: bold;
 }
 
 @media (min-width: 768px) {
