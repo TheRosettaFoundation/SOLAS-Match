@@ -130,7 +130,7 @@
                                 <a href="https://communitylibrary.translatorswb.org/login" target="_blank" class=" fs-5 nav-link fw-bold">Library</a>
                             </li>
                 {/if} *}
-                  {if isset($user)}
+               
 
                 <li class="nav-item dropdown fw-bold">
                 <a class="nav-link dropdown-toggle no-caret " href="#" id="hoverDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -155,7 +155,7 @@
                   
                 </ul>
                  </li>
-                 {/if}
+               
                 {* {if Settings::get('site.forum_enabled') == 'y'}
                     <li>
                         <a href="{Settings::get('site.forum_link')}"  class=" fs-5 nav-link fw-bold">{Localisation::getTranslation('common_forum')}</a>
@@ -216,9 +216,9 @@
                                        {TemplateHelper::uiCleanseHTML($user->getDisplayName())}
                                 </a>
                             </li> *}
-                            <li class="logout nav-item" >
+                            {* <li class="logout nav-item" >
                                 <a href="{urlFor name="logout"}"   class=" fs-5 nav-link fw-bold">{Localisation::getTranslation('header_log_out')}</a>
-                            </li>
+                            </li> *}
                         {else}
                             <li class="nav-item"><a href="{urlFor name="register"}" class="nav-link fw-bold">Join</a></li>
                             <li class="nav-item"><a href="{urlFor name="login"}" class="nav-link fw-bold">{Localisation::getTranslation('common_log_in')}</a></li>
