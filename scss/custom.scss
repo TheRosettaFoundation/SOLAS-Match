@@ -274,7 +274,7 @@ a[href^="mailto:"] {
 }
 /* Override active/focus style */
 .navbar .nav-link.dropdown-toggle:not(.active):not(:hover):not(:focus) {
-    color: #133978 !important; /* or whatever the default non-active color is */
+    // color: #133978 !important; /* or whatever the default non-active color is */
     background-color: transparent;
 }
 

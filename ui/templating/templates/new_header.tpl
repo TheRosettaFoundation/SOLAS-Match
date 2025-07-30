@@ -138,19 +138,19 @@
                 </a>
                 <ul class="dropdown-menu" aria-labelledby="hoverDropdown">
                    {if Settings::get('site.forum_enabled') == 'y'}
-                    <li><a href="{Settings::get('site.forum_link')}" target="_blank" class=" dropdown-item ">{Localisation::getTranslation('common_forum')}</a></li>
+                    <li><a href="{Settings::get('site.forum_link')}" target="_blank" class=" dropdown-item "> Community Forum</a></li>
                     {/if}
                     {* {if !isset($site_admin)} *}
                     <li>
                     {if isset($user)}
-                    <a href="https://elearn.translatorswb.org/auth/saml2/login.php?wants&idp=bd3eb3e6241260ee537b9a55145d852d&passive=off" target="_blank" class="dropdown-item">TWB Learning Center</a>
+                    <a href="https://elearn.translatorswb.org/auth/saml2/login.php?wants&idp=bd3eb3e6241260ee537b9a55145d852d&passive=off" target="_blank" class="dropdown-item">Learning Center</a>
                     {else}
-                    <a href="https://elearn.translatorswb.org/" target="_blank" class="dropdown-item">TWB Learning Center</a>
+                    <a href="https://elearn.translatorswb.org/" target="_blank" class="dropdown-item">Learning Center</a>
                     {/if}
                      </li>
                     {* {/if} *}
                     {if !isset($site_admin)}
-                    <li {if isset($current_page) && $current_page == 'faq'}" {/if} > <a  href="https://communitylibrary.translatorswb.org/login" target="_blank" class="dropdown-item">Library</a></li>
+                    <li {if isset($current_page) && $current_page == 'faq'}" {/if} > <a  href="https://communitylibrary.translatorswb.org/login" target="_blank" class="dropdown-item">CommunityLibrary</a></li>
                     {/if}
                   
                 </ul>
