@@ -138,7 +138,7 @@
                 </a>
                 <ul class="dropdown-menu" aria-labelledby="hoverDropdown">
                    {if Settings::get('site.forum_enabled') == 'y'}
-                    <li class='p-2 ' ><a href="{Settings::get('site.forum_link')}" target="_blank" class=" dropdown-item "> Community Forum
+                    <li  ><a href="{Settings::get('site.forum_link')}" target="_blank" class=" dropdown-item "> Community Forum
                    
                     </a>
                      <div class=" p-2 fs-5 fw-lighter drop_description">A collaborative space where members ask questions sand build a supportive and knowledge-driven community together.</div>
@@ -146,7 +146,7 @@
                     </li>
                     {/if}
                     {* {if !isset($site_admin)} *}
-                    <li class='p-2 '>
+                    <li >
                     {if isset($user)}
                     <a href="https://elearn.translatorswb.org/auth/saml2/login.php?wants&idp=bd3eb3e6241260ee537b9a55145d852d&passive=off" target="_blank" class="dropdown-item">Learning Center</a>
                     {else}
@@ -156,7 +156,7 @@
                      </li>
                     {* {/if} *}
                     {if !isset($site_admin)}
-                    <li {if isset($current_page) && $current_page == 'faq'}" {/if} class='p-2'> <a  href="https://communitylibrary.translatorswb.org/login" target="_blank" class="dropdown-item">Community Library</a>
+                    <li {if isset($current_page) && $current_page == 'faq'}" {/if} > <a  href="https://communitylibrary.translatorswb.org/login" target="_blank" class="dropdown-item">Community Library</a>
                         <div class=" p-2 fs-5 fw-lighter drop_description">A collaborative space where members can access a wide range of resources, including articles, videos, podcasts, and interactive tools, to support their language learning and cultural exchange. A valuable resource for anyone looking to enhance their linguistic and cultural understanding.</div>
                         </li>
                     {/if}
