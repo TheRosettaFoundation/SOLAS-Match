@@ -260,7 +260,7 @@ a[href^="mailto:"] {
     overflow-y: scroll;
 }
 
-.dropdown-item {
+a .dropdown-item {
     word-break: break-word !important;
 }
 .nav-item.dropdown:hover .dropdown-menu {
