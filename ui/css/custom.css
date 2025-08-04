@@ -191,6 +191,7 @@ a[href^="mailto:"] {
   word-break: break-word;
   overflow-wrap: anywhere;
   display: block; /* ensures it's treated as a block-level element */
+  padding: 10px;
 }
 
 .nav-item.dropdown:hover .dropdown-menu {
