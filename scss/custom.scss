@@ -260,9 +260,12 @@ a[href^="mailto:"] {
     overflow-y: scroll;
 }
 
-a .dropdown-item {
-    word-break: break-word !important;
-    white-space: normal !important;
+/* BUT allow text wrapping inside the drop_description */
+.dropdown-item .drop_description {
+    white-space: normal; /* override nowrap */
+    word-break: break-word;
+    overflow-wrap: anywhere;
+    display: block; /* ensures it's treated as a block-level element */
 }
 .nav-item.dropdown:hover .dropdown-menu {
     display: block;
