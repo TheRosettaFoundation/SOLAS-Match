@@ -187,12 +187,15 @@ a[href^="mailto:"] {
 
 .nav-item.dropdown:hover .dropdown-menu {
   display: block;
-  text-align: center;
   margin-top: 0;
 }
 
 .no-caret::after {
   display: none !important;
+}
+
+.dropdown-toggle {
+  text-align: center;
 }
 
 /* Override active/focus style */
@@ -214,6 +217,9 @@ a[href^="mailto:"] {
     width: 400px;
     border-radius: 4px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  .dropdown-toggle {
+    text-align: start;
   }
 }
 /*!

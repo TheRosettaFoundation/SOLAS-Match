@@ -262,7 +262,6 @@ a[href^="mailto:"] {
 
 .nav-item.dropdown:hover .dropdown-menu {
     display: block;
-    text-align: center;
 
     margin-top: 0;
 }
@@ -270,9 +269,9 @@ a[href^="mailto:"] {
 .no-caret::after {
     display: none !important;
 }
-// .dropdown-toggle {
-//     color: #133978;
-// }
+.dropdown-toggle {
+    text-align: center;
+}
 /* Override active/focus style */
 .navbar .nav-link.dropdown-toggle:not(.active):not(:hover):not(:focus) {
     // color: #133978 !important; /* or whatever the default non-active color is */
@@ -295,6 +294,10 @@ a[href^="mailto:"] {
         border-radius: 4px;
 
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .dropdown-toggle {
+        text-align: start;
     }
 }
 
