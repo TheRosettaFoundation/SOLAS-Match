@@ -198,7 +198,7 @@
                         {/if}
             </ul>
 
-             <ul class="navbar-nav d-flex align-items-center">
+             <ul class="navbar-nav d-flex align-items-center mx-4">
                         {if isset($user)}
                         {assign var="user_id" value=$user->getId()}
                               <li class="nav_item me-2" id="theme">
