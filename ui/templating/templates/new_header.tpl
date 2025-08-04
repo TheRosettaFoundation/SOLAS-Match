@@ -139,7 +139,7 @@
                 <ul class="dropdown-menu" aria-labelledby="hoverDropdown">
                    {if Settings::get('site.forum_enabled') == 'y'}
                     <li ><a href="{Settings::get('site.forum_link')}" target="_blank" class=" dropdown-item "> Community Forum
-                    <div class="fs-5 fw-lighter drop_description text-break">A collaborative space where members ask questions sand build a supportive and knowledge-driven community together.</div>
+                    <div class="fs-5 fw-lighter drop_description text-break mt-2">A collaborative space where members ask questions sand build a supportive and knowledge-driven community together.</div>
                     </a>
                     
                        
@@ -148,11 +148,13 @@
                     {* {if !isset($site_admin)} *}
                     <li >
                     {if isset($user)}
-                    <a href="https://elearn.translatorswb.org/auth/saml2/login.php?wants&idp=bd3eb3e6241260ee537b9a55145d852d&passive=off" target="_blank" class="dropdown-item">Learning Center</a>
+                    <a href="https://elearn.translatorswb.org/auth/saml2/login.php?wants&idp=bd3eb3e6241260ee537b9a55145d852d&passive=off" target="_blank" class="dropdown-item">Learning Center
+                     <div class="  fs-5 fw-lighter drop_description">A dynamic learning center offering resources, tutorials, and interactive content to help users grow their skills, explore new topics, and stay updated. Empowering individuals to learn at their own pace, anytime and anywhere, with support from a vibrant knowledge-sharing community.</div>
+                    </a>
                     {else}
                     <a href="https://elearn.translatorswb.org/" target="_blank" class="dropdown-item">Learning Center</a>
                     {/if}
-                    <div class="  fs-5 fw-lighter drop_description">A dynamic learning center offering resources, tutorials, and interactive content to help users grow their skills, explore new topics, and stay updated. Empowering individuals to learn at their own pace, anytime and anywhere, with support from a vibrant knowledge-sharing community.</div>
+                   
                      </li>
                     {* {/if} *}
                     {if !isset($site_admin)}
