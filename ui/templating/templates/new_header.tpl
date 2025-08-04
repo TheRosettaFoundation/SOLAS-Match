@@ -141,7 +141,7 @@
                     <li class='p-2 ' ><a href="{Settings::get('site.forum_link')}" target="_blank" class=" dropdown-item "> Community Forum
                    
                     </a>
-                     <div class="fs-6 fw-lighter">A collaborative space where members ask questions sand build a supportive and knowledge-driven community together.</div>
+                     <div class=" p-2 fs-5 fw-lighter">A collaborative space where members ask questions sand build a supportive and knowledge-driven community together.</div>
                        
                     </li>
                     {/if}
@@ -152,12 +152,12 @@
                     {else}
                     <a href="https://elearn.translatorswb.org/" target="_blank" class="dropdown-item">Learning Center</a>
                     {/if}
-                    <div class="w-100 p-1">A dynamic learning center offering resources, tutorials, and interactive content to help users grow their skills, explore new topics, and stay updated. Empowering individuals to learn at their own pace, anytime and anywhere, with support from a vibrant knowledge-sharing community.</div>
+                    <div class=" p-2 fs-5 fw-lighter">A dynamic learning center offering resources, tutorials, and interactive content to help users grow their skills, explore new topics, and stay updated. Empowering individuals to learn at their own pace, anytime and anywhere, with support from a vibrant knowledge-sharing community.</div>
                      </li>
                     {* {/if} *}
                     {if !isset($site_admin)}
                     <li {if isset($current_page) && $current_page == 'faq'}" {/if} class='p-2'> <a  href="https://communitylibrary.translatorswb.org/login" target="_blank" class="dropdown-item">Community Library</a>
-                        <div class="w-100 p-1">A collaborative space where members can access a wide range of resources, including articles, videos, podcasts, and interactive tools, to support their language learning and cultural exchange. A valuable resource for anyone looking to enhance their linguistic and cultural understanding.</div>
+                        <div class=" p-2 fs-5 fw-lighter">A collaborative space where members can access a wide range of resources, including articles, videos, podcasts, and interactive tools, to support their language learning and cultural exchange. A valuable resource for anyone looking to enhance their linguistic and cultural understanding.</div>
                         </li>
                     {/if}
                   
