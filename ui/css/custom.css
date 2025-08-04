@@ -225,6 +225,7 @@ a .dropdown-item {
     padding: 14px;
     word-break: break-word !important;
     overflow-wrap: anywhere;
+    word-wrap: normal !important;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   }
 }
