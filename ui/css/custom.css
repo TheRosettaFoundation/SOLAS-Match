@@ -208,6 +208,10 @@ a[href^="mailto:"] {
   color: rgb(178, 174, 174) !important;
 }
 
+.drop_description {
+  text-align: center;
+}
+
 @media (min-width: 768px) {
   .menu_list {
     height: 100%;
@@ -216,6 +220,7 @@ a[href^="mailto:"] {
   .drop_description {
     width: 400px;
     border-radius: 4px;
+    text-align: start;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   }
   .dropdown-toggle {
