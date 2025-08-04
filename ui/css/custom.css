@@ -187,6 +187,7 @@ a[href^="mailto:"] {
 
 a .dropdown-item {
   word-break: break-word !important;
+  white-space: normal !important;
 }
 
 .nav-item.dropdown:hover .dropdown-menu {
