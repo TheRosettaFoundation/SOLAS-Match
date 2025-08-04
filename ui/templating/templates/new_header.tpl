@@ -141,7 +141,7 @@
                     <li  ><a href="{Settings::get('site.forum_link')}" target="_blank" class=" dropdown-item "> Community Forum
                    
                     </a>
-                     <div class=" p-2 fs-5 fw-lighter drop_description">A collaborative space where members ask questions sand build a supportive and knowledge-driven community together.</div>
+                     <div class="fs-5 fw-lighter drop_description">A collaborative space where members ask questions sand build a supportive and knowledge-driven community together.</div>
                        
                     </li>
                     {/if}
