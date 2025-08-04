@@ -138,15 +138,15 @@
                 </a>
                 <ul class="dropdown-menu" aria-labelledby="hoverDropdown">
                    {if Settings::get('site.forum_enabled') == 'y'}
-                    <li class="py-2"><a href="{Settings::get('site.forum_link')}" target="_blank" class=" dropdown-item "> Community Forum
-                    <div class="fs-5 fw-lighter drop_description text-break mt-2">A collaborative space where members ask questions sand build a supportive and knowledge-driven community together.</div>
+                    <li class="py-4"><a href="{Settings::get('site.forum_link')}" target="_blank" class=" dropdown-item "> Community Forum
+                    <div class="fs-5 fw-lighter drop_description text-break mt-2 ">A collaborative space where members ask questions and build a supportive and knowledge-driven community together.</div>
                     </a>
                     
                        
                     </li>
                     {/if}
                     {* {if !isset($site_admin)} *}
-                    <li class="py-2">
+                    <li class="py-4">
                     {if isset($user)}
                     <a href="https://elearn.translatorswb.org/auth/saml2/login.php?wants&idp=bd3eb3e6241260ee537b9a55145d852d&passive=off" target="_blank" class="dropdown-item">Learning Center
                      <div class=" mt-2 fs-5 fw-lighter drop_description">A dynamic learning center offering resources, tutorials, and interactive content to help users grow their skills, explore new topics, and stay updated. Empowering individuals to learn at their own pace, anytime and anywhere, with support from a vibrant knowledge-sharing community.</div>
@@ -160,7 +160,7 @@
                      </li>
                     {* {/if} *}
                     {if !isset($site_admin)}
-                    <li {if isset($current_page) && $current_page == 'faq'}" {/if} class="py-2" > <a  href="https://communitylibrary.translatorswb.org/login" target="_blank" class="dropdown-item">Community Library
+                    <li {if isset($current_page) && $current_page == 'faq'}" {/if} class="py-4" > <a  href="https://communitylibrary.translatorswb.org/login" target="_blank" class="dropdown-item">Community Library
                           <div class=" mt-2 fs-5 fw-lighter drop_description">A collaborative space where members can access a wide range of resources, including articles, videos, podcasts, and interactive tools, to support their language learning and cultural exchange. A valuable resource for anyone looking to enhance their linguistic and cultural understanding.</div>
                         </a>
                       
