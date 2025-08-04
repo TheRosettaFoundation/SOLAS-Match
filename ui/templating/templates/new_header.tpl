@@ -139,7 +139,7 @@
                 <ul class="dropdown-menu" aria-labelledby="hoverDropdown">
                    {if Settings::get('site.forum_enabled') == 'y'}
                     <li class='p-2 ' ><a href="{Settings::get('site.forum_link')}" target="_blank" class=" dropdown-item "> Community Forum</a>
-                       <div class="py-2">A collaborative space where members ask questions, share ideas, find solutions, and build a supportive and knowledge-driven community together.</div>
+                       <div class="py-2">A collaborative space where members ask questions sand build a supportive and knowledge-driven community together.</div>
                     </li>
                     {/if}
                     {* {if !isset($site_admin)} *}
