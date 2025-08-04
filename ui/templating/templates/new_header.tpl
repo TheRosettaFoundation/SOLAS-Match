@@ -139,9 +139,9 @@
                 <ul class="dropdown-menu" aria-labelledby="hoverDropdown">
                    {if Settings::get('site.forum_enabled') == 'y'}
                     <li  ><a href="{Settings::get('site.forum_link')}" target="_blank" class=" dropdown-item "> Community Forum
-                   
+                    <div class="fs-5 fw-lighter drop_description">A collaborative space where members ask questions sand build a supportive and knowledge-driven community together.</div>
                     </a>
-                     <div class="fs-5 fw-lighter drop_description">A collaborative space where members ask questions sand build a supportive and knowledge-driven community together.</div>
+                    
                        
                     </li>
                     {/if}
