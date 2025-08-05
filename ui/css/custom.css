@@ -232,6 +232,7 @@ a[href^="mailto:"] {
     overflow-wrap: anywhere;
     word-wrap: normal !important;
     margin-top: 8px;
+    color: #de8e16;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   }
 }
