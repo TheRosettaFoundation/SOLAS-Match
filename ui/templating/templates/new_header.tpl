@@ -131,15 +131,19 @@
                             </li>
                 {/if} *}
                
-
+                    {if isset($site_admin)}
+                            <li class="nav-item">
+                                <a href="{urlFor name="analytics"}"  class=" fs-5 nav-link fw-bold">Analytics</a>
+                            </li>
+                        {/if}
                 <li class="nav-item dropdown fw-bold text-secondary">
                 <a class="nav-link dropdown-toggle fs-5  fw-bold no-caret  " href="#" id="hoverDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                     Resources
                 </a>
                 <ul class="dropdown-menu" aria-labelledby="hoverDropdown">
                    {if Settings::get('site.forum_enabled') == 'y'}
-                    <li class="py-2"><a href="{Settings::get('site.forum_link')}" target="_blank" class=" dropdown-item  py-4"> Community Forum
-                    <div class="fs-5 fw-lighter drop_description text-break mt-2 ">A collaborative space where members ask questions and build a supportive and knowledge-driven community together.</div>
+                    <li class="py-2"><a href="{Settings::get('site.forum_link')}" target="_blank" class=" dropdown-item  py-4 fw-bold"> Community Forum
+            <div class="fs-5 fw-lighter drop_description text-break mt-2  ">Ask questions and talk with other community members</div>
                     </a>
                     
                        
@@ -147,25 +151,25 @@
                     {/if}
                     {* {if !isset($site_admin)} *}
                     <li class="py-2">
-                    {if isset($user)}
-                    <a href="https://elearn.translatorswb.org/auth/saml2/login.php?wants&idp=bd3eb3e6241260ee537b9a55145d852d&passive=off" target="_blank" class="dropdown-item py-2" >Learning Center
-                     <div class=" mt-2 fs-5 fw-lighter drop_description">A dynamic learning center offering resources, tutorials, and interactive content to help users grow their skills, explore new topics, and stay updated. Empowering individuals to learn at their own pace, anytime and anywhere, with support from a vibrant knowledge-sharing community.</div>
+                    {* {if isset($user)} *}
+                    <a href="https://elearn.translatorswb.org/auth/saml2/login.php?wants&idp=bd3eb3e6241260ee537b9a55145d852d&passive=off" target="_blank" class="dropdown-item py-2 fw-bold" >Learning Center
+                     <div class=" mt-2 fs-5 fw-lighter drop_description"> Courses and training </div>
                     </a>
-                    {else}
-                    <a href="https://elearn.translatorswb.org/" target="_blank" class="dropdown-item py-2">Learning Center
+                    {* {else} *}
+                    {* <a href="https://elearn.translatorswb.org/" target="_blank" class="dropdown-item py-2">Learning Center
                      <div class=" mt-2 fs-5 fw-lighter drop_description">A dynamic learning center offering resources, tutorials, and interactive content to help users grow their skills, explore new topics, and stay updated. Empowering individuals to learn at their own pace, anytime and anywhere, with support from a vibrant knowledge-sharing community.</div>
-                    </a>
-                    {/if}
+                    </a> *}
+                    {* {/if} *}
                    
                      </li>
                     {* {/if} *}
-                    {if !isset($site_admin)}
-                    <li {if isset($current_page) && $current_page == 'faq'}" {/if} class="py-2" > <a  href="https://communitylibrary.translatorswb.org/login" target="_blank" class="dropdown-item py-2">Community Library
-                          <div class=" mt-2 fs-5 fw-lighter drop_description">A collaborative space where members can access a wide range of resources, including articles, videos, podcasts, and interactive tools, to support their language learning and cultural exchange. A valuable resource for anyone looking to enhance their linguistic and cultural understanding.</div>
+                    {* {if !isset($site_admin)} *}
+                    <li {if isset($current_page) && $current_page == 'faq'}" {/if} class="py-2" > <a  href="https://communitylibrary.translatorswb.org/login" target="_blank" class="dropdown-item py-2 fw-bold">Community Library
+                          <div class=" mt-2 fs-5 fw-lighter drop_description">Instructions, guidelines and reference material</div>
                         </a>
                       
                         </li>
-                    {/if}
+                    {* {/if} *}
                   
                 </ul>
                  </li>
@@ -176,11 +180,7 @@
                     </li>
                 {/if} *}
 
-                {if isset($site_admin)}
-                            <li class="nav-item">
-                                <a href="{urlFor name="analytics"}"  class=" fs-5 nav-link fw-bold">Analytics</a>
-                            </li>
-                        {/if}
+            
                  {if !isset($site_admin)}
                             {* <li class="nav-item">
                                 {if isset($user)}
@@ -189,9 +189,7 @@
                                 <a href="https://elearn.translatorswb.org/" target="_blank" class=" fs-5 nav-link fw-bold">TWB Learning Center</a>
                                 {/if}
                             </li> *}
-                            <li class="nav-item">
-                                <a href="https://form.asana.com?k=dlsF11XkOwpfFllbq325dg&d=170818793545926" target="_blank" class=" fs-5 nav-link fw-bold">Feedback?</a>
-                            </li>
+                          
                             {if !empty($user) && Settings::get('banner.enabled') == 'v' && $user->getNativeLocale() != null && in_array($user->getNativeLocale()->getLanguageCode(), ['ha', 'kr', 'shu'])}
                             <li class="nav-item">
                                 <a href="https://twbvoice.org" target="_blank" class=" fs-5 nav-link fw-bold">TWB Voice</a>
@@ -207,32 +205,43 @@
              <ul class="navbar-nav d-flex align-items-center mx-4">
                         {if isset($user)}
                         {assign var="user_id" value=$user->getId()}
-                              <li class="nav_item me-2" id="theme">
-                               <img src="{urlFor name='home'}ui/img/light.svg"   alt="theme button" id="light">
-                           
-                               <img src="{urlFor name='home'}ui/img/night.svg" class="d-none" alt="theme button" id="night">
+
+                <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle no-caret " href="#" id="hoverDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <img src="https://www.gravatar.com/avatar/{md5( strtolower( trim($user->getEmail())))}?s=20{urlencode("&")}r=g" alt="" />
+                                            {TemplateHelper::uiCleanseHTML($user->getDisplayName())}
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="hoverDropdown">
+                            <li><a href="{urlFor name="user-public-profile" options="user_id.$user_id"}"   class=" dropdown-item ">Profile</a></li>
+                                        
+                            {if isset($user_has_active_tasks)}
+                            {assign var="tmp_id" value=$user->getId()}
+                            <li class="nav-item fw-bold" >
+                                <a href="{urlFor name="claimed-tasks" options="user_id.$tmp_id"}" class="dropdown-item"  {if isset($current_page) && $current_page == 'claimed-tasks'} class="nav-link " {/if}>My Tasks</a>
                             </li>
-                             <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle no-caret " href="#" id="hoverDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                   <img src="https://www.gravatar.com/avatar/{md5( strtolower( trim($user->getEmail())))}?s=20{urlencode("&")}r=g" alt="" />
-                                       {TemplateHelper::uiCleanseHTML($user->getDisplayName())}
-                </a>
-                <ul class="dropdown-menu" aria-labelledby="hoverDropdown">
-                    <li><a href="{urlFor name="user-public-profile" options="user_id.$user_id"}"   class=" dropdown-item ">Profile</a></li>
-                                 
-                    {if isset($user_has_active_tasks)}
-                    {assign var="tmp_id" value=$user->getId()}
-                    <li class="nav-item fw-bold" >
-                        <a href="{urlFor name="claimed-tasks" options="user_id.$tmp_id"}" class="dropdown-item"  {if isset($current_page) && $current_page == 'claimed-tasks'} class="nav-link " {/if}>My Tasks</a>
-                    </li>
-                {/if} 
-                 <li> <a href="{urlFor name="logout"}" class="dropdown-item">{Localisation::getTranslation('header_log_out')}</a></li>
-      
-                    
-                   
-          
-                </ul>
+                        {/if} 
+                        <li> <a href="{urlFor name="logout"}" class="dropdown-item">{Localisation::getTranslation('header_log_out')}</a></li>
+            
+                            
+                        
+                
+                        </ul>
                  </li>
+
+                <li class="nav_item me-2" id="theme">
+                <img src="{urlFor name='home'}ui/img/light.svg"   alt="theme button" id="light">
+            
+                <img src="{urlFor name='home'}ui/img/night.svg" class="d-none" alt="theme button" id="night">
+                </li>
+
+                   {if !isset($site_admin)}
+
+                      <li class="nav-item">
+                                <a href="https://form.asana.com?k=dlsF11XkOwpfFllbq325dg&d=170818793545926" target="_blank" class=" fs-5 nav-link fw-bold">Feedback?</a>
+                            </li>
+
+                   {/if}
+                             
                             {* <li class="profile nav-item">
                                 <a href="{urlFor name="user-public-profile" options="user_id.$user_id"}"  class=" fs-5 nav-link fw-bold">
                                     <img src="https://www.gravatar.com/avatar/{md5( strtolower( trim($user->getEmail())))}?s=20{urlencode("&")}r=g" alt="" />
