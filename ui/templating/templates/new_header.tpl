@@ -96,7 +96,7 @@
                 </button>
            
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <div class="d-md-flex align-items-center justify-content-end w-100">
+            <div class="d-md-flex align-items-center justify-content-between w-100">
             <ul class="navbar-nav   d-flex align-items-center ">
                 {if !isset($admin)}
                     <li class="nav-item ms-md-6 fw-bold">

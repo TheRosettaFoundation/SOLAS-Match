@@ -299,7 +299,7 @@ a[href^="mailto:"] {
     }
 
     .drop_description {
-        width: 400px;
+        width: 200px;
         border-radius: 4px;
         text-align: start;
         padding: 14px;
@@ -307,6 +307,7 @@ a[href^="mailto:"] {
         overflow-wrap: anywhere;
         word-wrap: normal !important;
         margin-top: 8px;
+        color: #de8e16;
 
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     }
