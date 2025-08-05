@@ -1,4 +1,6 @@
-{include file='header.tpl'}
+{* {include file='header.tpl'} *}
+{include file='new_header.tpl'}
+
 
     <div class='page-header'><h1>
     {if $org->getName() != ''}
