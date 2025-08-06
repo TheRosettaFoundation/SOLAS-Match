@@ -264,15 +264,15 @@
                                             {TemplateHelper::uiCleanseHTML($user->getDisplayName())}
                         </a>
                         <ul class="dropdown-menu"   aria-labelledby="hoverDropdown">
-                            <li><a href="{urlFor name="user-public-profile" options="user_id.$user_id"}"   class="dropdown-item" id="dropdown-menu-user" >Profile</a></li>
+                            <li><a href="{urlFor name="user-public-profile" options="user_id.$user_id"}"   class="dropdown-item fs-5" id="dropdown-menu-user" >Profile</a></li>
                                         
                             {if isset($user_has_active_tasks)}
                             {assign var="tmp_id" value=$user->getId()}
                             <li class="nav-item fw-bold" >
-                                <a href="{urlFor name="claimed-tasks" options="user_id.$tmp_id"}" class="dropdown-item" id="dropdown-menu-user"  {if isset($current_page) && $current_page == 'claimed-tasks'} class="nav-link " {/if}>My Tasks</a>
+                                <a href="{urlFor name="claimed-tasks" options="user_id.$tmp_id"}" class="dropdown-item fs-5" id="dropdown-menu-user"  {if isset($current_page) && $current_page == 'claimed-tasks'} class="nav-link " {/if}>My Tasks</a>
                             </li>
                         {/if} 
-                        <li> <a href="{urlFor name="logout"}" class="dropdown-item" id="dropdown-menu-user">{Localisation::getTranslation('header_log_out')}</a></li>
+                        <li> <a href="{urlFor name="logout"}" class="dropdown-item fs-5" id="dropdown-menu-user">{Localisation::getTranslation('header_log_out')}</a></li>
             
                             
                         
