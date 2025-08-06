@@ -133,7 +133,7 @@
                 </a>
                 <ul class="dropdown-menu" aria-labelledby="hoverDropdown">
                    {if Settings::get('site.forum_enabled') == 'y'}
-                    <li class="py-2 border-bottom border-info">
+                    <li class="p-2 border-bottom border-info-subtle">
                     <a href="{Settings::get('site.forum_link')}" target="_blank" class=" dropdown-item  py-2 fw-bold"> 
                         <div>
                             <div>
