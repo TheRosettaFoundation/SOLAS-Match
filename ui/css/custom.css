@@ -219,6 +219,10 @@ a[href^="mailto:"] {
   color: rgb(7, 19, 38) !important;
 }
 
+[data-bs-theme=dark] .dropdown-menu {
+  color: rgb(123, 126, 129) !important;
+}
+
 @media (min-width: 768px) {
   .menu_list {
     height: 100%;
