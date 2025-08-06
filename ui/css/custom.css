@@ -201,6 +201,7 @@ a[href^="mailto:"] {
 .nav-item.dropdown:hover .dropdown-menu {
   display: block;
   margin-top: 0;
+  margin-bottom: 20px;
 }
 
 .dropdown-toggle {
@@ -236,6 +237,11 @@ a[href^="mailto:"] {
   }
   .drop_description__shadow {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  .nav-item.dropdown-menu {
+    display: block;
+    margin-top: 0;
+    margin-bottom: 0;
   }
 }
 /*!
