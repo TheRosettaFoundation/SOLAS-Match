@@ -144,10 +144,14 @@ a[href^="mailto:"] {
   border-radius: 4px;
 }
 
-.dropdown-menu a:hover {
-  background-color: #eee;
+.dropdown-menu {
+  margin-bottom: 8px;
   color: #133978;
   font-weight: 500;
+}
+
+.dropdown-menu a:hover {
+  background-color: #eee;
 }
 
 .displayF p,
@@ -192,10 +196,6 @@ a[href^="mailto:"] {
   overflow-wrap: anywhere;
   display: block; /* ensures it's treated as a block-level element */
   margin-bottom: 10px;
-}
-
-.drop_description {
-  margin-bottom: 20px;
 }
 
 .nav-item.dropdown:hover .dropdown-menu {

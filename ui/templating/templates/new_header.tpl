@@ -243,7 +243,7 @@
                         {if isset($user)}
                         {assign var="user_id" value=$user->getId()}
 
-                <li class="nav-item dropdown">
+                <li class="nav-item dropdown ">
                         <a class="nav-link dropdown-toggle no-caret " href="#" id="hoverDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         <img src="https://www.gravatar.com/avatar/{md5( strtolower( trim($user->getEmail())))}?s=20{urlencode("&")}r=g" alt="" />
                                             {TemplateHelper::uiCleanseHTML($user->getDisplayName())}
