@@ -149,7 +149,7 @@
                     </li>
                     {/if}
                     {* {if !isset($site_admin)} *}
-                    <li class="py-2">
+                    <li class="p-2 border-bottom border-dark-gray">
                     {* {if isset($user)} *}
                     <a href="https://elearn.translatorswb.org/auth/saml2/login.php?wants&idp=bd3eb3e6241260ee537b9a55145d852d&passive=off" target="_blank" class="dropdown-item py-2 fw-bold" >
                     
@@ -164,7 +164,7 @@
                      </li>
                     {* {/if} *}
                     {* {if !isset($site_admin)} *}
-                    <li {if isset($current_page) && $current_page == 'faq'}" {/if} class="py-2" > <a  href="https://communitylibrary.translatorswb.org/login" target="_blank" class="dropdown-item py-2 fw-bold">
+                    <li {if isset($current_page) && $current_page == 'faq'}" {/if} class="p-2 border-bottom border-dark-gray" > <a  href="https://communitylibrary.translatorswb.org/login" target="_blank" class="dropdown-item py-2 fw-bold">
                         <div> 
                             <div><span class="mx-2">💬</span> Community Library</div>
                             <div class="mt-2 fs-5 fw-bold mx-2">Instructions, guidelines and reference material</div>
