@@ -194,6 +194,10 @@ a[href^="mailto:"] {
   margin-bottom: 10px;
 }
 
+.drop_description {
+  margin-bottom: 20px;
+}
+
 .nav-item.dropdown:hover .dropdown-menu {
   display: block;
   margin-top: 0;
