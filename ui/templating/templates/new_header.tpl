@@ -263,8 +263,8 @@
                         <img src="https://www.gravatar.com/avatar/{md5( strtolower( trim($user->getEmail())))}?s=20{urlencode("&")}r=g" alt="" />
                                             {TemplateHelper::uiCleanseHTML($user->getDisplayName())}
                         </a>
-                        <ul class="dropdown-menu"   id="dropdown-menu-user" aria-labelledby="hoverDropdown">
-                            <li><a href="{urlFor name="user-public-profile" options="user_id.$user_id"}"   class="dropdown-item ">Profile</a></li>
+                        <ul class="dropdown-menu"   aria-labelledby="hoverDropdown">
+                            <li><a href="{urlFor name="user-public-profile" options="user_id.$user_id"}"   class="dropdown-item" id="dropdown-menu-user" >Profile</a></li>
                                         
                             {if isset($user_has_active_tasks)}
                             {assign var="tmp_id" value=$user->getId()}
