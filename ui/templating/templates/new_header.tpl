@@ -133,14 +133,14 @@
                 </a>
                 <ul class="dropdown-menu" aria-labelledby="hoverDropdown">
                    {if Settings::get('site.forum_enabled') == 'y'}
-                    <li class="py-2">
+                    <li class="py-2 border-bottom border-info">
                     <a href="{Settings::get('site.forum_link')}" target="_blank" class=" dropdown-item  py-2 fw-bold"> 
                         <div>
                             <div>
                             <span class='mx-2'>🎓</span>
                             Community Forum 
                             </div>
-                            <div class="fs-5 fw-bold  text-break mt-2 mx-2">Ask questions and talk with other community members</div>                        
+                            <div class="fs-5   text-break mt-2 mx-2">Ask questions and talk with other community members</div>                        
                         </div>
                 
                     </a>
@@ -159,11 +159,7 @@
                     </div>
                      
                     </a>
-                    {* {else} *}
-                    {* <a href="https://elearn.translatorswb.org/" target="_blank" class="dropdown-item py-2">Learning Center
-                     <div class=" mt-2 fs-5 fw-lighter drop_description">A dynamic learning center offering resources, tutorials, and interactive content to help users grow their skills, explore new topics, and stay updated. Empowering individuals to learn at their own pace, anytime and anywhere, with support from a vibrant knowledge-sharing community.</div>
-                    </a> *}
-                    {* {/if} *}
+                   
                    
                      </li>
                     {* {/if} *}
@@ -184,73 +180,20 @@
 
                  {* second trial  *}
 
-                 <li class="nav-item dropdown fw-bold text-secondary">
-                <a class="nav-link dropdown-toggle fs-5  fw-bold no-caret  " href="#" id="hoverDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                    Resources-2
-                </a>
-                <ul class="dropdown-menu" aria-labelledby="hoverDropdown">
-                   {if Settings::get('site.forum_enabled') == 'y'}
-                    <li ><a href="{Settings::get('site.forum_link')}" target="_blank" class=" dropdown-item  py-4 fw-bold "> <div class="drop_description__shadow p-2">
-                    
-                    <div > <span class='mx-2'>🎓</span>Community Forum</div> 
-                     <div class="fs-5 fw-bold  text-break mt-2 mx-2 ">Ask questions and talk with other community members</div>
-                    </div>
-               
-                    </a>
-                    
-                       
-                    </li>
-                    {/if}
-                    {* {if !isset($site_admin)} *}
-                    <li >
-                    {* {if isset($user)} *}
-                    <a href="https://elearn.translatorswb.org/auth/saml2/login.php?wants&idp=bd3eb3e6241260ee537b9a55145d852d&passive=off" target="_blank" class="dropdown-item py-2 fw-bold " ><div class="drop_description__shadow p-2"> 
-                    <div><span class="mx-2">📚</span> Learning Center</div>
-                     <div class=" mt-2 fs-5 fw-bold  mx-2 "> Courses and training </div>
-                     </div>
-                    
-                    </a>
                 
-                   
-                     </li>
-                    {* {/if} *}
-                    {* {if !isset($site_admin)} *}
-                    <li {if isset($current_page) && $current_page == 'faq'}" {/if}  > <a  href="https://communitylibrary.translatorswb.org/login" target="_blank" class="dropdown-item py-2 fw-bold "><div class="drop_description__shadow p-2"><div><span class="mx-2">💬</span> Community Library</div>
-                         <div class=" mt-2 fs-5 fw-bold  mx-2 ">Instructions, guidelines and reference material</div></div>
-                         
-                        </a>
-                      
-                        </li>
-                    {* {/if} *}
-                  
-                </ul>
-                 </li>
                
-                {* {if Settings::get('site.forum_enabled') == 'y'}
-                    <li>
-                        <a href="{Settings::get('site.forum_link')}"  class=" fs-5 nav-link fw-bold">{Localisation::getTranslation('common_forum')}</a>
-                    </li>
-                {/if} *}
+                
 
             
                  {if !isset($site_admin)}
-                            {* <li class="nav-item">
-                                {if isset($user)}
-                                <a href="https://elearn.translatorswb.org/auth/saml2/login.php?wants&idp=bd3eb3e6241260ee537b9a55145d852d&passive=off" target="_blank" class="fs-5 nav-link fw-bold">TWB Learning Center</a>
-                                {else}
-                                <a href="https://elearn.translatorswb.org/" target="_blank" class=" fs-5 nav-link fw-bold">TWB Learning Center</a>
-                                {/if}
-                            </li> *}
+                        
                           
                             {if !empty($user) && Settings::get('banner.enabled') == 'v' && $user->getNativeLocale() != null && in_array($user->getNativeLocale()->getLanguageCode(), ['ha', 'kr', 'shu'])}
                             <li class="nav-item">
                                 <a href="https://twbvoice.org" target="_blank" class=" fs-5 nav-link fw-bold">TWB Voice</a>
                             </li>
                             {/if}
-                        {* {else}
-                            <li class="nav-item">
-                                <a href="https://elearn.translatorswb.org/auth/saml2/login.php?wants&idp=bd3eb3e6241260ee537b9a55145d852d&passive=off" target="_blank" class=" fs-5 nav-link fw-bold">Learn. Center</a>
-                            </li> *}
+                      
                         {/if}
             </ul>
 
