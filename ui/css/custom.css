@@ -212,6 +212,7 @@ a[href^="mailto:"] {
 
 /* Override active/focus style */
 .navbar .nav-link.dropdown-toggle:not(.active):not(:hover):not(:focus) {
+  color: #133978 !important; /* or whatever the default non-active color is */
   color: inherit !important;
   background-color: transparent !important;
 }
@@ -223,6 +224,10 @@ a[href^="mailto:"] {
 
 [data-bs-theme=dark] .dropdown-menu .dropdown-item:hover {
   color: #f89406 !important;
+}
+
+#dropdown-menu-user {
+  font-weight: bold;
 }
 
 @media (min-width: 768px) {
