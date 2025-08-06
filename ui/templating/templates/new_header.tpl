@@ -136,7 +136,7 @@
                     <li class="py-2"><a href="{Settings::get('site.forum_link')}" target="_blank" class=" dropdown-item  py-4 fw-bold"> <div>
                     <span class='mx-2'>🎓</span>
                     Community Forum </div>
-                <div class="fs-5 fw-lighter drop_description text-break mt-2  ">Ask questions and talk with other community members</div>
+                <div class="fs-5 fw-bold drop_description text-break mt-2  ">Ask questions and talk with other community members</div>
                     </a>
                     
                        
@@ -157,8 +157,8 @@
                      </li>
                     {* {/if} *}
                     {* {if !isset($site_admin)} *}
-                    <li {if isset($current_page) && $current_page == 'faq'}" {/if} class="py-2" > <a  href="https://communitylibrary.translatorswb.org/login" target="_blank" class="dropdown-item py-2 fw-bold"><div><span>💬</span> Community Library</div>
-                          <div class=" mt-2 fs-5 fw-lighter drop_description">Instructions, guidelines and reference material</div>
+                    <li {if isset($current_page) && $current_page == 'faq'}" {/if} class="py-2" > <a  href="https://communitylibrary.translatorswb.org/login" target="_blank" class="dropdown-item py-2 fw-bold"><div><span class="mx-2">💬</span> Community Library</div>
+                          <div class=" mt-2 fs-5 fw-bold drop_description">Instructions, guidelines and reference material</div>
                         </a>
                       
                         </li>
