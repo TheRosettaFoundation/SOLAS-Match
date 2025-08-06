@@ -296,9 +296,9 @@ a[href^="mailto:"] {
     color: inherit !important;
     background-color: transparent !important;
 }
-// [data-bs-theme="dark"] #hoverDropdown {
-//     color: rgb(7, 19, 38) !important;
-// }
+[data-bs-theme="dark"] #hoverDropdown {
+    color: rgb(123, 126, 129) !important;
+}
 
 [data-bs-theme="dark"] .dropdown-menu a {
     color: rgb(123, 126, 129) !important;
