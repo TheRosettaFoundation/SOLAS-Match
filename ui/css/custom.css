@@ -154,7 +154,7 @@ a[href^="mailto:"] {
   background-color: #eee;
 }
 
-.dropdown-menu.drop_description:hover {
+.drop_description:hover {
   background-color: #eee;
   color: #133978;
 }
