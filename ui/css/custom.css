@@ -228,6 +228,7 @@ a[href^="mailto:"] {
 
 #dropdown-menu-user {
   font-weight: bold;
+  color: red;
 }
 
 @media (min-width: 768px) {
