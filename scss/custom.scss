@@ -307,12 +307,13 @@ a[href^="mailto:"] {
 }
 
 .profile_name {
-    font-weight: 500;
+    font-weight: bold;
     color: #133978;
-    font-size: 14px;
 }
 [data-bs-theme="dark"] .profile_name {
     color: rgba(255, 255, 255, 0.55);
+
+    font-weight: bold;
 }
 
 #dropdown-menu-user {
