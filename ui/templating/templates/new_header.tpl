@@ -210,11 +210,7 @@
                      </div>
                     
                     </a>
-                    {* {else} *}
-                    {* <a href="https://elearn.translatorswb.org/" target="_blank" class="dropdown-item py-2">Learning Center
-                     <div class=" mt-2 fs-5 fw-lighter drop_description">A dynamic learning center offering resources, tutorials, and interactive content to help users grow their skills, explore new topics, and stay updated. Empowering individuals to learn at their own pace, anytime and anywhere, with support from a vibrant knowledge-sharing community.</div>
-                    </a> *}
-                    {* {/if} *}
+                
                    
                      </li>
                     {* {/if} *}
@@ -267,7 +263,7 @@
                         <img src="https://www.gravatar.com/avatar/{md5( strtolower( trim($user->getEmail())))}?s=20{urlencode("&")}r=g" alt="" />
                                             {TemplateHelper::uiCleanseHTML($user->getDisplayName())}
                         </a>
-                        <ul class="dropdown-menu" aria-labelledby="hoverDropdown">
+                        <ul class="dropdown-menu fw-bold" aria-labelledby="hoverDropdown">
                             <li><a href="{urlFor name="user-public-profile" options="user_id.$user_id"}"   class=" dropdown-item ">Profile</a></li>
                                         
                             {if isset($user_has_active_tasks)}
