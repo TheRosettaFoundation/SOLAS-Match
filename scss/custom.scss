@@ -274,15 +274,17 @@ a[href^="mailto:"] {
     margin-bottom: 10px;
 }
 
-.nav-item.dropdown:hover.dropdown-menu {
+.nav-item.dropdown:hover .dropdown-menu {
     display: block;
 
     margin-top: 0;
     margin-bottom: 20px;
     font-weight: 500;
-    color: #133978;
 }
 
+// .no-caret::after {
+//     display: none !important;
+// }
 .dropdown-toggle {
     text-align: center;
 }
