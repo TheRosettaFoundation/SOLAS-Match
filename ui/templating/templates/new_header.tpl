@@ -111,12 +111,7 @@
                              </li>
                 {/if}
 
-                {* {if isset($user_has_active_tasks)}
-                    {assign var="tmp_id" value=$user->getId()}
-                    <li class="nav-item fw-bold" >
-                        <a href="{urlFor name="claimed-tasks" options="user_id.$tmp_id"}" class="fs-5 nav-link fw-bold"  {if isset($current_page) && $current_page == 'claimed-tasks'} class="nav-link " {/if}>{Localisation::getTranslation('header_claimed_tasks')}</a>
-                    </li>
-                {/if}  *}
+             
 
                 {if isset($show_admin_dashboard)}
                 {assign var="user_id" value=$user->getId()}
@@ -125,11 +120,7 @@
                     </li>
                 {/if} 
 
-                 {* {if !isset($site_admin)}
-                             <li {if isset($current_page) && $current_page == 'faq'}" {/if} class="nav-item ">
-                                <a href="https://communitylibrary.translatorswb.org/login" target="_blank" class=" fs-5 nav-link fw-bold">Library</a>
-                            </li>
-                {/if} *}
+             
                
                     {if isset($site_admin)}
                             <li class="nav-item">
@@ -145,7 +136,7 @@
                     <li class="py-2"><a href="{Settings::get('site.forum_link')}" target="_blank" class=" dropdown-item  py-4 fw-bold"> <div>
                     <span class='mx-2'>🎓</span>
                     Community Forum </div>
-            <div class="fs-5 fw-lighter drop_description text-break mt-2  ">Ask questions and talk with other community members</div>
+                <div class="fs-5 fw-lighter drop_description text-break mt-2  ">Ask questions and talk with other community members</div>
                     </a>
                     
                        
@@ -154,8 +145,8 @@
                     {* {if !isset($site_admin)} *}
                     <li class="py-2">
                     {* {if isset($user)} *}
-                    <a href="https://elearn.translatorswb.org/auth/saml2/login.php?wants&idp=bd3eb3e6241260ee537b9a55145d852d&passive=off" target="_blank" class="dropdown-item py-2 fw-bold" >Learning Center
-                     <div class=" mt-2 fs-5 fw-lighter drop_description"> Courses and training </div>
+                    <a href="https://elearn.translatorswb.org/auth/saml2/login.php?wants&idp=bd3eb3e6241260ee537b9a55145d852d&passive=off" target="_blank" class="dropdown-item py-2 fw-bold" ><div><span class="mx-2">📚</span> Learning Center</div>
+                     <div class=" mt-2 fs-5 fw-bold drop_description"> Courses and training </div>
                     </a>
                     {* {else} *}
                     {* <a href="https://elearn.translatorswb.org/" target="_blank" class="dropdown-item py-2">Learning Center
@@ -166,8 +157,50 @@
                      </li>
                     {* {/if} *}
                     {* {if !isset($site_admin)} *}
-                    <li {if isset($current_page) && $current_page == 'faq'}" {/if} class="py-2" > <a  href="https://communitylibrary.translatorswb.org/login" target="_blank" class="dropdown-item py-2 fw-bold">Community Library
+                    <li {if isset($current_page) && $current_page == 'faq'}" {/if} class="py-2" > <a  href="https://communitylibrary.translatorswb.org/login" target="_blank" class="dropdown-item py-2 fw-bold"><div><span>💬</span> Community Library</div>
                           <div class=" mt-2 fs-5 fw-lighter drop_description">Instructions, guidelines and reference material</div>
+                        </a>
+                      
+                        </li>
+                    {* {/if} *}
+                  
+                </ul>
+                 </li>
+
+                 {* second trial  *}
+
+                 <li class="nav-item dropdown fw-bold text-secondary">
+                <a class="nav-link dropdown-toggle fs-5  fw-bold no-caret  " href="#" id="hoverDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    Resources-2
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="hoverDropdown">
+                   {if Settings::get('site.forum_enabled') == 'y'}
+                    <li class="py-2"><a href="{Settings::get('site.forum_link')}" target="_blank" class=" dropdown-item  py-4 fw-bold"> <div>
+                    <span class='mx-2'>🎓</span>
+                    Community Forum </div>
+                <div class="fs-5 fw-lighter drop_description__shadow text-break mt-2  ">Ask questions and talk with other community members</div>
+                    </a>
+                    
+                       
+                    </li>
+                    {/if}
+                    {* {if !isset($site_admin)} *}
+                    <li class="py-2">
+                    {* {if isset($user)} *}
+                    <a href="https://elearn.translatorswb.org/auth/saml2/login.php?wants&idp=bd3eb3e6241260ee537b9a55145d852d&passive=off" target="_blank" class="dropdown-item py-2 fw-bold" ><div><span class="mx-2">📚</span> Learning Center</div>
+                     <div class=" mt-2 fs-5 fw-bold drop_description__shadow"> Courses and training </div>
+                    </a>
+                    {* {else} *}
+                    {* <a href="https://elearn.translatorswb.org/" target="_blank" class="dropdown-item py-2">Learning Center
+                     <div class=" mt-2 fs-5 fw-lighter drop_description">A dynamic learning center offering resources, tutorials, and interactive content to help users grow their skills, explore new topics, and stay updated. Empowering individuals to learn at their own pace, anytime and anywhere, with support from a vibrant knowledge-sharing community.</div>
+                    </a> *}
+                    {* {/if} *}
+                   
+                     </li>
+                    {* {/if} *}
+                    {* {if !isset($site_admin)} *}
+                    <li {if isset($current_page) && $current_page == 'faq'}" {/if} class="py-2" > <a  href="https://communitylibrary.translatorswb.org/login" target="_blank" class="dropdown-item py-2 fw-bold"><div><span>💬</span> Community Library</div>
+                          <div class=" mt-2 fs-5 fw-lighter drop_description__shadow">Instructions, guidelines and reference material</div>
                         </a>
                       
                         </li>
