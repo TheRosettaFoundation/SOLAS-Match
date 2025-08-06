@@ -140,7 +140,7 @@
                             <span class='mx-2'>🎓</span>
                             Community Forum 
                             </div>
-                            <div class="fs-5 fw-bold  text-break mt-2  ">Ask questions and talk with other community members</div>                        
+                            <div class="fs-5 fw-bold  text-break mt-2 ms-4  ">Ask questions and talk with other community members</div>                        
                         </div>
                 
                     </a>
@@ -155,7 +155,7 @@
                     
                     <div>
                         <div><span class="mx-2">📚</span> Learning Center </div>
-                        <div class=" mt-2 fs-5 fw-bold "> Courses and training </div>
+                        <div class=" mt-2 ms-4 fs-5 fw-bold "> Courses and training </div>
                     </div>
                      
                     </a>
@@ -171,7 +171,7 @@
                     <li {if isset($current_page) && $current_page == 'faq'}" {/if} class="py-2" > <a  href="https://communitylibrary.translatorswb.org/login" target="_blank" class="dropdown-item py-2 fw-bold">
                         <div> 
                             <div><span class="mx-2">💬</span> Community Library</div>
-                            <div class=" mt-2 fs-5 fw-bold ">Instructions, guidelines and reference material</div>
+                            <div class="mt-2 fs-5 fw-bold ms-4">Instructions, guidelines and reference material</div>
                         </div>
                           
                         </a>
