@@ -306,6 +306,15 @@ a[href^="mailto:"] {
     color: #f89406 !important;
 }
 
+.profile_name {
+    font-weight: 500;
+    color: #133978;
+    font-size: 14px;
+}
+[data-bs-theme="dark"] .profile_name {
+    color: rgba(255, 255, 255, 0.55);
+}
+
 #dropdown-menu-user {
     font-weight: bold;
 }
@@ -348,7 +357,6 @@ a[href^="mailto:"] {
     }
 
     .drop_description {
-        width: 200px;
         border-radius: 4px;
         text-align: start;
         padding: 14px;
