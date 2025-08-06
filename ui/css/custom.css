@@ -221,6 +221,7 @@ a[href^="mailto:"] {
 
 [data-bs-theme=dark] .dropdown-menu a {
   color: rgba(255, 255, 255, 0.55) !important;
+  font-weight: 700;
 }
 
 [data-bs-theme=dark] .dropdown-menu .dropdown-item:hover {
