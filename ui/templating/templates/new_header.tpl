@@ -155,7 +155,7 @@
                     
                     <div>
                         <div><span class="mx-2">📚</span> Learning Center </div>
-                        <div class=" mt-2 mx-2 fs-5 fw-bold "> Courses and training </div>
+                        <div class=" mt-2 mx-2 fs-5 fw-lighter "> Courses and training </div>
                     </div>
                      
                     </a>
@@ -164,10 +164,10 @@
                      </li>
                     {* {/if} *}
                     {* {if !isset($site_admin)} *}
-                    <li {if isset($current_page) && $current_page == 'faq'}" {/if} class="p-2 border-bottom border-dark-gray" > <a  href="https://communitylibrary.translatorswb.org/login" target="_blank" class="dropdown-item py-2 fw-bold">
+                    <li {if isset($current_page) && $current_page == 'faq'}" {/if} class="p-2 " > <a  href="https://communitylibrary.translatorswb.org/login" target="_blank" class="dropdown-item py-2 fw-bold">
                         <div> 
                             <div><span class="mx-2">💬</span> Community Library</div>
-                            <div class="mt-2 fs-5 fw-bold mx-2">Instructions, guidelines and reference material</div>
+                            <div class="mt-2 fs-5 fw-lighter mx-2">Instructions, guidelines and reference material</div>
                         </div>
                           
                         </a>
