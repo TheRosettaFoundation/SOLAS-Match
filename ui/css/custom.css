@@ -230,6 +230,33 @@ a[href^="mailto:"] {
   font-weight: bold;
 }
 
+@media (max-width: 991.98px) {
+  .dropdown-menu {
+    position: static !important;
+    transform: none !important;
+    width: 100%;
+    min-width: auto;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    border-radius: 0;
+    margin: 8px 0 0 0;
+    background: #f8f9fa;
+    backdrop-filter: none;
+  }
+  .dropdown-item {
+    margin-bottom: 4px;
+    border-radius: 6px;
+    padding: 12px;
+  }
+  .navbar-toggler {
+    border: none;
+    padding: 8px 12px;
+  }
+  .navbar-collapse {
+    margin-top: 16px;
+    padding-top: 16px;
+    border-top: 2px solid #e9ecef;
+  }
+}
 @media (min-width: 768px) {
   .menu_list {
     height: 100%;
