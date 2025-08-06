@@ -133,10 +133,16 @@
                 </a>
                 <ul class="dropdown-menu" aria-labelledby="hoverDropdown">
                    {if Settings::get('site.forum_enabled') == 'y'}
-                    <li class="py-2"><a href="{Settings::get('site.forum_link')}" target="_blank" class=" dropdown-item  py-2 fw-bold"> <div>
-                    <span class='mx-2'>🎓</span>
-                    Community Forum </div>
-                <div class="fs-5 fw-bold  text-break mt-2  ">Ask questions and talk with other community members</div>
+                    <li class="py-2">
+                    <a href="{Settings::get('site.forum_link')}" target="_blank" class=" dropdown-item  py-2 fw-bold"> 
+                        <div>
+                            <div>
+                            <span class='mx-2'>🎓</span>
+                            Community Forum 
+                            </div>
+                            <div class="fs-5 fw-bold  text-break mt-2  ">Ask questions and talk with other community members</div>                        
+                        </div>
+                
                     </a>
                     
                        
@@ -145,8 +151,13 @@
                     {* {if !isset($site_admin)} *}
                     <li class="py-2">
                     {* {if isset($user)} *}
-                    <a href="https://elearn.translatorswb.org/auth/saml2/login.php?wants&idp=bd3eb3e6241260ee537b9a55145d852d&passive=off" target="_blank" class="dropdown-item py-2 fw-bold" ><div><span class="mx-2">📚</span> Learning Center</div>
-                     <div class=" mt-2 fs-5 fw-bold "> Courses and training </div>
+                    <a href="https://elearn.translatorswb.org/auth/saml2/login.php?wants&idp=bd3eb3e6241260ee537b9a55145d852d&passive=off" target="_blank" class="dropdown-item py-2 fw-bold" >
+                    
+                    <div>
+                        <div><span class="mx-2">📚</span> Learning Center </div>
+                        <div class=" mt-2 fs-5 fw-bold "> Courses and training </div>
+                    </div>
+                     
                     </a>
                     {* {else} *}
                     {* <a href="https://elearn.translatorswb.org/" target="_blank" class="dropdown-item py-2">Learning Center
@@ -157,8 +168,12 @@
                      </li>
                     {* {/if} *}
                     {* {if !isset($site_admin)} *}
-                    <li {if isset($current_page) && $current_page == 'faq'}" {/if} class="py-2" > <a  href="https://communitylibrary.translatorswb.org/login" target="_blank" class="dropdown-item py-2 fw-bold"><div><span class="mx-2">💬</span> Community Library</div>
-                          <div class=" mt-2 fs-5 fw-bold ">Instructions, guidelines and reference material</div>
+                    <li {if isset($current_page) && $current_page == 'faq'}" {/if} class="py-2" > <a  href="https://communitylibrary.translatorswb.org/login" target="_blank" class="dropdown-item py-2 fw-bold">
+                        <div> 
+                            <div><span class="mx-2">💬</span> Community Library</div>
+                            <div class=" mt-2 fs-5 fw-bold ">Instructions, guidelines and reference material</div>
+                        </div>
+                          
                         </a>
                       
                         </li>
