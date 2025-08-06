@@ -189,8 +189,11 @@
                     {* {if !isset($site_admin)} *}
                     <li >
                     {* {if isset($user)} *}
-                    <a href="https://elearn.translatorswb.org/auth/saml2/login.php?wants&idp=bd3eb3e6241260ee537b9a55145d852d&passive=off" target="_blank" class="dropdown-item py-2 fw-bold " ><div class="drop_description__shadow p-2"><span class="mx-2">📚</span> Learning Center</div>
+                    <a href="https://elearn.translatorswb.org/auth/saml2/login.php?wants&idp=bd3eb3e6241260ee537b9a55145d852d&passive=off" target="_blank" class="dropdown-item py-2 fw-bold " ><div class="drop_description__shadow p-2"> 
+                    <div><span class="mx-2">📚</span> Learning Center</div>
                      <div class=" mt-2 fs-5 fw-bold  mx-2 px-2"> Courses and training </div>
+                     </div>
+                    
                     </a>
                     {* {else} *}
                     {* <a href="https://elearn.translatorswb.org/" target="_blank" class="dropdown-item py-2">Learning Center
@@ -201,8 +204,9 @@
                      </li>
                     {* {/if} *}
                     {* {if !isset($site_admin)} *}
-                    <li {if isset($current_page) && $current_page == 'faq'}" {/if}  > <a  href="https://communitylibrary.translatorswb.org/login" target="_blank" class="dropdown-item py-2 fw-bold "><div class="drop_description__shadow p-2"><span class="mx-2">💬</span> Community Library</div>
-                          <div class=" mt-2 fs-5 fw-bold  mx-2 px-2">Instructions, guidelines and reference material</div>
+                    <li {if isset($current_page) && $current_page == 'faq'}" {/if}  > <a  href="https://communitylibrary.translatorswb.org/login" target="_blank" class="dropdown-item py-2 fw-bold "><div class="drop_description__shadow p-2"><div><span class="mx-2">💬</span> Community Library</div>
+                         <div class=" mt-2 fs-5 fw-bold  mx-2 px-2">Instructions, guidelines and reference material</div></div>
+                         
                         </a>
                       
                         </li>
