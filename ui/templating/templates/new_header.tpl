@@ -142,7 +142,9 @@
                 </a>
                 <ul class="dropdown-menu" aria-labelledby="hoverDropdown">
                    {if Settings::get('site.forum_enabled') == 'y'}
-                    <li class="py-2"><a href="{Settings::get('site.forum_link')}" target="_blank" class=" dropdown-item  py-4 fw-bold"> Community Forum
+                    <li class="py-2"><a href="{Settings::get('site.forum_link')}" target="_blank" class=" dropdown-item  py-4 fw-bold"> <div>
+                    <span class='mx-2'>🎓</span>
+                    Community Forum </div>
             <div class="fs-5 fw-lighter drop_description text-break mt-2  ">Ask questions and talk with other community members</div>
                     </a>
                     

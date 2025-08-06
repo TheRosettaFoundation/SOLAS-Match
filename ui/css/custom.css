@@ -200,10 +200,6 @@ a[href^="mailto:"] {
   margin-top: 0;
 }
 
-.no-caret::after {
-  display: none !important;
-}
-
 .dropdown-toggle {
   text-align: center;
 }
