@@ -254,7 +254,7 @@
                         {/if}
             </ul>
 
-             <ul class="navbar-nav d-flex align-items-center mx-4">
+             <ul class="navbar-nav d-flex align-items-center mx-4 fw-bold">
                         {if isset($user)}
                         {assign var="user_id" value=$user->getId()}
 
