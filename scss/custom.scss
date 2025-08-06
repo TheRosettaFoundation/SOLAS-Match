@@ -297,13 +297,10 @@ a[href^="mailto:"] {
     background-color: transparent !important;
 }
 [data-bs-theme="dark"] #hoverDropdown {
-    color: rgb(123, 126, 129) !important;
-}
-
-[data-bs-theme="dark"] .dropdown-menu a {
     color: rgba(255, 255, 255, 0.55) !important;
     font-weight: 700;
 }
+
 [data-bs-theme="dark"] .dropdown-menu .dropdown-item:hover {
     color: #f89406 !important;
 }
