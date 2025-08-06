@@ -280,7 +280,7 @@
                         </ul>
                  </li>
 
-                <li class="nav_item me-2" id="theme">
+                <li class="nav_item " id="theme">
                 <img src="{urlFor name='home'}ui/img/light.svg"   alt="theme button" id="light">
             
                 <img src="{urlFor name='home'}ui/img/night.svg" class="d-none" alt="theme button" id="night">
