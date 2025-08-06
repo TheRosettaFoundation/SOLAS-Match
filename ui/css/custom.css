@@ -198,7 +198,7 @@ a[href^="mailto:"] {
   margin-bottom: 10px;
 }
 
-.nav-item.dropdown:hover .dropdown-menu {
+.nav-item.dropdown:hover.dropdown-menu {
   display: block;
   margin-top: 0;
   margin-bottom: 20px;
