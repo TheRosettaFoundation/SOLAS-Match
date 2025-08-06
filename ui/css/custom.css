@@ -146,16 +146,12 @@ a[href^="mailto:"] {
 
 .dropdown-menu {
   margin-bottom: 8px;
+  color: #133978;
   font-weight: 500;
 }
 
 .dropdown-menu a:hover {
   background-color: #eee;
-}
-
-.drop_description:hover {
-  background-color: #eee;
-  color: #133978;
 }
 
 .displayF p,
