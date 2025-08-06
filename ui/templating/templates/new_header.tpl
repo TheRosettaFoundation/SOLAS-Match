@@ -177,8 +177,10 @@
                    {if Settings::get('site.forum_enabled') == 'y'}
                     <li ><a href="{Settings::get('site.forum_link')}" target="_blank" class=" dropdown-item  py-4 fw-bold"> <div>
                     <span class='mx-2'>🎓</span>
-                    Community Forum </div>
-                <div class="fs-5 fw-bold drop_description__shadow text-break mt-2 mx-2 px-2">Ask questions and talk with other community members</div>
+                    <div>Community Forum</div> 
+                     <div class="fs-5 fw-bold drop_description__shadow text-break mt-2 mx-2 px-2">Ask questions and talk with other community members</div>
+                    </div>
+               
                     </a>
                     
                        
