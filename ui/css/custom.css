@@ -154,11 +154,6 @@ a[href^="mailto:"] {
   background-color: #eee;
 }
 
-.drop_description:hover {
-  background-color: #eee;
-  color: #133978;
-}
-
 .displayF p,
 .displayH p {
   margin: 0;
