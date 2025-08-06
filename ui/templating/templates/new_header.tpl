@@ -261,7 +261,7 @@
                 <li class="nav-item dropdown ">
                         <a class="nav-link dropdown-toggle no-caret " href="#" id="hoverDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         <img src="https://www.gravatar.com/avatar/{md5( strtolower( trim($user->getEmail())))}?s=20{urlencode("&")}r=g" alt="" />
-                                       <span class="text-primary"> {TemplateHelper::uiCleanseHTML($user->getDisplayName())} </span>    
+                                       <span class="text-secondary"> {TemplateHelper::uiCleanseHTML($user->getDisplayName())} </span>    
                         </a>
                         <ul class="dropdown-menu"   aria-labelledby="hoverDropdown">
                             <li><a href="{urlFor name="user-public-profile" options="user_id.$user_id"}"   class="dropdown-item fs-5" id="dropdown-menu-user" >Profile</a></li>
