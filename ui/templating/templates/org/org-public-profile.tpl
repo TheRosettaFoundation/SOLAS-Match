@@ -1,6 +1,7 @@
- {include file='header.tpl'} 
-{* {include file='new_header.tpl'} *}
+ {* {include file='header.tpl'}  *}
+{include file='new_header.tpl'}
 
+<div class="container">
 {if isset($org)}
     {if isset($flash['error'])}
         <div class="alert alert-error">
@@ -837,5 +838,8 @@
         {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
     </form>
 {/if}
+
+</div>
+
 
 {include file='footer.tpl'}
