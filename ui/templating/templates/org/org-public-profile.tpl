@@ -1,7 +1,7 @@
  {* {include file='header.tpl'}  *}
 {include file='new_header.tpl'}
 
-<div class="container">
+<div class="container py-4">
 {if isset($org)}
     {if isset($flash['error'])}
         <div class="alert alert-error">
