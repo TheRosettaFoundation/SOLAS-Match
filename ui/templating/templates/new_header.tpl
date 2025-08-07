@@ -177,64 +177,7 @@
                   
                 </ul>
                  </li>
-
-                 {* second trial  *}
-
-                  <li class="nav-item dropdown fw-bold text-secondary">
-                <a class="nav-link dropdown-toggle fs-5  fw-bold no-caret  " href="#" id="hoverDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                    Resources-2
-                </a>
-                <ul class="dropdown-menu" aria-labelledby="hoverDropdown">
-                   {if Settings::get('site.forum_enabled') == 'y'}
-                    <li class="p-2 ">
-                    <a href="{Settings::get('site.forum_link')}" target="_blank" class=" dropdown-item  py-2 fw-bold"> 
-                        <div>
-                            <div>
-                            <span class='mx-2'>🎓</span>
-                            Community Forum 
-                            </div>
-                            <div class="fs-5 text-break mt-2 mx-2 fw-light">Ask questions and talk with other community members</div>                        
-                        </div>
-                
-                    </a>
-                    
-                       
-                    </li>
-                    {/if}
-                    {* {if !isset($site_admin)} *}
-                    <li class="p-2 ">
-                    {* {if isset($user)} *}
-                    <a href="https://elearn.translatorswb.org/auth/saml2/login.php?wants&idp=bd3eb3e6241260ee537b9a55145d852d&passive=off" target="_blank" class="dropdown-item py-2 fw-bold" >
-                    
-                    <div>
-                        <div><span class="mx-2">📚</span> Learning Center </div>
-                        <div class=" mt-2 mx-2 fs-5 fw-lighter "> Courses and training </div>
-                    </div>
-                     
-                    </a>
-                   
-                   
-                     </li>
-                    {* {/if} *}
-                    {* {if !isset($site_admin)} *}
-                    <li {if isset($current_page) && $current_page == 'faq'}" {/if} class="p-2 " > <a  href="https://communitylibrary.translatorswb.org/login" target="_blank" class="dropdown-item py-2 fw-bold">
-                        <div> 
-                            <div><span class="mx-2">💬</span> Community Library</div>
-                            <div class="mt-2 fs-5 fw-lighter mx-2">Instructions, guidelines and reference material</div>
-                        </div>
-                          
-                        </a>
-                      
-                        </li>
-                    {* {/if} *}
-                  
-                </ul>
-                 </li>
-
-                
-               
-                
-
+                                 
             
                  {if !isset($site_admin)}
                         
@@ -288,15 +231,7 @@
 
                    {/if}
                              
-                            {* <li class="profile nav-item">
-                                <a href="{urlFor name="user-public-profile" options="user_id.$user_id"}"  class=" fs-5 nav-link fw-bold">
-                                    <img src="https://www.gravatar.com/avatar/{md5( strtolower( trim($user->getEmail())))}?s=20{urlencode("&")}r=g" alt="" />
-                                       {TemplateHelper::uiCleanseHTML($user->getDisplayName())}
-                                </a>
-                            </li> *}
-                            {* <li class="logout nav-item" >
-                                <a href="{urlFor name="logout"}"   class=" fs-5 nav-link fw-bold">{Localisation::getTranslation('header_log_out')}</a>
-                            </li> *}
+                         
                         {else}
                             <li class="nav-item"><a href="{urlFor name="register"}" class="nav-link fw-bold">Join</a></li>
                             <li class="nav-item"><a href="{urlFor name="login"}" class="nav-link fw-bold">{Localisation::getTranslation('common_log_in')}</a></li>
