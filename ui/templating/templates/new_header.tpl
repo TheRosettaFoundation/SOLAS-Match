@@ -148,9 +148,9 @@
                        
                     </li>
                     {/if}
-                    {* {if !isset($site_admin)} *}
+                 
                     <li class="p-2 border-bottom border-dark-gray">
-                    {* {if isset($user)} *}
+               
                     <a href="https://elearn.translatorswb.org/auth/saml2/login.php?wants&idp=bd3eb3e6241260ee537b9a55145d852d&passive=off" target="_blank" class="dropdown-item py-2 fw-bold" >
                     
                     <div>
@@ -162,8 +162,7 @@
                    
                    
                      </li>
-                    {* {/if} *}
-                    {* {if !isset($site_admin)} *}
+                  
                     <li {if isset($current_page) && $current_page == 'faq'}" {/if} class="p-2 " > <a  href="https://communitylibrary.translatorswb.org/login" target="_blank" class="dropdown-item py-2 fw-bold">
                         <div> 
                             <div><span class="mx-2">💬</span> Community Library</div>
@@ -173,7 +172,7 @@
                         </a>
                       
                         </li>
-                    {* {/if} *}
+                    
                   
                 </ul>
                  </li>
@@ -210,10 +209,7 @@
                             </li>
                       
                         <li> <a href="{urlFor name="logout"}" class="dropdown-item fs-5" id="dropdown-menu-user">{Localisation::getTranslation('header_log_out')}</a></li>
-            
-                            
-                        
-                
+
                         </ul>
                  </li>
 
@@ -230,17 +226,16 @@
                             </li>
 
                    {/if}
-                             
-                         
-                        {else}
-                            <li class="nav-item"><a href="{urlFor name="register"}" class="nav-link fw-bold">Join</a></li>
-                            <li class="nav-item"><a href="{urlFor name="login"}" class="nav-link fw-bold">{Localisation::getTranslation('common_log_in')}</a></li>
-                        {/if}
-                        {if isset($userNotifications)}   
-                            <li class="nav-item">
-                                <a  class=" fs-5 nav-link fw-bold">{Localisation::getTranslation('header_notifications')}<span id="notificationCount">{$userNotifications->lenght()}</span></a>
-                            </li>
-                        {/if}
+                                                      
+                    {else}
+                        <li class="nav-item"><a href="{urlFor name="register"}" class="nav-link fw-bold">Join</a></li>
+                        <li class="nav-item"><a href="{urlFor name="login"}" class="nav-link fw-bold">{Localisation::getTranslation('common_log_in')}</a></li>
+                    {/if}
+                    {if isset($userNotifications)}   
+                        <li class="nav-item">
+                            <a  class=" fs-5 nav-link fw-bold">{Localisation::getTranslation('header_notifications')}<span id="notificationCount">{$userNotifications->lenght()}</span></a>
+                        </li>
+                    {/if}
                     </ul>
             </div>
             </div>
