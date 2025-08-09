@@ -649,7 +649,9 @@ class UserRouteHandler
             $post = $request->getParsedBody();
             if (isset($post['verify'])) {
                 if ($userDao->finishRegistration($uuid)) {
-                    UserRouteHandler::flash('success', Lib\Localisation::getTranslation('email_verification_8'));
+                    $email = $user->getEmail();
+                    error_log("email verification, Login: $email");
+                    return $response->withStatus(302)->withHeader('Location', $userDao->requestAuthCode($email));
                 } else {
                     UserRouteHandler::flash('error', 'Failed to finish registration');  // TODO: remove inline text
                 }

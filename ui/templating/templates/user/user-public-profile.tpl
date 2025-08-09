@@ -1715,19 +1715,16 @@ If a language is to be removed from this list, the community will be informed be
     </div> 
 {/if}
 
-
+{*
  <div class="mt-4 rounded-3 p-4 bg-body fs-5">
 <div class="d-flex justify-content-between flex-wrap">
     <h3 class="fw-bold">{Localisation::getTranslation('common_tags')}<span class="text-muted fs-5"> {Localisation::getTranslation('user_public_profile_8')}</span></h3>
         <a href='{urlFor name='tags-list'}' class="btn btn-primary text-white">
             <i class="fa-solid fa-search me-1"></i> {Localisation::getTranslation('user_public_profile_search_for_tags')}
         </a>
-   
 </div>
 
-
 {if isset($user_tags) && count($user_tags) > 0}
-
     {foreach $user_tags as $tag}
         <p>
             {assign var="tag_label" value=TemplateHelper::uiCleanseHTML($tag->getLabel())}
@@ -1741,9 +1738,9 @@ If a language is to be removed from this list, the community will be informed be
     <p class="alert alert-info mt-2">
         {Localisation::getTranslation('user_public_profile_9')}
     </p>
-   
 {/if}
 </div> 
+*}
 
 {/if}
 {if $private_access || ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)) || !empty($linguist_orgs_for_admin)}

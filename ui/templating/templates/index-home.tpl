@@ -600,8 +600,7 @@ a:hover{
             </form>
         {/if}
 
-          {include file="tag/tags.top-list.flex.inc.tpl"}
-        
+        {* {include file="tag/tags.top-list.flex.inc.tpl"} *}
    
     </div>
 
