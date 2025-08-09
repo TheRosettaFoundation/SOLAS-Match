@@ -1,7 +1,5 @@
 {include file='header.tpl'}
 
-
-
     <div class='page-header'><h1>
     {if $org->getName() != ''}
         {$org->getName()}
