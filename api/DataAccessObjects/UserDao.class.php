@@ -444,20 +444,6 @@ class UserDao
     }
 
     /*
-        Get list of tasks in User's notification list
-    */
-    public static function getUserNotificationList($user_id)
-    {
-        $args = Lib\PDOWrapper::cleanseNull($user_id);
-        $result = Lib\PDOWrapper::call('getUserNotifications', $args);
-        if ($result) {
-            return $result;
-        } else {
-            return null;
-        }
-    }
-
-    /*
         returns true if the user has registered for notifications for this task
     */
     public static function isSubscribedToTask($user_id, $task_id)

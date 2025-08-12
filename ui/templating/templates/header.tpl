@@ -272,11 +272,6 @@
                         {/if}
                     </ul>
                     <ul class="nav pull-right main_nav_right" style="max-height: 38px">
-                        {if isset($userNotifications)}   
-                            <li>
-                                <a>{Localisation::getTranslation('header_notifications')}<span id="notificationCount">{$userNotifications->lenght()}</span></a>
-                            </li>
-                        {/if}
                         {if isset($user)}
                             <li class="profile">
                                 <a href="{urlFor name="user-public-profile" options="user_id.$user_id"}">
