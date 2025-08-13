@@ -9,20 +9,15 @@
     <div id="siteLocation">{$siteLocation}</div>
 </span>
 
- 
     <div class=" col-sm-12 col-md-4 col-lg-3 ">
 
-
-
-     {if isset($user)}
+    {if isset($user)}
             <h5 class="fw-bold mt-5 mb-4">{Localisation::getTranslation('index_filter_available_tasks')}
-            
             </h5>
-         
-           
-            <form method="post" action="{urlFor name="claimed-tasks" options="user_id.$user_id"}">
+
+        <form method="post" action="{urlFor name="claimed-tasks" options="user_id.$user_id"}">
             <div class="filter-block mb-2">
-                
+
                 <select name="taskTypes" id="taskTypes" class="form-select">
                     <option value="0" {if ($selectedTaskType === 0)}selected="selected"{/if}>{Localisation::getTranslation('index_any_task_type')}</option>
                     {foreach from=TaskTypeEnum::$enum_to_UI key=task_type item=ui}
@@ -33,7 +28,6 @@
                 </select>
             </div>
             <div class="filter-block mb-2">
-              
                 <select name="taskStatusFilter" id="taskStatusFilter" class="form-select mt-1">
                     <option value="3" {if ($selectedTaskStatus === 3)}selected="selected"{/if}>{Localisation::getTranslation('common_in_progress')}</option>
                     <option value="0" {if ($selectedTaskStatus === 0)}selected="selected"{/if}>{Localisation::getTranslation('common_any_task_status')}</option>
@@ -41,7 +35,6 @@
                 </select>
             </div>
             <div class="filter-block">
-              
                 <select name="ordering" id="ordering" class="form-select">
                     <option value="0" {if ($selectedOrdering === 0)}selected="selected"{/if}>{Localisation::getTranslation('claimed_tasks_ordering_created_asc')}</option>
                     <option value="1" {if ($selectedOrdering === 1)}selected="selected"{/if}>{Localisation::getTranslation('claimed_tasks_ordering_created_desc')}</option>
@@ -51,25 +44,21 @@
                     <option value="5" {if ($selectedOrdering === 5)}selected="selected"{/if}>{Localisation::getTranslation('claimed_tasks_ordering_title_desc')}</option>
                 </select>
             </div>
-              <div class=" d-grid mt-3 mb-5  ">
+            <div class=" d-grid mt-3 mb-5  ">
             <button class="btn btn-primary text-white align-middle" type="submit">
                <img src="{urlFor name='home'}ui/img/setting-5.svg" alt="Con" class="me-2">{Localisation::getTranslation('index_filter_task_stream')}
             </button>
             </div>
         </form>
+    {/if}
 
-        {/if}
-        
-   
     </div>
 
     <div class="col-sm-12 col-md-8 col-lg-9 mt-4">
 
-
-            {if isset($topTasks) && count($topTasks) > 0}
-            <div class=" d-flex justify-content-start align-items-center mb-3 "> 
-                
-                     <div>
+    {if isset($topTasks) && count($topTasks) > 0}
+            <div class=" d-flex justify-content-start align-items-center mb-3 ">
+                    <div>
                         <h3>
                                 {if isset($thisUser)}
                                     {if $thisUser->getDisplayName() != ''}
@@ -81,14 +70,9 @@
                                     {Localisation::getTranslation('claimed_tasks_claimed_tasks')}
                                 {/if}
                                 <small>{Localisation::getTranslation('claimed_tasks_a_list_of_tasks')}</small>
-                            </h3>
-                                    
-                                     
+                        </h3>
                     </div>
-                
-            
-             </div>   
-
+             </div>
 
             <div class="taskPagination">
 
@@ -100,7 +84,7 @@
                         {assign var="type_id" value=$task->getTaskType()}
                         {assign var="status_id" value=$task->getTaskStatus()}
                         {assign var="task_title" value=$task->getTitle()}
-                       
+
                             <div class="d-flex justify-content-start mb-2 flex-wrap">
                                 <div class="">
                                         <div class="fw-bold fs-3  d-flex align-items-center ">
@@ -116,35 +100,28 @@
                                                 {if isset($chunks[$task_id])}
                                                     <span  class=" ms-1 rounded-pill badge bg-quinary border border-2 border-quartBorder border-opacity-25  text-white font-bold fs-7"> <span> Part {$chunks[$task_id]['low_level'] }</span>/<span>{$chunks[$task_id]['number_of_chunks'] } </span></span>
                                                 {/if}
-
                                         </div>
 
                                         <p class="text-muted">
                                         {Localisation::getTranslation('common_status')}: <strong>{if $status_id == 3 && $memsource_tasks[$task_id] && $matecat_urls[$task_id] == ''}Claimed{else}{$taskStatusTexts[$status_id]}{/if}{if $task->get_cancelled()} (Cancelled){/if}</strong>
-                                         </p>
+                                        </p>
 
                                          <p class="task_details "><div class="process_created_time_utc text-muted" style="visibility: hidden">{$created_timestamps[$task_id]}</div></p>
-                                          
+
                                            {if !empty($completed_timestamps[$task_id])}
                                             <p><div class="process_completed_utc text-muted" style="visibility: hidden">{$completed_timestamps[$task_id]}</div></p>
                                             {/if}
 
                                          {if TaskTypeEnum::$enum_to_UI[$type_id]['source_and_target']}
-                                         
                                             <div class="mb-3  text-muted">
                                                 
                                                 <span class=" ">
                                                     Languages: <strong>{TemplateHelper::getLanguageAndCountryNoCodes($task->getSourceLocale())}  <img src="{urlFor name='home'}ui/img/lang_arr.svg" alt="arrow" class="mx-1" > </strong>
                                                 </span>
-                                               
-                                              
-                                          
+
                                             <span>
-                                           
                                             <strong>{TemplateHelper::getLanguageAndCountryNoCodes($task->getTargetLocale())}</strong>
                                             </span>
-
-                                          
                                             </div>
                                         {else}
 
@@ -157,26 +134,18 @@
                                         </span>
                                         </div>
                                         {/if}
-                                        
-                                            
-                                           
+
                                             <div class="process_deadline_utc d-flex mb-3 flex-wrap align-items-center text-muted" style="visibility: hidden"> {$deadline_timestamps[$task_id]}</div>
                                         </div>
                                     </div>
-                            
-                         
-                           
+
                             {if $task->getProjectId() > Settings::get("discourse.pre_discourse") && !preg_match('/^Test.{4}$/', $task_title)}
                             {/if}
-                            
+
                             <div class="d-flex text-body flex-wrap"> <span  class="project text-muted" >{$projectAndOrgs[$task_id]}</span> 
-                                
                             </div>
 
-                                
                             <div class=" mt-4  ">
-
-
                                         <p>
                                         {if $status_id == 3 && ($type_id == 3 || $type_id == 2 || $type_id == 6)}
                                                 {if $matecat_urls[$task_id] != '' && $memsource_tasks[$task_id]}
@@ -261,31 +230,16 @@
                                     </a>
                                 {/if}
 
-
                                     {if $task->getProjectId() > Settings::get("discourse.pre_discourse") && !preg_match('/^Test.{4}$/', $task_title)}
                                     <a class="btn btn-grayish mt-2 mt-md-0 "href="https://community.translatorswb.org/t/{$discourse_slug[$task_id]}" target="_blank">Discuss</a>
                                     {/if}
-                                
                             </p>
-                                        
-                                        
                                      </div>
-
-                            
-                           
-                           
                         </div>
-
-                        
-                        
                     </div>
-                    
+            {/for}
 
-                {/for}
-
-
-                           {* pagination begins here *}
-              {assign var="url_name" value="claimed-tasks-paged"}
+            {assign var="url_name" value="claimed-tasks-paged"}
             <div class="d-flex justify-content-start">
                 <div class="d-flex">
                     {if $currentScrollPage > 1}
@@ -311,28 +265,15 @@
                     {/if}
                 </div>
             </div>
-
-
-
             </div> 
-            
-
-                                                   
-  
-        {else}
+    {else}
             <p>
                    <p>{Localisation::getTranslation('index_no_tasks_available')}</p>
             </p>
-        {/if}
-      
-    
-    
+    {/if}
+
     </div> 
 </div>
 </div>
 
-
-
-
 {include file='footer2.tpl'}
-
