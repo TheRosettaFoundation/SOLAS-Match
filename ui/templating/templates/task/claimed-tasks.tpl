@@ -124,7 +124,7 @@
                                      <p><div class="process_completed_utc text-muted" style="visibility: hidden">{$completed_timestamps[$task_id]}</div></p>
                                  {/if}
 
-                                 <div><div class="process_deadline_utc d-flex mb-3 flex-wrap align-items-center text-muted" style="visibility: hidden"> {$deadline_timestamps[$task_id]}</div><span> or earlier, if possible<span></div>
+                                 <div class="process_deadline_utc d-flex mb-3 flex-wrap align-items-center text-muted" style="visibility: hidden"> {$deadline_timestamps[$task_id]}</div>
                              </div>
                         </div>
 
