@@ -78,82 +78,79 @@
 
             {for $count=0 to $itemsPerScrollPage-1}
             {assign var="task" value=$topTasks[$count]}
-                    <div class="d-flex justify-content-between mb-4 bg-body-tertiary p-3 rounded-3"  >
-                       <div class=" w-100">
+                <div class="d-flex justify-content-between mb-4 bg-body-tertiary p-3 rounded-3"  >
+                    <div class=" w-100">
                         {assign var="task_id" value=$task->getId()}
                         {assign var="type_id" value=$task->getTaskType()}
                         {assign var="status_id" value=$task->getTaskStatus()}
                         {assign var="task_title" value=$task->getTitle()}
 
-                            <div class="d-flex justify-content-start mb-2 flex-wrap">
-                                <div class="">
-                                        <div class="fw-bold fs-3  d-flex align-items-center ">
-                                            <a id="task-{$task_id}" href="{$siteLocation}task/{$task_id}/view" class="custom-link ">{TemplateHelper::uiCleanseHTMLNewlineAndTabs($task_title)} 
-                                             <img src="{urlFor name='home'}ui/img/question.svg" class="d-none" alt="question_Img" /></a> 
-                                        </div>
+                         <div class="d-flex justify-content-start mb-2 flex-wrap">
+                             <div class="">
+                                 <div class="fw-bold fs-3  d-flex align-items-center ">
+                                    <a id="task-{$task_id}" href="{$siteLocation}task/{$task_id}/view" class="custom-link ">{TemplateHelper::uiCleanseHTMLNewlineAndTabs($task_title)}
+                                    <img src="{urlFor name='home'}ui/img/question.svg" class="d-none" alt="question_Img" /></a>
+                                 </div>
 
-                                        <div class="d-flex mt-2 mb-3 ">
-                                            <span class=" badge rounded-pill border border-2 text-white text-uppercase border-greenBorder border-opacity-25 fs-7 font-bold" style="background-color:{TaskTypeEnum::$enum_to_UI[$type_id]['colour']}">  {TaskTypeEnum::$enum_to_UI[$type_id]['type_text']} </span>
-                                                {if $task->getWordCount()}
-                                                <span type="button" class=" ms-1 rounded-pill badge bg-quartenary border border-2 border-quartBorder border-opacity-25  text-white font-bold fs-7"> {$task->getWordCount()} {TaskTypeEnum::$enum_to_UI[$type_id]['unit_count_text_short']} </span>
-                                                {/if}
-                                                {if isset($chunks[$task_id])}
-                                                    <span  class=" ms-1 rounded-pill badge bg-quinary border border-2 border-quartBorder border-opacity-25  text-white font-bold fs-7"> <span> Part {$chunks[$task_id]['low_level'] }</span>/<span>{$chunks[$task_id]['number_of_chunks'] } </span></span>
-                                                {/if}
-                                        </div>
+                                 <div class="d-flex mt-2 mb-3 ">
+                                     <span class=" badge rounded-pill border border-2 text-white text-uppercase border-greenBorder border-opacity-25 fs-7 font-bold" style="background-color:{TaskTypeEnum::$enum_to_UI[$type_id]['colour']}">  {TaskTypeEnum::$enum_to_UI[$type_id]['type_text']} </span>
+                                     {if $task->getWordCount()}
+                                         <span type="button" class=" ms-1 rounded-pill badge bg-quartenary border border-2 border-quartBorder border-opacity-25  text-white font-bold fs-7"> {$task->getWordCount()} {TaskTypeEnum::$enum_to_UI[$type_id]['unit_count_text_short']} </span>
+                                     {/if}
+                                     {if isset($chunks[$task_id])}
+                                         <span  class=" ms-1 rounded-pill badge bg-quinary border border-2 border-quartBorder border-opacity-25  text-white font-bold fs-7"> <span> Part {$chunks[$task_id]['low_level'] }</span>/<span>{$chunks[$task_id]['number_of_chunks'] } </span></span>
+                                     {/if}
+                                 </div>
 
-                                        <p class="text-muted">
-                                        {Localisation::getTranslation('common_status')}: <strong>{if $status_id == 3 && $memsource_tasks[$task_id] && $matecat_urls[$task_id] == ''}Claimed{else}{$taskStatusTexts[$status_id]}{/if}{if $task->get_cancelled()} (Cancelled){/if}</strong>
-                                        </p>
+                                 <p class="text-muted">
+                                     {Localisation::getTranslation('common_status')}: <strong>{if $status_id == 3 && $memsource_tasks[$task_id] && $matecat_urls[$task_id] == ''}Claimed{else}{$taskStatusTexts[$status_id]}{/if}{if $task->get_cancelled()} (Cancelled){/if}</strong>
+                                 </p>
 
-                                         <p class="task_details "><div class="process_created_time_utc text-muted" style="visibility: hidden">{$created_timestamps[$task_id]}</div></p>
+                                 <p class="task_details "><div class="process_created_time_utc text-muted" style="visibility: hidden">{$created_timestamps[$task_id]}</div></p>
 
-                                           {if !empty($completed_timestamps[$task_id])}
-                                            <p><div class="process_completed_utc text-muted" style="visibility: hidden">{$completed_timestamps[$task_id]}</div></p>
-                                            {/if}
+                                 {if !empty($completed_timestamps[$task_id])}
+                                     <p><div class="process_completed_utc text-muted" style="visibility: hidden">{$completed_timestamps[$task_id]}</div></p>
+                                 {/if}
 
-                                         {if TaskTypeEnum::$enum_to_UI[$type_id]['source_and_target']}
-                                            <div class="mb-3  text-muted">
-                                                
-                                                <span class=" ">
-                                                    Languages: <strong>{TemplateHelper::getLanguageAndCountryNoCodes($task->getSourceLocale())}  <img src="{urlFor name='home'}ui/img/lang_arr.svg" alt="arrow" class="mx-1" > </strong>
-                                                </span>
-
-                                            <span>
+                                 {if TaskTypeEnum::$enum_to_UI[$type_id]['source_and_target']}
+                                     <div class="mb-3  text-muted">
+                                         <span class=" ">
+                                             Languages: <strong>{TemplateHelper::getLanguageAndCountryNoCodes($task->getSourceLocale())}  <img src="{urlFor name='home'}ui/img/lang_arr.svg" alt="arrow" class="mx-1" > </strong>
+                                         </span>
+                                         <span>
                                             <strong>{TemplateHelper::getLanguageAndCountryNoCodes($task->getTargetLocale())}</strong>
-                                            </span>
-                                            </div>
-                                        {else}
-
-                                        <div class="mb-3  text-muted">
+                                         </span>
+                                     </div>
+                                 {else}
+                                     <div class="mb-3  text-muted">
                                         <span class=" ">
                                             Language:
                                         </span>
                                         <span>
-                                        <strong>{TemplateHelper::getLanguageAndCountryNoCodes($task->getTargetLocale())}</strong>
+                                            <strong>{TemplateHelper::getLanguageAndCountryNoCodes($task->getTargetLocale())}</strong>
                                         </span>
-                                        </div>
-                                        {/if}
+                                     </div>
+                                 {/if}
 
-                                            <div class="process_deadline_utc d-flex mb-3 flex-wrap align-items-center text-muted" style="visibility: hidden"> {$deadline_timestamps[$task_id]}</div>
-                                        </div>
-                                    </div>
+                                 <div class="process_deadline_utc d-flex mb-3 flex-wrap align-items-center text-muted" style="visibility: hidden"> {$deadline_timestamps[$task_id]}</div>
+                             </div>
+                        </div>
 
-                            {if $task->getProjectId() > Settings::get("discourse.pre_discourse") && !preg_match('/^Test.{4}$/', $task_title)}
-                            {/if}
+                        {if $task->getProjectId() > Settings::get("discourse.pre_discourse") && !preg_match('/^Test.{4}$/', $task_title)}
+                        {/if}
 
-                            <div class="d-flex text-body flex-wrap"> <span  class="project text-muted" >{$projectAndOrgs[$task_id]}</span> 
-                            </div>
+                        <div class="d-flex text-body flex-wrap"> <span  class="project text-muted" >{$projectAndOrgs[$task_id]}</span>
+                        </div>
 
-                            <div class=" mt-4  ">
-                                        <p>
-                                        {if $status_id == 3 && ($type_id == 3 || $type_id == 2 || $type_id == 6)}
-                                                {if $matecat_urls[$task_id] != '' && $memsource_tasks[$task_id]}
-                                                    {if $type_id == 2}
-                                                        <a href="{$matecat_urls[$task_id]}" target="_blank" class="btn btn-small btn-success">
-                                                            {if $memsource_tasks[$task_id]}Translate using Phrase TMS{else}{Localisation::getTranslation('task_claimed_translate_using_kato')}{/if}
-                                                        </a>
-                                                    {elseif $type_id == 3}
+                        <div class=" mt-4  ">
+                            <p>
+                                {if $status_id == 3 && ($type_id == 3 || $type_id == 2 || $type_id == 6)}
+                                    {if $matecat_urls[$task_id] != '' && $memsource_tasks[$task_id]}
+                                        {if $type_id == 2}
+                                            <a href="{$matecat_urls[$task_id]}" target="_blank" class="btn btn-small btn-success">
+                                                {if $memsource_tasks[$task_id]}Translate using Phrase TMS{else}{Localisation::getTranslation('task_claimed_translate_using_kato')}{/if}
+                                            </a>
+                                        {elseif $type_id == 3}
                                             <a href="{$matecat_urls[$task_id]}" target="_blank" class="btn btn-small btn-success">
                                                 {if $memsource_tasks[$task_id]}Revise using Phrase TMS{else}{Localisation::getTranslation('task_claimed_proofread_using_kato')}{/if}
                                             </a>
@@ -234,9 +231,9 @@
                                     <a class="btn btn-grayish mt-2 mt-md-0 "href="https://community.translatorswb.org/t/{$discourse_slug[$task_id]}" target="_blank">Discuss</a>
                                     {/if}
                             </p>
-                                     </div>
                         </div>
                     </div>
+                </div>
             {/for}
 
             {assign var="url_name" value="claimed-tasks-paged"}
