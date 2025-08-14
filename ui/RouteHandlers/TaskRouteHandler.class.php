@@ -274,7 +274,6 @@ class TaskRouteHandler
         }
 
         $taskTags = array();
-        $created_timestamps = array();
         $deadline_timestamps = array();
         $completed_timestamps = [];
         $projectAndOrgs = array();
@@ -301,14 +300,6 @@ class TaskRouteHandler
                 $org = $orgDao->getOrganisation($org_id);
 
                 $taskTags[$taskId] = $taskDao->getTaskTags($taskId);
-
-                $created = $topTask->getCreatedTime();
-                $selected_year   = (int)substr($created,  0, 4);
-                $selected_month  = (int)substr($created,  5, 2);
-                $selected_day    = (int)substr($created,  8, 2);
-                $selected_hour   = (int)substr($created, 11, 2); // These are UTC, they will be recalculated to local time by JavaScript (we do not what the local time zone is)
-                $selected_minute = (int)substr($created, 14, 2);
-                $created_timestamps[$taskId] = gmmktime($selected_hour, $selected_minute, 0, $selected_month, $selected_day, $selected_year);
 
                 $deadline = $topTask->getDeadline();
                 $selected_year   = (int)substr($deadline,  0, 4);
@@ -419,7 +410,6 @@ class TaskRouteHandler
             'chunks' => $chunks,
             'taskStatusTexts' => $taskStatusTexts,
             'taskTags' => $taskTags,
-            'created_timestamps' => $created_timestamps,
             'deadline_timestamps' => $deadline_timestamps,
             'completed_timestamps' => $completed_timestamps,
             'projectAndOrgs' => $projectAndOrgs,

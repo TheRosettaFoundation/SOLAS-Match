@@ -725,7 +725,7 @@ Should you have any questions please contact <a href="mailto:info@translatorswit
 	<string name="archived_tasks_0">A list of tasks you have worked on in the past.</string>
 
 	<string name="claimed_tasks_claimed_tasks">My Tasks</string>
-    <string name="claimed_tasks_users_claimed_tasks">%s's My Tasks</string>
+    <string name="claimed_tasks_users_claimed_tasks">My Tasks for %s</string>
 	<string name="claimed_tasks_a_list_of_tasks">A list of tasks you are currently working on.</string>
     <string name="claimed_tasks_ordering">Ordering</string>
     <!-- Strings for ordering selection in claimed tasks filter -->
