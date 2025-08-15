@@ -123,6 +123,67 @@ function renderTaskDetails() {
         $(this).css("visibility", "visible");
     });
 
+    $(".process_deadline_utc_if_possible").each(function () {
+        $(this).removeClass("process_deadline_utc_if_possible");
+        var utcTime = $(this).text();
+
+        utcTime = parseInt(utcTime) * 1000;
+        var deadline = new Date(utcTime);
+        var m = deadline.getMonth() + 1;
+        if (m < 10) {
+            m = "0" + m;
+        }
+        var d = deadline.getDate();
+        if (d < 10) {
+            d = "0" + d;
+        }
+        var h = deadline.getHours();
+        if (h < 10) {
+            h = "0" + h;
+        }
+        var mi = deadline.getMinutes();
+        if (mi < 10) {
+            mi = "0" + mi;
+        }
+        $(this).html(
+            parameters.getTranslation("common_due_by").replace(
+                "%s",
+
+                "<div class='d-flex align-items-center  ms-2 me-4 '>" +
+                    `<div class="me-2">` +
+                    deadline.getFullYear() +
+                    "-" +
+                    m +
+                    "-" +
+                    d +
+                    `</div>` +
+                    `<div class=" d-flex align-items-center wrap mx-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#f89406" class="bi bi-clock" viewBox="0 0 16 16" class="ms-2 me-1">
+                        <path d="M8 3.5a.5.5 0 0 0-1 0V9a.5.5 0 0 0 .252.434l3.5 2a.5.5 0 0 0 .496-.868L8 8.71z"/>
+                        <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16m7-8A7 7 0 1 1 1 8a7 7 0 0 1 14 0"/>
+                        </svg>
+
+
+                  ` +
+                    " " +
+                    `<span class="mx-2"> ` +
+                    h +
+                    ":" +
+                    mi +
+                    ":00 " +
+                    " " +
+                    "</span>" +
+                    "</div>" +
+                    "</div>"
+            ) +
+                `<div class="fw-bold">` +
+                Intl.DateTimeFormat().resolvedOptions().timeZone +
+                ` or earlier, if possible</div>`
+        );
+
+        $(this).css("visibility", "visible");
+    });
+
     $(".process_deadline_utc_non_timezone").each(function () {
         $(this).removeClass("process_deadline_utc_non_timezone");
         const max_translation_deadline = $(this).text();
