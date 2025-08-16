@@ -1165,4 +1165,23 @@ error_log("createTaskDirectly: $args");
     {
         LibAPI\PDOWrapper::call('remove_user_type', LibAPI\PDOWrapper::cleanse($user_id));
     }
+
+    public function get_taskviews_for_user($user_id, $t0 = 0, $t1 = 0, $t2 = 0, $t3 = 0, $t4 = 0, $t5 = 0)
+    {
+        $args = LibAPI\PDOWrapper::cleanse($user_id) . ',' .
+                LibAPI\PDOWrapper::cleanse($t0) . ',' .
+                LibAPI\PDOWrapper::cleanse($t1) . ',' .
+                LibAPI\PDOWrapper::cleanse($t2) . ',' .
+                LibAPI\PDOWrapper::cleanse($t3) . ',' .
+                LibAPI\PDOWrapper::cleanse($t4) . ',' .
+                LibAPI\PDOWrapper::cleanse($t5);
+        $result = LibAPI\PDOWrapper::call('get_taskviews_for_user', $args);
+        if (empty($result)) return [];
+
+        $views = [];
+        foreach ($result as $row) {
+            $views[$row['task_id']] = $row;
+        }
+        return $views;
+    }
 }

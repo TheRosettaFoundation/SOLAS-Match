@@ -427,7 +427,7 @@ class TaskRouteHandler
             'itemsPerScrollPage' => $itemsPerScrollPage,
             'lastScrollPage' => $lastScrollPage,
             'extra_scripts' => $extra_scripts,
-            
+            'taskviews' => $taskDao->get_taskviews_for_user($user_id, ...$tasksIds),
         ));
         return UserRouteHandler::render('task/claimed-tasks.tpl', $response);
     }

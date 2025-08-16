@@ -138,6 +138,9 @@
                             <p>
                                 {if $status_id == 3 && ($type_id == 3 || $type_id == 2 || $type_id == 6)}
                                     {if $matecat_urls[$task_id] != '' && $memsource_tasks[$task_id]}
+                                      {if empty($taskviews[$task_id])}
+                                            <a href="{urlFor name="task-view" options="task_id.$task_id"}" class="btn btn-small btn-success">Review task instructions</a>
+                                      {else}
                                         {if $type_id == 2}
                                             <a href="{$matecat_urls[$task_id]}" target="_blank" class="btn btn-small btn-success">
                                                 {if $memsource_tasks[$task_id]}Translate using Phrase TMS{else}{Localisation::getTranslation('task_claimed_translate_using_kato')}{/if}
@@ -151,6 +154,7 @@
                                                 Proofread using Phrase TMS
                                             </a>
                                         {/if}
+                                      {/if}
                                     {/if}
                                     {if $allow_downloads[$task_id]}
                                     <a href="{$siteLocation}task/{$task_id}/simple-upload" class="btn btn-small btn-success">

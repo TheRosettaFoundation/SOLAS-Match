@@ -4563,6 +4563,24 @@ BEGIN
 END//
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `get_taskviews_for_user`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_taskviews_for_user`(IN uID INT, IN t0 BIGINT, IN t1 BIGINT, IN t2 BIGINT, IN t3 BIGINT, IN t4 BIGINT, IN t5 BIGINT)
+BEGIN
+    SELECT
+        tv.task_id,
+        COUNT(*) AS count,
+        MAX(tv.`viewed-time`) AS date_viewed_task
+    FROM TaskClaims tc
+    JOIN TaskViews  tv ON tc.task_id=tv.task_id AND tv.user_id=uID AND tc.`claimed-time`<tv.`viewed-time`
+    WHERE
+        tc.user_id=uID AND
+        (tc.task_id=t0 OR tc.task_id=t1 OR tc.task_id=t2 OR tc.task_id=t3 OR tc.task_id=t4 OR tc.task_id=t5)
+    GROUP BY tc.task_id
+    ORDER BY tc.task_id;
+END//
+DELIMITER ;
+
 DROP PROCEDURE IF EXISTS `getUserRecentTasks`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getUserRecentTasks`(IN `userID` INT, IN `lim` INT, IN `offset` INT)
