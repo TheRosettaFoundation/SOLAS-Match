@@ -297,7 +297,7 @@ $(document).ready(function () {
 });
 
 function open_task_view(task_id) {
-    window.open("{urlFor name="home"}task/" + task_id + "/view/", "_blank");
+    window.open(document.getElementById("siteLocation").innerHTML + "task/" + task_id + "/view/", "_blank");
     document.getElementById("instructions_" + task_id).classList.add("d-none");
     document.getElementById("phrase_" + task_id).classList.remove("d-none");
     return false;
