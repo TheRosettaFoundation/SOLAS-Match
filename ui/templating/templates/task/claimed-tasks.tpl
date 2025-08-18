@@ -139,10 +139,10 @@
                                 {if $status_id == 3 && ($type_id == 3 || $type_id == 2 || $type_id == 6)}
                                     {if $matecat_urls[$task_id] != '' && $memsource_tasks[$task_id]}
                                         {if empty($taskviews[$task_id])}
-                                          <div id="instructions_{$task_id}">
-                                            <a href="{urlFor name="task-view" options="task_id.$task_id"}" target="_blank" onclick="open_task_view({$task_id});" class="btn btn-small btn-success">Review task instructions</a>
-                                          </div>
-                                          <div id="phrase_{$task_id}" class="d-none">
+                                          <span id="instructions_{$task_id}">
+                                            <a href="{$siteLocation}task/{$task_id}/view" target="_blank" onclick="open_task_view({$task_id});" class="btn btn-small btn-success">Review task instructions</a>
+                                          </span>
+                                          <span id="phrase_{$task_id}" class="d-none">
                                         {/if}
                                         {if $type_id == 2}
                                             <a href="{$matecat_urls[$task_id]}" target="_blank" class="btn btn-small btn-success">
@@ -158,7 +158,7 @@
                                             </a>
                                         {/if}
                                         {if empty($taskviews[$task_id])}
-                                          </div>
+                                          </span>
                                         {/if}
                                     {/if}
                                     {if $allow_downloads[$task_id]}
