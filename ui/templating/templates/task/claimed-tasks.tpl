@@ -185,9 +185,18 @@
                                 {/if}
 
                                {if $status_id == 3 && TaskTypeEnum::$enum_to_UI[$type_id]['shell_task'] && !empty($shell_task_urls[$task_id])}
+                                    {if empty($taskviews[$task_id])}
+                                        <span id="instructions_{$task_id}">
+                                            <a href="{$siteLocation}task/{$task_id}/view" class="btn btn-small btn-success">Review task instructions</a>
+                                        </span>
+                                        <span id="phrase_{$task_id}" class="d-none">
+                                    {/if}
                                     <a href="{$shell_task_urls[$task_id]}" target="_blank" class="btn btn-small btn-success mt-2 mt-md-0">
                                         Work using this URL
                                     </a>
+                                    {if empty($taskviews[$task_id])}
+                                        </span>
+                                    {/if}
                                 {/if}
 
                                 <a href="{$siteLocation}user/task/{$task_id}/reviews" class="btn btn-small btn-primary mt-2 mt-md-0 text-white">
