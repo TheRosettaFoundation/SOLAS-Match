@@ -140,7 +140,7 @@
                                     {if $matecat_urls[$task_id] != '' && $memsource_tasks[$task_id]}
                                         {if empty($taskviews[$task_id])}
                                           <span id="instructions_{$task_id}">
-                                            <a href="{$siteLocation}task/{$task_id}/view" target="_blank" onclick="open_task_view({$task_id});" class="btn btn-small btn-success">Review task instructions</a>
+                                            <a href="{$siteLocation}task/{$task_id}/view" class="btn btn-small btn-success">Review task instructions</a>
                                           </span>
                                           <span id="phrase_{$task_id}" class="d-none">
                                         {/if}
