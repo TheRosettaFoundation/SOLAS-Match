@@ -140,7 +140,7 @@
                                     {if $matecat_urls[$task_id] != '' && $memsource_tasks[$task_id]}
                                         {if empty($taskviews[$task_id])}
                                           <span id="instructions_{$task_id}">
-                                            <a href="{$siteLocation}task/{$task_id}/view" class="btn btn-small btn-success">Review task instructions</a>
+                                            <a href="{$siteLocation}task/{$task_id}/view" class="btn btn-small btn-success">Review Instructions and Start Working</a>
                                           </span>
                                           <span id="phrase_{$task_id}" class="d-none">
                                         {/if}
@@ -187,7 +187,7 @@
                                {if $status_id == 3 && TaskTypeEnum::$enum_to_UI[$type_id]['shell_task'] && !empty($shell_task_urls[$task_id])}
                                     {if empty($taskviews[$task_id])}
                                         <span id="instructions_{$task_id}">
-                                            <a href="{$siteLocation}task/{$task_id}/view" class="btn btn-small btn-success">Review task instructions</a>
+                                            <a href="{$siteLocation}task/{$task_id}/view" class="btn btn-small btn-success">Review Instructions and Start Working</a>
                                         </span>
                                         <span id="phrase_{$task_id}" class="d-none">
                                     {/if}
