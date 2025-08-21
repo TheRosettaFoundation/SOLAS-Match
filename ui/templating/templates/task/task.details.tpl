@@ -1,4 +1,10 @@
 <!-- Editor Hint: ¿áéíóú -->
+
+{assign var="status_id" value=$task->getTaskStatus()}
+{if !empty($details_claimant)}
+    {assign var="user_id" value=$details_claimant->getId()}
+{/if}
+
 <div class="bg-body p-2 border-secondary rounded-3 mt-4 ">
 <div class="table-responsive ">
 <table class="table ">
@@ -63,7 +69,6 @@
 
             {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $NGO_ADMIN + $NGO_PROJECT_OFFICER)}
                 <td>
-                    {assign var="status_id" value=$task->getTaskStatus()}
                     {if $status_id == TaskStatusEnum::WAITING_FOR_PREREQUISITES}
                         {Localisation::getTranslation('common_waiting')}
                     {elseif $status_id == TaskStatusEnum::PENDING_CLAIM}
@@ -190,8 +195,15 @@
                 </th>
              
                 <th class="w-50" >
-                    {if ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)) && !empty($matecat_url)}<strong>{if !empty($memsource_task)}{if !TaskTypeEnum::$enum_to_UI[$type_id]['shell_task']}Phrase TMS{/if}{else}Kató TM{/if} URL for task:</strong>
-                    {elseif in_array($project->getOrganisationId(), $ORG_EXCEPTIONS) && $roles & ($NGO_ADMIN + $NGO_PROJECT_OFFICER) && !empty($matecat_url) && TaskTypeEnum::$enum_to_UI[$type_id]['shell_task']}<strong>URL for task:</strong>{/if}
+                    {if !empty($matecat_url)}
+                        {if ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER))}
+                            <strong>Ready to start working?</strong>
+                        {elseif in_array($project->getOrganisationId(), $ORG_EXCEPTIONS) && $roles & ($NGO_ADMIN + $NGO_PROJECT_OFFICER) && TaskTypeEnum::$enum_to_UI[$type_id]['shell_task']}
+                            <strong>Ready to start working?</strong>
+                        (elseif !empty($user_id) && $user_id == $current_user_id && $status_id == TaskStatusEnum::IN_PROGRESS}
+                            <strong>Ready to start working?</strong>
+                        {/if}
+                    {/if}
                 </th>
               </tr>  
             </thead>
@@ -204,8 +216,31 @@
                 <td class="w-50 ">
                   <div class="d-flex">
                     <div class="pb-0 bg-dark rounded-2">
-                        {if ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)) && !empty($matecat_url)}<a href="{$matecat_url}" class="btngray-lg" target="_blank"> Job URL <img src="{urlFor name='home'}ui/img/url.svg" alt="url" /></a>
-                        {elseif in_array($project->getOrganisationId(), $ORG_EXCEPTIONS) && $roles & ($NGO_ADMIN + $NGO_PROJECT_OFFICER) && !empty($matecat_url) && TaskTypeEnum::$enum_to_UI[$type_id]['shell_task']}<a href="{$matecat_url}" class="btngray-lg" target="_blank"> Job URL <img src="{urlFor name='home'}ui/img/url.svg" alt="url" /></a>{/if}
+                      {if !empty($matecat_url)}
+                        {if $type_id == 2}
+                            {assign var="translate_text" value="Translate using Phrase TMS"}
+                        {elseif $type_id == 3}
+                            {assign var="translate_text" value="Revise using Phrase TMS"}
+                        {elseif $type_id == 6}
+                            {assign var="translate_text" value="Proofread using Phrase TMS"}
+                        {else}
+                            {assign var="translate_text" value="Work using this URL"}
+                        {/if}
+
+                        {if ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER))}
+                            <a href="{$matecat_url}" class="btngray-lg" target="_blank">
+                                {$translate_text} <img src="{urlFor name='home'}ui/img/url.svg" alt="url" />
+                            </a>
+                        {elseif in_array($project->getOrganisationId(), $ORG_EXCEPTIONS) && $roles & ($NGO_ADMIN + $NGO_PROJECT_OFFICER) && TaskTypeEnum::$enum_to_UI[$type_id]['shell_task']}
+                            <a href="{$matecat_url}" class="btngray-lg" target="_blank">
+                                {$translate_text} <img src="{urlFor name='home'}ui/img/url.svg" alt="url" />
+                            </a>
+                        (elseif !empty($user_id) && $user_id == $current_user_id && $status_id == TaskStatusEnum::IN_PROGRESS}
+                            <a href="{$matecat_url}" class="btngray-lg" target="_blank">
+                                {$translate_text} <img src="{urlFor name='home'}ui/img/url.svg" alt="url" />
+                            </a>
+                        {/if}
+                      {/if}
                     </div>
                  <div>
                  </td>
@@ -369,7 +404,6 @@
                 <div class="convert_utc_to_local_deadline" style="visibility: hidden">{$details_claimed_date}</div>
             </td>
             <td>
-                {assign var="user_id" value=$details_claimant->getId()}
                 <a href="{urlFor name="user-public-profile" options="user_id.$user_id"}">{TemplateHelper::uiCleanseHTML($details_claimant->getDisplayName())}</a>
             </td>
             {/if}
