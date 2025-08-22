@@ -713,6 +713,8 @@
             </table>
             {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
         </form>
+
+        <a href="{urlFor name="org_members"}">Download Organization Members</a>
     {else}
         <p class="alert alert-info">{Localisation::getTranslation('org_public_profile_no_members')}</p>
     {/if}

@@ -93,6 +93,12 @@ class OrgRouteHandler
             '\SolasMatch\UI\RouteHandlers\OrgRouteHandler:orgTaskReviews')
             ->add('\SolasMatch\UI\Lib\Middleware:authUserForOrg_incl_community_officer')
             ->setName('org-task-reviews');
+
+        $app->get(
+            '/org/{org_id}/org_members[/]',
+            '\SolasMatch\UI\RouteHandlers\AdminRouteHandler:org_members')
+            ->add('\SolasMatch\UI\Lib\Middleware:auth_admin_any_or_ngo_admin')
+            ->setName('org_members');
     }
 
     public function createOrg(Request $request, Response $response)
@@ -2140,6 +2146,24 @@ class OrgRouteHandler
 
         $template_data = array_merge($template_data, $viewData);
         return UserRouteHandler::render('org/org.task-reviews.tpl', $response);
+    }
+
+    public function org_members(Request $request, Response $response, $args)
+    {
+        $org_members = $adminDao->getOrgMembers($args['org_id']);
+
+        $data = "\xEF\xBB\xBF";
+        foreach ($org_members as $om) {
+            $data .= '"' . $om['id'] . '","' . $om['first_name'] . '","' . $om['last_name'] . '","' . $om['email'] . '","' . $om['roles_text'] . '"' . "\n";
+        }
+        header('Content-type: text/csv');
+        header('Content-Disposition: attachment; filename="org_members.csv"');
+        header('Content-length: ' . strlen($data));
+        header('X-Frame-Options: ALLOWALL');
+        header('Pragma: no-cache');
+        header('Cache-control: no-cache, must-revalidate, no-transform');
+        echo $data;
+        die;
     }
 }
 

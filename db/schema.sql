@@ -2758,9 +2758,22 @@ BEGIN
             (SELECT code      FROM Countries c WHERE c.id = u.country_id)  AS countryCode,
             u.nonce,
             u.`created-time` AS created_time,
-            roles
+            roles,
+        CASE
+            WHEN a.roles&14=14 THEN 'NGO Admin, NGO Project Officer, NGO Linguist'
+            WHEN a.roles&14=12 THEN 'NGO Admin, NGO Project Officer'
+            WHEN a.roles&14=10 THEN 'NGO Admin, NGO Linguist'
+            WHEN a.roles&14=6  THEN 'NGO Project Officer, NGO Linguist'
+            WHEN a.roles&14=8  THEN 'NGO Admin'
+            WHEN a.roles&14=4  THEN 'NGO Project Officer'
+            WHEN a.roles&14=2  THEN 'NGO Linguist'
+        END AS roles_text,
+        a.source_of_user, # 1 => this linguist was invited to this NGO by the NGO itself
+        i.`first-name` AS first_name,
+        i.`last-name` AS last_name
         FROM Admins a
         JOIN Users  u ON a.user_id=u.id
+        JOIN UserPersonalInformation i ON u.id=i.user_id
         WHERE
             a.organisation_id=oID AND
             (a.roles&(@NGO_ADMIN | @NGO_PROJECT_OFFICER | @NGO_LINGUIST))!=exclude AND
