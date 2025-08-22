@@ -227,10 +227,6 @@
                             {assign var="translate_text" value="Work using this URL"}
                         {/if}
 
-roles:{$roles}
-{if in_array($project->getOrganisationId(), $ORG_EXCEPTIONS) && $roles & ($NGO_ADMIN + $NGO_PROJECT_OFFICER) && TaskTypeEnum::$enum_to_UI[$type_id]['shell_task']}FULL IF{/if}
-{if in_array($project->getOrganisationId(), $ORG_EXCEPTIONS)}IN ORG ACCEPT{/if}
-{if TaskTypeEnum::$enum_to_UI[$type_id]['shell_task']}SHELLTASK{/if}
                         {if ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER))}
                             <a href="{$matecat_url}" class="btngray-lg" target="_blank">
                                 {$translate_text} <img src="{urlFor name='home'}ui/img/url.svg" alt="url" />
