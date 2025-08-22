@@ -200,7 +200,7 @@
                             <strong>Ready to start working?</strong>
                         {elseif in_array($project->getOrganisationId(), $ORG_EXCEPTIONS) && $roles & ($NGO_ADMIN + $NGO_PROJECT_OFFICER) && TaskTypeEnum::$enum_to_UI[$type_id]['shell_task']}
                             <strong>Ready to start working?</strong>
-                        (elseif !empty($user_id) && $user_id == $current_user_id && $status_id == TaskStatusEnum::IN_PROGRESS}
+                        {elseif !empty($user_id) && $user_id == $current_user_id && $status_id == TaskStatusEnum::IN_PROGRESS}
                             <strong>Ready to start working?</strong>
                         {/if}
                     {/if}
@@ -235,7 +235,7 @@
                             <a href="{$matecat_url}" class="btngray-lg" target="_blank">
                                 {$translate_text} <img src="{urlFor name='home'}ui/img/url.svg" alt="url" />
                             </a>
-                        (elseif !empty($user_id) && $user_id == $current_user_id && $status_id == TaskStatusEnum::IN_PROGRESS}
+                        {elseif !empty($user_id) && $user_id == $current_user_id && $status_id == TaskStatusEnum::IN_PROGRESS}
                             <a href="{$matecat_url}" class="btngray-lg" target="_blank">
                                 {$translate_text} <img src="{urlFor name='home'}ui/img/url.svg" alt="url" />
                             </a>
