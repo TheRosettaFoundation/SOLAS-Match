@@ -2150,6 +2150,7 @@ class OrgRouteHandler
 
     public function org_members(Request $request, Response $response, $args)
     {
+        $adminDao = new DAO\AdminDao();
         $org_members = $adminDao->getOrgMembers($args['org_id']);
 
         $data = "\xEF\xBB\xBF";
