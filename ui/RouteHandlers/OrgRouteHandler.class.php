@@ -96,7 +96,7 @@ class OrgRouteHandler
 
         $app->get(
             '/org/{org_id}/org_members[/]',
-            '\SolasMatch\UI\RouteHandlers\AdminRouteHandler:org_members')
+            '\SolasMatch\UI\RouteHandlers\OrgRouteHandler:org_members')
             ->add('\SolasMatch\UI\Lib\Middleware:auth_admin_any_or_ngo_admin')
             ->setName('org_members');
     }
