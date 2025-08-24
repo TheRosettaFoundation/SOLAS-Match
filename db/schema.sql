@@ -2783,7 +2783,7 @@ BEGIN
 END//
 DELIMITER ;
 
-
+# Not currently used...
 DROP PROCEDURE IF EXISTS `getAdminsForOrg`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getAdminsForOrg`(IN `orgId` INT)
