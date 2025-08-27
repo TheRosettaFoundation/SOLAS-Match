@@ -246,16 +246,31 @@ a[href^="mailto:"] {
     transform: none !important;
     width: 100%;
     min-width: auto;
+    max-width: 100%;
     box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1);
     border-radius: 0;
     margin: 8px 0 0 0;
     background: #f8f9fa;
     backdrop-filter: none;
+    overflow: hidden;
   }
   .dropdown-item {
     margin-bottom: 4px;
     border-radius: 6px;
     padding: 12px;
+    white-space: normal;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    hyphens: auto;
+  }
+  .dropdown-item .drop_description {
+    white-space: normal;
+    word-break: break-word;
+    overflow-wrap: anywhere;
+    display: block;
+    margin-bottom: 10px;
+    font-weight: 700;
+    padding-right: 0;
   }
   .navbar-toggler {
     border: none;
@@ -266,8 +281,75 @@ a[href^="mailto:"] {
     padding-top: 16px;
     border-top: 2px solid #e9ecef;
   }
+  .menu_list {
+    height: auto;
+    max-height: 250px;
+    width: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+  .nav-item.dropdown .dropdown-menu {
+    margin-bottom: 20px;
+    font-weight: 500;
+  }
 }
-@media (min-width: 768px) {
+@media (max-width: 575.98px) {
+  .dropdown-menu {
+    padding: 8px;
+    margin: 4px 0 0 0;
+  }
+  .dropdown-item {
+    padding: 8px 12px;
+    font-size: 14px;
+    line-height: 1.4;
+  }
+  .dropdown-item .drop_description {
+    font-size: 12px;
+    margin-bottom: 6px;
+    line-height: 1.3;
+  }
+  .menu_list {
+    max-height: 200px;
+  }
+  .form_action {
+    width: 100%;
+    height: auto;
+    min-height: 48px;
+    margin: 4px 0;
+    padding: 8px;
+    flex-direction: column;
+    text-align: center;
+  }
+  .form_action:hover {
+    width: 100%;
+    height: auto;
+    min-height: 52px;
+  }
+}
+@media (min-width: 768px) and (max-width: 991.98px) {
+  .dropdown-menu {
+    max-width: 300px;
+    width: auto;
+  }
+  .menu_list {
+    height: 180px;
+    overflow-y: auto;
+  }
+  .drop_description {
+    border-radius: 4px;
+    text-align: start;
+    padding: 12px;
+    word-break: break-word;
+    overflow-wrap: anywhere;
+    margin-top: 6px;
+    color: #133978;
+    font-weight: bold;
+  }
+  .drop_description__shadow {
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+}
+@media (min-width: 992px) {
   .menu_list {
     height: 100%;
     overflow: hidden;
@@ -276,9 +358,9 @@ a[href^="mailto:"] {
     border-radius: 4px;
     text-align: start;
     padding: 14px;
-    word-break: break-word !important;
+    word-break: break-word;
     overflow-wrap: anywhere;
-    word-wrap: normal !important;
+    word-wrap: normal;
     margin-top: 8px;
     color: #133978;
     font-weight: bold;
@@ -286,12 +368,37 @@ a[href^="mailto:"] {
   .drop_description__shadow {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   }
-  .nav-item.dropdown-menu {
+  .nav-item.dropdown:hover .dropdown-menu {
     display: block;
     margin-top: 0;
-    margin-bottom: 0;
+    margin-bottom: 20px;
+    font-weight: 500;
   }
 }
+@media (max-width: 991.98px) {
+  .dropdown-responsive {
+    position: static !important;
+    width: 100% !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+  }
+}
+
+@media (max-width: 575.98px) {
+  .dropdown-item-responsive {
+    padding: 0.5rem 0.75rem !important;
+    font-size: 0.875rem !important;
+  }
+}
+
+@media (max-width: 575.98px) {
+  .select {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: auto !important;
+  }
+}
+
 /*!
  * Bootstrap  v5.3.2 (https://getbootstrap.com/)
  * Copyright 2011-2023 The Bootstrap Authors
@@ -339,7 +446,7 @@ a[href^="mailto:"] {
   --bs-primaryDark: #e8991c;
   --bs-primaryBorder: #ba7b1a;
   --bs-grayish: #364f67;
-  --bs-gray: #e4e4e4;
+  --bs-gray: #efe9e9;
   --bs-yellowish: #fef4e2;
   --bs-primary-rgb: 248, 148, 6;
   --bs-secondary-rgb: 19, 57, 120;
@@ -358,7 +465,7 @@ a[href^="mailto:"] {
   --bs-primaryDark-rgb: 232, 153, 28;
   --bs-primaryBorder-rgb: 186, 123, 26;
   --bs-grayish-rgb: 54, 79, 103;
-  --bs-gray-rgb: 228, 228, 228;
+  --bs-gray-rgb: 239, 233, 233;
   --bs-yellowish-rgb: 254, 244, 226;
   --bs-primary-text-emphasis: #052c65;
   --bs-secondary-text-emphasis: #133978;
@@ -3619,19 +3726,19 @@ textarea.form-control-lg {
 
 .btn-gray {
   --bs-btn-color: #000;
-  --bs-btn-bg: #e4e4e4;
-  --bs-btn-border-color: #e4e4e4;
+  --bs-btn-bg: #efe9e9;
+  --bs-btn-border-color: #efe9e9;
   --bs-btn-hover-color: #000;
-  --bs-btn-hover-bg: #e8e8e8;
-  --bs-btn-hover-border-color: #e7e7e7;
-  --bs-btn-focus-shadow-rgb: 194, 194, 194;
+  --bs-btn-hover-bg: #f1ecec;
+  --bs-btn-hover-border-color: #f1ebeb;
+  --bs-btn-focus-shadow-rgb: 203, 198, 198;
   --bs-btn-active-color: #000;
-  --bs-btn-active-bg: #e9e9e9;
-  --bs-btn-active-border-color: #e7e7e7;
+  --bs-btn-active-bg: #f2eded;
+  --bs-btn-active-border-color: #f1ebeb;
   --bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
   --bs-btn-disabled-color: #000;
-  --bs-btn-disabled-bg: #e4e4e4;
-  --bs-btn-disabled-border-color: #e4e4e4;
+  --bs-btn-disabled-bg: #efe9e9;
+  --bs-btn-disabled-border-color: #efe9e9;
 }
 
 .btn-yellowish {
@@ -3941,19 +4048,19 @@ textarea.form-control-lg {
 }
 
 .btn-outline-gray {
-  --bs-btn-color: #e4e4e4;
-  --bs-btn-border-color: #e4e4e4;
+  --bs-btn-color: #efe9e9;
+  --bs-btn-border-color: #efe9e9;
   --bs-btn-hover-color: #000;
-  --bs-btn-hover-bg: #e4e4e4;
-  --bs-btn-hover-border-color: #e4e4e4;
-  --bs-btn-focus-shadow-rgb: 228, 228, 228;
+  --bs-btn-hover-bg: #efe9e9;
+  --bs-btn-hover-border-color: #efe9e9;
+  --bs-btn-focus-shadow-rgb: 239, 233, 233;
   --bs-btn-active-color: #000;
-  --bs-btn-active-bg: #e4e4e4;
-  --bs-btn-active-border-color: #e4e4e4;
+  --bs-btn-active-bg: #efe9e9;
+  --bs-btn-active-border-color: #efe9e9;
   --bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
-  --bs-btn-disabled-color: #e4e4e4;
+  --bs-btn-disabled-color: #efe9e9;
   --bs-btn-disabled-bg: transparent;
-  --bs-btn-disabled-border-color: #e4e4e4;
+  --bs-btn-disabled-border-color: #efe9e9;
   --bs-gradient: none;
 }
 
@@ -7993,8 +8100,8 @@ textarea.form-control-lg {
   text-decoration-color: RGBA(var(--bs-gray-rgb), var(--bs-link-underline-opacity, 1)) !important;
 }
 .link-gray:hover, .link-gray:focus {
-  color: RGBA(233, 233, 233, var(--bs-link-opacity, 1)) !important;
-  text-decoration-color: RGBA(233, 233, 233, var(--bs-link-underline-opacity, 1)) !important;
+  color: RGBA(242, 237, 237, var(--bs-link-opacity, 1)) !important;
+  text-decoration-color: RGBA(242, 237, 237, var(--bs-link-underline-opacity, 1)) !important;
 }
 
 .link-yellowish {
