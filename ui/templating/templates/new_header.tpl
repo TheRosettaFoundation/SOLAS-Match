@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en" data-bs-theme="light"  >
     <head>
         <meta charset="utf-8" content="application/xhtml+xml" />
-
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>{Settings::get('site.title')}</title>
         <meta name="description" content="{Settings::get('site.meta_desc')}" />
         <meta name="keywords" content="{Settings::get('site.meta_key')}" />
