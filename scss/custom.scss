@@ -319,6 +319,24 @@ a[href^="mailto:"] {
 #dropdown-menu-user {
     font-weight: bold;
 }
+
+.dropdown-menu {
+    padding: 4px !important;
+    margin: 4px 0 0 0;
+    width: 100vw !important;
+    max-width: calc(100vw - 16px) !important;
+    left: 8px !important;
+    right: 8px !important;
+}
+
+.dropdown-menu li {
+    padding: 0 !important;
+    margin: 0 !important;
+    width: 100% !important;
+    overflow: hidden;
+    word-wrap: break-word;
+    box-sizing: border-box;
+}
 // Enhanced responsive dropdown menu styles
 @media (max-width: 991.98px) {
     .dropdown-menu {
@@ -427,6 +445,9 @@ a[href^="mailto:"] {
         padding: 0 !important;
         margin: 0 !important;
         width: 100% !important;
+        overflow: hidden;
+        word-wrap: break-word;
+        box-sizing: border-box;
     }
 
     .dropdown-item {
