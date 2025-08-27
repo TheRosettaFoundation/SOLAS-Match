@@ -2581,4 +2581,92 @@ error_log(print_r($result, true));//(**)
             curl_close($ch);
         } else error_log("update_phrase_field($project_uid, $field_uid, $value, $timeout): No fields content");
     }
+
+    public function insert_update_content_item($id, $type, $scope, $highlight, $published, $sorting_order, $title, $snippet, $body, $language_id_target, $country_id_target, $external_link, $owner_org_id, $admin_id)
+    {
+        $args =
+        LibAPI\PDOWrapper::cleanseNull($id) . ',' .
+        LibAPI\PDOWrapper::cleanse($type) . ',' .
+        LibAPI\PDOWrapper::cleanse($scope) . ',' .
+        LibAPI\PDOWrapper::cleanse($highlight) . ',' .
+        LibAPI\PDOWrapper::cleanse($published) . ',' .
+        LibAPI\PDOWrapper::cleanse($sorting_order) . ',' .
+        LibAPI\PDOWrapper::cleanseNullOrWrapStr($title) . ',' .
+        LibAPI\PDOWrapper::cleanseNullOrWrapStr($snippet) . ',' .
+        LibAPI\PDOWrapper::cleanseNullOrWrapStr($body) . ',' .
+        LibAPI\PDOWrapper::cleanseNull($language_id_target) . ',' .
+        LibAPI\PDOWrapper::cleanseNull($country_id_target) . ',' .
+        LibAPI\PDOWrapper::cleanseNullOrWrapStr($external_link) . ',' .
+        LibAPI\PDOWrapper::cleanseNull($owner_org_id) . ',' .
+        LibAPI\PDOWrapper::cleanse($admin_id);
+        LibAPI\PDOWrapper::call('insert_update_content_item', $args);
+    }
+
+    public function increment_content_item_views($id)
+    {
+        LibAPI\PDOWrapper::call('increment_content_item_views', LibAPI\PDOWrapper::cleanse($id));
+    }
+
+    public function get_content_items($id, $type, $scope, $highlight, $published, $language_id_target, $country_id_target, $owner_org_id, $project_id)
+    {
+        $args =
+        LibAPI\PDOWrapper::cleanseNull($id) . ',' .
+        LibAPI\PDOWrapper::cleanseNull($type) . ',' .
+        LibAPI\PDOWrapper::cleanseNull($scope) . ',' .
+        LibAPI\PDOWrapper::cleanseNull($highlight) . ',' .
+        LibAPI\PDOWrapper::cleanseNull($published) . ',' .
+        LibAPI\PDOWrapper::cleanseNull($language_id_target) . ',' .
+        LibAPI\PDOWrapper::cleanseNull($country_id_target) . ',' .
+        LibAPI\PDOWrapper::cleanseNull($owner_org_id) . ',' .
+        LibAPI\PDOWrapper::cleanseNull($project_id);
+        $result = LibAPI\PDOWrapper::call('get_content_items', $args);
+        if (empty($result)) return [];
+        return $result;
+    }
+
+    public function add_content_item_attachment($content_id, $is_image, $attachment, $admin_id)
+    {
+        $args =
+        LibAPI\PDOWrapper::cleanse($content_id) . ',' .
+        LibAPI\PDOWrapper::cleanse($is_image) . ',' .
+        LibAPI\PDOWrapper::cleanseWrapStr(attachment) . ',' .
+        LibAPI\PDOWrapper::cleanse($admin_id);
+        LibAPI\PDOWrapper::call('add_content_item_attachment', $args);
+    }
+
+    public function remove_content_item_attachment($content_id, $is_image, $sorting_order)
+    {
+        $args =
+        LibAPI\PDOWrapper::cleanse($content_id) . ',' .
+        LibAPI\PDOWrapper::cleanse($is_image) . ',' .
+        LibAPI\PDOWrapper::cleanse($sorting_order);
+        LibAPI\PDOWrapper::call('remove_content_item_attachment', $args);
+    }
+
+    public function get_content_item_attachments($content_id, $is_image, $sorting_order)
+    {
+        $args =
+        LibAPI\PDOWrapper::cleanse($content_id) . ',' .
+        LibAPI\PDOWrapper::cleanse($is_image) . ',' .
+        LibAPI\PDOWrapper::cleanseNull($sorting_order);
+        $result = LibAPI\PDOWrapper::call('get_content_item_attachments', $args);
+        if (empty($result)) return [];
+        return $result;
+    }
+
+    public function add_content_item_to_project($project_id, $content_id)
+    {
+        $args =
+        LibAPI\PDOWrapper::cleanse($project_id) . ',' .
+        LibAPI\PDOWrapper::cleanse($content_id);
+        LibAPI\PDOWrapper::call('add_content_item_to_project', $args);
+    }
+
+    public function remove_content_item_from_project($project_id, $content_id)
+    {
+        $args =
+        LibAPI\PDOWrapper::cleanseNull($project_id) . ',' .
+        LibAPI\PDOWrapper::cleanseNull($content_id);
+        LibAPI\PDOWrapper::call('remove_content_item_from_project', $args);
+    }
 }

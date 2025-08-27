@@ -14846,6 +14846,257 @@ END//
 DELIMITER ;
 
 
+CREATE TABLE IF NOT EXISTS `content_items` (
+  id                 INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  creation_date      DATETIME NOT NULL,
+  update_date        DATETIME,
+  type               INT DEFAULT 0,
+  scope              INT DEFAULT 0,
+  highlight          INT DEFAULT 0,
+  published          INT DEFAULT 0,
+  sorting_order      INT DEFAULT 0,
+  title              MEDIUMTEXT COLLATE utf8mb4_unicode_ci NOT NULL,
+  snippet            MEDIUMTEXT COLLATE utf8mb4_unicode_ci NOT NULL,
+  body               MEDIUMTEXT COLLATE utf8mb4_unicode_ci NOT NULL,
+  number_images      INT DEFAULT 0,
+  number_attachments INT DEFAULT 0,
+  language_id_target INT UNSIGNED,
+  country_id_target  INT UNSIGNED,
+  external_link      VARCHAR(1000) DEFAULT '',
+  number_of_views    INT DEFAULT 0,
+  owner_org_id       INT UNSIGNED,
+  admin_id           INT UNSIGNED NOT NULL,
+  PRIMARY KEY (id),
+  CONSTRAINT FK_content_items_Languages FOREIGN KEY (language_id_target) REFERENCES Languages (id) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT FK_content_items_Countries FOREIGN KEY (country_id_target)  REFERENCES Countries (id) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT FK_content_items_Organisations FOREIGN KEY (owner_org_id) REFERENCES Organisations (id) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT FK_content_items_Users FOREIGN KEY (admin_id) REFERENCES Users (id) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS `content_attachments` (
+  content_id    INT UNSIGNED NOT NULL,
+  is_image      INT DEFAULT 0,
+  creation_date DATETIME NOT NULL,
+  sorting_order INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  attachment    LONGBLOB,
+  admin_id      INT UNSIGNED NOT NULL,
+  PRIMARY KEY (sorting_order),
+  CONSTRAINT FK_content_attachments_content_items FOREIGN KEY (content_id) REFERENCES content_items (id) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT FK_content_attachments_Users FOREIGN KEY (admin_id) REFERENCES Users (id) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS `content_for_projects` (
+  project_id INT UNSIGNED NOT NULL,
+  content_id INT UNSIGNED NOT NULL,
+  CONSTRAINT FK_content_for_projects_Projects FOREIGN KEY (project_id) REFERENCES Projects (id) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT FK_content_for_projects_content_items FOREIGN KEY (content_id) REFERENCES content_items (id) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+DROP PROCEDURE IF EXISTS `insert_update_content_item`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_update_content_item`(
+    IN p_id                 INT UNSIGNED,
+    IN p_type               INT,
+    IN p_scope              INT,
+    IN p_highlight          INT,
+    IN p_published          INT,
+    IN p_sorting_order      INT,
+    IN p_title              MEDIUMTEXT,
+    IN p_snippet            MEDIUMTEXT,
+    IN p_body               MEDIUMTEXT,
+    IN p_language_id_target INT UNSIGNED,
+    IN p_country_id_target  INT UNSIGNED,
+    IN p_external_link      VARCHAR(1000),
+    IN p_owner_org_id       INT UNSIGNED,
+    IN p_admin_id           INT UNSIGNED)
+BEGIN
+    IF p_id IS NULL THEN
+        INSERT INTO content_items (
+            creation_date,
+            type,
+            scope,
+            highlight,
+            published,
+            sorting_order,
+            title,
+            snippet,
+            body,
+            language_id_target,
+            country_id_target,
+            external_link,
+            owner_org_id,
+            admin_id)
+        VALUES (
+            NOW(),
+            p_type,
+            p_scope,
+            p_highlight,
+            p_published,
+            p_sorting_order,
+            p_title,
+            p_snippet,
+            p_body,
+            p_language_id_target,
+            p_country_id_target,
+            p_external_link,
+            p_owner_org_id,
+            p_admin_id);
+        SELECT LAST_INSERT_ID() AS id;
+    ELSE
+        UPDATE content_items SET
+            update_date=NOW(),
+            type=p_type,
+            scope=p_scope,
+            highlight=p_highlight,
+            published=p_published,
+            sorting_order=p_sorting_order,
+            title=p_title,
+            snippet=p_snippet,
+            body=p_body,
+            language_id_target=p_language_id_target,
+            country_id_target=p_country_id_target,
+            external_link=p_external_link,
+            owner_org_id=p_owner_org_id,
+            admin_id=p_admin_id
+        WHERE id=p_id;
+    END IF;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `increment_content_item_views`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `increment_content_item_views`(IN p_id INT UNSIGNED)
+BEGIN
+    UPDATE content_items SET number_of_views=number_of_views+1
+    WHERE id=p_id;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `get_content_items`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_content_items`(
+    IN p_id                 INT UNSIGNED,
+    IN p_type               INT,
+    IN p_scope              INT,
+    IN p_highlight          INT,
+    IN p_published          INT,
+    IN p_language_id_target INT UNSIGNED,
+    IN p_country_id_target  INT UNSIGNED,
+    IN p_owner_org_id       INT UNSIGNED,
+    IN p_project_id         INT UNSIGNED)
+BEGIN
+    SELECT ci.*
+    FROM      content_items         ci
+    LEFT JOIN content_for_projects cfp ON ci.id=cfp.content_id
+    WHERE
+        (p_id IS NULL OR id=p_id) AND
+        (p_type IS NULL OR type=p_type) AND
+        (p_scope IS NULL OR scope=p_scope) AND
+        (p_highlight IS NULL OR highlight=p_highlight) AND
+        (p_published IS NULL OR published=p_published) AND
+        (p_language_id_target IS NULL OR language_id_target=p_language_id_target) AND
+        (p_country_id_target IS NULL OR country_id_target=p_country_id_target) AND
+        (p_owner_org_id IS NULL OR owner_org_id=p_owner_org_id) AND
+        (p_project_id IS NULL OR cfp.project_id=p_project_id)
+    ORDER BY sorting_order;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `add_content_item_attachment`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `add_content_item_attachment`(
+    p_content_id INT UNSIGNED,
+    p_is_image   INT,
+    p_attachment LONGBLOB,
+    p_admin_id   INT UNSIGNED)
+BEGIN
+    INSERT INTO content_attachments (
+        content_id,
+        is_image,
+        creation_date,
+        attachment,
+        admin_id)
+    VALUES (
+        p_content_id,
+        p_is_image,
+        NOW(),
+        p_attachment,
+        p_admin_id);
+    IF p_is_image=1 THEN
+        UPDATE content_items SET number_images=number_images+1 WHERE id=p_content_id;
+    ELSE
+        UPDATE content_items SET number_attachments=number_attachments+1 WHERE id=p_content_id;
+    END IF;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `remove_content_item_attachment`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `remove_content_item_attachment`(
+    p_content_id    INT UNSIGNED,
+    p_is_image      INT,
+    p_sorting_order INT UNSIGNED)
+BEGIN
+    IF p_is_image=1 THEN
+        UPDATE content_items SET number_images=GREATEST(number_images-1, 0) WHERE id=p_content_id;
+    ELSE
+        UPDATE content_items SET number_attachments=GREATEST(number_attachments-1, 0) WHERE id=p_content_id;
+    END IF;
+
+    DELETE FROM content_attachments
+    WHERE
+        content_id=p_content_id AND
+        is_image=p_is_image AND
+        sorting_order=p_sorting_order;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `get_content_item_attachments`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_content_item_attachments`(
+    p_content_id    INT UNSIGNED,
+    p_is_image      INT,
+    p_sorting_order INT UNSIGNED)
+BEGIN
+    SELECT * FROM content_attachments
+    WHERE
+        content_id=p_content_id AND
+        is_image=p_is_image AND
+        (p_sorting_order IS NULL OR sorting_order=p_sorting_order)
+    ORDER BY sorting_order;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `add_content_item_to_project`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `add_content_item_to_project`(
+    p_project_id INT UNSIGNED,
+    p_content_id INT UNSIGNED)
+BEGIN
+    INSERT INTO content_for_projects (
+        project_id,
+        content_id)
+    VALUES (
+        p_project_id,
+        p_content_id);
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `remove_content_item_from_project`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `remove_content_item_from_project`(
+    p_project_id INT UNSIGNED,
+    p_content_id INT UNSIGNED)
+BEGIN
+    DELETE FROM content_for_projects
+    WHERE
+        (p_project_id IS NOT NULL OR p_content_id IS NOT NULL) AND
+        (p_project_id IS NULL OR project_id=p_project_id) AND
+        (p_content_id IS NULL OR content_id=p_content_id);
+END//
+DELIMITER ;
+
+
 /*---------------------------------------end of procs----------------------------------------------*/
 
 
