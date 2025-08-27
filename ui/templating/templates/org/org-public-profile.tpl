@@ -496,7 +496,7 @@
                         </select>
                     </div>
                     
-                    <div class="col-md-6">
+                    {* <div class="col-md-6">
                         <label for="start_date_field" class="form-label"><strong>Start Date</strong></label>
                         {if $start_date_error != ''}
                             <div class="alert alert-danger">
@@ -505,7 +505,37 @@
                         {/if}
                         <input class="form-control hasDatePicker" type="text" id="start_date_field" name="start_date_field" value="{$subscription['start_date']}" />
                         <input type="hidden" name="start_date" id="start_date" />
+                    </div> *}
+                    <div class="col-md-6">
+                    <input class="d-none" type="text" id="start_date" name="start_date" value="{$subscription['start_date']}" style="width: 400px" />
+
+                    <label for="datetimepicker1Input" class="form-label"><strong>Start Date</strong></label>
+                        {if $deadline_error != ''}
+                            <p class="alert alert-error text-danger fw-bold">
+                                {$deadline_error}
+                            </p>
+                        {/if}
+                    <div
+                      class="input-group log-event"
+                      id="datetimepicker1"
+                      data-td-target-input="nearest"
+                      data-td-target-toggle="nearest"
+                    >
+                      <input
+                        id="datetimepicker1Input"
+                        type="text"
+                        class="form-control"
+                        data-td-target="#datetimepicker1"
+                      />
+                      <span
+                        class="input-group-text"
+                        data-td-target="#datetimepicker1"
+                        data-td-toggle="datetimepicker"
+                      >
+                        <i class="fas fa-calendar"></i>
+                      </span>
                     </div>
+                  </div>
                     
                     <div class="col-12">
                         <label for="comment" class="form-label"><strong>Comment</strong></label>
