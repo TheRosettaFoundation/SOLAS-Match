@@ -14860,15 +14860,13 @@ CREATE TABLE IF NOT EXISTS `content_items` (
   body               MEDIUMTEXT COLLATE utf8mb4_unicode_ci NOT NULL,
   number_images      INT DEFAULT 0,
   number_attachments INT DEFAULT 0,
-  language_id_target INT UNSIGNED,
-  country_id_target  INT UNSIGNED,
+  language_code_target VARCHAR(3) COLLATE utf8mb4_unicode_ci,
+  country_code_target  VARCHAR(4) COLLATE utf8mb4_unicode_ci,
   external_link      VARCHAR(1000) DEFAULT '',
   number_of_views    INT DEFAULT 0,
   owner_org_id       INT UNSIGNED,
   admin_id           INT UNSIGNED NOT NULL,
   PRIMARY KEY (id),
-  CONSTRAINT FK_content_items_Languages FOREIGN KEY (language_id_target) REFERENCES Languages (id) ON UPDATE CASCADE ON DELETE CASCADE,
-  CONSTRAINT FK_content_items_Countries FOREIGN KEY (country_id_target)  REFERENCES Countries (id) ON UPDATE CASCADE ON DELETE CASCADE,
   CONSTRAINT FK_content_items_Organisations FOREIGN KEY (owner_org_id) REFERENCES Organisations (id) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT FK_content_items_Users FOREIGN KEY (admin_id) REFERENCES Users (id) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -14904,8 +14902,8 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_update_content_item`(
     IN p_title              MEDIUMTEXT,
     IN p_snippet            MEDIUMTEXT,
     IN p_body               MEDIUMTEXT,
-    IN p_language_id_target INT UNSIGNED,
-    IN p_country_id_target  INT UNSIGNED,
+    IN p_language_code_target VARCHAR(3),
+    IN p_country_code_target  VARCHAR(4),
     IN p_external_link      VARCHAR(1000),
     IN p_owner_org_id       INT UNSIGNED,
     IN p_admin_id           INT UNSIGNED)
@@ -14980,8 +14978,8 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `get_content_items`(
     IN p_scope              INT,
     IN p_highlight          INT,
     IN p_published          INT,
-    IN p_language_id_target INT UNSIGNED,
-    IN p_country_id_target  INT UNSIGNED,
+    IN p_language_code_target VARCHAR(3),
+    IN p_country_code_target  VARCHAR(4),
     IN p_owner_org_id       INT UNSIGNED,
     IN p_project_id         INT UNSIGNED)
 BEGIN
