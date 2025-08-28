@@ -14919,8 +14919,8 @@ BEGIN
             title,
             snippet,
             body,
-            language_id_target,
-            country_id_target,
+            language_code_target,
+            country_code_target,
             external_link,
             owner_org_id,
             admin_id)
@@ -14934,8 +14934,8 @@ BEGIN
             p_title,
             p_snippet,
             p_body,
-            p_language_id_target,
-            p_country_id_target,
+            p_language_code_target,
+            p_country_code_target,
             p_external_link,
             p_owner_org_id,
             p_admin_id);
@@ -14951,8 +14951,8 @@ BEGIN
             title=p_title,
             snippet=p_snippet,
             body=p_body,
-            language_id_target=p_language_id_target,
-            country_id_target=p_country_id_target,
+            language_code_target=p_language_code_target,
+            country_code_target=p_country_code_target,
             external_link=p_external_link,
             owner_org_id=p_owner_org_id,
             admin_id=p_admin_id
@@ -14992,8 +14992,8 @@ BEGIN
         (p_scope IS NULL OR scope=p_scope) AND
         (p_highlight IS NULL OR highlight=p_highlight) AND
         (p_published IS NULL OR published=p_published) AND
-        (p_language_id_target IS NULL OR language_id_target=p_language_id_target) AND
-        (p_country_id_target IS NULL OR country_id_target=p_country_id_target) AND
+        (p_language_code_target IS NULL OR language_code_target=p_language_code_target) AND
+        (p_country_code_target IS NULL OR country_code_target=p_country_code_target) AND
         (p_owner_org_id IS NULL OR owner_org_id=p_owner_org_id) AND
         (p_project_id IS NULL OR cfp.project_id=p_project_id)
     ORDER BY sorting_order;
