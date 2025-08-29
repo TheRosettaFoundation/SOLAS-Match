@@ -14983,7 +14983,9 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `get_content_items`(
     IN p_owner_org_id       INT UNSIGNED,
     IN p_project_id         INT UNSIGNED)
 BEGIN
-    SELECT ci.*
+    SELECT
+        ci.*,
+        cfp.project_id
     FROM      content_items         ci
     LEFT JOIN content_for_projects cfp ON ci.id=cfp.content_id
     WHERE
