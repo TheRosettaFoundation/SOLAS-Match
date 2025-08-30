@@ -132,7 +132,7 @@
                     <a href="{Settings::get('site.forum_link')}" target="_blank" class=" dropdown-item  py-2 fw-bold">
                         <div>
                             <div>
-                            <span class='mx-2'>🎓</span>
+                            <span >🎓</span>
                             Community Forum
                             </div>
                             <div class="fs-5 text-break mt-2 mx-2 fw-light">Ask questions and talk with other community members</div>
