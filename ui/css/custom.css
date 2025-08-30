@@ -340,11 +340,6 @@ a[href^="mailto:"] {
   min-height: 52px;
 }
 
-/* Mobile tap behavior - disable hover, enable click */
-.nav-item.dropdown:hover .dropdown-menu {
-  display: none !important;
-}
-
 .nav-item.dropdown .dropdown-toggle {
   cursor: pointer;
   position: relative;
