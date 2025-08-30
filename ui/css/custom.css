@@ -191,21 +191,21 @@ a[href^="mailto:"] {
 
 /* BUT allow text wrapping inside the drop_description */
 .dropdown-item .drop_description {
-  white-space: normal; /* override nowrap */
-  word-break: break-word;
-  overflow-wrap: anywhere;
-  display: block; /* ensures it's treated as a block-level element */
+  white-space: normal; /* controls whitespace and how lines are broken when they reach the edge of the container */
+  overflow-wrap: anywhere; /* controls how unit text is broken */
+  display: block;
   margin-bottom: 10px;
   font-weight: 700;
 }
 
-.nav-item.dropdown:hover .dropdown-menu {
-  display: block;
-  margin-top: 0;
-  margin-bottom: 20px;
-  font-weight: 500;
+@media (hover: hover) {
+  .nav-item.dropdown:hover .dropdown-menu {
+    display: block;
+    margin-top: 0;
+    margin-bottom: 20px;
+    font-weight: 500;
+  }
 }
-
 .dropdown-toggle {
   text-align: center;
 }
@@ -259,7 +259,7 @@ a[href^="mailto:"] {
 
 .dropdown-menu li {
   width: 100% !important;
-  max-width: 100% !important;
+  max-width: 100% !important; /* Ensure it doesn't exceed container width */
   overflow: hidden;
   word-wrap: break-word;
   box-sizing: border-box;
@@ -544,14 +544,6 @@ a[href^="mailto:"] {
   .dropdown-item-responsive {
     padding: 0.5rem 0.75rem !important;
     font-size: 0.875rem !important;
-  }
-}
-
-@media (max-width: 575.98px) {
-  .select {
-    width: 100% !important;
-    max-width: 100% !important;
-    min-width: auto !important;
   }
 }
 
