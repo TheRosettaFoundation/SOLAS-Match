@@ -14983,22 +14983,41 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `get_content_items`(
     IN p_owner_org_id       INT UNSIGNED,
     IN p_project_id         INT UNSIGNED)
 BEGIN
-    SELECT
-        ci.*,
-        cfp.project_id
-    FROM      content_items         ci
-    LEFT JOIN content_for_projects cfp ON ci.id=cfp.content_id
-    WHERE
-        (p_id IS NULL OR id=p_id) AND
-        (p_type IS NULL OR type=p_type) AND
-        (p_scope IS NULL OR scope=p_scope) AND
-        (p_highlight IS NULL OR highlight=p_highlight) AND
-        (p_published IS NULL OR published=p_published) AND
-        (p_language_code_target IS NULL OR language_code_target=p_language_code_target) AND
-        (p_country_code_target IS NULL OR country_code_target=p_country_code_target) AND
-        (p_owner_org_id IS NULL OR owner_org_id=p_owner_org_id) AND
-        (p_project_id IS NULL OR cfp.project_id=p_project_id)
-    ORDER BY sorting_order;
+    IF p_project_id=0 THEN
+        SELECT
+            ci.*,
+            SUM(IF(cfp.project_id IS NOT NULL, 1, 0)) AS number_of_projects
+        FROM      content_items         ci
+        LEFT JOIN content_for_projects cfp ON ci.id=cfp.content_id
+        WHERE
+            (p_id IS NULL OR ci.id=p_id) AND
+            (p_type IS NULL OR ci.type=p_type) AND
+            (p_scope IS NULL OR ci.scope=p_scope) AND
+            (p_highlight IS NULL OR ci.highlight=p_highlight) AND
+            (p_published IS NULL OR ci.published=p_published) AND
+            (p_language_code_target IS NULL OR ci.language_code_target=p_language_code_target) AND
+            (p_country_code_target IS NULL OR ci.country_code_target=p_country_code_target) AND
+            (p_owner_org_id IS NULL OR ci.owner_org_id=p_owner_org_id)
+        GROUP BY ci.id
+        ORDER BY sorting_order DESC, ci.id DESC;
+    ELSE
+        SELECT
+            ci.*,
+            cfp.project_id
+        FROM      content_items         ci
+        LEFT JOIN content_for_projects cfp ON ci.id=cfp.content_id
+        WHERE
+            (p_id IS NULL OR ci.id=p_id) AND
+            (p_type IS NULL OR ci.type=p_type) AND
+            (p_scope IS NULL OR ci.scope=p_scope) AND
+            (p_highlight IS NULL OR ci.highlight=p_highlight) AND
+            (p_published IS NULL OR ci.published=p_published) AND
+            (p_language_code_target IS NULL OR ci.language_code_target=p_language_code_target) AND
+            (p_country_code_target IS NULL OR ci.country_code_target=p_country_code_target) AND
+            (p_owner_org_id IS NULL OR ci.owner_org_id=p_owner_org_id) AND
+            (p_project_id IS NULL OR cfp.project_id=p_project_id)
+        ORDER BY sorting_order DESC, ci.id DESC, cfp.project_id;
+    END IF;
 END//
 DELIMITER ;
 
