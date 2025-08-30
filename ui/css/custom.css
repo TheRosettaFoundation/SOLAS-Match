@@ -151,7 +151,6 @@ a[href^="mailto:"] {
 }
 
 .dropdown {
-  background-color: #1b8912;
   padding: auto;
 }
 
@@ -457,9 +456,6 @@ a[href^="mailto:"] {
   /* Enable hover behavior on tablets */
   .nav-item.dropdown:hover .dropdown-menu {
     display: block !important;
-  }
-  .nav-item.dropdown .dropdown-toggle::after {
-    display: none;
   }
 }
 /* Desktop styles (992px and up) */
