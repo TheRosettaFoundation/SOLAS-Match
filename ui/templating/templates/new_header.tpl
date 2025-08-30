@@ -132,7 +132,7 @@
                     <a href="{Settings::get('site.forum_link')}" target="_blank" class=" dropdown-item  py-2 fw-bold">
                         <div>
                             <div>
-                            <span >🎓</span>
+                            <span class="me-2" >🎓</span>
                             Community Forum
                             </div>
                             <div class="fs-5 text-break mt-2 mx-2 fw-light">Ask questions and talk with other community members</div>
@@ -144,7 +144,7 @@
                     <li class="p-2 border-bottom border-dark-gray">
                     <a href="https://elearn.translatorswb.org/auth/saml2/login.php?wants&idp=bd3eb3e6241260ee537b9a55145d852d&passive=off" target="_blank" class="dropdown-item py-2 fw-bold" >
                     <div>
-                        <div><span class="mx-2">📚</span> Learning Center </div>
+                        <div><span class="me-2">📚</span> Learning Center </div>
                         <div class=" mt-2 mx-2 fs-5 fw-lighter "> Courses and training </div>
                     </div>
                     </a>
@@ -152,7 +152,7 @@
                   
                     <li {if isset($current_page) && $current_page == 'faq'}" {/if} class="p-2 " > <a  href="https://communitylibrary.translatorswb.org/login" target="_blank" class="dropdown-item py-2 fw-bold">
                         <div>
-                            <div><span class="mx-2">💬</span> Community Library</div>
+                            <div><span class="me-2">💬</span> Community Library</div>
                             <div class="mt-2 fs-5 fw-lighter mx-2">Instructions, guidelines and reference material</div>
                         </div>
                         </a>
