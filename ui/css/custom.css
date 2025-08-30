@@ -263,7 +263,6 @@ a[href^="mailto:"] {
 .dropdown-item {
   margin-bottom: 2px;
   border-radius: 6px;
-  padding: 6px 8px !important;
   white-space: normal !important;
   word-wrap: break-word;
   overflow-wrap: break-word;
