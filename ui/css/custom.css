@@ -191,17 +191,6 @@ a[href^="mailto:"] {
 }
 
 /* --- Desktop: Enable Hover to Open --- */
-@media (hover: hover) {
-  .dropdown:hover .dropdown-menu {
-    display: block;
-  }
-  .dropdown .dropdown-menu {
-    transition: opacity 0.3s ease, visibility 0.3s ease;
-  }
-  .dropdown-toggle {
-    cursor: pointer;
-  }
-}
 /* BUT allow text wrapping inside the drop_description */
 .dropdown-item .drop_description {
   white-space: normal; /* controls whitespace and how lines are broken when they reach the edge of the container */
@@ -512,6 +501,17 @@ a[href^="mailto:"] {
   }
 }
 
+@media (hover: hover) {
+  .dropdown:hover .dropdown-menu {
+    display: block;
+  }
+  .dropdown .dropdown-menu {
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+  }
+  .dropdown-toggle {
+    cursor: pointer;
+  }
+}
 /*!
  * Bootstrap  v5.3.2 (https://getbootstrap.com/)
  * Copyright 2011-2023 The Bootstrap Authors

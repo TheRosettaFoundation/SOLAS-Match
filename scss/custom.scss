@@ -267,20 +267,6 @@ a[href^="mailto:"] {
 
 /* --- Desktop: Enable Hover to Open --- */
 
-@media (hover: hover) {
-    .dropdown:hover .dropdown-menu {
-        display: block;
-    }
-
-    .dropdown .dropdown-menu {
-        transition: opacity 0.3s ease, visibility 0.3s ease;
-    }
-
-    .dropdown-toggle {
-        cursor: pointer;
-    }
-}
-
 /* BUT allow text wrapping inside the drop_description */
 .dropdown-item .drop_description {
     white-space: normal; /* controls whitespace and how lines are broken when they reach the edge of the container */
@@ -613,6 +599,19 @@ a[href^="mailto:"] {
     @media (max-width: 575.98px) {
         padding: 0.5rem 0.75rem !important;
         font-size: 0.875rem !important;
+    }
+}
+@media (hover: hover) {
+    .dropdown:hover .dropdown-menu {
+        display: block;
+    }
+
+    .dropdown .dropdown-menu {
+        transition: opacity 0.3s ease, visibility 0.3s ease;
+    }
+
+    .dropdown-toggle {
+        cursor: pointer;
     }
 }
 
