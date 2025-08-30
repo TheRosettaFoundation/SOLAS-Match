@@ -430,7 +430,7 @@ a[href^="mailto:"] {
 /* Tablet styles (768px and up) */
 @media (min-width: 768px) {
   .dropdown-menu {
-    max-width: 100%;
+    max-width: 500px;
     width: auto;
     position: absolute !important;
     background: #ffffff;
