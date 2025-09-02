@@ -54,6 +54,7 @@ document
 
 // Hidden + visible inputs
 const dataOrgSubHiddenInput = document.getElementById("start_date_sub");
+console.log(dataOrgSubHiddenInput);
 const dataOrgSubVisibleInput = document.getElementById("datetimepicker2Input");
 
 // Pre-fill visible input with local time if hidden has UTC
