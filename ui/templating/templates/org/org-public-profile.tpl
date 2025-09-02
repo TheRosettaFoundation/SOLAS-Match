@@ -519,7 +519,7 @@
                       data-td-target-toggle="nearest"
                     >
                       <input
-                        id="datetimepicker1Input"
+                        id="datetimepicker2Input"
                         type="text"
                         class="form-control"
                         data-td-target="#datetimepicker2"
