@@ -11,7 +11,12 @@ let localTime = parsedUTC.local();
 
 let domi = document.getElementById("datetimepicker1Input");
 
+// Date input for subscription start date - org page
+let dataOrgSub = document.getElementById("start_date_field");
+
 domi.setAttribute("value", localTime.format("YYYY-MM-DD HH:mm:ss"));
+
+dataOrgSub.setAttribute("value", localTime.format("YYYY-MM-DD HH:mm:ss"));
 
 const datetimepicker1 = new tempusDominus.TempusDominus(
     document.getElementById("datetimepicker1"),
