@@ -1568,9 +1568,12 @@ class OrgRouteHandler
 
         $start_dateError = '';
         if ($roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER)) {
-            $extra_scripts = "
-        <script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/lib/jquery-ui-timepicker-addon.js\"></script>
-        <script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/datetimepicker.js\" defer ></script>";
+            $extra_scripts = "   
+        <script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/datetimepickerPublicOrg.js\" defer ></script>";
+
+        //  $extra_scripts = "
+        // <script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/lib/jquery-ui-timepicker-addon.js\"></script>
+        // <script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/datetimepickerPublicOrg.js\" defer ></script>";
     
         } else {
             $extra_scripts = '';
