@@ -52,10 +52,11 @@ document
 //  Subscription start date picker on organisation public profile page
 //  ---------------------------------------------------------------
 
-// Date input for subscription start date - org page
-let dataOrgSubHiddenInput = document.getElementById("start_date_sub");
-let dataOrgSubVisibleInput = document.getElementById("datetimepicker2Input");
-// Convert hidden UTC value → local and show in picker
+// Hidden + visible inputs
+const dataOrgSubHiddenInput = document.getElementById("start_date_sub");
+const dataOrgSubVisibleInput = document.getElementById("datetimepicker2Input");
+
+// Pre-fill visible input with local time if hidden has UTC
 if (dataOrgSubHiddenInput.value) {
     const localTime = dayjs.utc(dataOrgSubHiddenInput.value).local();
     dataOrgSubVisibleInput.value = localTime.format("YYYY-MM-DD HH:mm:ss");
@@ -83,7 +84,8 @@ const datetimepicker2 = new tempusDominus.TempusDominus(
         },
     }
 );
-// Sync picker changes back to hidden UTC field
+
+// Sync changes from visible → hidden in UTC
 dataOrgSubVisibleInput.addEventListener("change", (e) => {
     const local = dayjs(e.target.value);
     const utcTime = local.utc();
