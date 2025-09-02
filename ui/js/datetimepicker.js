@@ -14,7 +14,9 @@ let localTime = parsedUTC.local();
 
 let domi = document.getElementById("datetimepicker1Input");
 
-domi.setAttribute("value", localTime.format("YYYY-MM-DD HH:mm:ss"));
+if (domi) {
+    domi.setAttribute("value", localTime.format("YYYY-MM-DD HH:mm:ss"));
+}
 
 const datetimepicker1 = new tempusDominus.TempusDominus(
     document.getElementById("datetimepicker1"),
@@ -87,8 +89,11 @@ const datetimepicker2 = new tempusDominus.TempusDominus(
 );
 
 // Sync changes from visible → hidden in UTC
-dataOrgSubVisibleInput.addEventListener("change", (e) => {
-    const local = dayjs(e.target.value);
-    const utcTime = local.utc();
-    dataOrgSubHiddenInput.value = utcTime.format("YYYY-MM-DD HH:mm:ss");
-});
+
+if (dataOrgSubHiddenInput) {
+    dataOrgSubVisibleInput.addEventListener("change", (e) => {
+        const local = dayjs(e.target.value);
+        const utcTime = local.utc();
+        dataOrgSubHiddenInput.value = utcTime.format("YYYY-MM-DD HH:mm:ss");
+    });
+}
