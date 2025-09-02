@@ -1,6 +1,9 @@
 //  Subscription start date picker on organisation public profile page
 //  ---------------------------------------------------------------
 
+// Parse the UTC time using dayjs
+const dayjs = window.dayjs;
+dayjs.extend(window.dayjs_plugin_utc);
 // Hidden + visible inputs
 const dataOrgSubHiddenInput = document.getElementById("start_date_sub");
 
