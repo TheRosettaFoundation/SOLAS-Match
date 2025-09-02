@@ -509,15 +509,11 @@
                     <div class="col-md-6">
                     <input class="d-none" type="text" id="start_date" name="start_date" value="{$subscription['start_date']}" style="width: 400px" />
 
-                    <label for="datetimepicker1Input" class="form-label"><strong>Start Date</strong></label>
-                        {if $deadline_error != ''}
-                            <p class="alert alert-error text-danger fw-bold">
-                                {$deadline_error}
-                            </p>
-                        {/if}
+                    <label for="datetimepicker2Input" class="form-label"><strong>Start Date</strong></label>
+                      
                     <div
                       class="input-group log-event"
-                      id="datetimepicker1"
+                      id="datetimepicker2"
                       data-td-target-input="nearest"
                       data-td-target-toggle="nearest"
                     >
@@ -525,11 +521,11 @@
                         id="datetimepicker1Input"
                         type="text"
                         class="form-control"
-                        data-td-target="#datetimepicker1"
+                        data-td-target="#datetimepicker2"
                       />
                       <span
                         class="input-group-text"
-                        data-td-target="#datetimepicker1"
+                        data-td-target="#datetimepicker2"
                         data-td-toggle="datetimepicker"
                       >
                         <i class="fas fa-calendar"></i>

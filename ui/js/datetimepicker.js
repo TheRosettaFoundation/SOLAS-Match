@@ -36,10 +36,41 @@ const datetimepicker1 = new tempusDominus.TempusDominus(
     }
 );
 
+const datetimepicker2 = new tempusDominus.TempusDominus(
+    document.getElementById("datetimepicker2"),
+    {
+        //put your config here
+        display: {
+            components: {
+                year: true,
+                month: true,
+                date: true,
+                hours: true,
+                minutes: true,
+                seconds: true,
+            },
+        },
+        useCurrent: false,
+
+        localization: {
+            format: "yyyy-MM-dd HH:mm:ss",
+            locale: "en-UK",
+        },
+    }
+);
+
 let deadline = document.getElementById("deadline_field");
 
 document
     .getElementById("datetimepicker1Input")
+    .addEventListener("change", (e) => {
+        let local = dayjs(e.target.value);
+        let utcTime = dayjs.utc(local);
+        deadline.setAttribute("value", utcTime.format("YYYY-MM-DD HH:mm:ss"));
+    });
+
+document
+    .getElementById("datetimepicker2Input")
     .addEventListener("change", (e) => {
         let local = dayjs(e.target.value);
         let utcTime = dayjs.utc(local);
