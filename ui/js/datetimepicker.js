@@ -16,8 +16,6 @@ let domi = document.getElementById("datetimepicker1Input");
 
 domi.setAttribute("value", localTime.format("YYYY-MM-DD HH:mm:ss"));
 
-dataOrgSub.setAttribute("value", localTime.format("YYYY-MM-DD HH:mm:ss"));
-
 const datetimepicker1 = new tempusDominus.TempusDominus(
     document.getElementById("datetimepicker1"),
     {
@@ -55,11 +53,11 @@ document
 //  ---------------------------------------------------------------
 
 // Date input for subscription start date - org page
-let dataOrgSubHiddenInput = document.getElementById("start_date_field");
+let dataOrgSubHiddenInput = document.getElementById("start_date_sub");
 let dataOrgSubVisibleInput = document.getElementById("datetimepicker2Input");
 // Convert hidden UTC value → local and show in picker
 if (dataOrgSubHiddenInput.value) {
-    const localTime = dayjs.utc(hiddenField.value).local();
+    const localTime = dayjs.utc(dataOrgSubHiddenInput.value).local();
     dataOrgSubVisibleInput.value = localTime.format("YYYY-MM-DD HH:mm:ss");
 }
 

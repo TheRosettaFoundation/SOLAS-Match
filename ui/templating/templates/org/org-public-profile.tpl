@@ -507,9 +507,9 @@
                         <input type="hidden" name="start_date" id="start_date" />
                     </div> *}
                     <div class="col-md-6">
-                    <input class="d-none" type="text" id="start_date_field" name="start_date_field" value="{$subscription['start_date']}" style="width: 400px" />
-
-                    <label for="start_date_field" class="form-label"><strong>Start Date</strong></label>
+                    <input class="d-none" type="text" id="start_date_sub" name="start_date_sub" value="{$subscription['start_date']}" style="width: 400px" />
+                     
+                    <label for="start_date_sub" class="form-label"><strong>Start Date</strong></label>
                    
                       
                     <div
