@@ -510,6 +510,7 @@
                     <input class="d-none" type="text" id="start_date" name="start_date" value="{$subscription['start_date']}" style="width: 400px" />
 
                     <label for="datetimepicker2Input" class="form-label"><strong>Start Date</strong></label>
+                    <div>Test</div>
                       
                     <div
                       class="input-group log-event"
