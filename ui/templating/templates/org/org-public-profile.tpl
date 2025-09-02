@@ -578,4 +578,4 @@
     </div>
 {/if}
 
-{include file='footer.tpl'}
+{include file="footer2.tpl"}
