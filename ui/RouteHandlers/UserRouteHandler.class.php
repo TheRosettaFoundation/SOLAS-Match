@@ -3506,10 +3506,10 @@ foreach ($rows as $index => $row) {
 
             for ($i = 0; $i < 20; $i++) {
                 if (!empty($_FILES['image']['name'][$i]) && !empty($_FILES['image']['error'][$i]) && !empty($_FILES['image']['tmp_name'][$i]) && (($data = file_get_contents($_FILES['image']['tmp_name'][$i])) !== false)) {
-                    $userDao->add_content_item_attachment($content_id, 1, $data, $admin_id)
+                    $userDao->add_content_item_attachment($content_id, 1, $data, $admin_id);
                 }
                 if (!empty($_FILES['attachments']['name'][$i]) && !empty($_FILES['attachments']['error'][$i]) && !empty($_FILES['attachments']['tmp_name'][$i]) && (($data = file_get_contents($_FILES['attachments']['tmp_name'][$i])) !== false)) {
-                    $userDao->add_content_item_attachment($content_id, 0, $data, $admin_id)
+                    $userDao->add_content_item_attachment($content_id, 0, $data, $admin_id);
                 }
             }
             if (!empty($post['previous_images'))      foreach ($post['previous_images']      as $sorting_order) $userDao->remove_content_item_attachment($content_id, 1, $sorting_order)
