@@ -76,7 +76,7 @@
 
 {if !empty($content[0]['direct_link'])}{assign var="selected_direct_link" value=$content[0]['direct_link']}{else}{assign var="selected_direct_link" value=''}{/if}
 {if !empty($content[0]['external_link'])}{assign var="selected_external_link" value=$content[0]['external_link']}{else}{assign var="selected_external_link" value=''}{/if}
-{if !empty($content[0]['number_of_views'])}{assign var="selected_number_of_views" value=$content[0]['number_of_views']}{else}{assign var="selected_number_of_views" value=0}{/if}
+{if !empty($content[0]['number_of_views'])}{assign var="number_of_views" value=$content[0]['number_of_views']}{else}{assign var="number_of_views" value=0}{/if}
 
 {assign var="selected_project_ids" []}
 {assign var="index" value=0}
