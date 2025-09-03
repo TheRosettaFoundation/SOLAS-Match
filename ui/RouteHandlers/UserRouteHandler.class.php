@@ -3494,7 +3494,7 @@ foreach ($rows as $index => $row) {
 
             if (empty($post['content_id'])) $post['content_id'] = null;
             if (empty($post['scope'])) $post['scope'] = $post['type'];
-            if (empty($post['highlight']) $post['highlight'] = 0;
+            if (empty($post['highlight'])) $post['highlight'] = 0;
             $admin_id = Common\Lib\UserSession::getCurrentUserID();
 
             if (empty($post['language'])) {
