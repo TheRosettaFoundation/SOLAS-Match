@@ -69,7 +69,7 @@
 {if !empty($content[0]['title'])}{assign var="selected_title" value=$content[0]['title']}{else}{assign var="selected_title" value=''}{/if}
 {if !empty($content[0]['snippet'])}{assign var="selected_snippet" value=$content[0]['snippet']}{else}{assign var="selected_snippet" value=''}{/if}
 {if !empty($content[0]['body'])}{assign var="selected_body" value=$content[0]['body']}{else}{assign var="selected_body" value=''}{/if}
-{if !empty($content[0]['number_images'])}{assign var="selected_number_images" value=$content[0]['number_images']}{else}{assign var="selected_number_images" value=0}{/if}
+{if !empty($content[0]['number_images'])}{assign var="number_images" value=$content[0]['number_images']}{else}{assign var="number_images" value=0}{/if}
 {if !empty($content[0]['number_attachments'])}{assign var="number_attachments" value=$content[0]['number_attachments']}{else}{assign var="number_attachments" value=0}{/if}
 
 {if !empty($content[0]['language_code_target']) && !empty($content[0]['country_code_target'])}{assign var="selected_codes" value="`$content[0]['language_code_target']`-`$content[0]['country_code_target']`"}{else}{assign var="selected_codes" value=''}{/if}
