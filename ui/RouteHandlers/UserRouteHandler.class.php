@@ -220,6 +220,18 @@ class UserRouteHandler
             '/docusign_hook',
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:docusign_hook')
             ->setName('docusign_hook');
+
+        $app->get(
+            '/content_item/{content_id}/org/{org_id}[/]',
+            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:content_item')
+            ->add('\SolasMatch\UI\Lib\Middleware:authUserForOrg_incl_community_officer')
+            ->setName('content_item_org');
+
+        $app->get(
+            '/content_item/{content_id}[/]',
+            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:content_item')
+            ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin_any')
+            ->setName('content_item');
     }
 
     public function homeIndex(Request $request, Response $response, $args)
@@ -3462,6 +3474,93 @@ foreach ($rows as $index => $row) {
     $pdf->lastPage();
 
     return [$invoice['filename'], $pdf->Output($invoice['filename'], 'S')];
+    }
+
+    public function content_item(Request $request, Response $response, $args)
+    {
+        global $app, $template_data;
+        $userDao = new DAO\UserDao();
+        $projectDao = new DAO\ProjectDao();
+        $adminDao = new DAO\AdminDao();
+
+        $content_id = !empty($args['content_id']) ? $args['content_id'] : 0;
+        $org_id = !empty($args['org_id']) ? $args['org_id'] : 0;
+
+        $sesskey = Common\Lib\UserSession::getCSRFKey();
+
+        if ($request->getMethod() === 'POST') {
+            $post = $request->getParsedBody();
+            if ($fail_CSRF = Common\Lib\UserSession::checkCSRFKey($post, 'content_item')) return $response->withStatus(302)->withHeader('Location', $fail_CSRF);
+
+            if (empty($post['content_id'])) $post['content_id'] = null;
+            if (empty($post['scope'])) $post['scope'] = $post['type'];
+            if (empty($post['highlight']) $post['highlight'] = 0;
+            $admin_id = Common\Lib\UserSession::getCurrentUserID();
+
+            if (empty($post['language'])) {
+                $kp_language = null;
+                $kp_country  = null;
+            } else [$kp_language, $kp_country] = $projectDao->convert_selection_to_language_country($post['language']);
+
+            $content_id = $userDao->insert_update_content_item($post['content_id'], $post['type'], $post['scope'], $post['highlight'], $post['published'], $post['sorting_order'], $post['title'], $post['snippet'], $post['body'], $kp_language, $kp_country, $post['external_link'], $org_id, $admin_id);
+
+            for ($i = 0; $i < 20; $i++) {
+                if (!empty($_FILES['image']['name'][$i]) && !empty($_FILES['image']['error'][$i]) && !empty($_FILES['image']['tmp_name'][$i]) && (($data = file_get_contents($_FILES['image']['tmp_name'][$i])) !== false)) {
+                    $userDao->add_content_item_attachment($content_id, 1, $data, $admin_id)
+                }
+                if (!empty($_FILES['attachments']['name'][$i]) && !empty($_FILES['attachments']['error'][$i]) && !empty($_FILES['attachments']['tmp_name'][$i]) && (($data = file_get_contents($_FILES['attachments']['tmp_name'][$i])) !== false)) {
+                    $userDao->add_content_item_attachment($content_id, 0, $data, $admin_id)
+                }
+            }
+            if (!empty($post['previous_images'))      foreach ($post['previous_images']      as $sorting_order) $userDao->remove_content_item_attachment($content_id, 1, $sorting_order)
+            if (!empty($post['previous_attachments')) foreach ($post['previous_attachments'] as $sorting_order) $userDao->remove_content_item_attachment($content_id, 0, $sorting_order)
+
+            if ($org_id) {
+                $previous_projects = [];
+                $projects = $userDao->get_content_items($content_id, null, null, null, null, null, null, null, null);
+                foreach ($projects as $row) if ($row['project_id']) $previous_projects[$row['project_id']] = $row['project_id'];
+
+                if (!empty($post['projects'])) {
+                    foreach ($post['projects'] as $project_id => $name) {
+                        if (empty($previous_projects[$project_id])) $userDao->add_content_item_to_project($project_id, $content_id);
+                        else unset($previous_projects[$project_id];
+                    }
+                }
+                foreach ($previous_projects as $project_id) $userDao->remove_content_item_from_project($project_id, $content_id);
+            }
+        }
+
+        if ($content_id) {
+            $content = $userDao->get_content_items($content_id, null, null, null, null, null, null, null, 0);
+            $projects = $userDao->get_content_items($content_id, null, null, null, null, null, null, null, null);
+
+            if (empty($content)) {
+                UserRouteHandler::flash('error', 'Content not found.');
+                return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('home'));
+            }
+            if ($org_id && $org_id != $content[0]['owner_org_id']) {
+                UserRouteHandler::flash('error', 'You can only edit content for the specified organisation.');
+                return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('home'));
+            }
+            if (!$org_id && $content[0]['owner_org_id']) $org_id = $content[0]['owner_org_id'];
+        } else {
+            $content = [];
+            $projects = [];
+        }
+
+        $template_data = array_merge($template_data, [
+            'content' => $content,
+            'projects' => $projects,
+            'org_id' => $org_id,
+            'org' => $org_id ? $orgDao->getOrganisation($org_id) : 0,
+            'project_selection' => $projectDao->get_all_projects($org_id),
+            'language_selection' => $projectDao->generate_language_selection(),
+            'previous_images' => $content_id ? $userDao->get_content_item_attachments($content_id, 1, null) : [],
+            'previous_attachments' => $content_id ? $userDao->get_content_item_attachments($content_id, 0, null) : [],
+            'sesskey' => $sesskey,
+        ]);
+
+        return UserRouteHandler::render('user/insert_update_content_item.tpl', $response);
     }
 
     public static function flash($key, $value)
