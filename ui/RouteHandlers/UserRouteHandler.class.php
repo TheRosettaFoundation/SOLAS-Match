@@ -3512,8 +3512,8 @@ foreach ($rows as $index => $row) {
                     $userDao->add_content_item_attachment($content_id, 0, $data, $admin_id);
                 }
             }
-            if (!empty($post['previous_images'))      foreach ($post['previous_images']      as $sorting_order) $userDao->remove_content_item_attachment($content_id, 1, $sorting_order);
-            if (!empty($post['previous_attachments')) foreach ($post['previous_attachments'] as $sorting_order) $userDao->remove_content_item_attachment($content_id, 0, $sorting_order);
+            if (!empty($post['previous_images']))      foreach ($post['previous_images']      as $sorting_order) $userDao->remove_content_item_attachment($content_id, 1, $sorting_order);
+            if (!empty($post['previous_attachments'])) foreach ($post['previous_attachments'] as $sorting_order) $userDao->remove_content_item_attachment($content_id, 0, $sorting_order);
 
             if ($org_id) {
                 $previous_projects = [];
