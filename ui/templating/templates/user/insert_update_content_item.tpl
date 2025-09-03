@@ -13,7 +13,7 @@
       --bg:#f3f6f9;
       --success:#1eae6f;
     }
-    * {box-sizing:border-box}
+    * /* - */ {box-sizing:border-box}
     body{font-family:Inter,Segoe UI,Arial,sans-serif;margin:0;background:var(--bg);color:#182026}
     header{background:linear-gradient(90deg,var(--brand-blue),#257bbf);color:white;padding:18px 24px;display:flex;align-items:center;gap:16px}
     .logo{width:38px;height:38px;border-radius:6px;background:white;display:flex;align-items:center;justify-content:center;color:var(--brand-blue);font-weight:700}
