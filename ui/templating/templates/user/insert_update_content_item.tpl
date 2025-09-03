@@ -192,17 +192,17 @@
               <div>
                 <label for="snippet">Snippet (HTML) — used in lists / homepage</label>
                 {if empty($selected_snippet)}
-                <textarea id="snippet" placeholder="Short HTML snippet or summary"></textarea>
+                <textarea id="snippet" name="snippet" placeholder="Short HTML snippet or summary"></textarea>
                 {else}
-                <textarea id="snippet">{$selected_snippet}</textarea>
+                <textarea id="snippet name="snippet"">{$selected_snippet}</textarea>
                 {/if}
               </div>
               <div style="margin-top:10px">
                 <label for="body">Body (HTML)</label>
                 {if empty($selected_body)}
-                <textarea id="body" placeholder="Full HTML body"></textarea>
+                <textarea id="body" name="body" placeholder="Full HTML body"></textarea>
                 {else}
-                <textarea id="body">{$selected_body}</textarea>
+                <textarea id="body" name="body">{$selected_body}</textarea>
                 {/if}
               </div>
               <div class="row" style="margin-top:10px">
