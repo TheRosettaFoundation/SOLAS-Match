@@ -331,7 +331,7 @@
                   <label for="projects">Link to Projects</label>
                   <select id="projects" name="projects[]" multiple style="height:120px">
                     <option value="">— Select Project —</option>
-                    {foreach from=$projects key=project_id item=project_name}
+                    {foreach from=$project_selection key=project_id item=project_name}
                     <option value="{$project_id}" {if in_array($project_id, $selected_project_ids)}selected="selected"{/if}>{$project_name}</option>
                     {/foreach}
                   </select>
