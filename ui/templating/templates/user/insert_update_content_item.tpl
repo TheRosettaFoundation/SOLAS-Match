@@ -57,7 +57,7 @@
 <body>
   <header>
     <div class="logo"><a href="https://twbplatform.org">TWB Platform</a></div>
-    <h1>CMS — Create/Edit Resource{if !empty($org)} for {$org->getName();}{/if}</h1>
+    <h1>CMS — Create/Edit Resource{if !empty($org)} for {$org->getName()}{/if}</h1>
   </header>
 
 {if !empty($content[0]['content_id'])}{assign var="selected_content_id" value=$content[0]['content_id']}{else}{assign var="selected_content_id" value=0}{/if}
