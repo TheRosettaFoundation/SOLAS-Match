@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>TWB Platform — Resource CMS Prototype</title>
   <style>
-    :root{
+    :root {
       --brand-blue:#0b6fb2; /* TWB-like */
       --brand-dark:#073e5d;
       --muted:#6b7785;
@@ -417,7 +417,7 @@
     const panels = document.querySelectorAll('.step-panel');
     const steps = document.querySelectorAll('.step');
 
-    function gotoStep(n){
+    function gotoStep(n) {
       panels.forEach(p=>p.style.display = p.dataset.panel==n ? 'block' : 'none');
       steps.forEach(s=> s.classList.toggle('active', s.dataset.step==n));
       updateSummary();
@@ -426,7 +426,7 @@
     // initialize date to today
     //document.getElementById('date').valueAsDate = new Date();
 
-    function previewImage(e){
+    function previewImage(e) {
       const file = e.target.files[0];
       const p = document.getElementById('imgPreview');
       p.innerHTML = '';
@@ -440,32 +440,32 @@
     // attachments simulation
     const attachTbody = document.querySelector('#attachTable tbody');
     let attachments = [];
-    function handleFiles(e){
+    function handleFiles(e) {
       const files = Array.from(e.target.files);
-      files.forEach(f=>{
+      files.forEach(f => {
         const id = Date.now().toString(36) + Math.random().toString(36).slice(2,6);
-        const row = {id, name: f.name, size: formatBytes(f.size), downloads:0};
+        const row = { id, name: f.name, size: formatBytes(f.size), downloads:0 };
         attachments.push(row);
       });
       renderAttachments();
     }
-    function renderAttachments(){
+    function renderAttachments() {
       attachTbody.innerHTML = '';
-      attachments.forEach(a=>{
+      attachments.forEach(a => {
         const tr = document.createElement('tr');
-        tr.innerHTML = `<td>${a.name}</td><td>${a.size}</td><td>${a.downloads}</td><td><button class='btn ghost' onclick="removeAttach('${a.id}')">Delete</button></td>`;
+        tr.innerHTML = `<td>${ a.name }</td><td>${ a.size }</td><td>${ a.downloads }</td><td><button class='btn ghost' onclick="removeAttach('${ a.id }')">Delete</button></td>`;
         attachTbody.appendChild(tr);
       });
       document.getElementById('attachCount').innerText = 'Total attachments: ' + attachments.length;
       document.getElementById('summaryAttachments').innerText = attachments.length;
       document.getElementById('sumAttach').innerText = attachments.length;
     }
-    function removeAttach(id){ attachments = attachments.filter(a=>a.id!==id); renderAttachments(); }
-    function formatBytes(bytes){ if(bytes===0) return '0 B'; const k=1024; const sizes=['B','KB','MB','GB']; const i=Math.floor(Math.log(bytes)/Math.log(k)); return parseFloat((bytes/Math.pow(k,i)).toFixed(2)) + ' ' + sizes[i]; }
+    function removeAttach(id) { attachments = attachments.filter(a=>a.id!==id); renderAttachments(); }
+    function formatBytes(bytes) { if(bytes===0) return '0 B'; const k=1024; const sizes=['B','KB','MB','GB']; const i=Math.floor(Math.log(bytes)/Math.log(k)); return parseFloat((bytes/Math.pow(k,i)).toFixed(2)) + ' ' + sizes[i]; }
 
 /*
-    function saveDraft(){ alert('Draft saved (client-side). In production, POST to API endpoint.'); }
-    function publishResource(){
+    function saveDraft() { alert('Draft saved (client-side). In production, POST to API endpoint.'); }
+    function publishResource() {
       const data = {
         content_id: document.getElementById('content_id').value,
         type: document.getElementById('type').value,
@@ -487,7 +487,7 @@
     }
 */
 
-    function updateSummary(){
+    function updateSummary() {
       document.getElementById('sumTitle').innerText = document.getElementById('title').value || '—';
       document.getElementById('sumType').innerText = document.getElementById('type').value || '—';
       document.getElementById('sumScope').innerText = document.getElementById('scope').value || '—';
