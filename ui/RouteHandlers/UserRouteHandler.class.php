@@ -221,13 +221,13 @@ class UserRouteHandler
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:docusign_hook')
             ->setName('docusign_hook');
 
-        $app->get(
+        $app->map(['GET', 'POST'],
             '/content_item/{content_id}/org/{org_id}[/]',
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:content_item')
             ->add('\SolasMatch\UI\Lib\Middleware:authUserForOrg_incl_community_officer')
             ->setName('content_item_org');
 
-        $app->get(
+        $app->map(['GET', 'POST'],
             '/content_item/{content_id}[/]',
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:content_item')
             ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin_any')
