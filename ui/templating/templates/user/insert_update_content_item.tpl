@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>TWB Platform — Resource CMS Prototype</title>
+  <title>TWB Platform — Resource CMS</title>
   <style>
     :root {
       --brand-blue:#0b6fb2; /* TWB-like */
@@ -56,7 +56,7 @@
 </head>
 <body>
   <header>
-    <div class="logo"><a href="https://twbplatform.org">TWB Platform</a></div>
+    <div class="logo"><a href="https://twbplatform.org">TWB</a></div>
     <h1>CMS — Create/Edit Resource{if !empty($org)} for {$org->getName()}{/if}</h1>
   </header>
 
