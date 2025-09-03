@@ -3523,7 +3523,7 @@ foreach ($rows as $index => $row) {
                 if (!empty($post['projects'])) {
                     foreach ($post['projects'] as $project_id => $name) {
                         if (empty($previous_projects[$project_id])) $userDao->add_content_item_to_project($project_id, $content_id);
-                        else unset($previous_projects[$project_id];
+                        else unset($previous_projects[$project_id]);
                     }
                 }
                 foreach ($previous_projects as $project_id) $userDao->remove_content_item_from_project($project_id, $content_id);
