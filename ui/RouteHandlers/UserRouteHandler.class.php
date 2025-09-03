@@ -3481,6 +3481,7 @@ foreach ($rows as $index => $row) {
         global $app, $template_data;
         $userDao = new DAO\UserDao();
         $projectDao = new DAO\ProjectDao();
+        $orgDao = new DAO\OrganisationDao();
         $adminDao = new DAO\AdminDao();
 
         $content_id = !empty($args['content_id']) ? $args['content_id'] : 0;
