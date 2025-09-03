@@ -2599,7 +2599,11 @@ error_log(print_r($result, true));//(**)
         LibAPI\PDOWrapper::cleanseNullOrWrapStr($external_link) . ',' .
         LibAPI\PDOWrapper::cleanseNull($owner_org_id) . ',' .
         LibAPI\PDOWrapper::cleanse($admin_id);
-        LibAPI\PDOWrapper::call('insert_update_content_item', $args);
+        $result = LibAPI\PDOWrapper::call('insert_update_content_item', $args);
+        if (!$id && !empty($result)) {
+            $id = $result[0]['id'];
+        }
+        return $id;
     }
 
     public function increment_content_item_views($id)

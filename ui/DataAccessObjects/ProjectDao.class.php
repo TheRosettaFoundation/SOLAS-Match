@@ -2078,4 +2078,16 @@ error_log("Create PO ref: $result");
         $res = json_decode($result, true);
         return $res['access_token'];
     }
+
+    public function get_all_projects($org_id)
+    {
+        $result = LibAPI\PDOWrapper::call('get_all_projects', LibAPI\PDOWrapper::cleanse($org_id));
+        if (empty($result)) return [];
+
+        $project_names = [];
+        foreach ($result as $row) {
+            $project_names[$row['id']] = $row['title'];
+        }
+        return $project_names;
+    }
 }

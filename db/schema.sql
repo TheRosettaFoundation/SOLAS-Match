@@ -15115,6 +15115,14 @@ BEGIN
 END//
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `get_all_projects`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_all_projects`(IN oID INT UNSIGNED)
+BEGIN
+    SELECT * FROM Projects WHERE organisation_id=oID ORDER BY title, id;
+END//
+DELIMITER ;
+
 
 /*---------------------------------------end of procs----------------------------------------------*/
 
