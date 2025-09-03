@@ -2591,18 +2591,20 @@ error_log(print_r($result, true));//(**)
         LibAPI\PDOWrapper::cleanse($highlight) . ',' .
         LibAPI\PDOWrapper::cleanse($published) . ',' .
         LibAPI\PDOWrapper::cleanse($sorting_order) . ',' .
-        LibAPI\PDOWrapper::cleanseNullOrWrapStr($title) . ',' .
-        LibAPI\PDOWrapper::cleanseNullOrWrapStr($snippet) . ',' .
-        LibAPI\PDOWrapper::cleanseNullOrWrapStr($body) . ',' .
+        LibAPI\PDOWrapper::cleanseWrapStr($title) . ',' .
+        LibAPI\PDOWrapper::cleanseWrapStr($snippet) . ',' .
+        LibAPI\PDOWrapper::cleanseWrapStr($body) . ',' .
         LibAPI\PDOWrapper::cleanseNullOrWrapStr($language_code_target) . ',' .
         LibAPI\PDOWrapper::cleanseNullOrWrapStr($country_code_target) . ',' .
-        LibAPI\PDOWrapper::cleanseNullOrWrapStr($external_link) . ',' .
+        LibAPI\PDOWrapper::cleanseWrapStr($external_link) . ',' .
         LibAPI\PDOWrapper::cleanseNull($owner_org_id) . ',' .
         LibAPI\PDOWrapper::cleanse($admin_id);
+error_log($args);//(**)REMOVE
         $result = LibAPI\PDOWrapper::call('insert_update_content_item', $args);
         if (!$id && !empty($result)) {
             $id = $result[0]['id'];
         }
+error_log($id);//(**)REMOVE
         return $id;
     }
 
