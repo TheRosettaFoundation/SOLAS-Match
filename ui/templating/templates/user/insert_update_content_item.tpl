@@ -72,7 +72,7 @@
 {if !empty($content[0]['number_images'])}{assign var="selected_number_images" value=$content[0]['number_images']}{else}{assign var="selected_number_images" value=0}{/if}
 {if !empty($content[0]['number_attachments'])}{assign var="selected_number_attachments" value=$content[0]['number_attachments']}{else}{assign var="selected_number_attachments" value=0}{/if}
 
-{if !empty($content[0]['language_code_target']) && !empty($content[0]['country_code_target'])}{assign var="selected_codes" value=$content[0]['language_code_target'].'-'.$content[0]['country_code_target']}{else}{assign var="selected_codes" value=''}{/if}
+{if !empty($content[0]['language_code_target']) && !empty($content[0]['country_code_target'])}{assign var="selected_codes" value="`$content[0]['language_code_target']`-`$content[0]['country_code_target']`"}{else}{assign var="selected_codes" value=''}{/if}
 
 {if !empty($content[0]['direct_link'])}{assign var="selected_direct_link" value=$content[0]['direct_link']}{else}{assign var="selected_direct_link" value=''}{/if}
 {if !empty($content[0]['external_link'])}{assign var="selected_external_link" value=$content[0]['external_link']}{else}{assign var="selected_external_link" value=''}{/if}
