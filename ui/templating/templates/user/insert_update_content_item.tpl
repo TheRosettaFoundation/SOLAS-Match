@@ -70,7 +70,7 @@
 {if !empty($content[0]['snippet'])}{assign var="selected_snippet" value=$content[0]['snippet']}{else}{assign var="selected_snippet" value=''}{/if}
 {if !empty($content[0]['body'])}{assign var="selected_body" value=$content[0]['body']}{else}{assign var="selected_body" value=''}{/if}
 {if !empty($content[0]['number_images'])}{assign var="selected_number_images" value=$content[0]['number_images']}{else}{assign var="selected_number_images" value=0}{/if}
-{if !empty($content[0]['number_attachments'])}{assign var="selected_number_attachments" value=$content[0]['number_attachments']}{else}{assign var="selected_number_attachments" value=0}{/if}
+{if !empty($content[0]['number_attachments'])}{assign var="number_attachments" value=$content[0]['number_attachments']}{else}{assign var="number_attachments" value=0}{/if}
 
 {if !empty($content[0]['language_code_target']) && !empty($content[0]['country_code_target'])}{assign var="selected_codes" value="`$content[0]['language_code_target']`-`$content[0]['country_code_target']`"}{else}{assign var="selected_codes" value=''}{/if}
 
@@ -355,7 +355,7 @@
 
               <div style="margin-top:10px" class="row">
                 <div class="col small">Views: <span id="viewsCount">{if empty($number_of_views)}0{else}{$number_of_views}{/if}</span></div>
-                <div class="col small">Attachments: <span id="summaryAttachments">{if empty(number_attachments)}0{else}{number_attachments}{/if}</span> • Linked projects: <span id="summaryProjects">{if empty($number_of_projects)}0{else}{$number_of_projects}{/if}</span></div>
+                <div class="col small">Attachments: <span id="summaryAttachments">{if empty($number_attachments)}0{else}{$number_attachments}{/if}</span> • Linked projects: <span id="summaryProjects">{if empty($number_of_projects)}0{else}{$number_of_projects}{/if}</span></div>
               </div>
 
               <div class="actions">
@@ -392,7 +392,7 @@
             <div class="meta-item"><div>Type</div><div id="sumType" class="small">{if !empty($selected_type)}{$selected_type}{else}—{/if}</div></div>
             <div class="meta-item"><div>Scope</div><div id="sumScope" class="small">{if !empty($selected_scope)}{$selected_scope}{else}—{/if}</div></div>
             <div class="meta-item"><div>Language</div><div id="sumLang" class="small">{foreach from=$language_selection key=codes item=language}{if $codes == $selected_codes}{$language}{/if}{/foreach}</div></div>
-            <div class="meta-item"><div>Attachments</div><div id="sumAttach" class="small">{if empty(number_attachments)}0{else}{number_attachments}{/if}</div></div>
+            <div class="meta-item"><div>Attachments</div><div id="sumAttach" class="small">{if empty($number_attachments)}0{else}{$number_attachments}{/if}</div></div>
             <div class="meta-item"><div>Linked projects</div><div id="sumProjects" class="small">{if empty($number_of_projects)}0{else}{$number_of_projects}{/if}</div></div>
             <div class="meta-item"><div>Show on homepage</div><div id="sumHomepage" class="small">{if !empty($selected_highlight)}Yes{else}No{/if}</div></div>
           </div>
