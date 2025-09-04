@@ -390,7 +390,9 @@
           <div class="meta">
             <div class="meta-item"><div>Title</div><div id="sumTitle" class="small">{if !empty($selected_title)}{$selected_title}{else}—{/if}</div></div>
             <div class="meta-item"><div>Type</div><div id="sumType" class="small">{if !empty($selected_type)}{$selected_type}{else}—{/if}</div></div>
+            {if $org_id == 0}
             <div class="meta-item"><div>Scope</div><div id="sumScope" class="small">{if !empty($selected_scope)}{$selected_scope}{else}—{/if}</div></div>
+            {/if}
             <div class="meta-item"><div>Language</div><div id="sumLang" class="small">{foreach from=$language_selection key=codes item=language}{if $codes == $selected_codes}{$language}{/if}{/foreach}</div></div>
             <div class="meta-item"><div>Attachments</div><div id="sumAttach" class="small">{if empty($number_attachments)}0{else}{$number_attachments}{/if}</div></div>
             <div class="meta-item"><div>Linked projects</div><div id="sumProjects" class="small">{if empty($number_of_projects)}0{else}{$number_of_projects}{/if}</div></div>
@@ -490,7 +492,9 @@
     function updateSummary() {
       document.getElementById('sumTitle').innerText = document.getElementById('title').value || '—';
       document.getElementById('sumType').innerText = document.getElementById('type').options[document.getElementById('type').selectedIndex].text || '—';
+      {if $org_id == 0}
       document.getElementById('sumScope').innerText = document.getElementById('scope').options[document.getElementById('scope').selectedIndex].text || '—';
+      {/if}
       document.getElementById('sumLang').innerText = document.getElementById('language').value || '—';
       document.getElementById('sumProjects').innerText = Array.from(document.getElementById('projects').selectedOptions).length;
       document.getElementById('summaryProjects').innerText = document.getElementById('sumProjects').innerText;
