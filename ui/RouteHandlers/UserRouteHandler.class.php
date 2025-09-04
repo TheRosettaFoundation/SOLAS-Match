@@ -3526,8 +3526,7 @@ foreach ($rows as $index => $row) {
                 foreach ($projects as $row) if ($row['project_id']) $previous_projects[$row['project_id']] = $row['project_id'];
 
                 if (!empty($post['projects'])) {
-error_log(print_r($post['projects'], 1));
-                    foreach ($post['projects'] as $project_id => $name) {
+                    foreach ($post['projects'] as $project_id) {
                         if (empty($previous_projects[$project_id])) $userDao->add_content_item_to_project($project_id, $content_id);
                         else unset($previous_projects[$project_id]);
                     }
