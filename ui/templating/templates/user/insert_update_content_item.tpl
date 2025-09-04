@@ -78,12 +78,12 @@
 {if !empty($content[0]['external_link'])}{assign var="selected_external_link" value=$content[0]['external_link']}{else}{assign var="selected_external_link" value=''}{/if}
 {if !empty($content[0]['number_of_views'])}{assign var="number_of_views" value=$content[0]['number_of_views']}{else}{assign var="number_of_views" value=0}{/if}
 
-{assign var="selected_project_ids" []}
+{assign var="selected_project_ids" value=[]}
 {assign var="index" value=0}
 {foreach from=$projects item=row}
 project_id:{$row['project_id']}--
     {if !empty($row['project_id'])}
-        {assign var="selected_project_ids[$index]" value=$row['project_id']}
+        {append var="selected_project_ids" value=$row['project_id']}
 index:{$index}--selected_project_ids[index]:{$selected_project_ids[$index]}--
     {/if}
     {assign var="index" value=$index+1}
