@@ -81,12 +81,15 @@
 {assign var="selected_project_ids" []}
 {assign var="index" value=0}
 {foreach from=$projects item=row}
+project_id:{$row['project_id']}--
     {if !empty($row['project_id'])}
         {assign var="selected_project_ids[$index]" value=$row['project_id']}
+index:{$index}--selected_project_ids[index]:{$selected_project_ids[$index]}--
     {/if}
     {assign var="index" value=$index+1}
 {/foreach}
 {assign var="number_of_projects" value=count($selected_project_ids)}
+number_of_projects:{$number_of_projects}--
 
   <div class="container">
     <div class="layout">
@@ -411,6 +414,7 @@
             <button class="btn" onclick="gotoStep(1)">Edit Basic</button>
             <button class="btn ghost" onclick="gotoStep(2)">Edit Content</button>
             <button class="btn ghost" onclick="gotoStep(3)">Edit Attachments</button>
+            <button class="btn ghost" onclick="gotoStep(4)">Edit Links & Publish</button>
           </div>
         </div>
       </aside>
