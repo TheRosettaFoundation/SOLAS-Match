@@ -2242,9 +2242,11 @@ error_log("TM added: $result");//(**)
                 in_array($sourceLang, $sources) && in_array($language, ['ja', 'tl', 'prs_af', 'ur_pk'])
                 ) {
                 // Add MT for $language
+/* REMOVE THE COMMENT BOTH ENDS
               if (in_array($sourceLang, $sources) && in_array($language, ['es_419', 'es_co', 'es_es', 'ar_sa', 'fr_ca', 'fr_cd', 'fr_fr', 'pt_br', 'pt_mz', 'pt_pt', 'nl']))
                 $mtSettingsPerLangList[] = ['targetLang' => $language, 'machineTranslateSettings' => ['id' => '3932668']]; // uid: IuJTYKTrmzXV0OjDKT7y06, name: DeepL In-Kind
               else
+*/
                 $mtSettingsPerLangList[] = ['targetLang' => $language, 'machineTranslateSettings' => ['id' => '1618122']]; // uid: l70q1FxAYWDLC4Eug90aJl, name: Main MT
             }
         }
