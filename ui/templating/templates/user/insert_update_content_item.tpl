@@ -82,10 +82,11 @@
 {assign var="index" value=0}
 {foreach from=$projects item=row}
     {if !empty($row['project_id'])}
-        {assign var="selected_project_ids[$index]" $row['project_id']}
+        {assign var="selected_project_ids[$index]" value=$row['project_id']}
     {/if}
     {assign var="index" value=$index+1}
 {/foreach}
+{assign var="number_of_projects" value=count($selected_project_ids)}
 
   <div class="container">
     <div class="layout">
