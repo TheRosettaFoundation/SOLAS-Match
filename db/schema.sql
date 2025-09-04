@@ -14862,12 +14862,12 @@ CREATE TABLE IF NOT EXISTS `content_items` (
   number_attachments INT DEFAULT 0,
   language_code_target VARCHAR(3) COLLATE utf8mb4_unicode_ci,
   country_code_target  VARCHAR(4) COLLATE utf8mb4_unicode_ci,
-  external_link      VARCHAR(1000) DEFAULT '',
+  external_link      VARCHAR(1000) NOT NULL DEFAULT '',
   number_of_views    INT DEFAULT 0,
   owner_org_id       INT UNSIGNED,
   admin_id           INT UNSIGNED NOT NULL,
   PRIMARY KEY (id),
-  CONSTRAINT FK_content_items_Organisations FOREIGN KEY (owner_org_id) REFERENCES Organisations (id) ON DELETE CASCADE ON UPDATE CASCADE,
+  KEY (owner_org_id),
   CONSTRAINT FK_content_items_Users FOREIGN KEY (admin_id) REFERENCES Users (id) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
