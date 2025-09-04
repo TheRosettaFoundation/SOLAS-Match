@@ -60,7 +60,7 @@
     <h1>CMS — Create/Edit Resource{if !empty($org)} for {$org->getName()|escape:'html':'UTF-8'}{/if}</h1>
   </header>
 
-{if !empty($content[0]['content_id'])}{assign var="selected_content_id" value=$content[0]['content_id']}{else}{assign var="selected_content_id" value=0}{/if}
+{if !empty($content[0]['id'])}{assign var="selected_content_id" value=$content[0]['id']}{else}{assign var="selected_content_id" value=0}{/if}
 {if !empty($content[0]['type'])}{assign var="selected_type" value=$content[0]['type']}{else}{assign var="selected_type" value=0}{/if}
 {if !empty($content[0]['scope'])}{assign var="selected_scope" value=$content[0]['scope']}{else}{assign var="selected_scope" value=0}{/if}
 {if !empty($content[0]['highlight'])}{assign var="selected_highlight" value=$content[0]['highlight']}{else}{assign var="selected_highlight" value=0}{/if}
