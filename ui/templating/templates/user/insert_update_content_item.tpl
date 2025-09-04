@@ -132,7 +132,7 @@
                   {if empty($selected_title)}
                   <input type="text" id="title" name="title" placeholder="Enter title" />
                   {else}
-                  <input type="text" id="title" name="title" value="{$selected_title} />
+                  <input type="text" id="title" name="title" value="{$selected_title}" />
                   {/if}
                 </div>
                 <div class="col">
