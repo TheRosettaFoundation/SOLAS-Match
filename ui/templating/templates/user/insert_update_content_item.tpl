@@ -348,7 +348,7 @@
                   {if empty($selected_sorting_order)}
                   <input type="number" id="sorting_order" name="sorting_order" value="0" />
                   {else}
-                  <input type="number" id="sorting_order" name="sorting_order" value="{$selected_sorting_order}" /><
+                  <input type="number" id="sorting_order" name="sorting_order" value="{$selected_sorting_order}" />
                   {/if}
                 </div>
               </div>
