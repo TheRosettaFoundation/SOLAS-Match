@@ -489,8 +489,8 @@
 
     function updateSummary() {
       document.getElementById('sumTitle').innerText = document.getElementById('title').value || '—';
-      document.getElementById('sumType').innerText = document.getElementById('type').value || '—';
-      document.getElementById('sumScope').innerText = document.getElementById('scope').value || '—';
+      document.getElementById('sumType').innerText = document.getElementById('type').options[document.getElementById('type').selectedIndex].text || '—';
+      document.getElementById('sumScope').innerText = document.getElementById('scope').options[document.getElementById('scope').selectedIndex].text || '—';
       document.getElementById('sumLang').innerText = document.getElementById('language').value || '—';
       document.getElementById('sumProjects').innerText = Array.from(document.getElementById('projects').selectedOptions).length;
       document.getElementById('summaryProjects').innerText = document.getElementById('sumProjects').innerText;
