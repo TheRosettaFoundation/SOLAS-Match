@@ -57,7 +57,7 @@
 <body>
   <header>
     <div class="logo"><a href="https://twbplatform.org">TWB</a></div>
-    <h1>CMS — Create/Edit Resource{if !empty($org)} for {$org->getName()}{/if}</h1>
+    <h1>CMS — Create/Edit Resource{if !empty($org)} for {$org->getName()|escape:'html':'UTF-8'}{/if}</h1>
   </header>
 
 {if !empty($content[0]['content_id'])}{assign var="selected_content_id" value=$content[0]['content_id']}{else}{assign var="selected_content_id" value=0}{/if}
@@ -132,7 +132,7 @@
                   {if empty($selected_title)}
                   <input type="text" id="title" name="title" placeholder="Enter title" />
                   {else}
-                  <input type="text" id="title" name="title" value="{$selected_title}" />
+                  <input type="text" id="title" name="title" value="{$selected_title|escape:'html':'UTF-8'}" />
                   {/if}
                 </div>
                 <div class="col">
@@ -194,7 +194,7 @@
                 {if empty($selected_snippet)}
                 <textarea id="snippet" name="snippet" placeholder="Short HTML snippet or summary"></textarea>
                 {else}
-                <textarea id="snippet name="snippet"">{$selected_snippet}</textarea>
+                <textarea id="snippet name="snippet"">{$selected_snippet|escape:'html':'UTF-8'}</textarea>
                 {/if}
               </div>
               <div style="margin-top:10px">
@@ -202,7 +202,7 @@
                 {if empty($selected_body)}
                 <textarea id="body" name="body" placeholder="Full HTML body"></textarea>
                 {else}
-                <textarea id="body" name="body">{$selected_body}</textarea>
+                <textarea id="body" name="body">{$selected_body|escape:'html':'UTF-8'}</textarea>
                 {/if}
               </div>
               <div class="row" style="margin-top:10px">
@@ -239,7 +239,7 @@
                   {if empty($selected_direct_link)}
                   <input type="text" id="direct_link" name="direct_link" placeholder="https://..." />
                   {else}
-                  <input type="text" id="direct_link" name="direct_link" value="{$selected_direct_link}" />
+                  <input type="text" id="direct_link" name="direct_link" value="{$selected_direct_link|escape:'html':'UTF-8'}" />
                   {/if}
                   
                   <div class="small">Clicks on this link should be tracked.</div>
@@ -249,7 +249,7 @@
                     {if empty($selected_external_link)}
                     <input type="text" id="external_link" name="external_link" placeholder="https://..." />
                     {else}
-                    <input type="text" id="external_link" name="external_link" value="{$selected_external_link}" />
+                    <input type="text" id="external_link" name="external_link" value="{$selected_external_link|escape:'html':'UTF-8'}" />
                     {/if}
                     <div class="small">Clicks on this link should be tracked.</div>
                   </div>
@@ -322,7 +322,7 @@
                   <select id="organisation" name="organisation">
                     <option value="">— Select Organization —</option>
                     {foreach from=$organisations key=o_id item=o_name}
-                    <option value="{$o_id}" {if $o_id == $selected_org_id}selected="selected"{/if}>{$o_name}</option>
+                    <option value="{$o_id}" {if $o_id == $selected_org_id}selected="selected"{/if}>{$o_name|escape:'html':'UTF-8'}</option>
                     {/foreach}
                   </select>
                 </div>
@@ -332,7 +332,7 @@
                   <select id="projects" name="projects[]" multiple style="height:120px">
                     <option value="">— Select Project —</option>
                     {foreach from=$project_selection key=project_id item=project_name}
-                    <option value="{$project_id}" {if in_array($project_id, $selected_project_ids)}selected="selected"{/if}>{$project_name}</option>
+                    <option value="{$project_id}" {if in_array($project_id, $selected_project_ids)}selected="selected"{/if}>{$project_name|escape:'html':'UTF-8'}</option>
                     {/foreach}
                   </select>
                 </div>
