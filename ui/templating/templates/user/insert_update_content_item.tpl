@@ -395,7 +395,9 @@
             {/if}
             <div class="meta-item"><div>Language</div><div id="sumLang" class="small">{foreach from=$language_selection key=codes item=language}{if $codes == $selected_codes}{$language}{/if}{/foreach}</div></div>
             <div class="meta-item"><div>Attachments</div><div id="sumAttach" class="small">{if empty($number_attachments)}0{else}{$number_attachments}{/if}</div></div>
+            {if $org_id != 0}
             <div class="meta-item"><div>Linked projects</div><div id="sumProjects" class="small">{if empty($number_of_projects)}0{else}{$number_of_projects}{/if}</div></div>
+            {/if}
             <div class="meta-item"><div>Show on homepage</div><div id="sumHomepage" class="small">{if !empty($selected_highlight)}Yes{else}No{/if}</div></div>
           </div>
         </div>
@@ -496,8 +498,12 @@
       document.getElementById('sumScope').innerText = document.getElementById('scope').options[document.getElementById('scope').selectedIndex].text || '—';
       {/if}
       document.getElementById('sumLang').innerText = document.getElementById('language').value || '—';
+
+      {if $org_id != 0}
       document.getElementById('sumProjects').innerText = Array.from(document.getElementById('projects').selectedOptions).length;
       document.getElementById('summaryProjects').innerText = document.getElementById('sumProjects').innerText;
+      {/if}
+
       document.getElementById('sumHomepage').innerText = document.getElementById('highlight').checked ? 'Yes' : 'No';
     }
 
