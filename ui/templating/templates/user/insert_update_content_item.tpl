@@ -226,7 +226,7 @@
                   <label><input type="checkbox" name="previous_images[]" value="{$row['sorting_order']}" /> Previous Image {$row['sorting_order']}</label>
                 </div>
                 <div class="col">
-                  $row['creation_date']
+                  {$row['creation_date']}
                 </div>
               </div>
               {/foreach}
