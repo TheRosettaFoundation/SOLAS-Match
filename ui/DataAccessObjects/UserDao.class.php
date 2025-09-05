@@ -2633,7 +2633,7 @@ error_log(print_r($result, true));//(**)
         $args =
         LibAPI\PDOWrapper::cleanse($content_id) . ',' .
         LibAPI\PDOWrapper::cleanse($is_image) . ',' .
-        LibAPI\PDOWrapper::cleanseWrapStr(attachment) . ',' .
+        LibAPI\PDOWrapper::cleanseWrapStr($attachment) . ',' .
         LibAPI\PDOWrapper::cleanse($admin_id);
         LibAPI\PDOWrapper::call('add_content_item_attachment', $args);
     }
