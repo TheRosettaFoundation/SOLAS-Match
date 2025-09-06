@@ -272,7 +272,7 @@
                 <input type="file" id="attachments" name="attachments[]" multiple onchange="handleFiles(event)" />
                 <div class="attachments">
                   <table class="attach-list" id="attachTable">
-                    <thead><tr><th>File name</th><th>Size</th><th>Downloads</th><th>Action</th></tr></thead>
+                    <thead><tr><th>File name</th><th>Size</th><th>Action</th></tr></thead>
                     <tbody></tbody>
                   </table>
                 </div>
@@ -292,7 +292,7 @@
                     <label><input type="checkbox" name="previous_attachments[]" value="{$row['sorting_order']}" /> Previous Attachment {$row['sorting_order']}</label>
                   </div>
                   <div class="col">
-                    $row['creation_date']
+                    {$row['creation_date']}
                   </div>
                 </div>
                 {/foreach}
@@ -448,7 +448,7 @@
       const files = Array.from(e.target.files);
       files.forEach(f => {
         const id = Date.now().toString(36) + Math.random().toString(36).slice(2,6);
-        const row = { id, name: f.name, size: formatBytes(f.size), downloads:0 };
+        const row = { id, name: f.name, size: formatBytes(f.size) };
         attachments.push(row);
       });
       renderAttachments();
@@ -457,7 +457,7 @@
       attachTbody.innerHTML = '';
       attachments.forEach(a => {
         const tr = document.createElement('tr');
-        tr.innerHTML = `<td>${ a.name }</td><td>${ a.size }</td><td>${ a.downloads }</td><td><button class='btn ghost' onclick="removeAttach('${ a.id }')">Delete</button></td>`;
+        tr.innerHTML = `<td>${ a.name }</td><td>${ a.size }</td><td><button class='btn ghost' onclick="removeAttach('${ a.id }')">Delete</button></td>`;
         attachTbody.appendChild(tr);
       });
       document.getElementById('attachCount').innerText = 'Total attachments: ' + attachments.length;
