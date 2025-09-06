@@ -270,12 +270,14 @@
               <div>
                 <label>Upload attachments (multiple files allowed)</label>
                 <input type="file" id="attachments" name="attachments[]" multiple onchange="handleFiles(event)" />
+<!--
                 <div class="attachments">
                   <table class="attach-list" id="attachTable">
-                    <thead><tr><th>File name</th><th>Size</th><th>Action</th></tr></thead>
+                    <thead><tr><th>File name</th><th>Size</th><th>Downloads</th><th>Action</th></tr></thead>
                     <tbody></tbody>
                   </table>
                 </div>
+-->
 
                 {if !empty($previous_attachments)}
                 <div class="row" style="align-items:center">
@@ -301,7 +303,7 @@
               </div>
 
               <div class="actions">
-                <div class="small" id="attachCount">Total attachments: 0</div>
+<!--                <div class="small" id="attachCount">Total attachments: 0</div> -->
                 <div>
                   <button class="btn ghost" type="button" onclick="gotoStep(2)">← Back</button>
                   <button class="btn" type="button" onclick="gotoStep(4)">Next: Publish →</button>
@@ -441,6 +443,7 @@
       p.appendChild(img);
     }
 
+/*
     // attachments simulation
     const attachTbody = document.querySelector('#attachTable tbody');
     let attachments = [];
@@ -448,7 +451,7 @@
       const files = Array.from(e.target.files);
       files.forEach(f => {
         const id = Date.now().toString(36) + Math.random().toString(36).slice(2,6);
-        const row = { id, name: f.name, size: formatBytes(f.size) };
+        const row = { id, name: f.name, size: formatBytes(f.size), downloads:0 };
         attachments.push(row);
       });
       renderAttachments();
@@ -457,7 +460,7 @@
       attachTbody.innerHTML = '';
       attachments.forEach(a => {
         const tr = document.createElement('tr');
-        tr.innerHTML = `<td>${ a.name }</td><td>${ a.size }</td><td><button class='btn ghost' onclick="removeAttach('${ a.id }')">Delete</button></td>`;
+        tr.innerHTML = `<td>${ a.name }</td><td>${ a.size }</td><td>${ a.downloads }</td><td><button class='btn ghost' onclick="removeAttach('${ a.id }')">Delete</button></td>`;
         attachTbody.appendChild(tr);
       });
       document.getElementById('attachCount').innerText = 'Total attachments: ' + attachments.length;
@@ -467,7 +470,6 @@
     function removeAttach(id) { attachments = attachments.filter(a=>a.id!==id); renderAttachments(); }
     function formatBytes(bytes) { if(bytes===0) return '0 B'; const k=1024; const sizes=['B','KB','MB','GB']; const i=Math.floor(Math.log(bytes)/Math.log(k)); return parseFloat((bytes/Math.pow(k,i)).toFixed(2)) + ' ' + sizes[i]; }
 
-/*
     function saveDraft() { alert('Draft saved (client-side). In production, POST to API endpoint.'); }
     function publishResource() {
       const data = {
