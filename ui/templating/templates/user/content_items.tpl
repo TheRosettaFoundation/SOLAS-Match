@@ -36,7 +36,6 @@
 {else}
     <a href="{urlFor name="content_item" options="content_id.0"}" target="_blank">Create a new Resource</a>
 {/if}
-<br />
 
 <table id="myTable" style="overflow-wrap: break-word;" class="container table table-striped">
     <thead>
