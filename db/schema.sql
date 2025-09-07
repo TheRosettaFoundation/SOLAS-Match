@@ -14876,6 +14876,8 @@ CREATE TABLE IF NOT EXISTS `content_attachments` (
   is_image      INT DEFAULT 0,
   creation_date DATETIME NOT NULL,
   sorting_order INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  filename      VARCHAR(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  mimetype      VARCHAR(128) COLLATE utf8mb4_unicode_ci NOT NULL,
   attachment    LONGBLOB,
   admin_id      INT UNSIGNED NOT NULL,
   PRIMARY KEY (sorting_order),
@@ -15021,11 +15023,38 @@ BEGIN
 END//
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `get_all_content_items`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_all_content_items`(
+    IN p_owner_org_id INT UNSIGNED)
+BEGIN
+    SELECT
+        ci.*,
+        o.name,
+        u.email,
+        GROUP_CONCAT(DISTINCT IF(ca.is_image=1, ca.sorting_order, 0) ORDER BY ca.sorting_order SEPARATOR ',') AS image_ids,
+        GROUP_CONCAT(DISTINCT IF(ca.is_image=0, ca.sorting_order, 0) ORDER BY ca.sorting_order SEPARATOR ',') AS attachment_ids,
+        GROUP_CONCAT(DISTINCT cfp.project_id ORDER BY cfp.project_id SEPARATOR ',') AS project_ids
+    FROM      content_items         ci
+    JOIN      Users                  u ON ci.admin_id=u.id
+    LEFT JOIN Organisations          o ON ci.owner_org_id=o.id
+    LEFT JOIN content_attachments   ca ON ci.id=ca.content_id
+    LEFT JOIN content_for_projects cfp ON ci.id=cfp.content_id
+    WHERE
+        owner_org_id=p_owner_org_id AND
+        published>=0
+    GROUP BY ci.id
+    ORDER BY ci.id DESC;
+END//
+DELIMITER ;
+
 DROP PROCEDURE IF EXISTS `add_content_item_attachment`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `add_content_item_attachment`(
     p_content_id INT UNSIGNED,
     p_is_image   INT,
+    p_filename   VARCHAR(255),
+    p_mimetype   VARCHAR(128),
     p_attachment LONGBLOB,
     p_admin_id   INT UNSIGNED)
 BEGIN
@@ -15033,12 +15062,16 @@ BEGIN
         content_id,
         is_image,
         creation_date,
+        filename,
+        mimetype,
         attachment,
         admin_id)
     VALUES (
         p_content_id,
         p_is_image,
         NOW(),
+        p_filename,
+        p_mimetype,
         p_attachment,
         p_admin_id);
     IF p_is_image=1 THEN
