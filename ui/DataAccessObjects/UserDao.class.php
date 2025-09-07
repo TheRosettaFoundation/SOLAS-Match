@@ -2628,11 +2628,25 @@ error_log(print_r($result, true));//(**)
         return $result;
     }
 
-    public function add_content_item_attachment($content_id, $is_image, $attachment, $admin_id)
+    public function get_all_content_items($owner_org_id)
+    {
+        $result = LibAPI\PDOWrapper::call('get_all_content_items', LibAPI\PDOWrapper::cleanseNull($owner_org_id));
+        if (empty($result)) return [];
+        foreach ($result as $i => $row) {
+            $result[$i]['image_ids'] = !empty($row['image_ids']) ? explode(',', $row['image_ids']) : [];
+            $result[$i]['attachment_ids'] = !empty($row['attachment_ids']) ? explode(',', $row['attachment_ids']) : [];
+            $result[$i]['project_ids'] = !empty($row['project_ids']) ? explode(',', $row['project_ids']) : [];
+        }
+        return $result;
+    }
+
+    public function add_content_item_attachment($content_id, $is_image, $filename, $mimetype, $attachment, $admin_id)
     {
         $args =
         LibAPI\PDOWrapper::cleanse($content_id) . ',' .
         LibAPI\PDOWrapper::cleanse($is_image) . ',' .
+        LibAPI\PDOWrapper::cleanseWrapStr($filename) . ',' .
+        LibAPI\PDOWrapper::cleanseWrapStr($mimetype) . ',' .
         LibAPI\PDOWrapper::cleanseWrapStr($attachment) . ',' .
         LibAPI\PDOWrapper::cleanse($admin_id);
         LibAPI\PDOWrapper::call('add_content_item_attachment', $args);
