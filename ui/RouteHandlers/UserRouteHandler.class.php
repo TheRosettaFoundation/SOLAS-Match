@@ -232,6 +232,30 @@ class UserRouteHandler
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:content_item')
             ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin_any')
             ->setName('content_item');
+
+        $app->get(
+            '/download_attachment/{content_id}/is_image/{is_image}/sorting_order/{sorting_order}/org/{org_id}[/]',
+            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:download_attachment')
+            ->add('\SolasMatch\UI\Lib\Middleware:authUserForOrg_incl_community_officer')
+            ->setName('download_attachment_org');
+
+        $app->get(
+            '/download_attachment/{content_id}/is_image/{is_image}/sorting_order/{sorting_order}[/]',
+            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:download_attachment')
+            ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin_any')
+            ->setName('download_attachment');
+
+        $app->get(
+            '/content_items/org/{org_id}[/]',
+            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:content_items')
+            ->add('\SolasMatch\UI\Lib\Middleware:authUserForOrg_incl_community_officer')
+            ->setName('content_items_org');
+
+        $app->get(
+            '/content_items[/]',
+            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:content_items')
+            ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin_any')
+            ->setName('content_items');
     }
 
     public function homeIndex(Request $request, Response $response, $args)
@@ -3569,6 +3593,32 @@ foreach ($rows as $index => $row) {
         ]);
 
         return UserRouteHandler::render('user/insert_update_content_item.tpl', $response);
+    }
+
+    public static function download_attachment(Request $request, Response $response, $args)
+    {
+        $userDao = new DAO\UserDao();
+
+        $attachments = $userDao->get_content_item_attachments($args['content_id'], $args['is_image'], $args['sorting_order']);
+        if (empty($attachments)) return $response;
+
+        header('Content-type: ' . $attachments[0]['mimetype']);
+        header('Content-Disposition: attachment; filename="' . trim($attachments[0]['filename'], '"') . '"');
+        header('Content-length: ' . strlen($attachments[0]['attachment']));
+        header('X-Frame-Options: ALLOWALL');
+        header('Pragma: no-cache');
+        header('Cache-control: no-cache, must-revalidate, no-transform');
+        echo $attachments[0]['attachment'];
+        die;
+    }
+
+    public function content_items(Request $request, Response $response, $args)
+    {
+        global $template_data;
+        $userDao = new DAO\UserDao();
+
+        $template_data = array_merge($template_data, ['items' => $userDao->get_all_content_items(!empty($args['org_id']) ? $args['org_id'] : 0)]);
+        return UserRouteHandler::render('user/content_items.tpl', $response);
     }
 
     public static function flash($key, $value)
