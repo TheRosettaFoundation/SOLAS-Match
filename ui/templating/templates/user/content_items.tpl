@@ -116,7 +116,6 @@
 
             <td>{foreach $item['project_ids'] as $project_id}{if !empty($project_id)}
                     <a href="{urlFor name="project-view" options="project_id.$project_id"}" target="_blank">{$project_id},</a>
-                {/if}
             {/if}{/foreach}</td>
         </tr>
         {/foreach}
