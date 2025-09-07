@@ -3617,7 +3617,9 @@ foreach ($rows as $index => $row) {
         global $template_data;
         $userDao = new DAO\UserDao();
 
-        $template_data = array_merge($template_data, ['items' => $userDao->get_all_content_items(!empty($args['org_id']) ? $args['org_id'] : 0)]);
+        $org_id = !empty($args['org_id']) ? $args['org_id'] : 0;
+
+        $template_data = array_merge($template_data, ['items' => $userDao->get_all_content_items($org_id), 'org_id' => $org_id]);
         return UserRouteHandler::render('user/content_items.tpl', $response);
     }
 
