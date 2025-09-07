@@ -68,25 +68,25 @@
             <td>{$item['title']|escape:'html':'UTF-8'}</td>
 
             <td>
-            {if $item['type'] == 1}TWB Article</if>
-            {if $item['type'] == 2}Newsletter</if>
-            {if $item['type'] == 3}Event</if>
-            {if $item['type'] == 4}Resource</if>
-            {if $item['type'] == 5}Organization</if>
-            {if $item['type'] == 6}Project</if>
+            {if $item['type'] == 1}TWB Article{/if}
+            {if $item['type'] == 2}Newsletter{/if}
+            {if $item['type'] == 3}Event{/if}
+            {if $item['type'] == 4}Resource{/if}
+            {if $item['type'] == 5}Organization{/if}
+            {if $item['type'] == 6}Project{/if}
             </td>
 
             <td>
-            {if $item['scope'] == 1}TWB Resource</if>
-            {if $item['scope'] == 2}Public Resource</if>
+            {if $item['scope'] == 1}TWB Resource{/if}
+            {if $item['scope'] == 2}Public Resource{/if}
             </td>
 
             <td>
-            {if $item['highlight'] == 1}Highlight</if>
+            {if $item['highlight'] == 1}Highlight{/if}
             </td>
 
             <td>
-            {if $item['published'] == 1}Published</if>
+            {if $item['published'] == 1}Published{/if}
             </td>
 
             <td>{$item['sorting_order']}</td>
