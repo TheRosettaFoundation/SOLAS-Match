@@ -15041,7 +15041,8 @@ BEGIN
     LEFT JOIN content_attachments   ca ON ci.id=ca.content_id
     LEFT JOIN content_for_projects cfp ON ci.id=cfp.content_id
     WHERE
-        owner_org_id=p_owner_org_id AND
+        (p_owner_org_id=0 ||
+         p_owner_org_id=owner_org_id) AND
         published>=0
     GROUP BY ci.id
     ORDER BY ci.id DESC;
