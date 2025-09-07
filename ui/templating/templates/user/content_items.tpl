@@ -58,9 +58,9 @@
         <tr>
             <td>
             {if !empty($item['owner_org_id'])}
-            <a href="{urlFor name="content_item_org" options="content_id.$item['id']|org_id.$item['owner_org_id']"}" target="_blank">{$item['id']}</a>
+            <a href="{urlFor name="content_item_org" options="content_id.{$item['id']}|org_id.{$item['owner_org_id']}"}" target="_blank">{$item['id']}</a>
             {else}
-            <a href="{urlFor name="content_item" options="content_id.$item['id']"}" target="_blank">{$item['id']}</a>
+            <a href="{urlFor name="content_item" options="content_id.{$item['id']}"}" target="_blank">{$item['id']}</a>
             {/if}
             </td>
 
@@ -99,17 +99,17 @@
 
             <td>{foreach $item['image_ids'] as $image_id}{if !empty($image_id)}
                 {if !empty($item['owner_org_id'])}
-                    <a href="{urlFor name="download_attachment_org" options="org_id.$item['owner_org_id']|content_id.$item['id']|is_image.1|sorting_order.$image_id"}">{$image_id},</a>
+                    <a href="{urlFor name="download_attachment_org" options="org_id.{$item['owner_org_id']}|content_id.{$item['id']}|is_image.1|sorting_order.$image_id"}">{$image_id},</a>
                 {else}
-                    <a href="{urlFor name="download_attachment" options="content_id.$item['id']|is_image.1|sorting_order.$image_id"}">{$image_id},</a>
+                    <a href="{urlFor name="download_attachment" options="content_id.{$item['id']}|is_image.1|sorting_order.$image_id"}">{$image_id},</a>
                 {/if}
             {/if}{/foreach}</td>
 
             <td>{foreach $item['attachment_ids'] as $attachment_id}{if !empty($attachment_id)}
                 {if !empty($item['owner_org_id'])}
-                    <a href="{urlFor name="download_attachment_org" options="org_id.$item['owner_org_id']|content_id.$item['id']|is_image.0|sorting_order.$attachment_id"}">{$attachment_id},</a>
+                    <a href="{urlFor name="download_attachment_org" options="org_id.{$item['owner_org_id']}|content_id.{$item['id']}|is_image.0|sorting_order.$attachment_id"}">{$attachment_id},</a>
                 {else}
-                    <a href="{urlFor name="download_attachment" options="content_id.$item['id']|is_image.0|sorting_order.$attachment_id"}">{$attachment_id},</a>
+                    <a href="{urlFor name="download_attachment" options="content_id.{$item['id']}|is_image.0|sorting_order.$attachment_id"}">{$attachment_id},</a>
                 {/if}
             {/if}{/foreach}</td>
 
