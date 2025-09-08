@@ -3557,9 +3557,9 @@ foreach ($rows as $index => $row) {
                 }
                 foreach ($previous_projects as $project_id) $userDao->remove_content_item_from_project($project_id, $content_id);
 
-                return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('content_item_org', ['content_id' => $content_id, 'org_id' => $org_id]));
+                return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('content_items_org', ['org_id' => $org_id]));
             }
-            return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('content_item', ['content_id' => $content_id]));
+            return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('content_items'));
         }
 
         if ($content_id) {

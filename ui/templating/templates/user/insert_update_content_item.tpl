@@ -98,9 +98,9 @@
           </div>
 
          {if !empty($org_id)}
-         <form method="post" action="{urlFor name="content_item_org" options="content_id.$selected_content_id|org_id.$org_id"}" enctype="multipart/form-data" accept-charset="utf-8">
+         <form method="post" action="{urlFor name="content_item_org" options="content_id.$selected_content_id|org_id.$org_id"}" enctype="multipart/form-data" accept-charset="utf-8" onsubmit="update_content_item.disabled = true;">
          {else}
-         <form method="post" action="{urlFor name="content_item" options="content_id.$selected_content_id"}" enctype="multipart/form-data" accept-charset="utf-8">
+         <form method="post" action="{urlFor name="content_item" options="content_id.$selected_content_id"}" enctype="multipart/form-data" accept-charset="utf-8" onsubmit="update_content_item.disabled = true;">
          {/if}
 
             <input type="hidden" id="content_id" name="content_id" value="{$selected_content_id}" />
