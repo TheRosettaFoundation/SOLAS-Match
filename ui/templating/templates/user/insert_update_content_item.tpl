@@ -269,7 +269,7 @@
               <h3>Step 3 — Attachments</h3>
               <div>
                 <label>Upload attachments (multiple files allowed)</label>
-                <input type="file" id="attachments" name="attachments[]" multiple onchange="handleFiles(event)" />
+                <input type="file" id="attachments" name="attachments[]" multiple />
 <!--
                 <div class="attachments">
                   <table class="attach-list" id="attachTable">
