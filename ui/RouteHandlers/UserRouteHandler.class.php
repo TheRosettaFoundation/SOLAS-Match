@@ -3533,13 +3533,16 @@ foreach ($rows as $index => $row) {
 
             $content_id = $userDao->insert_update_content_item($post['content_id'], $post['type'], $post['scope'], $post['highlight'], $post['published'], $post['sorting_order'], $post['title'], $post['snippet'], $post['body'], $kp_language, $kp_country, $post['external_link'], $org_id, $admin_id);
 
+            if (!empty($_FILES['image']['name']) && empty($_FILES['image']['error']) && !empty($_FILES['image']['tmp_name']) && (($data = file_get_contents($_FILES['image']['tmp_name'])) !== false)) {
+                $userDao->add_content_item_attachment($content_id, 1, $_FILES['image']['name'], $_FILES['image']['type'], $data, $admin_id);
+            }
             for ($i = 0; $i < 20; $i++) {
-                if (!empty($_FILES['image']['name'][$i]) && empty($_FILES['image']['error'][$i]) && !empty($_FILES['image']['tmp_name'][$i]) && (($data = file_get_contents($_FILES['image']['tmp_name'][$i])) !== false)) {
-                    $userDao->add_content_item_attachment($content_id, 1, $_FILES['image']['name'][$i], $_FILES['image']['type'][$i], $data, $admin_id);
-error_log('filesize($_FILES[image][tmp_name][$i]): ' . filesize($_FILES['image']['tmp_name'][$i]));//(**)
-error_log('$_FILES[image][size][$i]: ' . $_FILES['image']['size'][$i]);//(**)
-error_log('upload length: ' . strlen($data));//(**)
-                }
+//                if (!empty($_FILES['image']['name'][$i]) && empty($_FILES['image']['error'][$i]) && !empty($_FILES['image']['tmp_name'][$i]) && (($data = file_get_contents($_FILES['image']['tmp_name'][$i])) !== false)) {
+//                    $userDao->add_content_item_attachment($content_id, 1, $_FILES['image']['name'][$i], $_FILES['image']['type'][$i], $data, $admin_id);
+//error_log('filesize($_FILES[image][tmp_name][$i]): ' . filesize($_FILES['image']['tmp_name'][$i]));//(**)
+//error_log('$_FILES[image][size][$i]: ' . $_FILES['image']['size'][$i]);//(**)
+//error_log('upload length: ' . strlen($data));//(**)
+//                }
                 if (!empty($_FILES['attachments']['name'][$i]) && empty($_FILES['attachments']['error'][$i]) && !empty($_FILES['attachments']['tmp_name'][$i]) && (($data = file_get_contents($_FILES['attachments']['tmp_name'][$i])) !== false)) {
                     $userDao->add_content_item_attachment($content_id, 0, $_FILES['attachments']['name'][$i], $_FILES['attachments']['type'][$i], $data, $admin_id);
 error_log('upload length: ' . strlen($data));//(**)
