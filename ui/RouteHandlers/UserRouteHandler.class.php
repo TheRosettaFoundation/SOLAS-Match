@@ -3536,6 +3536,7 @@ foreach ($rows as $index => $row) {
             for ($i = 0; $i < 20; $i++) {
                 if (!empty($_FILES['image']['name'][$i]) && empty($_FILES['image']['error'][$i]) && !empty($_FILES['image']['tmp_name'][$i]) && (($data = file_get_contents($_FILES['image']['tmp_name'][$i])) !== false)) {
                     $userDao->add_content_item_attachment($content_id, 1, $_FILES['image']['name'][$i], $_FILES['image']['type'][$i], $data, $admin_id);
+error_log("$_FILES['image']['size'][$i]: " . $_FILES['image']['size'][$i]);//(**)
 error_log('upload length: ' . strlen($data));//(**)
                 }
                 if (!empty($_FILES['attachments']['name'][$i]) && empty($_FILES['attachments']['error'][$i]) && !empty($_FILES['attachments']['tmp_name'][$i]) && (($data = file_get_contents($_FILES['attachments']['tmp_name'][$i])) !== false)) {
