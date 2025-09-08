@@ -1,7 +1,7 @@
 <!doctype html>
-<html lang="en">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-  <meta charset="utf-8" />
+  <meta charset="utf-8" content="application/xhtml+xml" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>TWB Platform — Resource CMS</title>
   <style>
