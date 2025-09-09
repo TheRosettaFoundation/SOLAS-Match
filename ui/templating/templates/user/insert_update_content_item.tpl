@@ -74,7 +74,6 @@
 
 {if !empty($content[0]['language_code_target']) && !empty($content[0]['country_code_target'])}{assign var="selected_codes" value="`$content[0]['language_code_target']`-`$content[0]['country_code_target']`"}{else}{assign var="selected_codes" value=''}{/if}
 
-{if !empty($content[0]['direct_link'])}{assign var="selected_direct_link" value=$content[0]['direct_link']}{else}{assign var="selected_direct_link" value=''}{/if}
 {if !empty($content[0]['external_link'])}{assign var="selected_external_link" value=$content[0]['external_link']}{else}{assign var="selected_external_link" value=''}{/if}
 {if !empty($content[0]['number_of_views'])}{assign var="number_of_views" value=$content[0]['number_of_views']}{else}{assign var="number_of_views" value=0}{/if}
 
@@ -234,15 +233,6 @@
 
               <div class="row">
                 <div class="col">
-                  <label for="direct_link">Direct link (from snippet)</label>
-                  {if empty($selected_direct_link)}
-                  <input type="text" id="direct_link" name="direct_link" placeholder="https://..." />
-                  {else}
-                  <input type="text" id="direct_link" name="direct_link" value="{$selected_direct_link|escape:'html':'UTF-8'}" />
-                  {/if}
-                  
-                  <div class="small">Clicks on this link should be tracked.</div>
-
                   <div style="margin-top:10px">
                     <label for="external_link">External link (from full article)</label>
                     {if empty($selected_external_link)}
