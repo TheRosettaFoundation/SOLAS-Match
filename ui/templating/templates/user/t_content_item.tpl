@@ -4,6 +4,10 @@
   <meta charset="utf-8" content="application/xhtml+xml" />
 </head>
 <body>
+  <header>
+    <div class="logo"><a href="https://twbplatform.org">TWB</a></div>
+    <h1>CMS — Create/Edit Resource{if !empty($org)} for {$org->getName()|escape:'html':'UTF-8'}{/if}</h1>
+  </header>
 
 {if !empty($content[0]['id'])}{assign var="selected_content_id" value=$content[0]['id']}{else}{assign var="selected_content_id" value=0}{/if}
 {if !empty($content[0]['type'])}{assign var="selected_type" value=$content[0]['type']}{else}{assign var="selected_type" value=0}{/if}
@@ -152,7 +156,8 @@
               <div class="row" style="margin-top:10px">
                 <div class="col">
                   <label for="image">Header image</label>
-                  <input type="file" id="image" name="image[]" />
+                  <input type="file" id="image" name="image[]" accept="image/*" onchange="previewImage(event)" />
+                  <div id="imgPreview" style="margin-top:8px"></div>
                 </div>
               </div>
               {if !empty($previous_images)}
