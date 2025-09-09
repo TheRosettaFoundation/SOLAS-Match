@@ -205,7 +205,7 @@
               </div>
               <div class="row" style="margin-top:10px">
                 <div class="col">
-                  <label for="image">Header image</label>
+                  <label for="image">Image</label>
                   <input type="file" id="image" name="image[]" accept="image/*" onchange="previewImage(event)" />
                   <div id="imgPreview" style="margin-top:8px"></div>
                 </div>
@@ -234,7 +234,7 @@
               <div class="row">
                 <div class="col">
                   <div style="margin-top:10px">
-                    <label for="external_link">External link (from full article)</label>
+                    <label for="external_link">External link</label>
                     {if empty($selected_external_link)}
                     <input type="text" id="external_link" name="external_link" placeholder="https://..." />
                     {else}
