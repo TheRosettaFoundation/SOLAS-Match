@@ -2647,7 +2647,7 @@ error_log(print_r($result, true));//(**)
         LibAPI\PDOWrapper::cleanse($is_image) . ',' .
         LibAPI\PDOWrapper::cleanseWrapStr($filename) . ',' .
         LibAPI\PDOWrapper::cleanseWrapStr($mimetype) . ',' .
-        "0x'" . bin2hex($attachment) . "'," .
+        "x'" . bin2hex($attachment) . "'," .
         LibAPI\PDOWrapper::cleanse($admin_id);
         LibAPI\PDOWrapper::call('add_content_item_attachment', $args);
     }
