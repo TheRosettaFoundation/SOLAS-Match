@@ -1916,6 +1916,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                                 ||(($data = file_get_contents($_FILES['projectImageFile']['tmp_name'])) === false)) {
                             $image_failed = true;
                         } else {
+error_log('strlen($data): ' . strlen($data));
                             $imageMaxWidth  = Common\Lib\Settings::get('projectImages.max_width');
                             $imageMaxHeight = Common\Lib\Settings::get('projectImages.max_height');
                             list($width, $height) = getimagesize($_FILES['projectImageFile']['tmp_name']);
