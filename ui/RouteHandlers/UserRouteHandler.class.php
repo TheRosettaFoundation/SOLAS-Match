@@ -3596,7 +3596,8 @@ error_log('upload length: ' . strlen($data));//(**)
             'sesskey' => $sesskey,
         ]);
 
-        return UserRouteHandler::render('user/insert_update_content_item.tpl', $response);
+        return UserRouteHandler::render('user/t_content_item.tpl', $response);//(**)
+//        return UserRouteHandler::render('user/insert_update_content_item.tpl', $response);
     }
 
     public static function download_attachment(Request $request, Response $response, $args)
