@@ -592,6 +592,10 @@ INSERT INTO TaskTypes (id, name) VALUES
   (36,'Community Recognition Program');
 INSERT INTO TaskTypes (id, name) VALUES
   (37,'TWB Voice');
+INSERT INTO TaskTypes (id, name) VALUES
+  (38,'Spot Quality Inspection');
+INSERT INTO TaskTypes (id, name) VALUES
+  (39,'Final Quality Evaluation');
 
 
 # Be very carefull of deleteing any of these they will cascade DELETEs
