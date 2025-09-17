@@ -595,7 +595,7 @@ INSERT INTO TaskTypes (id, name) VALUES
 INSERT INTO TaskTypes (id, name) VALUES
   (38,'Spot Quality Inspection');
 INSERT INTO TaskTypes (id, name) VALUES
-  (39,'Final Quality Evaluation');
+  (39,'Quality Evaluation');
 
 
 # Be very carefull of deleteing any of these they will cascade DELETEs
@@ -1511,6 +1511,10 @@ INSERT INTO task_type_details VALUES
 (36,9,1,0,1,1,0,1,0,'Community Recognition Program',       'Community Recognition Program',       '#B02323','',                           'SHELLTASK',    'ZZ',                       'Terms',        'terms',  'Terms',        'Terms',      'Terms',      1,    0,       0, 0,         0,         0, '', '', '', '');
 INSERT INTO task_type_details VALUES
 (37,10,1,0,1,1,0,1,0,'TWB Voice',                          'TWB Voice',                           '#B02323','',                           'SHELLTASK',    'ZZ',                       'Terms',        'terms',  'Terms',        'Terms',      'Terms',      1,    0,       0, 0,         0,         0, '', '', '', '');
+INSERT INTO task_type_details VALUES
+(38,1,1,0,1,0,0,1,0,'Spot Quality Inspection',             'Spot Quality Inspection',             '#B02323','',                           'SHELLTASK',    'Spot Quality Inspection',  'Word Count',   'words',  'Words',        'Words',      'Words',   0.00, 0.00,     0.5, 1,         0,     0.002, 'https://communitylibrary.translatorswb.org/books/13-translation-quality-working-group', '', '', '');
+INSERT INTO task_type_details VALUES
+(39,1,1,0,1,0,0,1,0,'Quality Evaluation',                  'Quality Evaluation',                  '#B02323','',                           'SHELLTASK',    'Quality Evaluation',       'Word Count',   'words',  'Words',        'Words',      'Words',   0.00, 0.00,     0.5, 1,         0,     0.002, 'https://communitylibrary.translatorswb.org/books/13-translation-quality-working-group', '', '', '');
 /*
 # "Labour Hours" or "Words" etc. for when user enters pricing rates
 UPDATE task_type_details SET pricing_and_recognition_unit_text_hours='Words' WHERE type_enum=1;
