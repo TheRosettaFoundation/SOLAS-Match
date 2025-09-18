@@ -1049,10 +1049,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
 
             if ($roles & (SITE_ADMIN | PROJECT_OFFICER)) {
                 if (!empty($post['request_quality_checks'])) {
-                    $task_ids = preg_split("/\,/", $post['request_quality_checks']);
-                    foreach ($task_ids as $id) {
-                        $taskDao->set_paid_status($id);
-                    }
+                    $userDao->set_request_quality_checks($post['request_quality_checks']);
                     UserRouteHandler::flashNow('success', count($task_ids) . ' tasks now marked as paid.');
                 }
             }
