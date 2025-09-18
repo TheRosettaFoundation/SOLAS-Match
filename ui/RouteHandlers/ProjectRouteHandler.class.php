@@ -1046,6 +1046,15 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                     }
                 }
             }
+            if ($roles & (SITE_ADMIN | PROJECT_OFFICER)) {
+                if (!empty($post['request_quality_checks'])) {
+                    $task_ids = preg_split ("/\,/", $post['request_quality_checks']);
+                    foreach ($task_ids as $id) {
+                        $taskDao->set_paid_status($id);
+                    }
+                    UserRouteHandler::flashNow('success', count($task_ids) . ' tasks now marked as paid.');
+                }
+            }
 
             if ($roles & (SITE_ADMIN | PROJECT_OFFICER) || in_array($project->getOrganisationId(), ORG_EXCEPTIONS) && $roles & (NGO_ADMIN + NGO_PROJECT_OFFICER)) {
                 if (!empty($post['complete_task'])) {
