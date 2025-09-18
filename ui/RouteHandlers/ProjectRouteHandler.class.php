@@ -1048,8 +1048,8 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
             }
 
             if ($roles & (SITE_ADMIN | PROJECT_OFFICER) && !empty($post['request_quality_checks'])) {
-                $userDao->set_request_quality_checks($post['request_quality_checks']);
-                UserRouteHandler::flashNow('success', count($task_ids) . ' tasks now marked as paid.');
+                $number = $userDao->set_request_quality_checks($post['request_quality_checks']);
+                UserRouteHandler::flashNow('success', "$number new languages in files now have quality checks.");
             }
 
             if ($roles & (SITE_ADMIN | PROJECT_OFFICER) || in_array($project->getOrganisationId(), ORG_EXCEPTIONS) && $roles & (NGO_ADMIN + NGO_PROJECT_OFFICER)) {
