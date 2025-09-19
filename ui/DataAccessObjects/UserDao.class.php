@@ -1845,7 +1845,7 @@ error_log("claimTask_shell($userId, $taskId)");
         LibAPI\PDOWrapper::call('set_memsource_user', LibAPI\PDOWrapper::cleanse($user_id) . ',' . LibAPI\PDOWrapper::cleanse($memsource_user_id) . ',' . LibAPI\PDOWrapper::cleanseWrapStr($memsource_user_uid) . ',' . LibAPI\PDOWrapper::cleanseWrapStr($memsource_user_userName));
     }
 
-    public function memsource_list_jobs($memsource_project_uid, $project_id)
+    public function memsource_list_jobs($memsource_project_uid, $project_id, $return_early = 0)
     {
         $projectDao = new ProjectDao();
 
@@ -1876,6 +1876,7 @@ error_log("claimTask_shell($userId, $taskId)");
 error_log("Sync memsource_list_jobs() project_id: $project_id, workflowLevels_array: {$workflowLevels_array[0]}, {$workflowLevels_array[1]}, {$workflowLevels_array[2]}");//(**)
             }
         }
+        if ($return_early) return;
 
         $jobs = [];
         $totalPages = 1;
