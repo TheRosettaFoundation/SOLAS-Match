@@ -1860,8 +1860,8 @@ error_log("claimTask_shell($userId, $taskId)");
         if (!isset($result['projectWorkflowSteps'])) return [];
         $workflowlevels = count($result['projectWorkflowSteps']);
 
+        $workflowLevels_array = ['', '', '', '', '', '', '', '', '', '', '', '']; // Will contain e.g. 'Translation' or 'Revision' for workflowLevel 1 possibly up to 12
         if (!empty($result['projectWorkflowSteps'])) {
-            $workflowLevels_array = ['', '', '', '', '', '', '', '', '', '', '', '']; // Will contain e.g. 'Translation' or 'Revision' for workflowLevel 1 possibly up to 12
             $found_something = 0;
             foreach ($result['projectWorkflowSteps'] as $step) {
                 foreach ($workflowLevels_array as $i => $w) {
@@ -1876,7 +1876,7 @@ error_log("claimTask_shell($userId, $taskId)");
 error_log("Sync memsource_list_jobs() project_id: $project_id, workflowLevels_array: {$workflowLevels_array[0]}, {$workflowLevels_array[1]}, {$workflowLevels_array[2]}");//(**)
             }
         }
-        if ($return_early) return;
+        if ($return_early) return $workflowLevels_array;
 
         $jobs = [];
         $totalPages = 1;
