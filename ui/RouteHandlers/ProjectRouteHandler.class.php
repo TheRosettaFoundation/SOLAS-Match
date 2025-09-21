@@ -2743,6 +2743,8 @@ error_log("get_queue_asana_projects: $projectId");//(**)
 
             $projectDao->poll_sun();
 
+            $userDao->handle_quality_task_creation();
+
             flock($fp_for_lock, LOCK_UN); // Release the lock
         }
         fclose($fp_for_lock);
