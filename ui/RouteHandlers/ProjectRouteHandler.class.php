@@ -382,6 +382,10 @@ class ProjectRouteHandler
                     continue;
                 }
             }
+            if ($taskType == Common\Enums\TaskTypeEnum::SPOT_QUALITY_INSPECTION || $taskType == Common\Enums\TaskTypeEnum::QUALITY_EVALUATION) {
+                error_log("Don't handle create_task hook for $taskType in new jobPart {$part['uid']} for: {$part['fileName']}");
+                continue;
+            }
             $task->setTaskType($taskType);
 
             if (!empty($part['wordsCount'])) {
