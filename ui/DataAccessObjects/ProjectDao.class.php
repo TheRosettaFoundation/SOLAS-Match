@@ -958,7 +958,7 @@ error_log('parent_tasks_filter:' . print_r($parent_tasks_filter, true));//(**)
         return 0;
     }
 
-    private function create_task($memsource_project, $job, $words_default, $publish, $do_claimable = 1)
+    private function create_task($memsource_project, $job, $words_default, $publish)
     {
         $taskDao = new TaskDao();
         $task = new Common\Protobufs\Models\Task();
@@ -1060,8 +1060,6 @@ error_log("set_memsource_task($task_id, 0, {$job['uid']}...), success: $success"
             error_log("Sync delete_task_directly($task_id) because of set_memsource_task fail");
             return '-';
         }
-
-      if ($do_claimable) {
         $this->set_task_resource_info_trigger($task_id);
 
         $forward_order = [];
@@ -1089,8 +1087,6 @@ error_log("set_memsource_task($task_id, 0, {$job['uid']}...), success: $success"
                 }
             }
         }
-      }
-
         if ($this->is_task_claimable($task_id)) $taskDao->setTaskStatus($task_id, Common\Enums\TaskStatusEnum::PENDING_CLAIM);
 
         if ($this->get_memsource_self_service_project($memsource_project['memsource_project_id'])) {
