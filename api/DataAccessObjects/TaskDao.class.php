@@ -283,12 +283,13 @@ class TaskDao
                 return $result;
             }
 
+          if ($task->getTaskType() != Common\Enums\TaskTypeEnum::SPOT_QUALITY_INSPECTION && $task->getTaskType() != Common\Enums\TaskTypeEnum::QUALITY_EVALUATION) {
             $project_tasks = self::get_tasks_for_project($task->getProjectId());
 
             $top_level = self::get_top_level($memsource_task['internalId']);
             // Remove any Deny List for this $userId for this top level 'internalId' for other 'workflowLevel's
             foreach ($project_tasks as $dependent_task) {
-                if ($top_level == self::get_top_level($dependent_task['internalId'])) {
+                if ($top_level == self::get_top_level($dependent_task['internalId']) && $dependent_task['task-type_id'] != Common\Enums\TaskTypeEnum::SPOT_QUALITY_INSPECTION && $dependent_task['task-type_id'] != Common\Enums\TaskTypeEnum::QUALITY_EVALUATION) {
                     if ($memsource_task['workflowLevel'] != $dependent_task['workflowLevel']) {
                         error_log("Removing $userId from Deny List for {$dependent_task['id']} {$dependent_task['internalId']}");
                         self::removeUserFromTaskBlacklist($userId, $dependent_task['id']);
@@ -306,8 +307,6 @@ class TaskDao
                                     if ($claimed_task['workflowLevel'] != $dependent_task['workflowLevel']) { // Not same workflowLevel
                                         if ( $claimed_task['task-type_id'] == Common\Enums\TaskTypeEnum::TRANSLATION ||
                                             ($claimed_task['task-type_id'] == Common\Enums\TaskTypeEnum::PROOFREADING && $dependent_task['task-type_id'] == Common\Enums\TaskTypeEnum::TRANSLATION)) {
-//(**)Need to add additional code to deny if user translated ANY file (not just current)
-//(**)Will there be index on QA/Proofread?
                                             if (($claimed_task['beginIndex'] <= $dependent_task['endIndex']) && ($dependent_task['beginIndex'] <= $claimed_task['endIndex'])) { // Overlap
                                                 error_log("Reapplying $userId to Deny List for {$dependent_task['id']} {$dependent_task['internalId']}");
                                                 self::addUserToTaskBlacklist($userId, $dependent_task['id']);
@@ -320,6 +319,7 @@ class TaskDao
                     }
                 }
             }
+          }
 
             $memsource_project = self::get_memsource_project($task->getProjectId());
             $url = 'https://cloud.memsource.com/web/api2/v1/projects/' . $memsource_project['memsource_project_uid'] . '/jobs/' . $memsource_task['memsource_task_uid'];
