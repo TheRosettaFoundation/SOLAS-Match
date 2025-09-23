@@ -477,7 +477,6 @@ error_log("set_memsource_task($task_id... {$part['uid']}...), success: $success"
             $project_tasks = $projectDao->get_tasks_for_project($project_id);
             foreach ($project_tasks as $project_task) {
                 if ($top_level == $projectDao->get_top_level($project_task['internalId']) && $project_task['task-type_id'] != Common\Enums\TaskTypeEnum::SPOT_QUALITY_INSPECTION && $project_task['task-type_id'] != Common\Enums\TaskTypeEnum::QUALITY_EVALUATION) {
-                    //(**) Matches on same file & same language, for QA or Proofreading may need to be wider
                     if ($forward_order[$taskType]) {
                          if ($forward_order[$taskType] == $project_task['task-type_id'])
                              $projectDao->set_taskclaims_required_to_make_claimable($task_id, $project_task['task_id'], $project_id);

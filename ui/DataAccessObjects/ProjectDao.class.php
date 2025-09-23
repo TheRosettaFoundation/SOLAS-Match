@@ -967,8 +967,6 @@ error_log('parent_tasks_filter:' . print_r($parent_tasks_filter, true));//(**)
             error_log("No filename in new jobPart {$job['uid']}");
             return '-';
         }
-//error_log('Sync create_task job: ' . print_r($job, true));
-
         $project_id = $memsource_project['project_id'];
         $task->setProjectId($project_id);
         $task->setTitle(mb_substr("{$job['innerId']} {$job['filename']}", 0, 128));
@@ -1070,13 +1068,11 @@ error_log("set_memsource_task($task_id, 0, {$job['uid']}...), success: $success"
                 $reverse_order[Common\Enums\TaskTypeEnum::$task_type_to_enum[$workflow_level]] = ($i ==  0 || empty(Common\Enums\TaskTypeEnum::$task_type_to_enum[$workflow_levels[$i - 1]])) ? 0 : Common\Enums\TaskTypeEnum::$task_type_to_enum[$workflow_levels[$i - 1]];
             }
         }
-//(**)Old comment: Translation task should already have been created
         $innerId = empty($job['innerId']) ? 0 : $job['innerId'];
         $top_level = $this->get_top_level($innerId);
         $project_tasks = $this->get_tasks_for_project($project_id);
         foreach ($project_tasks as $project_task) {
             if ($top_level == $this->get_top_level($project_task['internalId']) && $project_task['task-type_id'] != Common\Enums\TaskTypeEnum::SPOT_QUALITY_INSPECTION && $project_task['task-type_id'] != Common\Enums\TaskTypeEnum::QUALITY_EVALUATION) {
-                //(**) Matches on same file & same language, for QA or Proofreading may need to be wider
                 if ($forward_order[$taskType]) {
                      if ($forward_order[$taskType] == $project_task['task-type_id'])
                          $this->set_taskclaims_required_to_make_claimable($task_id, $project_task['task_id'], $project_id);
