@@ -2608,12 +2608,12 @@ BEGIN
     SELECT GROUP_CONCAT(organisation_id) INTO @NGO_list FROM Admins WHERE user_id=uID AND roles&@NGO_LINGUIST!=0 GROUP BY user_id;
 
     SET @max_not_comlete_tasks = 1000000;
-    SET @allowed_types = '1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35';
+    SET @allowed_types = '1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41';
     SET @excluded_orgs = '';
     SET @limited = 0;
     SELECT
         IF(max_not_comlete_tasks=0, 1000000, max_not_comlete_tasks),
-        IF(allowed_types='', '1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35', allowed_types),
+        IF(allowed_types='', '1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41', allowed_types),
         excluded_orgs,
         1
         INTO @max_not_comlete_tasks, @allowed_types, @excluded_orgs, @limited
@@ -4302,12 +4302,12 @@ BEGIN
     SELECT GROUP_CONCAT(organisation_id) INTO @NGO_list FROM Admins WHERE user_id=uID AND roles&@NGO_LINGUIST!=0 GROUP BY user_id;
 
     SET @max_not_comlete_tasks = 1000000;
-    SET @allowed_types = '1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35';
+    SET @allowed_types = '1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41';
     SET @excluded_orgs = '';
     SET @limited = 0;    
     SELECT
         IF(max_not_comlete_tasks=0, 1000000, max_not_comlete_tasks),
-        IF(allowed_types='', '1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35', allowed_types),
+        IF(allowed_types='', '1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41', allowed_types),
         excluded_orgs,
         1
         INTO @max_not_comlete_tasks, @allowed_types, @excluded_orgs, @limited
@@ -4416,12 +4416,12 @@ BEGIN
     SELECT GROUP_CONCAT(organisation_id) INTO @NGO_list FROM Admins WHERE user_id=uID AND roles&@NGO_LINGUIST!=0 GROUP BY user_id;
 
     SET @max_not_comlete_tasks = 1000000;
-    SET @allowed_types = '1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35';
+    SET @allowed_types = '1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41';
     SET @excluded_orgs = '';
     SET @limited = 0;    
     SELECT
         IF(max_not_comlete_tasks=0, 1000000, max_not_comlete_tasks),
-        IF(allowed_types='', '1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35', allowed_types),
+        IF(allowed_types='', '1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41', allowed_types),
         excluded_orgs,
         1
         INTO @max_not_comlete_tasks, @allowed_types, @excluded_orgs, @limited
@@ -13213,7 +13213,7 @@ BEGIN
     SET @limited=0;
     SELECT
         IF(max_not_comlete_tasks=0, 1000000, max_not_comlete_tasks),
-        IF(allowed_types='', '1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35', allowed_types),
+        IF(allowed_types='', '1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41', allowed_types),
         excluded_orgs,
         1
         INTO @max_not_comlete_tasks, @allowed_types, @excluded_orgs, @limited
