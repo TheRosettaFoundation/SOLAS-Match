@@ -1167,6 +1167,9 @@ error_log("Sync update_task_from_job() task_id: $task_id, status: $status, job: 
             }
         }
         if ($status == 'COMPLETED' || $status == 'DELIVERED') { // Complete ('COMPLETED_BY_LINGUIST' in Hook)
+            $type = $taskDao->get_task_type($task_id);
+            if ($type == Common\Enums\TaskTypeEnum::SPOT_QUALITY_INSPECTION || $type == Common\Enums\TaskTypeEnum::QUALITY_EVALUATION) return;
+
             if (!$taskDao->taskIsClaimed($task_id)) $taskDao->claimTask($task_id, 62927); // translators@translatorswithoutborders.org
 //(**)dev server                if (!$taskDao->taskIsClaimed($task_id)) $taskDao->claimTask($task_id, 3297);
 
