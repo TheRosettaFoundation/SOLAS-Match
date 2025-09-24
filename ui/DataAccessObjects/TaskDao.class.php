@@ -498,6 +498,13 @@ error_log("createTaskDirectly: $args");
         return $result[0]['task-status_id'];
     }
 
+    public function get_task_type($task_id)
+    {
+        $result = LibAPI\PDOWrapper::call('getTaskStatus', LibAPI\PDOWrapper::cleanse($task_id));
+        if (empty($result)) return 0;
+        return $result[0]['task-type_id'];
+    }
+
     public function taskIsClaimed($task_id)
     {
         $args = LibAPI\PDOWrapper::cleanse($task_id);
