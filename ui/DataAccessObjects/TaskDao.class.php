@@ -563,6 +563,9 @@ error_log("createTaskDirectly: $args");
             LibAPI\PDOWrapper::call('update_tasks_status_claimant', LibAPI\PDOWrapper::cleanse($task_id) . ',10,' . LibAPI\PDOWrapper::cleanse($user_id) . ',NULL');
 
             $this->email_finance($task_id, $user_id);
+
+            $userDao = new UserDao();
+            $userDao->possibly_mark_quality_assigned($user_id, $memsource_task, $task)
         }
         return $success;
     }
