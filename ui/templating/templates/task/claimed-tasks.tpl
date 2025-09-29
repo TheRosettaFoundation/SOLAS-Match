@@ -199,6 +199,12 @@
                                     {/if}
                                 {/if}
 
+                                {if $status_id == 3 && ($type_id == TaskTypeEnum::SPOT_QUALITY_INSPECTION || $type_id == TaskTypeEnum::QUALITY_EVALUATION)}
+                                    <a href="{$siteLocation}task/{$task_id}/task_complete" target="_blank" class="btn btn-small btn-success mt-2 mt-md-0">
+                                        Complete this task
+                                    </a>
+                                {/if}
+
                                 <a href="{$siteLocation}user/task/{$task_id}/reviews" class="btn btn-small btn-primary mt-2 mt-md-0 text-white">
                                     {Localisation::getTranslation('claimed_tasks_task_reviews')}
                                 </a>

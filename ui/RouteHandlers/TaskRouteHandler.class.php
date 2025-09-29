@@ -159,6 +159,12 @@ class TaskRouteHandler
             '\SolasMatch\UI\RouteHandlers\TaskRouteHandler:taskReview')
             ->add('\SolasMatch\UI\Lib\Middleware:authenticateUserForTask')
             ->setName('task-review');
+
+        $app->map(['GET', 'POST'],
+            '/task/{task_id}/task_complete[/]',
+            '\SolasMatch\UI\RouteHandlers\TaskRouteHandler:task_complete')
+            ->add('\SolasMatch\UI\Lib\Middleware:authenticateUserForTask')
+            ->setName('task_complete');
     }
 
     public function archivedTasks(Request $request, Response $response, $args)
