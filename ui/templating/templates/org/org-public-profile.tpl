@@ -1,4 +1,5 @@
-{include file='header.tpl'}
+ {include file='header.tpl'} 
+{* {include file='new_header.tpl'} *}
 
 {if isset($org)}
     {if isset($flash['error'])}
@@ -642,7 +643,7 @@
 
       {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER + $NGO_ADMIN + $NGO_PROJECT_OFFICER)}
         <a href="{urlFor name="invite_admins" options="org_id.$org_id"}" class='pull-right btn btn-success'>
-            <i class="icon-star icon-white"></i> Invite New User to be Assigned Role
+            <i class="icon-star icon-white"></i> Add users and assign roles
         </a>
       {/if}
     </h1>
@@ -719,12 +720,12 @@
 
 {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
     <p style="margin-bottom: 40px"></p>
-    <h1 class="page-header">Asana Board for Parner</h1>
+    <h1 class="page-header">Asana Board for Partner</h1>
     <form method="post" action="{urlFor name="org-public-profile" options="org_id.$org_id"}">
         <table>
             <tr>
                 <td>
-                    <label for="asana_board" style="font-size: large"><strong>Asana ID (not full URL) for this Parner's Board/Project</strong></label>
+                    <label for="asana_board" style="font-size: large"><strong>Asana ID (not full URL) for this Partner's Board/Project</strong></label>
                     <input type="text" name="asana_board" id="asana_board" maxlength="20" value="{$asana_board_for_org['asana_board']}" style="width: 80%" />
                 </td>
             </tr>
@@ -732,6 +733,26 @@
                 <td>
                     <button type="submit" value="set_asana_board" name="set_asana_board" class="btn btn-primary">
                         <i class="icon-refresh icon-white"></i> Update Asana ID
+                    </button>
+                </td>
+            </tr>
+        </table>
+        {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
+    </form>
+
+    <p style="margin-bottom: 40px"></p>
+    <h1 class="page-header">Resources</h1>
+    <form method="post" action="{urlFor name="org-public-profile" options="org_id.$org_id"}">
+        <table>
+            <tr>
+                <td>
+                    <input type="checkbox" name="mt_for_org" id="mt_for_org" value="1" {if $mt_for_org}checked="checked"{/if} /> Use machine translation in projects for this organization
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <button type="submit" value="set_mt_for_org" name="set_mt_for_org" class="btn btn-primary">
+                        <i class="icon-refresh icon-white"></i> Update Resources
                     </button>
                 </td>
             </tr>
@@ -797,7 +818,7 @@
     </form>
 {/if}
 
-{if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
+{if 0 & $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
     <p style="margin-bottom: 40px" />
     <h1 class="page-header">
         {Localisation::getTranslation('required_qualification_level')}<br />
