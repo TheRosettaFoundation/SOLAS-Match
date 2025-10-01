@@ -190,7 +190,6 @@ a[href^="mailto:"] {
 }
 
 /* --- Desktop: Enable Hover to Open --- */
-/* BUT allow text wrapping inside the drop_description */
 .dropdown-item .drop_description {
   white-space: normal; /* controls whitespace and how lines are broken when they reach the edge of the container */
   overflow-wrap: anywhere; /* controls how unit text is broken */
@@ -205,7 +204,7 @@ a[href^="mailto:"] {
 
 /* Override active/focus style */
 .navbar .nav-link.dropdown-toggle:not(.active):not(:hover):not(:focus) {
-  color: #133978 !important; /* or whatever the default non-active color is */
+  color: #133978 !important;
   color: inherit !important;
   background-color: transparent !important;
 }
@@ -233,7 +232,6 @@ a[href^="mailto:"] {
   font-weight: bold;
 }
 
-/* Mobile-first responsive dropdown menu styles */
 /* Base mobile styles (0px and up) */
 .dropdown-menu {
   position: static !important;
