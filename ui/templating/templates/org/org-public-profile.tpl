@@ -1,5 +1,5 @@
 
-{include file='new_header.tpl'}
+{include file='header.tpl'}
 
 {if isset($org)}
     {if isset($flash['error'])}
