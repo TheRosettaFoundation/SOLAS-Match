@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en" data-bs-theme="light"  >
     <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <meta charset="utf-8" content="application/xhtml+xml" />
 
         <title>{Settings::get('site.title')}</title>
