@@ -2713,7 +2713,7 @@ error_log(print_r($result, true));//(**)
                 }
                 curl_close($ch);
                 $count++;
-                LibAPI\PDOWrapper::call('insert_quality_request', LibAPI\PDOWrapper::cleanse($LibAPI\PDOWrapper::cleanse($project_id)) . ',' . LibAPI\PDOWrapper::cleanseWrapStr($top_level));
+                LibAPI\PDOWrapper::call('insert_quality_request', LibAPI\PDOWrapper::cleanse($project_id) . ',' . LibAPI\PDOWrapper::cleanseWrapStr($top_level));
             }
         }
         return $count;
@@ -2777,7 +2777,7 @@ error_log(print_r($result, true));//(**)
                                         $type = $project_task['taskType_id'];
                                         $claimed_users[str_pad($type, 2, '0', STR_PAD_LEFT) . str_pad(number_format($internalId, 3), 7, '0', STR_PAD_LEFT)] = [
                                             'user_id' => $user_id,
-                                            'name' =>LibAPI\PDOWrapper::call('get_user_name', LibAPI\PDOWrapper::cleanse($user_id))[0]['name'],
+                                            'name' => LibAPI\PDOWrapper::call('get_user_name', LibAPI\PDOWrapper::cleanse($user_id))[0]['name'],
                                             'internalId' => $internalId,
                                             'type' => ['', '', 'Translator', 'Revisor', '', '', 'Approver'][$type > 6 ? 0 : $type]];
                                         if ($project_task['workflowLevel'] != $memsource_task['workflowLevel']) { // Not same workflowLevel
