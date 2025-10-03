@@ -13328,7 +13328,9 @@ DROP PROCEDURE IF EXISTS `set_task_resource_info_trigger`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `set_task_resource_info_trigger`(IN tID BIGINT UNSIGNED)
 BEGIN
+  IF EXISTS (SELECT 1 FROM Tasks WHERE id=tID AND `task-type_id`<=6) THEN
     REPLACE INTO task_resource_info_triggers VALUES (tID, NOW(), DATE_ADD(NOW(), INTERVAL 5 MINUTE));
+  ENDIF;
 END//
 DELIMITER ;
 
