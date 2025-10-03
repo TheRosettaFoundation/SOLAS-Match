@@ -565,7 +565,7 @@ error_log("createTaskDirectly: $args");
             $this->email_finance($task_id, $user_id);
 
             $userDao = new UserDao();
-            $userDao->possibly_mark_quality_assigned($user_id, $memsource_task, $task)
+            $userDao->possibly_mark_quality_assigned($user_id, $memsource_task, $task);
         }
         return $success;
     }
