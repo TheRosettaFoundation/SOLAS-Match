@@ -2971,7 +2971,7 @@ curl_setopt($ch, CURLOPT_POSTFIELDS, "--l0H0X8tcUK3pm\r\nContent-Disposition: fo
 */
                     $ch = curl_init('https://app.asana.com/api/1.0/attachments');
                     curl_setopt($ch, CURLOPT_POSTFIELDS, "--l0H0X8tcUK3pm\r\nContent-Disposition: form-data; name=\"parent\"\r\n\r\n$asana_quality_task_id\r\n--l0H0X8tcUK3pm\r\nContent-Disposition: form-data; name=\"file\"; filename=\"bilingual.docx\"\r\nContent-Type: application/vnd.openxmlformats-officedocument.wordprocessingml.document\r\n\r\n$result\r\n--l0H0X8tcUK3pm--\r\n");
-                    curl_setopt($ch, CURLOPT_HTTPHEADER, [Content-Type: multipart/form-data; boundary=l0H0X8tcUK3pm', 'Accept: application/json', 'Authorization: Bearer ' . Common\Lib\Settings::get('asana.api_key6')]);
+                    curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: multipart/form-data; boundary=l0H0X8tcUK3pm', 'Accept: application/json', 'Authorization: Bearer ' . Common\Lib\Settings::get('asana.api_key6')]);
                     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
                     $result = curl_exec($ch);
                     curl_close($ch);
