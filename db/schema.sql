@@ -15194,7 +15194,7 @@ BEGIN
     FROM quality_requests qr
     WHERE
         qr.state>=0
-    ORDER BY qr.state ASC, qr.project_id, qr.top_level
+    ORDER BY qr.state ASC, qr.project_id, qr.top_level;
 END//
 DELIMITER ;
 
