@@ -2798,7 +2798,7 @@ error_log(print_r($result, true));//(**)
                         $asana_tasks = $projectDao->get_asana_tasks($project_id);
                         $asana_task = empty($asana_tasks["$pair:1"]) ? '' : $asana_tasks["$pair:1"]['asana_task_id'];
                         if ($asana_task) {
-                            $asana_task_id = $asana_task['asana_task_id']);
+                            $asana_task_id = $asana_task['asana_task_id'];
 
                             $selections = $projectDao->generate_language_selection();
 
