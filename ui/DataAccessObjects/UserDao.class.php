@@ -2897,7 +2897,7 @@ error_log(print_r($result, true));//(**)
         if ($task->getTaskType() != Common\Enums\TaskTypeEnum::SPOT_QUALITY_INSPECTION && $task->getTaskType() != Common\Enums\TaskTypeEnum::QUALITY_EVALUATION) return;
 
         $task_id = $task->getId();
-        $results = LibAPI\PDOWrapper::call('get_asana_quality_task', LibAPI\PDOWrapper::cleanse($LibAPI\PDOWrapper::cleanse($task_id)));
+        $results = LibAPI\PDOWrapper::call('get_asana_quality_task', LibAPI\PDOWrapper::cleanse($task_id));
         if (!empty($results)) {
             $asana_quality_task_id = $results[0]['asana_quality_task_id'];
             $ch = curl_init("https://app.asana.com/api/1.0/tasks/$asana_quality_task_id");
@@ -2917,7 +2917,7 @@ error_log(print_r($result, true));//(**)
     {
         LibAPI\PDOWrapper::call('update_asana_quality_task', LibAPI\PDOWrapper::cleanse($LibAPI\PDOWrapper::cleanse($task_id)) . ',' . LibAPI\PDOWrapper::cleanseWrapStr($comment));
 
-        $results = LibAPI\PDOWrapper::call('get_asana_quality_task', LibAPI\PDOWrapper::cleanse($LibAPI\PDOWrapper::cleanse($task_id)));
+        $results = LibAPI\PDOWrapper::call('get_asana_quality_task', LibAPI\PDOWrapper::cleanse($task_id));
         if (!empty($results)) {
             $asana_quality_task_id = $results[0]['asana_quality_task_id'];
             $ch = curl_init("https://app.asana.com/api/1.0/tasks/$asana_quality_task_id");
