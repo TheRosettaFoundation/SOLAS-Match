@@ -13330,7 +13330,7 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `set_task_resource_info_trigger`(IN 
 BEGIN
   IF EXISTS (SELECT 1 FROM Tasks WHERE id=tID AND `task-type_id`<=6) THEN
     REPLACE INTO task_resource_info_triggers VALUES (tID, NOW(), DATE_ADD(NOW(), INTERVAL 5 MINUTE));
-  ENDIF;
+  END IF;
 END//
 DELIMITER ;
 
