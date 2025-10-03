@@ -509,7 +509,7 @@ error_log("claimTask($userId, $taskId, ..., $project_id, ...) After Notify");
                 }
                 $projectDao->make_tasks_claimable($project_id);
 
-                $this->possibly_mark_quality_assigned($userId, $memsource_task, $task)
+                $this->possibly_mark_quality_assigned($userId, $memsource_task, $task);
             }
         } else {
             $this->client->call(null, "{$this->siteApi}v0/users/$userId/tasks/$taskId", Common\Enums\HttpMethodEnum::POST);
