@@ -2802,7 +2802,7 @@ error_log(print_r($result, true));//(**)
 
                             $selections = $projectDao->generate_language_selection();
 
-                            $pair_src = $asana_task['language_code_source']
+                            $pair_src = $asana_task['language_code_source'];
                             $source_name_asana = empty($selections[$pair_src]) ? $pair_src : $selections[$pair_src];
 
                             $target_name_asana = empty($selections[$pair]) ? $pair : $selections[$pair];
