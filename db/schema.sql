@@ -15133,6 +15133,129 @@ BEGIN
 END//
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `get_code_pair`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_code_pair`(IN lID INT UNSIGNED, IN cID INT UNSIGNED)
+BEGIN
+    SELECT CONCAT(l.code, '-', c.code) AS pair
+    FROM Languages l
+    JOIN Countries c
+    WHERE l.id=lID AND c.id=cID;
+END//
+DELIMITER ;
+
+CREATE TABLE IF NOT EXISTS `quality_requests` (
+  project_id INT UNSIGNED NOT NULL,
+  top_level  VARCHAR(30) NOT NULL,
+  state      INT NOT NULL DEFAULT 0,
+  KEY FK_quality_requests_project_id (project_id),
+  KEY (state),
+  CONSTRAINT FK_quality_requests_project_id FOREIGN KEY (project_id) REFERENCES Projects (id) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+DROP PROCEDURE IF EXISTS `insert_quality_request`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_quality_request`(IN pID INT UNSIGNED, IN top VARCHAR(30))
+BEGIN
+    INSERT INTO quality_requests
+               (project_id, top_level)
+        VALUES (       pID,       top);
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `get_new_quality_requests`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_new_quality_requests`(IN task_ids VARCHAR(5000))
+BEGIN
+    SELECT
+        t.project_id,
+        SUBSTRING_INDEX(mt.internalId, '.', 1) AS top_level
+    FROM      Tasks             t
+    JOIN      MemsourceTasks   mt ON t.id=mt.task_id
+    JOIN      Projects          p ON t.project_id=p.id
+    LEFT JOIN quality_requests qr ON t.project_id=qr.project_id AND SUBSTRING_INDEX(mt.internalId, '.', 1)=qr.top_level
+    WHERE
+        FIND_IN_SET(t.id, task_ids)>0 AND
+        qr.project_id IS NULL AND
+        mt.internalId!='0'
+    GROUP BY t.project_id, SUBSTRING_INDEX(mt.internalId, '.', 1)
+    ORDER BY t.project_id, SUBSTRING_INDEX(mt.internalId, '.', 1);
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `get_quality_requests`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_quality_requests`()
+BEGIN
+    SELECT
+        qr.project_id,
+        qr.top_level,
+        qr.state
+    FROM quality_requests qr
+    WHERE
+        qr.state>=0
+    ORDER BY qr.state ASC, qr.project_id, qr.top_level
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `update_quality_request_state`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `update_quality_request_state`(IN pID INT UNSIGNED, IN top VARCHAR(30))
+BEGIN
+    UPDATE quality_requests
+    SET state=IF(state=0, 1, -1)
+    WHERE project_id=pID AND
+    top_level=top;
+END//
+DELIMITER ;
+
+CREATE TABLE IF NOT EXISTS `asana_quality_tasks` (
+  project_id            INT UNSIGNED NOT NULL,
+  task_id               BIGINT UNSIGNED NOT NULL,
+  top_level             VARCHAR(30) COLLATE utf8mb4_unicode_ci NOT NULL,
+  asana_quality_task_id VARCHAR(30) COLLATE utf8mb4_unicode_ci NOT NULL,
+  comment VARCHAR(1020) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  KEY project_id (project_id),
+  KEY task_id (task_id),
+  CONSTRAINT FK_asana_quality_tasks_Projects FOREIGN KEY (project_id) REFERENCES Projects (id) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT FK_asana_quality_tasks_Tasks FOREIGN KEY (task_id) REFERENCES Tasks (id) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+DROP PROCEDURE IF EXISTS `set_asana_quality_task`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `set_asana_quality_task`(IN pID INT UNSIGNED, IN tID BIGINT UNSIGNED, IN tl VARCHAR(30), IN asana_id VARCHAR(30))
+BEGIN
+    INSERT INTO asana_quality_tasks (project_id, top_level, asana_quality_task_id)
+    VALUES                          (       pID,        tl,              asana_id);
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `update_asana_quality_task`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `update_asana_quality_task`(IN tID BIGINT UNSIGNED, c VARCHAR(1020))
+BEGIN
+    UPDATE asana_quality_tasks
+    SET comment=c
+    WHERE task_id=tID;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `get_asana_quality_task`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_asana_quality_task`(IN tID BIGINT UNSIGNED)
+BEGIN
+    SELECT * FROM asana_quality_tasks WHERE task_id=tID;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `get_user_name`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_user_name`(IN ID INT UNSIGNED)
+BEGIN
+    SELECT CONCAT(IFNULL(i.`first-name`, ''), ' ', IFNULL(i.`last-name`, '')) AS name UserPersonalInformation WHERE user_id=ID;
+END//
+DELIMITER ;
+
 
 /*---------------------------------------end of procs----------------------------------------------*/
 
