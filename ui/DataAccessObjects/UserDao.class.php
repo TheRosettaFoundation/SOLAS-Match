@@ -2915,7 +2915,7 @@ error_log(print_r($result, true));//(**)
 
     public function update_asana_quality_task($task_id, $comment)
     {
-        LibAPI\PDOWrapper::call('update_asana_quality_task', LibAPI\PDOWrapper::cleanse($LibAPI\PDOWrapper::cleanse($task_id)) . ',' . LibAPI\PDOWrapper::cleanseWrapStr($comment));
+        LibAPI\PDOWrapper::call('update_asana_quality_task', LibAPI\PDOWrapper::cleanse($task_id) . ',' . LibAPI\PDOWrapper::cleanseWrapStr($comment));
 
         $results = LibAPI\PDOWrapper::call('get_asana_quality_task', LibAPI\PDOWrapper::cleanse($task_id));
         if (!empty($results)) {
