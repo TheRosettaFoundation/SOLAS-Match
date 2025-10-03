@@ -2849,7 +2849,7 @@ error_log(print_r($result, true));//(**)
                             curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
                             curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'POST');
                             $authorization = 'Authorization: Bearer ' . Common\Lib\Settings::get('asana.api_key6');
-                            curl_setopt($ch, CURLOPT_HTTPHEADER, ['Accept: application/json', Content-Type: application/json', $authorization]);
+                            curl_setopt($ch, CURLOPT_HTTPHEADER, ['Accept: application/json', 'Content-Type: application/json', $authorization]);
                             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
                             curl_setopt($ch, CURLOPT_TIMEOUT, 300); // Just so it does not hang forever and block because of file lock
                             $result = curl_exec($ch);
@@ -2877,7 +2877,7 @@ error_log(print_r($result, true));//(**)
                                 curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
                                 curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'POST');
                                 $authorization = 'Authorization: Bearer ' . Common\Lib\Settings::get('asana.api_key6');
-                                curl_setopt($ch, CURLOPT_HTTPHEADER, ['Accept: application/json', Content-Type: application/json', $authorization]);
+                                curl_setopt($ch, CURLOPT_HTTPHEADER, ['Accept: application/json', 'Content-Type: application/json', $authorization]);
                                 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
                                 curl_setopt($ch, CURLOPT_TIMEOUT, 300); // Just so it does not hang forever and block because of file lock
                                 $result = curl_exec($ch);
@@ -2904,7 +2904,7 @@ error_log(print_r($result, true));//(**)
             $name = LibAPI\PDOWrapper::call('get_user_name', LibAPI\PDOWrapper::cleanse($user_id))[0]['name'];
             curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode(['data' => ['html_notes' => "Spot Check Linguist: $name https://twbplatform.org/$user_id/profile/"]]));
             curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PUT');
-            curl_setopt($ch, CURLOPT_HTTPHEADER, ['Accept: application/json', Content-Type: application/json', 'Authorization: Bearer ' . Common\Lib\Settings::get('asana.api_key6')]);
+            curl_setopt($ch, CURLOPT_HTTPHEADER, ['Accept: application/json', 'Content-Type: application/json', 'Authorization: Bearer ' . Common\Lib\Settings::get('asana.api_key6')]);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
             curl_setopt($ch, CURLOPT_TIMEOUT, 300); // Just so it does not hang forever and block because of file lock
             $result = curl_exec($ch);
@@ -2925,7 +2925,7 @@ error_log(print_r($result, true));//(**)
             $name = LibAPI\PDOWrapper::call('get_user_name', LibAPI\PDOWrapper::cleanse($user_id))[0]['name'];
             curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode(['data' => ['html_notes' => "Spot Check Linguist: $name https://twbplatform.org/$user_id/profile/\nOverall quality comment: $comment"]]));
             curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PUT');
-            curl_setopt($ch, CURLOPT_HTTPHEADER, ['Accept: application/json', Content-Type: application/json', 'Authorization: Bearer ' . Common\Lib\Settings::get('asana.api_key6')]);
+            curl_setopt($ch, CURLOPT_HTTPHEADER, ['Accept: application/json', 'Content-Type: application/json', 'Authorization: Bearer ' . Common\Lib\Settings::get('asana.api_key6')]);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
             $result = curl_exec($ch);
             curl_close($ch);
