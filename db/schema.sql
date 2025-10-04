@@ -15226,8 +15226,8 @@ DROP PROCEDURE IF EXISTS `set_asana_quality_task`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `set_asana_quality_task`(IN pID INT UNSIGNED, IN tID BIGINT UNSIGNED, IN tl VARCHAR(30), IN asana_id VARCHAR(30))
 BEGIN
-    INSERT INTO asana_quality_tasks (project_id, top_level, asana_quality_task_id)
-    VALUES                          (       pID,        tl,              asana_id);
+    INSERT INTO asana_quality_tasks (project_id, task_id, top_level, asana_quality_task_id)
+    VALUES                          (       pID,     tID,        tl,              asana_id);
 END//
 DELIMITER ;
 
