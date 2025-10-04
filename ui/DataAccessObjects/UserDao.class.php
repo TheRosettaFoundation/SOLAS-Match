@@ -2937,7 +2937,7 @@ error_log(print_r($result, true));//(**)
             $memsource_task_uid = $projectDao->get_memsource_task($task_id)['memsource_task_uid'];
             $memsource_project_uid = $projectDao->get_memsource_project($task->getProjectId())['memsource_project_uid'];
 
-            $ch = curl_init("https://cloud.memsource.com/web/api2/v1/projects/$memsource_project_uid/jobs/bilingualFile&format=DOCX");
+            $ch = curl_init("https://cloud.memsource.com/web/api2/v1/projects/$memsource_project_uid/jobs/bilingualFile?format=DOCX");
             curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode(['jobs' => [['uid' => $memsource_task_uid]]]));
             $authorization = 'Authorization: Bearer ' . $this->memsourceApiToken;
             curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json', $authorization]);
