@@ -2923,7 +2923,7 @@ error_log(print_r($result, true));//(**)
             $ch = curl_init("https://app.asana.com/api/1.0/tasks/$asana_quality_task_id");
             $user_id = $projectDao->getUserClaimedTask($task_id);
             $name = LibAPI\PDOWrapper::call('get_user_name', LibAPI\PDOWrapper::cleanse($user_id))[0]['name'];
-            curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode(['data' => ['html_notes' => "Spot Check Linguist: $name https://twbplatform.org/$user_id/profile/\nOverall quality comment: $comment"]]));
+            curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode(['data' => ['html_notes' => "Spot Check Linguist: $name https://twbplatform.org/$user_id/profile/<br />Overall quality comment: $comment"]]));
             curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PUT');
             curl_setopt($ch, CURLOPT_HTTPHEADER, ['Accept: application/json', 'Content-Type: application/json', 'Authorization: Bearer ' . Common\Lib\Settings::get('asana.api_key6')]);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
