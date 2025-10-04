@@ -15253,7 +15253,7 @@ DROP PROCEDURE IF EXISTS `get_user_name`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `get_user_name`(IN ID INT UNSIGNED)
 BEGIN
-    SELECT CONCAT(IFNULL(i.`first-name`, ''), ' ', IFNULL(i.`last-name`, '')) AS name FROM UserPersonalInformation WHERE user_id=ID;
+    SELECT CONCAT(IFNULL(`first-name`, ''), ' ', IFNULL(`last-name`, '')) AS name FROM UserPersonalInformation WHERE user_id=ID;
 END//
 DELIMITER ;
 
