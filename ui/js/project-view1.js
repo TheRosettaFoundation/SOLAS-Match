@@ -241,7 +241,7 @@ function select() {
         "restrict_native_language_and_variant",
         "restrict_native_language_only",
         "restrict_native_language_none",
-        "wordcountform"
+        "wordcountform",
         "request_quality_checks"
     ];
 
