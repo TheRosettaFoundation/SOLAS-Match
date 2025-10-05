@@ -2699,9 +2699,6 @@ error_log(print_r($result, true));//(**)
                     $step = 'O31wUqUkkgmNoyQW623Qj3';                                                    // "Spot Quality Inspection" dev
                     if (in_array('SME review', $workflowLevels_array)) $step = 'oEtaK3o6dZ9xaNFrV4k1C5'; // "Quality Evaluation" dev
                 }
-error_log("project_id: $project_id, top_level: $top_level, memsource_project_uid: $memsource_project_uid, step: $step");//(**)DEL
-error_log($workflowLevels_array[0] . $workflowLevels_array[1] . $workflowLevels_array[2] . $workflowLevels_array[3] . $workflowLevels_array[4] . $workflowLevels_array[5]);//(**)DEL
-if (0) {//(**)DEL
                 $ch = curl_init("https://cloud.memsource.com/web/api2/v1/projects/$memsource_project_uid/workflowSteps");
                 curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode(['workflowSteps' => [['id' => $step]]]));
                 curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json', $authorization]);
@@ -2715,7 +2712,6 @@ if (0) {//(**)DEL
                     continue;
                 }
                 curl_close($ch);
-}//(**)DEL
                 $count++;
                 LibAPI\PDOWrapper::call('insert_quality_request', LibAPI\PDOWrapper::cleanse($project_id) . ',' . LibAPI\PDOWrapper::cleanseWrapStr($top_level));
             }
@@ -2740,7 +2736,6 @@ if (0) {//(**)DEL
             $jobs = $this->memsource_list_jobs($memsource_project_uid, $project_id);
             $parts = 0;
             foreach ($jobs as $uid => $job) if ($projectDao->get_top_level($job['innerId']) == $top_level && in_array($job['workflowStep']['name'], ['Spot Quality Inspection', 'Quality Evaluation'])) $parts++;
-error_log("project_id: $project_id, top_level: $top_level, state: $state, memsource_project_uid: $memsource_project_uid, parts: $parts");//(**)DEL
 
             $parts_x = 0;
             foreach ($jobs as $uid => $job) {
