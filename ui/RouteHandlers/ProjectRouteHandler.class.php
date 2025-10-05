@@ -1053,7 +1053,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                 }
             }
 
-            if ($roles & (SITE_ADMIN | PROJECT_OFFICER) && !empty($post['request_quality_checks'])) {
+            if ($roles & (SITE_ADMIN | PROJECT_OFFICER) && isset($post['request_quality_checks'])) {
                 $number = $userDao->set_quality_checks($post['request_quality_checks']);
                 UserRouteHandler::flashNow('success', "$number new languages in files now have quality checks requested, these will take a few minutes to appear.");
             }
