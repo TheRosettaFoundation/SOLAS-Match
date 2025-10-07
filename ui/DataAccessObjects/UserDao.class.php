@@ -2815,24 +2815,7 @@ error_log(print_r($result, true));//(**)
                                 'name' => "$target_name_asana Spot Check: " . $project->getTitle(),
                                 'due_at' => $objDateTime->format('c'),
                                 'notes' => 'Spot Check task in Phrase TMS: ' . $taskDao->get_matecat_url_regardless(0, $memsource_task) . "\nCommunity members:\n Workflow team:\n$t",
-/* (**)NO
-'resource_subtype' => 'default_task',
-'approval_status' => 'pending',
-'completed' => 'false',
-'liked' => true,
-'start_on' => null,
-'assignee' => null,
-'assignee_section' => null,
-'followers' => [],
-'parent' => $asana_task_id,
-'tags' => [],
-'workspace' => string,
-'custom_type' => null,
-'custom_type_status_option' => null,
-201 is Good
-*/
-                                'projects' => ['1201393196578701'], // https://app.asana.com/0/1201393196578701 (**)??
-//dont know if this will work for subtasks(**)
+                                'projects' => ['1201393196578701'],
                                 'memberships' => [[
                                     'project' => '1201393196578701',
                                     'section' => '1210973753686189']],
