@@ -2842,16 +2842,6 @@ error_log(print_r($result, true));//(**)
                             if (!empty($asana_task_details['data']['gid'])) {
                                 $asana_quality_task_id = $asana_task_details['data']['gid'];
                                 LibAPI\PDOWrapper::call('set_asana_quality_task', LibAPI\PDOWrapper::cleanse($project_id) . ',' . LibAPI\PDOWrapper::cleanse($memsource_task['task_id']) . ',' . LibAPI\PDOWrapper::cleanseWrapStr($top_level) . ',' . LibAPI\PDOWrapper::cleanseWrapStr($asana_quality_task_id));
-/* (**) DEL or use(**)
-                                $asana_board_for_org = $userDao->get_asana_board_for_org($org_id);
-                                if (!empty($asana_board_for_org['asana_board'])) {
-                                    $asana_board_for_org = (string)$asana_board_for_org['asana_board'];
-                                    error_log("Moving $asana_quality_task_id to board for $org_id: $asana_board_for_org");
-                                    $move_result = $projectDao->executeCurl("https://app.asana.com/api/1.0/tasks/$asana_quality_task_id/addProject", 'POST', ['data' => ['project' => $asana_board_for_org]], 1);
-                                    if (isset($move_result['data'])) $projectDao->executeCurl("https://app.asana.com/api/1.0/tasks/$asana_quality_task_id/removeProject", 'POST', ['data' => ['project' => $asana_project]], 1);
-                                    else error_log('Failed: ' . print_r($move_result, 1));
-                                }
-*/
                                 $ch = curl_init("https://app.asana.com/api/1.0/tasks/$asana_quality_task_id/subtasks");
                                 $data = ['data' => [
                                     'name' => 'Next steps',
@@ -2930,28 +2920,6 @@ error_log(print_r($result, true));//(**)
                 $responseCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
                 curl_close($ch);
                 if ($responseCode == 200) {
-/* (**)
-export PARENT_ID="<PARENT_GID>"
-export ENCODED_NAME="r%C3%A9sum%C3%A9.pdf"
-curl --location 'https://app.asana.com/api/1.0/attachments' \
-  --header 'Content-Type: multipart/form-data' \
-  --header 'Accept: application/json' \
-  --header "Authorization: Bearer $ASANA_PAT" \
-  --form "parent=$PARENT_ID" \
-  --form "file=@/Users/exampleUser/Downloads/résumé.pdf;headers=\"Content-Disposition: form-data; name="file"; filename="$ENCODED_NAME.pdf"; filename*=UTF-8''$ENCODED_NAME.pdf\""
-
---XXX
-Content-Disposition: form-data; name="name"
-
-John
---XXX
-Content-Disposition: form-data; name="age"
-
-12
---XXX--
-
-curl_setopt($ch, CURLOPT_POSTFIELDS, "--l0H0X8tcUK3pm\r\nContent-Disposition: form-data; name=\"request\"\r\nContent-Type: application/json\r\n\r\n" . $DATA . "\r\n--l0H0X8tcUK3pm--\r\n");
-*/
                     $ch = curl_init('https://app.asana.com/api/1.0/attachments');
                     curl_setopt($ch, CURLOPT_POSTFIELDS, "--l0H0X8tcUK3pm\r\nContent-Disposition: form-data; name=\"parent\"\r\n\r\n$asana_quality_task_id\r\n--l0H0X8tcUK3pm\r\nContent-Disposition: form-data; name=\"file\"; filename=\"bilingual.docx\"\r\nContent-Type: application/vnd.openxmlformats-officedocument.wordprocessingml.document\r\n\r\n$result\r\n--l0H0X8tcUK3pm--\r\n");
                     curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: multipart/form-data; boundary=l0H0X8tcUK3pm', 'Accept: application/json', 'Authorization: Bearer ' . Common\Lib\Settings::get('asana.api_key6')]);
