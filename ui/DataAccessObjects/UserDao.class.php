@@ -2888,7 +2888,7 @@ error_log(print_r($result, true));//(**)
         curl_close($ch);
         error_log("GET Quality Asana task task_id: $task_id, asana_quality_task_id: $asana_quality_task_id, result: $result");
         $asana_task_details = json_decode($result, true);
-        if (empty($asana_task_details['data']['notes']) return 0;
+        if (empty($asana_task_details['data']['notes'])) return 0;
 
         $ch = curl_init("https://app.asana.com/api/1.0/tasks/$asana_quality_task_id");
         curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode(['data' => ['notes' => $asana_task_details['data']['notes'] . $comment]]));
