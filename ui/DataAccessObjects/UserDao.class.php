@@ -2878,7 +2878,7 @@ error_log(print_r($result, true));//(**)
     {
         $authorization = 'Authorization: Bearer ' . Common\Lib\Settings::get('asana.api_key6');
         $results = LibAPI\PDOWrapper::call('get_asana_quality_task', LibAPI\PDOWrapper::cleanse($task_id));
-        if (empty($results)) return 0
+        if (empty($results)) return 0;
         $asana_quality_task_id = $results[0]['asana_quality_task_id'];
         $ch = curl_init("https://app.asana.com/api/1.0/tasks/$asana_quality_task_id");
         curl_setopt($ch, CURLOPT_HTTPHEADER, ['Accept: application/json', $authorization]);
