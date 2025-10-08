@@ -2870,40 +2870,42 @@ error_log(print_r($result, true));//(**)
         if ($task->getTaskType() != Common\Enums\TaskTypeEnum::SPOT_QUALITY_INSPECTION && $task->getTaskType() != Common\Enums\TaskTypeEnum::QUALITY_EVALUATION) return;
 
         $task_id = $task->getId();
+        $name = LibAPI\PDOWrapper::call('get_user_name', LibAPI\PDOWrapper::cleanse($user_id))[0]['name'];
+        $this->update_asana_notes($task_id, "Spot Check Linguist: $name https://twbplatform.org/$user_id/profile/\n");
+    }
+
+    public function update_asana_notes($task_id, $comment)
+    {
+        $authorization = 'Authorization: Bearer ' . Common\Lib\Settings::get('asana.api_key6');
         $results = LibAPI\PDOWrapper::call('get_asana_quality_task', LibAPI\PDOWrapper::cleanse($task_id));
-        if (!empty($results)) {
-            $asana_quality_task_id = $results[0]['asana_quality_task_id'];
-            $ch = curl_init("https://app.asana.com/api/1.0/tasks/$asana_quality_task_id");
-            $name = LibAPI\PDOWrapper::call('get_user_name', LibAPI\PDOWrapper::cleanse($user_id))[0]['name'];
-            curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode(['data' => ['html_notes' => "Spot Check Linguist: $name https://twbplatform.org/$user_id/profile/"]]));
-            curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PUT');
-            curl_setopt($ch, CURLOPT_HTTPHEADER, ['Accept: application/json', 'Content-Type: application/json', 'Authorization: Bearer ' . Common\Lib\Settings::get('asana.api_key6')]);
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-            curl_setopt($ch, CURLOPT_TIMEOUT, 300); // Just so it does not hang forever and block because of file lock
-            $result = curl_exec($ch);
-            curl_close($ch);
-            error_log("PUT Update Quality Asana task task_id: $task_id, asana_quality_task_id: $asana_quality_task_id, result: $result");
-        }
+        if (empty($results)) return 0
+        $asana_quality_task_id = $results[0]['asana_quality_task_id'];
+        $ch = curl_init("https://app.asana.com/api/1.0/tasks/$asana_quality_task_id");
+        curl_setopt($ch, CURLOPT_HTTPHEADER, ['Accept: application/json', $authorization]);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_TIMEOUT, 300); // Just so it does not hang forever and block because of file lock
+        $result = curl_exec($ch);
+        curl_close($ch);
+        error_log("GET Quality Asana task task_id: $task_id, asana_quality_task_id: $asana_quality_task_id, result: $result");
+        $asana_task_details = json_decode($result, true);
+        if (empty($asana_task_details['data']['notes']) return 0;
+
+        $ch = curl_init("https://app.asana.com/api/1.0/tasks/$asana_quality_task_id");
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode(['data' => ['notes' => $asana_task_details['data']['notes'] . $comment]]));
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PUT');
+        curl_setopt($ch, CURLOPT_HTTPHEADER, ['Accept: application/json', 'Content-Type: application/json', $authorization]);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_TIMEOUT, 300); // Just so it does not hang forever and block because of file lock
+        $result = curl_exec($ch);
+        curl_close($ch);
+        error_log("PUT Update Quality Asana task result: $result");
+        return 1;
     }
 
     public function update_asana_quality_task($task_id, $comment)
     {
         LibAPI\PDOWrapper::call('update_asana_quality_task', LibAPI\PDOWrapper::cleanse($task_id) . ',' . LibAPI\PDOWrapper::cleanseWrapStr($comment));
-
-        $results = LibAPI\PDOWrapper::call('get_asana_quality_task', LibAPI\PDOWrapper::cleanse($task_id));
-        if (!empty($results)) {
-            $asana_quality_task_id = $results[0]['asana_quality_task_id'];
-            $ch = curl_init("https://app.asana.com/api/1.0/tasks/$asana_quality_task_id");
-            $user_id = $projectDao->getUserClaimedTask($task_id);
-            $name = LibAPI\PDOWrapper::call('get_user_name', LibAPI\PDOWrapper::cleanse($user_id))[0]['name'];
-            curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode(['data' => ['html_notes' => "Spot Check Linguist: $name https://twbplatform.org/$user_id/profile/<br />Overall quality comment: $comment"]]));
-            curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PUT');
-            curl_setopt($ch, CURLOPT_HTTPHEADER, ['Accept: application/json', 'Content-Type: application/json', 'Authorization: Bearer ' . Common\Lib\Settings::get('asana.api_key6')]);
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-            $result = curl_exec($ch);
-            curl_close($ch);
-            error_log("PUT Update Quality Asana task task_id: $task_id, asana_quality_task_id: $asana_quality_task_id, result: $result");
-
+        if ($this->update_asana_notes($task_id, "Overall quality comment: $comment\n")) {
             $projectDao = new ProjectDao();
             $taskDao = new DAO\TaskDao();
             $task = $taskDao->getTask($task_id);
