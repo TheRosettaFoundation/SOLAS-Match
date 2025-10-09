@@ -2766,92 +2766,73 @@ error_log(print_r($full_job, 1));//(**)
                             error_log("handle_quality_task_creation Split $uid, responseCode: $responseCode, $result");
                         }
                     } else { // Create matching TWB Task (state == 1)
-                        $projectDao->create_task($memsource_project, $full_job, 500, 0);
-
-                        $memsource_task = $projectDao->get_memsource_task_by_memsource_uid($uid);
-                        $project_tasks = $projectDao->get_tasks_for_project($project_id);
-                        $claimed_users = [];
-                        $taskDao = new TaskDao();
-                        foreach ($project_tasks as $project_task) {
-                            if ($project_task['memsource_task_uid'] == $uid) $memsource_task = $project_task;
-                            if ($project_task['task-status_id'] == Common\Enums\TaskStatusEnum::IN_PROGRESS || $project_task['task-status_id'] == Common\Enums\TaskStatusEnum::COMPLETE) {
-                                $task_id = $project_task['task_id'];
-                                if ($user_id = $projectDao->getUserClaimedTask($task_id)) {
-                                    // Add Quality Task to deny list for translator
-                                    $internalId = $project_task['internalId'];
-                                    if ($projectDao->get_top_level($internalId) == $projectDao->get_top_level($memsource_task['internalId'])) {
-                                        $type = $project_task['task-type_id'];
-                                        $claimed_users[str_pad($type, 2, '0', STR_PAD_LEFT) . str_pad(number_format($internalId, 3), 7, '0', STR_PAD_LEFT)] = [
-                                            'user_id' => $user_id,
-                                            'name' => LibAPI\PDOWrapper::call('get_user_name', LibAPI\PDOWrapper::cleanse($user_id))[0]['name'],
-                                            'internalId' => $internalId,
-                                            'type' => ['', '', 'Translator', 'Revisor', '', '', 'Approver'][$type > 6 ? 0 : $type]];
-                                        if ($project_task['workflowLevel'] != $memsource_task['workflowLevel']) { // Not same workflowLevel
-                                            error_log("Adding $user_id to Deny List for {$memsource_task['task_id']} {$memsource_task['internalId']} (Quality Task)");
-                                            $taskDao->addUserToTaskBlacklist($user_id, $memsource_task['task_id']);
+                        if ($projectDao->create_task($memsource_project, $full_job, 500, 0) === 0 {
+                            $memsource_task = $projectDao->get_memsource_task_by_memsource_uid($uid);
+                            $project_tasks = $projectDao->get_tasks_for_project($project_id);
+                            $claimed_users = [];
+                            $taskDao = new TaskDao();
+                            foreach ($project_tasks as $project_task) {
+                                if ($project_task['memsource_task_uid'] == $uid) $memsource_task = $project_task;
+                                if ($project_task['task-status_id'] == Common\Enums\TaskStatusEnum::IN_PROGRESS || $project_task['task-status_id'] == Common\Enums\TaskStatusEnum::COMPLETE) {
+                                    $task_id = $project_task['task_id'];
+                                    if ($user_id = $projectDao->getUserClaimedTask($task_id)) {
+                                        // Add Quality Task to deny list for translator
+                                        $internalId = $project_task['internalId'];
+                                        if ($projectDao->get_top_level($internalId) == $projectDao->get_top_level($memsource_task['internalId'])) {
+                                            $type = $project_task['task-type_id'];
+                                            $claimed_users[str_pad($type, 2, '0', STR_PAD_LEFT) . str_pad(number_format($internalId, 3), 7, '0', STR_PAD_LEFT)] = [
+                                                'user_id' => $user_id,
+                                                'name' => LibAPI\PDOWrapper::call('get_user_name', LibAPI\PDOWrapper::cleanse($user_id))[0]['name'],
+                                                'internalId' => $internalId,
+                                                'type' => ['', '', 'Translator', 'Revisor', '', '', 'Approver'][$type > 6 ? 0 : $type]];
+                                            if ($project_task['workflowLevel'] != $memsource_task['workflowLevel']) { // Not same workflowLevel
+                                                error_log("Adding $user_id to Deny List for {$memsource_task['task_id']} {$memsource_task['internalId']} (Quality Task)");
+                                                $taskDao->addUserToTaskBlacklist($user_id, $memsource_task['task_id']);
+                                            }
                                         }
                                     }
                                 }
                             }
-                        }
-                        ksort($claimed_users);
-                        $t = '';
-                        foreach ($claimed_users as $claimed_user) $t .= $claimed_user['type'] . $claimed_user['internalId'] . ': ' . $claimed_user['name'] . ' https://twbplatform.org/' . $claimed_user['user_id'] . "/profile/\n";
+                            ksort($claimed_users);
+                            $t = '';
+                            foreach ($claimed_users as $claimed_user) $t .= $claimed_user['type'] . $claimed_user['internalId'] . ': ' . $claimed_user['name'] . ' https://twbplatform.org/' . $claimed_user['user_id'] . "/profile/\n";
 
-                        $results = LibAPI\PDOWrapper::call('get_code_pair', LibAPI\PDOWrapper::cleanse($memsource_task['language_id-target']) . ',' . LibAPI\PDOWrapper::cleanse($memsource_task['country_id-target']));
-                        $pair = empty($results) ? '' : $results[0]['pair'];
+                            $results = LibAPI\PDOWrapper::call('get_code_pair', LibAPI\PDOWrapper::cleanse($memsource_task['language_id-target']) . ',' . LibAPI\PDOWrapper::cleanse($memsource_task['country_id-target']));
+                            $pair = empty($results) ? '' : $results[0]['pair'];
 
-                        $asana_tasks = $projectDao->get_asana_tasks($project_id);
-                        $asana_task = empty($asana_tasks["$pair:1"]) ? '' : $asana_tasks["$pair:1"]['asana_task_id'];
-                        if ($asana_task) {
-                            $asana_task_id = $asana_task['asana_task_id'];
+                            $asana_tasks = $projectDao->get_asana_tasks($project_id);
+                            $asana_task = empty($asana_tasks["$pair:1"]) ? '' : $asana_tasks["$pair:1"]['asana_task_id'];
+                            if ($asana_task) {
+                                $asana_task_id = $asana_task['asana_task_id'];
 
-                            $selections = $projectDao->generate_language_selection();
+                                $selections = $projectDao->generate_language_selection();
 
-                            $pair_src = $asana_task['language_code_source'];
-                            $source_name_asana = empty($selections[$pair_src]) ? $pair_src : $selections[$pair_src];
+                                $pair_src = $asana_task['language_code_source'];
+                                $source_name_asana = empty($selections[$pair_src]) ? $pair_src : $selections[$pair_src];
 
-                            $target_name_asana = empty($selections[$pair]) ? $pair : $selections[$pair];
+                                $target_name_asana = empty($selections[$pair]) ? $pair : $selections[$pair];
 
-                            $project = $projectDao->getProject($project_id);
-                            $objDateTime = new \DateTime($project->getDeadline());
+                                $project = $projectDao->getProject($project_id);
+                                $objDateTime = new \DateTime($project->getDeadline());
 
-                            $ch = curl_init("https://app.asana.com/api/1.0/tasks/$asana_task_id/subtasks");
-                            $data = ['data' => [
-                                'name' => "$target_name_asana Spot Check: " . $project->getTitle(),
-                                'due_at' => $objDateTime->format('c'),
-                                'notes' => 'Spot Check task in Phrase TMS: ' . $taskDao->get_matecat_url_regardless(0, $memsource_task) . "\nCommunity members:\n Workflow team:\n$t",
-                                'projects' => ['1201393196578701'],
-                                'memberships' => [[
-                                    'project' => '1201393196578701',
-                                    'section' => '1210973753686189']],
-                                'custom_fields' => [
-                                    '1200068101079960' => $source_name_asana,
-                                    '1200269602122253' => str_replace('---', '', $pair_src),
-                                    '1200067882657251' => $target_name_asana,
-                                    '1200269602122255' => str_replace('---', '', $pair),
-                                    '1200226775862070' => 'https://' . $_SERVER['SERVER_NAME'] . "/project/$project_id/view/",
-                                    '1202126000618445' => $taskDao->get_matecat_analyze_url($project_id, $memsource_project),
-                                    '1200269602122257' => "$project_id"
-                                ],
-                            ]];
-                            curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
-                            curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'POST');
-                            $authorization = 'Authorization: Bearer ' . Common\Lib\Settings::get('asana.api_key6');
-                            curl_setopt($ch, CURLOPT_HTTPHEADER, ['Accept: application/json', 'Content-Type: application/json', $authorization]);
-                            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-                            curl_setopt($ch, CURLOPT_TIMEOUT, 300); // Just so it does not hang forever and block because of file lock
-                            $result = curl_exec($ch);
-                            curl_close($ch);
-                            error_log("POST Quality Asana task pair: $pair, result: $result");
-                            $asana_task_details = json_decode($result, true);
-                            if (!empty($asana_task_details['data']['gid'])) {
-                                $asana_quality_task_id = $asana_task_details['data']['gid'];
-                                LibAPI\PDOWrapper::call('set_asana_quality_task', LibAPI\PDOWrapper::cleanse($project_id) . ',' . LibAPI\PDOWrapper::cleanse($memsource_task['task_id']) . ',' . LibAPI\PDOWrapper::cleanseWrapStr($top_level) . ',' . LibAPI\PDOWrapper::cleanseWrapStr($asana_quality_task_id));
-                                $ch = curl_init("https://app.asana.com/api/1.0/tasks/$asana_quality_task_id/subtasks");
+                                $ch = curl_init("https://app.asana.com/api/1.0/tasks/$asana_task_id/subtasks");
                                 $data = ['data' => [
-                                    'name' => 'Next steps',
+                                    'name' => "$target_name_asana Spot Check: " . $project->getTitle(),
                                     'due_at' => $objDateTime->format('c'),
+                                    'notes' => 'Spot Check task in Phrase TMS: ' . $taskDao->get_matecat_url_regardless(0, $memsource_task) . "\nCommunity members:\n Workflow team:\n$t",
+                                    'projects' => ['1201393196578701'],
+                                    'memberships' => [[
+                                        'project' => '1201393196578701',
+                                        'section' => '1210973753686189']],
+                                    'custom_fields' => [
+                                        '1200068101079960' => $source_name_asana,
+                                        '1200269602122253' => str_replace('---', '', $pair_src),
+                                        '1200067882657251' => $target_name_asana,
+                                        '1200269602122255' => str_replace('---', '', $pair),
+                                        '1200226775862070' => 'https://' . $_SERVER['SERVER_NAME'] . "/project/$project_id/view/",
+                                        '1202126000618445' => $taskDao->get_matecat_analyze_url($project_id, $memsource_project),
+                                        '1200269602122257' => "$project_id"
+                                    ],
                                 ]];
                                 curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
                                 curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'POST');
@@ -2861,7 +2842,26 @@ error_log(print_r($full_job, 1));//(**)
                                 curl_setopt($ch, CURLOPT_TIMEOUT, 300); // Just so it does not hang forever and block because of file lock
                                 $result = curl_exec($ch);
                                 curl_close($ch);
-                                error_log("POST Quality Next steps, result: $result");
+                                error_log("POST Quality Asana task pair: $pair, result: $result");
+                                $asana_task_details = json_decode($result, true);
+                                if (!empty($asana_task_details['data']['gid'])) {
+                                    $asana_quality_task_id = $asana_task_details['data']['gid'];
+                                    LibAPI\PDOWrapper::call('set_asana_quality_task', LibAPI\PDOWrapper::cleanse($project_id) . ',' . LibAPI\PDOWrapper::cleanse($memsource_task['task_id']) . ',' . LibAPI\PDOWrapper::cleanseWrapStr($top_level) . ',' . LibAPI\PDOWrapper::cleanseWrapStr($asana_quality_task_id));
+                                    $ch = curl_init("https://app.asana.com/api/1.0/tasks/$asana_quality_task_id/subtasks");
+                                    $data = ['data' => [
+                                        'name' => 'Next steps',
+                                        'due_at' => $objDateTime->format('c'),
+                                    ]];
+                                    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+                                    curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'POST');
+                                    $authorization = 'Authorization: Bearer ' . Common\Lib\Settings::get('asana.api_key6');
+                                    curl_setopt($ch, CURLOPT_HTTPHEADER, ['Accept: application/json', 'Content-Type: application/json', $authorization]);
+                                    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                                    curl_setopt($ch, CURLOPT_TIMEOUT, 300); // Just so it does not hang forever and block because of file lock
+                                    $result = curl_exec($ch);
+                                    curl_close($ch);
+                                    error_log("POST Quality Next steps, result: $result");
+                                }
                             }
                         }
                     }
