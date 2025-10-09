@@ -2801,7 +2801,7 @@ error_log(print_r($full_job, 1));//(**)
                             $pair = empty($results) ? '' : $results[0]['pair'];
 
                             $asana_tasks = $projectDao->get_asana_tasks($project_id);
-                            $asana_task = empty($asana_tasks["$pair:1"]) ? '' : $asana_tasks["$pair:1"]['asana_task_id'];
+                            $asana_task = empty($asana_tasks["$pair:1"]) ? 0 : $asana_tasks["$pair:1"];
                             if ($asana_task) {
                                 $asana_task_id = $asana_task['asana_task_id'];
 
