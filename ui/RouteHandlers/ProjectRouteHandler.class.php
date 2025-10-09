@@ -2749,9 +2749,7 @@ error_log("get_queue_asana_projects: $projectId");//(**)
 
             $projectDao->poll_sun();
 
-error_log("BEFORE userDao->handle_quality_task_creation();");//(**)
             $userDao->handle_quality_task_creation();
-error_log("AFTER userDao->handle_quality_task_creation();");//(**)
 
             flock($fp_for_lock, LOCK_UN); // Release the lock
         }
