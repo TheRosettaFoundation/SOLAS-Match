@@ -2732,8 +2732,10 @@ error_log(print_r($result, true));//(**)
             $state = $row['state'];
             $memsource_project = $projectDao->get_memsource_project($project_id);
             $memsource_project_uid = $memsource_project['memsource_project_uid'];
+error_log("project_id: $project_id, top_level: $top_level, state: $state, memsource_project_uid: $memsource_project_uid");//(**)
 
             $jobs = $this->memsource_list_jobs($memsource_project_uid, $project_id);
+error_log(print_r($jobs, 1));//(**)
             $parts = 0;
             foreach ($jobs as $uid => $job) if ($projectDao->get_top_level($job['innerId']) == $top_level && in_array($job['workflowStep']['name'], ['Spot Quality Inspection', 'Quality Evaluation'])) $parts++;
 
@@ -2744,8 +2746,10 @@ error_log(print_r($result, true));//(**)
                     if ($parts_x++) break; // pick second part
                 }
             }
+error_log("parts: $parts, parts_x: $parts_x, uid: $uid");//(**)
             if ($parts) {
                 $full_job = $this->memsource_get_job($memsource_project_uid, $uid);
+error_log(print_r($full_job, 1));//(**)
                 if (!empty($full_job['wordsCount']) && $full_job['wordsCount'] > 1) {
                     if ($state == 0) { // Check is Job Split needed?
                         if ($full_job['wordsCount'] > 600) {
