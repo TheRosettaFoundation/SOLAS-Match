@@ -2766,7 +2766,7 @@ error_log(print_r($full_job, 1));//(**)
                             error_log("handle_quality_task_creation Split $uid, responseCode: $responseCode, $result");
                         }
                     } else { // Create matching TWB Task (state == 1)
-                        if ($projectDao->create_task($memsource_project, $full_job, 500, 0) === 0 {
+                        if ($projectDao->create_task($memsource_project, $full_job, 500, 0) === 0) {
                             $memsource_task = $projectDao->get_memsource_task_by_memsource_uid($uid);
                             $project_tasks = $projectDao->get_tasks_for_project($project_id);
                             $claimed_users = [];
