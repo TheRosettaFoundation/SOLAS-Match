@@ -2774,7 +2774,7 @@ error_log(print_r($result, true));//(**)
                                     // Add Quality Task to deny list for translator
                                     $internalId = $project_task['internalId'];
                                     if ($projectDao->get_top_level($internalId) == $projectDao->get_top_level($memsource_task['internalId'])) {
-                                        $type = $project_task['taskType_id'];
+                                        $type = $project_task['task-type_id'];
                                         $claimed_users[str_pad($type, 2, '0', STR_PAD_LEFT) . str_pad(number_format($internalId, 3), 7, '0', STR_PAD_LEFT)] = [
                                             'user_id' => $user_id,
                                             'name' => LibAPI\PDOWrapper::call('get_user_name', LibAPI\PDOWrapper::cleanse($user_id))[0]['name'],
