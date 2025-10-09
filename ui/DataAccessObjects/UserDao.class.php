@@ -2724,7 +2724,9 @@ error_log(print_r($result, true));//(**)
         $projectDao = new ProjectDao();
         $authorization = 'Authorization: Bearer ' . $this->memsourceApiToken;
 
+error_log('BEFORE CALL get_quality_requests');//(**)
         $results = LibAPI\PDOWrapper::call('get_quality_requests', '');
+error_log('get_quality_requests: ' . print_r($results, 1));//(**)
         if (!empty($results)) {
             $row = $results[0];
             $project_id = $row['project_id'];
