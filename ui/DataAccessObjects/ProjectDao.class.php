@@ -958,7 +958,7 @@ error_log('parent_tasks_filter:' . print_r($parent_tasks_filter, true));//(**)
         return 0;
     }
 
-    private function create_task($memsource_project, $job, $words_default, $publish)
+    public function create_task($memsource_project, $job, $words_default, $publish)
     {
         $taskDao = new TaskDao();
         $task = new Common\Protobufs\Models\Task();
