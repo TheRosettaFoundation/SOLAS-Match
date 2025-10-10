@@ -54,6 +54,7 @@
         let html = '<div id="' + id_for_div + '" class="alert alert-error pull-left">';
         html += '<h3>Please correct the following errors:</h3>';
         html += '<ol>';
+        const length = document.getElementById("comment").textLength;
         if (length <   50) html += '<li>You must enter at least 50 characters.</li>';
         if (length > 1000) html += '<li>You cannot enter more than 1000 characters.</li>';
         html += '</ol>';
