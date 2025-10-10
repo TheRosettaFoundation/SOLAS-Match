@@ -1,7 +1,7 @@
 {include file="header.tpl"}
 
 <div class="page-header">
-    <h1>Complete Quality Task for <h2>{TemplateHelper::uiCleanseHTML($task->getTitle())}<small>What is your quality overview of these completed file/language segments?</small></h1>
+    <h1>Complete Quality Task for <h2>{TemplateHelper::uiCleanseHTML($task->getTitle())} <small>What is your quality overview of these completed file/language segments?</small></h1>
 </div>
 
 {include file="handle-flash-messages.tpl"}
