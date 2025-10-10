@@ -12,6 +12,46 @@
 
  
 
+  <section class="container ">
+  
+
+
+  <div class="bg-body ">
+
+     <div class="d-block d-md-flex justify-content-between fs-5  align-items-center align-middle">
+
+                <div class="d-xs-block d-md-flex flex-column justify-content-between flex-wrap ">
+
+                    <div class="p-4 ">
+
+                        {assign var="taskTypeId" value=$task->getTaskType()}
+                        {foreach from=TaskTypeEnum::$enum_to_UI key=task_type item=ui}
+                            {if $taskTypeId == $task_type}
+                                {include file=$ui['claimed_template'] task=$task}
+                            {/if}
+                        {/foreach}
+
+                             
+                    </div>
+
+
+
+                </div>
+       
+                <div class="h-100 text-center align-middle ms-2  ">
+
+                        <img src="{urlFor name='home'}ui/img/languages.svg" alt="translator" class="mx-1 object-fit-cover" />
+
+                </div>
+
+            </div>  
+
+       </div>    
+
+       </div>  
+
+    </section>
+
 
 
 <div class="bg-light-subtle py-4 ps-4 ">
