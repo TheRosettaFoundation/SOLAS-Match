@@ -1515,6 +1515,8 @@ INSERT INTO task_type_details VALUES
 (38,1,1,0,1,0,0,1,0,'Spot Quality Inspection',             'Spot Quality Inspection',             '#B02323','',             'SPOT_QUALITY_INSPECTION',    'Spot Quality Inspection',  'Word Count',   'words',  'Words',        'Words',      'Words',   0.00, 0.00,     0.5, 1,         0,     0.002, 'https://communitylibrary.translatorswb.org/books/13-translation-quality-working-group', '', '', '');
 INSERT INTO task_type_details VALUES
 (39,1,1,0,1,0,0,1,0,'Quality Evaluation',                  'Quality Evaluation',                  '#B02323','',                  'QUALITY_EVALUATION',    'Quality Evaluation',       'Word Count',   'words',  'Words',        'Words',      'Words',   0.00, 0.00,     0.5, 1,         0,     0.002, 'https://communitylibrary.translatorswb.org/books/13-translation-quality-working-group', '', '', '');
+UPDATE task_type_details SET claimed_template='task/task.claimed-spot_quality_inspection.tpl' WHERE type_enum=38;
+UPDATE task_type_details SET claimed_template='task/task.claimed-quality_evaluation.tpl'      WHERE type_enum=39;
 
 /*
 # "Labour Hours" or "Words" etc. for when user enters pricing rates
