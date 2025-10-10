@@ -41,12 +41,6 @@
                         {elseif $taskType == TaskTypeEnum::APPROVAL}
                             <img src="{urlFor name='home'}ui/img/success.svg" alt="translator" class="mx-1 " />
                             <strong>{Localisation::getTranslation('common_success')}</strong> {sprintf('You have claimed the Proofreading and Approval task <strong>%s</strong>.', {TemplateHelper::uiCleanseHTML($task->getTitle())})}
-                        {elseif $taskType == TaskTypeEnum::SPOT_QUALITY_INSPECTION}
-                            <img src="{urlFor name='home'}ui/img/success.svg" alt="translator" class="mx-1 " />
-                            <strong>{Localisation::getTranslation('common_success')}</strong> {sprintf('You have claimed the Spot Quality Inspection task <strong>%s</strong>.', {TemplateHelper::uiCleanseHTML($task->getTitle())})}
-                        {elseif $taskType == TaskTypeEnum::QUALITY_EVALUATION}
-                            <img src="{urlFor name='home'}ui/img/success.svg" alt="translator" class="mx-1 " />
-                            <strong>{Localisation::getTranslation('common_success')}</strong> {sprintf('You have claimed the Quality Evaluation task <strong>%s</strong>.', {TemplateHelper::uiCleanseHTML($task->getTitle())})}
                          {/if}
 
                         </div>
