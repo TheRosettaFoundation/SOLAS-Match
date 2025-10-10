@@ -2724,9 +2724,7 @@ error_log(print_r($result, true));//(**)
         $projectDao = new ProjectDao();
         $authorization = 'Authorization: Bearer ' . $this->memsourceApiToken;
 
-error_log('BEFORE CALL get_quality_requests');//(**)
         $results = LibAPI\PDOWrapper::call('get_quality_requests', '');
-error_log('get_quality_requests: ' . print_r($results, 1));//(**)
         if (!empty($results)) {
             $row = $results[0];
             $project_id = $row['project_id'];
@@ -2734,10 +2732,8 @@ error_log('get_quality_requests: ' . print_r($results, 1));//(**)
             $state = $row['state'];
             $memsource_project = $projectDao->get_memsource_project($project_id);
             $memsource_project_uid = $memsource_project['memsource_project_uid'];
-error_log("project_id: $project_id, top_level: $top_level, state: $state, memsource_project_uid: $memsource_project_uid");//(**)
 
             $jobs = $this->memsource_list_jobs($memsource_project_uid, $project_id);
-error_log(print_r($jobs, 1));//(**)
             $parts = 0;
             foreach ($jobs as $uid => $job) if ($projectDao->get_top_level($job['innerId']) == $top_level && in_array($job['workflowStep']['name'], ['Spot Quality Inspection', 'Quality Evaluation'])) $parts++;
 
