@@ -5,6 +5,62 @@
 
 {assign var="task_id" value=$task->getId()}
 
+<header class="">
+
+    <div class="container ">
+
+            <div class="py-4" >
+                <a  class="text-decoration-none text-body fw-bold"  href="/"> Home </a> <i class="fa-solid fa-chevron-right mx-1"> </i>
+
+                <a  href="{urlFor name="task-view" options="task_id.$task_id"}"  class="text-decoration-none text-body fw-bold"> Task </a> 
+        
+                <i class="fa-solid fa-chevron-right mx-1"> </i>
+
+                <a class="text-decoration-none text-primaryDark fw-bold" href="{urlFor name="task-claim-page" options="task_id.$task_id"}"> Claim </a>
+             
+              
+            
+            </div>
+
+    </div>
+
+      <section class="container">
+
+           
+                 <div class="alert alert-success alert-dismissible fade show mt-2  ">
+                        <div >
+                         {if $taskType == TaskTypeEnum::TRANSLATION}
+
+                        <img src="{urlFor name='home'}ui/img/success.svg" alt="translator" class="mx-1 " />
+                        <strong>{Localisation::getTranslation('common_success')}</strong>  {Localisation::getTranslation('task_claimed_translation_0')} &ldquo;<strong>{TemplateHelper::uiCleanseHTML($task->getTitle())}</strong>&rdquo;.
+                        {elseif $taskType == TaskTypeEnum::PROOFREADING}
+                        
+                        <img src="{urlFor name='home'}ui/img/success.svg" alt="translator" class="mx-1 " />
+                         <strong>{Localisation::getTranslation('common_success')}</strong> {sprintf(Localisation::getTranslation('task_claimed_proofreading_0'), {TemplateHelper::uiCleanseHTML($task->getTitle())})}
+
+                        {elseif $taskType == TaskTypeEnum::APPROVAL}
+                            <img src="{urlFor name='home'}ui/img/success.svg" alt="translator" class="mx-1 " />
+                            <strong>{Localisation::getTranslation('common_success')}</strong> {sprintf('You have claimed the Proofreading and Approval task <strong>%s</strong>.', {TemplateHelper::uiCleanseHTML($task->getTitle())})}
+                        {elseif $taskType == TaskTypeEnum::SPOT_QUALITY_INSPECTION}
+                            <img src="{urlFor name='home'}ui/img/success.svg" alt="translator" class="mx-1 " />
+                            <strong>{Localisation::getTranslation('common_success')}</strong> {sprintf('You have claimed the Spot Quality Inspection task <strong>%s</strong>.', {TemplateHelper::uiCleanseHTML($task->getTitle())})}
+                        {elseif $taskType == TaskTypeEnum::QUALITY_EVALUATION}
+                            <img src="{urlFor name='home'}ui/img/success.svg" alt="translator" class="mx-1 " />
+                            <strong>{Localisation::getTranslation('common_success')}</strong> {sprintf('You have claimed the Quality Evaluation task <strong>%s</strong>.', {TemplateHelper::uiCleanseHTML($task->getTitle())})}
+                         {/if}
+
+                        </div>
+             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+         
+                </div>
+    </section>
+         
+       
+ 
+   
+
+</header>
+
 <div class="bg-light-subtle py-4">
 
 
