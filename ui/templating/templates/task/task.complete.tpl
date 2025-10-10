@@ -16,7 +16,7 @@
 
     <h3>Quality Overview (minimum: 50 characters, maximum: 1000 characters)</h3>
     <div id="count"></div>
-    <textarea name="comment" cols='40' rows='10' style="width: 80%"></textarea>
+    <textarea name="comment" id="comment" cols="40" rows="10" style="width: 80%"></textarea>
 
     <div id="placeholder_for_errors_2"></div>
     <button class="btn btn-primary" type="submit" name="submitReview">
@@ -27,8 +27,8 @@
 </form>
 
 <script type="text/javascript">
-    document.getElementById('comment').onkeyup = function () {
-        document.getElementById('count').innerHTML = "Characters left: " + (1000 - this.value.length);
+    document.getElementById("comment").onkeyup = function () {
+        document.getElementById("count").innerHTML = "Characters left: " + (1000 - this.value.length);
         if (this.value.length < 50 || this.value.length > 1000) document.getElementById("count").style.color = "red";
         else                                                    document.getElementById("count").style.color = "black";
     };
