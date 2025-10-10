@@ -2795,7 +2795,7 @@ error_log(print_r($full_job, 1));//(**)
                             }
                             ksort($claimed_users);
                             $t = '';
-                            foreach ($claimed_users as $claimed_user) $t .= $claimed_user['type'] . $claimed_user['internalId'] . ': ' . $claimed_user['name'] . ' https://twbplatform.org/' . $claimed_user['user_id'] . "/profile/\n";
+                            foreach ($claimed_users as $claimed_user) $t .= $claimed_user['type'] . ' ' . $claimed_user['internalId'] . ': ' . $claimed_user['name'] . ' https://twbplatform.org/' . $claimed_user['user_id'] . "/profile/\n";
 
                             $results = LibAPI\PDOWrapper::call('get_code_pair', LibAPI\PDOWrapper::cleanse($memsource_task['language_id-target']) . ',' . LibAPI\PDOWrapper::cleanse($memsource_task['country_id-target']));
                             $pair = empty($results) ? '' : $results[0]['pair'];
