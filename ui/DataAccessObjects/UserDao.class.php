@@ -2691,27 +2691,27 @@ error_log(print_r($result, true));//(**)
                 $memsource_project_uid = $memsource_project['memsource_project_uid'];
                 $workflowLevels_array = $this->memsource_list_jobs($memsource_project_uid, $project_id, 1);
                 if (empty($workflowLevels_array)) continue;
-                if (in_array('Spot Quality Inspection', $workflowLevels_array) || in_array('Quality Evaluation', $workflowLevels_array)) continue;
-
-                $step = 'YnUg71Azdgh7hGfIE3Od0a';                                                        // "Spot Quality Inspection"
-                if (in_array('SME review', $workflowLevels_array)) $step = '8hVIp41ekCgrraH0KNTdT3';     // "Quality Evaluation"
-                if ($this->usernamePrefix === 'DEV_') {
-                    $step = 'O31wUqUkkgmNoyQW623Qj3';                                                    // "Spot Quality Inspection" dev
-                    if (in_array('SME review', $workflowLevels_array)) $step = 'oEtaK3o6dZ9xaNFrV4k1C5'; // "Quality Evaluation" dev
-                }
-                $ch = curl_init("https://cloud.memsource.com/web/api2/v1/projects/$memsource_project_uid/workflowSteps");
-                curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode(['workflowSteps' => [['id' => $step]]]));
-                curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json', $authorization]);
-                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-                curl_setopt($ch, CURLOPT_TIMEOUT, 300); // Just so it does not hang forever and block because of file lock
-                $project_result = curl_exec($ch);
-                error_log("set_quality_checks($task_ids): $project_result");
-                if ($err = curl_error($ch)) {
-                    error_log("set_quality_checks($task_ids) Error: $err");
+                if (!in_array('Spot Quality Inspection', $workflowLevels_array) && !in_array('Quality Evaluation', $workflowLevels_array)) {
+                    $step = 'YnUg71Azdgh7hGfIE3Od0a';                                                        // "Spot Quality Inspection"
+                    if (in_array('SME review', $workflowLevels_array)) $step = '8hVIp41ekCgrraH0KNTdT3';     // "Quality Evaluation"
+                    if ($this->usernamePrefix === 'DEV_') {
+                        $step = 'O31wUqUkkgmNoyQW623Qj3';                                                    // "Spot Quality Inspection" dev
+                        if (in_array('SME review', $workflowLevels_array)) $step = 'oEtaK3o6dZ9xaNFrV4k1C5'; // "Quality Evaluation" dev
+                    }
+                    $ch = curl_init("https://cloud.memsource.com/web/api2/v1/projects/$memsource_project_uid/workflowSteps");
+                    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode(['workflowSteps' => [['id' => $step]]]));
+                    curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json', $authorization]);
+                    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                    curl_setopt($ch, CURLOPT_TIMEOUT, 300); // Just so it does not hang forever and block because of file lock
+                    $project_result = curl_exec($ch);
+                    error_log("set_quality_checks($task_ids): $project_result");
+                    if ($err = curl_error($ch)) {
+                        error_log("set_quality_checks($task_ids) Error: $err");
+                        curl_close($ch);
+                        continue;
+                    }
                     curl_close($ch);
-                    continue;
                 }
-                curl_close($ch);
                 $count++;
                 LibAPI\PDOWrapper::call('insert_quality_request', LibAPI\PDOWrapper::cleanse($project_id) . ',' . LibAPI\PDOWrapper::cleanseWrapStr($top_level));
             }
