@@ -2909,7 +2909,7 @@ error_log(print_r($full_job, 1));//(**)
         LibAPI\PDOWrapper::call('update_asana_quality_task', LibAPI\PDOWrapper::cleanse($task_id) . ',' . LibAPI\PDOWrapper::cleanseWrapStr($comment));
         if ($this->update_asana_notes($task_id, "Overall quality comment: $comment\n")) {
             $projectDao = new ProjectDao();
-            $taskDao = new DAO\TaskDao();
+            $taskDao = new TaskDao();
             $task = $taskDao->getTask($task_id);
             $memsource_task_uid = $projectDao->get_memsource_task($task_id)['memsource_task_uid'];
             $memsource_project_uid = $projectDao->get_memsource_project($task->getProjectId())['memsource_project_uid'];
