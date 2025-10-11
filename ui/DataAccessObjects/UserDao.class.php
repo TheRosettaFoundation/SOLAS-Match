@@ -2901,13 +2901,13 @@ error_log(print_r($full_job, 1));//(**)
         $result = curl_exec($ch);
         curl_close($ch);
         error_log("PUT Update Quality Asana task result: $result");
-        return 1;
+        return $asana_quality_task_id;
     }
 
     public function update_asana_quality_task($task_id, $comment)
     {
         LibAPI\PDOWrapper::call('update_asana_quality_task', LibAPI\PDOWrapper::cleanse($task_id) . ',' . LibAPI\PDOWrapper::cleanseWrapStr($comment));
-        if ($this->update_asana_notes($task_id, "Overall quality comment: $comment\n")) {
+        if ($asana_quality_task_id = $this->update_asana_notes($task_id, "Overall quality comment: $comment\n")) {
             $projectDao = new ProjectDao();
             $taskDao = new TaskDao();
             $task = $taskDao->getTask($task_id);
