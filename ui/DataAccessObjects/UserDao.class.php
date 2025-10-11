@@ -2744,10 +2744,8 @@ error_log(print_r($result, true));//(**)
                     if ($parts_x++) break; // pick second part
                 }
             }
-error_log("parts: $parts, parts_x: $parts_x, uid: $uid");//(**)
             if ($parts) {
                 $full_job = $this->memsource_get_job($memsource_project_uid, $uid);
-error_log(print_r($full_job, 1));//(**)
                 if (!empty($full_job['wordsCount']) && $full_job['wordsCount'] > 1) {
                     if ($state == 0) { // Check is Job Split needed?
                         if ($full_job['wordsCount'] > 600) {
