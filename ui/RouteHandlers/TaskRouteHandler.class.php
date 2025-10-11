@@ -2032,13 +2032,13 @@ class TaskRouteHandler
         $task = $taskDao->getTask($task_id);
         if ($post = $request->getParsedBody() && !empty($post['comment']) && ($task->getTaskType() == Common\Enums\TaskTypeEnum::SPOT_QUALITY_INSPECTION || $task->getTaskType() == Common\Enums\TaskTypeEnum::QUALITY_EVALUATION)) {
             if ($fail_CSRF = Common\Lib\UserSession::checkCSRFKey($post, 'task_complete')) return $response->withStatus(302)->withHeader('Location', $fail_CSRF);
-            if ($taskDao->getTaskStatus($task_id) != Common\Enums\TaskStatusEnum::COMPLETE) {
+            if ($task->getTaskStatus() != Common\Enums\TaskStatusEnum::COMPLETE) {
                 $taskDao->setTaskStatus($task_id, Common\Enums\TaskStatusEnum::COMPLETE);
                 $taskDao->sendTaskUploadNotifications($task_id, 1);
                 $taskDao->set_task_complete_date($task_id);
                 error_log("Quality Task Marked Complete by linguist task_id: $task_id");
+                $userDao->update_asana_quality_task($task_id, $post['comment']);
             }
-            $userDao->update_asana_quality_task($task_id, $post['comment']);
             return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('claimed-tasks', array('user_id' => Common\Lib\UserSession::getCurrentUserID())));
         }
         $template_data = array_merge($template_data, [
