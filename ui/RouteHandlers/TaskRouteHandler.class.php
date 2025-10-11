@@ -2030,7 +2030,9 @@ class TaskRouteHandler
         $sesskey = Common\Lib\UserSession::getCSRFKey();
 
         $task = $taskDao->getTask($task_id);
-        if ($post = $request->getParsedBody() && !empty($post['comment']) && ($task->getTaskType() == Common\Enums\TaskTypeEnum::SPOT_QUALITY_INSPECTION || $task->getTaskType() == Common\Enums\TaskTypeEnum::QUALITY_EVALUATION)) {
+error_log("task_id: $task_id " . $task->getTaskType() . ' ' . $task->getTaskStatus());//(**)
+        if (($post = $request->getParsedBody()) && !empty($post['comment']) && ($task->getTaskType() == Common\Enums\TaskTypeEnum::SPOT_QUALITY_INSPECTION || $task->getTaskType() == Common\Enums\TaskTypeEnum::QUALITY_EVALUATION)) {
+error_log(print_r($post, 1));//(**)
             if ($fail_CSRF = Common\Lib\UserSession::checkCSRFKey($post, 'task_complete')) return $response->withStatus(302)->withHeader('Location', $fail_CSRF);
             if ($task->getTaskStatus() != Common\Enums\TaskStatusEnum::COMPLETE) {
                 $taskDao->setTaskStatus($task_id, Common\Enums\TaskStatusEnum::COMPLETE);
