@@ -498,6 +498,13 @@ error_log("createTaskDirectly: $args");
         return $result[0]['task-status_id'];
     }
 
+    public function get_task_type($task_id)
+    {
+        $result = LibAPI\PDOWrapper::call('getTaskStatus', LibAPI\PDOWrapper::cleanse($task_id));
+        if (empty($result)) return 0;
+        return $result[0]['task-type_id'];
+    }
+
     public function taskIsClaimed($task_id)
     {
         $args = LibAPI\PDOWrapper::cleanse($task_id);
@@ -556,6 +563,9 @@ error_log("createTaskDirectly: $args");
             LibAPI\PDOWrapper::call('update_tasks_status_claimant', LibAPI\PDOWrapper::cleanse($task_id) . ',10,' . LibAPI\PDOWrapper::cleanse($user_id) . ',NULL');
 
             $this->email_finance($task_id, $user_id);
+
+            $userDao = new UserDao();
+            $userDao->possibly_mark_quality_assigned($user_id, $memsource_task, $task);
         }
         return $success;
     }

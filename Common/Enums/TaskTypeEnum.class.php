@@ -10,6 +10,8 @@ class TaskTypeEnum
     const DESEGMENTATION    = 4;
     const QUALITY           = 5;
     const APPROVAL          = 6;
+    const SPOT_QUALITY_INSPECTION = 38;
+    const QUALITY_EVALUATION      = 39;
 
     static $enum_to_UI;
     static $task_type_to_enum;

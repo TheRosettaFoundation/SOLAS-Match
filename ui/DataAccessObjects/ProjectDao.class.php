@@ -958,7 +958,7 @@ error_log('parent_tasks_filter:' . print_r($parent_tasks_filter, true));//(**)
         return 0;
     }
 
-    private function create_task($memsource_project, $job, $words_default, $publish)
+    public function create_task($memsource_project, $job, $words_default, $publish)
     {
         $taskDao = new TaskDao();
         $task = new Common\Protobufs\Models\Task();
@@ -967,8 +967,6 @@ error_log('parent_tasks_filter:' . print_r($parent_tasks_filter, true));//(**)
             error_log("No filename in new jobPart {$job['uid']}");
             return '-';
         }
-//error_log('Sync create_task job: ' . print_r($job, true));
-
         $project_id = $memsource_project['project_id'];
         $task->setProjectId($project_id);
         $task->setTitle(mb_substr("{$job['innerId']} {$job['filename']}", 0, 128));
@@ -1070,24 +1068,21 @@ error_log("set_memsource_task($task_id, 0, {$job['uid']}...), success: $success"
                 $reverse_order[Common\Enums\TaskTypeEnum::$task_type_to_enum[$workflow_level]] = ($i ==  0 || empty(Common\Enums\TaskTypeEnum::$task_type_to_enum[$workflow_levels[$i - 1]])) ? 0 : Common\Enums\TaskTypeEnum::$task_type_to_enum[$workflow_levels[$i - 1]];
             }
         }
-//(**)Old comment: Translation task should already have been created
         $innerId = empty($job['innerId']) ? 0 : $job['innerId'];
         $top_level = $this->get_top_level($innerId);
         $project_tasks = $this->get_tasks_for_project($project_id);
         foreach ($project_tasks as $project_task) {
             if ($top_level == $this->get_top_level($project_task['internalId'])) {
-                //(**) Matches on same file & same language, for QA or Proofreading may need to be wider
                 if ($forward_order[$taskType]) {
                      if ($forward_order[$taskType] == $project_task['task-type_id'])
                          $this->set_taskclaims_required_to_make_claimable($task_id, $project_task['task_id'], $project_id);
                 }
-                if ($reverse_order[$taskType]) {
+                if ($reverse_order[$taskType] && $taskType != Common\Enums\TaskTypeEnum::SPOT_QUALITY_INSPECTION && $taskType != Common\Enums\TaskTypeEnum::QUALITY_EVALUATION) {
                      if ($reverse_order[$taskType] == $project_task['task-type_id'])
                          $this->set_taskclaims_required_to_make_claimable($project_task['task_id'], $task_id, $project_id);
                 }
             }
         }
-
         if ($this->is_task_claimable($task_id)) $taskDao->setTaskStatus($task_id, Common\Enums\TaskStatusEnum::PENDING_CLAIM);
 
         if ($this->get_memsource_self_service_project($memsource_project['memsource_project_id'])) {
@@ -1172,6 +1167,9 @@ error_log("Sync update_task_from_job() task_id: $task_id, status: $status, job: 
             }
         }
         if ($status == 'COMPLETED' || $status == 'DELIVERED') { // Complete ('COMPLETED_BY_LINGUIST' in Hook)
+            $type = $taskDao->get_task_type($task_id);
+            if ($type == Common\Enums\TaskTypeEnum::SPOT_QUALITY_INSPECTION || $type == Common\Enums\TaskTypeEnum::QUALITY_EVALUATION) return;
+
             if (!$taskDao->taskIsClaimed($task_id)) $taskDao->claimTask($task_id, 62927); // translators@translatorswithoutborders.org
 //(**)dev server                if (!$taskDao->taskIsClaimed($task_id)) $taskDao->claimTask($task_id, 3297);
 

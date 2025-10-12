@@ -382,6 +382,10 @@ class ProjectRouteHandler
                     continue;
                 }
             }
+            if ($taskType == Common\Enums\TaskTypeEnum::SPOT_QUALITY_INSPECTION || $taskType == Common\Enums\TaskTypeEnum::QUALITY_EVALUATION) {
+                error_log("Don't handle create_task hook for $taskType in new jobPart {$part['uid']} for: {$part['fileName']}");
+                continue;
+            }
             $task->setTaskType($taskType);
 
             if (!empty($part['wordsCount'])) {
@@ -473,12 +477,11 @@ error_log("set_memsource_task($task_id... {$part['uid']}...), success: $success"
             $project_tasks = $projectDao->get_tasks_for_project($project_id);
             foreach ($project_tasks as $project_task) {
                 if ($top_level == $projectDao->get_top_level($project_task['internalId'])) {
-                    //(**) Matches on same file & same language, for QA or Proofreading may need to be wider
                     if ($forward_order[$taskType]) {
                          if ($forward_order[$taskType] == $project_task['task-type_id'])
                              $projectDao->set_taskclaims_required_to_make_claimable($task_id, $project_task['task_id'], $project_id);
                     }
-                    if ($reverse_order[$taskType]) {
+                    if ($reverse_order[$taskType] && $taskType != Common\Enums\TaskTypeEnum::SPOT_QUALITY_INSPECTION && $taskType != Common\Enums\TaskTypeEnum::QUALITY_EVALUATION) {
                          if ($reverse_order[$taskType] == $project_task['task-type_id'])
                              $projectDao->set_taskclaims_required_to_make_claimable($project_task['task_id'], $task_id, $project_id);
                     }
@@ -575,6 +578,9 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                 }
             }
             if ($part['status'] == 'COMPLETED_BY_LINGUIST' || $part['status'] == 'COMPLETED') {
+                $type = $taskDao->get_task_type($task_id);
+                if ($type == Common\Enums\TaskTypeEnum::SPOT_QUALITY_INSPECTION || $type == Common\Enums\TaskTypeEnum::QUALITY_EVALUATION) continue;
+
                 if (!$taskDao->taskIsClaimed($task_id)) $taskDao->claimTask($task_id, 62927); // translators@translatorswithoutborders.org
 //(**)dev server                if (!$taskDao->taskIsClaimed($task_id)) $taskDao->claimTask($task_id, 3297);
 
@@ -1045,6 +1051,11 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                         }
                     }
                 }
+            }
+
+            if ($roles & (SITE_ADMIN | PROJECT_OFFICER) && isset($post['request_quality_checks'])) {
+                $number = $userDao->set_quality_checks($post['request_quality_checks']);
+                UserRouteHandler::flashNow('success', "$number new languages in files now have quality checks requested, these will take a few minutes to appear.");
             }
 
             if ($roles & (SITE_ADMIN | PROJECT_OFFICER) || in_array($project->getOrganisationId(), ORG_EXCEPTIONS) && $roles & (NGO_ADMIN + NGO_PROJECT_OFFICER)) {
@@ -2737,6 +2748,8 @@ error_log("get_queue_asana_projects: $projectId");//(**)
             $taskDao->update_native_matching();
 
             $projectDao->poll_sun();
+
+            $userDao->handle_quality_task_creation();
 
             flock($fp_for_lock, LOCK_UN); // Release the lock
         }

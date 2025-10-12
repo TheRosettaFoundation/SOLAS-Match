@@ -104,46 +104,53 @@
                            
                             {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
                         </form>
-
-
-
             {elseif $taskType == TaskTypeEnum::APPROVAL}
-
-
                  <form class="d-flex flex-wrap " method="post" action="{urlFor name="task-claim-page" options="task_id.$task_id"}">
-                            
                             <div class="mb-sm-2">
                                  <button type="submit" class="btn btn-primary fs-6 fw-bold text-white me-2 " >
                                     <img src="{urlFor name='home'}ui/img/yes.svg" alt="agree" class="mx-1" > Yes, I promise I will proofread this file
                                  </button>
                             </div>
-                            
                             <div>
                                 <a href="{urlFor name="task-view" options="task_id.$task_id"}"  class="btn btn-light fs-6 fw-bold  me-2 border border-dark-subtle ">
                                 <img src="{urlFor name='home'}ui/img/cancel.svg" alt="disagree" class="me-1" > {Localisation::getTranslation('common_no_just_bring_me_back_to_the_task_page')}
-                                </a> 
-                              
+                                </a>
                             </div>
-                           
-
-                           
                             {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
                         </form>
-
-
-
- 
+            {elseif $taskType == TaskTypeEnum::SPOT_QUALITY_INSPECTION}
+                 <form class="d-flex flex-wrap " method="post" action="{urlFor name="task-claim-page" options="task_id.$task_id"}">
+                            <div class="mb-sm-2">
+                                 <button type="submit" class="btn btn-primary fs-6 fw-bold text-white me-2 " >
+                                    <img src="{urlFor name='home'}ui/img/yes.svg" alt="agree" class="mx-1" > Yes, I promise I will spot quality inspect this file
+                                 </button>
+                            </div>
+                            <div>
+                                <a href="{urlFor name="task-view" options="task_id.$task_id"}"  class="btn btn-light fs-6 fw-bold  me-2 border border-dark-subtle ">
+                                <img src="{urlFor name='home'}ui/img/cancel.svg" alt="disagree" class="me-1" > {Localisation::getTranslation('common_no_just_bring_me_back_to_the_task_page')}
+                                </a>
+                            </div>
+                            {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
+                        </form>
+            {elseif $taskType == TaskTypeEnum::QUALITY_EVALUATION}
+                 <form class="d-flex flex-wrap " method="post" action="{urlFor name="task-claim-page" options="task_id.$task_id"}">
+                            <div class="mb-sm-2">
+                                 <button type="submit" class="btn btn-primary fs-6 fw-bold text-white me-2 " >
+                                    <img src="{urlFor name='home'}ui/img/yes.svg" alt="agree" class="mx-1" > Yes, I promise I will quality evaluate this file
+                                 </button>
+                            </div>
+                            <div>
+                                <a href="{urlFor name="task-view" options="task_id.$task_id"}"  class="btn btn-light fs-6 fw-bold  me-2 border border-dark-subtle ">
+                                <img src="{urlFor name='home'}ui/img/cancel.svg" alt="disagree" class="me-1" > {Localisation::getTranslation('common_no_just_bring_me_back_to_the_task_page')}
+                                </a>
+                            </div>
+                            {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
+                        </form>
             {/if}
 
             </div>
-       
-
-
           </div>
-
-
        </div>    
-    
 
  <main >
 
@@ -163,19 +170,12 @@
        
         {elseif $taskType == TaskTypeEnum::APPROVAL}
             {include file="task/task.claim-approval.tpl"}
-     
+        {elseif $taskType == TaskTypeEnum::SPOT_QUALITY_INSPECTION}
+            {include file="task/task.claim-spot_quality_inspection.tpl"}
+        {elseif $taskType == TaskTypeEnum::QUALITY_EVALUATION}
+            {include file="task/task.claim-quality_evaluation.tpl"}
     {/if}
- 
- 
  </div>
-
-
-
  </main>
-
-
-
- 
-
 
 {include file="footer2.tpl"}

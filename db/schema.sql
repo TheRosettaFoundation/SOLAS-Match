@@ -592,6 +592,10 @@ INSERT INTO TaskTypes (id, name) VALUES
   (36,'Community Recognition Program');
 INSERT INTO TaskTypes (id, name) VALUES
   (37,'TWB Voice');
+INSERT INTO TaskTypes (id, name) VALUES
+  (38,'Spot Quality Inspection');
+INSERT INTO TaskTypes (id, name) VALUES
+  (39,'Quality Evaluation');
 
 
 # Be very carefull of deleteing any of these they will cascade DELETEs
@@ -1507,6 +1511,13 @@ INSERT INTO task_type_details VALUES
 (36,9,1,0,1,1,0,1,0,'Community Recognition Program',       'Community Recognition Program',       '#B02323','',                           'SHELLTASK',    'ZZ',                       'Terms',        'terms',  'Terms',        'Terms',      'Terms',      1,    0,       0, 0,         0,         0, '', '', '', '');
 INSERT INTO task_type_details VALUES
 (37,10,1,0,1,1,0,1,0,'TWB Voice',                          'TWB Voice',                           '#B02323','',                           'SHELLTASK',    'ZZ',                       'Terms',        'terms',  'Terms',        'Terms',      'Terms',      1,    0,       0, 0,         0,         0, '', '', '', '');
+INSERT INTO task_type_details VALUES
+(38,1,1,0,1,0,0,1,0,'Spot Quality Inspection',             'Spot Quality Inspection',             '#B02323','',             'SPOT_QUALITY_INSPECTION',    'Spot Quality Inspection',  'Word Count',   'words',  'Words',        'Words',      'Words',   0.00, 0.00,     0.5, 1,         0,     0.002, 'https://communitylibrary.translatorswb.org/books/13-translation-quality-working-group', '', '', '');
+INSERT INTO task_type_details VALUES
+(39,1,1,0,1,0,0,1,0,'Quality Evaluation',                  'Quality Evaluation',                  '#B02323','',                  'QUALITY_EVALUATION',    'Quality Evaluation',       'Word Count',   'words',  'Words',        'Words',      'Words',   0.00, 0.00,     0.5, 1,         0,     0.002, 'https://communitylibrary.translatorswb.org/books/13-translation-quality-working-group', '', '', '');
+UPDATE task_type_details SET claimed_template='task/task.claimed-spot_quality_inspection.tpl' WHERE type_enum=38;
+UPDATE task_type_details SET claimed_template='task/task.claimed-quality_evaluation.tpl'      WHERE type_enum=39;
+
 /*
 # "Labour Hours" or "Words" etc. for when user enters pricing rates
 UPDATE task_type_details SET pricing_and_recognition_unit_text_hours='Words' WHERE type_enum=1;
@@ -2600,12 +2611,12 @@ BEGIN
     SELECT GROUP_CONCAT(organisation_id) INTO @NGO_list FROM Admins WHERE user_id=uID AND roles&@NGO_LINGUIST!=0 GROUP BY user_id;
 
     SET @max_not_comlete_tasks = 1000000;
-    SET @allowed_types = '1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35';
+    SET @allowed_types = '1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41';
     SET @excluded_orgs = '';
     SET @limited = 0;
     SELECT
         IF(max_not_comlete_tasks=0, 1000000, max_not_comlete_tasks),
-        IF(allowed_types='', '1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35', allowed_types),
+        IF(allowed_types='', '1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41', allowed_types),
         excluded_orgs,
         1
         INTO @max_not_comlete_tasks, @allowed_types, @excluded_orgs, @limited
@@ -4294,12 +4305,12 @@ BEGIN
     SELECT GROUP_CONCAT(organisation_id) INTO @NGO_list FROM Admins WHERE user_id=uID AND roles&@NGO_LINGUIST!=0 GROUP BY user_id;
 
     SET @max_not_comlete_tasks = 1000000;
-    SET @allowed_types = '1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35';
+    SET @allowed_types = '1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41';
     SET @excluded_orgs = '';
     SET @limited = 0;    
     SELECT
         IF(max_not_comlete_tasks=0, 1000000, max_not_comlete_tasks),
-        IF(allowed_types='', '1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35', allowed_types),
+        IF(allowed_types='', '1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41', allowed_types),
         excluded_orgs,
         1
         INTO @max_not_comlete_tasks, @allowed_types, @excluded_orgs, @limited
@@ -4408,12 +4419,12 @@ BEGIN
     SELECT GROUP_CONCAT(organisation_id) INTO @NGO_list FROM Admins WHERE user_id=uID AND roles&@NGO_LINGUIST!=0 GROUP BY user_id;
 
     SET @max_not_comlete_tasks = 1000000;
-    SET @allowed_types = '1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35';
+    SET @allowed_types = '1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41';
     SET @excluded_orgs = '';
     SET @limited = 0;    
     SELECT
         IF(max_not_comlete_tasks=0, 1000000, max_not_comlete_tasks),
-        IF(allowed_types='', '1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35', allowed_types),
+        IF(allowed_types='', '1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41', allowed_types),
         excluded_orgs,
         1
         INTO @max_not_comlete_tasks, @allowed_types, @excluded_orgs, @limited
@@ -13205,7 +13216,7 @@ BEGIN
     SET @limited=0;
     SELECT
         IF(max_not_comlete_tasks=0, 1000000, max_not_comlete_tasks),
-        IF(allowed_types='', '1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35', allowed_types),
+        IF(allowed_types='', '1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41', allowed_types),
         excluded_orgs,
         1
         INTO @max_not_comlete_tasks, @allowed_types, @excluded_orgs, @limited
@@ -13320,7 +13331,9 @@ DROP PROCEDURE IF EXISTS `set_task_resource_info_trigger`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `set_task_resource_info_trigger`(IN tID BIGINT UNSIGNED)
 BEGIN
+  IF EXISTS (SELECT 1 FROM Tasks WHERE id=tID AND `task-type_id`<=6) THEN
     REPLACE INTO task_resource_info_triggers VALUES (tID, NOW(), DATE_ADD(NOW(), INTERVAL 5 MINUTE));
+  END IF;
 END//
 DELIMITER ;
 
@@ -15120,6 +15133,129 @@ DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `get_all_projects`(IN oID INT UNSIGNED)
 BEGIN
     SELECT * FROM Projects WHERE organisation_id=oID ORDER BY title, id;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `get_code_pair`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_code_pair`(IN lID INT UNSIGNED, IN cID INT UNSIGNED)
+BEGIN
+    SELECT CONCAT(l.code, '-', c.code) AS pair
+    FROM Languages l
+    JOIN Countries c
+    WHERE l.id=lID AND c.id=cID;
+END//
+DELIMITER ;
+
+CREATE TABLE IF NOT EXISTS `quality_requests` (
+  project_id INT UNSIGNED NOT NULL,
+  top_level  VARCHAR(30) NOT NULL,
+  state      INT NOT NULL DEFAULT 0,
+  KEY FK_quality_requests_project_id (project_id),
+  KEY (state),
+  CONSTRAINT FK_quality_requests_project_id FOREIGN KEY (project_id) REFERENCES Projects (id) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+DROP PROCEDURE IF EXISTS `insert_quality_request`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_quality_request`(IN pID INT UNSIGNED, IN top VARCHAR(30))
+BEGIN
+    INSERT INTO quality_requests
+               (project_id, top_level)
+        VALUES (       pID,       top);
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `get_new_quality_requests`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_new_quality_requests`(IN task_ids VARCHAR(5000))
+BEGIN
+    SELECT
+        t.project_id,
+        SUBSTRING_INDEX(mt.internalId, '.', 1) AS top_level
+    FROM      Tasks             t
+    JOIN      MemsourceTasks   mt ON t.id=mt.task_id
+    JOIN      Projects          p ON t.project_id=p.id
+    LEFT JOIN quality_requests qr ON t.project_id=qr.project_id AND SUBSTRING_INDEX(mt.internalId, '.', 1)=qr.top_level
+    WHERE
+        FIND_IN_SET(t.id, task_ids)>0 AND
+        qr.project_id IS NULL AND
+        mt.internalId!='0'
+    GROUP BY t.project_id, SUBSTRING_INDEX(mt.internalId, '.', 1)
+    ORDER BY t.project_id, SUBSTRING_INDEX(mt.internalId, '.', 1);
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `get_quality_requests`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_quality_requests`()
+BEGIN
+    SELECT
+        qr.project_id,
+        qr.top_level,
+        qr.state
+    FROM quality_requests qr
+    WHERE
+        qr.state>=0
+    ORDER BY qr.state ASC, qr.project_id, qr.top_level;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `update_quality_request_state`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `update_quality_request_state`(IN pID INT UNSIGNED, IN top VARCHAR(30))
+BEGIN
+    UPDATE quality_requests
+    SET state=IF(state=0, 1, -1)
+    WHERE project_id=pID AND
+    top_level=top;
+END//
+DELIMITER ;
+
+CREATE TABLE IF NOT EXISTS `asana_quality_tasks` (
+  project_id            INT UNSIGNED NOT NULL,
+  task_id               BIGINT UNSIGNED NOT NULL,
+  top_level             VARCHAR(30) COLLATE utf8mb4_unicode_ci NOT NULL,
+  asana_quality_task_id VARCHAR(30) COLLATE utf8mb4_unicode_ci NOT NULL,
+  comment VARCHAR(1020) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  KEY project_id (project_id),
+  KEY task_id (task_id),
+  CONSTRAINT FK_asana_quality_tasks_Projects FOREIGN KEY (project_id) REFERENCES Projects (id) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT FK_asana_quality_tasks_Tasks FOREIGN KEY (task_id) REFERENCES Tasks (id) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+DROP PROCEDURE IF EXISTS `set_asana_quality_task`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `set_asana_quality_task`(IN pID INT UNSIGNED, IN tID BIGINT UNSIGNED, IN tl VARCHAR(30), IN asana_id VARCHAR(30))
+BEGIN
+    INSERT INTO asana_quality_tasks (project_id, task_id, top_level, asana_quality_task_id)
+    VALUES                          (       pID,     tID,        tl,              asana_id);
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `update_asana_quality_task`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `update_asana_quality_task`(IN tID BIGINT UNSIGNED, c VARCHAR(1020))
+BEGIN
+    UPDATE asana_quality_tasks
+    SET comment=c
+    WHERE task_id=tID;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `get_asana_quality_task`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_asana_quality_task`(IN tID BIGINT UNSIGNED)
+BEGIN
+    SELECT * FROM asana_quality_tasks WHERE task_id=tID;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `get_user_name`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_user_name`(IN ID INT UNSIGNED)
+BEGIN
+    SELECT CONCAT(IFNULL(`first-name`, ''), ' ', IFNULL(`last-name`, '')) AS name FROM UserPersonalInformation WHERE user_id=ID;
 END//
 DELIMITER ;
 
