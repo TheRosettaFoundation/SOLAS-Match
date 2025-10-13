@@ -11669,6 +11669,7 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `get_paid_project_data`()
 BEGIN
     SELECT
         pcd.project_id,
+        pcd.status,
         p.title,
         p.created,
         p.deadline,

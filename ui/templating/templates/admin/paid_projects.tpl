@@ -31,15 +31,16 @@
 
     <table id="myTable" style="overflow-wrap: break-word;" class="container table table-striped">
         <thead>
-            <th width="5%"></th>
-            <th width="19%">Project</th>
+            <th width="4%"></th>
+            <th width="14%">Project</th>
             <th width="8%">Deal ID</th>
             <th width="8%">Allocated Budget</th>
             <th width="8%">Project Cost</th>
             <th width="8%">Remaining Budget</th>
-            <th width="8%">Waived Tasks (In-kind, In-house, waived)</th>
+            <th width="8%">Waived Tasks</th>
+            <th width="7%">Status</th>
             <th width="18%">Organization</th>
-            <th width="6%">Source Language</th>
+            <th width="5%">Source Language</th>
             <th width="6%">Project Start&nbsp;&nbsp;Date</th>
             <th width="6%">Project Deadline</th>
         </thead>
@@ -53,6 +54,7 @@
                 <td>${round($paid_project['total_expected_cost'], 2)}</td>
                 <td>${round($paid_project['allocated_budget'] - $paid_project['total_expected_cost'], 2)}</td>
                 <td>${round($paid_project['total_expected_cost_waived'], 2)}</td>
+                <td>{if $paid_project['status'] == 1}Complete{/if}{if $paid_project['status'] == 2}In Progress{/if}</td>
                 <td>{TemplateHelper::uiCleanseHTMLNewlineAndTabs($paid_project['name'])}</td>
                 <td>{$paid_project['language_pair']}</td>
                 <td>{substr($paid_project['created'], 0, 10)}</td>
