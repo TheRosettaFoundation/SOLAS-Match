@@ -373,8 +373,8 @@
      <br />
 
         <div class="menu_list d-none bg-body p-4 mt-4 mb-4 rounded-2">
-        <div class="">
-        <div class="d-flex flex-wrap mb-4">
+        <div class="row">
+        <div class="d-flex col-8 col-md-4 flex-wrap mb-4">
         {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $NGO_ADMIN + $NGO_PROJECT_OFFICER)}
             <form id="publish_selected_tasks" class="bg-light-subtle d-flex flex-column justify-content-center form_action me-2  mb-4 mb-lg-0 mb-sm-2 mb-md-0" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
                 <a class="d-flex fs-6 text-muted text-decoration-none p-1" onclick="$('#publish_selected_tasks').submit();" >
@@ -413,7 +413,7 @@
         {/if}
         </div>
 
-        <div class="d-flex mb-4 flex-wrap">
+        <div class="d-flex col-8 col-md-4 flex-wrap mb-4">
         {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER) || in_array($project->getOrganisationId(), $ORG_EXCEPTIONS) && $roles & ($NGO_ADMIN + $NGO_PROJECT_OFFICER)}
             <form id="status_as_unclaimed" class="bg-light-subtle d-flex flex-column justify-content-center form_action me-2  mb-4 mb-lg-0" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
                 <a class="d-flex text-muted p-1 fs-6 text-decoration-none" onclick="$('#status_as_unclaimed').submit();" >
@@ -471,7 +471,7 @@
             </div>
         {/if}
         </div>
-        <div class="d-flex mt-4 flex-wrap">
+        <div class="d-flex col-8 col-md-4 flex-wrap mb-4">
         {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER)}
             <div class="bg-light-subtle d-flex flex-column justify-content-center form_action me-2  mb-4 mb-lg-0">
             <a class="d-flex p-1 text-muted fs-6 text-decoration-none "  data-bs-toggle="modal" href="#wordcountmodal" role="button">
