@@ -373,7 +373,7 @@
      <br />
 
         <div class="menu_list_project d-none bg-body p-4 mt-4 mb-4 rounded-2">
-        <div class="row">
+        <div class="">
         <div class="d-flex flex-wrap mb-4">
         {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $NGO_ADMIN + $NGO_PROJECT_OFFICER)}
             <form id="publish_selected_tasks" class="bg-light-subtle d-flex flex-column justify-content-center form_action me-2  mb-4 mb-lg-0 mb-sm-2 mb-md-0" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
