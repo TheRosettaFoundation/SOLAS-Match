@@ -413,7 +413,7 @@
         {/if}
         </div>
 
-        <div class="d-flex col-sm-8 col-md-4 flex-wrap mb-4">
+        <div class="d-flex col-sm-8  flex-wrap mb-4">
         {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER) || in_array($project->getOrganisationId(), $ORG_EXCEPTIONS) && $roles & ($NGO_ADMIN + $NGO_PROJECT_OFFICER)}
             <form id="status_as_unclaimed" class="bg-light-subtle d-flex flex-column justify-content-center form_action me-2  mb-4 mb-lg-0" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
                 <a class="d-flex text-muted p-1 fs-6 text-decoration-none" onclick="$('#status_as_unclaimed').submit();" >
@@ -471,7 +471,7 @@
             </div>
         {/if}
         </div>
-        <div class="d-flex col-sm-8 col-md-4 flex-wrap mb-4">
+        <div class="d-flex col-sm-8  flex-wrap mb-4">
         {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER)}
             <div class="bg-light-subtle d-flex flex-column justify-content-center form_action me-2  mb-4 mb-lg-0">
             <a class="d-flex p-1 text-muted fs-6 text-decoration-none "  data-bs-toggle="modal" href="#wordcountmodal" role="button">
