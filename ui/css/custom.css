@@ -292,6 +292,9 @@ a[href^="mailto:"] {
   .drop_description__shadow {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   }
+  .dropdown-item {
+    width: fit-content;
+  }
   .nav-item.dropdown-menu {
     display: block;
     margin-top: 0;
