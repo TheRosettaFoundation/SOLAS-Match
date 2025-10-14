@@ -372,7 +372,7 @@
      <br />
      <br />
 
-        <div class="menu_list d-none bg-body p-4 mt-4 mb-4 rounded-2">
+        <div class="menu_list--project d-none bg-body p-4 mt-4 mb-4 rounded-2">
         <div class="">
         <div class="d-flex flex-wrap mb-4">
         {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $NGO_ADMIN + $NGO_PROJECT_OFFICER)}
