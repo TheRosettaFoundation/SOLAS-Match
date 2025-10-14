@@ -278,7 +278,6 @@ a[href^="mailto:"] {
     // padding-top: 12px !important; /* ensure padding is applied */
     margin-bottom: 10px;
     font-weight: 700;
-    width: 200px;
 }
 .dropdown-item a,
 .dropdown-menu a {
@@ -293,7 +292,7 @@ a[href^="mailto:"] {
     margin-top: 0;
     margin-bottom: 20px;
     font-weight: 500;
-    width: fit-content;
+    width: 100%;
     // color: #133978;
 }
 
@@ -307,7 +306,7 @@ a[href^="mailto:"] {
 .navbar .nav-link.dropdown-toggle:not(.active):not(:hover):not(:focus) {
     color: #133978 !important; /* or whatever the default non-active color is */
 
-    color: inherit !important;
+    color: inherit !im portant;
     background-color: transparent !important;
 }
 [data-bs-theme="dark"] #hoverDropdown {
