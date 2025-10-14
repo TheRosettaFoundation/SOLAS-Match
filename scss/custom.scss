@@ -280,6 +280,13 @@ a[href^="mailto:"] {
     font-weight: 700;
     width: min-content;
 }
+.dropdown-item a,
+.dropdown-menu a {
+    word-break: break-word;
+    overflow-wrap: break-word;
+    white-space: normal;
+    max-width: 100%;
+}
 
 .nav-item.dropdown:hover .dropdown-menu {
     display: block;
