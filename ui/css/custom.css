@@ -308,7 +308,7 @@ a[href^="mailto:"] {
     margin-bottom: 0;
   }
   .nav-item.dropdown:hover .dropdown-menu {
-    width: fit-content;
+    width: max-content;
   }
 }
 /*!

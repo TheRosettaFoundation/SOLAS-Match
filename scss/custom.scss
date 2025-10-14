@@ -396,7 +396,7 @@ a[href^="mailto:"] {
     }
 
     .nav-item.dropdown:hover .dropdown-menu {
-        width: fit-content;
+        width: max-content;
 
         // color: #133978;
     }
