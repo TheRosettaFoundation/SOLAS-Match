@@ -274,7 +274,7 @@ a[href^="mailto:"] {
   }
 }
 @media (min-width: 768px) {
-  .menu_list {
+  .menu_list--project {
     height: 100%;
     overflow: hidden;
   }

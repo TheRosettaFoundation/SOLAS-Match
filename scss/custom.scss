@@ -282,7 +282,6 @@ a[href^="mailto:"] {
 
 .nav-item.dropdown:hover .dropdown-menu {
     display: block;
-
     margin-top: 0;
     margin-bottom: 20px;
     font-weight: 500;
@@ -358,7 +357,7 @@ a[href^="mailto:"] {
 }
 
 @media (min-width: 768px) {
-    .menu_list {
+    .menu_list--project {
         height: 100%;
         overflow: hidden;
     }
