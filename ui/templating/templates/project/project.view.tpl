@@ -472,16 +472,16 @@
             </div>
         {/if}
         </div>
-        <div class="d-flex mt-4 flex-wrap">
+        <div class=" d-flex mt-4 flex-wrap">
         {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER)}
-            <div class="bg-light-subtle d-flex flex-column justify-content-center form_action me-2  mb-4 mb-lg-0">
+            <div class="bg-light-subtle col-2 d-flex flex-column justify-content-center form_action me-2  mb-4 mb-lg-0">
             <a class="d-flex p-1 text-muted fs-6 text-decoration-none "  data-bs-toggle="modal" href="#wordcountmodal" role="button">
             <i class="fa-solid fa-check me-2 "></i> <span> Distribute Word Count </span>
             </a>
             </div>
         {/if}
         {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER)}
-            <form id="request_quality_checks" class="bg-light-subtle d-flex flex-column justify-content-center form_action me-2  mb-4 mb-lg-0" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
+            <form id="request_quality_checks" class="bg-light-subtle d-flex col-2 flex-column justify-content-center form_action me-2  mb-4 mb-lg-0" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
                 <a class="d-flex p-1 text-muted fs-6 text-decoration-none" onclick="$('#request_quality_checks').submit();">
                 <i class="fa-solid fa-check me-2 "></i><span>Request Quality Checks</span>
                 </a>
