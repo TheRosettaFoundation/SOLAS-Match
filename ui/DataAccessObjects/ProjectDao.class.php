@@ -2088,9 +2088,4 @@ error_log("Create PO ref: $result");
         }
         return $project_names;
     }
-
-    public function get_asana_quality_tasks_for_project($project_id)
-    {
-        return LibAPI\PDOWrapper::call('get_asana_quality_tasks_for_project', LibAPI\PDOWrapper::cleanse($project_id));
-    }
 }
