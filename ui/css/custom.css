@@ -202,7 +202,7 @@ a[href^="mailto:"] {
   display: block; /* ensures it's treated as a block-level element */
   margin-bottom: 10px;
   font-weight: 700;
-  width: max-content;
+  width: 200px;
 }
 
 .dropdown-item a,
