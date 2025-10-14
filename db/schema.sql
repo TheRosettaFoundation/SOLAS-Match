@@ -15252,14 +15252,6 @@ BEGIN
 END//
 DELIMITER ;
 
-DROP PROCEDURE IF EXISTS `get_asana_quality_tasks_for_project`;
-DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `get_asana_quality_tasks_for_project`(IN pID INT UNSIGNED)
-BEGIN
-    SELECT * FROM asana_quality_tasks WHERE project_id=pID;
-END//
-DELIMITER ;
-
 DROP PROCEDURE IF EXISTS `get_user_name`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `get_user_name`(IN ID INT UNSIGNED)
