@@ -219,8 +219,7 @@ a[href^="mailto:"] {
   margin-top: 0;
   margin-bottom: 20px;
   font-weight: 500;
-  width: 100%;
-  min-width: auto;
+  width: 300px;
 }
 
 .dropdown-toggle {
