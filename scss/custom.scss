@@ -278,6 +278,7 @@ a[href^="mailto:"] {
     // padding-top: 12px !important; /* ensure padding is applied */
     margin-bottom: 10px;
     font-weight: 700;
+    width: min-content;
 }
 
 .nav-item.dropdown:hover .dropdown-menu {
