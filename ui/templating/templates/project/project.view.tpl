@@ -373,11 +373,11 @@
      <br />
 
         <div class="menu_list--project d-none bg-body p-4 mt-4 mb-4 rounded-2">
-        <div>TEST  </div>
+      
         <div class="container">
         <div class="row mb-4">
         {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $NGO_ADMIN + $NGO_PROJECT_OFFICER)}
-            <form id="publish_selected_tasks" class="bg-light-subtle col-1 d-flex flex-column justify-content-center form_action me-2  mb-4 mb-lg-0 mb-sm-2 mb-md-0" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
+            <form id="publish_selected_tasks" class="bg-light-subtle col-2 d-flex flex-column justify-content-center form_action me-2  mb-4 mb-lg-0 mb-sm-2 mb-md-0" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
                 <a class="d-flex fs-6 text-muted text-decoration-none p-1" onclick="$('#publish_selected_tasks').submit();" >
                     <i class="fa-check fa-regular me-2"></i> <span>Publish Selected Tasks</span>
                 </a>
@@ -385,7 +385,7 @@
                 {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
             </form>
 
-            <form id="unpublish_selected_tasks" class="bg-light-subtle col-1 d-flex flex-column justify-content-center form_action me-2  mb-4 mb-lg-0 mb-sm-2 mb-md-0" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
+            <form id="unpublish_selected_tasks" class="bg-light-subtle col-2 d-flex flex-column justify-content-center form_action me-2  mb-4 mb-lg-0 mb-sm-2 mb-md-0" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
                 <a class=" d-flex text-muted fs-6 p-1 text-decoration-none" onclick="$('#unpublish_selected_tasks').submit();" >
                     <i class="fa-solid fa-xmark me-2" ></i> <span>Unpublish Selected Tasks</span>
                 </a>
@@ -395,7 +395,7 @@
         {/if}
 
         {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER)}
-            <form id="tasks_as_paid" class="bg-light-subtle col-1 d-flex flex-column  justify-content-center form_action me-2  mb-4 mb-lg-0 mb-sm-2 mb-md-0" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
+            <form id="tasks_as_paid" class="bg-light-subtle col-2 d-flex flex-column  justify-content-center form_action me-2  mb-4 mb-lg-0 mb-sm-2 mb-md-0" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
                 <a class="d-flex text-muted p-1 fs-6 text-decoration-none" onclick="$('#tasks_as_paid').submit();" >
                     <i class="fa fa-usd me-2"  aria-hidden="true"></i><span>Mark Selected Tasks as Paid</span>
                 </a>
@@ -403,7 +403,7 @@
                 {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
             </form>
 
-            <form id="tasks_as_unpaid" class="bg-light-subtle col-1 d-flex flex-column justify-content-center form_action me-2  mb-4 mb-lg-0" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
+            <form id="tasks_as_unpaid" class="bg-light-subtle col-2 d-flex flex-column justify-content-center form_action me-2  mb-4 mb-lg-0" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
                 <a class="d-flex text-muted p-1 fs-6 text-decoration-none" onclick="$('#tasks_as_unpaid').submit();" >
                     <i class="fa fa-strikethrough me-2" aria-hidden="true"></i> <span>Mark Selected Tasks as Unpaid</spam>
                 </a>
