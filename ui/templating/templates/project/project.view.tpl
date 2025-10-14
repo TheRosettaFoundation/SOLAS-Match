@@ -39,7 +39,7 @@
                     {if ($roles & ($SITE_ADMIN + $PROJECT_OFFICER)) && !empty($matecat_analyze_url)}
                         <input type="hidden" name="copyChunks" value="1" />
                         {if $disable_sync}
-                        <a class="btnSuccess mt-2 mt-md-0 me-2 disabled" aria-disabled="true">
+                        <a class="btngray-lg mt-2 mt-md-0 me-2 disabled" aria-disabled="true">
                         {else}
                         <a class="btnSuccess mt-2 mt-md-0 me-2" onclick="$('#copyChunksProjectForm').submit();" >
                         {/if}
