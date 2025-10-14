@@ -38,7 +38,11 @@
                     <form id="copyChunksProjectForm" class="d-flex flex-wrap" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}">
                     {if ($roles & ($SITE_ADMIN + $PROJECT_OFFICER)) && !empty($matecat_analyze_url)}
                         <input type="hidden" name="copyChunks" value="1" />
+                        {if $disable_sync}
+                        <a class="btnSuccess mt-2 mt-md-0 me-2 disabled" aria-disabled="true">
+                        {else}
                         <a class="btnSuccess mt-2 mt-md-0 me-2" onclick="$('#copyChunksProjectForm').submit();" >
+                        {/if}
                             <i class="fa-upload fa-solid me-1"></i> Sync Phrase TMS
                         </a>
                         <a href="{$matecat_analyze_url}" class="btnPrimary text-white mt-2 mt-md-0 me-2 " target="_blank">
