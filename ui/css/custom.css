@@ -307,6 +307,9 @@ a[href^="mailto:"] {
     margin-top: 0;
     margin-bottom: 0;
   }
+  .nav-item.dropdown:hover .dropdown-menu {
+    width: 400px;
+  }
 }
 /*!
  * Bootstrap  v5.3.2 (https://getbootstrap.com/)

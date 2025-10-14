@@ -394,6 +394,12 @@ a[href^="mailto:"] {
         margin-top: 0;
         margin-bottom: 0;
     }
+
+    .nav-item.dropdown:hover .dropdown-menu {
+        width: 400px;
+
+        // color: #133978;
+    }
 }
 
 @import "../node_modules/bootstrap/scss/bootstrap";
