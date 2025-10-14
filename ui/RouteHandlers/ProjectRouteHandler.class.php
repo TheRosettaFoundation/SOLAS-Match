@@ -1187,6 +1187,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                 'one_paid'                     => $one_paid,
                 'linguist_summary'             => $linguist_summary,
                 'ngo_linguists_by_language_pair' => $projectDao->get_language_pairs_with_ngo_linguists($project_id),
+                'disable_sync'                   => empty($projectDao->get_asana_quality_tasks_for_project($project_id)) ? 0 : 1,
                 'task_type_list'               => $task_type_list
         ));
 
