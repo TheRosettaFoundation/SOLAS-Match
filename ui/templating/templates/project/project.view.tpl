@@ -416,7 +416,7 @@
 
         <div class="d-flex mb-4 flex-wrap">
         {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER) || in_array($project->getOrganisationId(), $ORG_EXCEPTIONS) && $roles & ($NGO_ADMIN + $NGO_PROJECT_OFFICER)}
-            <form id="status_as_unclaimed" class="bg-light-subtle col-1 d-flex flex-column justify-content-center form_action me-2  mb-4 mb-lg-0" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
+            <form id="status_as_unclaimed" class="bg-light-subtle col-2 d-flex flex-column justify-content-center form_action me-2  mb-4 mb-lg-0" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
                 <a class="d-flex text-muted p-1 fs-6 text-decoration-none" onclick="$('#status_as_unclaimed').submit();" >
                     <i class="fa fa-unlock me-2"  aria-hidden="true"></i> <span>Set Status of Selected to Unclaimed</span>
                 </a>
@@ -424,7 +424,7 @@
                 {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
             </form>
 
-            <form id="status_as_waiting" class="bg-light-subtle col-1 d-flex flex-column justify-content-center form_action me-2  mb-4 mb-lg-0" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
+            <form id="status_as_waiting" class="bg-light-subtle col-2 d-flex flex-column justify-content-center form_action me-2  mb-4 mb-lg-0" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
                 <a class="d-flex p-1 text-muted fs-6 text-decoration-none" onclick="$('#status_as_waiting').submit();">
                     <i class="fa fa-pause me-2"  aria-hidden="true"></i> <span>Set Status of Selected to Waiting </span>
                 </a>
@@ -432,7 +432,7 @@
                 {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
             </form>
 
-            <form id="complete_selected_tasks" class="bg-light-subtle col-1 d-flex flex-column justify-content-center form_action me-2  mb-4 mb-lg-0" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
+            <form id="complete_selected_tasks" class="bg-light-subtle col-2 d-flex flex-column justify-content-center form_action me-2  mb-4 mb-lg-0" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
                 <a class="d-flex text-muted p-1 fs-6 text-decoration-none" onclick="$('#complete_selected_tasks').submit();">
                 <i class="fa-solid fa-check me-2 "></i> <span>Set Shell Tasks Status&nbsp;&nbsp;Complete</span>
                 </a>
@@ -440,7 +440,7 @@
                 {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
             </form>
 
-            <form id="uncomplete_selected_tasks" class="bg-light-subtle col-1  d-flex flex-column justify-content-center form_action me-2  mb-4 mb-lg-0" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
+            <form id="uncomplete_selected_tasks" class="bg-light-subtle col-2  d-flex flex-column justify-content-center form_action me-2  mb-4 mb-lg-0" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
                 <a class="d-flex p-1 text-muted fs-6 text-decoration-none" onclick="$('#uncomplete_selected_tasks').submit();">
                 <i class="fa-solid fa-pause me-2 "></i><span>Set Shell Tasks Status In Progress</span>
                 </a>
@@ -449,13 +449,13 @@
             </form>
             <br />
              
-            <div class="bg-light-subtle col-1 d-flex flex-column justify-content-center form_action me-2  mb-4 mb-lg-0">
+            <div class="bg-light-subtle col-2 d-flex flex-column justify-content-center form_action me-2  mb-4 mb-lg-0">
             <a class=" d-flex p-1 text-muted fs-6 text-decoration-none open-cancel-modal p-1" data-bs-toggle="modal" data-id="1" href="#cancelmodal" role="button" data-cancelled="1">
                 <i class="fa fa-ban me-2"  aria-hidden="true"></i> <span>Set Selected Tasks to Cancelled</span>
             </a>
             </div>
 
-            <form id="cancel" class="bg-light-subtle d-flex flex-column justify-content-center form_action me-2  mb-4 mb-lg-0" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" style="margin-bottom: 2px;">
+            <form id="cancel" class="bg-light-subtle col-2 d-flex flex-column justify-content-center form_action me-2  mb-4 mb-lg-0" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" style="margin-bottom: 2px;">
             <a class=" d-flex p-1 text-muted fs-6 text-decoration-none p-1" onclick="$('#cancel').submit();"   data-id="0" role="button" data-cancelled="0">
                 <i class="fa fa-check-square me-2"  aria-hidden="true"></i> <span>Set Selected Tasks to Uncancelled</span>
             </a>
@@ -465,7 +465,7 @@
              </form>
             <br />
 
-            <div class="bg-light-subtle d-flex flex-column justify-content-center form_action me-2 mb-4 mb-lg-0">
+            <div class="bg-light-subtle col-2 d-flex flex-column justify-content-center form_action me-2 mb-4 mb-lg-0">
               <a class="d-flex p-1 text-muted fs-6 text-decoration-none open_revoke_task_modal p-1" data-bs-toggle="modal" data-id="1" href="#revoke_task_modal" role="button">
                 <i class="fa fa-ban me-2" aria-hidden="true"></i> <span>Revoke selected tasks</span>
               </a>
