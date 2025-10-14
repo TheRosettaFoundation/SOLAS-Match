@@ -183,6 +183,12 @@ a[href^="mailto:"] {
   padding: 6px;
 }
 
+.menu_list {
+  height: 200px;
+  width: 100%;
+  overflow-y: scroll;
+}
+
 .menu_list--project {
   height: 200px;
   width: 100%;
@@ -204,6 +210,7 @@ a[href^="mailto:"] {
   margin-top: 0;
   margin-bottom: 20px;
   font-weight: 500;
+  width: fit-content;
 }
 
 .dropdown-toggle {
