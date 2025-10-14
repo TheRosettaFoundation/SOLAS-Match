@@ -306,7 +306,7 @@ a[href^="mailto:"] {
 .navbar .nav-link.dropdown-toggle:not(.active):not(:hover):not(:focus) {
     color: #133978 !important; /* or whatever the default non-active color is */
 
-    color: inherit !im portant;
+    color: inherit !important;
     background-color: transparent !important;
 }
 [data-bs-theme="dark"] #hoverDropdown {
