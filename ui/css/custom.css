@@ -148,6 +148,8 @@ a[href^="mailto:"] {
   margin-bottom: 8px;
   color: #133978;
   font-weight: 500;
+  max-width: 100vw;
+  overflow-x: hidden;
 }
 
 .dropdown-menu a:hover {
@@ -194,31 +196,33 @@ a[href^="mailto:"] {
   overflow-y: scroll;
 }
 
-/* BUT allow text wrapping inside the drop_description */
+/* Allow text wrapping inside the drop_description */
 .dropdown-item .drop_description {
-  white-space: normal; /* override nowrap */
+  white-space: normal;
   word-break: break-word;
   overflow-wrap: anywhere;
-  display: block; /* ensures it's treated as a block-level element */
+  display: block;
   margin-bottom: 10px;
   font-weight: 700;
 }
 
-.nav-item.dropdown:hover .dropdown-menu {
-  display: block;
-  margin-top: 0;
-  margin-bottom: 20px;
-  font-weight: 500;
-  width: fit-content;
+@media (min-width: 992px) {
+  .nav-item.dropdown:hover .dropdown-menu {
+    display: block;
+    margin-top: 0;
+    margin-bottom: 20px;
+    font-weight: 500;
+    width: fit-content;
+    max-width: 400px;
+  }
 }
-
 .dropdown-toggle {
   text-align: center;
 }
 
 /* Override active/focus style */
 .navbar .nav-link.dropdown-toggle:not(.active):not(:hover):not(:focus) {
-  color: #133978 !important; /* or whatever the default non-active color is */
+  color: #133978 !important;
   color: inherit !important;
   background-color: transparent !important;
 }
@@ -247,11 +251,15 @@ a[href^="mailto:"] {
 }
 
 @media (max-width: 991.98px) {
+  .nav-item.dropdown:hover .dropdown-menu {
+    display: none;
+  }
   .dropdown-menu {
     position: static !important;
     transform: none !important;
     width: 100%;
     min-width: auto;
+    max-width: 100%;
     box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1);
     border-radius: 0;
     margin: 8px 0 0 0;
@@ -262,6 +270,8 @@ a[href^="mailto:"] {
     margin-bottom: 4px;
     border-radius: 6px;
     padding: 12px;
+    white-space: normal;
+    word-break: break-word;
   }
   .navbar-toggler {
     border: none;
@@ -271,6 +281,15 @@ a[href^="mailto:"] {
     margin-top: 16px;
     padding-top: 16px;
     border-top: 2px solid #e9ecef;
+  }
+  .menu_list,
+  .menu_list--project {
+    max-height: 300px;
+    width: 100%;
+    overflow-y: auto;
+  }
+  [data-bs-theme=dark] .dropdown-menu {
+    background: #212529;
   }
 }
 @media (min-width: 768px) {
@@ -291,14 +310,6 @@ a[href^="mailto:"] {
   }
   .drop_description__shadow {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  }
-  .dropdown-item {
-    width: fit-content;
-  }
-  .nav-item.dropdown-menu {
-    display: block;
-    margin-top: 0;
-    margin-bottom: 0;
   }
 }
 /*!
