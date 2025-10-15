@@ -257,7 +257,7 @@
                             })
 
                         let menu = document.querySelector(".menu_open");
-                        let menuList = document.querySelector(".menu_list_project");
+                        let menuList = document.querySelector(".menu_list--project");
                         if (menu && menuList){
                             menu.addEventListener("click", function () {
                             menuList.classList.toggle("d-none");
