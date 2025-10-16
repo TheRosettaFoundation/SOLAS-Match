@@ -185,11 +185,24 @@
                 <td>{$project_complete_date['project_t_code']}</td>
                 <td>{$project_complete_date['purchase_requisition']}</td>
                 <td><div >${round($total_expected_price, 2)}</div></td>
-                <td>${round($project_complete_date['allocated_budget'], 2)}</td>
+                <td>${round($project_complete_date['allocated_budget'], 2)}<br />
+                    {if {$project_complete_date['budget_closed']}
+BUTTON>Re-open Budget
+                    {else}
+BUTTON>Close Budget
+                    {/if}
+                </td>
                 <td>${round($total_expected_cost, 2)}</td>
                 <td>${round($project_complete_date['allocated_budget'] - $total_expected_cost, 2)}</td>
                 <td>${round($total_expected_cost_waived, 2)}</td>
             </tr>
+            {if {$project_complete_date['budget_closed']}
+            <tr>
+COLSPAN 8
+CENTRE
+                <td>Budget Closed. Total Savings: ${round($project_complete_date['allocated_budget'] - $total_expected_cost, 2)}</td>
+            </tr>
+            {/if}
         </tbody>
     </table>
     </div>
