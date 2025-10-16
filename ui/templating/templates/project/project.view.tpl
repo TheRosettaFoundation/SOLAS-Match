@@ -177,7 +177,7 @@
             <th>Allocated Budget</th>
             <th>Project Cost</th>
             <th>Remaining Budget</th>
-            <th>Waived Tasks (In-kind, In-house, waived)</th>
+            <th>Waived Tasks</th>
         </thead>
         <tbody class="fs-4">
             <tr style="overflow-wrap: break-word;">

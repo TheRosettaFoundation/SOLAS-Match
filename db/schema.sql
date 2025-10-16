@@ -1384,6 +1384,8 @@ CREATE TABLE IF NOT EXISTS `UserServices` (
 CREATE TABLE IF NOT EXISTS `project_complete_dates` (
   project_id    INT(10) UNSIGNED NOT NULL,
   status        INT(10) UNSIGNED NOT NULL,
+  budget_closed INT NOT NULL DEFAULT 0,
+  budget_closed_date DATETIME,
   owner_id      INT UNSIGNED NOT NULL DEFAULT 0,
   self_service  INT NOT NULL DEFAULT 0,
   incremental_sourcing INT NOT NULL DEFAULT 1,
@@ -1396,7 +1398,9 @@ CREATE TABLE IF NOT EXISTS `project_complete_dates` (
   PRIMARY KEY (project_id),
           KEY (project_t_code),
           KEY (purchase_requisition),
+          KEY (budget_closed),
   KEY key_complete_date (complete_date),
+  KEY budget_closed_date (budget_closed_date),
   KEY (deal_id),
   CONSTRAINT `FK_project_complete_dates_project_id` FOREIGN KEY (`project_id`) REFERENCES `Projects` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -11247,6 +11251,14 @@ BEGIN
 END//
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `update_project_budget_closed`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `update_project_budget_closed`(IN pID INT UNSIGNED, IN bc INT)
+BEGIN
+    UPDATE project_complete_dates SET budget_closed=bc, budget_closed_date=NOW() WHERE project_id=pID;
+END//
+DELIMITER ;
+
 DROP PROCEDURE IF EXISTS `get_selections`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `get_selections`()
@@ -11670,6 +11682,8 @@ BEGIN
     SELECT
         pcd.project_id,
         pcd.status,
+        pcd.budget_closed,
+        pcd.budget_closed_date,
         p.title,
         p.created,
         p.deadline,
