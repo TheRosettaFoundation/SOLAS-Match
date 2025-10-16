@@ -52,7 +52,7 @@
                 <td>{if $paid_project['deal_id'] > 0}<a href="{urlFor name="deal_id_report" options="deal_id.{$paid_project['deal_id']}"}" target="_blank">{$paid_project['deal_id']}</a>{else}{$paid_project['deal_id']}{/if}</td>
                 <td>${round($paid_project['allocated_budget'], 2)}</td>
                 <td>${round($paid_project['total_expected_cost'], 2)}</td>
-                <td>${round($paid_project['allocated_budget'] - $paid_project['total_expected_cost'], 2)}</td>
+                <td>{if round($paid_project['allocated_budget'] - $paid_project['total_expected_cost'], 2) >= 0}${round($paid_project['allocated_budget'] - $paid_project['total_expected_cost'], 2)}{else}<strong><span style="color: red">${round($paid_project['allocated_budget'] - $paid_project['total_expected_cost'], 2)}</span></strong>{/if}</td>
                 <td>${round($paid_project['total_expected_cost_waived'], 2)}</td>
                 <td>{if $paid_project['status'] == 1}Complete{/if}{if $paid_project['status'] == 2}In Progress{/if}</td>
                 <td>{TemplateHelper::uiCleanseHTMLNewlineAndTabs($paid_project['name'])}</td>
