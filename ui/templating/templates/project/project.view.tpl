@@ -202,7 +202,7 @@
                 <td>${round($project_complete_date['allocated_budget'] - $total_expected_cost, 2)}</td>
                 <td>${round($total_expected_cost_waived, 2)}</td>
             </tr>
-            {if {$project_complete_date['budget_closed']}
+            {if $project_complete_date['budget_closed']}
             <tr>
                 <td colspan="8" align="center">Budget Closed. Total Savings: ${round($project_complete_date['allocated_budget'] - $total_expected_cost, 2)}</td>
             </tr>
