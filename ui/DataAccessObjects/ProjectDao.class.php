@@ -2093,4 +2093,8 @@ error_log("Create PO ref: $result");
     {
         return LibAPI\PDOWrapper::call('get_asana_quality_tasks_for_project', LibAPI\PDOWrapper::cleanse($project_id));
     }
+
+    public function update_project_budget_closed($project_id, $budget_closed) {
+        LibAPI\PDOWrapper::call('update_project_budget_closed', LibAPI\PDOWrapper::cleanse($project_id) . ',' . LibAPI\PDOWrapper::cleanse($budget_closed));
+    }
 }

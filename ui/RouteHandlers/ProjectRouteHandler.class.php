@@ -1068,6 +1068,11 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                     UserRouteHandler::flashNow('success', 'In progress shell task now marked as complete.');
                 }
             }
+
+            if ($roles & (SITE_ADMIN | PROJECT_OFFICER)) {
+                if (!empty($post['close_budget']))  $projectDao->update_project_budget_closed($project_id, 1);
+                if (!empty($post['reopen_budget'])) $projectDao->update_project_budget_closed($project_id, 0);
+            }
         }
 
         $total_expected_cost = 0;
