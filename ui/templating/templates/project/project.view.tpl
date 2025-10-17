@@ -187,9 +187,15 @@
                 <td><div >${round($total_expected_price, 2)}</div></td>
                 <td>${round($project_complete_date['allocated_budget'], 2)}<br />
                     {if {$project_complete_date['budget_closed']}
-BUTTON>Re-open Budget
+                        <form method="post" action="{urlFor name="project-view" options="project_id.$project_id"}">
+                            <input type="submit" class="btn btn-warning" name="reopen_budget" value="Re-open Budget" />
+                            {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
+                        </form>
                     {else}
-BUTTON>Close Budget
+                        <form method="post" action="{urlFor name="project-view" options="project_id.$project_id"}">
+                            <input type="submit" class="btn btn-success" name="close_budget" value="Close Budget" />
+                            {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
+                        </form>
                     {/if}
                 </td>
                 <td>${round($total_expected_cost, 2)}</td>
@@ -198,9 +204,7 @@ BUTTON>Close Budget
             </tr>
             {if {$project_complete_date['budget_closed']}
             <tr>
-COLSPAN 8
-CENTRE
-                <td>Budget Closed. Total Savings: ${round($project_complete_date['allocated_budget'] - $total_expected_cost, 2)}</td>
+                <td colspan="8" align="center">Budget Closed. Total Savings: ${round($project_complete_date['allocated_budget'] - $total_expected_cost, 2)}</td>
             </tr>
             {/if}
         </tbody>
