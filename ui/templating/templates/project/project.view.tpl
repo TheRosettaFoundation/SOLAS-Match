@@ -186,7 +186,7 @@
                 <td>{$project_complete_date['purchase_requisition']}</td>
                 <td><div >${round($total_expected_price, 2)}</div></td>
                 <td>${round($project_complete_date['allocated_budget'], 2)}<br />
-                    {if {$project_complete_date['budget_closed']}
+                    {if $project_complete_date['budget_closed']}
                         <form method="post" action="{urlFor name="project-view" options="project_id.$project_id"}">
                             <input type="submit" class="btn btn-warning" name="reopen_budget" value="Re-open Budget" />
                             {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
