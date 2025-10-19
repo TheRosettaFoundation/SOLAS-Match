@@ -6238,6 +6238,16 @@ BEGIN
 END//
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `defer_task_stream`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `defer_task_stream`(IN uID INT UNSIGNED)
+BEGIN
+    UPDATE UserTaskStreamNotifications
+    SET `last-sent`=`last-sent` + INTERVAL 318 MINUTE
+    WHERE user_id=uID;
+END//
+DELIMITER ;
+
 
 DROP PROCEDURE IF EXISTS `unClaimTask`;
 DELIMITER //
