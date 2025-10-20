@@ -175,24 +175,24 @@
             {if isset($user)}
                 {assign var="user_id" value=$user->getId()}
 
-                <li class="nav-item dropdown mb-sm-1 mb-md-1">
+                <li class="nav-item dropdown ">
                         <a class="nav-link dropdown-toggle no-caret " href="#" id="hoverDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         <img src="https://www.gravatar.com/avatar/{md5( strtolower( trim($user->getEmail())))}?s=20{urlencode("&")}r=g" alt="" />
                                        <span class="profile_name"> {TemplateHelper::uiCleanseHTML($user->getDisplayName())} </span>
                         </a>
                     <ul class="dropdown-menu"   aria-labelledby="hoverDropdown">
-                            <li><a href="{urlFor name="user-public-profile" options="user_id.$user_id"}"   class="dropdown-item fs-5" id="dropdown-menu-user" >Profile</a></li>
+                            <li><a href="{urlFor name="user-public-profile" options="user_id.$user_id"}"   class="dropdown-item fs-5 py-2" id="dropdown-menu-user" >Profile</a></li>
 
                             {assign var="tmp_id" value=$user->getId()}
                             <li class="nav-item fw-bold" >
-                                <a href="{urlFor name="claimed-tasks" options="user_id.$tmp_id"}" class="dropdown-item fs-5" id="dropdown-menu-user"  {if isset($current_page) && $current_page == 'claimed-tasks'} class="nav-link " {/if}>My Tasks</a>
+                                <a href="{urlFor name="claimed-tasks" options="user_id.$tmp_id"}" class="dropdown-item fs-5 py-2" id="dropdown-menu-user"  {if isset($current_page) && $current_page == 'claimed-tasks'} class="nav-link " {/if}>My Tasks</a>
                             </li>
 
-                            <li> <a href="{urlFor name="logout"}" class="dropdown-item fs-5" id="dropdown-menu-user">{Localisation::getTranslation('header_log_out')}</a></li>
+                            <li> <a href="{urlFor name="logout"}" class="dropdown-item fs-5 py-2" id="dropdown-menu-user">{Localisation::getTranslation('header_log_out')}</a></li>
                     </ul>
                 </li>
 
-                <li class="nav_item " id="theme">
+                <li class="nav_item py-1 " id="theme">
                 <img src="{urlFor name='home'}ui/img/light.svg"   alt="theme button" id="light">
                 <img src="{urlFor name='home'}ui/img/night.svg" class="d-none" alt="theme button" id="night">
                 </li>
