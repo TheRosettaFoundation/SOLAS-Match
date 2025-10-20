@@ -180,15 +180,15 @@
                         <img src="https://www.gravatar.com/avatar/{md5( strtolower( trim($user->getEmail())))}?s=20{urlencode("&")}r=g" alt="" />
                                        <span class="profile_name"> {TemplateHelper::uiCleanseHTML($user->getDisplayName())} </span>
                         </a>
-                    <ul class="dropdown-menu"   aria-labelledby="hoverDropdown">
-                            <li><a href="{urlFor name="user-public-profile" options="user_id.$user_id"}"   class="dropdown-item fs-5 py-2" id="dropdown-menu-user" >Profile</a></li>
+                    <ul class="dropdown-menu py-2"   aria-labelledby="hoverDropdown">
+                            <li><a href="{urlFor name="user-public-profile" options="user_id.$user_id"}"   class="dropdown-item fs-5 " id="dropdown-menu-user" >Profile</a></li>
 
                             {assign var="tmp_id" value=$user->getId()}
                             <li class="nav-item fw-bold" >
-                                <a href="{urlFor name="claimed-tasks" options="user_id.$tmp_id"}" class="dropdown-item fs-5 py-2" id="dropdown-menu-user"  {if isset($current_page) && $current_page == 'claimed-tasks'} class="nav-link " {/if}>My Tasks</a>
+                                <a href="{urlFor name="claimed-tasks" options="user_id.$tmp_id"}" class="dropdown-item fs-5 " id="dropdown-menu-user"  {if isset($current_page) && $current_page == 'claimed-tasks'} class="nav-link " {/if}>My Tasks</a>
                             </li>
 
-                            <li> <a href="{urlFor name="logout"}" class="dropdown-item fs-5 py-2" id="dropdown-menu-user">{Localisation::getTranslation('header_log_out')}</a></li>
+                            <li> <a href="{urlFor name="logout"}" class="dropdown-item fs-5" id="dropdown-menu-user">{Localisation::getTranslation('header_log_out')}</a></li>
                     </ul>
                 </li>
 
