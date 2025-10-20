@@ -281,6 +281,7 @@ a[href^="mailto:"] {
     width: 100%;
     min-width: auto;
 }
+
 .dropdown-item a,
 .dropdown-menu a {
     word-break: break-word;
@@ -289,29 +290,17 @@ a[href^="mailto:"] {
     max-width: 100%;
 }
 
-.nav-item.dropdown:hover .dropdown-menu {
-    display: block;
-    margin-top: 0;
-    margin-bottom: 20px;
-    font-weight: 500;
-    width: auto;
-
-    // color: #133978;
-}
-
-// .no-caret::after {
-//     display: none !important;
-// }
 .dropdown-toggle {
     text-align: center;
 }
+
 /* Override active/focus style */
 .navbar .nav-link.dropdown-toggle:not(.active):not(:hover):not(:focus) {
     color: #133978 !important; /* or whatever the default non-active color is */
-
     color: inherit !important;
     background-color: transparent !important;
 }
+
 [data-bs-theme="dark"] #hoverDropdown {
     color: rgba(255, 255, 255, 0.55) !important;
     font-weight: 700;
@@ -325,9 +314,9 @@ a[href^="mailto:"] {
     font-weight: bold;
     color: #133978;
 }
+
 [data-bs-theme="dark"] .profile_name {
     color: rgba(255, 255, 255, 0.55);
-
     font-weight: bold;
 }
 
@@ -335,6 +324,7 @@ a[href^="mailto:"] {
     font-weight: bold;
 }
 
+// MOBILE STYLES - Click to toggle (default Bootstrap behavior)
 @media (max-width: 991.98px) {
     .dropdown-menu {
         position: static !important;
@@ -364,9 +354,20 @@ a[href^="mailto:"] {
         padding-top: 16px;
         border-top: 2px solid #e9ecef;
     }
+
+    // CRITICAL: Prevent hover behavior on mobile
+    .nav-item.dropdown:hover .dropdown-menu {
+        display: none !important; // Override hover on mobile
+    }
+
+    // Let Bootstrap handle the toggle with clicks
+    .nav-item.dropdown .dropdown-menu.show {
+        display: block !important;
+    }
 }
 
-@media (min-width: 768px) {
+// DESKTOP STYLES - Hover to show (min-width: 992px)
+@media (min-width: 992px) {
     .menu_list--project {
         height: 100%;
         overflow: hidden;
@@ -390,15 +391,17 @@ a[href^="mailto:"] {
 
     .nav-item.dropdown-menu {
         display: block;
-
         margin-top: 0;
         margin-bottom: 0;
     }
 
+    // HOVER behavior only on desktop
     .nav-item.dropdown:hover .dropdown-menu {
+        display: block;
+        margin-top: 0;
+        margin-bottom: 20px;
+        font-weight: 500;
         width: max-content;
-
-        // color: #133978;
     }
 }
 
