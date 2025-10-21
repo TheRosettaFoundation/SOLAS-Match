@@ -31,6 +31,13 @@
 {if !empty($items)}
 
 <h2 style="text-align:center;">Resources</h2>
+
+    {if isset($flash['error'])}
+        <p class="alert alert-error">
+            {TemplateHelper::uiCleanseHTMLKeepMarkup($flash['error'])}
+        </p>
+    {/if}
+
 {if !empty($org_id)}
     <a href="{urlFor name="content_item_org" options="content_id.0|org_id.$org_id"}" target="_blank">Create a new Organisation Resource</a>
 {else}

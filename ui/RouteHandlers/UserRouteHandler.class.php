@@ -3517,7 +3517,16 @@ foreach ($rows as $index => $row) {
         if ($request->getMethod() === 'POST') {
             $post = $request->getParsedBody();
             if ($fail_CSRF = Common\Lib\UserSession::checkCSRFKey($post, 'content_item')) return $response->withStatus(302)->withHeader('Location', $fail_CSRF);
-
+            $size = 0;
+            for ($i = 0; $i < 20; $i++) {
+                if (!empty($_FILES['image']['size'][$i]))       $size += $_FILES['image']['size'][$i];
+                if (!empty($_FILES['attachments']['size'][$i])) $size += $_FILES['image']['size'][$i];
+            }
+            if ($size > 10000000) {
+                UserRouteHandler::flash('error', 'Total file size must be less than 10MB.');
+                if ($org_id) return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('content_items_org', ['org_id' => $org_id]));
+                else         return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('content_items'));
+            }
             if (empty($post['content_id'])) $post['content_id'] = null;
             if (empty($post['scope'])) $post['scope'] = $post['type'];
             if (empty($post['highlight'])) $post['highlight'] = 0;
