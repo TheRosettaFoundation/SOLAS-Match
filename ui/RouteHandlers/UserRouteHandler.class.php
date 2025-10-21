@@ -248,7 +248,8 @@ class UserRouteHandler
         $app->get(
             '/content_items/org/{org_id}[/]',
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:content_items')
-            ->add('\SolasMatch\UI\Lib\Middleware:authUserForOrg_incl_community_officer')
+//(**)incl NGO:            ->add('\SolasMatch\UI\Lib\Middleware:authUserForOrg_incl_community_officer')
+            ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin_any')
             ->setName('content_items_org');
 
         $app->get(
