@@ -2582,7 +2582,7 @@ error_log(print_r($result, true));//(**)
         } else error_log("update_phrase_field($project_uid, $field_uid, $value, $timeout): No fields content");
     }
 
-    public function insert_update_content_item($id, $type, $scope, $highlight, $published, $sorting_order, $title, $snippet, $body, $language_code_target, $country_code_target, $external_link, $owner_org_id, $admin_id)
+    public function insert_update_content_item($id, $type, $scope, $highlight, $published, $sorting_order, $title, $snippet, $body, $language_code_target_JSON, $language_pair_target_JSON, $external_link, $owner_org_id, $admin_id)
     {
         $args =
         LibAPI\PDOWrapper::cleanseNull($id) . ',' .
@@ -2594,8 +2594,8 @@ error_log(print_r($result, true));//(**)
         LibAPI\PDOWrapper::cleanseWrapStr($title) . ',' .
         LibAPI\PDOWrapper::cleanseWrapStr($snippet) . ',' .
         LibAPI\PDOWrapper::cleanseWrapStr($body) . ',' .
-        LibAPI\PDOWrapper::cleanseNullOrWrapStr($language_code_target) . ',' .
-        LibAPI\PDOWrapper::cleanseNullOrWrapStr($country_code_target) . ',' .
+        LibAPI\PDOWrapper::cleanseNullOrWrapStr($language_code_target_JSON) . ',' .
+        LibAPI\PDOWrapper::cleanseNullOrWrapStr($language_pair_target_JSON) . ',' .
         LibAPI\PDOWrapper::cleanseWrapStr($external_link) . ',' .
         LibAPI\PDOWrapper::cleanseNull($owner_org_id) . ',' .
         LibAPI\PDOWrapper::cleanse($admin_id);
@@ -2611,7 +2611,7 @@ error_log(print_r($result, true));//(**)
         LibAPI\PDOWrapper::call('increment_content_item_views', LibAPI\PDOWrapper::cleanse($id));
     }
 
-    public function get_content_items($id, $type, $scope, $highlight, $published, $language_code_target, $country_code_target, $owner_org_id, $project_id)
+    public function get_content_items($id, $type, $scope, $highlight, $published, $language_code_target_JSON, $language_pair_target_JSON, $owner_org_id, $project_id)
     {
         $args =
         LibAPI\PDOWrapper::cleanseNull($id) . ',' .
@@ -2619,8 +2619,8 @@ error_log(print_r($result, true));//(**)
         LibAPI\PDOWrapper::cleanseNull($scope) . ',' .
         LibAPI\PDOWrapper::cleanseNull($highlight) . ',' .
         LibAPI\PDOWrapper::cleanseNull($published) . ',' .
-        LibAPI\PDOWrapper::cleanseNullOrWrapStr($language_code_target) . ',' .
-        LibAPI\PDOWrapper::cleanseNullOrWrapStr($country_code_target) . ',' .
+        LibAPI\PDOWrapper::cleanseNullOrWrapStr($language_code_target_JSON) . ',' .
+        LibAPI\PDOWrapper::cleanseNullOrWrapStr($language_pair_target_JSON) . ',' .
         LibAPI\PDOWrapper::cleanseNull($owner_org_id) . ',' .
         LibAPI\PDOWrapper::cleanseNull($project_id);
         $result = LibAPI\PDOWrapper::call('get_content_items', $args);
