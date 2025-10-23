@@ -3537,11 +3537,20 @@ foreach ($rows as $index => $row) {
             $admin_id = Common\Lib\UserSession::getCurrentUserID();
 
             if (empty($post['languages'])) {
-                $kp_language = null;
-                $kp_country  = null;
-            } else [$kp_language, $kp_country] = $projectDao->convert_selection_to_language_country($post['languages']);
-
-            $content_id = $userDao->insert_update_content_item($post['content_id'], $post['type'], $post['scope'], $post['highlight'], $post['published'], $post['sorting_order'], $post['title'], $post['snippet'], $post['body'], $kp_language, $kp_country, $post['external_link'], $org_id, $admin_id);
+                $language_code_target_JSON = '[]';
+                $language_pair_target_JSON = '[]';
+            } else {
+                $langs = [];
+                $pairs = [];
+                foreach ($post['languages'] as $codes) {
+                    [$kp_language, $x] = $projectDao->convert_selection_to_language_country($codes);
+                    $langs[] = "\"$kp_language\"";
+                    $pairs[] = "\"$codes\"";
+                }
+                $language_code_target_JSON = '[' . implode(',', $langs) . ']';
+                $language_pair_target_JSON = '[' . implode(',', $pairs) . ']';
+            }
+            $content_id = $userDao->insert_update_content_item($post['content_id'], $post['type'], $post['scope'], $post['highlight'], $post['published'], $post['sorting_order'], $post['title'], $post['snippet'], $post['body'], $language_code_target_JSON, $language_pair_target_JSON, $post['external_link'], $org_id, $admin_id);
 
             for ($i = 0; $i < 20; $i++) {
                 if (!empty($_FILES['image']['name'][$i]) && empty($_FILES['image']['error'][$i]) && !empty($_FILES['image']['tmp_name'][$i]) && (($data = file_get_contents($_FILES['image']['tmp_name'][$i])) !== false)) {
