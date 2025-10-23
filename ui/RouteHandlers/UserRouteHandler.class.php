@@ -3536,10 +3536,10 @@ foreach ($rows as $index => $row) {
             if (empty($post['external_link'])) $post['external_link'] = '';
             $admin_id = Common\Lib\UserSession::getCurrentUserID();
 
-            if (empty($post['language'])) {
+            if (empty($post['languages'])) {
                 $kp_language = null;
                 $kp_country  = null;
-            } else [$kp_language, $kp_country] = $projectDao->convert_selection_to_language_country($post['language']);
+            } else [$kp_language, $kp_country] = $projectDao->convert_selection_to_language_country($post['languages']);
 
             $content_id = $userDao->insert_update_content_item($post['content_id'], $post['type'], $post['scope'], $post['highlight'], $post['published'], $post['sorting_order'], $post['title'], $post['snippet'], $post['body'], $kp_language, $kp_country, $post['external_link'], $org_id, $admin_id);
 

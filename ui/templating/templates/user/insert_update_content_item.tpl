@@ -72,7 +72,7 @@
 {if !empty($content[0]['number_images'])}{assign var="number_images" value=$content[0]['number_images']}{else}{assign var="number_images" value=0}{/if}
 {if !empty($content[0]['number_attachments'])}{assign var="number_attachments" value=$content[0]['number_attachments']}{else}{assign var="number_attachments" value=0}{/if}
 
-{if !empty($content[0]['language_code_target']) && !empty($content[0]['country_code_target'])}{assign var="selected_codes" value="`$content[0]['language_code_target']`-`$content[0]['country_code_target']`"}{else}{assign var="selected_codes" value=''}{/if}
+{if !empty($content[0]['language_pair_target_JSON'])}{assign var="selected_codes" value=json_decode($content[0]['language_pair_target_JSON'], true)}{else}{assign var="selected_codes" value=[]}{/if}
 
 {if !empty($content[0]['external_link'])}{assign var="selected_external_link" value=$content[0]['external_link']}{else}{assign var="selected_external_link" value=''}{/if}
 {if !empty($content[0]['number_of_views'])}{assign var="number_of_views" value=$content[0]['number_of_views']}{else}{assign var="number_of_views" value=0}{/if}
@@ -165,11 +165,11 @@
                 </div>
                 {/if}
                 <div class="col">
-                  <label for="language">Language + Variant</label>
-                  <select id="language" name="language">
+                  <label for="languages">Language + Variant</label>
+                  <select id="languages" name="languages[]" multiple style="height:120px">
                     <option value="0"></option>
                     {foreach from=$language_selection key=codes item=language}
-                    <option value="{$codes}" {if $codes == $selected_codes}selected="selected"{/if}>{$language}</option>
+                    <option value="{$codes}" {if in_array($codes, $selected_codes)}selected="selected"{/if}>{$language}</option>
                     {/foreach}
                   </select>
                 </div>
@@ -384,7 +384,7 @@
             {if $org_id == 0}
             <div class="meta-item"><div>Scope</div><div id="sumScope" class="small">{if !empty($selected_scope)}{$selected_scope}{else}—{/if}</div></div>
             {/if}
-            <div class="meta-item"><div>Language</div><div id="sumLang" class="small">{foreach from=$language_selection key=codes item=language}{if $codes == $selected_codes}{$language}{/if}{/foreach}</div></div>
+            <div class="meta-item"><div>Languages</div><div id="sumLang" class="small">{foreach from=$language_selection key=codes item=language}{if in_array($codes, $selected_codes)}{$language},{/if}{/foreach}</div></div>
             <div class="meta-item"><div>Attachments</div><div id="sumAttach" class="small">{if empty($number_attachments)}0{else}{$number_attachments}{/if}</div></div>
             {if $org_id != 0}
             <div class="meta-item"><div>Linked projects</div><div id="sumProjects" class="small">{if empty($number_of_projects)}0{else}{$number_of_projects}{/if}</div></div>
@@ -489,7 +489,7 @@
       {if $org_id == 0}
       document.getElementById('sumScope').innerText = document.getElementById('scope').options[document.getElementById('scope').selectedIndex].text || '—';
       {/if}
-      document.getElementById('sumLang').innerText = document.getElementById('language').value || '—';
+      document.getElementById('sumLang').innerText = Array.from(document.getElementById('languages').selectedOptions).length;
 
       {if $org_id != 0}
       document.getElementById('sumProjects').innerText = Array.from(document.getElementById('projects').selectedOptions).length;
@@ -500,7 +500,7 @@
     }
 
     // wire up inputs to summary updates
-    ['title', 'type', 'scope', 'language', 'highlight', 'projects'].forEach(id => {
+    ['title', 'type', 'scope', 'languages', 'highlight', 'projects'].forEach(id => {
       const el = document.getElementById(id);
       if (!el) return;
       el.addEventListener('change', updateSummary);
