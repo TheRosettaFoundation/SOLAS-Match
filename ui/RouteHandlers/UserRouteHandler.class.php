@@ -3550,7 +3550,9 @@ foreach ($rows as $index => $row) {
                 $language_code_target_JSON = '[' . implode(',', $langs) . ']';
                 $language_pair_target_JSON = '[' . implode(',', $pairs) . ']';
             }
-            $content_id = $userDao->insert_update_content_item($post['content_id'], $post['type'], $post['scope'], $post['highlight'], $post['published'], $post['sorting_order'], $post['title'], $post['snippet'], $post['body'], $language_code_target_JSON, $language_pair_target_JSON, $post['external_link'], $org_id, $admin_id);
+            if (empty($post['services'])) $selected_service_JSON = '[]';
+            else                          $selected_service_JSON = '[' . implode(',', $post['services']) . ']';
+            $content_id = $userDao->insert_update_content_item($post['content_id'], $post['type'], $post['scope'], $post['highlight'], $post['published'], $post['sorting_order'], $post['title'], $post['snippet'], $post['body'], $language_code_target_JSON, $language_pair_target_JSON, $selected_service_JSON, $post['external_link'], $org_id, $admin_id);
 
             for ($i = 0; $i < 20; $i++) {
                 if (!empty($_FILES['image']['name'][$i]) && empty($_FILES['image']['error'][$i]) && !empty($_FILES['image']['tmp_name'][$i]) && (($data = file_get_contents($_FILES['image']['tmp_name'][$i])) !== false)) {
@@ -3565,7 +3567,7 @@ foreach ($rows as $index => $row) {
 
             if ($org_id) {
                 $previous_projects = [];
-                $projects = $userDao->get_content_items($content_id, null, null, null, null, null, null, null, null);
+                $projects = $userDao->get_content_items($content_id, null, null, null, null, null, null, null, null, null);
                 foreach ($projects as $row) if ($row['project_id']) $previous_projects[$row['project_id']] = $row['project_id'];
 
                 if (!empty($post['projects'])) {
@@ -3582,8 +3584,8 @@ foreach ($rows as $index => $row) {
         }
 
         if ($content_id) {
-            $content = $userDao->get_content_items($content_id, null, null, null, null, null, null, null, 0);
-            $projects = $userDao->get_content_items($content_id, null, null, null, null, null, null, null, null);
+            $content = $userDao->get_content_items($content_id, null, null, null, null, null, null, null, null, 0);
+            $projects = $userDao->get_content_items($content_id, null, null, null, null, null, null, null, null, null);
 
             if (empty($content)) {
                 UserRouteHandler::flash('error', 'Content not found.');
@@ -3606,6 +3608,7 @@ foreach ($rows as $index => $row) {
             'org' => $org_id ? $orgDao->getOrganisation($org_id) : 0,
             'project_selection' => $projectDao->get_all_projects($org_id),
             'language_selection' => $projectDao->generate_language_selection(),
+            'service_selection' => $userDao->get_user_services(0),
             'previous_images' => $content_id ? $userDao->get_content_item_attachments($content_id, 1, null) : [],
             'previous_attachments' => $content_id ? $userDao->get_content_item_attachments($content_id, 0, null) : [],
             'sesskey' => $sesskey,

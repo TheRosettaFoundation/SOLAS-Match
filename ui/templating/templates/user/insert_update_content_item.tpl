@@ -74,6 +74,8 @@
 
 {if !empty($content[0]['language_pair_target_JSON'])}{assign var="selected_codes" value=json_decode($content[0]['language_pair_target_JSON'], true)}{else}{assign var="selected_codes" value=[]}{/if}
 
+{if !empty($content[0]['selected_service_JSON'])}{assign var="selected_service_ids" value=json_decode($content[0]['selected_service_JSON'], true)}{else}{assign var="selected_service_ids" value=[]}{/if}
+
 {if !empty($content[0]['external_link'])}{assign var="selected_external_link" value=$content[0]['external_link']}{else}{assign var="selected_external_link" value=''}{/if}
 {if !empty($content[0]['number_of_views'])}{assign var="number_of_views" value=$content[0]['number_of_views']}{else}{assign var="number_of_views" value=0}{/if}
 
@@ -170,6 +172,18 @@
                     <option value="0"></option>
                     {foreach from=$language_selection key=codes item=language}
                     <option value="{$codes}" {if in_array($codes, $selected_codes)}selected="selected"{/if}>{$language}</option>
+                    {/foreach}
+                  </select>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col">
+                  <label for="services">Relevant Services (optional)</label>
+                  <select id="services" name="services[]" multiple style="height:120px">
+                    <option value="0"></option>
+                    {foreach from=$service_selection key=service_id item=service}
+                    <option value="{$service_id}" {if in_array($service_id, $selected_service_ids)}selected="selected"{/if}>{$service['desc']}</option>
                     {/foreach}
                   </select>
                 </div>
