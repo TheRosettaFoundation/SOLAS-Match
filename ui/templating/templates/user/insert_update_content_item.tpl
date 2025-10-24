@@ -182,8 +182,8 @@
                   <label for="services">Relevant Services (optional)</label>
                   <select id="services" name="services[]" multiple style="height:120px">
                     <option value="0"></option>
-                    {foreach from=$service_selection key=service_id item=service}
-                    <option value="{$service_id}" {if in_array($service_id, $selected_service_ids)}selected="selected"{/if}>{$service['desc']}</option>
+                    {foreach from=$service_selection item=service}
+                    <option value="{$service['id']}" {if in_array({$service['id']}, $selected_service_ids)}selected="selected"{/if}>{$service['desc']}</option>
                     {/foreach}
                   </select>
                 </div>
