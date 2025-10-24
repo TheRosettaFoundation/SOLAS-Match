@@ -14860,8 +14860,9 @@ CREATE TABLE IF NOT EXISTS `content_items` (
   body               MEDIUMTEXT COLLATE utf8mb4_unicode_ci NOT NULL,
   number_images      INT NOT NULL DEFAULT 0,
   number_attachments INT NOT NULL DEFAULT 0,
-  language_code_target VARCHAR(3) COLLATE utf8mb4_unicode_ci,
-  country_code_target  VARCHAR(4) COLLATE utf8mb4_unicode_ci,
+  language_code_target_JSON JSON NOT NULL DEFAULT ('[]'),
+  language_pair_target_JSON JSON NOT NULL DEFAULT ('[]'),
+  selected_service_JSON     JSON NOT NULL DEFAULT ('[]'),
   external_link      VARCHAR(1000) NOT NULL DEFAULT '',
   number_of_views    INT NOT NULL DEFAULT 0,
   owner_org_id       INT UNSIGNED NOT NULL DEFAULT 0,
@@ -14904,8 +14905,9 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_update_content_item`(
     IN p_title              MEDIUMTEXT,
     IN p_snippet            MEDIUMTEXT,
     IN p_body               MEDIUMTEXT,
-    IN p_language_code_target VARCHAR(3),
-    IN p_country_code_target  VARCHAR(4),
+    IN p_language_code_target_JSON JSON,
+    IN p_language_pair_target_JSON JSON,
+    IN p_selected_service_JSON     JSON,
     IN p_external_link      VARCHAR(1000),
     IN p_owner_org_id       INT UNSIGNED,
     IN p_admin_id           INT UNSIGNED)
@@ -14921,8 +14923,9 @@ BEGIN
             title,
             snippet,
             body,
-            language_code_target,
-            country_code_target,
+            language_code_target_JSON,
+            language_pair_target_JSON,
+            selected_service_JSON,
             external_link,
             owner_org_id,
             admin_id)
@@ -14936,8 +14939,9 @@ BEGIN
             p_title,
             p_snippet,
             p_body,
-            p_language_code_target,
-            p_country_code_target,
+            p_language_code_target_JSON,
+            p_language_pair_target_JSON,
+            p_selected_service_JSON,
             p_external_link,
             p_owner_org_id,
             p_admin_id);
@@ -14953,8 +14957,9 @@ BEGIN
             title=p_title,
             snippet=p_snippet,
             body=p_body,
-            language_code_target=p_language_code_target,
-            country_code_target=p_country_code_target,
+            language_code_target_JSON=p_language_code_target_JSON,
+            language_pair_target_JSON=p_language_pair_target_JSON,
+            selected_service_JSON=p_selected_service_JSON,
             external_link=p_external_link,
             owner_org_id=p_owner_org_id,
             admin_id=p_admin_id
@@ -14980,8 +14985,9 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `get_content_items`(
     IN p_scope              INT,
     IN p_highlight          INT,
     IN p_published          INT,
-    IN p_language_code_target VARCHAR(3),
-    IN p_country_code_target  VARCHAR(4),
+    IN p_language_code_target_JSON JSON,
+    IN p_language_pair_target_JSON JSON,
+    IN p_selected_service_JSON     JSON,
     IN p_owner_org_id       INT UNSIGNED,
     IN p_project_id         INT UNSIGNED)
 BEGIN
@@ -14997,8 +15003,9 @@ BEGIN
             (p_scope IS NULL OR ci.scope=p_scope) AND
             (p_highlight IS NULL OR ci.highlight=p_highlight) AND
             (p_published IS NULL OR ci.published=p_published) AND
-            (p_language_code_target IS NULL OR ci.language_code_target=p_language_code_target) AND
-            (p_country_code_target IS NULL OR ci.country_code_target=p_country_code_target) AND
+            (p_language_code_target_JSON IS NULL OR JSON_OVERLAPS(p_language_code_target_JSON, ci.language_code_target_JSON)) AND
+            (p_language_pair_target_JSON IS NULL OR JSON_OVERLAPS(p_language_pair_target_JSON, ci.language_pair_target_JSON)) AND
+            (p_selected_service_JSON     IS NULL OR JSON_OVERLAPS(p_selected_service_JSON,     ci.selected_service_JSON)) AND
             (p_owner_org_id IS NULL OR ci.owner_org_id=p_owner_org_id)
         GROUP BY ci.id
         ORDER BY sorting_order DESC, ci.id DESC;
@@ -15014,8 +15021,9 @@ BEGIN
             (p_scope IS NULL OR ci.scope=p_scope) AND
             (p_highlight IS NULL OR ci.highlight=p_highlight) AND
             (p_published IS NULL OR ci.published=p_published) AND
-            (p_language_code_target IS NULL OR ci.language_code_target=p_language_code_target) AND
-            (p_country_code_target IS NULL OR ci.country_code_target=p_country_code_target) AND
+            (p_language_code_target_JSON IS NULL OR JSON_OVERLAPS(p_language_code_target_JSON, ci.language_code_target_JSON)) AND
+            (p_language_pair_target_JSON IS NULL OR JSON_OVERLAPS(p_language_pair_target_JSON, ci.language_pair_target_JSON)) AND
+            (p_selected_service_JSON     IS NULL OR JSON_OVERLAPS(p_selected_service_JSON,     ci.selected_service_JSON)) AND
             (p_owner_org_id IS NULL OR ci.owner_org_id=p_owner_org_id) AND
             (p_project_id IS NULL OR cfp.project_id=p_project_id)
         ORDER BY sorting_order DESC, ci.id DESC, cfp.project_id;
