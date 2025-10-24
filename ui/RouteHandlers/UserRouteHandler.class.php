@@ -3520,7 +3520,9 @@ foreach ($rows as $index => $row) {
             $size = 0;
             for ($i = 0; $i < 20; $i++) {
                 if (!empty($_FILES['image']['size'][$i]))       $size += $_FILES['image']['size'][$i];
-                if (!empty($_FILES['attachments']['size'][$i])) $size += $_FILES['image']['size'][$i];
+error_log("$i $size");//(**)
+                if (!empty($_FILES['attachments']['size'][$i])) $size += $_FILES['attachments']['size'][$i];
+error_log("$i $size");//(**)
             }
             if ($size > 10000000) {
                 UserRouteHandler::flash('error', 'Total file size must be less than 10MB.');
