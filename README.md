@@ -40,6 +40,20 @@ For full terms see License.txt or http://www.gnu.org/licenses/lgpl-3.0.txt
 
 # Release Notes
 
+## Version 19.0
+
+- There is now a new quality feature.
+It is triggered by clicking "Request Quality Checks" in project view after having selected one or more tasks.
+A new "Spot Quality Inspection" workflow (or sometimes "Quality Evaluation") will be added.
+This may sometimes be split. In which case only one of the tasks will be added to TWB Platform.
+A new Asana subtask will be created with information about the users who have claimed prerequisites.
+This will later be updated with the linguist who claimed the quality task and their comments and the bilingual file when they complete the task using a link in their "My Tasks".
+- There is an improved header on the main pages also with better mobile performance.
+- There is a way of adding content items for display on the home pages and elsewhere (in the future). This is the site wide URL https://twbplatform.org/content_items .
+There is also an organisation specific one: https://twbplatform.org/content_items/org/org_id . These allowing list of and editing and creation of content.
+- It is now possible to close (and re-open) a project budget in project view.
+- Task Stream emails to Microsoft accounts is limited to 5 per hour as they block us when we send large (by their standards) numbers.
+
 ## Version 18.0
 
 - NGO Admins and POs will be able to set that a task is only available to their own organisation linguists.
