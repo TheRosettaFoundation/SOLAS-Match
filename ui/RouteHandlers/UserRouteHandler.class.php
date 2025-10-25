@@ -3520,11 +3520,10 @@ foreach ($rows as $index => $row) {
             $size = 0;
             for ($i = 0; $i < 20; $i++) {
                 if (!empty($_FILES['image']['size'][$i]))       $size += $_FILES['image']['size'][$i];
-error_log("$i $size");//(**)
                 if (!empty($_FILES['attachments']['size'][$i])) $size += $_FILES['attachments']['size'][$i];
-error_log("$i $size");//(**)
             }
-            if ($size > 10000000) {
+//(**)            if ($size > 10000000) {
+            if ($size > 400000) {//(**)REMOVE
                 UserRouteHandler::flash('error', 'Total file size must be less than 10MB.');
                 if ($org_id) return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('content_items_org', ['org_id' => $org_id]));
                 else         return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('content_items'));
