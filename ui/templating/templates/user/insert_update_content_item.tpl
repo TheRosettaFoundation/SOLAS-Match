@@ -167,7 +167,7 @@
                 </div>
                 {/if}
                 <div class="col">
-                  <label for="languages">Language + Variant</label>
+                  <label for="languages">Language + Variant (optional)</label>
                   <select id="languages" name="languages[]" multiple style="height:120px">
                     <option value="0"></option>
                     {foreach from=$language_selection key=codes item=language}
