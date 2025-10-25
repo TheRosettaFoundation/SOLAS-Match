@@ -14888,24 +14888,25 @@ CREATE TABLE IF NOT EXISTS `content_items` (
   id                 INT UNSIGNED NOT NULL AUTO_INCREMENT,
   creation_date      DATETIME NOT NULL,
   update_date        DATETIME,
-  type               INT DEFAULT 0,
-  scope              INT DEFAULT 0,
-  highlight          INT DEFAULT 0,
-  published          INT DEFAULT 0,
-  sorting_order      INT DEFAULT 0,
+  type               INT NOT NULL DEFAULT 0,
+  scope              INT NOT NULL DEFAULT 0,
+  highlight          INT NOT NULL DEFAULT 0,
+  published          INT NOT NULL DEFAULT 0,
+  sorting_order      INT NOT NULL DEFAULT 0,
   title              MEDIUMTEXT COLLATE utf8mb4_unicode_ci NOT NULL,
   snippet            MEDIUMTEXT COLLATE utf8mb4_unicode_ci NOT NULL,
   body               MEDIUMTEXT COLLATE utf8mb4_unicode_ci NOT NULL,
-  number_images      INT DEFAULT 0,
-  number_attachments INT DEFAULT 0,
-  language_code_target VARCHAR(3) COLLATE utf8mb4_unicode_ci,
-  country_code_target  VARCHAR(4) COLLATE utf8mb4_unicode_ci,
-  external_link      VARCHAR(1000) DEFAULT '',
-  number_of_views    INT DEFAULT 0,
-  owner_org_id       INT UNSIGNED,
+  number_images      INT NOT NULL DEFAULT 0,
+  number_attachments INT NOT NULL DEFAULT 0,
+  language_code_target_JSON JSON NOT NULL DEFAULT ('[]'),
+  language_pair_target_JSON JSON NOT NULL DEFAULT ('[]'),
+  selected_service_JSON     JSON NOT NULL DEFAULT ('[]'),
+  external_link      VARCHAR(1000) NOT NULL DEFAULT '',
+  number_of_views    INT NOT NULL DEFAULT 0,
+  owner_org_id       INT UNSIGNED NOT NULL DEFAULT 0,
   admin_id           INT UNSIGNED NOT NULL,
   PRIMARY KEY (id),
-  CONSTRAINT FK_content_items_Organisations FOREIGN KEY (owner_org_id) REFERENCES Organisations (id) ON DELETE CASCADE ON UPDATE CASCADE,
+  KEY (owner_org_id),
   CONSTRAINT FK_content_items_Users FOREIGN KEY (admin_id) REFERENCES Users (id) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -14914,6 +14915,8 @@ CREATE TABLE IF NOT EXISTS `content_attachments` (
   is_image      INT DEFAULT 0,
   creation_date DATETIME NOT NULL,
   sorting_order INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  filename      VARCHAR(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  mimetype      VARCHAR(128) COLLATE utf8mb4_unicode_ci NOT NULL,
   attachment    LONGBLOB,
   admin_id      INT UNSIGNED NOT NULL,
   PRIMARY KEY (sorting_order),
@@ -14940,8 +14943,9 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_update_content_item`(
     IN p_title              MEDIUMTEXT,
     IN p_snippet            MEDIUMTEXT,
     IN p_body               MEDIUMTEXT,
-    IN p_language_code_target VARCHAR(3),
-    IN p_country_code_target  VARCHAR(4),
+    IN p_language_code_target_JSON JSON,
+    IN p_language_pair_target_JSON JSON,
+    IN p_selected_service_JSON     JSON,
     IN p_external_link      VARCHAR(1000),
     IN p_owner_org_id       INT UNSIGNED,
     IN p_admin_id           INT UNSIGNED)
@@ -14957,8 +14961,9 @@ BEGIN
             title,
             snippet,
             body,
-            language_code_target,
-            country_code_target,
+            language_code_target_JSON,
+            language_pair_target_JSON,
+            selected_service_JSON,
             external_link,
             owner_org_id,
             admin_id)
@@ -14972,8 +14977,9 @@ BEGIN
             p_title,
             p_snippet,
             p_body,
-            p_language_code_target,
-            p_country_code_target,
+            p_language_code_target_JSON,
+            p_language_pair_target_JSON,
+            p_selected_service_JSON,
             p_external_link,
             p_owner_org_id,
             p_admin_id);
@@ -14989,8 +14995,9 @@ BEGIN
             title=p_title,
             snippet=p_snippet,
             body=p_body,
-            language_code_target=p_language_code_target,
-            country_code_target=p_country_code_target,
+            language_code_target_JSON=p_language_code_target_JSON,
+            language_pair_target_JSON=p_language_pair_target_JSON,
+            selected_service_JSON=p_selected_service_JSON,
             external_link=p_external_link,
             owner_org_id=p_owner_org_id,
             admin_id=p_admin_id
@@ -15016,8 +15023,9 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `get_content_items`(
     IN p_scope              INT,
     IN p_highlight          INT,
     IN p_published          INT,
-    IN p_language_code_target VARCHAR(3),
-    IN p_country_code_target  VARCHAR(4),
+    IN p_language_code_target_JSON JSON,
+    IN p_language_pair_target_JSON JSON,
+    IN p_selected_service_JSON     JSON,
     IN p_owner_org_id       INT UNSIGNED,
     IN p_project_id         INT UNSIGNED)
 BEGIN
@@ -15033,8 +15041,9 @@ BEGIN
             (p_scope IS NULL OR ci.scope=p_scope) AND
             (p_highlight IS NULL OR ci.highlight=p_highlight) AND
             (p_published IS NULL OR ci.published=p_published) AND
-            (p_language_code_target IS NULL OR ci.language_code_target=p_language_code_target) AND
-            (p_country_code_target IS NULL OR ci.country_code_target=p_country_code_target) AND
+            (p_language_code_target_JSON IS NULL OR JSON_OVERLAPS(p_language_code_target_JSON, ci.language_code_target_JSON)) AND
+            (p_language_pair_target_JSON IS NULL OR JSON_OVERLAPS(p_language_pair_target_JSON, ci.language_pair_target_JSON)) AND
+            (p_selected_service_JSON     IS NULL OR JSON_OVERLAPS(p_selected_service_JSON,     ci.selected_service_JSON)) AND
             (p_owner_org_id IS NULL OR ci.owner_org_id=p_owner_org_id)
         GROUP BY ci.id
         ORDER BY sorting_order DESC, ci.id DESC;
@@ -15050,12 +15059,39 @@ BEGIN
             (p_scope IS NULL OR ci.scope=p_scope) AND
             (p_highlight IS NULL OR ci.highlight=p_highlight) AND
             (p_published IS NULL OR ci.published=p_published) AND
-            (p_language_code_target IS NULL OR ci.language_code_target=p_language_code_target) AND
-            (p_country_code_target IS NULL OR ci.country_code_target=p_country_code_target) AND
+            (p_language_code_target_JSON IS NULL OR JSON_OVERLAPS(p_language_code_target_JSON, ci.language_code_target_JSON)) AND
+            (p_language_pair_target_JSON IS NULL OR JSON_OVERLAPS(p_language_pair_target_JSON, ci.language_pair_target_JSON)) AND
+            (p_selected_service_JSON     IS NULL OR JSON_OVERLAPS(p_selected_service_JSON,     ci.selected_service_JSON)) AND
             (p_owner_org_id IS NULL OR ci.owner_org_id=p_owner_org_id) AND
             (p_project_id IS NULL OR cfp.project_id=p_project_id)
         ORDER BY sorting_order DESC, ci.id DESC, cfp.project_id;
     END IF;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `get_all_content_items`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_all_content_items`(
+    IN p_owner_org_id INT UNSIGNED)
+BEGIN
+    SELECT
+        ci.*,
+        o.name,
+        u.email,
+        GROUP_CONCAT(DISTINCT IF(ca.is_image=1, ca.sorting_order, 0) ORDER BY ca.sorting_order SEPARATOR ',') AS image_ids,
+        GROUP_CONCAT(DISTINCT IF(ca.is_image=0, ca.sorting_order, 0) ORDER BY ca.sorting_order SEPARATOR ',') AS attachment_ids,
+        GROUP_CONCAT(DISTINCT cfp.project_id ORDER BY cfp.project_id SEPARATOR ',') AS project_ids
+    FROM      content_items         ci
+    JOIN      Users                  u ON ci.admin_id=u.id
+    LEFT JOIN Organisations          o ON ci.owner_org_id=o.id
+    LEFT JOIN content_attachments   ca ON ci.id=ca.content_id
+    LEFT JOIN content_for_projects cfp ON ci.id=cfp.content_id
+    WHERE
+        (p_owner_org_id=0 ||
+         p_owner_org_id=owner_org_id) AND
+        published>=0
+    GROUP BY ci.id
+    ORDER BY ci.id DESC;
 END//
 DELIMITER ;
 
@@ -15064,6 +15100,8 @@ DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `add_content_item_attachment`(
     p_content_id INT UNSIGNED,
     p_is_image   INT,
+    p_filename   VARCHAR(255),
+    p_mimetype   VARCHAR(128),
     p_attachment LONGBLOB,
     p_admin_id   INT UNSIGNED)
 BEGIN
@@ -15071,12 +15109,16 @@ BEGIN
         content_id,
         is_image,
         creation_date,
+        filename,
+        mimetype,
         attachment,
         admin_id)
     VALUES (
         p_content_id,
         p_is_image,
         NOW(),
+        p_filename,
+        p_mimetype,
         p_attachment,
         p_admin_id);
     IF p_is_image=1 THEN

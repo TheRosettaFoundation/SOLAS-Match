@@ -220,6 +220,43 @@ class UserRouteHandler
             '/docusign_hook',
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:docusign_hook')
             ->setName('docusign_hook');
+
+        $app->map(['GET', 'POST'],
+            '/content_item/{content_id}/org/{org_id}[/]',
+            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:content_item')
+            ->add('\SolasMatch\UI\Lib\Middleware:authUserForOrg_incl_community_officer')
+            ->setName('content_item_org');
+
+        $app->map(['GET', 'POST'],
+            '/content_item/{content_id}[/]',
+            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:content_item')
+            ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin_any')
+            ->setName('content_item');
+
+        $app->get(
+            '/download_attachment/{content_id}/is_image/{is_image}/sorting_order/{sorting_order}/org/{org_id}[/]',
+            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:download_attachment')
+            ->add('\SolasMatch\UI\Lib\Middleware:authUserForOrg_incl_community_officer')
+            ->setName('download_attachment_org');
+
+        $app->get(
+            '/download_attachment/{content_id}/is_image/{is_image}/sorting_order/{sorting_order}[/]',
+            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:download_attachment')
+            ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin_any')
+            ->setName('download_attachment');
+
+        $app->get(
+            '/content_items/org/{org_id}[/]',
+            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:content_items')
+//(**)incl NGO:            ->add('\SolasMatch\UI\Lib\Middleware:authUserForOrg_incl_community_officer')
+            ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin_any')
+            ->setName('content_items_org');
+
+        $app->get(
+            '/content_items[/]',
+            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:content_items')
+            ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin_any')
+            ->setName('content_items');
     }
 
     public function homeIndex(Request $request, Response $response, $args)
@@ -3462,6 +3499,150 @@ foreach ($rows as $index => $row) {
     $pdf->lastPage();
 
     return [$invoice['filename'], $pdf->Output($invoice['filename'], 'S')];
+    }
+
+    public function content_item(Request $request, Response $response, $args)
+    {
+        global $app, $template_data;
+        $userDao = new DAO\UserDao();
+        $projectDao = new DAO\ProjectDao();
+        $orgDao = new DAO\OrganisationDao();
+        $adminDao = new DAO\AdminDao();
+
+        $content_id = !empty($args['content_id']) ? $args['content_id'] : 0;
+        $org_id = !empty($args['org_id']) ? $args['org_id'] : 0;
+
+        $sesskey = Common\Lib\UserSession::getCSRFKey();
+
+        if ($request->getMethod() === 'POST') {
+            $post = $request->getParsedBody();
+            if ($fail_CSRF = Common\Lib\UserSession::checkCSRFKey($post, 'content_item')) return $response->withStatus(302)->withHeader('Location', $fail_CSRF);
+            $size = 0;
+            for ($i = 0; $i < 20; $i++) {
+                if (!empty($_FILES['image']['size'][$i]))       $size += $_FILES['image']['size'][$i];
+                if (!empty($_FILES['attachments']['size'][$i])) $size += $_FILES['attachments']['size'][$i];
+            }
+            if ($size > 10000000) {
+                UserRouteHandler::flash('error', 'Total file size must be less than 10MB.');
+                if ($org_id) return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('content_items_org', ['org_id' => $org_id]));
+                else         return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('content_items'));
+            }
+            if (empty($post['content_id'])) $post['content_id'] = null;
+            if (empty($post['scope'])) $post['scope'] = $post['type'];
+            if (empty($post['highlight'])) $post['highlight'] = 0;
+            if (empty($post['title'])) $post['title'] = '';
+            if (empty($post['snippet'])) $post['snippet'] = '';
+            if (empty($post['body'])) $post['body'] = '';
+            if (empty($post['external_link'])) $post['external_link'] = '';
+            $admin_id = Common\Lib\UserSession::getCurrentUserID();
+
+            if (empty($post['languages'])) {
+                $language_code_target_JSON = '[]';
+                $language_pair_target_JSON = '[]';
+            } else {
+                $langs = [];
+                $pairs = [];
+                foreach ($post['languages'] as $codes) {
+                    [$kp_language, $x] = $projectDao->convert_selection_to_language_country($codes);
+                    $langs[] = "\"$kp_language\"";
+                    $pairs[] = "\"$codes\"";
+                }
+                $language_code_target_JSON = '[' . implode(',', $langs) . ']';
+                $language_pair_target_JSON = '[' . implode(',', $pairs) . ']';
+            }
+            if (empty($post['services'])) $selected_service_JSON = '[]';
+            else                          $selected_service_JSON = '[' . implode(',', $post['services']) . ']';
+            $content_id = $userDao->insert_update_content_item($post['content_id'], $post['type'], $post['scope'], $post['highlight'], $post['published'], $post['sorting_order'], $post['title'], $post['snippet'], $post['body'], $language_code_target_JSON, $language_pair_target_JSON, $selected_service_JSON, $post['external_link'], $org_id, $admin_id);
+
+            for ($i = 0; $i < 20; $i++) {
+                if (!empty($_FILES['image']['name'][$i]) && empty($_FILES['image']['error'][$i]) && !empty($_FILES['image']['tmp_name'][$i]) && (($data = file_get_contents($_FILES['image']['tmp_name'][$i])) !== false)) {
+                    $userDao->add_content_item_attachment($content_id, 1, $_FILES['image']['name'][$i], $_FILES['image']['type'][$i], $data, $admin_id);
+                }
+                if (!empty($_FILES['attachments']['name'][$i]) && empty($_FILES['attachments']['error'][$i]) && !empty($_FILES['attachments']['tmp_name'][$i]) && (($data = file_get_contents($_FILES['attachments']['tmp_name'][$i])) !== false)) {
+                    $userDao->add_content_item_attachment($content_id, 0, $_FILES['attachments']['name'][$i], $_FILES['attachments']['type'][$i], $data, $admin_id);
+                }
+            }
+            if (!empty($post['previous_images']))      foreach ($post['previous_images']      as $sorting_order) $userDao->remove_content_item_attachment($content_id, 1, $sorting_order);
+            if (!empty($post['previous_attachments'])) foreach ($post['previous_attachments'] as $sorting_order) $userDao->remove_content_item_attachment($content_id, 0, $sorting_order);
+
+            if ($org_id) {
+                $previous_projects = [];
+                $projects = $userDao->get_content_items($content_id, null, null, null, null, null, null, null, null, null);
+                foreach ($projects as $row) if ($row['project_id']) $previous_projects[$row['project_id']] = $row['project_id'];
+
+                if (!empty($post['projects'])) {
+                    foreach ($post['projects'] as $project_id) {
+                        if (empty($previous_projects[$project_id])) $userDao->add_content_item_to_project($project_id, $content_id);
+                        else unset($previous_projects[$project_id]);
+                    }
+                }
+                foreach ($previous_projects as $project_id) $userDao->remove_content_item_from_project($project_id, $content_id);
+
+                return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('content_items_org', ['org_id' => $org_id]));
+            }
+            return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('content_items'));
+        }
+
+        if ($content_id) {
+            $content = $userDao->get_content_items($content_id, null, null, null, null, null, null, null, null, 0);
+            $projects = $userDao->get_content_items($content_id, null, null, null, null, null, null, null, null, null);
+
+            if (empty($content)) {
+                UserRouteHandler::flash('error', 'Content not found.');
+                return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('home'));
+            }
+            if ($org_id && $org_id != $content[0]['owner_org_id']) {
+                UserRouteHandler::flash('error', 'You can only edit content for the specified organisation.');
+                return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('home'));
+            }
+            if (!$org_id && $content[0]['owner_org_id']) $org_id = $content[0]['owner_org_id'];
+        } else {
+            $content = [];
+            $projects = [];
+        }
+
+        $template_data = array_merge($template_data, [
+            'content' => $content,
+            'projects' => $projects,
+            'org_id' => $org_id,
+            'org' => $org_id ? $orgDao->getOrganisation($org_id) : 0,
+            'project_selection' => $projectDao->get_all_projects($org_id),
+            'language_selection' => $projectDao->generate_language_selection(),
+            'service_selection' => $userDao->get_user_services(0),
+            'previous_images' => $content_id ? $userDao->get_content_item_attachments($content_id, 1, null) : [],
+            'previous_attachments' => $content_id ? $userDao->get_content_item_attachments($content_id, 0, null) : [],
+            'sesskey' => $sesskey,
+        ]);
+
+        return UserRouteHandler::render('user/insert_update_content_item.tpl', $response);
+    }
+
+    public static function download_attachment(Request $request, Response $response, $args)
+    {
+        $userDao = new DAO\UserDao();
+
+        $attachments = $userDao->get_content_item_attachments($args['content_id'], $args['is_image'], $args['sorting_order']);
+        if (empty($attachments)) return $response;
+
+        header('Content-type: ' . $attachments[0]['mimetype']);
+        header('Content-Disposition: attachment; filename="' . trim($attachments[0]['filename'], '"') . '"');
+        header('Content-length: ' . strlen($attachments[0]['attachment']));
+        header('X-Frame-Options: ALLOWALL');
+        header('Pragma: no-cache');
+        header('Cache-control: no-cache, must-revalidate, no-transform');
+        echo $attachments[0]['attachment'];
+        die;
+    }
+
+    public function content_items(Request $request, Response $response, $args)
+    {
+        global $template_data;
+        $userDao = new DAO\UserDao();
+
+        $org_id = !empty($args['org_id']) ? $args['org_id'] : 0;
+
+        $template_data = array_merge($template_data, ['items' => $userDao->get_all_content_items($org_id), 'org_id' => $org_id]);
+        return UserRouteHandler::render('user/content_items.tpl', $response);
     }
 
     public static function flash($key, $value)
