@@ -1753,6 +1753,7 @@ GROUP BY c.id, u.id';
 error_log("Moodle INSERT WOULD CREATE AND CLAIM courseid: $courseid, userid: " . $row['userid']);//(**)DISABLE
                             } else $count_updated++;
 //(**)DISABLE ... from HERE
+if ($courseid == 19) {//(**)TEMP LIMIT FOR courseid
                             if (!$insert) {
                                 $task = new Common\Protobufs\Models\Task();
 
@@ -1782,20 +1783,21 @@ error_log("Moodle INSERT WOULD CREATE AND CLAIM courseid: $courseid, userid: " .
 
                                 $task->setTaskStatus(Common\Enums\TaskStatusEnum::IN_PROGRESS);
 
-//(**)DISABLE                                $task_id = $taskDao->createTaskDirectly($task);
+                                $task_id = $taskDao->createTaskDirectly($task);
 
-//(**)DISABLE                                $taskDao->insert_task_url($task_id, "https://elearn.translatorswb.org/course/view.php?id=$courseid");
+                                $taskDao->insert_task_url($task_id, "https://elearn.translatorswb.org/course/view.php?id=$courseid");
 
-//(**)DISABLE                                $projectDao->set_memsource_task($task_id, 0, $task_id, '', 0, 0, 0, 0, 0);
+                                $projectDao->set_memsource_task($task_id, 0, $task_id, '', 0, 0, 0, 0, 0);
 
-//(**)DISABLE                                LibAPI\PDOWrapper::call('claim_moodle_task_by_email', LibAPI\PDOWrapper::cleanse($task_id) . ',' . LibAPI\PDOWrapper::cleanseWrapStr($row['email']) . ',' . LibAPI\PDOWrapper::cleanse($courseid) . ',' . LibAPI\PDOWrapper::cleanse($row['userid']));
+                                LibAPI\PDOWrapper::call('claim_moodle_task_by_email', LibAPI\PDOWrapper::cleanse($task_id) . ',' . LibAPI\PDOWrapper::cleanseWrapStr($row['email']) . ',' . LibAPI\PDOWrapper::cleanse($courseid) . ',' . LibAPI\PDOWrapper::cleanse($row['userid']));
 error_log("Moodle UPDATE WOULD CREATE AND CLAIM courseid: $courseid, userid: " . $row['userid']);//(**)DISABLE
                             }
 //(**)DISABLE to HERE
                             if (!empty($max_criteria[$courseid]) && (empty($old_completions[$index]) || $row['completions'] != $old_completions[$index]) && $row['completions'] == $max_criteria[$courseid]) {
-//(**)DISABLE                                LibAPI\PDOWrapper::call('complete_moodle_task', LibAPI\PDOWrapper::cleanse($courseid) . ',' . LibAPI\PDOWrapper::cleanse($row['userid']));
+                                LibAPI\PDOWrapper::call('complete_moodle_task', LibAPI\PDOWrapper::cleanse($courseid) . ',' . LibAPI\PDOWrapper::cleanse($row['userid']));
                                 error_log("Moodle completed courseid: $courseid, userid: " . $row['userid']);
                             }
+}//(**)TEMP LIMIT FOR courseid
                         } else $count_skipped++;
                     }
                 }
