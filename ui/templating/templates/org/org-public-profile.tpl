@@ -657,6 +657,7 @@
                         <th>Remove Role</th>
                         <th>Add Role</th>
                     {/if}
+                    <th>Language Pairs</th>
                 </thead>
                 <tbody>
                     {foreach $orgMembers as $member}
@@ -707,6 +708,9 @@
                                 {/if}
                             </td>
                         {/if}
+                            <td>
+                                {$member['language_pairs']}
+                            </td>
                       </tr>
                     {/foreach}
                 </tbody>
