@@ -2155,6 +2155,7 @@ class OrgRouteHandler
 
         $data = "\xEF\xBB\xBF" . '"user_id","Given Name","Family Name","email","Roles","Language Pairs"' . "\n";
         foreach ($org_members as $om) {
+          if ($om['source_of_user'])
             $data .= '"' . $om['id'] . '","' . $om['first_name'] . '","' . $om['last_name'] . '","' . $om['email'] . '","' . $om['roles_text'] . '","' . $om['language_pairs'] . '"' . "\n";
         }
         header('Content-type: text/csv');
