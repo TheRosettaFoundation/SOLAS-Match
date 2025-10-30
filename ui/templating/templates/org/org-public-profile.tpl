@@ -661,7 +661,8 @@
                 </thead>
                 <tbody>
                     {foreach $orgMembers as $member}
-                        <tr>
+                      {if $roles&($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER) || $org_id != 707 || $member['source_of_user']}
+                      <tr>
                             <td>
                                 {if $member['roles'] & $NGO_ADMIN}
                                     <span class="marker org-admin-marker">ADMIN</span>
@@ -712,6 +713,7 @@
                                 {$member['language_pairs']}
                             </td>
                       </tr>
+                      {/if}
                     {/foreach}
                 </tbody>
             </table>
