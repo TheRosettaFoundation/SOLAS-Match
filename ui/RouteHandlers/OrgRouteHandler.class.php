@@ -2153,9 +2153,9 @@ class OrgRouteHandler
         $adminDao = new DAO\AdminDao();
         $org_members = $adminDao->getOrgMembers($args['org_id']);
 
-        $data = "\xEF\xBB\xBF";
+        $data = "\xEF\xBB\xBF" . '"user_id","Given Name","Family Name","email","Roles","Language Pairs"' . "\n";
         foreach ($org_members as $om) {
-            $data .= '"' . $om['id'] . '","' . $om['first_name'] . '","' . $om['last_name'] . '","' . $om['email'] . '","' . $om['roles_text'] . '"' . "\n";
+            $data .= '"' . $om['id'] . '","' . $om['first_name'] . '","' . $om['last_name'] . '","' . $om['email'] . '","' . $om['roles_text'] . '","' . $om['language_pairs'] . '"' . "\n";
         }
         header('Content-type: text/csv');
         header('Content-Disposition: attachment; filename="org_members.csv"');
