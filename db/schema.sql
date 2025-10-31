@@ -14482,11 +14482,14 @@ DROP PROCEDURE IF EXISTS `claim_moodle_task_by_email`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `claim_moodle_task_by_email`(IN tID BIGINT, IN mail VARCHAR(100), IN mcID BIGINT, IN muID BIGINT)
 BEGIN
+    SET @uID = NULL;
     SELECT id INTO @uID FROM Users WHERE email=mail;
+    IF @uID IS NOT NULL THEN
     INSERT INTO TaskClaims (task_id, user_id, `claimed-time`)
                     VALUES (    tID,    @uID,          NOW());
     INSERT INTO moodle_task_users (task_id, user_id, courseid, userid)
                            VALUES (    tID,    @uID,     mcID,   muID);
+    END IF;
 END//
 DELIMITER ;
 

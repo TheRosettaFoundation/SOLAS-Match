@@ -1686,6 +1686,7 @@ GROUP BY c.id, u.id';
                     }
                 }
                 $result = null;
+                $projects = [2 => 36065, 4 => 36066, 5 => 36067, 7 => 36068, 9 => 36068, 11 => 36072, 12 => 36070, 15 => 36069, 16 => 36071, 17 => 36073, 18 => 36074, 20 => 36075];
                 foreach ($data as $row) {
                     if (!empty($row['email'])) {
                         $hash = '';
@@ -1714,13 +1715,11 @@ GROUP BY c.id, u.id';
                             LibAPI\PDOWrapper::call('insert_update_moodle_data', "$insert,$args");
 
                             $courseid = $row['courseid'];
-                            if ($insert) {
+                            if (!empty($projects[$courseid]) && $insert) {
+                                $project_id = $projects[$courseid];
                                 $count_inserted++;
                                 $task = new Common\Protobufs\Models\Task();
 
-                                $projects = [2 => 36065, 4 => 36066, 5 => 36067, 7 => 36068, 9 => 36068, 11 => 36072, 12 => 36070, 15 => 36069, 16 => 36071, 17 => 36073, 18 => 36074, 20 => 36075];
-                                if (empty($projects[$courseid])) $project_id = 36076;
-                                else $project_id = $projects[$courseid];
                                 $task->setProjectId($project_id);
                                 $task->setTitle($row['fullname']);
                                 $task->setTaskType(29);
@@ -1755,12 +1754,10 @@ error_log("Moodle INSERT WOULD CREATE AND CLAIM courseid: $courseid, userid: " .
                             } else $count_updated++;
 //(**)DISABLE ... from HERE
 if ($courseid == 19) {//(**)TEMP LIMIT FOR courseid
-                            if (!$insert) {
+                            if (!empty($projects[$courseid]) && !$insert) {
+                                $project_id = $projects[$courseid];
                                 $task = new Common\Protobufs\Models\Task();
 
-                                $projects = [2 => 36065, 4 => 36066, 5 => 36067, 7 => 36068, 9 => 36068, 11 => 36072, 12 => 36070, 15 => 36069, 16 => 36071, 17 => 36073, 18 => 36074, 20 => 36075];
-                                if (empty($projects[$courseid])) $project_id = 36076;
-                                else $project_id = $projects[$courseid];
                                 $task->setProjectId($project_id);
                                 $task->setTitle($row['fullname']);
                                 $task->setTaskType(29);
