@@ -14498,6 +14498,12 @@ BEGIN
     JOIN   moodle_task_users mtu ON t.id=mtu.task_id
     SET t.`task-status_id`=4
     WHERE mtu.courseid=mcID AND mtu.userid=muID;
+
+    SET @tID = NULL;
+    SELECT task_id INTO @tID FROM moodle_task_users WHERE courseid=mcID AND userid=muID;
+    IF @tID IS NOT NULL THEN
+        REPLACE INTO TaskCompleteDates (task_id, complete_date) VALUES (@tID, now());
+    END IF;
 END//
 DELIMITER ;
 

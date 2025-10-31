@@ -1695,6 +1695,7 @@ GROUP BY c.id, u.id';
                         if (empty($moodle_hashs[$index])) $insert = 1;
                         elseif ($moodle_hashs[$index] != md5($hash)) $insert = 0;
                         if ($insert != -1) {
+                            if ($row['timestart'] == 0) $row['timestart'] = 1729494225;
                             $args =
                             LibAPI\PDOWrapper::cleanse($row['userid']) . ',' .
                             LibAPI\PDOWrapper::cleanseWrapStr($row['email']) . ',' .
@@ -1728,7 +1729,7 @@ GROUP BY c.id, u.id';
                                 $task->set_word_count_partner_weighted($quantity);
                                 $task->set_word_count_original($quantity);
                                 $task->set_source_quantity($quantity);
-                                $task->setDeadline(gmdate('Y-m-d H:i:s', strtotime('31 days')));
+                                $task->setDeadline(gmdate('Y-m-d H:i:s', $row['timestart'] + 7889400)); // 3 months
                                 $task->setPublished(0);
 
                                 $taskSourceLocale = new Common\Protobufs\Models\Locale();
@@ -1768,7 +1769,7 @@ if ($courseid == 19) {//(**)TEMP LIMIT FOR courseid
                                 $task->set_word_count_partner_weighted($quantity);
                                 $task->set_word_count_original($quantity);
                                 $task->set_source_quantity($quantity);
-                                $task->setDeadline(gmdate('Y-m-d H:i:s', strtotime('31 days')));
+                                $task->setDeadline(gmdate('Y-m-d H:i:s', $row['timestart'] + 7889400));
                                 $task->setPublished(0);
 
                                 $taskSourceLocale = new Common\Protobufs\Models\Locale();
