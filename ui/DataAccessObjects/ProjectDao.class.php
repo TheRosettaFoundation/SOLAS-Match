@@ -1715,6 +1715,12 @@ GROUP BY c.id, u.id';
                             LibAPI\PDOWrapper::call('insert_update_moodle_data', "$insert,$args");
 
                             $courseid = $row['courseid'];
+
+                            $result = LibAPI\PDOWrapper::call('getUser', 'null,null,' . LibAPI\PDOWrapper::cleanseWrapStr($row['email']) . ',null,null,null,null,null,null');
+                            if (empty($result)) {
+                                error_log('Moodle SKIPPING MISSING TWB User email: ' . $row['email'] . ", courseid: $courseid, userid: " . $row['userid']);
+                                continue;
+                            }
                             if (!empty($projects[$courseid]) && $insert) {
                                 $project_id = $projects[$courseid];
                                 $count_inserted++;
@@ -1791,10 +1797,16 @@ if ($courseid == 9) {//(**)TEMP LIMIT FOR courseid
 error_log("Moodle UPDATE WOULD CREATE AND CLAIM courseid: $courseid, userid: " . $row['userid']);//(**)DISABLE
                             }
 //(**)DISABLE to HERE
+                            if (!empty($max_criteria[$courseid]) && $row['completions'] == $max_criteria[$courseid]) {
+                                LibAPI\PDOWrapper::call('complete_moodle_task', LibAPI\PDOWrapper::cleanse($courseid) . ',' . LibAPI\PDOWrapper::cleanse($row['userid']));
+                                error_log("Moodle completed courseid: $courseid, userid: " . $row['userid']);
+                            }
+/* //PUT THESE BACK (**) AND TAKEOUT ABOVE IF
                             if (!empty($max_criteria[$courseid]) && (empty($old_completions[$index]) || $row['completions'] != $old_completions[$index]) && $row['completions'] == $max_criteria[$courseid]) {
                                 LibAPI\PDOWrapper::call('complete_moodle_task', LibAPI\PDOWrapper::cleanse($courseid) . ',' . LibAPI\PDOWrapper::cleanse($row['userid']));
                                 error_log("Moodle completed courseid: $courseid, userid: " . $row['userid']);
                             }
+*/ //PUT THESE BACK ABOVE (**)
 }//(**)TEMP LIMIT FOR courseid
                         } else $count_skipped++;
                     }
