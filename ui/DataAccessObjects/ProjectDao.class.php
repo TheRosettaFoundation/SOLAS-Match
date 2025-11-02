@@ -1759,7 +1759,7 @@ GROUP BY c.id, u.id';
                                 error_log("Moodle INSERT CREATE AND CLAIM courseid: $courseid, userid: " . $row['userid']);
                             } else $count_updated++;
 //(**)DISABLE ... from HERE
-if ($courseid == 12) {//(**)TEMP LIMIT FOR courseid
+if ($courseid == 17) {//(**)TEMP LIMIT FOR courseid
                             if (!empty($projects[$courseid]) && !$insert) {
                                 $project_id = $projects[$courseid];
                                 $task = new Common\Protobufs\Models\Task();
