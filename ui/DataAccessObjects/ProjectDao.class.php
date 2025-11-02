@@ -1756,10 +1756,10 @@ GROUP BY c.id, u.id';
 //(**)DISABLE                                $projectDao->set_memsource_task($task_id, 0, $task_id, '', 0, 0, 0, 0, 0);
 
 //(**)DISABLE                                LibAPI\PDOWrapper::call('claim_moodle_task_by_email', LibAPI\PDOWrapper::cleanse($task_id) . ',' . LibAPI\PDOWrapper::cleanseWrapStr($row['email']) . ',' . LibAPI\PDOWrapper::cleanse($courseid) . ',' . LibAPI\PDOWrapper::cleanse($row['userid']));
-error_log("Moodle INSERT WOULD CREATE AND CLAIM courseid: $courseid, userid: " . $row['userid']);//(**)DISABLE
+                                error_log("Moodle INSERT CREATE AND CLAIM courseid: $courseid, userid: " . $row['userid']);
                             } else $count_updated++;
 //(**)DISABLE ... from HERE
-if ($courseid == 9) {//(**)TEMP LIMIT FOR courseid
+if ($courseid == 7) {//(**)TEMP LIMIT FOR courseid
                             if (!empty($projects[$courseid]) && !$insert) {
                                 $project_id = $projects[$courseid];
                                 $task = new Common\Protobufs\Models\Task();
