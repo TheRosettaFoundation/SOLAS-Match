@@ -1505,6 +1505,7 @@ INSERT INTO task_type_details VALUES
 ;
 INSERT INTO task_type_details VALUES
 (29,7,1,0,1,1,0,1,1,'Course',                     'Course',                     '#B02323','',                                    'SHELLTASK',    'ZZ',                       'Labor minutes','minutes','Labor minutes','Labor hours','Minutes',    0,  0, 0, 0, 0.0166667, 0.0166667, '', '', '', '');
+UPDATE task_type_details SET show_section='COURSE' WHERE type_enum=29;
 INSERT INTO task_type_details VALUES
 (30,3,1,0,1,1,1,2,1,'DTP Processing',             'DTP Processing',             '#B02323','',                                    'SHELLTASK',    'ZZ',                       'Labor minutes','minutes','Labor minutes','Labor hours','Pages',     10, 12.5, 4.16667, 0, 0.0166667, 0.0166667, '', '', '', '');
 INSERT INTO task_type_details VALUES
