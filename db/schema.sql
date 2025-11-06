@@ -14479,6 +14479,7 @@ CREATE TABLE IF NOT EXISTS `moodle_task_users` (
   user_id   INT UNSIGNED NOT NULL,
   courseid  BIGINT NOT NULL,
   userid    BIGINT NOT NULL,
+  final_reminder INT DEFAULT 0,
   PRIMARY KEY (userid, courseid),
   CONSTRAINT FK_moodle_task_users_task_id FOREIGN KEY (task_id) REFERENCES Tasks (id) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT FK_moodle_task_users_user_id FOREIGN KEY (user_id) REFERENCES Users (id) ON UPDATE CASCADE ON DELETE CASCADE
