@@ -3245,10 +3245,12 @@ BEGIN
             (select code from Countries where id =t.`country_id-target`) as `targetCountryCode`, 
             comment,  `task-type_id` as taskType, `task-status_id` as taskStatus, published, deadline 
         FROM Tasks t 
+   LEFT JOIN TaskNotificationSent n ON t.id=n.task_id
         where deadline < NOW()
         AND   deadline > DATE_SUB(DATE_SUB(NOW(), INTERVAL 1 DAY), INTERVAL 30 MINUTE)
         AND `task-status_id` != 4
-        AND cancelled=0;
+        AND cancelled=0
+        AND (n.notification IS NULL OR n.notification<2);
 END//
 DELIMITER ;
 
