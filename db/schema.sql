@@ -14519,9 +14519,9 @@ DELIMITER ;
 
 DROP PROCEDURE IF EXISTS `mark_final_reminder`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `mark_final_reminder`(IN tID BIGINT UNSIGNED)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `mark_final_reminder`(IN tID BIGINT UNSIGNED, IN r INT)
 BEGIN
-    UPDATE moodle_task_users SET final_reminder=1 WHERE task_id=tID;
+    UPDATE moodle_task_users SET final_reminder=r WHERE task_id=tID;
 END//
 DELIMITER ;
 
