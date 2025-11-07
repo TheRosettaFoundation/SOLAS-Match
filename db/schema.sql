@@ -14517,6 +14517,14 @@ BEGIN
 END//
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `mark_final_reminder`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `mark_final_reminder`(IN tID BIGINT UNSIGNED)
+BEGIN
+    UPDATE moodle_task_users SET final_reminder=1 WHERE task_id=tID;
+END//
+DELIMITER ;
+
 
 CREATE TABLE IF NOT EXISTS `no_mt_for_orgs` (
   org_id INT UNSIGNED NOT NULL,
