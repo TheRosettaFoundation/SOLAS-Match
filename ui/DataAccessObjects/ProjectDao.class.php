@@ -1762,16 +1762,7 @@ GROUP BY c.id, u.id';
                                 LibAPI\PDOWrapper::call('complete_moodle_task', LibAPI\PDOWrapper::cleanse($courseid) . ',' . LibAPI\PDOWrapper::cleanse($row['userid']));
                                 error_log("Moodle completed courseid: $courseid, userid: " . $row['userid']);
                             }
-[[
-if ($row['completions'] != (empty($old_completions[$index]) ? 0 : $old_completions[$index]) && [[final_reminder]]) {
-
-
-  remove final_reminder
-  and set deadlien + 2 weeks... is that enough to skip hitting early waring??? remove nortification??? or set 1???
-
-
-}
-]]
+                            if ($row['completions'] != (empty($old_completions[$index]) ? 0 : $old_completions[$index])) LibAPI\PDOWrapper::call('process_final_reminder', LibAPI\PDOWrapper::cleanse($courseid) . ',' . LibAPI\PDOWrapper::cleanse($row['userid']));
                         } else $count_skipped++;
                     }
                 }
