@@ -1762,7 +1762,7 @@ GROUP BY c.id, u.id';
                                 LibAPI\PDOWrapper::call('complete_moodle_task', LibAPI\PDOWrapper::cleanse($courseid) . ',' . LibAPI\PDOWrapper::cleanse($row['userid']));
                                 error_log("Moodle completed courseid: $courseid, userid: " . $row['userid']);
                             }
-                            if ($row['completions'] != (empty($old_completions[$index]) ? 0 : $old_completions[$index])) LibAPI\PDOWrapper::call('process_final_reminder', LibAPI\PDOWrapper::cleanse($courseid) . ',' . LibAPI\PDOWrapper::cleanse($row['userid']));
+                            if ($row['completions'] != (empty($old_completions[$index]) ? 0 : $old_completions[$index])) LibAPI\PDOWrapper::call('remove_final_reminder_after_progress', LibAPI\PDOWrapper::cleanse($courseid) . ',' . LibAPI\PDOWrapper::cleanse($row['userid']));
                         } else $count_skipped++;
                     }
                 }
