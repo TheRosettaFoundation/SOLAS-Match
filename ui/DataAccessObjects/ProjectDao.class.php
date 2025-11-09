@@ -1664,7 +1664,7 @@ error_log("Sync update_task_from_job() task_id: $task_id, status: $status, job: 
         unset($data);
         try {
             $conn = new \PDO('mysql:host=88.198.8.249;dbname=moodle;port=3306', 'moodle', Common\Lib\Settings::get('moodle.db_pw'), [\PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8']);
-$sql = 'SELECT u.id AS userid, u.email, u.firstname, u.lastname, c.id AS courseid, c.fullname, ue.timestart, cc.timeenrolled, cc.timestarted, cc.timecompleted, la.timeaccess,
+$sql = 'SELECT u.id AS userid, u.email, u.firstname, u.lastname, c.id AS courseid, c.fullname, ue.id AS ueid, ue.timestart, cc.timeenrolled, cc.timestarted, cc.timecompleted, la.timeaccess,
                SUM(IF(cr.id IS NOT NULL, 1, 0)) AS completions
      FROM mdl_user_enrolments              ue
      JOIN mdl_enrol                         e ON ue.enrolid=e.id
@@ -1687,6 +1687,7 @@ GROUP BY c.id, u.id';
                 }
                 $result = null;
                 $projects = [2 => 36065, 4 => 36066, 5 => 36067, 7 => 36068, 9 => 36068, 11 => 36072, 12 => 36070, 15 => 36069, 16 => 36071, 17 => 36073, 18 => 36074, 20 => 36075];
+                $user_enrolment_ids = [];
                 foreach ($data as $row) {
                     if (!empty($row['email'])) {
                         $hash = '';
@@ -1695,6 +1696,9 @@ GROUP BY c.id, u.id';
                         $index = $row['userid'] . '#' . $row['courseid'];
                         if (empty($moodle_hashs[$index])) $insert = 1;
                         elseif ($moodle_hashs[$index] != md5($hash)) $insert = 0;
+
+                        $user_enrolment_ids[$index] = $row['ueid'];
+
                         if ($insert != -1) {
                             if ($row['timestart'] == 0) $row['timestart'] = 1729494225;
                             $args =
@@ -1766,6 +1770,10 @@ GROUP BY c.id, u.id';
                         } else $count_skipped++;
                     }
                 }
+HERE
+$user_enrolment_ids[<<$index>>] = $row['ueid'];
+
+HERE
             }
         } catch (PDOException $e) {error_log('Unable to connect to Moodle: ' . $e->getMessage());}
         $conn = null;
