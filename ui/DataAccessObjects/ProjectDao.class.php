@@ -1790,7 +1790,7 @@ GROUP BY c.id, u.id';
                                 error_log('core_enrol_unenrol_user_enrolment: ' . print_r($results, 1));
 
                                 LibAPI\PDOWrapper::call('delete_task_straight', LibAPI\PDOWrapper::cleanse($row['id']));
-                            } catch (\Exception $ex) error_log('core_enrol_unenrol_user_enrolment FAILED: ' . $ex->getMessage());
+                            } catch (\Exception $ex) { error_log('core_enrol_unenrol_user_enrolment FAILED: ' . $ex->getMessage()); }
                         }
                     }
                 }
