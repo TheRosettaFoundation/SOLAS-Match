@@ -10,6 +10,7 @@ require_once __DIR__."/../../Common/lib/APIHelper.class.php";
 require_once __DIR__."/../../Common/lib/CacheHelper.class.php";
 require_once __DIR__."/BaseDao.php";
 require_once __DIR__.'/../../api/lib/PDOWrapper.class.php';
+require_once __DIR__ . '/../../Common/lib/MoodleRest.php';
 
 
 class ProjectDao extends BaseDao
@@ -1770,10 +1771,25 @@ GROUP BY c.id, u.id';
                         } else $count_skipped++;
                     }
                 }
-HERE
-$user_enrolment_ids[<<$index>>] = $row['ueid'];
+                $result = LibAPI\PDOWrapper::call('get_moodle_tasks_to_be_deleted', '');
+                if ($result) {
+                    foreach ($result as $row) {
+                        $index = $row['userid'] . '#' . $row['courseid'];
+                        if (!empty($user_enrolment_ids[$index])) {
+                            $MoodleRest = new Common\Lib\MoodleRest();
+                            $ip = Common\Lib\Settings::get('moodle.ip');
+                            $MoodleRest->setServerAddress("http://$ip/webservice/rest/server.php");
+                            $MoodleRest->setToken(Common\Lib\Settings::get('moodle.token'));
+                            $MoodleRest->setReturnFormat(Common\Lib\MoodleRest::RETURN_ARRAY);
+                            try {
+                                $results = $MoodleRest->request('core_enrol_unenrol_user_enrolment', ['ueid' => $user_enrolment_ids[$index]]);
+                                error_log('core_enrol_unenrol_user_enrolment: ' . print_r($results, 1));
 
-HERE
+                                LibAPI\PDOWrapper::call('delete_task_straight', LibAPI\PDOWrapper::cleanse($row['id']));
+                            } catch (\Exception $ex) error_log('core_enrol_unenrol_user_enrolment FAILED: ' . $ex->getMessage());
+                        }
+                    }
+                }
             }
         } catch (PDOException $e) {error_log('Unable to connect to Moodle: ' . $e->getMessage());}
         $conn = null;
