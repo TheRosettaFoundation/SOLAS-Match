@@ -1767,7 +1767,10 @@ GROUP BY c.id, u.id';
                                 LibAPI\PDOWrapper::call('complete_moodle_task', LibAPI\PDOWrapper::cleanse($courseid) . ',' . LibAPI\PDOWrapper::cleanse($row['userid']));
                                 error_log("Moodle completed courseid: $courseid, userid: " . $row['userid']);
                             }
-                            if ($row['completions'] != (empty($old_completions[$index]) ? 0 : $old_completions[$index])) LibAPI\PDOWrapper::call('remove_final_reminder_after_progress', LibAPI\PDOWrapper::cleanse($courseid) . ',' . LibAPI\PDOWrapper::cleanse($row['userid']));
+                            if ($row['completions'] != (empty($old_completions[$index]) ? 0 : $old_completions[$index])) {
+                                LibAPI\PDOWrapper::call('remove_final_reminder_after_progress', LibAPI\PDOWrapper::cleanse($courseid) . ',' . LibAPI\PDOWrapper::cleanse($row['userid']));
+                                error_log("Moodle course progress courseid: $courseid, userid: " . $row['userid']);
+                            }
                         } else $count_skipped++;
                     }
                 }
@@ -1776,6 +1779,7 @@ GROUP BY c.id, u.id';
                     foreach ($result as $row) {
                         $index = $row['userid'] . '#' . $row['courseid'];
                         if (!empty($user_enrolment_ids[$index])) {
+                            error_log("get_moodle_tasks_to_be_deleted: $index, task_id: " . $row['id'] . ', ueid: ' . $user_enrolment_ids[$index]);
                             $MoodleRest = new Common\Lib\MoodleRest();
                             $ip = Common\Lib\Settings::get('moodle.ip');
                             $MoodleRest->setServerAddress("http://$ip/webservice/rest/server.php");
