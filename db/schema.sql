@@ -3307,6 +3307,26 @@ BEGIN
 END//
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `get_moodle_tasks_to_be_deleted`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_moodle_tasks_to_be_deleted`()
+BEGIN
+    SELECT
+        t.id,
+        mtu.courseid,
+        mtu.userid
+    FROM Tasks                t
+    JOIN moodle_task_users  mtu
+    JOIN TaskNotificationSent n ON t.id=n.task_id
+    WHERE
+        t.`task-type_id`=29 AND
+        t.`task-status_id`!=4 AND
+        t.deadline<DATE_SUB(NOW(), INTERVAL 2 WEEK) AND
+        t.cancelled=0 AND
+        n.notification=2;
+END//
+DELIMITER ;
+
 
 DROP PROCEDURE IF EXISTS `taskNotificationSentInsertAndUpdate`;
 DELIMITER //
@@ -10802,6 +10822,14 @@ BEGIN
 END//
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `delete_task_straight`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `delete_task_straight`(IN tID BIGINT UNSIGNED)
+BEGIN
+    DELETE FROM Tasks WHERE id=tID;
+END//
+DELIMITER ;
+
 DROP PROCEDURE IF EXISTS `record_referer`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `record_referer`(IN ref VARCHAR(30))
@@ -14522,6 +14550,23 @@ DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `mark_final_reminder`(IN tID BIGINT UNSIGNED, IN r INT)
 BEGIN
     UPDATE moodle_task_users SET final_reminder=r WHERE task_id=tID;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `remove_final_reminder_after_progress`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `remove_final_reminder_after_progress`(IN mcID BIGINT, IN muID BIGINT)
+BEGIN
+    SET @tID = NULL;
+    SELECT task_id, final_reminder INTO @tID, @r FROM moodle_task_users WHERE courseid=mcID AND userid=muID;
+    IF @r IS NOT NULL AND @r=1 THEN
+        # Final reminder was set, but progress has been made
+        UPDATE moodle_task_users SET final_reminder=0 WHERE task_id=@tID;
+
+        UPDATE Tasks SET deadline=DATE_ADD(deadline, INTERVAL 4 WEEK) WHERE id=@tID;
+
+        DELETE FROM TaskNotificationSent WHERE task_id=@tID;
+    END IF;
 END//
 DELIMITER ;
 
