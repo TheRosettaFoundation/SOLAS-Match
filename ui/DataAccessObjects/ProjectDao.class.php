@@ -1778,6 +1778,8 @@ if (1) {$result=[];//(**)REPLACE            if ($result = $conn->query($sql)) {
                 if ($result) {
                     foreach ($result as $row) {
                         $index = $row['userid'] . '#' . $row['courseid'];
+//(**)REPLACE TAKE OUT BELWO...
+$user_enrolment_ids[$index] = 888;//(**)REMOVE
                         if (!empty($user_enrolment_ids[$index])) {
                             error_log("get_moodle_tasks_to_be_deleted: $index, task_id: " . $row['id'] . ', ueid: ' . $user_enrolment_ids[$index]);
                             $MoodleRest = new Common\Lib\MoodleRest();
