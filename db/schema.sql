@@ -14407,6 +14407,7 @@ CREATE TABLE IF NOT EXISTS `moodle_datas` (
   completions   INT,
   compl_percent INT,
   md5_hash      BINARY(32) DEFAULT '00000000000000000000000000000000',
+  PRIMARY KEY (userid, courseid),
   KEY (email),
   KEY (fullname)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
