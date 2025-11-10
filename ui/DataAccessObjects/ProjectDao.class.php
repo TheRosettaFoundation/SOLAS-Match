@@ -1789,6 +1789,8 @@ GROUP BY c.id, u.id';
                                 $results = $MoodleRest->request('core_enrol_unenrol_user_enrolment', ['ueid' => $user_enrolment_ids[$index]]);
                                 error_log('core_enrol_unenrol_user_enrolment: ' . print_r($results, 1));
 
+                                LibAPI\PDOWrapper::call('delete_moodle_data', LibAPI\PDOWrapper::cleanse($row['courseid']) . ',' . LibAPI\PDOWrapper::cleanse($row['userid']));
+
                                 LibAPI\PDOWrapper::call('delete_task_straight', LibAPI\PDOWrapper::cleanse($row['id']));
                             } catch (\Exception $ex) { error_log('core_enrol_unenrol_user_enrolment FAILED: ' . $ex->getMessage()); }
                         }
