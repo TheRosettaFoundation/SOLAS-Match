@@ -1786,8 +1786,8 @@ if (1) {$result=[];//(**)REPLACE            if ($result = $conn->query($sql)) {
                             $MoodleRest->setToken(Common\Lib\Settings::get('moodle.token'));
                             $MoodleRest->setReturnFormat(Common\Lib\MoodleRest::RETURN_ARRAY);
                             try {
-                                $results = $MoodleRest->request('core_enrol_unenrol_user_enrolment', ['ueid' => $user_enrolment_ids[$index]]);
-                                error_log('core_enrol_unenrol_user_enrolment: ' . print_r($results, 1));
+//(**)REPLACE                                $results = $MoodleRest->request('core_enrol_unenrol_user_enrolment', ['ueid' => $user_enrolment_ids[$index]]);
+//(**)REPLACE                                error_log('core_enrol_unenrol_user_enrolment: ' . print_r($results, 1));
 
                                 LibAPI\PDOWrapper::call('delete_moodle_data', LibAPI\PDOWrapper::cleanse($row['courseid']) . ',' . LibAPI\PDOWrapper::cleanse($row['userid']));
 

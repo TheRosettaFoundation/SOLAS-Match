@@ -3316,7 +3316,7 @@ BEGIN
         mtu.courseid,
         mtu.userid
     FROM Tasks                t
-    JOIN moodle_task_users  mtu
+    JOIN moodle_task_users  mtu ON t.id=mtu.task_id
     JOIN TaskNotificationSent n ON t.id=n.task_id
     WHERE
         t.`task-type_id`=29 AND
