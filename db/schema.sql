@@ -14483,6 +14483,14 @@ BEGIN
 END//
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `delete_moodle_data`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `delete_moodle_data`(IN mcID BIGINT, IN muID BIGINT)
+BEGIN
+    DELETE FROM moodle_datas WHERE courseid=mcID AND userid=muID;
+END//
+DELIMITER ;
+
 DROP PROCEDURE IF EXISTS `get_moodle_datas`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `get_moodle_datas`()
