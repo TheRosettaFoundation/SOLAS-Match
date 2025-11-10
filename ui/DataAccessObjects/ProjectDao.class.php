@@ -1774,20 +1774,6 @@ if (1) {$result=[];//(**)REPLACE            if ($result = $conn->query($sql)) {
                         } else $count_skipped++;
                     }
                 }
-//(**)REPLACE[[
-$row = [];
-$row['userid'] = 991;
-$row['courseid'] = 99;
-$courseid = $row['courseid'];
-$index = $row['userid'] . '#' . $row['courseid'];
-$row['completions'] = 0;
-                            if ($row['completions'] != (empty($old_completions[$index]) ? 0 : $old_completions[$index])) {
-error_log("Doing row['completions']:" . $row['completions']);
-error_log('Doing old_completions:' . $old_completions[$index]);
-                                LibAPI\PDOWrapper::call('remove_final_reminder_after_progress', LibAPI\PDOWrapper::cleanse($courseid) . ',' . LibAPI\PDOWrapper::cleanse($row['userid']));
-                                error_log("Moodle course progress courseid: $courseid, userid: " . $row['userid']);
-                            }
-//(**)REPLACE]]
                 $result = LibAPI\PDOWrapper::call('get_moodle_tasks_to_be_deleted', '');
                 if ($result) {
                     foreach ($result as $row) {
