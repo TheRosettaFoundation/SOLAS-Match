@@ -184,7 +184,7 @@
                                     </a>
                                 {/if}
 
-                               {if $status_id == 3 && TaskTypeEnum::$enum_to_UI[$type_id]['shell_task'] && !empty($shell_task_urls[$task_id])}
+                               {if $status_id == 3 && TaskTypeEnum::$enum_to_UI[$type_id]['shell_task'] && !empty($shell_task_urls[$task_id]) && $type_id != 29}
                                     {if empty($taskviews[$task_id])}
                                         <span id="instructions_{$task_id}">
                                             <a href="{$siteLocation}task/{$task_id}/view" class="btn btn-small btn-success">Review Instructions and Start Working</a>
@@ -197,6 +197,12 @@
                                     {if empty($taskviews[$task_id])}
                                         </span>
                                     {/if}
+                                {/if}
+
+                               {if $status_id == 3 && TaskTypeEnum::$enum_to_UI[$type_id]['shell_task'] && !empty($shell_task_urls[$task_id]) && $type_id == 29}
+                                    <a href="{$shell_task_urls[$task_id]}" target="_blank" class="btn btn-small btn-success mt-2 mt-md-0">
+                                        Learning Center Course
+                                    </a>
                                 {/if}
 
                                 {if $status_id == 3 && ($type_id == TaskTypeEnum::SPOT_QUALITY_INSPECTION || $type_id == TaskTypeEnum::QUALITY_EVALUATION)}
