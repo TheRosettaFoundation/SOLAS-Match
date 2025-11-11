@@ -1664,7 +1664,7 @@ error_log("Sync update_task_from_job() task_id: $task_id, status: $status, job: 
         }
         unset($data);
         try {
-//(**)REPLACE            $conn = new \PDO('mysql:host=88.198.8.249;dbname=moodle;port=3306', 'moodle', Common\Lib\Settings::get('moodle.db_pw'), [\PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8']);
+            $conn = new \PDO('mysql:host=88.198.8.249;dbname=moodle;port=3306', 'moodle', Common\Lib\Settings::get('moodle.db_pw'), [\PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8']);
 $sql = 'SELECT u.id AS userid, u.email, u.firstname, u.lastname, c.id AS courseid, c.fullname, ue.id AS ueid, ue.timestart, cc.timeenrolled, cc.timestarted, cc.timecompleted, la.timeaccess,
                SUM(IF(cr.id IS NOT NULL, 1, 0)) AS completions
      FROM mdl_user_enrolments              ue
@@ -1676,7 +1676,7 @@ LEFT JOIN mdl_user_lastaccess              la ON c.id=la.courseid AND u.id=la.us
 LEFT JOIN mdl_course_completion_crit_compl cr ON c.id=cr.course AND u.id=cr.userid
 WHERE deleted=0
 GROUP BY c.id, u.id';
-if (1) {$result=[];//(**)REPLACE            if ($result = $conn->query($sql)) {
+            if ($result = $conn->query($sql)) {
                 $data = [];
                 $max_criteria = [];
                 foreach ($result as $row) {
@@ -1778,8 +1778,6 @@ if (1) {$result=[];//(**)REPLACE            if ($result = $conn->query($sql)) {
                 if ($result) {
                     foreach ($result as $row) {
                         $index = $row['userid'] . '#' . $row['courseid'];
-//(**)REPLACE TAKE OUT BELWO...
-$user_enrolment_ids[$index] = 888;//(**)REMOVE
                         if (!empty($user_enrolment_ids[$index])) {
                             error_log("get_moodle_tasks_to_be_deleted: $index, task_id: " . $row['id'] . ', ueid: ' . $user_enrolment_ids[$index]);
                             $MoodleRest = new Common\Lib\MoodleRest();
@@ -1788,8 +1786,8 @@ $user_enrolment_ids[$index] = 888;//(**)REMOVE
                             $MoodleRest->setToken(Common\Lib\Settings::get('moodle.token'));
                             $MoodleRest->setReturnFormat(Common\Lib\MoodleRest::RETURN_ARRAY);
                             try {
-//(**)REPLACE                                $results = $MoodleRest->request('core_enrol_unenrol_user_enrolment', ['ueid' => $user_enrolment_ids[$index]]);
-//(**)REPLACE                                error_log('core_enrol_unenrol_user_enrolment: ' . print_r($results, 1));
+                                $results = $MoodleRest->request('core_enrol_unenrol_user_enrolment', ['ueid' => $user_enrolment_ids[$index]]);
+                                error_log('core_enrol_unenrol_user_enrolment: ' . print_r($results, 1));
 
                                 LibAPI\PDOWrapper::call('delete_moodle_data', LibAPI\PDOWrapper::cleanse($row['courseid']) . ',' . LibAPI\PDOWrapper::cleanse($row['userid']));
 
