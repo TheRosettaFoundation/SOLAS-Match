@@ -205,7 +205,7 @@
                                     </a>
                                 {/if}
 
-                                {if $type_id != TaskTypeEnum::SPOT_QUALITY_INSPECTION && $type_id != TaskTypeEnum::QUALITY_EVALUATION}
+                                {if $type_id != TaskTypeEnum::SPOT_QUALITY_INSPECTION && $type_id != TaskTypeEnum::QUALITY_EVALUATION && $type_id != 29}
                                 <a href="{$siteLocation}user/task/{$task_id}/reviews" class="btn btn-small btn-primary mt-2 mt-md-0 text-white">
                                     {Localisation::getTranslation('claimed_tasks_task_reviews')}
                                 </a>
@@ -246,7 +246,7 @@
                                     </a>
                                 {/if}
 
-                                    {if $task->getProjectId() > Settings::get("discourse.pre_discourse") && !preg_match('/^Test.{4}$/', $task_title)}
+                                    {if $task->getProjectId() > Settings::get("discourse.pre_discourse") && !preg_match('/^Test.{4}$/', $task_title) && $type_id != 29}
                                     <a class="btn btn-grayish mt-2 mt-md-0 "href="https://community.translatorswb.org/t/{$discourse_slug[$task_id]}" target="_blank">Ask in the Forum</a>
                                     {/if}
                             </p>
