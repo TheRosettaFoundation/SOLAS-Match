@@ -201,7 +201,7 @@
 
                                {if $status_id == 3 && TaskTypeEnum::$enum_to_UI[$type_id]['shell_task'] && !empty($shell_task_urls[$task_id]) && $type_id == 29}
                                     <a href="{$shell_task_urls[$task_id]}" target="_blank" class="btn btn-small btn-success mt-2 mt-md-0">
-                                        Learning Center Course
+                                        Go to Course!
                                     </a>
                                 {/if}
 
