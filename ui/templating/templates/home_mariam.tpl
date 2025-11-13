@@ -272,133 +272,133 @@
         </div>
     </div>
 
-            <div class="lg:col-span-1 space-y-8 order-2 lg:order-2">
+    <div class="lg:col-span-1 space-y-8 order-2 lg:order-2">
 
-                <div class="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-1 xl:grid-cols-1 gap-8">
-                    <div class="bg-gray-50 p-6 rounded-xl shadow-lg">
-                        <div class="bg-gray-50flex items-center space-x-3 mb-4 border-b pb-3">
-                            <span class="w-6 h-6" style="color: var(--twb-accent);">📰</span>
-                            <a href="archive.html" class="text-xl font-bold text-gray-800 cursor-pointer hover:text-gray-600 transition-colors">
-                                News & Updates
-                            </a>
-                        </div>
-                        <ul class="space-y-3">
-                            <li class="border-b last:border-b-0 pb-3">
-                                <a href="article.html" class="block hover:bg-gray-50 -mx-1 p-1 rounded transition duration-200 cursor-pointer">
-                                    <div class="flex items-start space-x-3">
-                                        <span class="w-5 h-5 mt-1 flex-shrink-0" style="color: var(--twb-accent);">💡</span>
-                                        <div>
-                                            <p class="font-medium text-gray-700">Webinar: CAT Tools for Reviewers</p>
-                                            <p class="text-xs text-gray-500">Webinar • Oct 28, 2025</p>
-                                        </div>
-                                    </div>
-                                </a>
-                            </li>
-                            <li class="border-b last:border-b-0 pb-3">
-                                <a href="article.html" class="block hover:bg-gray-50 -mx-1 p-1 rounded transition duration-200 cursor-pointer">
-                                    <div class="flex items-start space-x-3">
-                                        <span class="w-5 h-5 mt-1 flex-shrink-0" style="color: var(--twb-accent);">📊</span>
-                                        <div>
-                                            <p class="font-medium text-gray-700">TWB's 2024 Impact Report Published</p>
-                                            <p class="text-xs text-gray-500">Achievement • Oct 15, 2025</p>
-                                        </div>
-                                    </div>
-                                </a>
-                            </li>
-                            <li class="border-b last:border-b-0 pb-3">
-                                <a href="article.html" class="block hover:bg-gray-50 -mx-1 p-1 rounded transition duration-200 cursor-pointer">
-                                    <div class="flex items-start space-x-3">
-                                        <span class="w-5 h-5 mt-1 flex-shrink-0" style="color: var(--twb-accent);">🗞️</span>
-                                        <div>
-                                            <p class="font-medium text-gray-700">New Article: The Future of Neural MT</p>
-                                            <p class="text-xs text-gray-500">Article • Oct 10, 2025</p>
-                                        </div>
-                                    </div>
-                                </a>
-                            </li>
-                        </ul>
-                        <a href="#news-archive" class="mt-4 w-full text-sm font-semibold transition-colors flex items-center justify-center py-2 rounded-lg" style="color: var(--core-blue);" onmouseover="this.style.backgroundColor = 'var(--core-blue)' + '1A';" onmouseout="this.style.backgroundColor = 'transparent';">
-                            View All News →
-                        </a>
-                    </div>
-                
-                    <div class="bg-gray-50 p-6 rounded-xl shadow-lg">
-                        <div class="flex items-center space-x-3 mb-4 border-b pb-3">
-                            <span class="w-6 h-6" style="color: var(--core-blue);">📖</span>
-                            <h3 class="text-xl font-bold text-gray-800">Resources & Tools</h3>
-                        </div>
-                        <ul class="space-y-2">
-                            <li>
-                                <a href="#guidelines" class="flex items-center text-sm text-gray-700 font-medium transition-colors hover:text-blue-800">
-                                    <span class="w-4 h-4 mr-2" style="color: var(--core-blue); opacity: 0.6;">→</span> Community Contribution Guidelines (Bookstack)
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#training" class="flex items-center text-sm text-gray-700 font-medium transition-colors hover:text-blue-800">
-                                    <span class="w-4 h-4 mr-2" style="color: var(--core-blue); opacity: 0.6;">→</span> Advanced Training Modules (TWB Learning Center)
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#support" class="flex items-center text-sm text-gray-700 font-medium transition-colors hover:text-blue-800">
-                                    <span class="w-4 h-4 mr-2" style="color: var(--core-blue); opacity: 0.6;">→</span> Technical Support & FAQs
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#style-guides" class="flex items-center text-sm text-gray-700 font-medium transition-colors hover:text-blue-800">
-                                    <span class="w-4 h-4 mr-2" style="color: var(--core-blue); opacity: 0.6;">→</span> Language-Specific Style Guides
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-
-          <div class="bg-gray-50 p-6 rounded-xl shadow-lg">
-            <div class="flex items-center space-x-3 mb-4 border-b pb-3">
-              <div class="p-2 rounded-full" style="background-color: var(--core-blue); opacity: 0.1;">
-                💬
-              </div>
-              <h3 class="text-xl font-bold text-gray-800">Community Survey</h3>
-            </div>
-            <p class="font-semibold text-gray-700 mb-2">How satisfied are you with the platform's task matching feature?</p>
-            <p class="text-sm text-gray-500 mb-4">Your anonymous feedback helps us improve task assignments and efficiency.</p>
-            <form onsubmit="alert('Response submitted!'); return false;" class="space-y-3">
-              <div class="flex items-center">
-                <input type="radio" id="radio-v-satisfied" name="survey-response" value="Very Satisfied" class="h-4 w-4 border-gray-300" style="color: var(--core-blue);" required>
-                <label for="radio-v-satisfied" class="ml-3 text-sm font-medium text-gray-700 cursor-pointer w-full p-2 hover:bg-gray-50 rounded">Very Satisfied</label>
-              </div>
-              <div class="flex items-center">
-                <input type="radio" id="radio-satisfied" name="survey-response" value="Satisfied" class="h-4 w-4 border-gray-300" style="color: var(--core-blue);" required>
-                <label for="radio-satisfied" class="ml-3 text-sm font-medium text-gray-700 cursor-pointer w-full p-2 hover:bg-gray-50 rounded">Satisfied</label>
-              </div>
-              <div class="flex items-center">
-                <input type="radio" id="radio-neutral" name="survey-response" value="Neutral" class="h-4 w-4 border-gray-300" style="color: var(--core-blue);" required>
-                <label for="radio-neutral" class="ml-3 text-sm font-medium text-gray-700 cursor-pointer w-full p-2 hover:bg-gray-50 rounded">Neutral</label>
-              </div>
-              <div class="flex items-center">
-                <input type="radio" id="radio-dissatisfied" name="survey-response" value="Dissatisfied" class="h-4 w-4 border-gray-300" style="color: var(--core-blue);" required>
-                <label for="radio-dissatisfied" class="ml-3 text-sm font-medium text-gray-700 cursor-pointer w-full p-2 hover:bg-gray-50 rounded">Dissatisfied</label>
-              </div>
-              <div class="flex items-center">
-                <input type="radio" id="radio-v-dissatisfied" name="survey-response" value="Very Dissatisfied" class="h-4 w-4 border-gray-300" style="color: var(--core-blue);" required>
-                <label for="radio-v-dissatisfied" class="ml-3 text-sm font-medium text-gray-700 cursor-pointer w-full p-2 hover:bg-gray-50 rounded">Very Dissatisfied</label>
-              </div>
-              <button type="submit" style="background-color: var(--twb-accent);" class="w-full py-2 text-white font-semibold rounded-lg mt-4 transition duration-300 flex items-center justify-center hover:opacity-90">
-                Submit Response
-              </button>
-            </form>
-          </div>
-
-          <div class="bg-gray-50 p-6 rounded-xl shadow-lg border-t-4 border-t-gray-400">
-            <h3 class="text-xl font-bold text-gray-800 mb-3">Feedback & Suggestions</h3>
-            <p class="text-gray-600 mb-4 text-sm">Have ideas for improvement? Share your experience with the platform or suggest a new feature.</p>
-            <a href="#feedback-form" class="inline-flex items-center py-2 px-4 border border-transparent text-sm font-medium rounded-full shadow-sm text-white transition-colors" style="background-color: var(--twb-accent);" onmouseover="this.style.backgroundColor = 'var(--core-blue)';" onmouseout="this.style.backgroundColor = 'var(--twb-accent)';">
-            💡 Submit Feedback
-            </a>
-          </div>
+        <div class="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-1 xl:grid-cols-1 gap-8">
+            <div class="bg-gray-50 p-6 rounded-xl shadow-lg">
+                <div class="bg-gray-50flex items-center space-x-3 mb-4 border-b pb-3">
+                    <span class="w-6 h-6" style="color: var(--twb-accent);">📰</span>
+                    <a href="archive.html" class="text-xl font-bold text-gray-800 cursor-pointer hover:text-gray-600 transition-colors">
+                        News & Updates
+                    </a>
                 </div>
+                <ul class="space-y-3">
+                    <li class="border-b last:border-b-0 pb-3">
+                        <a href="article.html" class="block hover:bg-gray-50 -mx-1 p-1 rounded transition duration-200 cursor-pointer">
+                            <div class="flex items-start space-x-3">
+                                <span class="w-5 h-5 mt-1 flex-shrink-0" style="color: var(--twb-accent);">💡</span>
+                                <div>
+                                    <p class="font-medium text-gray-700">Webinar: CAT Tools for Reviewers</p>
+                                    <p class="text-xs text-gray-500">Webinar • Oct 28, 2025</p>
+                                </div>
+                            </div>
+                        </a>
+                    </li>
+                    <li class="border-b last:border-b-0 pb-3">
+                        <a href="article.html" class="block hover:bg-gray-50 -mx-1 p-1 rounded transition duration-200 cursor-pointer">
+                            <div class="flex items-start space-x-3">
+                                <span class="w-5 h-5 mt-1 flex-shrink-0" style="color: var(--twb-accent);">📊</span>
+                                <div>
+                                    <p class="font-medium text-gray-700">TWB's 2024 Impact Report Published</p>
+                                    <p class="text-xs text-gray-500">Achievement • Oct 15, 2025</p>
+                                </div>
+                            </div>
+                        </a>
+                    </li>
+                    <li class="border-b last:border-b-0 pb-3">
+                        <a href="article.html" class="block hover:bg-gray-50 -mx-1 p-1 rounded transition duration-200 cursor-pointer">
+                            <div class="flex items-start space-x-3">
+                                <span class="w-5 h-5 mt-1 flex-shrink-0" style="color: var(--twb-accent);">🗞️</span>
+                                <div>
+                                    <p class="font-medium text-gray-700">New Article: The Future of Neural MT</p>
+                                    <p class="text-xs text-gray-500">Article • Oct 10, 2025</p>
+                                </div>
+                            </div>
+                        </a>
+                    </li>
+                </ul>
+                <a href="#news-archive" class="mt-4 w-full text-sm font-semibold transition-colors flex items-center justify-center py-2 rounded-lg" style="color: var(--core-blue);" onmouseover="this.style.backgroundColor = 'var(--core-blue)' + '1A';" onmouseout="this.style.backgroundColor = 'transparent';">
+                    View All News →
+                </a>
             </div>
 
+            <div class="bg-gray-50 p-6 rounded-xl shadow-lg">
+                <div class="flex items-center space-x-3 mb-4 border-b pb-3">
+                    <span class="w-6 h-6" style="color: var(--core-blue);">📖</span>
+                    <h3 class="text-xl font-bold text-gray-800">Resources & Tools</h3>
+                </div>
+                <ul class="space-y-2">
+                    <li>
+                        <a href="#guidelines" class="flex items-center text-sm text-gray-700 font-medium transition-colors hover:text-blue-800">
+                            <span class="w-4 h-4 mr-2" style="color: var(--core-blue); opacity: 0.6;">→</span> Community Contribution Guidelines (Bookstack)
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#training" class="flex items-center text-sm text-gray-700 font-medium transition-colors hover:text-blue-800">
+                            <span class="w-4 h-4 mr-2" style="color: var(--core-blue); opacity: 0.6;">→</span> Advanced Training Modules (TWB Learning Center)
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#support" class="flex items-center text-sm text-gray-700 font-medium transition-colors hover:text-blue-800">
+                            <span class="w-4 h-4 mr-2" style="color: var(--core-blue); opacity: 0.6;">→</span> Technical Support & FAQs
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#style-guides" class="flex items-center text-sm text-gray-700 font-medium transition-colors hover:text-blue-800">
+                            <span class="w-4 h-4 mr-2" style="color: var(--core-blue); opacity: 0.6;">→</span> Language-Specific Style Guides
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="bg-gray-50 p-6 rounded-xl shadow-lg">
+                <div class="flex items-center space-x-3 mb-4 border-b pb-3">
+                    <div class="p-2 rounded-full" style="background-color: var(--core-blue); opacity: 0.1;">
+                        💬
+                   </div>
+                   <h3 class="text-xl font-bold text-gray-800">Community Survey</h3>
+                </div>
+                <p class="font-semibold text-gray-700 mb-2">How satisfied are you with the platform's task matching feature?</p>
+                <p class="text-sm text-gray-500 mb-4">Your anonymous feedback helps us improve task assignments and efficiency.</p>
+                <form onsubmit="alert('Response submitted!'); return false;" class="space-y-3">
+                    <div class="flex items-center">
+                        <input type="radio" id="radio-v-satisfied" name="survey-response" value="Very Satisfied" class="h-4 w-4 border-gray-300" style="color: var(--core-blue);" required>
+                        <label for="radio-v-satisfied" class="ml-3 text-sm font-medium text-gray-700 cursor-pointer w-full p-2 hover:bg-gray-50 rounded">Very Satisfied</label>
+                    </div>
+                    <div class="flex items-center">
+                        <input type="radio" id="radio-satisfied" name="survey-response" value="Satisfied" class="h-4 w-4 border-gray-300" style="color: var(--core-blue);" required>
+                        <label for="radio-satisfied" class="ml-3 text-sm font-medium text-gray-700 cursor-pointer w-full p-2 hover:bg-gray-50 rounded">Satisfied</label>
+                    </div>
+                    <div class="flex items-center">
+                        <input type="radio" id="radio-neutral" name="survey-response" value="Neutral" class="h-4 w-4 border-gray-300" style="color: var(--core-blue);" required>
+                        <label for="radio-neutral" class="ml-3 text-sm font-medium text-gray-700 cursor-pointer w-full p-2 hover:bg-gray-50 rounded">Neutral</label>
+                    </div>
+                    <div class="flex items-center">
+                        <input type="radio" id="radio-dissatisfied" name="survey-response" value="Dissatisfied" class="h-4 w-4 border-gray-300" style="color: var(--core-blue);" required>
+                        <label for="radio-dissatisfied" class="ml-3 text-sm font-medium text-gray-700 cursor-pointer w-full p-2 hover:bg-gray-50 rounded">Dissatisfied</label>
+                    </div>
+                    <div class="flex items-center">
+                        <input type="radio" id="radio-v-dissatisfied" name="survey-response" value="Very Dissatisfied" class="h-4 w-4 border-gray-300" style="color: var(--core-blue);" required>
+                        <label for="radio-v-dissatisfied" class="ml-3 text-sm font-medium text-gray-700 cursor-pointer w-full p-2 hover:bg-gray-50 rounded">Very Dissatisfied</label>
+                    </div>
+                    <button type="submit" style="background-color: var(--twb-accent);" class="w-full py-2 text-white font-semibold rounded-lg mt-4 transition duration-300 flex items-center justify-center hover:opacity-90">
+                        Submit Response
+                    </button>
+                </form>
+            </div>
+
+            <div class="bg-gray-50 p-6 rounded-xl shadow-lg border-t-4 border-t-gray-400">
+                <h3 class="text-xl font-bold text-gray-800 mb-3">Feedback & Suggestions</h3>
+                <p class="text-gray-600 mb-4 text-sm">Have ideas for improvement? Share your experience with the platform or suggest a new feature.</p>
+                <a href="#feedback-form" class="inline-flex items-center py-2 px-4 border border-transparent text-sm font-medium rounded-full shadow-sm text-white transition-colors" style="background-color: var(--twb-accent);" onmouseover="this.style.backgroundColor = 'var(--core-blue)';" onmouseout="this.style.backgroundColor = 'var(--twb-accent)';">
+                    💡 Submit Feedback
+                </a>
+            </div>
         </div>
-    </main>
+    </div>
+
+</div>
+</main>
 
 
 
