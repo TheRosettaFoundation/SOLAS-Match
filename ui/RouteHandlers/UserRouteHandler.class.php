@@ -24,6 +24,11 @@ class UserRouteHandler
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:home')
             ->setName('home');
 
+        $app->map(['GET'],
+            '/home_mariam[/]',
+            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:home_mariam')
+            ->setName('home_mariam');
+
         $app->map(['GET', 'POST'],
             '/paged/{page_no}/tt/{tt}/sl/{sl}/tl/{tl}[/]',
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:homeIndex')
@@ -3643,6 +3648,15 @@ foreach ($rows as $index => $row) {
 
         $template_data = array_merge($template_data, ['items' => $userDao->get_all_content_items($org_id), 'org_id' => $org_id]);
         return UserRouteHandler::render('user/content_items.tpl', $response);
+    }
+
+    public function home_mariam(Request $request, Response $response)
+    {
+        global $template_data;
+        $userDao = new DAO\UserDao();
+
+        $template_data = array_merge($template_data, []);
+        return UserRouteHandler::render('home_mariam.tpl', $response);
     }
 
     public static function flash($key, $value)
