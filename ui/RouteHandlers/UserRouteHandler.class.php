@@ -3652,7 +3652,7 @@ foreach ($rows as $index => $row) {
 
     public function home_mariam(Request $request, Response $response)
     {
-        global $template_data;
+        global $app, $template_data;
         $userDao = new DAO\UserDao();
 
         $extra_scripts  = "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/Parameters.js\"></script>";
