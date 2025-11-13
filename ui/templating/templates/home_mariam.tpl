@@ -1,12 +1,36 @@
 {include file="new_header.tpl" body_id="home"}
 <!-- Editor Hint: ¿áéíóú -->
-        <div class="container">
-
+<div class="container">
 <span class="d-none">
     <!-- Parameters... -->
-    <div id="siteLocation">https://twbplatform.org/</div>
+    <div id="siteLocation">{$siteLocation}</div>
 </span>
 
+{if isset($flash['error'])}
+    <div class="alert alert-danger alert-dismissible fade show mt-4">
+        <p><strong>{Localisation::getTranslation('common_warning')}! </strong>{TemplateHelper::uiCleanseHTMLKeepMarkup($flash['error'])}</p>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+{/if}
+{if isset($flash['info'])}
+    <div class="alert alert-info alert-dismissible fade show mt-4">
+        <p><strong>{Localisation::getTranslation('common_note')} </strong>{TemplateHelper::uiCleanseHTMLKeepMarkup($flash['info'])}</p>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+{/if}
+{if isset($flash['success'])}
+    <div class="alert alert-success alert-dismissible fade show mt-4 ">
+        <img src="{urlFor name='home'}ui/img/success.svg" alt="translator" class="mx-1 " />
+        <strong>{Localisation::getTranslation('common_success')}! </strong>{TemplateHelper::uiCleanseHTMLKeepMarkup($flash['success'])}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+{/if}
+{if isset($flash['warning'])}
+    <div class="alert alert-warning alert-dismissible fade show mt-4">
+        <p><strong>{TemplateHelper::uiCleanseHTMLKeepMarkup($flash['warning'])}</strong></p>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+{/if}
 
     <div id="announcement-banner" class="p-3 text-center text-sm font-medium bg-yellow-100 text-yellow-800 flex items-center justify-center space-x-3">
         <p class="flex-1">
@@ -16,147 +40,129 @@
             &times;
         </button>
     </div>
-
-
-
-
- 
-
-
-
-
- 
-
 </div>
 
-
-    <main class="max-w-7xl mx-auto px-4 sm:px-8 lg:px-8 pb-8 pt-8">
+<main class="max-w-7xl mx-auto px-4 sm:px-8 lg:px-8 pb-8 pt-8">
     <div><img src="https://twbplatform.org/ui/img/voice.png"></div>
     <div>&nbsp;</div>
 
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-
-
-
-            <div class="lg:col-span-2 space-y-8 order-1 lg:order-1">
-
-                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-                            <!-- Hours Contributed Card -->
-                            <div class="bg-white rounded-xl shadow-lg p-4 border-t-4" style="border-top-color: var(--core-blue);">
-                                <div class="flex items-center">
-                                    <div class="flex-shrink-0 bg-blue-100 p-3 rounded-full" style="color: var(--core-blue);">
-                                        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                        </svg>
-                                    </div>
-                                    <div class="ml-4">
-                                        <p class="text-sm font-medium text-gray-500">Hours Contributed</p>
-                                        <p class="text-xl font-bold text-gray-900">145</p>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Words Translated Card -->
-                            <div class="bg-white rounded-xl shadow-lg p-4 border-t-4" style="border-top-color: var(--twb-accent);">
-                                <div class="flex items-center">
-                                    <div class="flex-shrink-0 bg-yellow-100 p-3 rounded-full" style="color: var(--twb-accent);">
-                                        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
-                                        </svg>
-                                    </div>
-                                    <div class="ml-4">
-                                        <p class="text-sm font-medium text-gray-500">Words Translated</p>
-                                        <p class="text-xl font-bold text-gray-900">45,892</p>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Projects Completed Card -->
-                            <div class="bg-white rounded-xl shadow-lg p-4 border-t-4" style="border-top-color: #16a34a;">
-                                <div class="flex items-center">
-                                    <div class="flex-shrink-0 bg-green-100 p-3 rounded-full text-green-700">
-                                        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                        </svg>
-                                    </div>
-                                    <div class="ml-4">
-                                        <p class="text-sm font-medium text-gray-500">Projects Completed</p>
-                                        <p class="text-xl font-bold text-gray-900">18</p>
-                                    </div>
-                                </div>
-                            </div>
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div class="lg:col-span-2 space-y-8 order-1 lg:order-1">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                <!-- Hours Contributed Card -->
+                <div class="bg-white rounded-xl shadow-lg p-4 border-t-4" style="border-top-color: var(--core-blue);">
+                    <div class="flex items-center">
+                        <div class="flex-shrink-0 bg-blue-100 p-3 rounded-full" style="color: var(--core-blue);">
+                            <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
                         </div>
-
-
-                <div class="bg-gray-50 p-6 rounded-xl shadow-lg border-t-4" style="border-top-color: var(--twb-accent);">
-                    <div class="flex justify-between items-center mb-4">
-                        <h2 class="text-2xl font-bold text-gray-800">My Tasks</h2>
-                        <a href="#my-tasks" class="text-sm font-semibold transition-colors flex items-center" style="color: var(--twb-accent);">
-                            Go to My Tasks →
-                        </a>
-                    </div>
-                    <div class="space-y-4">
-                        <div class="flex items-center justify-between p-3 rounded-lg shadow-sm border border-gray-200 hover:shadow-md transition duration-300">
-                            <div class="flex items-center space-x-3">
-                                <div class="p-2 rounded-full" style="background-color: var(--twb-accent); opacity: 0.1; color: var(--twb-accent);">
-                                    ✔
-                                </div>
-                                <div>
-                  <div class="fw-bold text-md">
-                    <a id="task-286410" href="https://twbplatform.org/task/286410/view" class="custom-link w-75 text-wrap ">1.09 INEE Minimum Standards 2024</a>
-                    <span class=" badge rounded-pill border border-2 text-white text-uppercase border-greenBorder border-opacity-25 fs-7 font-bold" style="background-color:#1D8A11">  Translation </span>
-                    <span  class=" ms-1 rounded-pill badge bg-quartenary border border-2 border-quartBorder border-opacity-25  text-white font-bold fs-7"> 8343 words </span>
-                  </div>
-                                    <p class="text-xs text-gray-500">English → French | In Progress</p>
-                                </div>
-                            </div>
-                            <div class="text-right">
-                                <p class="text-xs font-medium text-red-500 flex items-center">
-                                    🕒
-                                    Today, 11:00 AM
-                                </p>
-                            </div>
-                        </div>
-                        <div class="flex items-center justify-between p-3 rounded-lg shadow-sm border border-gray-200 hover:shadow-md transition duration-300">
-                            <div class="flex items-center space-x-3">
-                                <div class="p-2 rounded-full" style="background-color: var(--twb-accent); opacity: 0.1; color: var(--twb-accent);">
-                                    ✔
-                                </div>
-                                <div>
-                  <div class="fw-bold text-md">
-                    <a id="task-286410" href="https://twbplatform.org/task/286410/view" class="custom-link w-75 text-wrap ">1.03 INEE Minimum Standards Minimum 2024 [FINAL DRAFT]_for translation.docx</a>
-                    <span class=" badge rounded-pill border border-2 text-white text-uppercase border-greenBorder border-opacity-25 fs-7 font-bold" style="background-color:#1D8A11">  Translation </span>
-                    <span  class=" ms-1 rounded-pill badge bg-quartenary border border-2 border-quartBorder border-opacity-25  text-white font-bold fs-7"> 8343 words </span>
-                  </div>
-                                    <p class="text-xs text-gray-500">English → French | In Progress</p>
-                                </div>
-                            </div>
-                            <div class="text-right">
-                                <p class="text-xs font-medium text-red-500 flex items-center">
-                                    🕒
-                                    Today, 11:00 AM
-                                </p>
-                            </div>
-                        </div>
-                        <div class="flex items-center justify-between p-3 rounded-lg shadow-sm border border-gray-200 hover:shadow-md transition duration-300">
-                            <div class="flex items-center space-x-3">
-                                <div class="p-2 rounded-full" style="background-color: var(--twb-accent); opacity: 0.1; color: var(--twb-accent);">
-                                    ✔
-                                </div>
-                                <div>
-                                    <p class="font-semibold text-gray-800">Revision</p>
-                                    <p class="text-xs text-gray-500">English → French | Ready to Submit</p>
-                                </div>
-                            </div>
-                            <div class="text-right">
-                                <p class="text-xs font-medium text-red-500 flex items-center">
-                                    🕒
-                                    10/25/2025 9:30 AM
-                                </p>
-                            </div>
+                        <div class="ml-4">
+                            <p class="text-sm font-medium text-gray-500">Hours Contributed</p>
+                            <p class="text-xl font-bold text-gray-900">145</p>
                         </div>
                     </div>
                 </div>
+                <!-- Words Translated Card -->
+                <div class="bg-white rounded-xl shadow-lg p-4 border-t-4" style="border-top-color: var(--twb-accent);">
+                    <div class="flex items-center">
+                        <div class="flex-shrink-0 bg-yellow-100 p-3 rounded-full" style="color: var(--twb-accent);">
+                            <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
+                            </svg>
+                        </div>
+                        <div class="ml-4">
+                            <p class="text-sm font-medium text-gray-500">Words Translated</p>
+                            <p class="text-xl font-bold text-gray-900">45,892</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Projects Completed Card -->
+                <div class="bg-white rounded-xl shadow-lg p-4 border-t-4" style="border-top-color: #16a34a;">
+                    <div class="flex items-center">
+                        <div class="flex-shrink-0 bg-green-100 p-3 rounded-full text-green-700">
+                            <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                        </div>
+                        <div class="ml-4">
+                            <p class="text-sm font-medium text-gray-500">Projects Completed</p>
+                            <p class="text-xl font-bold text-gray-900">18</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-gray-50 p-6 rounded-xl shadow-lg border-t-4" style="border-top-color: var(--twb-accent);">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="text-2xl font-bold text-gray-800">My Tasks</h2>
+                    <a href="#my-tasks" class="text-sm font-semibold transition-colors flex items-center" style="color: var(--twb-accent);">
+                        Go to My Tasks →
+                    </a>
+                </div>
+                <div class="space-y-4">
+                    <div class="flex items-center justify-between p-3 rounded-lg shadow-sm border border-gray-200 hover:shadow-md transition duration-300">
+                        <div class="flex items-center space-x-3">
+                            <div class="p-2 rounded-full" style="background-color: var(--twb-accent); opacity: 0.1; color: var(--twb-accent);">
+                                ✔
+                            </div>
+                            <div>
+                                <div class="fw-bold text-md">
+                                    <a id="task-286410" href="https://twbplatform.org/task/286410/view" class="custom-link w-75 text-wrap ">1.09 INEE Minimum Standards 2024</a>
+                                    <span class=" badge rounded-pill border border-2 text-white text-uppercase border-greenBorder border-opacity-25 fs-7 font-bold" style="background-color:#1D8A11">  Translation </span>
+                                    <span  class=" ms-1 rounded-pill badge bg-quartenary border border-2 border-quartBorder border-opacity-25  text-white font-bold fs-7"> 8343 words </span>
+                                </div>
+                                <p class="text-xs text-gray-500">English → French | In Progress</p>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-xs font-medium text-red-500 flex items-center">
+                                🕒
+                                Today, 11:00 AM
+                            </p>
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-between p-3 rounded-lg shadow-sm border border-gray-200 hover:shadow-md transition duration-300">
+                        <div class="flex items-center space-x-3">
+                            <div class="p-2 rounded-full" style="background-color: var(--twb-accent); opacity: 0.1; color: var(--twb-accent);">
+                                ✔
+                            </div>
+                            <div>
+                                <div class="fw-bold text-md">
+                                    <a id="task-286410" href="https://twbplatform.org/task/286410/view" class="custom-link w-75 text-wrap ">1.03 INEE Minimum Standards Minimum 2024 [FINAL DRAFT]_for translation.docx</a>
+                                    <span class=" badge rounded-pill border border-2 text-white text-uppercase border-greenBorder border-opacity-25 fs-7 font-bold" style="background-color:#1D8A11">  Translation </span>
+                                    <span  class=" ms-1 rounded-pill badge bg-quartenary border border-2 border-quartBorder border-opacity-25  text-white font-bold fs-7"> 8343 words </span>
+                                </div>
+                                <p class="text-xs text-gray-500">English → French | In Progress</p>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-xs font-medium text-red-500 flex items-center">
+                                🕒
+                                Today, 11:00 AM
+                            </p>
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-between p-3 rounded-lg shadow-sm border border-gray-200 hover:shadow-md transition duration-300">
+                        <div class="flex items-center space-x-3">
+                            <div class="p-2 rounded-full" style="background-color: var(--twb-accent); opacity: 0.1; color: var(--twb-accent);">
+                                ✔
+                            </div>
+                            <div>
+                                <p class="font-semibold text-gray-800">Revision</p>
+                                <p class="text-xs text-gray-500">English → French | Ready to Submit</p>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-xs font-medium text-red-500 flex items-center">
+                                🕒
+                                10/25/2025 9:30 AM
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
                 <div class="bg-gray-50 p-6 rounded-xl shadow-lg border-t-4" style="border-top-color: var(--core-blue);">
                     <div class="flex justify-between items-center mb-4">
