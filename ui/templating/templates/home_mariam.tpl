@@ -1,15 +1,5 @@
 {include file="new_header.tpl" body_id="home"}
 <!-- Editor Hint: ¿áéíóú -->
-    <body  class="flex-grow-1">
-        <div class="d-flex flex-column min-vh-100 ">
-        <nav data-bs-theme="light" id="nav" class="navbar navbar-expand-lg bg-body-tertiary shadow bg-secondary d-flex ">
-    <div class="container py-2">Menu</div>
-        </nav>
-
-                
-        <main class="flex-grow-1">
-<!-- Editor Hint: ¿áéíóú -->
-
         <div class="container">
 
 <span class="d-none">
