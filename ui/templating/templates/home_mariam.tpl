@@ -196,15 +196,12 @@ h3{
 a:hover{
     text-decoration:underline;
 }
-
 </style>
 
-
-  
-                        <script type="text/javascript" src="https://gc.kis.v2.scr.kaspersky-labs.com/FD126C42-EBFA-4E12-B309-BB3FDD723AC1/main.js?attr=2gfnHtk_AE3Xa8TGtXgZ-JudSEHgc-ONXLN9sy8IQcJuXfz1z0NWOcq6vDX-C0jt" charset="UTF-8"></script><script type="text/javascript" src="https://twbplatform.org/ui/js/lib/jquery-1.9.0.js"></script>
-        <script type="text/javascript" src="https://twbplatform.org/ui/js/lib/jquery-ui.js"></script>
-        <script type="text/javascript" src="https://twbplatform.org/ui/js/lib/dayjs.min.js"></script>
-        <script type="text/javascript" src="https://twbplatform.org/ui/js/lib/plugin/utc.js"></script>
+<script type="text/javascript" src="https://twbplatform.org/ui/js/lib/jquery-1.9.0.js"></script>
+<script type="text/javascript" src="https://twbplatform.org/ui/js/lib/jquery-ui.js"></script>
+<script type="text/javascript" src="https://twbplatform.org/ui/js/lib/dayjs.min.js"></script>
+<script type="text/javascript" src="https://twbplatform.org/ui/js/lib/plugin/utc.js"></script>
    
 <!-- Global site tag (gtag.js) - Google Analytics -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-3Z3VNH71D6"></script>
