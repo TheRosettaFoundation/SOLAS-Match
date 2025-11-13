@@ -164,118 +164,113 @@
                 </div>
             </div>
 
-                <div class="bg-gray-50 p-6 rounded-xl shadow-lg border-t-4" style="border-top-color: var(--core-blue);">
-                    <div class="flex justify-between items-center mb-4">
-                        <h2 class="text-2xl font-bold text-gray-800">Available Tasks</h2>
-                        <a href="#browse-tasks" class="text-sm font-semibold transition-colors flex items-center" style="color: var(--core-blue);">
-                            Browse All Tasks →
-                        </a>
-                    </div>
-                    <div class="space-y-4">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div class="p-4 rounded-xl shadow-lg border-l-4 flex flex-col space-y-3" style="border-left-color: var(--twb-accent);">
-                <div class="flex justify-between items-start">
-                  <div class="space-y-1">
-                    <div class="flex space-x-2 text-sm font-semibold text-white">
-                      <span class=" badge rounded-pill border border-2 text-white text-uppercase border-greenBorder border-opacity-25 fs-7 font-bold" style="background-color:#1D8A11">  Translation </span>
-                      <span  class=" ms-1 rounded-pill badge bg-quartenary border border-2 border-quartBorder border-opacity-25  text-white font-bold fs-7"> 8343 words </span>
-                    </div>
-                    <p class="text-lg font-bold text-gray-800">1.09 INEE Minimum Standards 2024 [FINAL DRAFT]_for translation.docx</p>
-                    <div class="fw-bold text-lg">
-                                            <a id="task-286410" href="https://twbplatform.org/task/286410/view" class="custom-link w-75 text-wrap ">1.09 INEE Minimum Standards 2024 [FINAL DRAFT]_for translation.docx</a>
-                                        </div>
-
-                  </div>
-                  <img src="https://placehold.co/40x40/ED1C24/ffffff?text=IFRC" alt="IFRC logo" class="w-10 h-10 rounded-full object-cover" />
+            <div class="bg-gray-50 p-6 rounded-xl shadow-lg border-t-4" style="border-top-color: var(--core-blue);">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="text-2xl font-bold text-gray-800">Available Tasks</h2>
+                    <a href="#browse-tasks" class="text-sm font-semibold transition-colors flex items-center" style="color: var(--core-blue);">
+                        Browse All Tasks →
+                    </a>
                 </div>
-                <p class="text-sm text-gray-600">
-                  <span class="font-medium">Languages:</span> English → French
-                </p>
-                <p class="text-xs font-medium text-red-500 flex items-center">
-                                    🕒
-                                    Today, 5:20 PM
-                                </p>
-                   <div class="d-flex items-center justify-center flex-wrap mt-2 mt-sm-2 mt-md-2">
-                                        <a class="btn btn-secondary fs-5 px-3" href="https://twbplatform.org/task/286410/view">View Task</a>
-                                     </div>
-              </div>
-              <div class="p-4 rounded-xl shadow-lg border-l-4 flex flex-col space-y-3" style="border-left-color: var(--twb-accent);">
-                <div class="flex justify-between items-start">
-                  <div class="space-y-1">
-                    <div class="flex space-x-2 text-sm font-semibold text-white">
-                      <span class=" badge rounded-pill border border-2 text-white text-uppercase border-greenBorder border-opacity-25 fs-7 font-bold" style="background-color:#1D8A11">  Translation </span>
-                      <span  class=" ms-1 rounded-pill badge bg-quartenary border border-2 border-quartBorder border-opacity-25  text-white font-bold fs-7"> 8343 words </span>
+                <div class="space-y-4">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="p-4 rounded-xl shadow-lg border-l-4 flex flex-col space-y-3" style="border-left-color: var(--twb-accent);">
+                            <div class="flex justify-between items-start">
+                                <div class="space-y-1">
+                                    <div class="flex space-x-2 text-sm font-semibold text-white">
+                                        <span class=" badge rounded-pill border border-2 text-white text-uppercase border-greenBorder border-opacity-25 fs-7 font-bold" style="background-color:#1D8A11">  Translation </span>
+                                        <span  class=" ms-1 rounded-pill badge bg-quartenary border border-2 border-quartBorder border-opacity-25  text-white font-bold fs-7"> 8343 words </span>
+                                    </div>
+                                    <p class="text-lg font-bold text-gray-800">1.09 INEE Minimum Standards 2024 [FINAL DRAFT]_for translation.docx</p>
+                                    <div class="fw-bold text-lg">
+                                        <a id="task-286410" href="https://twbplatform.org/task/286410/view" class="custom-link w-75 text-wrap ">1.09 INEE Minimum Standards 2024 [FINAL DRAFT]_for translation.docx</a>
+                                    </div>
+                                </div>
+                                <img src="https://placehold.co/40x40/ED1C24/ffffff?text=IFRC" alt="IFRC logo" class="w-10 h-10 rounded-full object-cover" />
+                            </div>
+                            <p class="text-sm text-gray-600">
+                                <span class="font-medium">Languages:</span> English → French
+                            </p>
+                            <p class="text-xs font-medium text-red-500 flex items-center">
+                                🕒
+                                Today, 5:20 PM
+                            </p>
+                            <div class="d-flex items-center justify-center flex-wrap mt-2 mt-sm-2 mt-md-2">
+                                <a class="btn btn-secondary fs-5 px-3" href="https://twbplatform.org/task/286410/view">View Task</a>
+                            </div>
+                        </div>
+                        <div class="p-4 rounded-xl shadow-lg border-l-4 flex flex-col space-y-3" style="border-left-color: var(--twb-accent);">
+                            <div class="flex justify-between items-start">
+                                <div class="space-y-1">
+                                    <div class="flex space-x-2 text-sm font-semibold text-white">
+                                        <span class=" badge rounded-pill border border-2 text-white text-uppercase border-greenBorder border-opacity-25 fs-7 font-bold" style="background-color:#1D8A11">  Translation </span>
+                                        <span  class=" ms-1 rounded-pill badge bg-quartenary border border-2 border-quartBorder border-opacity-25  text-white font-bold fs-7"> 8343 words </span>
+                                    </div>
+                                    <p class="text-lg font-bold text-gray-800">Translations in DTP of epidural risk infographics</p>
+                                </div>
+                                <img src="https://placehold.co/40x40/003C71/ffffff?text=OXF" alt="Oxfam logo" class="w-10 h-10 rounded-full object-cover" />
+                            </div>
+                            <p class="text-sm text-gray-600">
+                                <span class="font-medium">Languages:</span> Spanish → Italian
+                            </p>
+                            <p class="text-xs font-medium text-red-500 flex items-center">
+                                🕒
+                                20/25/2025 10:40 PM
+                            </p>
+                            <div class="d-flex items-center justify-center flex-wrap mt-2 mt-sm-2 mt-md-2">
+                                <a class="btn btn-secondary fs-5 px-3" href="https://twbplatform.org/task/286410/view">View Task</a>
+                            </div>
+                        </div>
                     </div>
-                    <p class="text-lg font-bold text-gray-800">Translations in DTP of epidural risk infographics</p>
-                  </div>
-                  <img src="https://placehold.co/40x40/003C71/ffffff?text=OXF" alt="Oxfam logo" class="w-10 h-10 rounded-full object-cover" />
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="p-4 rounded-xl shadow-lg border-l-4 flex flex-col space-y-3" style="border-left-color: var(--twb-accent);">
+                            <div class="flex justify-between items-start">
+                                <div class="space-y-1">
+                                    <div class="flex space-x-2 text-sm font-semibold text-white">
+                                        <span class=" badge rounded-pill border border-2 text-white text-uppercase border-greenBorder border-opacity-25 fs-7 font-bold" style="background-color:#1D8A11">  Translation </span>
+                                        <span  class=" ms-1 rounded-pill badge bg-quartenary border border-2 border-quartBorder border-opacity-25  text-white font-bold fs-7"> 8343 words </span>
+                                    </div>
+                                    <p class="text-lg font-bold text-gray-800">INEE - Minimum Standards 2025</p>
+                                </div>
+                                <img src="https://placehold.co/40x40/ED1C24/ffffff?text=IFRC" alt="IFRC logo" class="w-10 h-10 rounded-full object-cover" />
+                            </div>
+                            <p class="text-sm text-gray-600">
+                                <span class="font-medium">Languages:</span> English → French
+                            </p>
+                            <p class="text-xs font-medium text-red-500 flex items-center">
+                                🕒
+                                Tomorrow, 9:30 PM
+                            </p>
+                            <div class="d-flex items-center justify-center flex-wrap mt-2 mt-sm-2 mt-md-2">
+                                <a class="btn btn-secondary fs-5 px-3" href="https://twbplatform.org/task/286410/view">View Task</a>
+                            </div>
+                        </div>
+                        <div class="p-4 rounded-xl shadow-lg border-l-4 flex flex-col space-y-3" style="border-left-color: var(--twb-accent);">
+                            <div class="flex justify-between items-start">
+                                <div class="space-y-1">
+                                    <div class="flex space-x-2 text-sm font-semibold text-white">
+                                        <span class=" badge rounded-pill border border-2 text-white text-uppercase border-greenBorder border-opacity-25 fs-7 font-bold" style="background-color:#1D8A11">  Translation </span>
+                                        <span  class=" ms-1 rounded-pill badge bg-quartenary border border-2 border-quartBorder border-opacity-25  text-white font-bold fs-7"> 8343 words </span>
+                                    </div>
+                                    <p class="text-lg font-bold text-gray-800">Global MEL Platform - 1</p>
+                                </div>
+                                <img src="https://placehold.co/40x40/003C71/ffffff?text=OXF" alt="Oxfam logo" class="w-10 h-10 rounded-full object-cover" />
+                            </div>
+                            <p class="text-sm text-gray-600">
+                                <span class="font-medium">Languages:</span> Spanish → Italian
+                            </p>
+                            <div class="d-flex items-center justify-center flex-wrap mt-2 mt-sm-2 mt-md-2">
+                                <a class="btn btn-secondary fs-5 px-3" href="https://twbplatform.org/task/286410/view">View Task</a>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <p class="text-sm text-gray-600">
-                  <span class="font-medium">Languages:</span> Spanish → Italian
-                </p>
-                <p class="text-xs font-medium text-red-500 flex items-center">
-                                    🕒
-                                    20/25/2025 10:40 PM
-                                </p>
-              
-                   <div class="d-flex items-center justify-center flex-wrap mt-2 mt-sm-2 mt-md-2">
-                                        <a class="btn btn-secondary fs-5 px-3" href="https://twbplatform.org/task/286410/view">View Task</a>
-                                     </div>
-                
-              </div>
-            </div>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div class="p-4 rounded-xl shadow-lg border-l-4 flex flex-col space-y-3" style="border-left-color: var(--twb-accent);">
-                <div class="flex justify-between items-start">
-                  <div class="space-y-1">
-                    <div class="flex space-x-2 text-sm font-semibold text-white">
-                      <span class=" badge rounded-pill border border-2 text-white text-uppercase border-greenBorder border-opacity-25 fs-7 font-bold" style="background-color:#1D8A11">  Translation </span>
-                      <span  class=" ms-1 rounded-pill badge bg-quartenary border border-2 border-quartBorder border-opacity-25  text-white font-bold fs-7"> 8343 words </span>
-                    </div>
-                    <p class="text-lg font-bold text-gray-800">INEE - Minimum Standards 2025</p>
-                  </div>
-                  <img src="https://placehold.co/40x40/ED1C24/ffffff?text=IFRC" alt="IFRC logo" class="w-10 h-10 rounded-full object-cover" />
-                </div>
-                <p class="text-sm text-gray-600">
-                  <span class="font-medium">Languages:</span> English → French
-                </p>
-                <p class="text-xs font-medium text-red-500 flex items-center">
-                                    🕒
-                                    Tomorrow, 9:30 PM
-                                </p>
-                   <div class="d-flex items-center justify-center flex-wrap mt-2 mt-sm-2 mt-md-2">
-                                        <a class="btn btn-secondary fs-5 px-3" href="https://twbplatform.org/task/286410/view">View Task</a>
-                                     </div>
-              </div>
-              
-              <div class="p-4 rounded-xl shadow-lg border-l-4 flex flex-col space-y-3" style="border-left-color: var(--twb-accent);">
-                <div class="flex justify-between items-start">
-                  <div class="space-y-1">
-                    <div class="flex space-x-2 text-sm font-semibold text-white">
-                      <span class=" badge rounded-pill border border-2 text-white text-uppercase border-greenBorder border-opacity-25 fs-7 font-bold" style="background-color:#1D8A11">  Translation </span>
-                      <span  class=" ms-1 rounded-pill badge bg-quartenary border border-2 border-quartBorder border-opacity-25  text-white font-bold fs-7"> 8343 words </span>
-                    </div>
-                    <p class="text-lg font-bold text-gray-800">Global MEL Platform - 1</p>
-                  </div>
-                  <img src="https://placehold.co/40x40/003C71/ffffff?text=OXF" alt="Oxfam logo" class="w-10 h-10 rounded-full object-cover" />
-                </div>
-                <p class="text-sm text-gray-600">
-                  <span class="font-medium">Languages:</span> Spanish → Italian
-                </p>
-                   <div class="d-flex items-center justify-center flex-wrap mt-2 mt-sm-2 mt-md-2">
-                                        <a class="btn btn-secondary fs-5 px-3" href="https://twbplatform.org/task/286410/view">View Task</a>
-                                     </div>
-              </div>
-            </div>
-          </div>
-                    <div class="text-center mt-6">
-          
-          <div class="d-flex items-center justify-center flex-wrap mt-2 mt-sm-4 mt-md-0">
-                                        <a class="btn btn-secondary fs-5 px-3" href="https://twbplatform.org/task/286410/view">View More Available Tasks</a>
-                                     </div>
-                    </div>
+            <div class="text-center mt-6">
+                <div class="d-flex items-center justify-center flex-wrap mt-2 mt-sm-4 mt-md-0">
+                    <a class="btn btn-secondary fs-5 px-3" href="https://twbplatform.org/task/286410/view">View More Available Tasks</a>
                 </div>
             </div>
+        </div>
+    </div>
 
             <div class="lg:col-span-1 space-y-8 order-2 lg:order-2">
 
