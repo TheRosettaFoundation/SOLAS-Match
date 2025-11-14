@@ -3664,6 +3664,7 @@ foreach ($rows as $index => $row) {
         $extra_styles .= "<link rel=\"stylesheet\" href=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}resources/css/home_styles.css\" />";
 
         $template_data = array_merge($template_data, ['extra_scripts' => $extra_scripts, 'extra_styles' => $extra_styles,]);
+error_log(print_r($template_data, 1));
         return UserRouteHandler::render('home_mariam.tpl', $response);
     }
 
