@@ -3660,7 +3660,7 @@ foreach ($rows as $index => $row) {
         $extra_scripts .= "<script type=\"text/javascript\"  src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/pagination1.js\" defer ></script>";
 
         $extra_styles  = '<script src="https://cdn.tailwindcss.com"></script>';
-        $extra_styles .= '<link rel="stylesheet" href="{$app->getRouteCollector()->getRouteParser()->urlFor("home")}resources/css/home_styles.css" />';
+        $extra_styles .= "<link rel=\"stylesheet\" href=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}resources/css/home_styles.css\" />";
 
         $template_data = array_merge($template_data, ['extra_scripts' => $extra_scripts, 'extra_styles' => $extra_styles,]);
         return UserRouteHandler::render('home_mariam.tpl', $response);
