@@ -27,6 +27,7 @@ class UserRouteHandler
         $app->map(['GET'],
             '/home_mariam[/]',
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:home_mariam')
+            ->add('\SolasMatch\UI\Lib\Middleware:authUserIsLoggedIn')
             ->setName('home_mariam');
 
         $app->map(['GET', 'POST'],
