@@ -102,7 +102,7 @@
 {assign var="task_id" value=$task->getId()}
 {assign var="type_id" value=$task->getTaskType()}
 {assign var="status_id" value=$task->getTaskStatus()}
-{assign var="task_title" value=$task->getTitle()}
+{assign var="task_title" value=mb_substr($task->getTitle(), 0, 50)}
                                 <div class="d-flex align-items-center justify-content-between p-3 rounded-3 shadow-sm border bg-white hover-shadow">
                                     <div class="d-flex align-items-center">
                                         <div class="p-2 rounded-circle me-3" style="background-color: var(--twb-accent); opacity: 0.1; color: var(--twb-accent);">
@@ -110,7 +110,7 @@
                                         </div>
                                         <div>
                                             <div class="fw-bold text-md">
-                                                <a id="task-286410" href="https://twbplatform.org/task/286410/view" class="custom-link text-wrap ">1.09 INEE Minimum Standards 2024</a>
+                                                <a id="task-{$task_id}" href="{$siteLocation}task/{$task_id}/view" class="custom-link text-wrap">{TemplateHelper::uiCleanseHTMLNewlineAndTabs($task_title)}</a>
                                                 <span class="badge rounded-pill text-uppercase task-type-badge fs-7 fw-bold">Translation</span>
                                             </div>
                                             <p class="text-muted small mb-0">English → French | In Progress</p>
@@ -119,9 +119,9 @@
                                     <div class="text-end">
                                         <p class="small fw-medium text-danger d-flex align-items-center mb-0">
                                             <i class="fa-regular fa-clock me-1"></i> Today, 11:00 AM
+<div class="process_deadline_utc_if_possible d-flex mb-3 flex-wrap align-items-center text-muted" style="visibility: hidden"> {$deadline_timestamps[$task_id]}</div>
                                         </p>
                                     </div>
-<div class="process_deadline_utc_if_possible d-flex mb-3 flex-wrap align-items-center text-muted" style="visibility: hidden"> {$deadline_timestamps[$task_id]}</div>
                                 </div>
                                 {/foreach}
                             </div>
