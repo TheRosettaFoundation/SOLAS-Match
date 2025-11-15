@@ -3657,8 +3657,9 @@ foreach ($rows as $index => $row) {
         $userDao = new DAO\UserDao();
         $projectDao = new DAO\ProjectDao();
 
-        $tasks = $userDao->getFilteredUserClaimedTasks(Common\Lib\UserSession::getCurrentUserID(), 0, 50, 0, 0, 3);
-        if (empty ($tasks)) $tasks = [];
+        $user_id = Common\Lib\UserSession::getCurrentUserID();
+        $tasks = $userDao->getFilteredUserClaimedTasks($user_id, 0, 50, 0, 0, 3);
+        if (empty($tasks)) $tasks = [];
 
         $deadline_timestamps = [];
         $matecat_urls = [];
@@ -3682,11 +3683,12 @@ foreach ($rows as $index => $row) {
         $extra_styles = "<link rel=\"stylesheet\" href=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}resources/css/home_styles.css\" />";
 
         $template_data = array_merge($template_data, [
+            'user_id'       => $user_id,
             'siteLocation'  => Common\Lib\Settings::get('site.location'),
             'extra_scripts' => $extra_scripts,
             'extra_styles'  => $extra_styles,
             'claimed_tasks' => $tasks,
-            'matecat_urls' => $matecat_urls,
+            'matecat_urls'  => $matecat_urls,
             'deadline_timestamps' => $deadline_timestamps,
             ]);
 

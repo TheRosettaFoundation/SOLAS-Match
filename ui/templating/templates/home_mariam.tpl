@@ -93,7 +93,7 @@
                         <div class="card bg-light custom-card p-4 border-top-0 card-border-top-accent">
                             <div class="d-flex justify-content-between align-items-center mb-4 border-bottom pb-3">
                                 <h2 class="fs-3 fw-bold text-dark mb-0">My Tasks</h2>
-                                <a href="{urlFor name="claimed-tasks" options="user_id.{$user->getId()}"}" class="text-decoration-none fw-semibold d-flex align-items-center" style="color: var(--twb-accent);">
+                                <a href="{urlFor name="claimed-tasks" options="user_id.{$user_id}"}" class="text-decoration-none fw-semibold d-flex align-items-center" style="color: var(--twb-accent);">
                                     Go to My Tasks <i class="fa-solid fa-arrow-right ms-2"></i>
                                 </a>
                             </div>
