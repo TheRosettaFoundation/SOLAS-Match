@@ -3655,6 +3655,25 @@ foreach ($rows as $index => $row) {
     {
         global $app, $template_data;
         $userDao = new DAO\UserDao();
+        $projectDao = new DAO\ProjectDao();
+
+        $tasks = $userDao->getFilteredUserClaimedTasks(Common\Lib\UserSession::getCurrentUserID(), 0, 50, 0, 0, 3);
+        if (empty ($tasks)) $tasks = [];
+
+        $deadline_timestamps = [];
+        $matecat_urls = [];
+        foreach ($tasks as $task) {
+            $task_id = $task->getId();
+            $deadline = $task->getDeadline();
+            $selected_year   = (int)substr($deadline,  0, 4);
+            $selected_month  = (int)substr($deadline,  5, 2);
+            $selected_day    = (int)substr($deadline,  8, 2);
+            $selected_hour   = (int)substr($deadline, 11, 2); // These are UTC, they will be recalculated to local time by JavaScript (we do not what the local time zone is)
+            $selected_minute = (int)substr($deadline, 14, 2);
+            $deadline_timestamps[$task_id] = gmmktime($selected_hour, $selected_minute, 0, $selected_month, $selected_day, $selected_year);
+
+            if (!$projectDao->are_translations_not_all_complete($task, $projectDao->get_memsource_task($task_id))) $matecat_urls[$task_id] = 1;
+        }
 
         $extra_scripts  = "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/Parameters.js\"></script>";
         $extra_scripts .= "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/Home2.js\" async></script>";
@@ -3666,6 +3685,9 @@ foreach ($rows as $index => $row) {
             'siteLocation'  => Common\Lib\Settings::get('site.location'),
             'extra_scripts' => $extra_scripts,
             'extra_styles'  => $extra_styles,
+            'claimed_tasks' => $tasks,
+            'matecat_urls' => $matecat_urls,
+            'deadline_timestamps' => $deadline_timestamps,
             ]);
 
         return UserRouteHandler::render('home_mariam.tpl', $response);
