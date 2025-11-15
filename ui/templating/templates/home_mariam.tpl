@@ -99,6 +99,10 @@
                             </div>
                             <div class="space-y-4">
                                 {foreach from=claimed_tasks item=task}
+{assign var="task_id" value=$task->getId()}
+{assign var="type_id" value=$task->getTaskType()}
+{assign var="status_id" value=$task->getTaskStatus()}
+{assign var="task_title" value=$task->getTitle()}
                                 <div class="d-flex align-items-center justify-content-between p-3 rounded-3 shadow-sm border bg-white hover-shadow">
                                     <div class="d-flex align-items-center">
                                         <div class="p-2 rounded-circle me-3" style="background-color: var(--twb-accent); opacity: 0.1; color: var(--twb-accent);">
@@ -117,6 +121,7 @@
                                             <i class="fa-regular fa-clock me-1"></i> Today, 11:00 AM
                                         </p>
                                     </div>
+<div class="process_deadline_utc_if_possible d-flex mb-3 flex-wrap align-items-center text-muted" style="visibility: hidden"> {$deadline_timestamps[$task_id]}</div>
                                 </div>
                                 {/foreach}
                             </div>
