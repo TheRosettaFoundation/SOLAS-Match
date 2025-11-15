@@ -111,7 +111,7 @@
                                         <div>
                                             <div class="fw-bold text-md">
                                                 <a id="task-{$task_id}" href="{$siteLocation}task/{$task_id}/view" class="custom-link text-wrap">{TemplateHelper::uiCleanseHTMLNewlineAndTabs($task_title)}</a>
-                                                <span class="badge rounded-pill text-uppercase fs-7 fw-bold background-color:{TaskTypeEnum::$enum_to_UI[$type_id]['colour']}">{TaskTypeEnum::$enum_to_UI[$type_id]['type_text']}</span>
+                                                <span class="badge rounded-pill text-uppercase fs-7 fw-bold" style="background-color:{TaskTypeEnum::$enum_to_UI[$type_id]['colour']}">{TaskTypeEnum::$enum_to_UI[$type_id]['type_text']}</span>
                                             </div>
                                             <p class="text-muted small mb-0">English → French | In Progress</p>
                                         </div>
