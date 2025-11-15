@@ -93,11 +93,12 @@
                         <div class="card bg-light custom-card p-4 border-top-0 card-border-top-accent">
                             <div class="d-flex justify-content-between align-items-center mb-4 border-bottom pb-3">
                                 <h2 class="fs-3 fw-bold text-dark mb-0">My Tasks</h2>
-                                <a href="#my-tasks" class="text-decoration-none fw-semibold d-flex align-items-center" style="color: var(--twb-accent);">
+                                <a href="{urlFor name="claimed-tasks" options="user_id.{$user->getId()}"}" class="text-decoration-none fw-semibold d-flex align-items-center" style="color: var(--twb-accent);">
                                     Go to My Tasks <i class="fa-solid fa-arrow-right ms-2"></i>
                                 </a>
                             </div>
                             <div class="space-y-4">
+                                {foreach from=claimed_tasks item=task}
                                 <div class="d-flex align-items-center justify-content-between p-3 rounded-3 shadow-sm border bg-white hover-shadow">
                                     <div class="d-flex align-items-center">
                                         <div class="p-2 rounded-circle me-3" style="background-color: var(--twb-accent); opacity: 0.1; color: var(--twb-accent);">
@@ -107,7 +108,6 @@
                                             <div class="fw-bold text-md">
                                                 <a id="task-286410" href="https://twbplatform.org/task/286410/view" class="custom-link text-wrap ">1.09 INEE Minimum Standards 2024</a>
                                                 <span class="badge rounded-pill text-uppercase task-type-badge fs-7 fw-bold">Translation</span>
-                                                <span class="badge rounded-pill ms-1 task-unit-badge fs-7 fw-bold">8343 words</span>
                                             </div>
                                             <p class="text-muted small mb-0">English → French | In Progress</p>
                                         </div>
@@ -118,42 +118,7 @@
                                         </p>
                                     </div>
                                 </div>
-                                <div class="d-flex align-items-center justify-content-between p-3 rounded-3 shadow-sm border bg-white hover-shadow">
-                                    <div class="d-flex align-items-center">
-                                        <div class="p-2 rounded-circle me-3" style="background-color: var(--twb-accent); opacity: 0.1; color: var(--twb-accent);">
-                                            <i class="fa-solid fa-check"></i>
-                                        </div>
-                                        <div>
-                                            <div class="fw-bold text-md">
-                                                <a id="task-286410" href="https://twbplatform.org/task/286410/view" class="custom-link text-wrap ">1.03 INEE Minimum Standards Minimum 2024 [FINAL DRAFT]_for translation.docx</a>
-                                                <span class="badge rounded-pill text-uppercase task-type-badge fs-7 fw-bold">Translation</span>
-                                                <span class="badge rounded-pill ms-1 task-unit-badge fs-7 fw-bold">8343 words</span>
-                                            </div>
-                                            <p class="text-muted small mb-0">English → French | In Progress</p>
-                                        </div>
-                                    </div>
-                                    <div class="text-end">
-                                        <p class="small fw-medium text-danger d-flex align-items-center mb-0">
-                                            <i class="fa-regular fa-clock me-1"></i> Today, 11:00 AM
-                                        </p>
-                                    </div>
-                                </div>
-                                <div class="d-flex align-items-center justify-content-between p-3 rounded-3 shadow-sm border bg-white hover-shadow">
-                                    <div class="d-flex align-items-center">
-                                        <div class="p-2 rounded-circle me-3" style="background-color: var(--twb-accent); opacity: 0.1; color: var(--twb-accent);">
-                                            <i class="fa-solid fa-check"></i>
-                                        </div>
-                                        <div>
-                                            <p class="fw-semibold text-dark mb-0">Revision</p>
-                                            <p class="text-muted small mb-0">English → French | Ready to Submit</p>
-                                        </div>
-                                    </div>
-                                    <div class="text-end">
-                                        <p class="small fw-medium text-danger d-flex align-items-center mb-0">
-                                            <i class="fa-regular fa-clock me-1"></i> 10/25/2025 9:30 AM
-                                        </p>
-                                    </div>
-                                </div>
+                                {/foreach}
                             </div>
                         </div>
 
