@@ -98,7 +98,7 @@
                                 </a>
                             </div>
                             <div class="space-y-4">
-                                {foreach from=claimed_tasks item=task}
+                                {foreach from=$claimed_tasks item=task}
 {assign var="task_id" value=$task->getId()}
 {assign var="type_id" value=$task->getTaskType()}
 {assign var="status_id" value=$task->getTaskStatus()}
