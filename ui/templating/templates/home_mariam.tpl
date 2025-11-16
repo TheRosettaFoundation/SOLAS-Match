@@ -119,11 +119,11 @@
                                                 <span class="badge rounded-pill text-uppercase fs-7 fw-bold" style="background-color:{TaskTypeEnum::$enum_to_UI[$type_id]['colour']}">{TaskTypeEnum::$enum_to_UI[$type_id]['type_text']}</span>
                                             </div>
                                             {if TaskTypeEnum::$enum_to_UI[$type_id]['source_and_target']}
-                                                <p class="text-muted small mb-0">{TemplateHelper::getLanguageAndCountryNoCodes($task->getSourceLocale())} → {TemplateHelper::getLanguageAndCountryNoCodes($task->getTargetLocale())} |
+                                                <p class="text-muted small mb-0">{if $type_id != 29}{TemplateHelper::getLanguageAndCountryNoCodes($task->getSourceLocale())} → {TemplateHelper::getLanguageAndCountryNoCodes($task->getTargetLocale())} |{/if}
                                                     ({if $status_id == 3 && empty($matecat_urls[$task_id])}Claimed{elseif $status_id == 3}In Progress{else}Complete{/if}{if $task->get_cancelled()} (Cancelled){/if})
                                                 </p>
                                             {else}
-                                                <p class="text-muted small mb-0">{TemplateHelper::getLanguageAndCountryNoCodes($task->getTargetLocale())} |
+                                                <p class="text-muted small mb-0">{if $type_id != 29}{TemplateHelper::getLanguageAndCountryNoCodes($task->getTargetLocale())} |{/if}
                                                     ({if $status_id == 3 && empty($matecat_urls[$task_id])}Claimed{elseif $status_id == 3}In Progress{else}Complete{/if}{if $task->get_cancelled()} (Cancelled){/if})
                                                 </p>
                                             {/if}
