@@ -99,10 +99,14 @@
                             </div>
                             <div class="space-y-4">
                                 {foreach from=$claimed_tasks item=task}
-{assign var="task_id" value=$task->getId()}
-{assign var="type_id" value=$task->getTaskType()}
+                                    {assign var="task_id" value=$task->getId()}
+                                    {assign var="type_id" value=$task->getTaskType()}
 {assign var="status_id" value=$task->getTaskStatus()}
-{assign var="task_title" value=mb_substr($task->getTitle(), 0, 50)}
+                                    {if mb_strlen($task->getTitle()) > 50}
+                                        {assign var="task_title" value=(mb_substr($task->getTitle(), 0, 50) . '...')}
+                                    {else}
+                                        {assign var="task_title" value=$task->getTitle()}
+                                    {/if}
                                 <div class="d-flex align-items-center justify-content-between p-3 rounded-3 shadow-sm border bg-white hover-shadow">
                                     <div class="d-flex align-items-center">
                                         <div class="p-2 rounded-circle me-3" style="background-color: var(--twb-accent); opacity: 0.1; color: var(--twb-accent);">
