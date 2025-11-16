@@ -142,7 +142,7 @@
                         <div class="card bg-light custom-card p-4 border-top-0" style="border-top-color: var(--core-blue);">
                             <div class="d-flex justify-content-between align-items-center mb-4 border-bottom pb-3">
                                 <h2 class="fs-3 fw-bold text-dark mb-0">Available Tasks</h2>
-                                <a href="#browse-tasks" class="text-decoration-none fw-semibold d-flex align-items-center" style="color: var(--core-blue);">
+                                <a href="{urlFor name="home"}" class="text-decoration-none fw-semibold d-flex align-items-center" style="color: var(--core-blue);">
                                     Browse All Tasks <i class="fa-solid fa-arrow-right ms-2"></i>
                                 </a>
                             </div>
