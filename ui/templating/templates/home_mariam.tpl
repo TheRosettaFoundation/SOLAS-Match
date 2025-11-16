@@ -149,6 +149,14 @@
                             <div class="space-y-4">
                                 {assign var="count" value=0}
                                 {foreach from=$tasks item=task}
+                                    {assign var="task_id" value=$task->getId()}
+                                    {assign var="type_id" value=$task->getTaskType()}
+                                    {if mb_strlen($task->getTitle()) > 50}
+                                        {assign var="task_title" value=TemplateHelper::uiCleanseHTMLNewlineAndTabs(mb_substr($task->getTitle(), 0, 50))}
+                                        {assign var="task_title" value="`$task_title`..."}
+                                    {else}
+                                        {assign var="task_title" value=TemplateHelper::uiCleanseHTMLNewlineAndTabs($task->getTitle())}
+                                    {/if}
                               {if $count%2 == 0}
                                 <div class="row g-4">
                               {/if}
@@ -167,11 +175,37 @@
                                             </div>
                                             <p class="small text-secondary mb-2">
                                                 <span class="fw-medium">Languages:</span> English → French
+[[[
+                                <div class="d-flex align-items-center justify-content-between p-3 rounded-3 shadow-sm border bg-white hover-shadow">
+                                    <div class="d-flex align-items-center">
+                                        <div class="p-2 rounded-circle me-3" style="background-color: var(--twb-accent); opacity: 0.1; color: var(--twb-accent);">
+                                            <i class="fa-solid fa-check"></i>
+                                        </div>
+                                        <div>
+                                            <div class="fw-bold text-md">
+                                                <a id="task-{$task_id}" href="{$siteLocation}task/{$task_id}/view" class="custom-link text-wrap">{$task_title}</a>
+                                                <span class="badge rounded-pill text-uppercase fs-7 fw-bold" style="background-color:{TaskTypeEnum::$enum_to_UI[$type_id]['colour']}">{TaskTypeEnum::$enum_to_UI[$type_id]['type_text']}</span>
+                                            </div>
+                                            {if TaskTypeEnum::$enum_to_UI[$type_id]['source_and_target']}
+                                                <p class="text-muted small mb-0">{if $type_id != 29}{TemplateHelper::getLanguageAndCountryNoCodes($task->getSourceLocale())} → {TemplateHelper::getLanguageAndCountryNoCodes($task->getTargetLocale())} |{/if}
+                                                    ({if $status_id == 3 && empty($matecat_urls[$task_id])}Claimed{elseif $status_id == 3}In Progress{else}Complete{/if}{if $task->get_cancelled()} (Cancelled){/if})
+                                                </p>
+                                            {else}
+                                                <p class="text-muted small mb-0">{if $type_id != 29}{TemplateHelper::getLanguageAndCountryNoCodes($task->getTargetLocale())} |{/if}
+                                                    ({if $status_id == 3 && empty($matecat_urls[$task_id])}Claimed{elseif $status_id == 3}In Progress{else}Complete{/if}{if $task->get_cancelled()} (Cancelled){/if})
+                                                </p>
+                                            {/if}
+                                        </div>
+                                    </div>
+                                    <div class="text-end">
+                                        <p class="small fw-medium text-danger d-flex align-items-center mb-0">
+                                            <span class="process_deadline_utc_new_home_if_possible" style="visibility: hidden"> {$deadline_timestamps[$task_id]}</span>
+]]]
                                             </p>
                                             <p class="small fw-medium text-danger d-flex align-items-center mb-3">
                                                 <i class="fa-regular fa-clock me-1"></i> Today, 5:20 PM
                                             </p>
-                                            <a class="btn btn-secondary fs-5 px-3" href="https://twbplatform.org/task/286410/view">View Task</a>
+                                            <a class="btn btn-secondary fs-5 px-3" href="{$siteLocation}task/{$task_id}/view">View Task</a>
                                         </div>
                                     </div>
                               {if $count%2 == 0 && $count == count($tasks) - 1}
