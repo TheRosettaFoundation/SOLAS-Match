@@ -124,7 +124,7 @@
                                     <div class="text-end">
                                         <p class="small fw-medium text-danger d-flex align-items-center mb-0">
                                             <i class="fa-regular fa-clock me-1"></i> Today, 11:00 AM
-<div class="process_deadline_utc_if_possible d-flex mb-3 flex-wrap align-items-center text-muted" style="visibility: hidden"> {$deadline_timestamps[$task_id]}</div>
+<div class="process_deadline_utc_if_possible" style="visibility: hidden"> {$deadline_timestamps[$task_id]}</div>
                                         </p>
                                     </div>
                                 </div>
