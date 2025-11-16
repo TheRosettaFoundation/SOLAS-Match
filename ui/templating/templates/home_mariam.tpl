@@ -165,102 +165,30 @@
                                             <div class="d-flex justify-content-between align-items-start mb-2">
                                                 <div class="flex-grow-1">
                                                     <div class="mb-2">
-                                                        <span class="badge rounded-pill text-uppercase task-type-badge fs-7 fw-bold">Translation</span>
-[[[
-                                <div class="d-flex align-items-center justify-content-between p-3 rounded-3 shadow-sm border bg-white hover-shadow">
-                                    <div class="d-flex align-items-center">
-                                        <div class="p-2 rounded-circle me-3" style="background-color: var(--twb-accent); opacity: 0.1; color: var(--twb-accent);">
-                                            <i class="fa-solid fa-check"></i>
-                                        </div>
-                                        <div>
-                                            <div class="fw-bold text-md">
-                                                <span class="badge rounded-pill text-uppercase fs-7 fw-bold" style="background-color:{TaskTypeEnum::$enum_to_UI[$type_id]['colour']}">{TaskTypeEnum::$enum_to_UI[$type_id]['type_text']}</span>
-                                            </div>
-                                            {if TaskTypeEnum::$enum_to_UI[$type_id]['source_and_target']}
-                                                <p class="text-muted small mb-0">{if $type_id != 29}{TemplateHelper::getLanguageAndCountryNoCodes($task->getSourceLocale())} → {TemplateHelper::getLanguageAndCountryNoCodes($task->getTargetLocale())} |{/if}
-                                                    ({if $status_id == 3 && empty($matecat_urls[$task_id])}Claimed{elseif $status_id == 3}In Progress{else}Complete{/if}{if $task->get_cancelled()} (Cancelled){/if})
-                                                </p>
-                                            {else}
-                                                <p class="text-muted small mb-0">{if $type_id != 29}{TemplateHelper::getLanguageAndCountryNoCodes($task->getTargetLocale())} |{/if}
-                                                    ({if $status_id == 3 && empty($matecat_urls[$task_id])}Claimed{elseif $status_id == 3}In Progress{else}Complete{/if}{if $task->get_cancelled()} (Cancelled){/if})
-                                                </p>
-                                            {/if}
-                                        </div>
-                                    </div>
-                                    <div class="text-end">
-                                        <p class="small fw-medium text-danger d-flex align-items-center mb-0">
-                                            <span class="process_deadline_utc_new_home_if_possible" style="visibility: hidden"> {$deadline_timestamps[$task_id]}</span>
-]]]
-                                                        <span class="badge rounded-pill ms-1 task-unit-badge fs-7 fw-bold">8343 words</span>
-[[
-                                     <span class=" badge rounded-pill border border-2 text-white text-uppercase border-greenBorder border-opacity-25 fs-7 font-bold" style="background-color:{TaskTypeEnum::$enum_to_UI[$type_id]['colour']}">  {TaskTypeEnum::$enum_to_UI[$type_id]['type_text']} </span>
-                                     {if $task->getWordCount()}
-                                         <span type="button" class=" ms-1 rounded-pill badge bg-quartenary border border-2 border-quartBorder border-opacity-25  text-white font-bold fs-7"> {$task->getWordCount()} {TaskTypeEnum::$enum_to_UI[$type_id]['unit_count_text_short']} </span>
-                                     {/if}
-                                     {if isset($chunks[$task_id])}
-                                         <span  class=" ms-1 rounded-pill badge bg-quinary border border-2 border-quartBorder border-opacity-25  text-white font-bold fs-7"> <span> Part {$chunks[$task_id]['low_level'] }</span>/<span>{$chunks[$task_id]['number_of_chunks'] } </span></span>
-                                     {/if}
-]]
+                                                        <span class="badge rounded-pill text-uppercase fs-7 fw-bold" style="background-color:{TaskTypeEnum::$enum_to_UI[$type_id]['colour']}">{TaskTypeEnum::$enum_to_UI[$type_id]['type_text']}</span>
+                                                        {if $task->getWordCount()}
+                                                        <span class="badge rounded-pill ms-1 task-unit-badge fs-7 fw-bold">{$task->getWordCount()} {TaskTypeEnum::$enum_to_UI[$type_id]['unit_count_text_short']}</span>
+                                                        {/if}
+                                                        {if isset($chunks[$task_id])}
+                                                        <span class="badge rounded-pill ms-1 fs-7 fw-bold" style="background-color:var(--core-purple)}">{Part {$chunks[$task_id]['low_level']}</span>
+                                                        {/if}
                                                     </div>
                                                     <h5 class="fw-bold text-dark mb-2"><a id="task-{$task_id}" href="{$siteLocation}task/{$task_id}/view" class="custom-link text-wrap">{$task_title}</a></h5>
                                                 </div>
                                                 <img src="https://placehold.co/40x40/ED1C24/ffffff?text=IFRC" alt="IFRC logo" class="rounded-circle ms-3" width="40" height="40" />
                                             </div>
-                                            <p class="small text-secondary mb-2">
-                                                <span class="fw-medium">Languages:</span> English → French
-[[[
-                                <div class="d-flex align-items-center justify-content-between p-3 rounded-3 shadow-sm border bg-white hover-shadow">
-                                    <div class="d-flex align-items-center">
-                                        <div class="p-2 rounded-circle me-3" style="background-color: var(--twb-accent); opacity: 0.1; color: var(--twb-accent);">
-                                            <i class="fa-solid fa-check"></i>
-                                        </div>
-                                        <div>
-                                            <div class="fw-bold text-md">
-                                                <span class="badge rounded-pill text-uppercase fs-7 fw-bold" style="background-color:{TaskTypeEnum::$enum_to_UI[$type_id]['colour']}">{TaskTypeEnum::$enum_to_UI[$type_id]['type_text']}</span>
-                                            </div>
                                             {if TaskTypeEnum::$enum_to_UI[$type_id]['source_and_target']}
-                                                <p class="text-muted small mb-0">{if $type_id != 29}{TemplateHelper::getLanguageAndCountryNoCodes($task->getSourceLocale())} → {TemplateHelper::getLanguageAndCountryNoCodes($task->getTargetLocale())} |{/if}
-                                                    ({if $status_id == 3 && empty($matecat_urls[$task_id])}Claimed{elseif $status_id == 3}In Progress{else}Complete{/if}{if $task->get_cancelled()} (Cancelled){/if})
-                                                </p>
+                                            <p class="small text-secondary mb-2">
+                                                {if $type_id != 29}<span class="fw-medium">Languages:</span> {TemplateHelper::getLanguageAndCountryNoCodes($task->getSourceLocale())} → {TemplateHelper::getLanguageAndCountryNoCodes($task->getTargetLocale())}{/if}
+                                            </p>
                                             {else}
-                                                <p class="text-muted small mb-0">{if $type_id != 29}{TemplateHelper::getLanguageAndCountryNoCodes($task->getTargetLocale())} |{/if}
-                                                    ({if $status_id == 3 && empty($matecat_urls[$task_id])}Claimed{elseif $status_id == 3}In Progress{else}Complete{/if}{if $task->get_cancelled()} (Cancelled){/if})
-                                                </p>
+                                            <p class="small text-secondary mb-2">
+                                                {if $type_id != 29}<span class="fw-medium">Language:</span> {TemplateHelper::getLanguageAndCountryNoCodes($task->getTargetLocale())}{/if}
+                                            </p>
                                             {/if}
-                                        </div>
-                                    </div>
-                                    <div class="text-end">
-                                        <p class="small fw-medium text-danger d-flex align-items-center mb-0">
-                                            <span class="process_deadline_utc_new_home_if_possible" style="visibility: hidden"> {$deadline_timestamps[$task_id]}</span>
-]]]
                                             </p>
                                             <p class="small fw-medium text-danger d-flex align-items-center mb-3">
-                                                <i class="fa-regular fa-clock me-1"></i> Today, 5:20 PM
-[[[
-                                <div class="d-flex align-items-center justify-content-between p-3 rounded-3 shadow-sm border bg-white hover-shadow">
-                                    <div class="d-flex align-items-center">
-                                        <div class="p-2 rounded-circle me-3" style="background-color: var(--twb-accent); opacity: 0.1; color: var(--twb-accent);">
-                                            <i class="fa-solid fa-check"></i>
-                                        </div>
-                                        <div>
-                                            <div class="fw-bold text-md">
-                                                <span class="badge rounded-pill text-uppercase fs-7 fw-bold" style="background-color:{TaskTypeEnum::$enum_to_UI[$type_id]['colour']}">{TaskTypeEnum::$enum_to_UI[$type_id]['type_text']}</span>
-                                            </div>
-                                            {if TaskTypeEnum::$enum_to_UI[$type_id]['source_and_target']}
-                                                <p class="text-muted small mb-0">{if $type_id != 29}{TemplateHelper::getLanguageAndCountryNoCodes($task->getSourceLocale())} → {TemplateHelper::getLanguageAndCountryNoCodes($task->getTargetLocale())} |{/if}
-                                                    ({if $status_id == 3 && empty($matecat_urls[$task_id])}Claimed{elseif $status_id == 3}In Progress{else}Complete{/if}{if $task->get_cancelled()} (Cancelled){/if})
-                                                </p>
-                                            {else}
-                                                <p class="text-muted small mb-0">{if $type_id != 29}{TemplateHelper::getLanguageAndCountryNoCodes($task->getTargetLocale())} |{/if}
-                                                    ({if $status_id == 3 && empty($matecat_urls[$task_id])}Claimed{elseif $status_id == 3}In Progress{else}Complete{/if}{if $task->get_cancelled()} (Cancelled){/if})
-                                                </p>
-                                            {/if}
-                                        </div>
-                                    </div>
-                                    <div class="text-end">
-                                        <p class="small fw-medium text-danger d-flex align-items-center mb-0">
                                             <span class="process_deadline_utc_new_home_if_possible" style="visibility: hidden"> {$deadline_timestamps[$task_id]}</span>
-]]]
                                             </p>
                                             <a class="btn btn-secondary fs-5 px-3" href="{$siteLocation}task/{$task_id}/view">View Task</a>
                                         </div>
