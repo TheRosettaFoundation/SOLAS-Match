@@ -103,7 +103,8 @@
                                     {assign var="type_id" value=$task->getTaskType()}
 {assign var="status_id" value=$task->getTaskStatus()}
                                     {if mb_strlen($task->getTitle()) > 50}
-                                        {assign var="task_title" value=(mb_substr($task->getTitle(), 0, 50) . '...')}
+                                        {assign var="task_title" value=mb_substr($task->getTitle(), 0, 50)}
+                                        {assign var="task_title" value="`$task_title`..."}
                                     {else}
                                         {assign var="task_title" value=$task->getTitle()}
                                     {/if}
