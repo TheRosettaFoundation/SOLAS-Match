@@ -222,7 +222,7 @@ function renderTaskDetails() {
                     h +
                     ":" +
                     mi +
-                    ":00 " +
+                    ":00 "
             ) +
             Intl.DateTimeFormat().resolvedOptions().timeZone + " or earlier, if possible"
         );
