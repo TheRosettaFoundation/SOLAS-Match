@@ -103,10 +103,10 @@
                                     {assign var="type_id" value=$task->getTaskType()}
                                     {assign var="status_id" value=$task->getTaskStatus()}
                                     {if mb_strlen($task->getTitle()) > 50}
-                                        {assign var="task_title" value=mb_substr($task->getTitle(), 0, 50)}
+                                        {assign var="task_title" value=TemplateHelper::uiCleanseHTMLNewlineAndTabs(mb_substr($task->getTitle(), 0, 50))}
                                         {assign var="task_title" value="`$task_title`..."}
                                     {else}
-                                        {assign var="task_title" value=$task->getTitle()}
+                                        {assign var="task_title" value=TemplateHelper::uiCleanseHTMLNewlineAndTabs($task->getTitle())}
                                     {/if}
                                 <div class="d-flex align-items-center justify-content-between p-3 rounded-3 shadow-sm border bg-white hover-shadow">
                                     <div class="d-flex align-items-center">
@@ -115,7 +115,7 @@
                                         </div>
                                         <div>
                                             <div class="fw-bold text-md">
-                                                <a id="task-{$task_id}" href="{$siteLocation}task/{$task_id}/view" class="custom-link text-wrap">{TemplateHelper::uiCleanseHTMLNewlineAndTabs($task_title)}</a>
+                                                <a id="task-{$task_id}" href="{$siteLocation}task/{$task_id}/view" class="custom-link text-wrap">{$task_title}</a>
                                                 <span class="badge rounded-pill text-uppercase fs-7 fw-bold" style="background-color:{TaskTypeEnum::$enum_to_UI[$type_id]['colour']}">{TaskTypeEnum::$enum_to_UI[$type_id]['type_text']}</span>
                                             </div>
                                             {if TaskTypeEnum::$enum_to_UI[$type_id]['source_and_target']}
