@@ -123,8 +123,7 @@
                                     </div>
                                     <div class="text-end">
                                         <p class="small fw-medium text-danger d-flex align-items-center mb-0">
-                                            <i class="fa-regular fa-clock me-1"></i> Today, 11:00 AM
-<span class="process_deadline_utc_new_home_if_possible" style="visibility: hidden"> {$deadline_timestamps[$task_id]}</span>
+                                            <span class="process_deadline_utc_new_home_if_possible" style="visibility: hidden"> {$deadline_timestamps[$task_id]}</span>
                                         </p>
                                     </div>
                                 </div>
