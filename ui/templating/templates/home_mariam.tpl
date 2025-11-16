@@ -147,7 +147,11 @@
                                 </a>
                             </div>
                             <div class="space-y-4">
+                                {assign var="count" value=0}
+                                {foreach from=$tasks item=task}
+                              {if $count%2 == 0}
                                 <div class="row g-4">
+                              {/if}
                                     <div class="col-md-6">
                                         <div class="card custom-card p-3 h-100 border-start border-4" style="border-left-color: var(--twb-accent);">
                                             <div class="d-flex justify-content-between align-items-start mb-2">
@@ -170,73 +174,19 @@
                                             <a class="btn btn-secondary fs-5 px-3" href="https://twbplatform.org/task/286410/view">View Task</a>
                                         </div>
                                     </div>
+                              {if $count%2 == 0 && $count == count($tasks) - 1}
                                     <div class="col-md-6">
-                                        <div class="card custom-card p-3 h-100 border-start border-4" style="border-left-color: var(--twb-accent);">
-                                            <div class="d-flex justify-content-between align-items-start mb-2">
-                                                <div class="flex-grow-1">
-                                                    <div class="mb-2">
-                                                        <span class="badge rounded-pill text-uppercase task-type-badge fs-7 fw-bold">Translation</span>
-                                                        <span class="badge rounded-pill ms-1 task-unit-badge fs-7 fw-bold">8343 words</span>
-                                                    </div>
-                                                    <h5 class="fw-bold text-dark mb-2">Translations in DTP of epidural risk infographics</h5>
-                                                </div>
-                                                <img src="https://placehold.co/40x40/003C71/ffffff?text=OXF" alt="Oxfam logo" class="rounded-circle ms-3" width="40" height="40" />
-                                            </div>
-                                            <p class="small text-secondary mb-2">
-                                                <span class="fw-medium">Languages:</span> Spanish → Italian
-                                            </p>
-                                            <p class="small fw-medium text-danger d-flex align-items-center mb-3">
-                                                <i class="fa-regular fa-clock me-1"></i> 20/25/2025 10:40 PM
-                                            </p>
-                                            <a class="btn btn-secondary fs-5 px-3" href="https://twbplatform.org/task/286410/view">View Task</a>
-                                        </div>
                                     </div>
                                 </div>
-
-                                <div class="row g-4">
-                                    <div class="col-md-6">
-                                        <div class="card custom-card p-3 h-100 border-start border-4" style="border-left-color: var(--twb-accent);">
-                                            <div class="d-flex justify-content-between align-items-start mb-2">
-                                                <div class="flex-grow-1">
-                                                    <div class="mb-2">
-                                                        <span class="badge rounded-pill text-uppercase task-type-badge fs-7 fw-bold">Translation</span>
-                                                        <span class="badge rounded-pill ms-1 task-unit-badge fs-7 fw-bold">8343 words</span>
-                                                    </div>
-                                                    <h5 class="fw-bold text-dark mb-2">INEE - Minimum Standards 2025</h5>
-                                                </div>
-                                                <img src="https://placehold.co/40x40/ED1C24/ffffff?text=IFRC" alt="IFRC logo" class="rounded-circle ms-3" width="40" height="40" />
-                                            </div>
-                                            <p class="small text-secondary mb-2">
-                                                <span class="fw-medium">Languages:</span> English → French
-                                            </p>
-                                            <p class="small fw-medium text-danger d-flex align-items-center mb-3">
-                                                <i class="fa-regular fa-clock me-1"></i> Tomorrow, 9:30 PM
-                                            </p>
-                                            <a class="btn btn-secondary fs-5 px-3" href="https://twbplatform.org/task/286410/view">View Task</a>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="card custom-card p-3 h-100 border-start border-4" style="border-left-color: var(--twb-accent);">
-                                            <div class="d-flex justify-content-between align-items-start mb-2">
-                                                <div class="flex-grow-1">
-                                                    <div class="mb-2">
-                                                        <span class="badge rounded-pill text-uppercase task-type-badge fs-7 fw-bold">Translation</span>
-                                                        <span class="badge rounded-pill ms-1 task-unit-badge fs-7 fw-bold">8343 words</span>
-                                                    </div>
-                                                    <h5 class="fw-bold text-dark mb-2">Global MEL Platform - 1</h5>
-                                                </div>
-                                                <img src="https://placehold.co/40x40/003C71/ffffff?text=OXF" alt="Oxfam logo" class="rounded-circle ms-3" width="40" height="40" />
-                                            </div>
-                                            <p class="small text-secondary mb-2">
-                                                <span class="fw-medium">Languages:</span> Spanish → Italian
-                                            </p>
-                                            <a class="btn btn-secondary fs-5 px-3 mt-3" href="https://twbplatform.org/task/286410/view">View Task</a>
-                                        </div>
-                                    </div>
+                              {/if}
+                              {if $count%2 == 1}
                                 </div>
+                              {/if}
+                                {assign var="count" value=($count + 1)}
+                                {/foreach}
                             </div>
                             <div class="text-center mt-4">
-                                <a class="btn btn-secondary fs-5 px-3" href="https://twbplatform.org/task/286410/view">View More Available Tasks</a>
+                                <a class="btn btn-secondary fs-5 px-3" href="{urlFor name="home"}">View More Available Tasks</a>
                             </div>
                         </div>
 
