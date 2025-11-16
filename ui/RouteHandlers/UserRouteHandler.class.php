@@ -3658,12 +3658,12 @@ foreach ($rows as $index => $row) {
         $projectDao = new DAO\ProjectDao();
 
         $user_id = Common\Lib\UserSession::getCurrentUserID();
-        $tasks = $userDao->getFilteredUserClaimedTasks($user_id, 0, 50, 0, 0, 3);
-        if (empty($tasks)) $tasks = [];
+        $claimed_tasks = $userDao->getFilteredUserClaimedTasks($user_id, 0, 50, 0, 0, 3);
+        if (empty($claimed_tasks)) $claimed_tasks = [];
 
         $deadline_timestamps = [];
         $matecat_urls = [];
-        foreach ($tasks as $task) {
+        foreach ($claimed_tasks as $task) {
             $task_id = $task->getId();
             $deadline = $task->getDeadline();
             $selected_year   = (int)substr($deadline,  0, 4);
@@ -3687,7 +3687,7 @@ foreach ($rows as $index => $row) {
             'siteLocation'  => Common\Lib\Settings::get('site.location'),
             'extra_scripts' => $extra_scripts,
             'extra_styles'  => $extra_styles,
-            'claimed_tasks' => $tasks,
+            'claimed_tasks' => $claimed_tasks,
             'matecat_urls'  => $matecat_urls,
             'deadline_timestamps' => $deadline_timestamps,
             ]);
