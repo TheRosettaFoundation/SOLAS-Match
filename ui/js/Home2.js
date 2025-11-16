@@ -206,20 +206,17 @@ function renderTaskDetails() {
             mi = "0" + mi;
         }
         $(this).html(
-            parameters.getTranslation("common_due_by").replace(
-                "%s",
-                    "" +
-                    deadline.getFullYear() +
-                    "-" +
-                    m +
-                    "-" +
-                    d +
-                    '<i class="fa-regular fa-clock me-1"></i> ' +
-                    h +
-                    ":" +
-                    mi +
-                    ":00 "
-            ) +
+            "Due by " +
+            deadline.getFullYear() +
+            "-" +
+            m +
+            "-" +
+            d +
+            ' <i class="fa-regular fa-clock me-1"></i>' +
+            h +
+            ":" +
+            mi +
+            ":00 " +
             Intl.DateTimeFormat().resolvedOptions().timeZone + " or earlier, if possible"
         );
 
