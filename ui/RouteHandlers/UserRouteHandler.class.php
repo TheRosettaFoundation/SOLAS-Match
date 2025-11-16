@@ -3676,6 +3676,19 @@ foreach ($rows as $index => $row) {
             if (!$projectDao->are_translations_not_all_complete($task, $projectDao->get_memsource_task($task_id))) $matecat_urls[$task_id] = 1;
         }
 
+        $tasks = $userDao->getUserPageTasks($user_id, 4, 0, NULL, NULL, NULL);
+        if (empty($tasks)) $tasks = [];
+        foreach ($tasks as $task) {
+            $task_id = $task->getId();
+            $deadline = $task->getDeadline();
+            $selected_year   = (int)substr($deadline,  0, 4);
+            $selected_month  = (int)substr($deadline,  5, 2);
+            $selected_day    = (int)substr($deadline,  8, 2);
+            $selected_hour   = (int)substr($deadline, 11, 2); // These are UTC, they will be recalculated to local time by JavaScript (we do not what the local time zone is)
+            $selected_minute = (int)substr($deadline, 14, 2);
+            $deadline_timestamps[$task_id] = gmmktime($selected_hour, $selected_minute, 0, $selected_month, $selected_day, $selected_year);
+        }
+
         $extra_scripts  = "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/Parameters.js\"></script>";
         $extra_scripts .= "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/Home2.js\" async></script>";
         $extra_scripts .= "<script type=\"text/javascript\"  src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/pagination1.js\" defer ></script>";
@@ -3690,6 +3703,7 @@ foreach ($rows as $index => $row) {
             'claimed_tasks' => $claimed_tasks,
             'matecat_urls'  => $matecat_urls,
             'deadline_timestamps' => $deadline_timestamps,
+            'tasks' => $tasks,
             ]);
 
         return UserRouteHandler::render('home_mariam.tpl', $response);
