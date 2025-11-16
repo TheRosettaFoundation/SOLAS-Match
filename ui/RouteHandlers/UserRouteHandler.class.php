@@ -3678,8 +3678,10 @@ foreach ($rows as $index => $row) {
 
         $tasks = $userDao->getUserPageTasks($user_id, 4, 0, NULL, NULL, NULL);
         if (empty($tasks)) $tasks = [];
+        $task_ids = [];
         foreach ($tasks as $task) {
             $task_id = $task->getId();
+            array_push($task_ids, $task_id);
             $deadline = $task->getDeadline();
             $selected_year   = (int)substr($deadline,  0, 4);
             $selected_month  = (int)substr($deadline,  5, 2);
@@ -3688,6 +3690,7 @@ foreach ($rows as $index => $row) {
             $selected_minute = (int)substr($deadline, 14, 2);
             $deadline_timestamps[$task_id] = gmmktime($selected_hour, $selected_minute, 0, $selected_month, $selected_day, $selected_year);
         }
+        $chunks = $userDao->getUserTaskChunks(...$task_ids);
 
         $extra_scripts  = "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/Parameters.js\"></script>";
         $extra_scripts .= "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/Home2.js\" async></script>";
@@ -3704,6 +3707,7 @@ foreach ($rows as $index => $row) {
             'matecat_urls'  => $matecat_urls,
             'deadline_timestamps' => $deadline_timestamps,
             'tasks' => $tasks,
+            'chunks' => $chunks,
             ]);
 
         return UserRouteHandler::render('home_mariam.tpl', $response);
