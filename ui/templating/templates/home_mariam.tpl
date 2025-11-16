@@ -101,7 +101,7 @@
                                 {foreach from=$claimed_tasks item=task}
                                     {assign var="task_id" value=$task->getId()}
                                     {assign var="type_id" value=$task->getTaskType()}
-{assign var="status_id" value=$task->getTaskStatus()}
+                                    {assign var="status_id" value=$task->getTaskStatus()}
                                     {if mb_strlen($task->getTitle()) > 50}
                                         {assign var="task_title" value=mb_substr($task->getTitle(), 0, 50)}
                                         {assign var="task_title" value="`$task_title`..."}
@@ -118,7 +118,15 @@
                                                 <a id="task-{$task_id}" href="{$siteLocation}task/{$task_id}/view" class="custom-link text-wrap">{TemplateHelper::uiCleanseHTMLNewlineAndTabs($task_title)}</a>
                                                 <span class="badge rounded-pill text-uppercase fs-7 fw-bold" style="background-color:{TaskTypeEnum::$enum_to_UI[$type_id]['colour']}">{TaskTypeEnum::$enum_to_UI[$type_id]['type_text']}</span>
                                             </div>
-                                            <p class="text-muted small mb-0">English → French | In Progress</p>
+                                            {if TaskTypeEnum::$enum_to_UI[$type_id]['source_and_target']}
+                                                <p class="text-muted small mb-0">{TemplateHelper::getLanguageAndCountryNoCodes($task->getSourceLocale())} → {TemplateHelper::getLanguageAndCountryNoCodes($task->getTargetLocale())} |
+                                                    ({if $status_id == 3 && empty($matecat_urls[$task_id])}Claimed{elseif $status_id == 3}In Progress{else}Complete{/if}{if $task->get_cancelled()} (Cancelled){/if})
+                                                </p>
+                                            {else}
+                                                <p class="text-muted small mb-0">{TemplateHelper::getLanguageAndCountryNoCodes($task->getTargetLocale())} |
+                                                    ({if $status_id == 3 && empty($matecat_urls[$task_id])}Claimed{elseif $status_id == 3}In Progress{else}Complete{/if}{if $task->get_cancelled()} (Cancelled){/if})
+                                                </p>
+                                            {/if}
                                         </div>
                                     </div>
                                     <div class="text-end">
