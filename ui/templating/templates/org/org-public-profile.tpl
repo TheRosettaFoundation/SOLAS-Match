@@ -782,7 +782,6 @@
         <table>
             <tr>
                 <td>
-                  <label for="image">Image</label>
                   <input type="file" id="image" name="image" accept="image/jpeg" />
                 </td>
             </tr>
