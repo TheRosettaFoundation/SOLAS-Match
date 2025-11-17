@@ -778,11 +778,11 @@
 
     <p style="margin-bottom: 40px"></p>
     <h1 class="page-header">Organization Image</h1>
-    <form method="post" action="{urlFor name="org-public-profile" options="org_id.$org_id"}">
+    <form method="post" action="{urlFor name="org-public-profile" options="org_id.$org_id"}" enctype="multipart/form-data">
         <table>
             <tr>
                 <td>
-                    <input type="file" name="org_image" accept="image/*" enctype="multipart/form-data" />
+                    <input type="file" name="org_image" accept="image/jpeg" />
                 </td>
             </tr>
             <tr>
