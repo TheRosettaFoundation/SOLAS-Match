@@ -15341,7 +15341,7 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `add_org_image`(
     p_attachment LONGBLOB,
     p_admin_id   INT UNSIGNED)
 BEGIN
-    REPLACE INTO content_attachments (
+    REPLACE INTO org_images (
         org_id,
         creation_date,
         mimetype,
@@ -15353,7 +15353,6 @@ BEGIN
         p_mimetype,
         p_attachment,
         p_admin_id);
-    END IF;
 END//
 DELIMITER ;
 
