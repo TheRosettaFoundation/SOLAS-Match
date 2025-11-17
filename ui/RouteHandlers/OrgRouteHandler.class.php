@@ -1677,7 +1677,9 @@ class OrgRouteHandler
                     $userDao->set_mt_for_org($org_id, empty($post['mt_for_org']) ? 0 : 1);
                 }
                 if (isset($post['set_image_for_org'])) {
+error_log("(0)$org_id, {$_FILES['image']['type']}, data, $current_user_id, error: " . $_FILES['image']['error']);
                     if (empty($_FILES['image']['error']) && !empty($_FILES['image']['tmp_name']) && (($data = file_get_contents($_FILES['image']['tmp_name'])) !== false)) {
+error_log("(0,1)$org_id, {$_FILES['image']['type']}, data, $current_user_id" . strlen($data));
                         list($width, $height) = getimagesize($_FILES['image']['tmp_name']);
                         $ratio = min(100/$width, 100/$height);
                         $new_width  = floor($width*$ratio);
