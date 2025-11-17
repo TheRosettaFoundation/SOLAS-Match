@@ -2969,6 +2969,7 @@ error_log(print_r($result, true));//(**)
         LibAPI\PDOWrapper::cleanseWrapStr($mimetype) . ',' .
         "x'" . bin2hex($attachment) . "'," .
         LibAPI\PDOWrapper::cleanse($admin_id);
+error_log($args);
         LibAPI\PDOWrapper::call('add_org_image', $args);
     }
 }

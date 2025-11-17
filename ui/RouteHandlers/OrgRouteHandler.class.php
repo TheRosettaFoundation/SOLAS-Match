@@ -1688,6 +1688,7 @@ class OrgRouteHandler
                             if (imagecopyresampled($tci, $img, 0, 0, 0, 0, $new_width, $new_height, $width, $height)) imagejpeg($tci, $_FILES['image']['tmp_name'], 100);
                         }
                         if (($data = file_get_contents($_FILES['image']['tmp_name'])) !== false) $userDao->add_org_image($org_id, $_FILES['image']['type'], $data, $current_user_id);
+error_log("$org_id, ($_FILES['image']['type']}, data, $current_user_id, len: " . strlen($data));
                     }
                 }
             }
