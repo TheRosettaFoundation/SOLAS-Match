@@ -1676,6 +1676,20 @@ class OrgRouteHandler
                 if (isset($post['set_mt_for_org'])) {
                     $userDao->set_mt_for_org($org_id, empty($post['mt_for_org']) ? 0 : 1);
                 }
+                if (isset($post['set_image_for_org'])) {
+                    if (empty($_FILES['image']['error']) && !empty($_FILES['image']['tmp_name']) && (($data = file_get_contents($_FILES['image']['tmp_name'])) !== false)) {
+                        list($width, $height) = getimagesize($_FILES['image']['tmp_name']);
+                        $ratio = min(100/$width, 100/$height);
+                        $new_width  = floor($width*$ratio);
+                        $new_height = floor($height*$ratio);
+                        $img = imagecreatefromjpeg($_FILES['image']['tmp_name']);
+                        $tci = imagecreatetruecolor($new_width, $new_height);
+                        if (!empty($img) && $tci !== false) {
+                            if (imagecopyresampled($tci, $img, 0, 0, 0, 0, $new_width, $new_height, $width, $height)) imagejpeg($tci, $_FILES['image']['tmp_name'], 100);
+                        }
+                        if (($data = file_get_contents($_FILES['image']['tmp_name'])) !== false) $userDao->add_org_image($org_id, $_FILES['image']['type'], $data, $current_user_id);
+                    }
+                }
             }
         }
         $orgMemberList = $adminDao->getOrgMembers($org_id);
@@ -1729,6 +1743,7 @@ class OrgRouteHandler
                 'mt_for_org' => $userDao->get_mt_for_org($org_id),
                 'required_qualification_level' => $userDao->getRequiredOrgQualificationLevel($org_id),
                 'siteName' => $siteName,
+                'image' => $userDao->get_org_image($org_id),
         ));
 
         return UserRouteHandler::render("org/org-public-profile.tpl", $response);

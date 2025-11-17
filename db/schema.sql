@@ -15313,6 +15313,51 @@ BEGIN
 END//
 DELIMITER ;
 
+
+CREATE TABLE IF NOT EXISTS `org_images` (
+  org_id        INT UNSIGNED NOT NULL,
+  creation_date DATETIME NOT NULL,
+  mimetype      VARCHAR(128) COLLATE utf8mb4_unicode_ci NOT NULL,
+  attachment    LONGBLOB,
+  admin_id      INT UNSIGNED NOT NULL,
+  PRIMARY KEY (org_id),
+  CONSTRAINT FK_org_images_Orgs FOREIGN KEY (org_id) REFERENCES Organisations (id) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT FK_org_images_Users FOREIGN KEY (admin_id) REFERENCES Users (id) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+DROP PROCEDURE IF EXISTS `get_org_image`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_org_image`(p_org_id INT UNSIGNED)
+BEGIN
+    SELECT * FROM org_images WHERE org_id=p_org_id;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `add_org_image`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `add_org_image`(
+    p_org_id INT UNSIGNED,
+    p_mimetype   VARCHAR(128),
+    p_attachment LONGBLOB,
+    p_admin_id   INT UNSIGNED)
+BEGIN
+    REPLACE INTO content_attachments (
+        org_id,
+        creation_date,
+        mimetype,
+        attachment,
+        admin_id)
+    VALUES (
+        p_org_id,
+        NOW(),
+        p_mimetype,
+        p_attachment,
+        p_admin_id);
+    END IF;
+END//
+DELIMITER ;
+
+
 DROP PROCEDURE IF EXISTS `get_all_projects`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `get_all_projects`(IN oID INT UNSIGNED)

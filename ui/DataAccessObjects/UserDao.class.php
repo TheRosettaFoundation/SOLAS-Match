@@ -2954,4 +2954,21 @@ error_log(print_r($result, true));//(**)
             }
         } else error_log("get_asana_quality_task Failed task_id: $task_id");
     }
+
+    public function get_org_image($org_id)
+    {
+        $result = LibAPI\PDOWrapper::call('add_org_image', LibAPI\PDOWrapper::cleanse($org_id));
+        if (empty($result)) return '';
+        return base64_encode($result[0]['attachment']);
+    }
+
+    public function add_org_image($org_id, $mimetype, $attachment, $admin_id)
+    {
+        $args =
+        LibAPI\PDOWrapper::cleanse($org_id) . ',' .
+        LibAPI\PDOWrapper::cleanseWrapStr($mimetype) . ',' .
+        "x'" . bin2hex($attachment) . "'," .
+        LibAPI\PDOWrapper::cleanse($admin_id);
+        LibAPI\PDOWrapper::call('add_org_image', $args);
+    }
 }

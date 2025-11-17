@@ -60,6 +60,14 @@
         <table>
             <tr valign="top">
                 <td  style="width: 48%">
+                    <img class="rounded-circle ms-3" width="100" height="100" title="Organisation Image" alt="Organisation Image" src="data:image/jpeg;base64,{$image}" />
+                </td>
+                <td style="width: 4%"/>
+                <td style="width: 48%">
+                </td>
+            </tr>
+            <tr valign="top">
+                <td  style="width: 48%">
                     <div>
                         <table border="0" width="40%" style="overflow-wrap: break-word; word-break:break-all;">
                             <thead>                
@@ -761,6 +769,27 @@
                 <td>
                     <button type="submit" value="set_mt_for_org" name="set_mt_for_org" class="btn btn-primary">
                         <i class="icon-refresh icon-white"></i> Update Resources
+                    </button>
+                </td>
+            </tr>
+        </table>
+        {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
+    </form>
+
+    <p style="margin-bottom: 40px"></p>
+    <h1 class="page-header">Organization Image</h1>
+    <form method="post" action="{urlFor name="org-public-profile" options="org_id.$org_id"}">
+        <table>
+            <tr>
+                <td>
+                  <label for="image">Image</label>
+                  <input type="file" id="image" name="image" accept="image/jpeg" />
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <button type="submit" value="set_image_for_org" name="set_image_for_org" class="btn btn-primary">
+                        <i class="icon-refresh icon-white"></i> Update Image
                     </button>
                 </td>
             </tr>
