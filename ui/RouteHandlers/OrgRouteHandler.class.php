@@ -1678,21 +1678,21 @@ class OrgRouteHandler
                 }
                 if (isset($post['set_image_for_org'])) {
 error_log(print_r($post, 1));
-error_log("(0)$org_id, {$_FILES['image']['type']}, data, $current_user_id, error: " . $_FILES['image']['error']);
-                    if (empty($_FILES['image']['error']) && !empty($_FILES['image']['tmp_name']) && (($data = file_get_contents($_FILES['image']['tmp_name'])) !== false)) {
-error_log("(0,1)$org_id, {$_FILES['image']['type']}, data, $current_user_id" . strlen($data));
-                        list($width, $height) = getimagesize($_FILES['image']['tmp_name']);
+error_log("(0)$org_id, {$_FILES['org_image']['type']}, data, $current_user_id, error: " . $_FILES['org_image']['error']);
+                    if (empty($_FILES['org_image']['error']) && !empty($_FILES['org_image']['tmp_name']) && (($data = file_get_contents($_FILES['org_image']['tmp_name'])) !== false)) {
+error_log("(0,1)$org_id, {$_FILES['org_image']['type']}, data, $current_user_id" . strlen($data));
+                        list($width, $height) = getimagesize($_FILES['org_image']['tmp_name']);
                         $ratio = min(100/$width, 100/$height);
                         $new_width  = floor($width*$ratio);
                         $new_height = floor($height*$ratio);
-                        $img = imagecreatefromjpeg($_FILES['image']['tmp_name']);
+                        $img = imagecreatefromjpeg($_FILES['org_image']['tmp_name']);
                         $tci = imagecreatetruecolor($new_width, $new_height);
                         if (!empty($img) && $tci !== false) {
-                            if (imagecopyresampled($tci, $img, 0, 0, 0, 0, $new_width, $new_height, $width, $height)) imagejpeg($tci, $_FILES['image']['tmp_name'], 100);
+                            if (imagecopyresampled($tci, $img, 0, 0, 0, 0, $new_width, $new_height, $width, $height)) imagejpeg($tci, $_FILES['org_image']['tmp_name'], 100);
                         }
-error_log("(1)$org_id, {$_FILES['image']['type']}, data, $current_user_id, len: " . strlen($data));
-                        if (($data = file_get_contents($_FILES['image']['tmp_name'])) !== false) $userDao->add_org_image($org_id, $_FILES['image']['type'], $data, $current_user_id);
-error_log("(2)$org_id, {$_FILES['image']['type']}, data, $current_user_id, len: " . strlen($data));
+error_log("(1)$org_id, {$_FILES['org_image']['type']}, data, $current_user_id, len: " . strlen($data));
+                        if (($data = file_get_contents($_FILES['org_image']['tmp_name'])) !== false) $userDao->add_org_image($org_id, $_FILES['org_image']['type'], $data, $current_user_id);
+error_log("(2)$org_id, {$_FILES['org_image']['type']}, data, $current_user_id, len: " . strlen($data));
                     }
                 }
             }
@@ -1748,7 +1748,7 @@ error_log("(2)$org_id, {$_FILES['image']['type']}, data, $current_user_id, len: 
                 'mt_for_org' => $userDao->get_mt_for_org($org_id),
                 'required_qualification_level' => $userDao->getRequiredOrgQualificationLevel($org_id),
                 'siteName' => $siteName,
-                'image' => $userDao->get_org_image($org_id),
+                'org_image' => $userDao->get_org_image($org_id),
         ));
 
         return UserRouteHandler::render("org/org-public-profile.tpl", $response);

@@ -60,7 +60,7 @@
         <table>
             <tr valign="top">
                 <td  style="width: 48%">
-                    <img class="rounded-circle ms-3" width="100" height="100" title="Organisation Image" alt="Organisation Image" src="data:image/jpeg;base64,{$image}" />
+                    <img class="rounded-circle ms-3" width="100" height="100" title="Organisation Image" alt="Organisation Image" src="data:image/jpeg;base64,{$org_image}" />
                 </td>
                 <td style="width: 4%"/>
                 <td style="width: 48%">
@@ -782,7 +782,7 @@
         <table>
             <tr>
                 <td>
-                  <input type="file" id="image" name="image" accept="image/jpeg" />
+                    <input type="file" name="org_image" accept="image/jpeg" />
                 </td>
             </tr>
             <tr>
