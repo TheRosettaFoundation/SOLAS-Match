@@ -18,5 +18,4 @@
         .space-y-8 > * + * { margin-top: 2rem !important; }
 
         /* Custom badge styles for Task Cards */
-        .task-type-badge { background-color: #1D8A11; }
         .task-unit-badge { background-color: var(--core-blue); }
