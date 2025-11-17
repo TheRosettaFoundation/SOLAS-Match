@@ -782,7 +782,7 @@
         <table>
             <tr>
                 <td>
-                    <input type="file" name="org_image" accept="image/jpeg" enctype="multipart/form-data" />
+                    <input type="file" name="org_image" accept="image/*" enctype="multipart/form-data" />
                 </td>
             </tr>
             <tr>
