@@ -175,7 +175,11 @@
                                                     </div>
                                                     <h5 class="fw-bold text-dark mb-2"><a id="task-{$task_id}" href="{$siteLocation}task/{$task_id}/view" class="custom-link text-wrap">{$task_title}</a></h5>
                                                 </div>
-                                                <img src="https://placehold.co/40x40/ED1C24/ffffff?text=IFRC" alt="IFRC logo" class="rounded-circle ms-3" width="40" height="40" />
+                                                {if !empty($org_images[$task_id])}
+                                                <img src="data:image/jpeg;base64,{$org_images[$task_id]}" alt="Organisation logo" class="rounded-circle ms-3" width="40" height="40" />
+                                                {else}
+                                                <img src="https://placehold.co/40x40/ED1C24/ffffff?text=TWB" alt="Organisation logo" class="rounded-circle ms-3" width="40" height="40" />
+                                                {/if}
                                             </div>
                                             {if TaskTypeEnum::$enum_to_UI[$type_id]['source_and_target']}
                                             <p class="small text-secondary mb-2">

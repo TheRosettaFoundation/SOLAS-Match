@@ -3689,6 +3689,9 @@ foreach ($rows as $index => $row) {
             $selected_hour   = (int)substr($deadline, 11, 2); // These are UTC, they will be recalculated to local time by JavaScript (we do not what the local time zone is)
             $selected_minute = (int)substr($deadline, 14, 2);
             $deadline_timestamps[$task_id] = gmmktime($selected_hour, $selected_minute, 0, $selected_month, $selected_day, $selected_year);
+
+            $project = $projectDao->getProject($task->getProjectId());
+            $org_images[$task_id] = $userDao->get_org_image($project->getOrganisationId());
         }
         $chunks = $userDao->getUserTaskChunks(...$task_ids);
 
@@ -3708,6 +3711,7 @@ foreach ($rows as $index => $row) {
             'deadline_timestamps' => $deadline_timestamps,
             'tasks' => $tasks,
             'chunks' => $chunks,
+            'org_images' => $org_images,
             ]);
 
         return UserRouteHandler::render('home_mariam.tpl', $response);
