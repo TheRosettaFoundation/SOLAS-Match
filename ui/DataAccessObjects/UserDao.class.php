@@ -2957,7 +2957,7 @@ error_log(print_r($result, true));//(**)
 
     public function get_org_image($org_id)
     {
-        $result = LibAPI\PDOWrapper::call('add_org_image', LibAPI\PDOWrapper::cleanse($org_id));
+        $result = LibAPI\PDOWrapper::call('get_org_image', LibAPI\PDOWrapper::cleanse($org_id));
         if (empty($result)) return '';
         return base64_encode($result[0]['attachment']);
     }

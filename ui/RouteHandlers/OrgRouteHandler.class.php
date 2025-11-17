@@ -1687,9 +1687,8 @@ class OrgRouteHandler
                         if (!empty($img) && $tci !== false) {
                             if (imagecopyresampled($tci, $img, 0, 0, 0, 0, $new_width, $new_height, $width, $height)) imagejpeg($tci, $_FILES['image']['tmp_name'], 100);
                         }
-error_log("(0)$org_id, $current_user_id");
 error_log("(1)$org_id, {$_FILES['image']['type']}, data, $current_user_id, len: " . strlen($data));
-//                        if (($data = file_get_contents($_FILES['image']['tmp_name'])) !== false) $userDao->add_org_image($org_id, $_FILES['image']['type'], $data, $current_user_id);
+                        if (($data = file_get_contents($_FILES['image']['tmp_name'])) !== false) $userDao->add_org_image($org_id, $_FILES['image']['type'], $data, $current_user_id);
 error_log("(2)$org_id, {$_FILES['image']['type']}, data, $current_user_id, len: " . strlen($data));
                     }
                 }
