@@ -34,61 +34,11 @@
     </div>
 {/if}
 
-                <div id="announcement-banner" class="alert alert-warning text-center p-3 d-flex align-items-center justify-content-center" role="alert">
-                    <p class="mb-0 flex-grow-1">
-                        System Notice: The task assignment queue is experiencing minor delays. Thank you for your patience.
-                    </p>
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" onclick="document.getElementById('announcement-banner').style.display = 'none';"></button>
-                </div>
             </div>
 
             <div class="container-xxl px-4 px-sm-5 px-lg-5 pb-5 pt-4">
-                <div class="mb-4"><img src="https://twbplatform.org/ui/img/voice.png" alt="Voice image"></div>
-
                 <div class="row g-4">
                     <div class="col-lg-8 order-1 order-lg-1 space-y-8">
-
-                        <div class="row g-4 mb-4">
-                            <div class="col-md-4">
-                                <div class="card custom-card p-3 h-100 card-border-top-blue">
-                                    <div class="d-flex align-items-center">
-                                        <div class="flex-shrink-0 p-3 rounded-circle bg-primary-subtle" style="color: var(--core-blue);">
-                                            <i class="fa-solid fa-clock fa-xl"></i>
-                                        </div>
-                                        <div class="ms-3">
-                                            <p class="text-secondary fw-medium mb-0">Hours Contributed</p>
-                                            <p class="fs-4 fw-bold text-dark mb-0">145</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="card custom-card p-3 h-100 card-border-top-accent">
-                                    <div class="d-flex align-items-center">
-                                        <div class="flex-shrink-0 p-3 rounded-circle" style="background-color: #fef3c7; color: var(--twb-accent);">
-                                            <i class="fa-solid fa-file-lines fa-xl"></i>
-                                        </div>
-                                        <div class="ms-3">
-                                            <p class="text-secondary fw-medium mb-0">Words Translated</p>
-                                            <p class="fs-4 fw-bold text-dark mb-0">45,892</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="card custom-card p-3 h-100 card-border-top-green">
-                                    <div class="d-flex align-items-center">
-                                        <div class="flex-shrink-0 p-3 rounded-circle bg-success-subtle text-success">
-                                            <i class="fa-solid fa-check-circle fa-xl"></i>
-                                        </div>
-                                        <div class="ms-3">
-                                            <p class="text-secondary fw-medium mb-0">Projects Completed</p>
-                                            <p class="fs-4 fw-bold text-dark mb-0">18</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
 
                         <div class="card bg-light custom-card p-4 border-top-0 card-border-top-accent">
                             <div class="d-flex justify-content-between align-items-center mb-4 border-bottom pb-3">
@@ -230,8 +180,8 @@
                                         <div class="d-flex align-items-start">
                                             <span class="me-2 mt-1 flex-shrink-0" style="color: var(--twb-accent);">💡</span>
                                             <div>
-                                                <p class="fw-medium text-dark mb-0">Webinar: CAT Tools for Reviewers</p>
-                                                <p class="small text-secondary mb-0">Webinar • Oct 28, 2025</p>
+                                                <p class="fw-medium text-dark mb-0">CAT Tools for Reviewers</p>
+                                                <p class="small text-secondary mb-0">Event • Oct 28, 2025</p>
                                             </div>
                                         </div>
                                     </a>
