@@ -3658,7 +3658,7 @@ foreach ($rows as $index => $row) {
         $projectDao = new DAO\ProjectDao();
 
         $user_id = Common\Lib\UserSession::getCurrentUserID();
-        $claimed_tasks = $userDao->getFilteredUserClaimedTasks($user_id, 0, 4, 0, 0, 3);
+        $claimed_tasks = $userDao->getFilteredUserClaimedTasks($user_id, 2, 4, 0, 0, 3);
         if (empty($claimed_tasks)) $claimed_tasks = [];
 
         $deadline_timestamps = [];
