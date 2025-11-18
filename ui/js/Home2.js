@@ -206,7 +206,7 @@ function renderTaskDetails() {
             mi = "0" + mi;
         }
         $(this).html(
-            "Due by " +
+            "" +
             deadline.getFullYear() +
             "-" +
             m +
@@ -217,7 +217,7 @@ function renderTaskDetails() {
             ":" +
             mi +
             ":00 " +
-            Intl.DateTimeFormat().resolvedOptions().timeZone + " or earlier, if possible"
+            Intl.DateTimeFormat().resolvedOptions().timeZone
         );
 
         $(this).css("visibility", "visible");
