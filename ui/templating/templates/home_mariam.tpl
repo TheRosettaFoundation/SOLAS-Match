@@ -61,9 +61,11 @@
                                     {/if}
                                 <div class="d-flex align-items-center justify-content-between p-3 rounded-3 shadow-sm border bg-white hover-shadow">
                                     <div class="d-flex align-items-center">
-                                        <div class="p-2 rounded-circle me-3" style="background-color: var(--twb-accent); opacity: 0.1; color: var(--twb-accent);">
-                                            <i class="fa-solid fa-check"></i>
-                                        </div>
+                                       {if !empty($org_images[$task_id])}
+                                       <img src="data:image/jpeg;base64,{$org_images[$task_id]}" alt="Organisation logo" class="rounded-circle ms-3" width="40" height="40" />
+                                       {else}
+                                       <img src="https://placehold.co/40x40/ED1C24/ffffff?text=TWB" alt="Organisation logo" class="rounded-circle ms-3" width="40" height="40" />
+                                       {/if}
                                         <div>
                                             <div class="fw-bold text-md">
                                                 <a id="taskc-{$task_id}" href="{$siteLocation}task/{$task_id}/view" class="custom-link text-wrap">{$task_title}</a>

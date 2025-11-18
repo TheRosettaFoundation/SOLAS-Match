@@ -3674,6 +3674,9 @@ foreach ($rows as $index => $row) {
             $deadline_timestamps[$task_id] = gmmktime($selected_hour, $selected_minute, 0, $selected_month, $selected_day, $selected_year);
 
             if (!$projectDao->are_translations_not_all_complete($task, $projectDao->get_memsource_task($task_id))) $matecat_urls[$task_id] = 1;
+
+            $project = $projectDao->getProject($task->getProjectId());
+            $org_images[$task_id] = $userDao->get_org_image($project->getOrganisationId());
         }
 
         $tasks = $userDao->getUserPageTasks($user_id, 4, 0, NULL, NULL, NULL);
