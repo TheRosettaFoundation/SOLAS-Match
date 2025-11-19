@@ -3719,6 +3719,8 @@ foreach ($rows as $index => $row) {
             'chunks' => $chunks,
             'org_images' => $org_images,
             'orgs' => $orgs,
+            'news' => $userDao->get_content_items(null, 1, null, 1, 1, null, null, null, 0, 0),
+            'resources' => $userDao->get_content_items(null, 2, null, 1, 1, null, null, null, 0, 0),
             ]);
 
         return UserRouteHandler::render('home_mariam.tpl', $response);
