@@ -3663,6 +3663,7 @@ foreach ($rows as $index => $row) {
 
         $deadline_timestamps = [];
         $matecat_urls = [];
+        $orgs = [];
         foreach ($claimed_tasks as $task) {
             $task_id = $task->getId();
             $deadline = $task->getDeadline();
@@ -3677,6 +3678,7 @@ foreach ($rows as $index => $row) {
 
             $project = $projectDao->getProject($task->getProjectId());
             $org_images[$task_id] = $userDao->get_org_image($project->getOrganisationId());
+            $orgs[$task_id] = $project->getOrganisationId();
         }
 
         $tasks = $userDao->getUserPageTasks($user_id, 4, 0, NULL, NULL, NULL);
@@ -3695,6 +3697,7 @@ foreach ($rows as $index => $row) {
 
             $project = $projectDao->getProject($task->getProjectId());
             $org_images[$task_id] = $userDao->get_org_image($project->getOrganisationId());
+            $orgs[$task_id] = $project->getOrganisationId();
         }
         $chunks = $userDao->getUserTaskChunks(...$task_ids);
 
@@ -3715,6 +3718,7 @@ foreach ($rows as $index => $row) {
             'tasks' => $tasks,
             'chunks' => $chunks,
             'org_images' => $org_images,
+            'orgs' => $orgs,
             ]);
 
         return UserRouteHandler::render('home_mariam.tpl', $response);
