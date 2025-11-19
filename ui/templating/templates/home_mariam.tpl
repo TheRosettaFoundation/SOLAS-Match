@@ -192,7 +192,7 @@
                                         </div>
                                     </a>
                                 </li>
-                                </ul>
+                            </ul>
                             <a href="#news-archive" class="mt-3 w-100 btn btn-outline-primary fw-semibold" style="color: var(--core-blue);">
                                 View All News <i class="fa-solid fa-arrow-right ms-1"></i>
                             </a>
@@ -209,7 +209,10 @@
                                         <span class="me-2" style="color: var(--core-blue); opacity: 0.6;">&rarr;</span> Community Contribution Guidelines (Bookstack)
                                     </a>
                                 </li>
-                                </ul>
+                            </ul>
+                            <a href="#news-archive" class="mt-3 w-100 btn btn-outline-primary fw-semibold" style="color: var(--core-blue);">
+                                View All Resources <i class="fa-solid fa-arrow-right ms-1"></i>
+                            </a>
                         </div>
 
                         <div class="card bg-light custom-card p-4">
