@@ -139,15 +139,15 @@
                   <label for="type">Type / Category</label>
                   <select id="type" name="type">
                     {if $org_id == 0}
-                    <option value="1" {if $selected_type == 11}selected="selected"{/if}>Article</option>
-                    <option value="3" {if $selected_type == 13}selected="selected"{/if}>Event</option>
-                    <option value="2" {if $selected_type == 12}selected="selected"{/if}>Newsletter</option>
-                    <option value="2" {if $selected_type == 14}selected="selected"{/if}>Report</option>
-                    <option value="4" {if $selected_type == 21}selected="selected"{/if}>Resource</option>
+                    <option value="11" {if $selected_type == 11}selected="selected"{/if}>Article</option>
+                    <option value="13" {if $selected_type == 13}selected="selected"{/if}>Event</option>
+                    <option value="12" {if $selected_type == 12}selected="selected"{/if}>Newsletter</option>
+                    <option value="14" {if $selected_type == 14}selected="selected"{/if}>Report</option>
+                    <option value="21" {if $selected_type == 21}selected="selected"{/if}>Resource</option>
                     {else}
 <!--                    <option value="0">External content</option> -->
-                    <option value="5" {if $selected_type == 50}selected="selected"{/if}>Organization</option>
-                    <option value="6" {if $selected_type == 60}selected="selected"{/if}>Project</option>
+                    <option value="50" {if $selected_type == 50}selected="selected"{/if}>Organization</option>
+                    <option value="60" {if $selected_type == 60}selected="selected"{/if}>Project</option>
                     {/if}
                   </select>
                 </div>
