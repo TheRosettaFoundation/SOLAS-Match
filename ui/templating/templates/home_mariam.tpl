@@ -245,8 +245,8 @@
 
                         <div class="card bg-light custom-card p-4 border-top-0" style="border-top: 4px solid #adb5bd;">
                             <h3 class="fs-5 fw-bold text-dark mb-2">Feedback & Suggestions</h3>
-                            <p class="text-secondary mb-3 small">Have ideas for improvement? Share your experience with the platform or suggest a new feature.</p>
-                            <a href="#feedback-form" class="btn rounded-pill text-white fw-medium transition-colors" style="background-color: var(--twb-accent);">
+                            <p class="text-secondary mb-3 small">Please share your feedback with our team to help fix any issues and deliver a better experience to our community.</p>
+                            <a href="https://form.asana.com/?k=dlsF11XkOwpfFllbq325dg&d=170818793545926" class="btn rounded-pill text-white fw-medium transition-colors" style="background-color: var(--twb-accent);">
                                 💡 Submit Feedback
                             </a>
                         </div>
