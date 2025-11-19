@@ -230,17 +230,10 @@
                                </div>
                                <h3 class="fs-5 fw-bold text-dark mb-0">Community Survey</h3>
                             </div>
-                            <p class="fw-semibold text-dark mb-2">How satisfied are you with the platform's task matching feature?</p>
-                            <p class="small text-secondary mb-3">Your anonymous feedback helps us improve task assignments and efficiency.</p>
-                            <form onsubmit="alert('Response submitted!'); return false;" class="space-y-3">
-                                <div class="form-check">
-                                    <input class="form-check-input" type="radio" id="radio-v-satisfied" name="survey-response" value="Very Satisfied" style="color: var(--core-blue);" required>
-                                    <label class="form-check-label small fw-medium text-dark w-100 p-2 rounded hover-bg-light" for="radio-v-satisfied">Very Satisfied</label>
-                                </div>
-                                <button type="submit" class="btn w-100 py-2 text-white fw-semibold rounded-pill mt-3 hover-opacity-90" style="background-color: var(--twb-accent);">
-                                    Submit Response
-                                </button>
-                            </form>
+                            <p class="small text-secondary mb-3">We want to hear from you! Take our annual Community Survey and help shape future opportunities and support for volunteers. It’s anonymous and only takes 7–10 minutes.</p>
+                            <a href="https://forms.translatorswb.org/view.php?id=56405" class="btn rounded-pill text-white fw-medium transition-colors" style="background-color: var(--twb-accent);">
+                                💡 Submit Response
+                            </a>
                         </div>
 
                         <div class="card bg-light custom-card p-4 border-top-0" style="border-top: 4px solid #adb5bd;">
