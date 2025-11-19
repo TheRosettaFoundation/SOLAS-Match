@@ -102,6 +102,8 @@
                                     Browse All Tasks <i class="fa-solid fa-arrow-right ms-2"></i>
                                 </a>
                             </div>
+
+                            {if !empty($tasks)}
                             <div class="space-y-4">
                                 {assign var="count" value=0}
                                 {foreach from=$tasks item=task}
@@ -167,6 +169,12 @@
                             <div class="text-center mt-4">
                                 <a class="btn btn-secondary fs-5 px-3" href="{urlFor name="home"}">View More Available Tasks</a>
                             </div>
+                            {else}
+                            <div class="text-center mt-4">
+                                It looks like we don't have any tasks available for your language pair at the moment. In the meantime, you can take a course from our Learning Center.
+                                <a class="btn btn-secondary fs-5 px-3" href="https://elearn.translatorswb.org/">Learning Center</a>
+                            </div>
+                            {/if}
                         </div>
 
                     </div>
