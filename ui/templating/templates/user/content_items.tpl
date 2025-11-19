@@ -74,12 +74,13 @@
             <td>{$item['title']|escape:'html':'UTF-8'}</td>
 
             <td>
-            {if $item['type'] == 1}TWB Article{/if}
-            {if $item['type'] == 2}Newsletter{/if}
-            {if $item['type'] == 3}Event{/if}
-            {if $item['type'] == 4}Resource{/if}
-            {if $item['type'] == 5}Organization{/if}
-            {if $item['type'] == 6}Project{/if}
+            {if $item['type'] == 11}Article{/if}
+            {if $item['type'] == 13}Event{/if}
+            {if $item['type'] == 12}Newsletter{/if}
+            {if $item['type'] == 14}Report{/if}
+            {if $item['type'] == 21}Resource{/if}
+            {if $item['type'] == 50}Organization{/if}
+            {if $item['type'] == 60}Project{/if}
             </td>
 
             <td>
