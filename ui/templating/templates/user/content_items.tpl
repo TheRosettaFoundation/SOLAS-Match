@@ -50,9 +50,9 @@
         <th>Title</th>
         <th>Type</th>
         <th>Scope</th>
-        <th>Highlight</th>
         <th>Published</th>
-        <th>Sort Order</th>
+        <th>Show on Homepage</th>
+        <th>Sort Order (Greater on top)</th>
         <th>Number of Views</th>
         <th>Organization</th>
         <th>Admin</th>
@@ -89,11 +89,11 @@
             </td>
 
             <td>
-            {if $item['highlight'] == 1}Highlight{/if}
+            {if $item['published'] == 1}Published{/if}
             </td>
 
             <td>
-            {if $item['published'] == 1}Published{/if}
+            {if $item['highlight'] == 1}Show on Homepage{/if}
             </td>
 
             <td>{$item['sorting_order']}</td>

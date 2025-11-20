@@ -95,7 +95,7 @@
             <div class="step active" data-step="1">1 — Basic</div>
             <div class="step" data-step="2">2 — Content</div>
             <div class="step" data-step="3">3 — Attachments</div>
-            <div class="step" data-step="4">4 — Links & Publish</div>
+            <div class="step" data-step="4">4 — Links & Save</div>
           </div>
 
          {if !empty($org_id)}
@@ -123,6 +123,12 @@
                     <option value= "1" {if $selected_published ==  1}selected="selected"{/if}>Published</option>
                     <option value="-1" {if $selected_published == -1}selected="selected"{/if}>Archived</option>
                   </select>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col">
+                  <label><input type="checkbox" id="highlight" name="highlight" value="1" {if !empty($selected_highlight)}checked="checked"{/if} /> Show on homepage</label>
                 </div>
               </div>
 
@@ -203,7 +209,7 @@
             <div class="step-panel" data-panel="2" style="display:none">
               <h3>Step 2 — Content</h3>
               <div>
-                <label for="snippet">Snippet (HTML) — used in lists / homepage</label>
+                <label for="snippet">Snippet (HTML) — used in lists</label>
                 {if empty($selected_snippet)}
                 <textarea id="snippet" name="snippet" placeholder="Short HTML snippet or summary"></textarea>
                 {else}
@@ -311,14 +317,14 @@
 <!--                <div class="small" id="attachCount">Total attachments: 0</div> -->
                 <div>
                   <button class="btn ghost" type="button" onclick="gotoStep(2)">← Back</button>
-                  <button class="btn" type="button" onclick="gotoStep(4)">Next: Publish →</button>
+                  <button class="btn" type="button" onclick="gotoStep(4)">Next: Save →</button>
                 </div>
               </div>
             </div>
 
             <!-- Step 4 -->
             <div class="step-panel" data-panel="4" style="display:none">
-              <h3>Step 4 — Projects & Publish</h3>
+              <h3>Step 4 — Projects & Save</h3>
 
               {if $org_id != 0}
               <div class="row">
@@ -346,9 +352,6 @@
               {/if}
 
               <div class="row" style="align-items:center">
-                <div class="col">
-                  <label><input type="checkbox" id="highlight" name="highlight" value="1" {if !empty($selected_highlight)}checked="checked"{/if} /> Show on homepage</label>
-                </div>
                 <div class="col">
                   <label for="sorting_order">Sort order (higher = higher priority)</label>
                   {if empty($selected_sorting_order)}
@@ -416,7 +419,7 @@
             <button class="btn" onclick="gotoStep(1)">Edit Basic</button>
             <button class="btn ghost" onclick="gotoStep(2)">Edit Content</button>
             <button class="btn ghost" onclick="gotoStep(3)">Edit Attachments</button>
-            <button class="btn ghost" onclick="gotoStep(4)">Edit Links & Publish</button>
+            <button class="btn ghost" onclick="gotoStep(4)">Edit Links & Save</button>
           </div>
         </div>
       </aside>
