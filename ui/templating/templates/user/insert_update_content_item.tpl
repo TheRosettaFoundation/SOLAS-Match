@@ -353,7 +353,7 @@
 
               <div class="row" style="align-items:center">
                 <div class="col">
-                  <label for="sorting_order">Sort order (higher = higher priority)</label>
+                  <label for="sorting_order">Sort order (higher => higher up in lists)</label>
                   {if empty($selected_sorting_order)}
                   <input type="number" id="sorting_order" name="sorting_order" value="0" />
                   {else}

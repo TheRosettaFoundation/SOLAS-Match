@@ -52,7 +52,7 @@
         <th>Scope</th>
         <th>Published</th>
         <th>Show on Homepage</th>
-        <th>Sort Order (Greater on top)</th>
+        <th>Sort Order (higher => higher up in lists)</th>
         <th>Number of Views</th>
         <th>Organization</th>
         <th>Admin</th>
