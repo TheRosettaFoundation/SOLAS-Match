@@ -195,12 +195,8 @@
                             </div>
                             <ul class="list-unstyled space-y-4">
                                 {foreach from=$news item=item}
-[[
-(**)LINK $item['id']
-(**)date from UTC?????
-]]
                                 <li class="border-bottom pb-3">
-                                    <a href="article.html" class="d-block text-decoration-none text-dark hover-bg-light p-1 rounded transition-colors">
+                                    <a href="{$siteLocation}content_display/{$item['id']}/" class="d-block text-decoration-none text-dark hover-bg-light p-1 rounded transition-colors">
                                         <div class="d-flex align-items-start">
                                             {if $item['type'] == 11}
                                             <span class="me-2 mt-1 flex-shrink-0" style="color: var(--twb-accent);">🗞</span>
@@ -213,7 +209,7 @@
                                             {/if}
                                             <div>
                                                 <p class="fw-medium text-dark mb-0">{$item['title']}</p>
-                                                <p class="small text-secondary mb-0">• $item['update_date']</p>
+                                                <p class="small text-secondary mb-0">• {substr($item['update_date'], 0, 10)}</p>
                                             </div>
                                         </div>
                                     </a>
@@ -234,11 +230,8 @@
                             </div>
                             <ul class="list-unstyled space-y-4">
                                 {foreach from=$resources item=item}
-[[
-(**)LINK $item['id']
-]]
                                 <li>
-                                    <a href="#guidelines" class="d-flex align-items-center small text-dark fw-medium text-decoration-none hover-text-primary">
+                                    <a href="{$siteLocation}content_display/{$item['id']}/" class="d-flex align-items-center small text-dark fw-medium text-decoration-none hover-text-primary">
                                         <span class="me-2" style="color: var(--core-blue); opacity: 0.6;">&rarr;</span> {$item['title']}
                                     </a>
                                 </li>
