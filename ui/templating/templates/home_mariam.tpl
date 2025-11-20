@@ -185,6 +185,7 @@
 
                     <div class="col-lg-4 order-2 order-lg-2 space-y-8">
 
+                        {if !empty($news)}
                         <div class="card bg-light custom-card p-4">
                             <div class="d-flex align-items-center mb-3 border-bottom pb-3">
                                 <span class="me-2 fs-5" style="color: var(--twb-accent);">📰</span>
@@ -193,6 +194,13 @@
                                 </a>
                             </div>
                             <ul class="list-unstyled space-y-4">
+{foreach from=$news item=item}
+[[
+$item['']
+(**)no display subtype text
+(**)use Update date for display
+(**)icon for each
+]]
                                 <li class="border-bottom pb-3">
                                     <a href="article.html" class="d-block text-decoration-none text-dark hover-bg-light p-1 rounded transition-colors">
                                         <div class="d-flex align-items-start">
@@ -204,28 +212,41 @@
                                         </div>
                                     </a>
                                 </li>
+{/foreach}
                             </ul>
                             <a href="#news-archive" class="mt-3 w-100 btn btn-outline-primary fw-semibold" style="color: var(--core-blue);">
                                 View All News <i class="fa-solid fa-arrow-right ms-1"></i>
                             </a>
                         </div>
+                        {/if}
 
+                        {if !empty($resources)}
                         <div class="card bg-light custom-card p-4">
                             <div class="d-flex align-items-center mb-3 border-bottom pb-3">
                                 <span class="me-2 fs-5" style="color: var(--core-blue);">📖</span>
                                 <h3 class="fs-5 fw-bold text-dark mb-0">Resources & Tools</h3>
                             </div>
                             <ul class="list-unstyled space-y-4">
+{foreach from=$resources item=item}
+[[
+$item['']
+(**)no display subtype text
+(**)use Update date for display
+(**)icon for each
+]]
+
                                 <li>
                                     <a href="#guidelines" class="d-flex align-items-center small text-dark fw-medium text-decoration-none hover-text-primary">
                                         <span class="me-2" style="color: var(--core-blue); opacity: 0.6;">&rarr;</span> Community Contribution Guidelines (Bookstack)
                                     </a>
                                 </li>
+{/foreach}
                             </ul>
                             <a href="#news-archive" class="mt-3 w-100 btn btn-outline-primary fw-semibold" style="color: var(--core-blue);">
                                 View All Resources <i class="fa-solid fa-arrow-right ms-1"></i>
                             </a>
                         </div>
+                        {/if}
 
                         <div class="card bg-light custom-card p-4">
                             <div class="d-flex align-items-center mb-3 border-bottom pb-3">
