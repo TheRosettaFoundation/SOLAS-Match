@@ -15155,7 +15155,7 @@ BEGIN
         LEFT JOIN content_for_projects cfp ON ci.id=cfp.content_id
         WHERE
             (p_id IS NULL OR ci.id=p_id) AND
-            (p_type IS NULL OR ci.type/10=p_type) AND
+            (p_type IS NULL OR ci.type div 10=p_type) AND
             (p_scope IS NULL OR ci.scope=p_scope) AND
             (p_highlight IS NULL OR ci.highlight=p_highlight) AND
             (p_published IS NULL OR ci.published=p_published) AND
@@ -15173,7 +15173,7 @@ BEGIN
         LEFT JOIN content_for_projects cfp ON ci.id=cfp.content_id
         WHERE
             (p_id IS NULL OR ci.id=p_id) AND
-            (p_type IS NULL OR ci.type/10=p_type) AND
+            (p_type IS NULL OR ci.type div 10=p_type) AND
             (p_scope IS NULL OR ci.scope=p_scope) AND
             (p_highlight IS NULL OR ci.highlight=p_highlight) AND
             (p_published IS NULL OR ci.published=p_published) AND
