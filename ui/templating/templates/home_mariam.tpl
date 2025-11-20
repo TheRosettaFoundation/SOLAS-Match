@@ -194,25 +194,31 @@
                                 </a>
                             </div>
                             <ul class="list-unstyled space-y-4">
-{foreach from=$news item=item}
+                                {foreach from=$news item=item}
 [[
-$item['']
-(**)no display subtype text
-(**)use Update date for display
-(**)icon for each
+(**)LINK $item['id']
+(**)date from UTC?????
 ]]
                                 <li class="border-bottom pb-3">
                                     <a href="article.html" class="d-block text-decoration-none text-dark hover-bg-light p-1 rounded transition-colors">
                                         <div class="d-flex align-items-start">
+                                            {if $item['type'] == 11}
+                                            <span class="me-2 mt-1 flex-shrink-0" style="color: var(--twb-accent);">🗞</span>
+                                            {elseif $item['type'] == 13}
                                             <span class="me-2 mt-1 flex-shrink-0" style="color: var(--twb-accent);">💡</span>
+                                            {elseif $item['type'] == 12}
+                                            <span class="me-2 mt-1 flex-shrink-0" style="color: var(--twb-accent);">📰</span>
+                                            {elseif $item['type'] == 14}
+                                            <span class="me-2 mt-1 flex-shrink-0" style="color: var(--twb-accent);">📊</span>
+                                            {/if}
                                             <div>
-                                                <p class="fw-medium text-dark mb-0">CAT Tools for Reviewers</p>
-                                                <p class="small text-secondary mb-0">Event • Oct 28, 2025</p>
+                                                <p class="fw-medium text-dark mb-0">{$item['title']}</p>
+                                                <p class="small text-secondary mb-0">• $item['update_date']</p>
                                             </div>
                                         </div>
                                     </a>
                                 </li>
-{/foreach}
+                                {/foreach}
                             </ul>
                             <a href="#news-archive" class="mt-3 w-100 btn btn-outline-primary fw-semibold" style="color: var(--core-blue);">
                                 View All News <i class="fa-solid fa-arrow-right ms-1"></i>
@@ -227,20 +233,16 @@ $item['']
                                 <h3 class="fs-5 fw-bold text-dark mb-0">Resources & Tools</h3>
                             </div>
                             <ul class="list-unstyled space-y-4">
-{foreach from=$resources item=item}
+                                {foreach from=$resources item=item}
 [[
-$item['']
-(**)no display subtype text
-(**)use Update date for display
-(**)icon for each
+(**)LINK $item['id']
 ]]
-
                                 <li>
                                     <a href="#guidelines" class="d-flex align-items-center small text-dark fw-medium text-decoration-none hover-text-primary">
-                                        <span class="me-2" style="color: var(--core-blue); opacity: 0.6;">&rarr;</span> Community Contribution Guidelines (Bookstack)
+                                        <span class="me-2" style="color: var(--core-blue); opacity: 0.6;">&rarr;</span> {$item['title']}
                                     </a>
                                 </li>
-{/foreach}
+                                {/foreach}
                             </ul>
                             <a href="#news-archive" class="mt-3 w-100 btn btn-outline-primary fw-semibold" style="color: var(--core-blue);">
                                 View All Resources <i class="fa-solid fa-arrow-right ms-1"></i>
