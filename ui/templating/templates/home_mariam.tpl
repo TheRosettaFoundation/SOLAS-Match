@@ -130,7 +130,7 @@
                                                         <span class="badge rounded-pill ms-1 task-unit-badge fs-7 fw-bold">{$task->getWordCount()} {TaskTypeEnum::$enum_to_UI[$type_id]['unit_count_text_short']}</span>
                                                         {/if}
                                                         {if isset($chunks[$task_id])}
-                                                        <span class="badge rounded-pill ms-1 fs-7 fw-bold" style="background-color:var(--core-purple)}">Part {$chunks[$task_id]['low_level']}/{$chunks[$task_id]['number_of_chunks']}</span>
+                                                        <span class="badge rounded-pill ms-1 fs-7 fw-bold" style="background-color:#7B61FF">Part {$chunks[$task_id]['low_level']}/{$chunks[$task_id]['number_of_chunks']}</span>
                                                         {/if}
                                                     </div>
                                                     <h5 class="fw-bold text-dark mb-2"><a id="task-{$task_id}" href="{$siteLocation}task/{$task_id}/view" class="custom-link text-wrap">{$task_title}</a></h5>
