@@ -305,7 +305,7 @@ a:hover{
         </div>
 
             <ul class="flex-row d-flex justify-content-center list-unstyled flex-wrap text-secondary pagination mt-1 mt-md-0">
-                    {assign var="url_nam" value="home-paged"}
+                    {assign var="url_nam" value="task_stream_AJAX"}
                     {if $page_count> 6}
                         {assign var="count" value= 6}
                     {else}

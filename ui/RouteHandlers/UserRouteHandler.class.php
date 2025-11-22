@@ -32,8 +32,8 @@ class UserRouteHandler
 
         $app->map(['GET', 'POST'],
             '/paged/{page_no}/tt/{tt}/sl/{sl}/tl/{tl}[/]',
-            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:homeIndex')
-            ->setName('home-paged');
+            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:task_stream_AJAX')
+            ->setName('task_stream_AJAX');
 
         $app->map(['GET', 'POST'],
             '/register[/]',
@@ -265,7 +265,7 @@ class UserRouteHandler
             ->setName('content_items');
     }
 
-    public function homeIndex(Request $request, Response $response, $args)
+    public function task_stream_AJAX(Request $request, Response $response, $args)
     {
         $currentScrollPage          = !empty($args['page_no']) ? $args['page_no'] : 1;
         $selectedTaskType           = !empty($args['tt'])      ? $args['tt'] : NULL;
