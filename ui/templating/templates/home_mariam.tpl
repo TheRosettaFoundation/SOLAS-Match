@@ -175,7 +175,7 @@
                             </div>
                             {else}
                             <div class="text-center mt-4">
-                                It looks like we don't have any tasks available for your language pair at the moment. In the meantime, you can take a course from our Learning Center.
+                                It looks like we don't have any tasks available for your language pair at the moment. In the meantime, you can take a course from our Learning Center:<br />
                                 <a class="btn btn-secondary fs-5 px-3" href="https://elearn.translatorswb.org/">Learning Center</a>
                             </div>
                             {/if}
