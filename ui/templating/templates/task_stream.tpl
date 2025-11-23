@@ -1,4 +1,4 @@
-{include file="new_header.tpl" body_id="home"}
+{include file="new_header.tpl"}
 <!-- Editor Hint: ¿áéíóú -->
 
 <style>
