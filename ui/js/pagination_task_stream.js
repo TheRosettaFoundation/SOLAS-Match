@@ -32,7 +32,7 @@ if (isPagination) {
 
     // Setting the pagination with correct sl and tl
     allpages.forEach((pg, i) => {
-        pg.href = `paged/${i + 1}/tt/${pagePosition.tt}/sl/${sl}/tl/${tl}`;
+        pg.href = `/paged/${i + 1}/tt/${pagePosition.tt}/sl/${sl}/tl/${tl}`;
     });
 
     const validation = {
@@ -67,10 +67,10 @@ if (isPagination) {
 
     // Setting url with appropriare sl and tl  on new  page load
 
-    first.children[0].href = `paged/1/tt/${pagePosition.tt}/sl/${pagePosition.sl}/tl/${pagePosition.tl}`;
-    next.children[0].href = `paged/${nextPosition}/tt/${pagePosition.tt}/sl/${pagePosition.sl}/tl/${pagePosition.tl}`;
-    previous.children[0].href = `paged/${prevPosition}/tt/${pagePosition.tt}/sl/${pagePosition.sl}/tl/${pagePosition.tl}`;
-    last.children[0].href = `paged/${countPage}/tt/${pagePosition.tt}/sl/${pagePosition.sl}/tl/${pagePosition.tl}`;
+    first.children[0].href = `/paged/1/tt/${pagePosition.tt}/sl/${pagePosition.sl}/tl/${pagePosition.tl}`;
+    next.children[0].href = `/paged/${nextPosition}/tt/${pagePosition.tt}/sl/${pagePosition.sl}/tl/${pagePosition.tl}`;
+    previous.children[0].href = `/paged/${prevPosition}/tt/${pagePosition.tt}/sl/${pagePosition.sl}/tl/${pagePosition.tl}`;
+    last.children[0].href = `/paged/${countPage}/tt/${pagePosition.tt}/sl/${pagePosition.sl}/tl/${pagePosition.tl}`;
 
     last.addEventListener("click", (e) => {
         e.preventDefault();
@@ -89,7 +89,7 @@ if (isPagination) {
             );
         }
 
-        const url = `paged/${countPage}/tt/${pagePosition.tt}/sl/${pagePosition.sl}/tl/${pagePosition.tl}`;
+        const url = `/paged/${countPage}/tt/${pagePosition.tt}/sl/${pagePosition.sl}/tl/${pagePosition.tl}`;
 
         pagePosition.p = parseInt(countPage);
 
@@ -134,7 +134,7 @@ if (isPagination) {
 
         pagePosition.p = prevPosition;
 
-        const url = `paged/${prevPosition}/tt/${pagePosition.tt}/sl/${pagePosition.sl}/tl/${pagePosition.tl}`;
+        const url = `/paged/${prevPosition}/tt/${pagePosition.tt}/sl/${pagePosition.sl}/tl/${pagePosition.tl}`;
 
         // Checking if there is dom element for the page position selected
 
@@ -199,7 +199,7 @@ if (isPagination) {
             next.classList.remove("bg-gray", "text-body", "opacity-50");
         }
 
-        const url = `paged/${nextPosition}/tt/${pagePosition.tt}/sl/${pagePosition.sl}/tl/${pagePosition.tl}`;
+        const url = `/paged/${nextPosition}/tt/${pagePosition.tt}/sl/${pagePosition.sl}/tl/${pagePosition.tl}`;
 
         next.children[0].href = url;
 
@@ -235,7 +235,7 @@ if (isPagination) {
 
         firstPage.classList.add("bg-primary", "opacity-75", "text-primary");
 
-        const url = `paged/1/tt/${pagePosition.tt}/sl/${pagePosition.sl}/tl/${pagePosition.tl}`;
+        const url = `/paged/1/tt/${pagePosition.tt}/sl/${pagePosition.sl}/tl/${pagePosition.tl}`;
 
         pagePosition.p = 1;
 
@@ -348,17 +348,17 @@ if (isPagination) {
                     ? pagePosition.p + 1
                     : pagePosition.p;
 
-            const newPrevUrl = `paged/${newPrevPosition}/tt/${pagePosition.tt}/sl/${pagePosition.sl}/tl/${pagePosition.tl}`;
+            const newPrevUrl = `/paged/${newPrevPosition}/tt/${pagePosition.tt}/sl/${pagePosition.sl}/tl/${pagePosition.tl}`;
 
-            const newNextUrl = `paged/${newNextPosition}/tt/${pagePosition.tt}/sl/${pagePosition.sl}/tl/${pagePosition.tl}`;
+            const newNextUrl = `/paged/${newNextPosition}/tt/${pagePosition.tt}/sl/${pagePosition.sl}/tl/${pagePosition.tl}`;
 
             previous.children[0].href = newPrevUrl;
 
             next.children[0].href = newNextUrl;
 
-            first.children[0].href = `paged/1/tt/${pagePosition.tt}/sl/${pagePosition.sl}/tl/${pagePosition.tl}`;
+            first.children[0].href = `/paged/1/tt/${pagePosition.tt}/sl/${pagePosition.sl}/tl/${pagePosition.tl}`;
 
-            last.children[0].href = `paged/1/tt/${pagePosition.tt}/sl/${pagePosition.sl}/tl/${pagePosition.tl}`;
+            last.children[0].href = `/paged/1/tt/${pagePosition.tt}/sl/${pagePosition.sl}/tl/${pagePosition.tl}`;
 
             requestPage(hr);
         });
