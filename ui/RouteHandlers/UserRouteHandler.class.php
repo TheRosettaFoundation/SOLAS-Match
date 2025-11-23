@@ -265,6 +265,86 @@ class UserRouteHandler
             ->setName('content_items');
     }
 
+    public function home(Request $request, Response $response)
+    {
+        global $app, $template_data;
+
+        $user_id = Common\Lib\UserSession::getCurrentUserID();
+
+        $template_data = array_merge($template_data, ['current_page' => 'home']);
+        if (empty($user_id)) return UserRouteHandler::render('index-home.tpl', $response);
+
+        $userDao = new DAO\UserDao();
+        $projectDao = new DAO\ProjectDao();
+
+        $claimed_tasks = $userDao->getFilteredUserClaimedTasks($user_id, 2, 4, 0, 0, 3);
+        if (empty($claimed_tasks)) $claimed_tasks = [];
+
+        $deadline_timestamps = [];
+        $matecat_urls = [];
+        $orgs = [];
+        foreach ($claimed_tasks as $task) {
+            $task_id = $task->getId();
+            $deadline = $task->getDeadline();
+            $selected_year   = (int)substr($deadline,  0, 4);
+            $selected_month  = (int)substr($deadline,  5, 2);
+            $selected_day    = (int)substr($deadline,  8, 2);
+            $selected_hour   = (int)substr($deadline, 11, 2); // These are UTC, they will be recalculated to local time by JavaScript (we do not what the local time zone is)
+            $selected_minute = (int)substr($deadline, 14, 2);
+            $deadline_timestamps[$task_id] = gmmktime($selected_hour, $selected_minute, 0, $selected_month, $selected_day, $selected_year);
+
+            if (!$projectDao->are_translations_not_all_complete($task, $projectDao->get_memsource_task($task_id))) $matecat_urls[$task_id] = 1;
+
+            $project = $projectDao->getProject($task->getProjectId());
+            $org_images[$task_id] = $userDao->get_org_image($project->getOrganisationId());
+            $orgs[$task_id] = $project->getOrganisationId();
+        }
+
+        $tasks = $userDao->getUserPageTasks($user_id, 4, 0, NULL, NULL, NULL);
+        if (empty($tasks)) $tasks = [];
+        $task_ids = [];
+        foreach ($tasks as $task) {
+            $task_id = $task->getId();
+            array_push($task_ids, $task_id);
+            $deadline = $task->getDeadline();
+            $selected_year   = (int)substr($deadline,  0, 4);
+            $selected_month  = (int)substr($deadline,  5, 2);
+            $selected_day    = (int)substr($deadline,  8, 2);
+            $selected_hour   = (int)substr($deadline, 11, 2); // These are UTC, they will be recalculated to local time by JavaScript (we do not what the local time zone is)
+            $selected_minute = (int)substr($deadline, 14, 2);
+            $deadline_timestamps[$task_id] = gmmktime($selected_hour, $selected_minute, 0, $selected_month, $selected_day, $selected_year);
+
+            $project = $projectDao->getProject($task->getProjectId());
+            $org_images[$task_id] = $userDao->get_org_image($project->getOrganisationId());
+            $orgs[$task_id] = $project->getOrganisationId();
+        }
+        $chunks = $userDao->getUserTaskChunks(...$task_ids);
+
+        $extra_scripts  = "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/Parameters.js\"></script>";
+        $extra_scripts .= "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/Home2.js\" async></script>";
+        $extra_scripts .= "<script type=\"text/javascript\"  src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/pagination1.js\" defer ></script>";
+
+        $extra_styles = "<link rel=\"stylesheet\" href=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}resources/css/home_styles.css\" />";
+
+        $template_data = array_merge($template_data, [
+            'user_id'       => $user_id,
+            'siteLocation'  => Common\Lib\Settings::get('site.location'),
+            'extra_scripts' => $extra_scripts,
+            'extra_styles'  => $extra_styles,
+            'claimed_tasks' => $claimed_tasks,
+            'matecat_urls'  => $matecat_urls,
+            'deadline_timestamps' => $deadline_timestamps,
+            'tasks' => $tasks,
+            'chunks' => $chunks,
+            'org_images' => $org_images,
+            'orgs' => $orgs,
+            'news' => $userDao->get_content_items(null, 1, null, 1, 1, null, null, null, 0, 0),
+            'resources' => $userDao->get_content_items(null, 2, null, 1, 1, null, null, null, 0, 0),
+            ]);
+
+        return UserRouteHandler::render('home_mariam.tpl', $response);
+    }
+
     public function task_stream(Request $request, Response $response)
     {
         global $app, $template_data;
@@ -471,151 +551,6 @@ class UserRouteHandler
         $results = json_encode(['tasks' => $topTasks, 'images' => $taskImages, 'projects' => $projectAndOrgs, 'chunks' => $chunks, 'max_translation_deadlines' => $max_translation_deadlines]);
         $response->getBody()->write($results);
         return $response->withHeader('Content-Type', 'application/json');
-    }
-
-    public function home(Request $request, Response $response)
-    {
-        global $app, $template_data;
-        $selectedTaskType           = 0;
-        $selectedSourceLanguageCode = 0;
-
-        $user_id = Common\Lib\UserSession::getCurrentUserID();
-        $userDao = new DAO\UserDao();
-        $orgDao = new DAO\OrganisationDao();
-        $projectDao = new DAO\ProjectDao();
-        $taskDao = new DAO\TaskDao();
-        $adminDao = new DAO\AdminDao();
-
-        $viewData = array();
-        $viewData['current_page'] = 'home';
-
-        $tagDao = new DAO\TagDao();
-        $top_tags = $tagDao->getTopTags(10);
-        $viewData['top_tags'] = $top_tags;
-
-        if ($user_id != null) {
-            $user_tags = $userDao->getUserTags($user_id);
-            $viewData['user_tags'] = $user_tags;
-        }
-
-        $template_data = array_merge($template_data, $viewData);
-
-        $siteLocation = Common\Lib\Settings::get('site.location');
-        $itemsPerScrollPage = 6;
-        $offset = 0;
-        $topTasksCount = 0;
-        $topTasks = [];
-
-        if ($request->getMethod() === 'POST') {
-            $post = $request->getParsedBody();
-
-            if (isset($post['taskTypes'])) {
-                $selectedTaskType = $post['taskTypes'];
-            }
-            if (isset($post['sourceLanguage'])) {
-                $selectedSourceLanguageCode = $post['sourceLanguage'];
-            }
-        }
-
-         // Post or route handler may return '0', need an explicit zero
-         $selectedTaskType = (int)$selectedTaskType;
-         if ($selectedSourceLanguageCode === '0') $selectedSourceLanguageCode = 0;
-
-         $filter_type   = NULL;
-         $filter_source = NULL;
-         $filter_target = NULL;
-         // Identity tests (also in template) because a language code string evaluates to zero; (we use '0' because URLs look better that way)
-         if ($selectedTaskType           !== 0) $filter_type = $selectedTaskType;
-         if ($selectedSourceLanguageCode !== 0) {
-             $codes = explode('_', $selectedSourceLanguageCode);
-             $filter_source = $codes[0];
-             $filter_target = $codes[1];
-         }
-
-         try {
-             if ($user_id) {
-                 $topTasks      = $userDao->getUserPageTasks($user_id, $itemsPerScrollPage, $offset, $filter_type, $filter_source, $filter_target);
-                 $topTasksCount = intval($userDao->getUserPageTasksCount($user_id, $filter_type, $filter_source, $filter_target));
-             }
-         } catch (\Exception $e) {
-             $topTasks = [];
-             $topTasksCount = 0;
-         }
-
-        $deadline_timestamps = array();
-        $projectAndOrgs = array();
-        $taskImages = array();
-        $tasksIds = array();
-        $max_translation_deadlines = [];
-
-        $pages = ceil($topTasksCount/6);
-            foreach ($topTasks as $topTask) {
-                $taskId = $topTask->getId();
-                array_push($tasksIds,$taskId);
-                $project = $projectDao->getProject($topTask->getProjectId());
-                $org_id = $project->getOrganisationId();
-                $org = $orgDao->getOrganisation($org_id);
-                $deadline = $topTask->getDeadline();
-                $selected_year   = (int)substr($deadline,  0, 4);
-                $selected_month  = (int)substr($deadline,  5, 2);
-                $selected_day    = (int)substr($deadline,  8, 2);
-                $selected_hour   = (int)substr($deadline, 11, 2); // These are UTC, they will be recalculated to local time by JavaScript (we do not what the local time zone is)
-                $selected_minute = (int)substr($deadline, 14, 2);
-                $deadline_timestamps[$taskId] = gmmktime($selected_hour, $selected_minute, 0, $selected_month, $selected_day, $selected_year);
-
-                $projectUri = "{$siteLocation}project/{$project->getId()}/view";
-                $projectName = $project->getTitle();
-                $orgUri = "{$siteLocation}org/{$org_id}/profile";
-                $orgName = $org->getName();
-                $projectAndOrgs[$taskId] = sprintf(
-                    Lib\Localisation::getTranslation('common_part_of_for'),
-                    $projectUri,
-                    htmlspecialchars($projectName, ENT_COMPAT, 'UTF-8'),
-                    $orgUri,
-                    htmlspecialchars($orgName, ENT_COMPAT, 'UTF-8')
-                );
-
-                $taskImages[$taskId] = '';
-                if ($project->getImageApproved() && $project->getImageUploaded()) {
-                    $taskImages[$taskId] = "{$siteLocation}project/{$project->getId()}/image";
-                }
-                $max_translation_deadlines[$taskId] = $projectDao->max_translation_deadline($topTask);
-            }
-
-        $extra_scripts  = "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/Parameters.js\"></script>";
-        $extra_scripts .= "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/Home2.js\" async></script>";
-        $extra_scripts .= "<script type=\"text/javascript\"  src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/pagination1.js\" defer ></script>";
-
-        $org_admin = false;
-        if (empty($topTasks) && !empty($user_id)) {
-            $org_admin = $adminDao->isSiteAdmin_any_or_org_admin_any_for_any_org($user_id);
-        }
-
-        $chunks = [];
-        if (!empty($user_id)) {
-            $chunks = $userDao->getUserTaskChunks(...$tasksIds);
-        }
-
-        $template_data = array_merge($template_data, array(
-            'siteLocation' => $siteLocation,
-            'active_languages' => !empty($user_id) ? $taskDao->get_active_languages($user_id) : [],
-            'selectedTaskType' => $selectedTaskType,
-            'selectedSourceLanguageCode' => $selectedSourceLanguageCode,
-            'selectedTargetLanguageCode' => 0,
-            'topTasks' => $topTasks,
-            'chunks' => $chunks,
-            'deadline_timestamps' => $deadline_timestamps,
-            'projectAndOrgs' => $projectAndOrgs,
-            'taskImages' => $taskImages,
-            'itemsPerScrollPage' => min($itemsPerScrollPage, $topTasksCount),
-            'extra_scripts' => $extra_scripts,
-            'user_id' => $user_id,
-            'org_admin' => $org_admin,
-            'page_count' => $pages,
-            'roles' => !empty($user_id) ? $adminDao->get_roles($user_id) : 0,
-            'max_translation_deadlines' => $max_translation_deadlines,
-        ));
-        return UserRouteHandler::render('index-home.tpl', $response);
     }
 
     public function register(Request $request, Response $response, $args)
@@ -3780,81 +3715,6 @@ foreach ($rows as $index => $row) {
 
         $template_data = array_merge($template_data, ['items' => $userDao->get_all_content_items($org_id), 'org_id' => $org_id]);
         return UserRouteHandler::render('user/content_items.tpl', $response);
-    }
-
-    public function home_mariam(Request $request, Response $response)
-    {
-        global $app, $template_data;
-        $userDao = new DAO\UserDao();
-        $projectDao = new DAO\ProjectDao();
-
-        $user_id = Common\Lib\UserSession::getCurrentUserID();
-        $claimed_tasks = $userDao->getFilteredUserClaimedTasks($user_id, 2, 4, 0, 0, 3);
-        if (empty($claimed_tasks)) $claimed_tasks = [];
-
-        $deadline_timestamps = [];
-        $matecat_urls = [];
-        $orgs = [];
-        foreach ($claimed_tasks as $task) {
-            $task_id = $task->getId();
-            $deadline = $task->getDeadline();
-            $selected_year   = (int)substr($deadline,  0, 4);
-            $selected_month  = (int)substr($deadline,  5, 2);
-            $selected_day    = (int)substr($deadline,  8, 2);
-            $selected_hour   = (int)substr($deadline, 11, 2); // These are UTC, they will be recalculated to local time by JavaScript (we do not what the local time zone is)
-            $selected_minute = (int)substr($deadline, 14, 2);
-            $deadline_timestamps[$task_id] = gmmktime($selected_hour, $selected_minute, 0, $selected_month, $selected_day, $selected_year);
-
-            if (!$projectDao->are_translations_not_all_complete($task, $projectDao->get_memsource_task($task_id))) $matecat_urls[$task_id] = 1;
-
-            $project = $projectDao->getProject($task->getProjectId());
-            $org_images[$task_id] = $userDao->get_org_image($project->getOrganisationId());
-            $orgs[$task_id] = $project->getOrganisationId();
-        }
-
-        $tasks = $userDao->getUserPageTasks($user_id, 4, 0, NULL, NULL, NULL);
-        if (empty($tasks)) $tasks = [];
-        $task_ids = [];
-        foreach ($tasks as $task) {
-            $task_id = $task->getId();
-            array_push($task_ids, $task_id);
-            $deadline = $task->getDeadline();
-            $selected_year   = (int)substr($deadline,  0, 4);
-            $selected_month  = (int)substr($deadline,  5, 2);
-            $selected_day    = (int)substr($deadline,  8, 2);
-            $selected_hour   = (int)substr($deadline, 11, 2); // These are UTC, they will be recalculated to local time by JavaScript (we do not what the local time zone is)
-            $selected_minute = (int)substr($deadline, 14, 2);
-            $deadline_timestamps[$task_id] = gmmktime($selected_hour, $selected_minute, 0, $selected_month, $selected_day, $selected_year);
-
-            $project = $projectDao->getProject($task->getProjectId());
-            $org_images[$task_id] = $userDao->get_org_image($project->getOrganisationId());
-            $orgs[$task_id] = $project->getOrganisationId();
-        }
-        $chunks = $userDao->getUserTaskChunks(...$task_ids);
-
-        $extra_scripts  = "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/Parameters.js\"></script>";
-        $extra_scripts .= "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/Home2.js\" async></script>";
-        $extra_scripts .= "<script type=\"text/javascript\"  src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/pagination1.js\" defer ></script>";
-
-        $extra_styles = "<link rel=\"stylesheet\" href=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}resources/css/home_styles.css\" />";
-
-        $template_data = array_merge($template_data, [
-            'user_id'       => $user_id,
-            'siteLocation'  => Common\Lib\Settings::get('site.location'),
-            'extra_scripts' => $extra_scripts,
-            'extra_styles'  => $extra_styles,
-            'claimed_tasks' => $claimed_tasks,
-            'matecat_urls'  => $matecat_urls,
-            'deadline_timestamps' => $deadline_timestamps,
-            'tasks' => $tasks,
-            'chunks' => $chunks,
-            'org_images' => $org_images,
-            'orgs' => $orgs,
-            'news' => $userDao->get_content_items(null, 1, null, 1, 1, null, null, null, 0, 0),
-            'resources' => $userDao->get_content_items(null, 2, null, 1, 1, null, null, null, 0, 0),
-            ]);
-
-        return UserRouteHandler::render('home_mariam.tpl', $response);
     }
 
     public static function flash($key, $value)

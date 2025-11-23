@@ -118,11 +118,6 @@ a:hover{
 
         <div class="container">
 
-<span class="d-none">
-    <!-- Parameters... -->
-    <div id="siteLocation">{$siteLocation}</div>
-</span>
-
     <div class="hero-unit">
        <!-- <h1>{Localisation::getTranslation('index_translation_commons')}</h1>
         <p>Vital information, in the right language, at the right time. </p>
