@@ -169,7 +169,7 @@ a:hover{
             <h5 class="fw-bold mt-5">{Localisation::getTranslation('index_filter_available_tasks')}
             </h5>
             <div>You can only filter for languages that you have chosen as your language pairs in your user profile.</div>
-            <form method="post" action="{urlFor name="home"}" class="needs-validation" novalidate>
+            <form method="post" action="{urlFor name="task_stream"}" class="needs-validation" novalidate>
 	                    <div class="mt-4">
                             <div class="mb-3">
                                     <select name="taskTypes" id="taskTypes" class="form-select" required >

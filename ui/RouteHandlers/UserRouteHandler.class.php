@@ -19,12 +19,12 @@ class UserRouteHandler
     {
         global $app;
 
-        $app->map(['GET', 'POST'],
+        $app->map(['GET'],
             '[/]',
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:home')
             ->setName('home');
 
-        $app->map(['GET'],
+        $app->map(['GET', 'POST'],
             '/task_stream[/]',
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:task_stream')
             ->add('\SolasMatch\UI\Lib\Middleware:authUserIsLoggedIn')
