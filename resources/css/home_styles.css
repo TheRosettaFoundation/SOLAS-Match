@@ -12,7 +12,7 @@
         .card-border-top-blue { border-top: 4px solid var(--core-blue); }
         .card-border-top-accent { border-top: 4px solid var(--twb-accent); }
         .card-border-top-green { border-top: 4px solid var(--twb-green); }
-        .card-border-start-accent { border-start: 4px solid var(--twb-accent); }
+        .card-border-start-accent { border-left: 4px solid var(--twb-accent); }
 
         /* Custom spacing utilities to emulate Tailwind's space-y-N */
         .space-y-4 > * + * { margin-top: 1.5rem !important; }
