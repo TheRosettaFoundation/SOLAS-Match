@@ -111,6 +111,13 @@
                              </li>
                 {/if}
 
+                {if isset($user_has_active_tasks) && !isset($show_admin_dashboard)}
+                    {assign var="tmp_id" value=$user->getId()}
+                    <li class="nav-item fw-bold" >
+                        <a href="{urlFor name="claimed-tasks" options="user_id.$tmp_id"}" class="fs-5 nav-link fw-bold"  {if isset($current_page) && $current_page == 'claimed-tasks'} class="nav-link " {/if}>{Localisation::getTranslation('header_claimed_tasks')}</a>
+                    </li>
+                {/if}
+
                 {if isset($show_admin_dashboard)}
                 {assign var="user_id" value=$user->getId()}
                     <li class="nav-item fw-bold" {if isset($current_page) && $current_page == 'site-admin-dashboard'}" {/if}>
