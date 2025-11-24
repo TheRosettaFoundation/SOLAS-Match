@@ -59,7 +59,14 @@
                                     {else}
                                         {assign var="task_title" value=TemplateHelper::uiCleanseHTMLNewlineAndTabs($task->getTitle())}
                                     {/if}
-                                <div class="d-flex align-items-center justify-content-between p-3 rounded-3 shadow-sm border bg-white hover-shadow">
+                                <div class="d-flex align-items-center justify-content-between p-3 rounded-3 shadow-sm border bg-white hover-shadow card-border-start-accent">
+<!--
+from non bootstrap...
+<div class="p-4 rounded-xl shadow-lg border-l-4 flex flex-col space-y-3" style="border-left-color: var(--twb-accent);">
+
+from above worked top...
+<div class="card bg-light custom-card p-4 card-border-start-accent">
+-->
                                     <div class="d-flex align-items-center">
                                         <div class="me-1">
                                             {if !empty($org_images[$task_id])}
