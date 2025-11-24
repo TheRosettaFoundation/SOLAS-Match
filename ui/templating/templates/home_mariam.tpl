@@ -59,9 +59,11 @@
                                     {else}
                                         {assign var="task_title" value=TemplateHelper::uiCleanseHTMLNewlineAndTabs($task->getTitle())}
                                     {/if}
-                                <div class="card custom-card d-flex align-items-center justify-content-between p-4 rounded-4 shadow-sm border bg-white hover-shadow card-border-start-accent">
+                                <div class="card custom-card d-flex align-items-center justify-content-between p-4 bg-white card-border-start-accent">
 <!--
 TRIED...
+                                <div class="card custom-card d-flex align-items-center justify-content-between p-4 rounded-4 shadow-sm border bg-white hover-shadow card-border-start-accent">
+
                                 <div class="d-flex align-items-center justify-content-between p-3 rounded-3 shadow-sm border bg-white hover-shadow card-border-start-accent">
 
 
