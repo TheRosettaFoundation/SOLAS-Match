@@ -121,7 +121,7 @@
                                 <div class="row g-4">
                               {/if}
                                     <div class="col-md-6">
-                                        <div class="card custom-card p-3 h-100 border-start border-4 card-border-start-accent">
+                                        <div class="card custom-card p-4 h-100 card-border-start-accent">
 <!--
 wrongly edited
 <div class="card bg-white custom-card p-4 d-flex align-items-center justify-content-between card-border-start-accent">
