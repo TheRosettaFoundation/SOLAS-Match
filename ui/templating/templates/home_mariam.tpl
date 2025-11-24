@@ -122,22 +122,6 @@
                               {/if}
                                     <div class="col-md-6">
                                         <div class="card custom-card p-4 h-100 card-border-start-accent">
-<!--
-wrongly edited
-<div class="card bg-white custom-card p-4 d-flex align-items-center justify-content-between card-border-start-accent">
-                                
-TRIED...
-                                <div class="card custom-card d-flex align-items-center justify-content-between p-4 rounded-4 shadow-sm border bg-white hover-shadow card-border-start-accent">
-
-                                <div class="d-flex align-items-center justify-content-between p-3 rounded-3 shadow-sm border bg-white hover-shadow card-border-start-accent">
-
-
-from non bootstrap...
-<div class="p-4 rounded-xl shadow-lg border-l-4 flex flex-col space-y-3" style="border-left-color: var(--twb-accent);">
-
-from above worked top AND MODS...
-<div class="card bg-white custom-card p-4 card-border-start-accent">
--->
                                             <div class="d-flex justify-content-between align-items-start mb-2">
                                                 <div class="flex-grow-1">
                                                     <div class="mb-2">
@@ -259,7 +243,7 @@ from above worked top AND MODS...
                         </div>
                         {/if}
 
-                        <div class="card bg-light custom-card p-4">
+                        <div class="card bg-light custom-card p-4 card-border-top-accent">
                             <div class="d-flex align-items-center mb-3 border-bottom pb-3">
                                 <div class="p-2 rounded-circle me-3" style="background-color: var(--core-blue); opacity: 0.1;">
                                     💬
@@ -272,7 +256,7 @@ from above worked top AND MODS...
                             </a>
                         </div>
 
-                        <div class="card bg-light custom-card p-4 border-top-0" style="border-top: 4px solid #adb5bd;">
+                        <div class="card bg-light custom-card p-4 card-border-top-blue">
                             <h3 class="fs-5 fw-bold text-dark mb-2">Feedback & Suggestions</h3>
                             <p class="text-secondary mb-3 small">Please share your feedback with our team to help fix any issues and deliver a better experience to our community.</p>
                             <a href="https://form.asana.com/?k=dlsF11XkOwpfFllbq325dg&d=170818793545926" class="btn rounded-pill text-white fw-medium transition-colors" style="background-color: var(--twb-accent);">
