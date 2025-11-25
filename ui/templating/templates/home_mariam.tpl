@@ -226,7 +226,6 @@
                         <div class="card bg-light custom-card p-4">
                             <div class="d-flex align-items-center mb-3 border-bottom pb-3">
                                 <span class="me-2 fs-5" style="color: var(--core-blue);">📖</span>
-                                <h3 class="fs-5 fw-bold text-dark mb-0">Resources & Tools</h3>
                                 <a href="archive.html" class="fs-5 fw-bold text-dark text-decoration-none hover-text-secondary">
                                     Resources & Tools
                                 </a>
