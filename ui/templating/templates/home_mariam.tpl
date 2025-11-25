@@ -208,7 +208,7 @@
                                             <span class="me-2 mt-1 flex-shrink-0" style="color: var(--twb-accent);">📊</span>
                                             {/if}
                                             <div>
-                                                <p class="fw-medium text-dark mb-0">{$item['title']}</p>
+                                                <p class="fs-5 fw-medium text-dark mb-0">{$item['title']}</p>
                                                 <p class="small text-secondary mb-0">• {substr($item['update_date'], 0, 10)}</p>
                                             </div>
                                         </div>
