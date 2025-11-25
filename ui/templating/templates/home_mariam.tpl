@@ -234,7 +234,7 @@
                                 {foreach from=$resources item=item}
                                 <li>
                                     <a href="{$siteLocation}content_display/{$item['id']}/" class="d-flex align-items-center small text-dark fw-medium text-decoration-none hover-text-primary">
-                                        <span class="me-2" style="color: var(--core-blue); opacity: 0.6;">&rarr;</span> <p class="fs-3 fw-medium text-dark mb-0">{$item['title']}{$item['title']}</p>
+                                        <span class="me-2" style="color: var(--core-blue); opacity: 0.6;">&rarr;</span> <p class="fs-3 fw-medium text-dark mb-0">{$item['title']}</p>
                                     </a>
                                 </li>
                                 {/foreach}
