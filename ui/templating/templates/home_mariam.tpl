@@ -216,7 +216,7 @@
                                 </li>
                                 {/foreach}
                             </ul>
-                            <a href="#news-archive" class="mt-3 w-100 btn btn-outline-primary fw-semibold" style="color: var(--core-blue);">
+                            <a href="{$siteLocation}content_list/1/" class="mt-3 w-100 btn btn-outline-primary fw-semibold" style="color: var(--core-blue);">
                                 View All News <i class="fa-solid fa-arrow-right ms-1"></i>
                             </a>
                         </div>
@@ -239,7 +239,7 @@
                                 </li>
                                 {/foreach}
                             </ul>
-                            <a href="#news-archive" class="mt-3 w-100 btn btn-outline-primary fw-semibold" style="color: var(--core-blue);">
+                            <a href="{$siteLocation}content_list/2/" class="mt-3 w-100 btn btn-outline-primary fw-semibold" style="color: var(--core-blue);">
                                 View All Resources <i class="fa-solid fa-arrow-right ms-1"></i>
                             </a>
                         </div>
