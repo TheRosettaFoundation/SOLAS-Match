@@ -196,7 +196,7 @@
                             <ul class="list-unstyled space-y-4">
                                 {foreach from=$news item=item}
                                 <li class="border-bottom pb-3">
-                                    <a href="{$siteLocation}content_display/{$item['id']}/" class="d-block text-decoration-none text-dark hover-bg-light p-1 rounded transition-colors">
+                                    <a href="{if empty($item['external_link'])}{$siteLocation}content_display/{$item['id']}/{else}{$item['external_link']}{/if}" class="d-block text-decoration-none text-dark hover-bg-light p-1 rounded transition-colors">
                                         <div class="d-flex align-items-start">
                                             {if $item['type'] == 11}
                                             <span class="me-2 mt-1 flex-shrink-0" style="color: var(--twb-accent);">🗞</span>
@@ -233,7 +233,7 @@
                             <ul class="list-unstyled space-y-4">
                                 {foreach from=$resources item=item}
                                 <li>
-                                    <a href="{$siteLocation}content_display/{$item['id']}/" class="d-flex align-items-center small text-dark fw-medium text-decoration-none hover-text-primary">
+                                    <a href="{if empty($item['external_link'])}{$siteLocation}content_display/{$item['id']}/{else}{$item['external_link']}{/if}" class="d-flex align-items-center small text-dark fw-medium text-decoration-none hover-text-primary">
                                         <span class="me-2" style="color: var(--core-blue); opacity: 0.6;">&rarr;</span> <p class="fs-4 fw-medium text-dark mb-0">{$item['title']}</p>
                                     </a>
                                 </li>
