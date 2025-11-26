@@ -14871,6 +14871,7 @@ BEGIN
         spr.approvalStatus,
         spr.status,
         t.id AS task_id,
+        t.`created-time`,
         t.`task-status_id`,
         t.project_id,
         p.title,
