@@ -2851,6 +2851,7 @@ error_log("result: $result");//(**)
 
         $languages = [];
         foreach ($user_tasks as $item) {
+            if ($item['taskType'] == 29) continue;
             $languages[$item['sourceLanguageName'] . ' to ' . $item['targetLanguageName']] = $item['sourceLanguageName'] . ' to ' . $item['targetLanguageName'] . ', ';
         }
         asort($languages);
@@ -2992,6 +2993,7 @@ public static function downloadletter(Request $request, Response $response, $arg
         $languages = [];
         $types = [];
         foreach ($user_tasks as $item) {
+            if ($item['taskType'] == 29) continue;
             $languages[$item['sourceLanguageName'] . ' to ' . $item['targetLanguageName']] = '<li>' . $item['sourceLanguageName'] . ' to ' . $item['targetLanguageName'] . ',</li>';
             $types[$item['taskType']] = Common\Enums\TaskTypeEnum::$enum_to_UI[$item['taskType']]['type_text'] . ', ';
         }
@@ -3002,6 +3004,7 @@ public static function downloadletter(Request $request, Response $response, $arg
 
         $orgs = [];
         foreach ($user_tasks as $item) {
+            if ($item['taskType'] == 29) continue;
             $org_name = $projectDao->get_project_org_name($item['projectId']);
             $orgs[$org_name] = "<li>$org_name,</li>";
         }
