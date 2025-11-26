@@ -8,32 +8,6 @@
     <div id="siteLocation">{$siteLocation}</div>
 </span>
 
-{if isset($flash['error'])}
-    <div class="alert alert-danger alert-dismissible fade show mt-4">
-        <p><strong>{Localisation::getTranslation('common_warning')}! </strong>{TemplateHelper::uiCleanseHTMLKeepMarkup($flash['error'])}</p>
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
-{/if}
-{if isset($flash['info'])}
-    <div class="alert alert-info alert-dismissible fade show mt-4">
-        <p><strong>{Localisation::getTranslation('common_note')} </strong>{TemplateHelper::uiCleanseHTMLKeepMarkup($flash['info'])}</p>
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
-{/if}
-{if isset($flash['success'])}
-    <div class="alert alert-success alert-dismissible fade show mt-4 ">
-        <img src="{urlFor name='home'}ui/img/success.svg" alt="translator" class="mx-1 " />
-        <strong>{Localisation::getTranslation('common_success')}! </strong>{TemplateHelper::uiCleanseHTMLKeepMarkup($flash['success'])}
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
-{/if}
-{if isset($flash['warning'])}
-    <div class="alert alert-warning alert-dismissible fade show mt-4">
-        <p><strong>{TemplateHelper::uiCleanseHTMLKeepMarkup($flash['warning'])}</strong></p>
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
-{/if}
-
             </div>
 
             <div class="container-xxl px-4 px-sm-5 px-lg-5 pb-5 pt-4">
@@ -41,76 +15,7 @@
                     <div class="col-lg-8 order-1 order-lg-1 space-y-8">
 
 [[[
-    <style>
-        /* Custom Variables to match original Tailwind colors */
-        :root {
-            --core-blue: #143878;
-            --twb-accent: #e8991c;
-        }
-
-        /* TWB Custom Styles */
-        body {
-            background-color: #f8f9fa; /* Equivalent to bg-gray-50 */
-        }
-        .twb-core-blue {
-            color: var(--core-blue) !important;
-        }
-        .twb-bg-core-blue {
-            background-color: var(--core-blue) !important;
-        }
-        .twb-bg-accent {
-            background-color: var(--twb-accent) !important;
-        }
-
-        /* Custom Nav Item Hover Effect */
-        .nav-link.twb-nav-item {
-            transition: background-color 150ms ease, color 150ms ease;
-        }
-        .nav-link.twb-nav-item:hover:not(.active) {
-            background-color: var(--core-blue) !important;
-            color: white !important;
-        }
-
-        /* Card Customization */
-        .article-card {
-            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important; 
-            transition: box-shadow 300ms ease;
-        }
-        .article-card:hover {
-            box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.175) !important;
-        }
-        .line-clamp-3 {
-            display: -webkit-box;
-            -webkit-line-clamp: 3;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-        }
-        .article-title:hover {
-            color: #6c757d !important;
-        }
-
-        /* 9:6 Aspect Ratio Implementation (1.5:1 ratio, 66.66% padding-bottom) */
-        .image-aspect-ratio-9-6 {
-            position: relative;
-            width: 100%;
-            /* Padding-bottom calculation: (Height / Width) * 100% = (6 / 9) * 100% = 66.666% */
-            padding-top: 66.666%; 
-            overflow: hidden;
-        }
-        .image-aspect-ratio-9-6 img {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            object-fit: cover; /* Ensures the image fills the container without distortion */
-        }
-    </style>
-]]]
-
-
-[[[
-        <a href="homepage3.html" class="text-decoration-none fw-medium transition-colors mb-3 d-inline-flex align-items-center twb-core-blue">
+        <a href="{urlFor name="home"}" class="text-decoration-none fw-medium transition-colors mb-3 d-inline-flex align-items-center twb-core-blue">
             &larr; Back to Dashboard
         </a>
         
