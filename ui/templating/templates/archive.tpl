@@ -17,15 +17,13 @@
                     News Archive (All Articles)
                 </h1>
 
+                {if !empty($news)}
+                {assign var="count" value=0}
+                {foreach from=$news item=new}
+
+                {if $count%3 == 0}
                 <div class="row g-4">
-                    {if !empty($news)}
-                    {assign var="count" value=0}
-                    {foreach from=$news item=new}
-[[
-                              {if $count%2 == 0}
-                <div class="row g-4">
-                              {/if}
-]]
+                {/if}
                     <div class="col-12 col-md-6 col-lg-4">
                         <div class="card article-card h-100 border-0 rounded-3 overflow-hidden d-flex flex-column">
                             <a href="{urlFor name="content_display" options="user_id.{$new['id']"}" class="d-block">
@@ -56,18 +54,25 @@ OR                                  <span class="badge rounded-pill text-white t
                         </div>
                     </div>
 [[[
-                              {if $count%2 == 0 && $count == count($tasks) - 1}
-                                    <div class="col-md-6">
-                                    </div>
-                                </div>
-                              {/if}
-                              {if $count%2 == 1}
-                                </div>
-                              {/if}
-                                {assign var="count" value=($count + 1)}
-]]]
-                    {/foreach}
-                    {/if}
+                {if $count%3 == 0 && $count == count($news) - 1}
+                    <div class="col-12 col-md-6 col-lg-4">
+                    </div>
+                    <div class="col-12 col-md-6 col-lg-4">
+                    </div>
+                </div>
+                {/if}
+                {if $count%3 == 1 && $count == count($news) - 1}
+                    <div class="col-12 col-md-6 col-lg-4">
+                    </div>
+                </div>
+                {/if}
+                {if $count%3 == 2}
+                </div>
+                {/if}
+                {assign var="count" value=($count + 1)}
+                {/foreach}
+                {/if}
+[[DEL
                     <div class="col-12 col-md-6 col-lg-4">
                         <div class="card article-card h-100 border-0 rounded-3 overflow-hidden d-flex flex-column">
                             <a href="article.html" class="d-block">
@@ -121,7 +126,7 @@ OR                                  <span class="badge rounded-pill text-white t
                             </div>
                         </div>
                     </div>
-]]]
+DEL ABOVE]]
                         {if !empty($claimed_tasks)}
                         <div class="card bg-light custom-card p-4 card-border-top-accent">
                             <div class="d-flex justify-content-between align-items-center mb-4 border-bottom pb-3">
