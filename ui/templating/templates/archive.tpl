@@ -2,111 +2,125 @@
 <!-- Editor Hint: ¿áéíóú -->
 
             <div class="container">
-
 <span class="d-none">
     <!-- Parameters... -->
     <div id="siteLocation">{$siteLocation}</div>
 </span>
-
             </div>
 
             <div class="container-xxl px-4 px-sm-5 px-lg-5 pb-5 pt-4">
+                <a href="{urlFor name="home"}" class="text-decoration-none fw-medium transition-colors mb-3 d-inline-flex align-items-center twb-core-blue">
+                    &larr; Back to Dashboard
+                </a>
+
+                <h1 class="fs-3 fw-bolder text-dark mb-4">
+                    News Archive (All Articles)
+                </h1>
+
                 <div class="row g-4">
-                    <div class="col-lg-8 order-1 order-lg-1 space-y-8">
-
+                    {if !empty($news)}
+                    {assign var="count" value=0}
+                    {foreach from=$news item=new}
+[[
+                              {if $count%2 == 0}
+                <div class="row g-4">
+                              {/if}
+]]
+                    <div class="col-12 col-md-6 col-lg-4">
+                        <div class="card article-card h-100 border-0 rounded-3 overflow-hidden d-flex flex-column">
+                            <a href="{urlFor name="content_display" options="user_id.{$new['id']"}" class="d-block">
+                                <div class="image-aspect-ratio-9-6">
+                                    <img src="https://placehold.co/120x80/29528D/ffffff?text=WEBINAR" alt="Webinar Thumbnail" class="card-img-top" />
+OR                                  <img src="https://placehold.co/120x80/E8991C/ffffff?text=IMPACT" alt="Impact Report Thumbnail" class="card-img-top" />
+OR                                  <img src="https://placehold.co/120x80/143878/ffffff?text=ARTICLE" alt="Article Thumbnail" class="card-img-top" />
+                                </div>
+                            </a>
+                            <div class="card-body p-4 flex-grow-1">
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <span class="badge rounded-pill text-white twb-bg-core-blue fw-semibold p-1 px-2">Webinar</span>
+OR                                  <span class="badge rounded-pill text-white twb-bg-accent fw-semibold p-1 px-2">Achievement</span>
+                                    <span class="text-sm text-secondary">Oct 28, 2025</span>
+                                </div>
+                                <a href="{urlFor name="content_display" options="user_id.{$new['id']"}" class="fs-5 fw-bold text-dark text-decoration-none article-title d-block">
+                                    Webinar: CAT Tools for Reviewers
+                                </a>
+                                <p class="text-sm text-secondary mt-2 line-clamp-3">
+                                    Join our expert panel on the latest features in computer-assisted translation (CAT) tools specifically for reviewers...
+                                </p>
+                            </div>
+                            <div class="card-footer bg-white border-0 p-4 pt-0">
+                                <a href="{urlFor name="content_display" options="user_id.{$new['id']"}" class="text-decoration-none fw-semibold d-flex align-items-center twb-core-blue">
+                                    Read Article &rarr;
+                                </a>
+                            </div>
+                        </div>
+                    </div>
 [[[
-        <a href="{urlFor name="home"}" class="text-decoration-none fw-medium transition-colors mb-3 d-inline-flex align-items-center twb-core-blue">
-            &larr; Back to Dashboard
-        </a>
-        
-        <h1 class="fs-3 fw-bolder text-dark mb-4">
-            News Archive (All Articles)
-        </h1>
+                              {if $count%2 == 0 && $count == count($tasks) - 1}
+                                    <div class="col-md-6">
+                                    </div>
+                                </div>
+                              {/if}
+                              {if $count%2 == 1}
+                                </div>
+                              {/if}
+                                {assign var="count" value=($count + 1)}
+]]]
+                    {/foreach}
+                    {/if}
+                    <div class="col-12 col-md-6 col-lg-4">
+                        <div class="card article-card h-100 border-0 rounded-3 overflow-hidden d-flex flex-column">
+                            <a href="article.html" class="d-block">
+                                <div class="image-aspect-ratio-9-6">
+                                    <img src="https://placehold.co/120x80/E8991C/ffffff?text=IMPACT" alt="Impact Report Thumbnail" class="card-img-top" />
+                                </div>
+                            </a>
+                            <div class="card-body p-4 flex-grow-1">
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <span class="badge rounded-pill text-white twb-bg-accent fw-semibold p-1 px-2">Achievement</span>
+                                    <span class="text-sm text-secondary">Oct 15, 2025</span>
+                                </div>
+                                <a href="article.html" class="fs-5 fw-bold text-dark text-decoration-none article-title d-block">
+                                    TWB's 2024 Impact Report Published
+                                </a>
+                                <p class="text-sm text-secondary mt-2 line-clamp-3">
+                                    The annual Impact Report details the incredible contributions of our 100,000+ volunteers, the new languages we support, and the measurable impact...
+                                </p>
+                            </div>
+                            <div class="card-footer bg-white border-0 p-4 pt-0">
+                                <a href="article.html" class="text-decoration-none fw-semibold d-flex align-items-center twb-core-blue">
+                                    Read Article &rarr;
+                                </a>
+                            </div>
+                        </div>
+                    </div>
 
-        <div class="row g-4">
-            
-            <div class="col-12 col-md-6 col-lg-4">
-                <div class="card article-card h-100 border-0 rounded-3 overflow-hidden d-flex flex-column">
-                    <a href="article.html" class="d-block">
-                        <div class="image-aspect-ratio-9-6">
-                            <img src="https://placehold.co/120x80/29528D/ffffff?text=WEBINAR" alt="Webinar Thumbnail" class="card-img-top" />
+                    <div class="col-12 col-md-6 col-lg-4">
+                        <div class="card article-card h-100 border-0 rounded-3 overflow-hidden d-flex flex-column">
+                            <a href="article.html" class="d-block">
+                                <div class="image-aspect-ratio-9-6">
+                                    <img src="https://placehold.co/120x80/143878/ffffff?text=ARTICLE" alt="Article Thumbnail" class="card-img-top" />
+                                </div>
+                            </a>
+                            <div class="card-body p-4 flex-grow-1">
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <span class="badge rounded-pill text-white twb-bg-core-blue fw-semibold p-1 px-2">Article</span>
+                                    <span class="text-sm text-secondary">Oct 10, 2025</span>
+                                </div>
+                                <a href="article.html" class="fs-5 fw-bold text-dark text-decoration-none article-title d-block">
+                                    New Article: The Future of Neural MT
+                                </a>
+                                <p class="text-sm text-secondary mt-2 line-clamp-3">
+                                    An in-depth look at the evolution of Neural Machine Translation (NMT) technology and its role in humanitarian translation efforts...
+                                </p>
+                            </div>
+                            <div class="card-footer bg-white border-0 p-4 pt-0">
+                                <a href="article.html" class="text-decoration-none fw-semibold d-flex align-items-center twb-core-blue">
+                                    Read Article &rarr;
+                                </a>
+                            </div>
                         </div>
-                    </a>
-                    <div class="card-body p-4 flex-grow-1">
-                        <div class="d-flex justify-content-between align-items-center mb-2">
-                            <span class="badge rounded-pill text-white twb-bg-core-blue fw-semibold p-1 px-2">Webinar</span>
-                            <span class="text-sm text-secondary">Oct 28, 2025</span>
-                        </div>
-                        <a href="article.html" class="fs-5 fw-bold text-dark text-decoration-none article-title d-block">
-                            Webinar: CAT Tools for Reviewers
-                        </a>
-                        <p class="text-sm text-secondary mt-2 line-clamp-3">
-                            Join our expert panel on the latest features in computer-assisted translation (CAT) tools specifically for reviewers...
-                        </p>
                     </div>
-                    <div class="card-footer bg-white border-0 p-4 pt-0">
-                        <a href="article.html" class="text-decoration-none fw-semibold d-flex align-items-center twb-core-blue">
-                            Read Article &rarr;
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-12 col-md-6 col-lg-4">
-                <div class="card article-card h-100 border-0 rounded-3 overflow-hidden d-flex flex-column">
-                    <a href="article.html" class="d-block">
-                        <div class="image-aspect-ratio-9-6">
-                            <img src="https://placehold.co/120x80/E8991C/ffffff?text=IMPACT" alt="Impact Report Thumbnail" class="card-img-top" />
-                        </div>
-                    </a>
-                    <div class="card-body p-4 flex-grow-1">
-                        <div class="d-flex justify-content-between align-items-center mb-2">
-                            <span class="badge rounded-pill text-white twb-bg-accent fw-semibold p-1 px-2">Achievement</span>
-                            <span class="text-sm text-secondary">Oct 15, 2025</span>
-                        </div>
-                        <a href="article.html" class="fs-5 fw-bold text-dark text-decoration-none article-title d-block">
-                            TWB's 2024 Impact Report Published
-                        </a>
-                        <p class="text-sm text-secondary mt-2 line-clamp-3">
-                            The annual Impact Report details the incredible contributions of our 100,000+ volunteers, the new languages we support, and the measurable impact...
-                        </p>
-                    </div>
-                    <div class="card-footer bg-white border-0 p-4 pt-0">
-                        <a href="article.html" class="text-decoration-none fw-semibold d-flex align-items-center twb-core-blue">
-                            Read Article &rarr;
-                        </a>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="col-12 col-md-6 col-lg-4">
-                <div class="card article-card h-100 border-0 rounded-3 overflow-hidden d-flex flex-column">
-                    <a href="article.html" class="d-block">
-                        <div class="image-aspect-ratio-9-6">
-                            <img src="https://placehold.co/120x80/143878/ffffff?text=ARTICLE" alt="Article Thumbnail" class="card-img-top" />
-                        </div>
-                    </a>
-                    <div class="card-body p-4 flex-grow-1">
-                        <div class="d-flex justify-content-between align-items-center mb-2">
-                            <span class="badge rounded-pill text-white twb-bg-core-blue fw-semibold p-1 px-2">Article</span>
-                            <span class="text-sm text-secondary">Oct 10, 2025</span>
-                        </div>
-                        <a href="article.html" class="fs-5 fw-bold text-dark text-decoration-none article-title d-block">
-                            New Article: The Future of Neural MT
-                        </a>
-                        <p class="text-sm text-secondary mt-2 line-clamp-3">
-                            An in-depth look at the evolution of Neural Machine Translation (NMT) technology and its role in humanitarian translation efforts...
-                        </p>
-                    </div>
-                    <div class="card-footer bg-white border-0 p-4 pt-0">
-                        <a href="article.html" class="text-decoration-none fw-semibold d-flex align-items-center twb-core-blue">
-                            Read Article &rarr;
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-        </div>
 ]]]
                         {if !empty($claimed_tasks)}
                         <div class="card bg-light custom-card p-4 card-border-top-accent">
@@ -249,7 +263,6 @@
                             {/if}
                         </div>
 
-                    </div>
 
                     <div class="col-lg-4 order-2 order-lg-2 space-y-8">
 
@@ -334,6 +347,7 @@
                             </a>
                         </div>
                     </div>
+DEL ABOVE
                 </div>
             </div>
 
