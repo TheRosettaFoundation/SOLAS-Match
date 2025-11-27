@@ -14,7 +14,12 @@
                 </a>
 
                 <h1 class="fs-3 fw-bolder text-dark mb-4">
+                    {if $type = 1}
                     News Archive (All Articles)
+                    {/if}
+                    {if $type = 2}
+                    Resources Archive (All Articles)
+                    {/if}
                 </h1>
 
                 {if !empty($news)}
@@ -35,15 +40,28 @@ OR                                  <img src="https://placehold.co/120x80/143878
                             </a>
                             <div class="card-body p-4 flex-grow-1">
                                 <div class="d-flex justify-content-between align-items-center mb-2">
-                                    <span class="badge rounded-pill text-white twb-bg-core-blue fw-semibold p-1 px-2">Webinar</span>
-OR                                  <span class="badge rounded-pill text-white twb-bg-accent fw-semibold p-1 px-2">Achievement</span>
-                                    <span class="text-sm text-secondary">Oct 28, 2025</span>
+                                    {if $new['type'] == 11}
+                                    <span class="badge rounded-pill text-white twb-bg-core-blue fw-semibold p-1 px-2">Article</span>
+                                    {/if}
+                                    {if $new['type'] == 13}
+                                    <span class="badge rounded-pill text-white twb-bg-accent fw-semibold p-1 px-2">Event</span>
+                                    {/if}
+                                    {if $new['type'] == 12}
+                                    <span class="badge rounded-pill text-white twb-bg-core-blue fw-semibold p-1 px-2">Newsletter</span>
+                                    {/if}
+                                    {if $new['type'] == 14}
+                                    <span class="badge rounded-pill text-white twb-bg-core-blue fw-semibold p-1 px-2">Report</span>
+                                    {/if}
+                                    {if $new['type'] == 21}
+                                    <span class="badge rounded-pill text-white twb-bg-core-blue fw-semibold p-1 px-2">Resource</span>
+                                    {/if}
+                                    <span class="text-sm text-secondary">{substr($new['update_date'], 0, 10)}</span>
                                 </div>
                                 <a href="{urlFor name="content_display" options="user_id.{$new['id']"}" class="fs-5 fw-bold text-dark text-decoration-none article-title d-block">
-                                    Webinar: CAT Tools for Reviewers
+                                    {$new['title']}
                                 </a>
                                 <p class="text-sm text-secondary mt-2 line-clamp-3">
-                                    Join our expert panel on the latest features in computer-assisted translation (CAT) tools specifically for reviewers...
+                                    {$new['snippet']}...
                                 </p>
                             </div>
                             <div class="card-footer bg-white border-0 p-4 pt-0">
@@ -53,7 +71,7 @@ OR                                  <span class="badge rounded-pill text-white t
                             </div>
                         </div>
                     </div>
-[[[
+
                 {if $count%3 == 0 && $count == count($news) - 1}
                     <div class="col-12 col-md-6 col-lg-4">
                     </div>
@@ -61,298 +79,20 @@ OR                                  <span class="badge rounded-pill text-white t
                     </div>
                 </div>
                 {/if}
+
                 {if $count%3 == 1 && $count == count($news) - 1}
                     <div class="col-12 col-md-6 col-lg-4">
                     </div>
                 </div>
                 {/if}
+
                 {if $count%3 == 2}
                 </div>
                 {/if}
+
                 {assign var="count" value=($count + 1)}
                 {/foreach}
                 {/if}
-[[DEL
-                    <div class="col-12 col-md-6 col-lg-4">
-                        <div class="card article-card h-100 border-0 rounded-3 overflow-hidden d-flex flex-column">
-                            <a href="article.html" class="d-block">
-                                <div class="image-aspect-ratio-9-6">
-                                    <img src="https://placehold.co/120x80/E8991C/ffffff?text=IMPACT" alt="Impact Report Thumbnail" class="card-img-top" />
-                                </div>
-                            </a>
-                            <div class="card-body p-4 flex-grow-1">
-                                <div class="d-flex justify-content-between align-items-center mb-2">
-                                    <span class="badge rounded-pill text-white twb-bg-accent fw-semibold p-1 px-2">Achievement</span>
-                                    <span class="text-sm text-secondary">Oct 15, 2025</span>
-                                </div>
-                                <a href="article.html" class="fs-5 fw-bold text-dark text-decoration-none article-title d-block">
-                                    TWB's 2024 Impact Report Published
-                                </a>
-                                <p class="text-sm text-secondary mt-2 line-clamp-3">
-                                    The annual Impact Report details the incredible contributions of our 100,000+ volunteers, the new languages we support, and the measurable impact...
-                                </p>
-                            </div>
-                            <div class="card-footer bg-white border-0 p-4 pt-0">
-                                <a href="article.html" class="text-decoration-none fw-semibold d-flex align-items-center twb-core-blue">
-                                    Read Article &rarr;
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-12 col-md-6 col-lg-4">
-                        <div class="card article-card h-100 border-0 rounded-3 overflow-hidden d-flex flex-column">
-                            <a href="article.html" class="d-block">
-                                <div class="image-aspect-ratio-9-6">
-                                    <img src="https://placehold.co/120x80/143878/ffffff?text=ARTICLE" alt="Article Thumbnail" class="card-img-top" />
-                                </div>
-                            </a>
-                            <div class="card-body p-4 flex-grow-1">
-                                <div class="d-flex justify-content-between align-items-center mb-2">
-                                    <span class="badge rounded-pill text-white twb-bg-core-blue fw-semibold p-1 px-2">Article</span>
-                                    <span class="text-sm text-secondary">Oct 10, 2025</span>
-                                </div>
-                                <a href="article.html" class="fs-5 fw-bold text-dark text-decoration-none article-title d-block">
-                                    New Article: The Future of Neural MT
-                                </a>
-                                <p class="text-sm text-secondary mt-2 line-clamp-3">
-                                    An in-depth look at the evolution of Neural Machine Translation (NMT) technology and its role in humanitarian translation efforts...
-                                </p>
-                            </div>
-                            <div class="card-footer bg-white border-0 p-4 pt-0">
-                                <a href="article.html" class="text-decoration-none fw-semibold d-flex align-items-center twb-core-blue">
-                                    Read Article &rarr;
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-DEL ABOVE]]
-                        {if !empty($claimed_tasks)}
-                        <div class="card bg-light custom-card p-4 card-border-top-accent">
-                            <div class="d-flex justify-content-between align-items-center mb-4 border-bottom pb-3">
-                                <h2 class="fs-3 fw-bold text-dark mb-0">My Tasks</h2>
-                                <a href="{urlFor name="claimed-tasks" options="user_id.{$user_id}"}" class="text-decoration-none fw-semibold d-flex align-items-center" style="color: var(--twb-accent);">
-                                    Go to My Tasks <i class="fa-solid fa-arrow-right ms-2"></i>
-                                </a>
-                            </div>
-                            <div class="space-y-4">
-                                {foreach from=$claimed_tasks item=task}
-                                    {assign var="task_id" value=$task->getId()}
-                                    {assign var="type_id" value=$task->getTaskType()}
-                                    {assign var="status_id" value=$task->getTaskStatus()}
-                                    {if mb_strlen($task->getTitle()) > 50}
-                                        {assign var="task_title" value=TemplateHelper::uiCleanseHTMLNewlineAndTabs(mb_substr($task->getTitle(), 0, 50))}
-                                        {assign var="task_title" value="`$task_title`..."}
-                                    {else}
-                                        {assign var="task_title" value=TemplateHelper::uiCleanseHTMLNewlineAndTabs($task->getTitle())}
-                                    {/if}
-                                <div class="d-flex align-items-center justify-content-between p-3 rounded-3 shadow-sm border bg-white hover-shadow">
-                                    <div class="d-flex align-items-center">
-                                        <div class="me-1">
-                                            {if !empty($org_images[$task_id])}
-                                            <a href="{$siteLocation}org/{$orgs[$task_id]}/profile">
-                                            <img src="data:image/jpeg;base64,{$org_images[$task_id]}" alt="Organisation logo" class="rounded-circle ms-3" width="40" height="40" />
-                                            </a>
-                                            {else}
-                                            <img src="https://placehold.co/40x40/ED1C24/ffffff?text=TWB" alt="Organisation logo" class="rounded-circle ms-3" width="40" height="40" />
-                                            {/if}
-                                        </div>
-                                        <div>
-                                            <div class="fw-bold text-md">
-                                                <a id="taskc-{$task_id}" href="{$siteLocation}task/{$task_id}/view" class="custom-link text-wrap">{$task_title}</a>
-                                                <span class="badge rounded-pill text-uppercase fs-7 fw-bold" style="background-color:{TaskTypeEnum::$enum_to_UI[$type_id]['colour']}">{TaskTypeEnum::$enum_to_UI[$type_id]['type_text']}</span>
-                                            </div>
-                                            {if TaskTypeEnum::$enum_to_UI[$type_id]['source_and_target']}
-                                                <p class="text-muted small mb-0">{if $type_id != 29}{TemplateHelper::getLanguageAndCountryNoCodes($task->getSourceLocale())} → {TemplateHelper::getLanguageAndCountryNoCodes($task->getTargetLocale())} |{/if}
-                                                    ({if $status_id == 3 && empty($matecat_urls[$task_id])}Claimed{elseif $status_id == 3}In Progress{else}Complete{/if}{if $task->get_cancelled()} (Cancelled){/if})
-                                                </p>
-                                            {else}
-                                                <p class="text-muted small mb-0">{if $type_id != 29}{TemplateHelper::getLanguageAndCountryNoCodes($task->getTargetLocale())} |{/if}
-                                                    ({if $status_id == 3 && empty($matecat_urls[$task_id])}Claimed{elseif $status_id == 3}In Progress{else}Complete{/if}{if $task->get_cancelled()} (Cancelled){/if})
-                                                </p>
-                                            {/if}
-                                        </div>
-                                    </div>
-                                    <div class="text-end">
-                                        <p class="small fw-medium text-danger d-flex align-items-center mb-0">
-                                            <span class="process_deadline_utc_new_home_if_possible" style="visibility: hidden"> {$deadline_timestamps[$task_id]}</span>
-                                        </p>
-                                    </div>
-                                </div>
-                                {/foreach}
-                            </div>
-                        </div>
-                        {/if}
-
-                        <div class="card bg-light custom-card p-4 card-border-top-blue">
-                            <div class="d-flex justify-content-between align-items-center mb-4 border-bottom pb-3">
-                                <h2 class="fs-3 fw-bold text-dark mb-0">Available Tasks</h2>
-                                <a href="{urlFor name="task_stream"}" class="text-decoration-none fw-semibold d-flex align-items-center" style="color: var(--core-blue);">
-                                    Browse All Tasks <i class="fa-solid fa-arrow-right ms-2"></i>
-                                </a>
-                            </div>
-
-                            {if !empty($tasks)}
-                            <div class="space-y-4">
-                                {assign var="count" value=0}
-                                {foreach from=$tasks item=task}
-                                    {assign var="task_id" value=$task->getId()}
-                                    {assign var="type_id" value=$task->getTaskType()}
-                                    {if mb_strlen($task->getTitle()) > 50}
-                                        {assign var="task_title" value=TemplateHelper::uiCleanseHTMLNewlineAndTabs(mb_substr($task->getTitle(), 0, 50))}
-                                        {assign var="task_title" value="`$task_title`..."}
-                                    {else}
-                                        {assign var="task_title" value=TemplateHelper::uiCleanseHTMLNewlineAndTabs($task->getTitle())}
-                                    {/if}
-                              {if $count%2 == 0}
-                                <div class="row g-4">
-                              {/if}
-                                    <div class="col-md-6">
-                                        <div class="card custom-card p-4 h-100 card-border-start-accent">
-                                            <div class="d-flex justify-content-between align-items-start mb-2">
-                                                <div class="flex-grow-1">
-                                                    <div class="mb-2">
-                                                        <span class="badge rounded-pill text-uppercase fs-7 fw-bold" style="background-color:{TaskTypeEnum::$enum_to_UI[$type_id]['colour']}">{TaskTypeEnum::$enum_to_UI[$type_id]['type_text']}</span>
-                                                        {if $task->getWordCount()}
-                                                        <span class="badge rounded-pill ms-1 task-unit-badge fs-7 fw-bold">{$task->getWordCount()} {TaskTypeEnum::$enum_to_UI[$type_id]['unit_count_text_short']}</span>
-                                                        {/if}
-                                                        {if isset($chunks[$task_id])}
-                                                        <span class="badge rounded-pill ms-1 fs-7 fw-bold" style="background-color:#7B61FF">Part {$chunks[$task_id]['low_level']}/{$chunks[$task_id]['number_of_chunks']}</span>
-                                                        {/if}
-                                                    </div>
-                                                    <h5 class="fw-bold text-dark mb-2"><a id="task-{$task_id}" href="{$siteLocation}task/{$task_id}/view" class="custom-link text-wrap">{$task_title}</a></h5>
-                                                </div>
-                                                {if !empty($org_images[$task_id])}
-                                                <a href="{$siteLocation}org/{$orgs[$task_id]}/profile">
-                                                <img src="data:image/jpeg;base64,{$org_images[$task_id]}" alt="Organisation logo" class="rounded-circle ms-3" width="40" height="40" />
-                                                </a>
-                                                {else}
-                                                <img src="https://placehold.co/40x40/ED1C24/ffffff?text=TWB" alt="Organisation logo" class="rounded-circle ms-3" width="40" height="40" />
-                                                {/if}
-                                            </div>
-                                            {if TaskTypeEnum::$enum_to_UI[$type_id]['source_and_target']}
-                                            <p class="small text-secondary mb-2">
-                                                {if $type_id != 29}<span class="fw-medium">Languages:</span> {TemplateHelper::getLanguageAndCountryNoCodes($task->getSourceLocale())} → {TemplateHelper::getLanguageAndCountryNoCodes($task->getTargetLocale())}{/if}
-                                            </p>
-                                            {else}
-                                            <p class="small text-secondary mb-2">
-                                                {if $type_id != 29}<span class="fw-medium">Language:</span> {TemplateHelper::getLanguageAndCountryNoCodes($task->getTargetLocale())}{/if}
-                                            </p>
-                                            {/if}
-                                            </p>
-                                            <p class="small fw-medium text-danger d-flex align-items-center mb-3">
-                                            <span class="process_deadline_utc_new_home_if_possible" style="visibility: hidden"> {$deadline_timestamps[$task_id]}</span>
-                                            </p>
-                                            <a class="btn btn-secondary fs-5 px-3" href="{$siteLocation}task/{$task_id}/view">View Task</a>
-                                        </div>
-                                    </div>
-                              {if $count%2 == 0 && $count == count($tasks) - 1}
-                                    <div class="col-md-6">
-                                    </div>
-                                </div>
-                              {/if}
-                              {if $count%2 == 1}
-                                </div>
-                              {/if}
-                                {assign var="count" value=($count + 1)}
-                                {/foreach}
-                            </div>
-                            <div class="text-center mt-4">
-                                <a class="btn btn-secondary fs-5 px-3" href="{urlFor name="home"}">View More Available Tasks</a>
-                            </div>
-                            {else}
-                            <div class="text-center mt-4">
-                                It looks like we don't have any tasks available for your language pair at the moment. In the meantime, you can take a course from our Learning Center:<br />
-                                <a class="btn btn-secondary fs-5 px-3" href="https://elearn.translatorswb.org/">Learning Center</a>
-                            </div>
-                            {/if}
-                        </div>
-
-
-                    <div class="col-lg-4 order-2 order-lg-2 space-y-8">
-
-                        {if !empty($news)}
-                        <div class="card bg-light custom-card p-4">
-                            <div class="d-flex align-items-center mb-3 border-bottom pb-3">
-                                <span class="me-2 fs-5" style="color: var(--twb-accent);">📰</span>
-                                <a href="archive.html" class="fs-3 fw-bold text-dark text-decoration-none hover-text-secondary">
-                                    News & Updates
-                                </a>
-                            </div>
-                            <ul class="list-unstyled space-y-4">
-                                {foreach from=$news item=item}
-                                <li class="border-bottom pb-3">
-                                    <a href="{if empty($item['external_link'])}{$siteLocation}content_display/{$item['id']}/{else}{$item['external_link']}{/if}" class="d-block text-decoration-none text-dark hover-bg-light p-1 rounded transition-colors">
-                                        <div class="d-flex align-items-start">
-                                            {if $item['type'] == 11}
-                                            <span class="me-2 mt-1 flex-shrink-0" style="color: var(--twb-accent);">🗞</span>
-                                            {elseif $item['type'] == 13}
-                                            <span class="me-2 mt-1 flex-shrink-0" style="color: var(--twb-accent);">💡</span>
-                                            {elseif $item['type'] == 12}
-                                            <span class="me-2 mt-1 flex-shrink-0" style="color: var(--twb-accent);">📰</span>
-                                            {elseif $item['type'] == 14}
-                                            <span class="me-2 mt-1 flex-shrink-0" style="color: var(--twb-accent);">📊</span>
-                                            {/if}
-                                            <div>
-                                                <p class="fs-4 fw-medium text-dark mb-0">{$item['title']}</p>
-                                                <p class="small text-secondary mb-0">• {substr($item['update_date'], 0, 10)}</p>
-                                            </div>
-                                        </div>
-                                    </a>
-                                </li>
-                                {/foreach}
-                            </ul>
-                            <a href="{$siteLocation}content_list/1/" class="mt-3 w-100 btn btn-outline-primary fw-semibold" style="color: var(--core-blue);">
-                                View All News <i class="fa-solid fa-arrow-right ms-1"></i>
-                            </a>
-                        </div>
-                        {/if}
-
-                        {if !empty($resources)}
-                        <div class="card bg-light custom-card p-4">
-                            <div class="d-flex align-items-center mb-3 border-bottom pb-3">
-                                <span class="me-2 fs-5" style="color: var(--core-blue);">📖</span>
-                                <a href="archive.html" class="fs-3 fw-bold text-dark text-decoration-none hover-text-secondary">
-                                    Resources & Tools
-                                </a>
-                            </div>
-                            <ul class="list-unstyled space-y-4">
-                                {foreach from=$resources item=item}
-                                <li>
-                                    <a href="{if empty($item['external_link'])}{$siteLocation}content_display/{$item['id']}/{else}{$item['external_link']}{/if}" class="d-flex align-items-center small text-dark fw-medium text-decoration-none hover-text-primary">
-                                        <span class="me-2" style="color: var(--core-blue); opacity: 0.6;">&rarr;</span> <p class="fs-4 fw-medium text-dark mb-0">{$item['title']}</p>
-                                    </a>
-                                </li>
-                                {/foreach}
-                            </ul>
-                            <a href="{$siteLocation}content_list/2/" class="mt-3 w-100 btn btn-outline-primary fw-semibold" style="color: var(--core-blue);">
-                                View All Resources <i class="fa-solid fa-arrow-right ms-1"></i>
-                            </a>
-                        </div>
-                        {/if}
-
-                        <div class="card bg-light custom-card p-4 card-border-top-accent">
-                            <div class="d-flex align-items-center mb-3 border-bottom pb-3">
-                                <div class="p-2 rounded-circle me-3" style="background-color: var(--core-blue); opacity: 0.1;">
-                                    💬
-                               </div>
-                               <h3 class="fs-3 fw-bold text-dark mb-0">Community Survey</h3>
-                            </div>
-                            <p class="small text-secondary mb-3">We want to hear from you! Take our annual Community Survey and help shape future opportunities and support for volunteers. It’s anonymous and only takes 7–10 minutes.</p>
-                            <a href="https://forms.translatorswb.org/view.php?id=56405" class="btn rounded-pill text-white fw-medium transition-colors" style="background-color: var(--twb-accent);">
-                                💡 Submit Response
-                            </a>
-                        </div>
-
-                        <div class="card bg-light custom-card p-4 card-border-top-blue">
-                            <h3 class="fs-3 fw-bold text-dark mb-2">Feedback & Suggestions</h3>
-                            <p class="text-secondary mb-3 small">Please share your feedback with our team to help fix any issues and deliver a better experience to our community.</p>
-                            <a href="https://form.asana.com/?k=dlsF11XkOwpfFllbq325dg&d=170818793545926" class="btn rounded-pill text-white fw-medium transition-colors" style="background-color: var(--twb-accent);">
-                                💡 Submit Feedback
-                            </a>
-                        </div>
-                    </div>
-DEL ABOVE
                 </div>
             </div>
 
