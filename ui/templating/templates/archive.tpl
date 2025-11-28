@@ -33,9 +33,40 @@
             <div class="card article-card h-100 border-0 rounded-3 overflow-hidden d-flex flex-column">
                 <a href="{urlFor name="content_display" options="user_id.{$new['id']"}" class="d-block">
                     <div class="image-aspect-ratio-9-6">
-                        <img src="https://placehold.co/120x80/29528D/ffffff?text=WEBINAR" alt="Webinar Thumbnail" class="card-img-top" />
-OR                      <img src="https://placehold.co/120x80/E8991C/ffffff?text=IMPACT" alt="Impact Report Thumbnail" class="card-img-top" />
-OR                      <img src="https://placehold.co/120x80/143878/ffffff?text=ARTICLE" alt="Article Thumbnail" class="card-img-top" />
+                            {assign var="col" value="143878"}
+                            {assign var="txt" value="OTHER"}
+                            {assign var="alt" value="Other"}
+                        {if $new['type'] == 11}
+                            {assign var="col" value="143878"}
+                            {assign var="txt" value="ARTICLE"}
+                            {assign var="alt" value="Article"}
+                        {/if}
+                        {if $new['type'] == 13}
+                            {assign var="col" value="E8991C"}
+                            {assign var="txt" value="EVENT"}
+                            {assign var="alt" value="Event"}
+                        {/if}
+                        {if $new['type'] == 12}
+                            {assign var="col" value="143878"}
+                            {assign var="txt" value="NEWSLETTER"}
+                            {assign var="alt" value="Newsletter"}
+                        {/if}
+                        {if $new['type'] == 14}
+                            {assign var="col" value="29528D"}
+                            {assign var="txt" value="REPORT"}
+                            {assign var="alt" value="Report"}
+                        {/if}
+                        {if $new['type'] == 21}
+                            {assign var="col" value="143878"}
+                            {assign var="txt" value="RESOURCE"}
+                            {assign var="alt" value="Resource"}
+                        {/if}
+
+                        {if !empty($images[$new['id']])}
+                        <img src="data:image/jpeg;base64,{$images[$new['id']]}" alt="{$alt}" class="card-img-top" />
+                        {else}
+                        <img src="https://placehold.co/120x80/{$col}/ffffff?text={$txt}" alt="{$alt}" class="card-img-top" />
+                        {/if}
                     </div>
                 </a>
                 <div class="card-body p-4 flex-grow-1">
@@ -60,9 +91,11 @@ OR                      <img src="https://placehold.co/120x80/143878/ffffff?text
                     <a href="{urlFor name="content_display" options="user_id.{$new['id']"}" class="fs-5 fw-bold text-dark text-decoration-none article-title d-block">
                         {$new['title']}
                     </a>
-                    <p class="text-sm text-secondary mt-2 line-clamp-3">
-                        {$new['snippet']}...
-                    </p>
+                    <a href="{urlFor name="content_display" options="user_id.{$new['id']"}">
+                        <p class="text-sm text-secondary mt-2 line-clamp-3">
+                            {$new['snippet']}...
+                        </p>
+                    </a>
                 </div>
                 <div class="card-footer bg-white border-0 p-4 pt-0">
                     <a href="{urlFor name="content_display" options="user_id.{$new['id']"}" class="text-decoration-none fw-semibold d-flex align-items-center twb-core-blue">
