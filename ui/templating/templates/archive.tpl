@@ -93,7 +93,7 @@
                     </a>
                     <a href="{if empty($new['external_link'])}{urlFor name="content_display" options="user_id.{$new['id']"}/{else}{$new['external_link']}{/if}">
                         <p class="text-sm text-secondary mt-2 line-clamp-3">
-                            {$new['snippet']}...
+                            {if !empty($new['snippet'])}{$new['snippet']}...{/if}
                         </p>
                     </a>
                 </div>
