@@ -14,10 +14,10 @@
     </a>
 
     <h1 class="fs-3 fw-bolder text-dark mb-4">
-        {if $type = 1}
+        {if $type == 1}
         News Archive (All Articles)
         {/if}
-        {if $type = 2}
+        {if $type == 2}
         Resources Archive (All Articles)
         {/if}
     </h1>
