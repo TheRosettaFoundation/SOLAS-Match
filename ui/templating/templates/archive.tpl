@@ -1,6 +1,13 @@
 {include file="new_header.tpl"}
 <!-- Editor Hint: ¿áéíóú -->
 
+<div class="container">
+    <span class="d-none">
+        <!-- Parameters... -->
+        <div id="siteLocation">{$siteLocation}</div>
+    </span>
+</div>
+
 <div class="container-xxl px-4 px-sm-5 px-lg-5 pb-5 pt-4">
     <a href="{urlFor name="home"}" class="text-decoration-none fw-medium transition-colors mb-3 d-inline-flex align-items-center twb-core-blue">
         &larr; Back to Dashboard
