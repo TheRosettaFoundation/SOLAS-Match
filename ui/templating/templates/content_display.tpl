@@ -8,16 +8,61 @@
     </span>
 </div>
 
+[[[[[
+    <main class="container py-4" style="max-width: 800px;">
+        <a href="archive.html" class="text-decoration-none fw-medium transition-colors mb-3 d-inline-flex align-items-center twb-core-blue">
+            &larr; Back to News Archive
+        </a>
+
+        <div class="bg-white p-4 p-sm-5 rounded-3 shadow-lg mt-4">
+
+            <div class="mb-4 mb-sm-5 pb-4 border-bottom">
+                <span class="badge rounded-pill text-white twb-bg-core-blue fw-semibold p-2 px-3">
+                    Webinar
+                </span>
+                <h1 class="display-6 fw-bolder text-dark mt-3 mb-2 lh-sm">
+                    Webinar: CAT Tools for Reviewers
+                </h1>
+                <p class="text-lg text-secondary">
+                    <span class="fw-medium">Published:</span> Oct 28, 2025
+                </p>
+                <img src="https://placehold.co/700x350/29528D/ffffff?text=WEBINAR+FEATURE" alt="Article Feature Image" class="w-100 mt-4 rounded-3 object-fit-cover" />
+            </div>
+
+            <div class="article-content text-secondary-emphasis">
+                <p class="fs-5">
+                    Join our expert panel on the latest features in computer-assisted translation (CAT) tools specifically for reviewers. We will cover advanced quality assurance checks, terminology management, and collaborative review workflows. Registration is required to receive the access link, and attendees will receive a certificate of participation.
+                </p>
+
+                <h2>What We'll Cover:</h2>
+                <ul class="list-unstyled"> <li>&bull; Advanced QA features in Memsource and Trados.</li>
+                    <li>&bull; Best practices for using termbases and translation memories.</li>
+                    <li>&bull; Collaborative workflows for remote teams.</li>
+                    <li>&bull; Q&A with the TWB Tech team.</li>
+                </ul>
+                <p class="mt-4 fs-6 fst-italic text-secondary">
+                    To register for the webinar, please visit the event page linked below.
+                </p>
+            </div>
+
+            <div class="mt-5 pt-4 border-top text-center">
+                <a href="#register" class="btn btn-twb-accent py-3 px-5 fw-semibold rounded-3 shadow-sm fs-5">
+                    Register for Webinar
+                </a>
+            </div>
+        </div>
+    </main>
+]]]]]
 <div class="container-xxl px-4 px-sm-5 px-lg-5 pb-5 pt-4">
     <a href="{urlFor name="home"}" class="text-decoration-none fw-medium transition-colors mb-3 d-inline-flex align-items-center twb-core-blue">
         &larr; Back to Dashboard
     </a>
 
     <h1 class="fs-3 fw-bolder text-dark mb-4">
-        {if $type = 1}
+        {if $type == 1}
         News Archive (All Articles)
         {/if}
-        {if $type = 2}
+        {if $type == 2}
         Resources Archive (All Articles)
         {/if}
     </h1>
