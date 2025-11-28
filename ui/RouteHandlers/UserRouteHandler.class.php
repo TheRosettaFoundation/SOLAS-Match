@@ -263,6 +263,12 @@ class UserRouteHandler
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:content_items')
             ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin_any')
             ->setName('content_items');
+
+        $app->map(['GET'],
+            '/content_list/{type}[/]',
+            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:content_list')
+            ->add('\SolasMatch\UI\Lib\Middleware:authUserIsLoggedIn')
+            ->setName('content_list');
     }
 
     public function home(Request $request, Response $response)
@@ -3714,6 +3720,37 @@ foreach ($rows as $index => $row) {
 
         $template_data = array_merge($template_data, ['items' => $userDao->get_all_content_items($org_id), 'org_id' => $org_id]);
         return UserRouteHandler::render('user/content_items.tpl', $response);
+    }
+
+    public function content_list(Request $request, Response $response, $args)
+    {
+        global $app, $template_data;
+
+        $userDao = new DAO\UserDao();
+
+        $news = $userDao->get_content_items(null, $args['type'], null, null, 1, null, null, null, 0, 0);
+        $images = [];
+        foreach ($news as $new) {
+            if ($new['number_images']) {
+                $result = $userDao->get_content_item_attachments($new['id'], 1, null);
+                if ($result) $images[$new['id']] = $result[0]['attachment'];
+            }
+        }
+
+        $extra_scripts  = "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/Parameters.js\"></script>";
+        $extra_scripts .= "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/Home2.js\" async></script>";
+        $extra_styles = "<link rel=\"stylesheet\" href=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}resources/css/home_styles.css\" />";
+
+        $template_data = array_merge($template_data, [
+            'siteLocation'  => Common\Lib\Settings::get('site.location'),
+            'extra_scripts' => $extra_scripts,
+            'extra_styles'  => $extra_styles,
+            'news'   => $news,
+            'images' => $images,
+            'type'   => $args['type'],
+            ]);
+
+        return UserRouteHandler::render('content_list.tpl', $response);
     }
 
     public static function flash($key, $value)
