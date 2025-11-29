@@ -216,7 +216,7 @@
                 {if empty($selected_snippet)}
                 <textarea wrap="soft" cols="1" rows="6" style="display:none ;" id="snippet" name="snippet" placeholder="Short HTML snippet or summary"></textarea>
                 {else}
-                <textarea wrap="soft" cols="1" rows="6" style="display:none ;" id="snippet name="snippet"">{$selected_snippet|escape:'html':'UTF-8'}</textarea>
+                <textarea wrap="soft" cols="1" rows="6" style="display:none ;" id="snippet" name="snippet">{$selected_snippet|escape:'html':'UTF-8'}</textarea>
                 {/if}
                 <div id="snippet_toolbar_container" style="width: 400px">
                     <!-- Add the color picker to the toolbar -->
