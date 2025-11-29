@@ -31,7 +31,7 @@
     {/if}
         <div class="col-12 col-md-6 col-lg-4">
             <div class="card article-card h-100 border-0 rounded-3 overflow-hidden d-flex flex-column">
-                <a href="{if empty($new['external_link'])}{urlFor name="content_display" options="item_id.{$new['id']"}/{else}{$new['external_link']}{/if}" class="d-block">
+                <a href="{if empty($new['external_link'])}{urlFor name="content_display" options="item_id.{$new['id']"}{else}{$new['external_link']}{/if}" class="d-block">
                     <div class="image-aspect-ratio-9-6">
                             {assign var="col" value="143878"}
                             {assign var="txt" value="OTHER"}
@@ -88,17 +88,17 @@
                         {/if}
                         <span class="text-sm text-secondary">{substr($new['update_date'], 0, 10)}</span>
                     </div>
-                    <a href="{if empty($new['external_link'])}{urlFor name="content_display" options="item_id.{$new['id']"}/{else}{$new['external_link']}{/if}" class="fs-5 fw-bold text-dark text-decoration-none article-title d-block">
+                    <a href="{if empty($new['external_link'])}{urlFor name="content_display" options="item_id.{$new['id']"}{else}{$new['external_link']}{/if}" class="fs-5 fw-bold text-dark text-decoration-none article-title d-block">
                         {$new['title']}
                     </a>
-                    <a href="{if empty($new['external_link'])}{urlFor name="content_display" options="item_id.{$new['id']"}/{else}{$new['external_link']}{/if}">
+                    <a href="{if empty($new['external_link'])}{urlFor name="content_display" options="item_id.{$new['id']"}{else}{$new['external_link']}{/if}">
                         <p class="text-sm text-secondary mt-2 line-clamp-3">
                             {if !empty($new['snippet'])}{$new['snippet']}...{/if}
                         </p>
                     </a>
                 </div>
                 <div class="card-footer bg-white border-0 p-4 pt-0">
-                    <a href="{if empty($new['external_link'])}{urlFor name="content_display" options="item_id.{$new['id']"}/{else}{$new['external_link']}{/if}" class="text-decoration-none fw-semibold d-flex align-items-center twb-core-blue">
+                    <a href="{if empty($new['external_link'])}{urlFor name="content_display" options="item_id.{$new['id']"}{else}{$new['external_link']}{/if}" class="text-decoration-none fw-semibold d-flex align-items-center twb-core-blue">
                         Read Article &rarr;
                     </a>
                 </div>
