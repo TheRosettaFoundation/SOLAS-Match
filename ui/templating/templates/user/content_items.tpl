@@ -77,6 +77,7 @@
             <a href="{urlFor name="content_display" options="item_id.{$item['id']}"}" target="_blank">TWB</a>
             {else}
             <a href="{$item['external_link']}" target="_blank">External</a>
+            {/if}
             </td>
 
             <td>{$item['title']|escape:'html':'UTF-8'}</td>
