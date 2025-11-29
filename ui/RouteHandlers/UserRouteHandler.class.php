@@ -3779,8 +3779,9 @@ foreach ($rows as $index => $row) {
         $adminDao = new DAO\AdminDao();
 
         $new = $userDao->get_content_items($args['item_id'], null, null, null, ($adminDao->get_roles(Common\Lib\UserSession::getCurrentUserID())&(SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER)) ? null : 1, null, null, null, 0, 0);
+        if (!empty($new)) $new = $new[0]; else $new = [];
         $image = '';
-        if ($new['number_images']) {
+        if (!empty($new['number_images'])) {
             $result = $userDao->get_content_item_attachments($new['id'], 1, null);
             if ($result) $image = $result[0]['attachment'];
         }

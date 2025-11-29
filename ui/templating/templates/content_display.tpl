@@ -8,7 +8,7 @@
     </span>
 </div>
 
-<div class="container py-4" style="max-width: 800px;">{$new['type']}+++{intdiv($new['type'], 10)}
+<div class="container py-4" style="max-width: 800px;">
     <a href="{$siteLocation}content_list/{intdiv($new['type'], 10)}/" class="text-decoration-none fw-medium transition-colors mb-3 d-inline-flex align-items-center twb-core-blue">
         &larr; Back to {if intdiv($new['type'], 10) == 2}Resources{else}News{/if} Archive
     </a>
