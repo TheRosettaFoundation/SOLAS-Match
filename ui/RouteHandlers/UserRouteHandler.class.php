@@ -269,6 +269,12 @@ class UserRouteHandler
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:content_list')
             ->add('\SolasMatch\UI\Lib\Middleware:authUserIsLoggedIn')
             ->setName('content_list');
+
+        $app->map(['GET'],
+            '/content_display/{item_id}[/]',
+            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:content_display')
+            ->add('\SolasMatch\UI\Lib\Middleware:authUserIsLoggedIn')
+            ->setName('content_display');
     }
 
     public function home(Request $request, Response $response)
@@ -3751,6 +3757,37 @@ foreach ($rows as $index => $row) {
             ]);
 
         return UserRouteHandler::render('content_list.tpl', $response);
+    }
+
+    public function content_display(Request $request, Response $response, $args)
+    {
+        global $app, $template_data;
+
+        $userDao = new DAO\UserDao();
+        $adminDao = new DAO\AdminDao();
+
+        $new = $userDao->get_content_items($args['item_id'], null, null, null, ($adminDao->get_roles(Common\Lib\UserSession::getCurrentUserID())&(SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER)) ? null : 1, null, null, null, 0, 0);
+        $image = '';
+        if ($new['number_images']) {
+            $result = $userDao->get_content_item_attachments($new['id'], 1, null);
+            if ($result) $image = $result[0]['attachment'];
+        }
+
+        $userDao->increment_content_item_views($args['item_id']);
+
+        $extra_scripts  = "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/Parameters.js\"></script>";
+        $extra_scripts .= "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/Home2.js\" async></script>";
+        $extra_styles = "<link rel=\"stylesheet\" href=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}resources/css/home_styles.css\" />";
+
+        $template_data = array_merge($template_data, [
+            'siteLocation'  => Common\Lib\Settings::get('site.location'),
+            'extra_scripts' => $extra_scripts,
+            'extra_styles'  => $extra_styles,
+            'new'   => $new,
+            'image' => $image,
+            ]);
+
+        return UserRouteHandler::render('content_display.tpl', $response);
     }
 
     public static function flash($key, $value)
