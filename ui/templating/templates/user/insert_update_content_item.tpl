@@ -53,6 +53,8 @@
     /* responsive */
     @media(max-width:900px) { .layout { grid-template-columns:1fr } .steps { flex-direction:column } .step { width:100% }  }
   </style>
+
+  <link href="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.snow.css" rel="stylesheet">
 </head>
 <body>
   <header>
@@ -527,6 +529,73 @@
 
     // initial
     gotoStep(1);
+
+
+const quill = new Quill('#snippet_editor', {
+    theme: 'snow',
+    modules: {
+        toolbar: {
+            container: '#snippet_toolbar_container'
+        }
+    }
+});
+
+let textarea = document.getElementById("snippet");
+let htmlText = textarea.value;
+let cleanText = htmlText.replace(/\\r\\n|\\n|\\r/g, '<br/>');
+cleanText = cleanText.replace(/\\t/g, '&nbsp;&nbsp;&nbsp;&nbsp;');
+textarea.value = cleanText;
+var delta = quill.clipboard.convert(cleanText);
+
+quill.root.innerHTML = cleanText;
+
+quill.on('text-change', function(delta, oldDelta, source) {
+   if (source =='user') {
+       updateFormattedText();
+   }
+} )
+
+function updateFormattedText() {
+    let htmlContent = quill.root.innerHTML;
+    // remove the color code black and background
+    htmlContent = htmlContent.replace(/style="color: black;"/g ,'');
+    htmlContent = htmlContent.replace(/style="background-color: transparent; color: rgb(0, 0, 0);"/g ,'');
+    let delta = quill.getContents();
+    textarea.value = htmlContent;
+}
+
+const quill = new Quill('#body_editor', {
+    theme: 'snow',
+    modules: {
+        toolbar: {
+            container: '#body_toolbar_container'
+        }
+    }
+});
+
+let textarea = document.getElementById("body");
+let htmlText = textarea.value;
+let cleanText = htmlText.replace(/\\r\\n|\\n|\\r/g, '<br/>');
+cleanText = cleanText.replace(/\\t/g, '&nbsp;&nbsp;&nbsp;&nbsp;');
+textarea.value = cleanText;
+var delta = quill.clipboard.convert(cleanText);
+
+quill.root.innerHTML = cleanText;
+
+quill.on('text-change', function(delta, oldDelta, source) {
+   if (source =='user') {
+       updateFormattedText();
+   }
+} )
+
+function updateFormattedText() {
+    let htmlContent = quill.root.innerHTML;
+    // remove the color code black and background
+    htmlContent = htmlContent.replace(/style="color: black;"/g ,'');
+    htmlContent = htmlContent.replace(/style="background-color: transparent; color: rgb(0, 0, 0);"/g ,'');
+    let delta = quill.getContents();
+    textarea.value = htmlContent;
+}
   </script>
 </body>
 </html>
