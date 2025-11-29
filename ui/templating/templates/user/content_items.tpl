@@ -47,6 +47,7 @@
 <table id="myTable" style="overflow-wrap: break-word;" class="container table table-striped">
     <thead>
         <th>ID</th>
+        <th>User View</th>
         <th>Title</th>
         <th>Type</th>
         <th>Scope</th>
@@ -69,8 +70,13 @@
             {else}
             <a href="{urlFor name="content_item" options="content_id.{$item['id']}"}" target="_blank">{$item['id']}</a>
             {/if}
-            <br />
-            <a href="{if empty($item['external_link'])}{urlFor name="content_display" options="item_id.{$item['id']}"}{else}{$item['external_link']}{/if}" target="_blank">User view</a>
+            </td>
+
+            <td>
+            {if empty($item['external_link'])}
+            <a href="{urlFor name="content_display" options="item_id.{$item['id']}"}" target="_blank">TWB</a>
+            {else}
+            <a href="{$item['external_link']}" target="_blank">External</a>
             </td>
 
             <td>{$item['title']|escape:'html':'UTF-8'}</td>
