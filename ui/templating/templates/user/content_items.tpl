@@ -70,7 +70,7 @@
             <a href="{urlFor name="content_item" options="content_id.{$item['id']}"}" target="_blank">{$item['id']}</a>
             {/if}
             <br />
-            <a href="{if empty($item['external_link'])}{urlFor name="content_display" options="item_id.{$item['id']"}}{else}{$item['external_link']}{/if}" target="_blank">User view</a>
+            <a href="{if empty($item['external_link'])}{urlFor name="content_display" options="item_id.{$item['id']}"}{else}{$item['external_link']}{/if}" target="_blank">User view</a>
             </td>
 
             <td>{$item['title']|escape:'html':'UTF-8'}</td>
