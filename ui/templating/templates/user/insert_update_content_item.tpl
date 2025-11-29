@@ -213,18 +213,74 @@
               <div>
                 <label for="snippet">Snippet (HTML) — used in lists</label>
                 {if empty($selected_snippet)}
-                <textarea id="snippet" name="snippet" placeholder="Short HTML snippet or summary"></textarea>
+                <textarea wrap="soft" cols="1" rows="6" style="display:none ;" id="snippet" name="snippet" placeholder="Short HTML snippet or summary"></textarea>
                 {else}
-                <textarea id="snippet name="snippet"">{$selected_snippet|escape:'html':'UTF-8'}</textarea>
+                <textarea wrap="soft" cols="1" rows="6" style="display:none ;" id="snippet name="snippet"">{$selected_snippet|escape:'html':'UTF-8'}</textarea>
                 {/if}
+                <div id="snippet_toolbar_container" style="width: 400px">
+                    <!-- Add the color picker to the toolbar -->
+                    <span class="ql-formats">
+                        <button class="ql-bold"></button>
+                        <button class="ql-italic"></button>
+                        <button class="ql-underline"></button>
+                    </span>
+                    <span class="ql-formats">
+                        <select class="ql-color">
+                            <option value="black"></option>
+                            <option value="red"></option>
+                        </select>
+                    </span>
+                    <span class="ql-formats">
+                        <button class="ql-list" value="ordered"></button>
+                        <button class="ql-list" value="bullet"></button>
+                        <button class="ql-indent" value="-1"></button>
+                        <button class="ql-indent" value="+1"></button>
+                    </span>
+                    <span class="ql-formats">
+                        <select class="ql-align"></select>
+                    </span>
+                    <span class="ql-formats">
+                        <button class="ql-link"></button>
+                    </span>
+                </div>
+                <div id="snippet_editor" style="width: 400px; margin-bottom: 40px">
+                </div>
               </div>
               <div style="margin-top:10px">
                 <label for="body">Body (HTML)</label>
                 {if empty($selected_body)}
-                <textarea id="body" name="body" placeholder="Full HTML body"></textarea>
+                <textarea wrap="soft" cols="1" rows="6" style="display:none ;" id="body" name="body" placeholder="Full HTML body"></textarea>
                 {else}
-                <textarea id="body" name="body">{$selected_body|escape:'html':'UTF-8'}</textarea>
+                <textarea wrap="soft" cols="1" rows="6" style="display:none ;" id="body" name="body">{$selected_body|escape:'html':'UTF-8'}</textarea>
                 {/if}
+                <div id="body_toolbar_container" style="width: 400px">
+                    <!-- Add the color picker to the toolbar -->
+                    <span class="ql-formats">
+                        <button class="ql-bold"></button>
+                        <button class="ql-italic"></button>
+                        <button class="ql-underline"></button>
+                    </span>
+                    <span class="ql-formats">
+                        <select class="ql-color">
+                            <option value="black"></option>
+                            <option value="red"></option>
+                        </select>
+                    </span>
+                    <span class="ql-formats">
+                        <button class="ql-list" value="ordered"></button>
+                        <button class="ql-list" value="bullet"></button>
+                        <button class="ql-indent" value="-1"></button>
+                        <button class="ql-indent" value="+1"></button>
+                    </span>
+                    <span class="ql-formats">
+                        <select class="ql-align"></select>
+                    </span>
+                    <span class="ql-formats">
+                        <button class="ql-link"></button>
+                    </span>
+                </div>
+                <div id="body_editor" style="width: 400px; margin-bottom: 40px">
+                </div>
               </div>
               <div class="row" style="margin-top:10px">
                 <div class="col">
