@@ -53,6 +53,9 @@
     /* responsive */
     @media(max-width:900px) { .layout { grid-template-columns:1fr } .steps { flex-direction:column } .step { width:100% }  }
   </style>
+
+  <link href="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.snow.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.js"></script>
 </head>
 <body>
   <header>
@@ -211,18 +214,74 @@
               <div>
                 <label for="snippet">Snippet (HTML) — used in lists</label>
                 {if empty($selected_snippet)}
-                <textarea id="snippet" name="snippet" placeholder="Short HTML snippet or summary"></textarea>
+                <textarea wrap="soft" cols="1" rows="6" style="display:none ;" id="snippet" name="snippet" placeholder="Short HTML snippet or summary"></textarea>
                 {else}
-                <textarea id="snippet name="snippet"">{$selected_snippet|escape:'html':'UTF-8'}</textarea>
+                <textarea wrap="soft" cols="1" rows="6" style="display:none ;" id="snippet" name="snippet">{$selected_snippet|escape:'html':'UTF-8'}</textarea>
                 {/if}
+                <div id="snippet_toolbar_container" style="width: 400px">
+                    <!-- Add the color picker to the toolbar -->
+                    <span class="ql-formats">
+                        <button class="ql-bold"></button>
+                        <button class="ql-italic"></button>
+                        <button class="ql-underline"></button>
+                    </span>
+                    <span class="ql-formats">
+                        <select class="ql-color">
+                            <option value="black"></option>
+                            <option value="red"></option>
+                        </select>
+                    </span>
+                    <span class="ql-formats">
+                        <button class="ql-list" value="ordered"></button>
+                        <button class="ql-list" value="bullet"></button>
+                        <button class="ql-indent" value="-1"></button>
+                        <button class="ql-indent" value="+1"></button>
+                    </span>
+                    <span class="ql-formats">
+                        <select class="ql-align"></select>
+                    </span>
+                    <span class="ql-formats">
+                        <button class="ql-link"></button>
+                    </span>
+                </div>
+                <div id="snippet_editor" style="width: 400px; margin-bottom: 40px">
+                </div>
               </div>
               <div style="margin-top:10px">
                 <label for="body">Body (HTML)</label>
                 {if empty($selected_body)}
-                <textarea id="body" name="body" placeholder="Full HTML body"></textarea>
+                <textarea wrap="soft" cols="1" rows="6" style="display:none ;" id="body" name="body" placeholder="Full HTML body"></textarea>
                 {else}
-                <textarea id="body" name="body">{$selected_body|escape:'html':'UTF-8'}</textarea>
+                <textarea wrap="soft" cols="1" rows="6" style="display:none ;" id="body" name="body">{$selected_body|escape:'html':'UTF-8'}</textarea>
                 {/if}
+                <div id="body_toolbar_container" style="width: 400px">
+                    <!-- Add the color picker to the toolbar -->
+                    <span class="ql-formats">
+                        <button class="ql-bold"></button>
+                        <button class="ql-italic"></button>
+                        <button class="ql-underline"></button>
+                    </span>
+                    <span class="ql-formats">
+                        <select class="ql-color">
+                            <option value="black"></option>
+                            <option value="red"></option>
+                        </select>
+                    </span>
+                    <span class="ql-formats">
+                        <button class="ql-list" value="ordered"></button>
+                        <button class="ql-list" value="bullet"></button>
+                        <button class="ql-indent" value="-1"></button>
+                        <button class="ql-indent" value="+1"></button>
+                    </span>
+                    <span class="ql-formats">
+                        <select class="ql-align"></select>
+                    </span>
+                    <span class="ql-formats">
+                        <button class="ql-link"></button>
+                    </span>
+                </div>
+                <div id="body_editor" style="width: 400px; margin-bottom: 40px">
+                </div>
               </div>
               <div class="row" style="margin-top:10px">
                 <div class="col">
@@ -527,6 +586,73 @@
 
     // initial
     gotoStep(1);
+
+
+const snippet_quill = new Quill('#snippet_editor', {
+    theme: 'snow',
+    modules: {
+        toolbar: {
+            container: '#snippet_toolbar_container'
+        }
+    }
+});
+
+let snippet_textarea = document.getElementById("snippet");
+let snippet_htmlText = snippet_textarea.value;
+let snippet_cleanText = snippet_htmlText.replace(/\\r\\n|\\n|\\r/g, '<br/>');
+snippet_cleanText = snippet_cleanText.replace(/\\t/g, '&nbsp;&nbsp;&nbsp;&nbsp;');
+snippet_textarea.value = snippet_cleanText;
+var delta = snippet_quill.clipboard.convert(snippet_cleanText);
+
+snippet_quill.root.innerHTML = snippet_cleanText;
+
+snippet_quill.on('text-change', function(delta, oldDelta, source) {
+   if (source =='user') {
+       snippet_updateFormattedText();
+   }
+} )
+
+function snippet_updateFormattedText() {
+    let htmlContent = snippet_quill.root.innerHTML;
+    // remove the color code black and background
+    htmlContent = htmlContent.replace(/style="color: black;"/g ,'');
+    htmlContent = htmlContent.replace(/style="background-color: transparent; color: rgb(0, 0, 0);"/g ,'');
+    let delta = snippet_quill.getContents();
+    snippet_textarea.value = htmlContent;
+}
+
+const body_quill = new Quill('#body_editor', {
+    theme: 'snow',
+    modules: {
+        toolbar: {
+            container: '#body_toolbar_container'
+        }
+    }
+});
+
+let body_textarea = document.getElementById("body");
+let body_htmlText = body_textarea.value;
+let body_cleanText = body_htmlText.replace(/\\r\\n|\\n|\\r/g, '<br/>');
+body_cleanText = body_cleanText.replace(/\\t/g, '&nbsp;&nbsp;&nbsp;&nbsp;');
+body_textarea.value = body_cleanText;
+var delta = body_quill.clipboard.convert(body_cleanText);
+
+body_quill.root.innerHTML = body_cleanText;
+
+body_quill.on('text-change', function(delta, oldDelta, source) {
+   if (source =='user') {
+       body_updateFormattedText();
+   }
+} )
+
+function body_updateFormattedText() {
+    let htmlContent = body_quill.root.innerHTML;
+    // remove the color code black and background
+    htmlContent = htmlContent.replace(/style="color: black;"/g ,'');
+    htmlContent = htmlContent.replace(/style="background-color: transparent; color: rgb(0, 0, 0);"/g ,'');
+    let delta = body_quill.getContents();
+    body_textarea.value = htmlContent;
+}
   </script>
 </body>
 </html>
