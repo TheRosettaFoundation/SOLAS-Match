@@ -31,7 +31,7 @@
     {/if}
         <div class="col-12 col-md-6 col-lg-4">
             <div class="card article-card h-100 border-0 rounded-3 overflow-hidden d-flex flex-column">
-                <a href="{if empty($new['external_link'])}{urlFor name="content_display" options="item_id.{$new['id']"}}{else}{$new['external_link']}{/if}" class="d-block">
+                <a href="{if empty($new['external_link'])}{urlFor name="content_display" options="item_id.{$new['id']}"}{else}{$new['external_link']}{/if}" class="d-block">
                     <div class="image-aspect-ratio-9-6">
                             {assign var="col" value="143878"}
                             {assign var="txt" value="OTHER"}
