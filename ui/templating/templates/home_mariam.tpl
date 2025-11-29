@@ -189,7 +189,7 @@
                         <div class="card bg-light custom-card p-4">
                             <div class="d-flex align-items-center mb-3 border-bottom pb-3">
                                 <span class="me-2 fs-5" style="color: var(--twb-accent);">📰</span>
-                                <a href="archive.html" class="fs-3 fw-bold text-dark text-decoration-none hover-text-secondary">
+                                <a href="{$siteLocation}content_list/1/" class="fs-3 fw-bold text-dark text-decoration-none hover-text-secondary">
                                     News & Updates
                                 </a>
                             </div>
@@ -226,7 +226,7 @@
                         <div class="card bg-light custom-card p-4">
                             <div class="d-flex align-items-center mb-3 border-bottom pb-3">
                                 <span class="me-2 fs-5" style="color: var(--core-blue);">📖</span>
-                                <a href="archive.html" class="fs-3 fw-bold text-dark text-decoration-none hover-text-secondary">
+                                <a href="{$siteLocation}content_list/2/" class="fs-3 fw-bold text-dark text-decoration-none hover-text-secondary">
                                     Resources & Tools
                                 </a>
                             </div>
