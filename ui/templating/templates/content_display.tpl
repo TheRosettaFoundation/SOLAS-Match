@@ -9,8 +9,8 @@
 </div>
 
 <div class="container py-4" style="max-width: 800px;">
-    <a href="{$siteLocation}content_list/{$new['type']/10}/" class="text-decoration-none fw-medium transition-colors mb-3 d-inline-flex align-items-center twb-core-blue">
-        &larr; Back to {if $new['type']/10 == 2}Resources{else}News{/if} Archive
+    <a href="{$siteLocation}content_list/{intdiv($new['type'], 10)}/" class="text-decoration-none fw-medium transition-colors mb-3 d-inline-flex align-items-center twb-core-blue">
+        &larr; Back to {if intdiv($new['type'], 10) == 2}Resources{else}News{/if} Archive
     </a>
 
     <div class="bg-white p-4 p-sm-5 rounded-3 shadow-lg mt-4">
