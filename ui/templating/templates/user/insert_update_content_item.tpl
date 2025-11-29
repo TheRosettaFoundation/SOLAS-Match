@@ -597,13 +597,13 @@ const snippet_quill = new Quill('#snippet_editor', {
 });
 
 let snippet_textarea = document.getElementById("snippet");
-let htmlText = snippet_textarea.value;
-let cleanText = htmlText.replace(/\\r\\n|\\n|\\r/g, '<br/>');
-cleanText = cleanText.replace(/\\t/g, '&nbsp;&nbsp;&nbsp;&nbsp;');
-snippet_textarea.value = cleanText;
-var delta = snippet_quill.clipboard.convert(cleanText);
+let snippet_htmlText = snippet_textarea.value;
+let snippet_cleanText = snippet_htmlText.replace(/\\r\\n|\\n|\\r/g, '<br/>');
+snippet_cleanText = snippet_cleanText.replace(/\\t/g, '&nbsp;&nbsp;&nbsp;&nbsp;');
+snippet_textarea.value = snippet_cleanText;
+var delta = snippet_quill.clipboard.convert(snippet_cleanText);
 
-snippet_quill.root.innerHTML = cleanText;
+snippet_quill.root.innerHTML = snippet_cleanText;
 
 snippet_quill.on('text-change', function(delta, oldDelta, source) {
    if (source =='user') {
@@ -630,13 +630,13 @@ const body_quill = new Quill('#body_editor', {
 });
 
 let body_textarea = document.getElementById("body");
-let htmlText = body_textarea.value;
-let cleanText = htmlText.replace(/\\r\\n|\\n|\\r/g, '<br/>');
-cleanText = cleanText.replace(/\\t/g, '&nbsp;&nbsp;&nbsp;&nbsp;');
-body_textarea.value = cleanText;
-var delta = body_quill.clipboard.convert(cleanText);
+let body_htmlText = body_textarea.value;
+let body_cleanText = body_htmlText.replace(/\\r\\n|\\n|\\r/g, '<br/>');
+body_cleanText = body_cleanText.replace(/\\t/g, '&nbsp;&nbsp;&nbsp;&nbsp;');
+body_textarea.value = body_cleanText;
+var delta = body_quill.clipboard.convert(body_cleanText);
 
-body_quill.root.innerHTML = cleanText;
+body_quill.root.innerHTML = body_cleanText;
 
 body_quill.on('text-change', function(delta, oldDelta, source) {
    if (source =='user') {
