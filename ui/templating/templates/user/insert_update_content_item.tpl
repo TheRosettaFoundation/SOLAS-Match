@@ -596,11 +596,11 @@ const snippet_quill = new Quill('#snippet_editor', {
     }
 });
 
-let textarea = document.getElementById("snippet");
-let htmlText = textarea.value;
+let snippet_textarea = document.getElementById("snippet");
+let htmlText = snippet_textarea.value;
 let cleanText = htmlText.replace(/\\r\\n|\\n|\\r/g, '<br/>');
 cleanText = cleanText.replace(/\\t/g, '&nbsp;&nbsp;&nbsp;&nbsp;');
-textarea.value = cleanText;
+snippet_textarea.value = cleanText;
 var delta = snippet_quill.clipboard.convert(cleanText);
 
 snippet_quill.root.innerHTML = cleanText;
@@ -617,7 +617,7 @@ function updateFormattedText() {
     htmlContent = htmlContent.replace(/style="color: black;"/g ,'');
     htmlContent = htmlContent.replace(/style="background-color: transparent; color: rgb(0, 0, 0);"/g ,'');
     let delta = snippet_quill.getContents();
-    textarea.value = htmlContent;
+    snippet_textarea.value = htmlContent;
 }
 
 const body_quill = new Quill('#body_editor', {
@@ -629,11 +629,11 @@ const body_quill = new Quill('#body_editor', {
     }
 });
 
-let textarea = document.getElementById("body");
-let htmlText = textarea.value;
+let body_textarea = document.getElementById("body");
+let htmlText = body_textarea.value;
 let cleanText = htmlText.replace(/\\r\\n|\\n|\\r/g, '<br/>');
 cleanText = cleanText.replace(/\\t/g, '&nbsp;&nbsp;&nbsp;&nbsp;');
-textarea.value = cleanText;
+body_textarea.value = cleanText;
 var delta = body_quill.clipboard.convert(cleanText);
 
 body_quill.root.innerHTML = cleanText;
@@ -650,7 +650,7 @@ function updateFormattedText() {
     htmlContent = htmlContent.replace(/style="color: black;"/g ,'');
     htmlContent = htmlContent.replace(/style="background-color: transparent; color: rgb(0, 0, 0);"/g ,'');
     let delta = body_quill.getContents();
-    textarea.value = htmlContent;
+    body_textarea.value = htmlContent;
 }
   </script>
 </body>
