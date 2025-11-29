@@ -587,7 +587,7 @@
     gotoStep(1);
 
 
-const quill = new Quill('#snippet_editor', {
+const snippet_quill = new Quill('#snippet_editor', {
     theme: 'snow',
     modules: {
         toolbar: {
@@ -601,26 +601,26 @@ let htmlText = textarea.value;
 let cleanText = htmlText.replace(/\\r\\n|\\n|\\r/g, '<br/>');
 cleanText = cleanText.replace(/\\t/g, '&nbsp;&nbsp;&nbsp;&nbsp;');
 textarea.value = cleanText;
-var delta = quill.clipboard.convert(cleanText);
+var delta = snippet_quill.clipboard.convert(cleanText);
 
-quill.root.innerHTML = cleanText;
+snippet_quill.root.innerHTML = cleanText;
 
-quill.on('text-change', function(delta, oldDelta, source) {
+snippet_quill.on('text-change', function(delta, oldDelta, source) {
    if (source =='user') {
        updateFormattedText();
    }
 } )
 
 function updateFormattedText() {
-    let htmlContent = quill.root.innerHTML;
+    let htmlContent = snippet_quill.root.innerHTML;
     // remove the color code black and background
     htmlContent = htmlContent.replace(/style="color: black;"/g ,'');
     htmlContent = htmlContent.replace(/style="background-color: transparent; color: rgb(0, 0, 0);"/g ,'');
-    let delta = quill.getContents();
+    let delta = snippet_quill.getContents();
     textarea.value = htmlContent;
 }
 
-const quill = new Quill('#body_editor', {
+const body_quill = new Quill('#body_editor', {
     theme: 'snow',
     modules: {
         toolbar: {
@@ -634,22 +634,22 @@ let htmlText = textarea.value;
 let cleanText = htmlText.replace(/\\r\\n|\\n|\\r/g, '<br/>');
 cleanText = cleanText.replace(/\\t/g, '&nbsp;&nbsp;&nbsp;&nbsp;');
 textarea.value = cleanText;
-var delta = quill.clipboard.convert(cleanText);
+var delta = body_quill.clipboard.convert(cleanText);
 
-quill.root.innerHTML = cleanText;
+body_quill.root.innerHTML = cleanText;
 
-quill.on('text-change', function(delta, oldDelta, source) {
+body_quill.on('text-change', function(delta, oldDelta, source) {
    if (source =='user') {
        updateFormattedText();
    }
 } )
 
 function updateFormattedText() {
-    let htmlContent = quill.root.innerHTML;
+    let htmlContent = body_quill.root.innerHTML;
     // remove the color code black and background
     htmlContent = htmlContent.replace(/style="color: black;"/g ,'');
     htmlContent = htmlContent.replace(/style="background-color: transparent; color: rgb(0, 0, 0);"/g ,'');
-    let delta = quill.getContents();
+    let delta = body_quill.getContents();
     textarea.value = htmlContent;
 }
   </script>
