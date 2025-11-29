@@ -608,11 +608,11 @@ snippet_quill.root.innerHTML = snippet_cleanText;
 
 snippet_quill.on('text-change', function(delta, oldDelta, source) {
    if (source =='user') {
-       updateFormattedText();
+       snippet_updateFormattedText();
    }
 } )
 
-function updateFormattedText() {
+function snippet_updateFormattedText() {
     let htmlContent = snippet_quill.root.innerHTML;
     // remove the color code black and background
     htmlContent = htmlContent.replace(/style="color: black;"/g ,'');
@@ -641,11 +641,11 @@ body_quill.root.innerHTML = body_cleanText;
 
 body_quill.on('text-change', function(delta, oldDelta, source) {
    if (source =='user') {
-       updateFormattedText();
+       body_updateFormattedText();
    }
 } )
 
-function updateFormattedText() {
+function body_updateFormattedText() {
     let htmlContent = body_quill.root.innerHTML;
     // remove the color code black and background
     htmlContent = htmlContent.replace(/style="color: black;"/g ,'');
