@@ -51,7 +51,7 @@
                 {$new['title']}
             </h1>
             <p class="text-lg text-secondary">
-                <span class="fw-medium">Updated:</span> {substr($new['update_date'], 0, 10)}
+                Updated: {substr($new['update_date'], 0, 10)}
             </p>
             {if !empty($image)}
             <img src="data:image/jpeg;base64,{$image}" alt="{$alt}" alt="{$alt}" class="w-100 mt-4 rounded-3 object-fit-cover" />

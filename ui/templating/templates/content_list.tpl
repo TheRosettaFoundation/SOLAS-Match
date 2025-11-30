@@ -86,7 +86,7 @@
                         {if $new['type'] == 21}
                         <span class="badge rounded-pill text-white twb-bg-core-blue fw-semibold p-1 px-2">Resource</span>
                         {/if}
-                        <span class="fw-medium">Updated:</span> <span class="text-sm text-secondary">{substr($new['update_date'], 0, 10)}</span>
+                        <span class="text-sm text-secondary">Updated: {substr($new['update_date'], 0, 10)}</span>
                     </div>
                     <a href="{if empty($new['external_link'])}{urlFor name="content_display" options="item_id.{$new['id']}"}{else}{$new['external_link']}{/if}" class="fs-5 fw-bold text-dark text-decoration-none article-title d-block">
                         {$new['title']}
