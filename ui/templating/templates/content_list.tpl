@@ -91,11 +91,9 @@
                     <a href="{if empty($new['external_link'])}{urlFor name="content_display" options="item_id.{$new['id']}"}{else}{$new['external_link']}{/if}" class="fs-5 fw-bold text-dark text-decoration-none article-title d-block">
                         {$new['title']}
                     </a>
-                    <a href="{if empty($new['external_link'])}{urlFor name="content_display" options="item_id.{$new['id']}"}{else}{$new['external_link']}{/if}">
-                        <p class="text-sm text-secondary mt-2 line-clamp-3">
-                            {if !empty($new['snippet'])}{$new['snippet']}{/if}
-                        </p>
-                    </a>
+                    <p class="text-sm text-secondary mt-2 line-clamp-3">
+                        {if !empty($new['snippet'])}{$new['snippet']}{/if}
+                    </p>
                 </div>
                 <div class="card-footer bg-white border-0 p-4 pt-0">
                     <a href="{if empty($new['external_link'])}{urlFor name="content_display" options="item_id.{$new['id']}"}{else}{$new['external_link']}{/if}" class="text-decoration-none fw-semibold d-flex align-items-center twb-core-blue">
