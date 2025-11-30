@@ -3565,7 +3565,16 @@ foreach ($rows as $index => $row) {
 
             for ($i = 0; $i < 20; $i++) {
                 if (!empty($_FILES['image']['name'][$i]) && empty($_FILES['image']['error'][$i]) && !empty($_FILES['image']['tmp_name'][$i]) && (($data = file_get_contents($_FILES['image']['tmp_name'][$i])) !== false)) {
-                    $userDao->add_content_item_attachment($content_id, 1, $_FILES['image']['name'][$i], $_FILES['image']['type'][$i], $data, $admin_id);
+                    list($width, $height) = getimagesize($_FILES['image']['tmp_name'][$i]);
+                    $ratio = min(702/$width, 468/$height);
+                    $new_width  = floor($width*$ratio);
+                    $new_height = floor($height*$ratio);
+                    $img = imagecreatefromjpeg($_FILES['image']['tmp_name'][$i]);
+                    $tci = imagecreatetruecolor($new_width, $new_height);
+                    if (!empty($img) && $tci !== false) {
+                        if (imagecopyresampled($tci, $img, 0, 0, 0, 0, $new_width, $new_height, $width, $height)) imagejpeg($tci, $_FILES['image']['tmp_name'][$i], 100);
+                    }
+                    if (($data = file_get_contents($_FILES['image']['tmp_name'][$i])) !== false) $userDao->add_content_item_attachment($content_id, 1, $_FILES['image']['name'][$i], $_FILES['image']['type'][$i], $data, $admin_id);
                 }
                 if (!empty($_FILES['attachments']['name'][$i]) && empty($_FILES['attachments']['error'][$i]) && !empty($_FILES['attachments']['tmp_name'][$i]) && (($data = file_get_contents($_FILES['attachments']['tmp_name'][$i])) !== false)) {
                     $userDao->add_content_item_attachment($content_id, 0, $_FILES['attachments']['name'][$i], $_FILES['attachments']['type'][$i], $data, $admin_id);
