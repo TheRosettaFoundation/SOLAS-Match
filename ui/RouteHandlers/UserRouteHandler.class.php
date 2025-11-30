@@ -3751,7 +3751,7 @@ foreach ($rows as $index => $row) {
         foreach ($news as $new) {
             if ($new['number_images']) {
                 $result = $userDao->get_content_item_attachments($new['id'], 1, null);
-                if ($result) $images[$new['id']] = $result[0]['attachment'];
+                if ($result) $images[$new['id']] = base64_encode($result[0]['attachment']);
             }
         }
 
@@ -3783,7 +3783,7 @@ foreach ($rows as $index => $row) {
         $image = '';
         if (!empty($new['number_images'])) {
             $result = $userDao->get_content_item_attachments($new['id'], 1, null);
-            if ($result) $image = $result[0]['attachment'];
+            if ($result) $image = base64_encode($result[0]['attachment']);
         }
 
         $userDao->increment_content_item_views($args['item_id']);
