@@ -92,3 +92,9 @@
             margin-bottom: 0.5rem;
         }
 */
+
+        .nowrap-title {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }

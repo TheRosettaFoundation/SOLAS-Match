@@ -53,12 +53,7 @@
                                     {assign var="task_id" value=$task->getId()}
                                     {assign var="type_id" value=$task->getTaskType()}
                                     {assign var="status_id" value=$task->getTaskStatus()}
-                                    {if mb_strlen($task->getTitle()) > 50}
-                                        {assign var="task_title" value=TemplateHelper::uiCleanseHTMLNewlineAndTabs(mb_substr($task->getTitle(), 0, 50))}
-                                        {assign var="task_title" value="`$task_title`..."}
-                                    {else}
-                                        {assign var="task_title" value=TemplateHelper::uiCleanseHTMLNewlineAndTabs($task->getTitle())}
-                                    {/if}
+                                    {assign var="task_title" value=TemplateHelper::uiCleanseHTMLNewlineAndTabs($task->getTitle())}
                                 <div class="d-flex align-items-center justify-content-between p-3 rounded-3 shadow-sm border bg-white hover-shadow">
                                     <div class="d-flex align-items-center">
                                         <div class="me-1">
@@ -72,7 +67,7 @@
                                         </div>
                                         <div>
                                             <div class="fw-bold text-md">
-                                                <a id="taskc-{$task_id}" href="{$siteLocation}task/{$task_id}/view" class="custom-link text-wrap">{$task_title}</a>
+                                                <a id="taskc-{$task_id}" href="{$siteLocation}task/{$task_id}/view" class="custom-link nowrap-title">{$task_title} aaa bbb ccc ddd eee fff ggg hhh iii jjj kkk lll mmm nnn ooo ppp qqq rrr sss ttt</a>
                                                 <span class="badge rounded-pill text-uppercase fs-7 fw-bold" style="background-color:{TaskTypeEnum::$enum_to_UI[$type_id]['colour']}">{TaskTypeEnum::$enum_to_UI[$type_id]['type_text']}</span>
                                             </div>
                                             {if TaskTypeEnum::$enum_to_UI[$type_id]['source_and_target']}
@@ -111,12 +106,7 @@
                                 {foreach from=$tasks item=task}
                                     {assign var="task_id" value=$task->getId()}
                                     {assign var="type_id" value=$task->getTaskType()}
-                                    {if mb_strlen($task->getTitle()) > 50}
-                                        {assign var="task_title" value=TemplateHelper::uiCleanseHTMLNewlineAndTabs(mb_substr($task->getTitle(), 0, 50))}
-                                        {assign var="task_title" value="`$task_title`..."}
-                                    {else}
-                                        {assign var="task_title" value=TemplateHelper::uiCleanseHTMLNewlineAndTabs($task->getTitle())}
-                                    {/if}
+                                    {assign var="task_title" value=TemplateHelper::uiCleanseHTMLNewlineAndTabs($task->getTitle())}
                               {if $count%2 == 0}
                                 <div class="row g-4">
                               {/if}
@@ -133,7 +123,7 @@
                                                         <span class="badge rounded-pill ms-1 fs-7 fw-bold" style="background-color:#7B61FF">Part {$chunks[$task_id]['low_level']}/{$chunks[$task_id]['number_of_chunks']}</span>
                                                         {/if}
                                                     </div>
-                                                    <h5 class="fw-bold text-dark mb-2"><a id="task-{$task_id}" href="{$siteLocation}task/{$task_id}/view" class="custom-link text-wrap">{$task_title}</a></h5>
+                                                    <h5 class="fw-bold text-dark mb-2"><a id="task-{$task_id}" href="{$siteLocation}task/{$task_id}/view" class="custom-link nowrap-title">{$task_title} aaa bbb ccc ddd eee fff ggg hhh iii jjj kkk lll mmm nnn ooo ppp qqq rrr sss ttt</a></h5>
                                                 </div>
                                                 {if !empty($org_images[$task_id])}
                                                 <a href="{$siteLocation}org/{$orgs[$task_id]}/profile">
