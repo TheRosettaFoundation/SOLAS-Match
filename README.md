@@ -40,6 +40,10 @@ For full terms see License.txt or http://www.gnu.org/licenses/lgpl-3.0.txt
 
 # Release Notes
 
+## Version 20.0
+
+- There is now a new (logged in) home page with news content and resources.
+
 ## Version 19.0
 
 - There is now a new quality feature.
