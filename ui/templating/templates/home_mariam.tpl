@@ -56,7 +56,7 @@
                                     {if mb_strlen($task->getTitle()) > 0}
                                         {assign var="task_title" value=TemplateHelper::uiCleanseHTMLNewlineAndTabs(mb_substr($task->getTitle(), 0, 50))}
 {assign var="task_title" value="`$task_title` aaa bbb ccc ddd eee fff ggg hhh iii jjj kkk lll mmm nnn ooo ppp qqq rrr sss ttt uuu vvv www xxx yyy zzz"}
-{assign var="task_title" value=TemplateHelper::uiCleanseHTMLNewlineAndTabs(mb_substr($task_title, 0, 50))}
+{assign var="task_title" value=TemplateHelper::uiCleanseHTMLNewlineAndTabs(mb_substr($task_title, 0, 40))}
                                         {assign var="task_title" value="`$task_title`..."}
                                     {else}
                                         {assign var="task_title" value=TemplateHelper::uiCleanseHTMLNewlineAndTabs($task->getTitle())}
