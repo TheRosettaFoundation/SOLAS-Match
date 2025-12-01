@@ -54,7 +54,7 @@
                                     {assign var="type_id" value=$task->getTaskType()}
                                     {assign var="status_id" value=$task->getTaskStatus()}
                                     {if mb_strlen($task->getTitle()) > 0}
-                                        {assign var="task_title" value=TemplateHelper::uiCleanseHTMLNewlineAndTabs(mb_substr($task->getTitle() . ' aaa bbb ccc ddd eee fff ggg hhh iii jjj kkk lll mmm nnn ooo ppp qqq rrr sss ttt', 0, 50))}
+                                        {assign var="task_title" value=TemplateHelper::uiCleanseHTMLNewlineAndTabs('aaa bbb ccc ddd eee fff ggg hhh iii jjj kkk lll mmm nnn ooo ppp qqq rrr sss ttt uuu vvv www xxx yyy zzz', 0, 50))}
                                         {assign var="task_title" value="`$task_title`..."}
                                     {else}
                                         {assign var="task_title" value=TemplateHelper::uiCleanseHTMLNewlineAndTabs($task->getTitle())}
