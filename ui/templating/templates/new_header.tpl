@@ -166,6 +166,17 @@
                         </div>
                         </a>
                     </li>
+
+                    {if !empty($user) && !empty($siteLocation)}
+                    <li class="p-2">
+                        <a  href="{$siteLocation}virtual-tour.html" class="dropdown-item py-2 fw-bold">
+                        <div>
+                            <div><span class="mx-2">🎯</span>Platform Tour</div>
+                            <div class="mt-2 fs-5 fw-lighter mx-2">Learn about the new features</div>
+                        </div>
+                        </a>
+                    </li>
+                    {/if}
                 </ul>
             </li>
 
