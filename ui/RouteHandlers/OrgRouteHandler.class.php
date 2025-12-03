@@ -1679,7 +1679,7 @@ class OrgRouteHandler
                 if (isset($post['set_image_for_org'])) {
                     if (empty($_FILES['org_image']['error']) && !empty($_FILES['org_image']['tmp_name']) && (($data = file_get_contents($_FILES['org_image']['tmp_name'])) !== false)) {
                         list($width, $height) = getimagesize($_FILES['org_image']['tmp_name']);
-                        $ratio = min(100/$width, 100/$height);
+                        $ratio = min(200/$width, 200/$height);
                         $new_width  = floor($width*$ratio);
                         $new_height = floor($height*$ratio);
                         $img = imagecreatefromjpeg($_FILES['org_image']['tmp_name']);
