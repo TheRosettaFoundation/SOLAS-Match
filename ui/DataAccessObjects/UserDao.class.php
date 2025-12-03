@@ -1105,6 +1105,13 @@ error_log("claimTask_shell($userId, $taskId)");
         LibAPI\PDOWrapper::call('update_post_login_message', LibAPI\PDOWrapper::cleanse($user_id) . ',0');
     }
 
+    public function seen_tutorial($user_id)
+    {
+        $result = LibAPI\PDOWrapper::call('seen_tutorial', LibAPI\PDOWrapper::cleanse($user_id));
+        if ($result[0]['result']) return 1;
+         return 0;
+    }
+
     public function saveUser($user)
     {
         $userId = $user->getId();

@@ -1010,6 +1010,7 @@ class UserRouteHandler
                                     UserRouteHandler::flash('error', $message);
                                     return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('user-private-profile', array('user_id' => $user->getId())));
                                 }
+                                if (!$userDao->seen_tutorial($user->getId())) return $response->withStatus(302)->withHeader('Location', Common\Lib\Settings::get('site.location') . 'virtual-tour.html');
                                 return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor("home"));
                             } else {
                                 return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('user-private-profile', array('user_id' => $user->getId())));
@@ -1112,6 +1113,7 @@ class UserRouteHandler
                                 UserRouteHandler::flash('error', $message);
                                 return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('user-private-profile', array('user_id' => $user->getId())));
                             }
+                            if (!$userDao->seen_tutorial($user->getId())) return $response->withStatus(302)->withHeader('Location', Common\Lib\Settings::get('site.location') . 'virtual-tour.html');
                             return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor("home"));
                         } else {
                             if ($terms_accepted == 1) {
@@ -1491,6 +1493,7 @@ class UserRouteHandler
 
                     $userDao->update_post_login_message($user_id);
 
+                    if (!$userDao->seen_tutorial($user_id)) return $response->withStatus(302)->withHeader('Location', Common\Lib\Settings::get('site.location') . 'virtual-tour.html');
                     return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('user-public-profile', array('user_id' => $user_id)));
                 } catch (\Exception $e) {
                     UserRouteHandler::flashNow('error', 'Failed to Update');

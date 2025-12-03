@@ -9727,6 +9727,28 @@ BEGIN
 END//
 DELIMITER ;
 
+
+CREATE TABLE IF NOT EXISTS `seen_tutorials` (
+  user_id    INT UNSIGNED NOT NULL,
+  date_shown DATETIME NOT NULL,
+  PRIMARY KEY (user_id),
+  CONSTRAINT FK_seen_tutorials_Users FOREIGN KEY (user_id) REFERENCES Users (id) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+DROP PROCEDURE IF EXISTS `seen_tutorial`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `seen_tutorial`(IN uID INT UNSIGNED)
+BEGIN
+     IF EXISTS (SELECT 1 FROM seen_tutorials WHERE user_id=uID) THEN
+         SELECT 1 AS result;
+     ELSE
+         INSERT INTO seen_tutorials VALUES (uID, NOW());
+         SELECT 0 AS result;
+     END IF;
+END//
+DELIMITER ;
+
+
 DROP PROCEDURE IF EXISTS `set_project_tm_key`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `set_project_tm_key`(IN `projectID` INT, IN `mtEngine` INT, IN `preTranslate` INT, IN `lexi_QA` INT, IN `privateTMKey` VARCHAR(255))
