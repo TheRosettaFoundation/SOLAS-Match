@@ -43,7 +43,7 @@
                         {if !empty($claimed_tasks)}
                         <div class="card bg-light-mariam custom-card p-4 card-border-top-accent">
                             <div class="d-flex justify-content-between align-items-center mb-4 border-bottom pb-3">
-                                <h2 class="fs-3 fw-bold text-dark mb-0">My Tasks</h2>
+                                <h2 class="fs-3 fw-bold text-dark-mariam mb-0">My Tasks</h2>
                                 <a href="{urlFor name="claimed-tasks" options="user_id.{$user_id}"}" class="text-decoration-none fw-semibold d-flex align-items-center" style="color: var(--twb-accent);">
                                     Go to My Tasks <i class="fa-solid fa-arrow-right ms-2"></i>
                                 </a>
@@ -99,7 +99,7 @@
 
                         <div class="card bg-light-mariam custom-card p-4 card-border-top-blue">
                             <div class="d-flex justify-content-between align-items-center mb-4 border-bottom pb-3">
-                                <h2 class="fs-3 fw-bold text-dark mb-0">Available Tasks</h2>
+                                <h2 class="fs-3 fw-bold text-dark-mariam mb-0">Available Tasks</h2>
                                 <a href="{urlFor name="task_stream"}" class="text-decoration-none fw-semibold d-flex align-items-center" style="color: var(--core-blue);">
                                     Browse All Tasks <i class="fa-solid fa-arrow-right ms-2"></i>
                                 </a>
@@ -133,7 +133,7 @@
                                                         <span class="badge rounded-pill ms-1 fs-7 fw-bold" style="background-color:#7B61FF">Part {$chunks[$task_id]['low_level']}/{$chunks[$task_id]['number_of_chunks']}</span>
                                                         {/if}
                                                     </div>
-                                                    <h5 class="fw-bold text-dark mb-2"><a id="task-{$task_id}" href="{$siteLocation}task/{$task_id}/view" class="custom-link text-wrap">{$task_title}</a></h5>
+                                                    <h5 class="fw-bold text-dark-mariam mb-2"><a id="task-{$task_id}" href="{$siteLocation}task/{$task_id}/view" class="custom-link text-wrap">{$task_title}</a></h5>
                                                 </div>
                                                 {if !empty($org_images[$task_id])}
                                                 <a href="{$siteLocation}org/{$orgs[$task_id]}/profile">
@@ -189,14 +189,14 @@
                         <div class="card bg-light-mariam custom-card p-4">
                             <div class="d-flex align-items-center mb-3 border-bottom pb-3">
                                 <span class="me-2 fs-5" style="color: var(--twb-accent);">📰</span>
-                                <a href="{$siteLocation}content_list/1/" class="fs-3 fw-bold text-dark text-decoration-none hover-text-secondary">
+                                <a href="{$siteLocation}content_list/1/" class="fs-3 fw-bold text-dark-mariam text-decoration-none hover-text-secondary">
                                     News & Updates
                                 </a>
                             </div>
                             <ul class="list-unstyled space-y-4">
                                 {foreach from=$news item=item}
                                 <li class="border-bottom pb-3">
-                                    <a href="{if empty($item['external_link'])}{$siteLocation}content_display/{$item['id']}/{else}{$item['external_link']}{/if}" class="d-block text-decoration-none text-dark hover-bg-light p-1 rounded transition-colors">
+                                    <a href="{if empty($item['external_link'])}{$siteLocation}content_display/{$item['id']}/{else}{$item['external_link']}{/if}" class="d-block text-decoration-none text-dark-mariam hover-bg-light p-1 rounded transition-colors">
                                         <div class="d-flex align-items-start">
                                             {if $item['type'] == 11}
                                             <span class="me-2 mt-1 flex-shrink-0" style="color: var(--twb-accent);">🗞</span>
@@ -208,7 +208,7 @@
                                             <span class="me-2 mt-1 flex-shrink-0" style="color: var(--twb-accent);">📊</span>
                                             {/if}
                                             <div>
-                                                <p class="fs-4 fw-medium text-dark mb-0">{$item['title']}</p>
+                                                <p class="fs-4 fw-medium text-dark-mariam mb-0">{$item['title']}</p>
                                                 <p class="small text-secondary mb-0">• {substr($item['update_date'], 0, 10)}</p>
                                             </div>
                                         </div>
@@ -226,15 +226,15 @@
                         <div class="card bg-light-mariam custom-card p-4">
                             <div class="d-flex align-items-center mb-3 border-bottom pb-3">
                                 <span class="me-2 fs-5" style="color: var(--core-blue);">📖</span>
-                                <a href="{$siteLocation}content_list/2/" class="fs-3 fw-bold text-dark text-decoration-none hover-text-secondary">
+                                <a href="{$siteLocation}content_list/2/" class="fs-3 fw-bold text-dark-mariam text-decoration-none hover-text-secondary">
                                     Resources & Tools
                                 </a>
                             </div>
                             <ul class="list-unstyled space-y-4">
                                 {foreach from=$resources item=item}
                                 <li>
-                                    <a href="{if empty($item['external_link'])}{$siteLocation}content_display/{$item['id']}/{else}{$item['external_link']}{/if}" class="d-flex align-items-center small text-dark fw-medium text-decoration-none hover-text-primary">
-                                        <span class="me-2" style="color: var(--core-blue); opacity: 0.6;">&rarr;</span> <p class="fs-4 fw-medium text-dark mb-0">{$item['title']}</p>
+                                    <a href="{if empty($item['external_link'])}{$siteLocation}content_display/{$item['id']}/{else}{$item['external_link']}{/if}" class="d-flex align-items-center small text-dark-mariam fw-medium text-decoration-none hover-text-primary">
+                                        <span class="me-2" style="color: var(--core-blue); opacity: 0.6;">&rarr;</span> <p class="fs-4 fw-medium text-dark-mariam mb-0">{$item['title']}</p>
                                     </a>
                                 </li>
                                 {/foreach}
@@ -250,7 +250,7 @@
                                 <div class="p-2 rounded-circle me-3" style="background-color: var(--core-blue); opacity: 0.1;">
                                     💬
                                </div>
-                               <h3 class="fs-3 fw-bold text-dark mb-0">Community Survey</h3>
+                               <h3 class="fs-3 fw-bold text-dark-mariam mb-0">Community Survey</h3>
                             </div>
                             <p class="small text-secondary mb-3">We want to hear from you! Take our annual Community Survey and help shape future opportunities and support for volunteers. It’s anonymous and only takes 7–10 minutes.</p>
                             <a href="https://forms.translatorswb.org/view.php?id=56405" class="btn rounded-pill text-white fw-medium transition-colors" style="background-color: var(--twb-accent);">
@@ -259,7 +259,7 @@
                         </div>
 
                         <div class="card bg-light-mariam custom-card p-4 card-border-top-blue">
-                            <h3 class="fs-3 fw-bold text-dark mb-2">Feedback & Suggestions</h3>
+                            <h3 class="fs-3 fw-bold text-dark-mariam mb-2">Feedback & Suggestions</h3>
                             <p class="text-secondary mb-3 small">Please share your feedback with our team to help fix any issues and deliver a better experience to our community.</p>
                             <a href="https://form.asana.com/?k=dlsF11XkOwpfFllbq325dg&d=170818793545926" class="btn rounded-pill text-white fw-medium transition-colors" style="background-color: var(--twb-accent);">
                                 💡 Submit Feedback
