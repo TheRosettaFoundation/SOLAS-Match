@@ -59,7 +59,7 @@
                                     {else}
                                         {assign var="task_title" value=TemplateHelper::uiCleanseHTMLNewlineAndTabs($task->getTitle())}
                                     {/if}
-                                <div class="d-flex align-items-center justify-content-between p-3 rounded-3 shadow-sm border bg-white hover-shadow">
+                                <div class="d-flex align-items-center justify-content-between p-3 rounded-3 shadow-sm border bg-light-mariam hover-shadow">
                                     <div class="d-flex align-items-center">
                                         <div class="me-3">
                                             {if !empty($org_images[$task_id])}
