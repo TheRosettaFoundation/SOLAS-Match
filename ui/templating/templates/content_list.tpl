@@ -23,10 +23,10 @@
     </h1>
 
     {if !empty($news)}
-    {assign var="count" value=0}
-    {foreach from=$news item=new}
-
     <div class="row g-4">
+
+        {assign var="count" value=0}
+        {foreach from=$news item=new}
         <div class="col-12 col-md-6 col-lg-4">
             <div class="card article-card h-100 border-0 rounded-3 overflow-hidden d-flex flex-column">
                 <a href="{if empty($new['external_link'])}{urlFor name="content_display" options="item_id.{$new['id']}"}{else}{$new['external_link']}{/if}" class="d-block">
@@ -100,10 +100,10 @@
                 </div>
             </div>
         </div>
-    </div>
+        {assign var="count" value=($count + 1)}
+        {/foreach}
 
-    {assign var="count" value=($count + 1)}
-    {/foreach}
+    </div>
     {/if}
 </div>
 
