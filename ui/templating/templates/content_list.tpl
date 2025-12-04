@@ -26,9 +26,7 @@
     {assign var="count" value=0}
     {foreach from=$news item=new}
 
-    {if $count%3 == 0}
     <div class="row g-4">
-    {/if}
         <div class="col-12 col-md-6 col-lg-4">
             <div class="card article-card h-100 border-0 rounded-3 overflow-hidden d-flex flex-column">
                 <a href="{if empty($new['external_link'])}{urlFor name="content_display" options="item_id.{$new['id']}"}{else}{$new['external_link']}{/if}" class="d-block">
@@ -102,29 +100,11 @@
                 </div>
             </div>
         </div>
-
-    {if $count%3 == 0 && $count == count($news) - 1}
-        <div class="col-12 col-md-6 col-lg-4">
-        </div>
-        <div class="col-12 col-md-6 col-lg-4">
-        </div>
     </div>
-    {/if}
-
-    {if $count%3 == 1 && $count == count($news) - 1}
-        <div class="col-12 col-md-6 col-lg-4">
-        </div>
-    </div>
-    {/if}
-
-    {if $count%3 == 2}
-    </div>
-    {/if}
 
     {assign var="count" value=($count + 1)}
     {/foreach}
     {/if}
-    </div>
 </div>
 
 {include file="footer2.tpl"}
