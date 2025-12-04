@@ -144,11 +144,11 @@
                                                 {/if}
                                             </div>
                                             {if TaskTypeEnum::$enum_to_UI[$type_id]['source_and_target']}
-                                            <p class="small text-secondary mb-2">
+                                            <p class="small text-muted mb-2">
                                                 {if $type_id != 29}<span class="fw-medium">Languages:</span> {TemplateHelper::getLanguageAndCountryNoCodes($task->getSourceLocale())} → {TemplateHelper::getLanguageAndCountryNoCodes($task->getTargetLocale())}{/if}
                                             </p>
                                             {else}
-                                            <p class="small text-secondary mb-2">
+                                            <p class="small text-muted mb-2">
                                                 {if $type_id != 29}<span class="fw-medium">Language:</span> {TemplateHelper::getLanguageAndCountryNoCodes($task->getTargetLocale())}{/if}
                                             </p>
                                             {/if}
@@ -209,7 +209,7 @@
                                             {/if}
                                             <div>
                                                 <p class="fs-4 fw-medium text-dark-mariam mb-0">{$item['title']}</p>
-                                                <p class="small text-secondary mb-0">• {substr($item['update_date'], 0, 10)}</p>
+                                                <p class="small text-muted mb-0">• {substr($item['update_date'], 0, 10)}</p>
                                             </div>
                                         </div>
                                     </a>
@@ -252,7 +252,7 @@
                                </div>
                                <h3 class="fs-3 fw-bold text-dark-mariam mb-0">Community Survey</h3>
                             </div>
-                            <p class="small text-secondary mb-3">We want to hear from you! Take our annual Community Survey and help shape future opportunities and support for volunteers. It’s anonymous and only takes 7–10 minutes.</p>
+                            <p class="small text-muted mb-3">We want to hear from you! Take our annual Community Survey and help shape future opportunities and support for volunteers. It’s anonymous and only takes 7–10 minutes.</p>
                             <a href="https://forms.translatorswb.org/view.php?id=56405" class="btn rounded-pill text-white fw-medium transition-colors" style="background-color: var(--twb-accent);">
                                 💡 Submit Response
                             </a>
@@ -260,7 +260,7 @@
 
                         <div class="card bg-light-mariam custom-card p-4 card-border-top-blue">
                             <h3 class="fs-3 fw-bold text-dark-mariam mb-2">Feedback & Suggestions</h3>
-                            <p class="text-secondary mb-3 small">Please share your feedback with our team to help fix any issues and deliver a better experience to our community.</p>
+                            <p class="text-muted mb-3 small">Please share your feedback with our team to help fix any issues and deliver a better experience to our community.</p>
                             <a href="https://form.asana.com/?k=dlsF11XkOwpfFllbq325dg&d=170818793545926" class="btn rounded-pill text-white fw-medium transition-colors" style="background-color: var(--twb-accent);">
                                 💡 Submit Feedback
                             </a>
