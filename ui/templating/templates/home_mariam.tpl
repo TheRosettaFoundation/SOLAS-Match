@@ -61,13 +61,13 @@
                                     {/if}
                                 <div class="d-flex align-items-center justify-content-between p-3 rounded-3 shadow-sm border bg-white hover-shadow">
                                     <div class="d-flex align-items-center">
-                                        <div class="me-1">
+                                        <div class="me-3">
                                             {if !empty($org_images[$task_id])}
                                             <a href="{$siteLocation}org/{$orgs[$task_id]}/profile">
-                                            <img src="data:image/jpeg;base64,{$org_images[$task_id]}" alt="Organisation logo" class="rounded-circle ms-3" width="40" height="40" />
+                                            <img src="data:image/jpeg;base64,{$org_images[$task_id]}" alt="Organisation logo" class="rounded-circle" width="40" height="40" />
                                             </a>
                                             {else}
-                                            <img src="https://placehold.co/40x40/ED1C24/ffffff?text=TWB" alt="Organisation logo" class="rounded-circle ms-3" width="40" height="40" />
+                                            <img src="https://placehold.co/40x40/ED1C24/ffffff?text=TWB" alt="Organisation logo" class="rounded-circle" width="40" height="40" />
                                             {/if}
                                         </div>
                                         <div>
