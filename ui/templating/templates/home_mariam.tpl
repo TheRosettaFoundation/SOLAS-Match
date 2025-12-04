@@ -97,7 +97,7 @@
                         </div>
                         {/if}
 
-                        <div class="card bg-light custom-card p-4 card-border-top-blue">
+                        <div class="card bg-light-mariam custom-card p-4 card-border-top-blue">
                             <div class="d-flex justify-content-between align-items-center mb-4 border-bottom pb-3">
                                 <h2 class="fs-3 fw-bold text-dark mb-0">Available Tasks</h2>
                                 <a href="{urlFor name="task_stream"}" class="text-decoration-none fw-semibold d-flex align-items-center" style="color: var(--core-blue);">
@@ -186,7 +186,7 @@
                     <div class="col-lg-4 order-2 order-lg-2 space-y-8">
 
                         {if !empty($news)}
-                        <div class="card bg-light custom-card p-4">
+                        <div class="card bg-light-mariam custom-card p-4">
                             <div class="d-flex align-items-center mb-3 border-bottom pb-3">
                                 <span class="me-2 fs-5" style="color: var(--twb-accent);">📰</span>
                                 <a href="{$siteLocation}content_list/1/" class="fs-3 fw-bold text-dark text-decoration-none hover-text-secondary">
@@ -223,7 +223,7 @@
                         {/if}
 
                         {if !empty($resources)}
-                        <div class="card bg-light custom-card p-4">
+                        <div class="card bg-light-mariam custom-card p-4">
                             <div class="d-flex align-items-center mb-3 border-bottom pb-3">
                                 <span class="me-2 fs-5" style="color: var(--core-blue);">📖</span>
                                 <a href="{$siteLocation}content_list/2/" class="fs-3 fw-bold text-dark text-decoration-none hover-text-secondary">
@@ -245,7 +245,7 @@
                         </div>
                         {/if}
 
-                        <div class="card bg-light custom-card p-4 card-border-top-accent">
+                        <div class="card bg-light-mariam custom-card p-4 card-border-top-accent">
                             <div class="d-flex align-items-center mb-3 border-bottom pb-3">
                                 <div class="p-2 rounded-circle me-3" style="background-color: var(--core-blue); opacity: 0.1;">
                                     💬
@@ -258,7 +258,7 @@
                             </a>
                         </div>
 
-                        <div class="card bg-light custom-card p-4 card-border-top-blue">
+                        <div class="card bg-light-mariam custom-card p-4 card-border-top-blue">
                             <h3 class="fs-3 fw-bold text-dark mb-2">Feedback & Suggestions</h3>
                             <p class="text-secondary mb-3 small">Please share your feedback with our team to help fix any issues and deliver a better experience to our community.</p>
                             <a href="https://form.asana.com/?k=dlsF11XkOwpfFllbq325dg&d=170818793545926" class="btn rounded-pill text-white fw-medium transition-colors" style="background-color: var(--twb-accent);">
