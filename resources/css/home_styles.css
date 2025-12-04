@@ -92,3 +92,13 @@
             margin-bottom: 0.5rem;
         }
 */
+
+[data-bs-theme=dark] .bg-light-mariam {
+  --bs-bg-opacity: 1;
+  background-color: rgba(var(--bs-light-rgb), var(--bs-bg-opacity)) !important;
+}
+
+[data-bs-theme=light] .bg-light-mariam {
+  --bs-bg-opacity: 1;
+  background-color: rgba(var(--bs-dark-rgb), var(--bs-bg-opacity)) !important;
+}
