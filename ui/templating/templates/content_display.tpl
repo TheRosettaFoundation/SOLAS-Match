@@ -13,7 +13,7 @@
         &larr; Back to {if intdiv($new['type'], 10) == 2}Resources{else}News{/if} Archive
     </a>
 
-    <div class="bg-white p-4 p-sm-5 rounded-3 shadow-lg mt-4">
+    <div class="bg-light-mariam p-4 p-sm-5 rounded-3 shadow-lg mt-4">
 
         <div class="mb-4 mb-sm-5 pb-4 border-bottom">
                 {assign var="col" value="143878"}
@@ -47,16 +47,16 @@
             <span class="badge rounded-pill text-white twb-bg-core-blue fw-semibold p-2 px-3">
                 {$alt}
             </span>
-            <h1 class="display-6 fw-bolder text-dark mt-3 mb-2 lh-sm">
+            <h1 class="display-6 fw-bolder text-dark-mariam mt-3 mb-2 lh-sm">
                 {$new['title']}
             </h1>
-            <p class="text-lg text-secondary">
+            <p class="text-lg text-muted">
                 Updated: {substr($new['update_date'], 0, 10)}
             </p>
             {if !empty($image)}
             <img src="data:image/jpeg;base64,{$image}" alt="{$alt}" alt="{$alt}" class="w-100 mt-4 rounded-3 object-fit-cover" />
             {else}
-            <img src="https://placehold.co/700x350/{$col}/ffffff?text={$txt}" alt="{$alt}" class="w-100 mt-4 rounded-3 object-fit-cover" />
+            <img src="https://placehold.co/702x468/{$col}/ffffff?text={$txt}" alt="{$alt}" class="w-100 mt-4 rounded-3 object-fit-cover" />
             {/if}
         </div>
 
