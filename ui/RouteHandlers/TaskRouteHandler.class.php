@@ -401,7 +401,7 @@ class TaskRouteHandler
         }
         $extra_scripts  = "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/lib/jquery-ias.min.js\"></script>";
         $extra_scripts .= "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/Parameters.js\"></script>";
-        $extra_scripts .= "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/Home2.js\"></script>";
+        $extra_scripts .= "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/Home3.js\"></script>";
         $extra_scripts .= "<script type=\"text/javascript\"  src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/pagination1.js\" defer ></script>";
 
         $template_data = array_merge($template_data, array(
@@ -533,7 +533,7 @@ class TaskRouteHandler
         }
         $extra_scripts  = "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/lib/jquery-ias.min.js\"></script>";
         $extra_scripts .= "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/Parameters.js\"></script>";
-        $extra_scripts .= "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/Home2.js\"></script>";
+        $extra_scripts .= "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/Home3.js\"></script>";
         $extra_scripts .= "<script type=\"text/javascript\"  src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/pagination1.js\" defer ></script>";
 
 
