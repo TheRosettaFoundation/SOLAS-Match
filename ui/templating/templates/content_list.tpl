@@ -13,7 +13,7 @@
         &larr; Back to Dashboard
     </a>
 
-    <h1 class="fs-3 fw-bolder text-dark mb-4">
+    <h1 class="fs-3 fw-bolder text-dark-mariam mb-4">
         {if $type == 1}
         News Archive (All Articles)
         {/if}
@@ -84,16 +84,16 @@
                         {if $new['type'] == 21}
                         <span class="badge rounded-pill text-white twb-bg-core-blue fw-semibold p-1 px-2">Resource</span>
                         {/if}
-                        <span class="text-sm text-secondary">Updated: {substr($new['update_date'], 0, 10)}</span>
+                        <span class="text-sm text-muted">Updated: {substr($new['update_date'], 0, 10)}</span>
                     </div>
-                    <a href="{if empty($new['external_link'])}{urlFor name="content_display" options="item_id.{$new['id']}"}{else}{$new['external_link']}{/if}" class="fs-5 fw-bold text-dark text-decoration-none article-title d-block">
+                    <a href="{if empty($new['external_link'])}{urlFor name="content_display" options="item_id.{$new['id']}"}{else}{$new['external_link']}{/if}" class="fs-5 fw-bold text-dark-mariam text-decoration-none article-title d-block">
                         {$new['title']}
                     </a>
-                    <p class="text-sm text-secondary mt-2 line-clamp-3">
+                    <p class="text-sm text-muted mt-2 line-clamp-3">
                         {if !empty($new['snippet'])}{$new['snippet']}{/if}
                     </p>
                 </div>
-                <div class="card-footer bg-white border-0 p-4 pt-0">
+                <div class="card-footer bg-light-mariam border-0 p-4 pt-0">
                     <a href="{if empty($new['external_link'])}{urlFor name="content_display" options="item_id.{$new['id']}"}{else}{$new['external_link']}{/if}" class="text-decoration-none fw-semibold d-flex align-items-center twb-core-blue">
                         Read Article &rarr;
                     </a>
