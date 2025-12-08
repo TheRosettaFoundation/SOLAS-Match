@@ -1,868 +1,1209 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>TWB Platform - Virtual Tour</title>
-  <style>
-    /* Reset and Base Styles */
-    * {
-      box-sizing: border-box;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TWB Platform Tour - Translators without Borders</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --twb-orange: #F89728;
+            --twb-blue: #1064C4;
+            --twb-green: #1D8A11;
+            --twb-red: #ED1C24;
+            --twb-accent: #F89728;
+            --core-blue: #1064C4;
+            --text-dark: #2C3E50;
+            --bg-light: #F8F9FA;
+        }
 
-    body {
-      margin: 0;
-      padding: 0;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
-        "Helvetica Neue", Arial, sans-serif;
-      background: #f5f5f5;
-    }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-    /* Navbar Styles */
-    .resources-menu a:hover,
-    .user-menu a:hover {
-      background: #f8f8f8;
-    }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f5f5;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
 
-    .nav-dropdown.open .resources-menu,
-    .user-dropdown.open .user-menu {
-      display: block !important;
-    }
+        /* Navigation */
+        .navbar {
+            background: white !important;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            padding: 0.75rem 0;
+        }
 
-    /* Tour Overlay */
-    .tour-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.7);
-      z-index: 9998;
-      display: none;
-    }
+        .navbar-brand img {
+            height: 40px;
+        }
 
-    .tour-overlay.active {
-      display: block;
-    }
+        .nav-link {
+            color: #333 !important;
+            font-weight: 600;
+            font-size: 1rem;
+            padding: 0.5rem 1rem !important;
+            transition: color 0.3s;
+        }
 
-    /* Tour Modal */
-    .tour-modal {
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      background: white;
-      border-radius: 12px;
-      padding: 40px;
-      max-width: 500px;
-      width: 90%;
-      z-index: 9999;
-      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
-      display: none;
-    }
+        .nav-link:hover {
+            color: var(--twb-orange) !important;
+        }
 
-    .tour-modal.active {
-      display: block;
-      animation: modalFadeIn 0.3s ease;
-    }
+        .nav-link.active {
+            color: var(--twb-orange) !important;
+        }
 
-    @keyframes modalFadeIn {
-      from {
-        opacity: 0;
-        transform: translate(-50%, -45%);
-      }
-      to {
-        opacity: 1;
-        transform: translate(-50%, -50%);
-      }
-    }
+        /* Profile Section */
+        .profile-section {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
 
-    .tour-modal h2 {
-      font-size: 28px;
-      font-weight: 600;
-      margin: 0 0 16px 0;
-      color: #1a1a1a;
-    }
+        .profile-section img {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+        }
 
-    .tour-modal p {
-      font-size: 16px;
-      line-height: 1.6;
-      color: #4a4a4a;
-      margin: 0 0 24px 0;
-    }
+        .theme-toggle {
+            cursor: pointer;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: background 0.3s;
+        }
 
-    .tour-modal .tip {
-      font-size: 14px;
-      color: #666;
-      font-style: italic;
-      margin-top: 12px;
-    }
+        .theme-toggle:hover {
+            background: #f0f0f0;
+        }
 
-    /* Tour Buttons */
-    .tour-buttons {
-      display: flex;
-      gap: 12px;
-      justify-content: flex-end;
-      margin-top: 32px;
-    }
+        /* Main Content */
+        main {
+            flex: 1;
+            padding: 2rem 0;
+        }
 
-    .tour-btn-primary {
-      background: #f58220;
-      color: white;
-      border: none;
-      padding: 12px 28px;
-      border-radius: 6px;
-      font-size: 16px;
-      font-weight: 500;
-      cursor: pointer;
-      transition: background 0.2s;
-    }
+        /* Task Cards */
+        .task-card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            border: 1px solid #e0e0e0;
+            border-left: 4px solid var(--twb-orange);
+            transition: transform 0.3s, box-shadow 0.3s;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
 
-    .tour-btn-primary:hover {
-      background: #e07515;
-    }
+        .task-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+        }
 
-    .tour-btn-secondary {
-      background: transparent;
-      color: #666;
-      border: 1px solid #ddd;
-      padding: 12px 28px;
-      border-radius: 6px;
-      font-size: 16px;
-      font-weight: 500;
-      cursor: pointer;
-      transition: all 0.2s;
-    }
+        .task-badge {
+            display: inline-block;
+            padding: 0.35rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: white;
+            margin-right: 0.5rem;
+        }
 
-    .tour-btn-secondary:hover {
-      border-color: #999;
-      color: #333;
-    }
+        .task-badge.revision {
+            background: var(--twb-blue);
+        }
 
-    .tour-btn-text {
-      background: none;
-      border: none;
-      color: #666;
-      font-size: 14px;
-      cursor: pointer;
-      text-decoration: underline;
-      padding: 0;
-    }
+        .task-badge.translation {
+            background: var(--twb-green);
+        }
 
-    .tour-btn-text:hover {
-      color: #333;
-    }
+        .word-count-badge {
+            background: #f0f0f0;
+            color: #333;
+            padding: 0.35rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
 
-    /* Spotlight */
-    .tour-spotlight {
-      position: absolute;
-      border: 3px solid #f58220;
-      border-radius: 8px;
-      box-shadow: 0 0 0 4000px rgba(0, 0, 0, 0.7);
-      z-index: 9997;
-      pointer-events: none;
-      display: none;
-      transition: all 0.3s ease;
-    }
+        .task-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin: 0.75rem 0;
+            text-decoration: none;
+        }
 
-    .tour-spotlight.active {
-      display: block;
-    }
+        .task-title:hover {
+            color: var(--twb-blue);
+        }
 
-    /* Tooltip */
-    .tour-tooltip {
-      position: absolute;
-      background: white;
-      border-radius: 12px;
-      padding: 24px;
-      max-width: 400px;
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
-      z-index: 9999;
-      display: none;
-    }
+        .org-logo {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
 
-    .tour-tooltip.active {
-      display: block;
-      animation: tooltipFadeIn 0.3s ease;
-    }
+        .task-meta {
+            color: #666;
+            font-size: 0.9rem;
+            margin: 0.5rem 0;
+        }
 
-    @keyframes tooltipFadeIn {
-      from {
-        opacity: 0;
-        transform: translateY(-10px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
+        .task-deadline {
+            color: #dc3545;
+            font-size: 0.875rem;
+            font-weight: 600;
+            margin: 0.5rem 0;
+        }
 
-    .tour-tooltip h3 {
-      font-size: 20px;
-      font-weight: 600;
-      margin: 0 0 12px 0;
-      color: #1a1a1a;
-    }
+        .btn-view-task {
+            background: var(--twb-blue);
+            color: white;
+            padding: 0.625rem 1.5rem;
+            border-radius: 6px;
+            border: none;
+            font-weight: 600;
+            transition: background 0.3s;
+            text-decoration: none;
+            display: inline-block;
+            margin-top: auto;
+        }
 
-    .tour-tooltip p {
-      font-size: 15px;
-      line-height: 1.5;
-      color: #4a4a4a;
-      margin: 0;
-    }
+        .btn-view-task:hover {
+            background: #0d4fa3;
+            color: white;
+        }
 
-    .tour-tooltip .tip {
-      font-size: 14px;
-      color: #666;
-      font-style: italic;
-      margin-top: 12px;
-      display: block;
-    }
+        /* Section Headers */
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid #e0e0e0;
+        }
 
-    /* Progress Indicator */
-    .tour-progress {
-      display: flex;
-      gap: 8px;
-      justify-content: center;
-      margin-top: 24px;
-    }
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin: 0;
+        }
 
-    .tour-progress-dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background: #ddd;
-      transition: all 0.3s;
-    }
+        .section-link {
+            color: var(--twb-blue);
+            text-decoration: none;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: gap 0.3s;
+        }
 
-    .tour-progress-dot.active {
-      background: #f58220;
-      width: 24px;
-      border-radius: 4px;
-    }
+        .section-link:hover {
+            gap: 0.75rem;
+        }
 
-    /* Skip Button */
-    .tour-skip {
-      position: absolute;
-      top: 16px;
-      right: 16px;
-      background: none;
-      border: none;
-      color: #666;
-      font-size: 14px;
-      cursor: pointer;
-      padding: 4px 8px;
-    }
+        /* Sidebar Cards */
+        .sidebar-card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border: 1px solid #e0e0e0;
+            border-top: 4px solid var(--twb-blue);
+        }
 
-    .tour-skip:hover {
-      color: #333;
-    }
+        .news-item {
+            padding: 1rem 0;
+            border-bottom: 1px solid #e0e0e0;
+        }
 
-    /* Back Button */
-    .tour-back {
-      margin-right: auto;
-    }
-  </style>
+        .news-item:last-child {
+            border-bottom: none;
+        }
+
+        .news-item a {
+            text-decoration: none;
+            color: var(--text-dark);
+            display: flex;
+            align-items: start;
+            gap: 0.75rem;
+            transition: background 0.3s;
+            padding: 0.5rem;
+            border-radius: 6px;
+        }
+
+        .news-item a:hover {
+            background: #f8f9fa;
+        }
+
+        .news-icon {
+            font-size: 1.25rem;
+            flex-shrink: 0;
+        }
+
+        .news-title {
+            font-weight: 600;
+            font-size: 1rem;
+            margin: 0;
+        }
+
+        .news-date {
+            color: #666;
+            font-size: 0.875rem;
+            margin: 0;
+        }
+
+        /* Survey & Feedback Cards */
+        .action-card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border: 1px solid #e0e0e0;
+            border-top: 4px solid var(--twb-orange);
+        }
+
+        .action-card h3 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .action-card p {
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .btn-action {
+            background: var(--twb-orange);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 25px;
+            border: none;
+            font-weight: 600;
+            transition: background 0.3s, transform 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+        }
+
+        .btn-action:hover {
+            background: #e07d1a;
+            transform: translateY(-2px);
+            color: white;
+        }
+
+        /* Footer */
+        footer {
+            background: white;
+            margin-top: 3rem;
+            padding: 2rem 0 0;
+        }
+
+        .footer-bottom {
+            background: var(--twb-blue);
+            color: white;
+            padding: 1.5rem 0;
+            margin-top: 2rem;
+        }
+
+        .footer-bottom a {
+            color: white;
+            text-decoration: none;
+            transition: opacity 0.3s;
+        }
+
+        .footer-bottom a:hover {
+            opacity: 0.8;
+        }
+
+        .social-links {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .social-links img {
+            width: 24px;
+            height: 24px;
+            transition: transform 0.3s;
+        }
+
+        .social-links img:hover {
+            transform: scale(1.2);
+        }
+
+        /* Virtual Tour Overlay */
+        .tour-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 9998;
+            display: none;
+            animation: fadeIn 0.3s;
+        }
+
+        .tour-overlay.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* Tour Highlight */
+        .tour-highlight {
+            position: fixed;
+            z-index: 9999;
+            pointer-events: none;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .tour-highlight::before {
+            content: '';
+            position: absolute;
+            top: -8px;
+            left: -8px;
+            right: -8px;
+            bottom: -8px;
+            border: 3px solid var(--twb-orange);
+            border-radius: 12px;
+            box-shadow: 0 0 0 4px rgba(248, 151, 40, 0.3),
+                        0 0 30px rgba(248, 151, 40, 0.5);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                box-shadow: 0 0 0 4px rgba(248, 151, 40, 0.3),
+                            0 0 30px rgba(248, 151, 40, 0.5);
+            }
+            50% {
+                box-shadow: 0 0 0 8px rgba(248, 151, 40, 0.2),
+                            0 0 40px rgba(248, 151, 40, 0.6);
+            }
+        }
+
+        /* Tour Tooltip */
+        .tour-tooltip {
+            position: fixed;
+            z-index: 10000;
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            max-width: 400px;
+            animation: slideUp 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            pointer-events: all;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .tour-tooltip-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+        }
+
+        .tour-tooltip-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--twb-orange), var(--twb-blue));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.25rem;
+            flex-shrink: 0;
+        }
+
+        .tour-tooltip-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin: 0;
+        }
+
+        .tour-tooltip-content {
+            color: #666;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+
+        .tour-tooltip-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .tour-progress {
+            color: #999;
+            font-size: 0.875rem;
+            font-weight: 600;
+        }
+
+        .tour-buttons {
+            display: flex;
+            gap: 0.75rem;
+        }
+
+        .tour-btn {
+            padding: 0.625rem 1.25rem;
+            border-radius: 6px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.9rem;
+        }
+
+        .tour-btn-skip {
+            background: #f0f0f0;
+            color: #666;
+        }
+
+        .tour-btn-skip:hover {
+            background: #e0e0e0;
+        }
+
+        .tour-btn-prev {
+            background: #f0f0f0;
+            color: var(--twb-blue);
+        }
+
+        .tour-btn-prev:hover {
+            background: #e0e0e0;
+        }
+
+        .tour-btn-next {
+            background: var(--twb-orange);
+            color: white;
+        }
+
+        .tour-btn-next:hover {
+            background: #e07d1a;
+            transform: translateX(2px);
+        }
+
+        /* Start Tour Button */
+        .start-tour-btn {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: linear-gradient(135deg, var(--twb-orange), var(--twb-blue));
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            border: none;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            transition: all 0.3s;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        .start-tour-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4);
+            animation: none;
+        }
+
+        .start-tour-btn i {
+            font-size: 1.25rem;
+        }
+
+        /* Browse All Tasks Button */
+        .btn-browse-all {
+            background: white;
+            border: 2px solid var(--twb-blue);
+            color: var(--twb-blue);
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s;
+        }
+
+        .btn-browse-all:hover {
+            background: var(--twb-blue);
+            color: white;
+        }
+
+        /* View All Buttons */
+        .btn-view-all {
+            width: 100%;
+            background: white;
+            border: 2px solid var(--twb-blue);
+            color: var(--twb-blue);
+            padding: 0.75rem;
+            border-radius: 8px;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+            transition: all 0.3s;
+        }
+
+        .btn-view-all:hover {
+            background: var(--twb-blue);
+            color: white;
+        }
+
+        /* Resources List */
+        .resources-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .resources-list li {
+            padding: 0.75rem 0;
+        }
+
+        .resources-list a {
+            text-decoration: none;
+            color: var(--text-dark);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 600;
+            transition: color 0.3s;
+        }
+
+        .resources-list a:hover {
+            color: var(--twb-blue);
+        }
+
+        .resources-list a::before {
+            content: '→';
+            color: var(--twb-blue);
+            opacity: 0.6;
+        }
+
+        /* Responsive */
+        @media (max-width: 991px) {
+            .start-tour-btn {
+                bottom: 1rem;
+                right: 1rem;
+                padding: 0.875rem 1.5rem;
+                font-size: 0.9rem;
+            }
+
+            .tour-tooltip {
+                max-width: 90%;
+                left: 5% !important;
+                right: 5% !important;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .task-card {
+                margin-bottom: 1rem;
+            }
+
+            .tour-tooltip-footer {
+                flex-direction: column;
+                gap: 0.75rem;
+            }
+
+            .tour-buttons {
+                width: 100%;
+            }
+
+            .tour-btn {
+                flex: 1;
+            }
+        }
+    </style>
 </head>
 <body>
-
-<!-- TWB Navigation Bar -->
-<nav style="background: white; border-bottom: 1px solid #e0e0e0; padding: 0 20px; position: sticky; top: 0; z-index: 1000;">
-  <div style="display: flex; justify-content: space-between; align-items: center; max-width: 1400px; margin: 0 auto; height: 60px;">
-
-    <!-- Left Side: Logo and Main Nav -->
-    <div style="display: flex; align-items: center; gap: 30px;">
-      <!-- Logo -->
-      <div style="display: flex; align-items: center; gap: 8px;">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-          <path d="M12 2L2 7L12 12L22 7L12 2Z" fill="#F58220" />
-          <path d="M2 17L12 22L22 17" stroke="#F58220" stroke-width="2" />
-        </svg>
-        <span style="font-weight: 600; font-size: 16px; color: #1a1a1a;">Translators without Borders</span>
-      </div>
-
-      <!-- Main Navigation -->
-      <div style="display: flex; gap: 20px; align-items: center;">
-        <a href="#" style="text-decoration: none; color: #2C5F9C; font-weight: 500; font-size: 15px;">Home</a>
-
-        <!-- Resources Dropdown -->
-        <div class="nav-dropdown" style="position: relative;">
-          <button class="resources-toggle" style="background: none; border: none; color: #F58220; font-weight: 500; font-size: 15px; cursor: pointer; display: flex; align-items: center; gap: 4px; padding: 8px 12px;">
-            Resources
-            <svg width="12" height="12" viewBox="0 0 12 12" fill="currentColor">
-              <path d="M6 8L2 4h8l-4 4z" />
-            </svg>
-          </button>
-
-          <!-- Resources Dropdown Menu -->
-          <div class="resources-menu" style="position: absolute; top: 100%; left: 0; background: white; border: 1px solid #e0e0e0; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); min-width: 280px; margin-top: 8px; display: none; z-index: 1001;">
-            <a href="#" style="display: flex; align-items: start; gap: 12px; padding: 16px; text-decoration: none; color: #1a1a1a; border-bottom: 1px solid #f0f0f0;">
-              <span style="font-size: 20px;">🎓</span>
-              <div>
-                <div style="font-weight: 600; font-size: 15px; margin-bottom: 4px;">Community Forum</div>
-                <div style="font-size: 13px; color: #666;">Ask questions and talk with other community members</div>
-              </div>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 50'%3E%3Ctext x='10' y='35' font-family='Arial, sans-serif' font-size='24' font-weight='bold' fill='%23F89728'%3ETranslators%3C/text%3E%3Ctext x='10' y='48' font-family='Arial, sans-serif' font-size='10' fill='%23333'%3Ewithout Borders%3C/text%3E%3C/svg%3E" alt="Translators without Borders">
             </a>
-            <a href="#" style="display: flex; align-items: start; gap: 12px; padding: 16px; text-decoration: none; color: #1a1a1a; border-bottom: 1px solid #f0f0f0;">
-              <span style="font-size: 20px;">📚</span>
-              <div>
-                <div style="font-weight: 600; font-size: 15px; margin-bottom: 4px;">Learning Center</div>
-                <div style="font-size: 13px; color: #666;">Courses and training</div>
-              </div>
-            </a>
-            <a href="#" style="display: flex; align-items: start; gap: 12px; padding: 16px; text-decoration: none; color: #1a1a1a; border-bottom: 1px solid #f0f0f0;">
-              <span style="font-size: 20px;">📖</span>
-              <div>
-                <div style="font-weight: 600; font-size: 15px; margin-bottom: 4px;">Community Library</div>
-                <div style="font-size: 13px; color: #666;">Instructions, guidelines and reference material</div>
-              </div>
-            </a>
-            <a href="#" class="platform-tour-link" style="display: flex; align-items: start; gap: 12px; padding: 16px; text-decoration: none; color: #F58220; border-top: 1px solid #f0f0f0;">
-              <span style="font-size: 20px;">🎯</span>
-              <div>
-                <div style="font-weight: 600; font-size: 15px;">Platform Tour</div>
-                <div style="font-size: 13px; color: #666;">Learn about the new features</div>
-              </div>
-            </a>
-          </div>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto align-items-center">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Dashboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Admin</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Analytics</a>
+                    </li>
+                    <li class="nav-item dropdown" id="resources-dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                            Resources
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="#">🎓 Community Forum</a></li>
+                            <li><a class="dropdown-item" href="#">📚 Learning Center</a></li>
+                            <li><a class="dropdown-item" href="#">💬 Community Library</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item dropdown" id="profile-dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                            <div class="profile-section">
+                                <img src="https://www.gravatar.com/avatar/b47accd9b56ed83428ff9ae17b6a3637?s=32&r=g" alt="Profile">
+                                <span class="fw-semibold">ahmad.konainah</span>
+                            </div>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="#">👤 Profile</a></li>
+                            <li><a class="dropdown-item" href="#">📋 My Tasks</a></li>
+                            <li><a class="dropdown-item" href="#">🚪 Log out</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item" id="theme-toggle-section">
+                        <div class="theme-toggle">
+                            <i class="fas fa-sun"></i>
+                        </div>
+                    </li>
+                </ul>
+            </div>
         </div>
-      </div>
-    </div>
+    </nav>
 
-    <!-- Right Side: User Menu and Feedback -->
-    <div style="display: flex; align-items: center; gap: 16px;">
+    <!-- Main Content -->
+    <main>
+        <div class="container">
+            <div class="row g-4">
+                <!-- Left Column - Available Tasks -->
+                <div class="col-lg-8" id="available-tasks-section">
+                    <div class="sidebar-card">
+                        <div class="section-header">
+                            <h2 class="section-title">Available Tasks</h2>
+                            <a href="#" class="section-link">
+                                Browse All Tasks <i class="fas fa-arrow-right"></i>
+                            </a>
+                        </div>
 
-      <!-- User Profile Dropdown -->
-      <div class="user-dropdown" style="position: relative;">
-        <button class="user-toggle" style="background: none; border: none; cursor: pointer; display: flex; align-items: center; gap: 8px; padding: 8px 12px;">
-          <div style="width: 32px; height: 32px; border-radius: 50%; background: #F58220; display: flex; align-items: center; justify-content: center; color: white; font-weight: 600; font-size: 14px;">
-            AK
-          </div>
-          <span style="color: #2C5F9C; font-weight: 500; font-size: 14px;">ahmad.konainah</span>
-          <svg width="12" height="12" viewBox="0 0 12 12" fill="#2C5F9C">
-            <path d="M6 8L2 4h8l-4 4z" />
-          </svg>
-        </button>
+                        <!-- Task Cards Grid -->
+                        <div class="row g-3 mb-4">
+                            <!-- Task Card 1 -->
+                            <div class="col-md-6" id="task-card-1">
+                                <div class="task-card">
+                                    <div class="d-flex justify-content-between align-items-start mb-2">
+                                        <div class="flex-grow-1">
+                                            <div class="mb-2">
+                                                <span class="task-badge revision">Revision</span>
+                                                <span class="word-count-badge">7 words</span>
+                                            </div>
+                                            <h5 class="task-title">
+                                                <a href="#" class="task-title">1 Test project 2.docx</a>
+                                            </h5>
+                                        </div>
+                                        <img src="data:image/svg+xml,%3Csvg width='40' height='40' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='20' cy='20' r='20' fill='%23ED1C24'/%3E%3Ctext x='20' y='26' font-family='Arial' font-size='12' font-weight='bold' fill='white' text-anchor='middle'%3ETWB%3C/text%3E%3C/svg%3E" alt="TWB" class="org-logo">
+                                    </div>
+                                    <p class="task-meta">
+                                        <strong>Languages:</strong> English, US → Arabic, Modern Standard
+                                    </p>
+                                    <p class="task-deadline">
+                                        <i class="far fa-clock"></i> Deadline: 2025-10-10 02:38:00
+                                    </p>
+                                    <a href="#" class="btn-view-task">View Task</a>
+                                </div>
+                            </div>
 
-        <!-- User Dropdown Menu -->
-        <div class="user-menu" style="position: absolute; top: 100%; right: 0; background: white; border: 1px solid #e0e0e0; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); min-width: 180px; margin-top: 8px; display: none; z-index: 1001;">
-          <a href="#" style="display: block; padding: 12px 16px; text-decoration: none; color: #1a1a1a; font-size: 14px; border-bottom: 1px solid #f0f0f0;">
-            Profile
-          </a>
-          <a href="#" style="display: block; padding: 12px 16px; text-decoration: none; color: #1a1a1a; font-size: 14px; border-bottom: 1px solid #f0f0f0;">
-            My Tasks
-          </a>
-          <a href="#" style="display: block; padding: 12px 16px; text-decoration: none; color: #1a1a1a; font-size: 14px;">
-            Log out
-          </a>
+                            <!-- Task Card 2 -->
+                            <div class="col-md-6">
+                                <div class="task-card">
+                                    <div class="d-flex justify-content-between align-items-start mb-2">
+                                        <div class="flex-grow-1">
+                                            <div class="mb-2">
+                                                <span class="task-badge translation">Translation</span>
+                                                <span class="word-count-badge">7 words</span>
+                                            </div>
+                                            <h5 class="task-title">
+                                                <a href="#" class="task-title">3 Test project 2.docx</a>
+                                            </h5>
+                                        </div>
+                                        <img src="data:image/svg+xml,%3Csvg width='40' height='40' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='20' cy='20' r='20' fill='%23ED1C24'/%3E%3Ctext x='20' y='26' font-family='Arial' font-size='12' font-weight='bold' fill='white' text-anchor='middle'%3ETWB%3C/text%3E%3C/svg%3E" alt="TWB" class="org-logo">
+                                    </div>
+                                    <p class="task-meta">
+                                        <strong>Languages:</strong> English, US → Chinese Simplified
+                                    </p>
+                                    <p class="task-deadline">
+                                        <i class="far fa-clock"></i> Deadline: 2025-10-07 07:44:00
+                                    </p>
+                                    <a href="#" class="btn-view-task">View Task</a>
+                                </div>
+                            </div>
+
+                            <!-- Task Card 3 -->
+                            <div class="col-md-6">
+                                <div class="task-card">
+                                    <div class="d-flex justify-content-between align-items-start mb-2">
+                                        <div class="flex-grow-1">
+                                            <div class="mb-2">
+                                                <span class="task-badge translation">Translation</span>
+                                                <span class="word-count-badge">7 words</span>
+                                            </div>
+                                            <h5 class="task-title">
+                                                <a href="#" class="task-title">2 Test project 2.docx</a>
+                                            </h5>
+                                        </div>
+                                        <img src="data:image/svg+xml,%3Csvg width='40' height='40' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='20' cy='20' r='20' fill='%23ED1C24'/%3E%3Ctext x='20' y='26' font-family='Arial' font-size='12' font-weight='bold' fill='white' text-anchor='middle'%3ETWB%3C/text%3E%3C/svg%3E" alt="TWB" class="org-logo">
+                                    </div>
+                                    <p class="task-meta">
+                                        <strong>Languages:</strong> English, US → Bengali, India
+                                    </p>
+                                    <p class="task-deadline">
+                                        <i class="far fa-clock"></i> Deadline: 2025-10-07 07:44:00
+                                    </p>
+                                    <a href="#" class="btn-view-task">View Task</a>
+                                </div>
+                            </div>
+
+                            <!-- Task Card 4 -->
+                            <div class="col-md-6">
+                                <div class="task-card">
+                                    <div class="d-flex justify-content-between align-items-start mb-2">
+                                        <div class="flex-grow-1">
+                                            <div class="mb-2">
+                                                <span class="task-badge translation">Translation</span>
+                                                <span class="word-count-badge">7 words</span>
+                                            </div>
+                                            <h5 class="task-title">
+                                                <a href="#" class="task-title">3 Test project 2.docx</a>
+                                            </h5>
+                                        </div>
+                                        <img src="data:image/svg+xml,%3Csvg width='40' height='40' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='20' cy='20' r='20' fill='%23ED1C24'/%3E%3Ctext x='20' y='26' font-family='Arial' font-size='12' font-weight='bold' fill='white' text-anchor='middle'%3ETWB%3C/text%3E%3C/svg%3E" alt="TWB" class="org-logo">
+                                    </div>
+                                    <p class="task-meta">
+                                        <strong>Languages:</strong> English, US → Chinese Simplified
+                                    </p>
+                                    <p class="task-deadline">
+                                        <i class="far fa-clock"></i> Deadline: 2025-10-07 07:42:00
+                                    </p>
+                                    <a href="#" class="btn-view-task">View Task</a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="text-center">
+                            <a href="#" class="btn-browse-all">View More Available Tasks</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Column - Sidebar -->
+                <div class="col-lg-4">
+                    <!-- News & Updates -->
+                    <div class="sidebar-card" id="news-section">
+                        <div class="section-header" style="border-bottom: none;">
+                            <h3 class="section-title" style="font-size: 1.25rem;">
+                                <span style="margin-right: 0.5rem;">📰</span> News & Updates
+                            </h3>
+                        </div>
+                        <div>
+                            <div class="news-item">
+                                <a href="#">
+                                    <span class="news-icon">🗞</span>
+                                    <div>
+                                        <p class="news-title">TEST N</p>
+                                        <p class="news-date">• 2025-11-30</p>
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="news-item">
+                                <a href="#">
+                                    <span class="news-icon">📊</span>
+                                    <div>
+                                        <p class="news-title">This is a Report</p>
+                                        <p class="news-date">• 2025-11-30</p>
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="news-item">
+                                <a href="#">
+                                    <span class="news-icon">💡</span>
+                                    <div>
+                                        <p class="news-title">This is an Event</p>
+                                        <p class="news-date">• 2025-11-30</p>
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="news-item">
+                                <a href="#">
+                                    <span class="news-icon">📰</span>
+                                    <div>
+                                        <p class="news-title">This is a newsletter</p>
+                                        <p class="news-date">• 2025-11-30</p>
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="news-item">
+                                <a href="#">
+                                    <span class="news-icon">🗞</span>
+                                    <div>
+                                        <p class="news-title">This is an Article</p>
+                                        <p class="news-date">• 2025-11-20</p>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                        <a href="#" class="btn-view-all mt-3">
+                            View All News <i class="fas fa-arrow-right ms-1"></i>
+                        </a>
+                    </div>
+
+                    <!-- Resources & Tools -->
+                    <div class="sidebar-card" id="resources-section">
+                        <div class="section-header" style="border-bottom: none;">
+                            <h3 class="section-title" style="font-size: 1.25rem;">
+                                <span style="margin-right: 0.5rem;">📖</span> Resources & Tools
+                            </h3>
+                        </div>
+                        <ul class="resources-list">
+                            <li>
+                                <a href="#">This is a ResourceX</a>
+                            </li>
+                        </ul>
+                        <a href="#" class="btn-view-all mt-3">
+                            View All Resources <i class="fas fa-arrow-right ms-1"></i>
+                        </a>
+                    </div>
+
+                    <!-- Community Survey -->
+                    <div class="action-card" id="survey-section">
+                        <h3>
+                            <span style="width: 40px; height: 40px; background: rgba(16, 100, 196, 0.1); border-radius: 50%; display: inline-flex; align-items: center; justify-content: center;">💬</span>
+                            Community Survey
+                        </h3>
+                        <p>We want to hear from you! Take our annual Community Survey and help shape future opportunities and support for volunteers. It's anonymous and only takes 7–10 minutes.</p>
+                        <a href="#" class="btn-action">
+                            💡 Submit Response
+                        </a>
+                    </div>
+
+                    <!-- Feedback & Suggestions -->
+                    <div class="action-card" id="feedback-section">
+                        <h3>Feedback & Suggestions</h3>
+                        <p>Please share your feedback with our team to help fix any issues and deliver a better experience to our community.</p>
+                        <a href="#" class="btn-action">
+                            💡 Submit Feedback
+                        </a>
+                    </div>
+                </div>
+            </div>
         </div>
-      </div>
+    </main>
 
-      <!-- Feedback Button -->
-      <button style="background: #FFF3E0; border: 1px solid #FFE0B2; color: #F58220; padding: 8px 16px; border-radius: 20px; font-size: 14px; font-weight: 500; cursor: pointer; display: flex; align-items: center; gap: 6px;">
-        <span style="font-size: 16px;">💭</span>
-        Feedback?
-      </button>
-    </div>
-  </div>
-</nav>
-
-<!-- Demo Page Content -->
-<div style="padding: 40px 20px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 1400px; margin: 0 auto; background: #f5f5f5;">
-
-  <h1 style="margin-bottom: 30px; color: #1a1a1a;">Welcome to Your Dashboard</h1>
-
-  <!-- Available Tasks Section -->
-  <div class="available-tasks" style="margin-bottom: 30px;">
-    <div style="border: 1px solid #ddd; border-radius: 12px; padding: 30px; background: white; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
-      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-        <h2 style="margin: 0; color: #333;">Available Tasks</h2>
-        <a href="#" style="color: #F58220; text-decoration: none; font-weight: 500; font-size: 14px;">Browse All Tasks →</a>
-      </div>
-      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;">
-        <div style="border: 1px solid #eee; padding: 20px; border-radius: 8px; background: #fafafa;">
-          <div style="margin-bottom: 12px;">
-            <span style="background: #4CAF50; color: white; padding: 4px 12px; border-radius: 4px; font-size: 12px; font-weight: 500;">TRANSLATION</span>
-            <span style="background: #2196F3; color: white; padding: 4px 12px; border-radius: 4px; font-size: 12px; font-weight: 500; margin-left: 6px;">8322 words</span>
-          </div>
-          <h3 style="color: #F58220; margin: 10px 0; font-size: 16px;">1.09 INEE Minimum Standards 2024 [FINAL DRAFT]</h3>
-          <p style="color: #666; font-size: 14px; margin: 8px 0;">Languages: English, US → Hebrew</p>
-          <button style="margin-top: 12px; background: #2C5F9C; color: white; border: none; padding: 10px 20px; border-radius: 6px; width: 100%; cursor: pointer; font-weight: 500;">View Task</button>
+    <!-- Footer -->
+    <footer>
+        <div class="container text-center py-4">
+            <p class="mb-2">Maintained by <a href="#" style="color: var(--twb-orange); text-decoration: none;">Translators without Borders</a></p>
+            <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='48' viewBox='0 0 100 48'%3E%3Ctext x='10' y='30' font-family='Arial, sans-serif' font-size='24' font-weight='bold' fill='%23F89728'%3ESolas%3C/text%3E%3C/svg%3E" alt="Solas" style="height: 48px;">
+            <p class="mt-2">TWB Platform is powered by <a href="#" style="color: var(--twb-blue); text-decoration: none;">Solas</a></p>
         </div>
-        <div style="border: 1px solid #eee; padding: 20px; border-radius: 8px; background: #fafafa;">
-          <div style="margin-bottom: 12px;">
-            <span style="background: #4CAF50; color: white; padding: 4px 12px; border-radius: 4px; font-size: 12px; font-weight: 500;">TRANSLATION</span>
-            <span style="background: #2196F3; color: white; padding: 4px 12px; border-radius: 4px; font-size: 12px; font-weight: 500; margin-left: 6px;">8343 words</span>
-          </div>
-          <h3 style="color: #F58220; margin: 10px 0; font-size: 16px;">1.07 INEE Minimum Standards 2024 [FINAL DRAFT]</h3>
-          <p style="color: #666; font-size: 14px; margin: 8px 0;">Languages: English, US → Hebrew</p>
-          <button style="margin-top: 12px; background: #2C5F9C; color: white; border: none; padding: 10px 20px; border-radius: 6px; width: 100%; cursor: pointer; font-weight: 500;">View Task</button>
+        <div class="footer-bottom">
+            <div class="container">
+                <div class="row align-items-center">
+                    <div class="col-md-4 mb-3 mb-md-0">
+                        <div class="social-links">
+                            <span>Follow Us:</span>
+                            <a href="#"><i class="fab fa-facebook"></i></a>
+                            <a href="#"><i class="fab fa-twitter"></i></a>
+                            <a href="#"><i class="fab fa-youtube"></i></a>
+                            <a href="#"><i class="fab fa-linkedin"></i></a>
+                            <a href="#"><i class="fab fa-instagram"></i></a>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-3 mb-md-0 text-center">
+                        <a href="#">Contact Us</a> | 
+                        <a href="#">Terms and Conditions</a> | 
+                        <a href="#">Privacy Policy</a>
+                    </div>
+                    <div class="col-md-4 text-md-end">
+                        <a href="#"><i class="fas fa-envelope me-2"></i>Subscribe To TWB Newsletter</a>
+                    </div>
+                </div>
+            </div>
         </div>
-      </div>
-    </div>
-  </div>
+    </footer>
 
-  <!-- Community Sidebar Section -->
-  <div class="community-sidebar" style="margin-bottom: 30px;">
-    <div style="border: 1px solid #ddd; border-radius: 12px; padding: 30px; background: white; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
-      <h2 style="margin-top: 0; color: #333; font-size: 20px;">Community Survey</h2>
-      <p style="color: #666; line-height: 1.6;">We want to hear from you! Take our annual Community Survey and help shape future opportunities and support for volunteers. It's anonymous and only takes 7-10 minutes.</p>
-      <button style="padding: 12px 24px; background: #F58220; color: white; border: none; border-radius: 6px; cursor: pointer; width: 100%; font-weight: 500; margin-top: 12px;">
-        📝 Submit Response
-      </button>
-    </div>
-    <div style="border: 1px solid #ddd; border-radius: 12px; padding: 30px; background: white; margin-top: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
-      <h2 style="margin-top: 0; color: #333; font-size: 20px;">Feedback & Suggestions</h2>
-      <p style="color: #666; line-height: 1.6;">Please share your feedback with our team to help fix any issues and deliver a better experience to our community.</p>
-      <button style="padding: 12px 24px; background: #F58220; color: white; border: none; border-radius: 6px; cursor: pointer; width: 100%; font-weight: 500; margin-top: 12px;">
-        📢 Submit Feedback
-      </button>
-    </div>
-  </div>
+    <!-- Tour Overlay -->
+    <div class="tour-overlay" id="tourOverlay"></div>
+    <div class="tour-highlight" id="tourHighlight"></div>
+    <div class="tour-tooltip" id="tourTooltip"></div>
 
-  <!-- Task Details Container -->
-  <div class="task-details-container" style="margin-bottom: 30px;">
-    <div style="border: 1px solid #ddd; border-radius: 12px; padding: 30px; background: white; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
-      <h2 style="margin-top: 0; color: #333;">Task Details</h2>
-      <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 30px;">
-        <div>
-          <h3 style="color: #F58220; margin-top: 0;">Basics of Humanitarian Interpreting</h3>
-          <div style="margin: 16px 0;">
-            <span style="background: #E91E63; color: white; padding: 4px 12px; border-radius: 4px; font-size: 12px; font-weight: 500; margin-right: 6px;">COURSE</span>
-            <span style="background: #2196F3; color: white; padding: 4px 12px; border-radius: 4px; font-size: 12px; font-weight: 500;">60 minutes</span>
-          </div>
-          <p style="color: #666; margin: 12px 0;"><strong>Language:</strong> English (Complete)</p>
-          <p style="color: #666; margin: 12px 0;"><strong>Completed:</strong> 2023-11-02 🕐 10:43:00</p>
-          <p style="color: #666; margin: 12px 0;"><strong>Due by:</strong> 2025-04-15 🕐 21:46:00</p>
-          <p style="color: #666; margin: 12px 0;"><strong>Region:</strong> Asia/Beirut or earlier, if possible</p>
-        </div>
-        <div style="background: #f8f8f8; padding: 20px; border-radius: 8px;">
-          <h4 style="margin-top: 0; margin-bottom: 16px;">Filter Available Tasks:</h4>
-          <select style="width: 100%; padding: 10px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px;">
-            <option>Any Task Type</option>
-            <option>Translation</option>
-            <option>Review</option>
-            <option>Course</option>
-          </select>
-          <select style="width: 100%; padding: 10px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px;">
-            <option>In Progress</option>
-            <option>Complete</option>
-            <option>Available</option>
-          </select>
-          <select style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px;">
-            <option>Created Time, Newest First</option>
-            <option>Due Date</option>
-            <option>Word Count</option>
-          </select>
-          <button style="width: 100%; padding: 12px; background: #F58220; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: 500; margin-top: 16px;">
-            🔍 Filter Task Stream
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
+    <!-- Start Tour Button -->
+    <button class="start-tour-btn" id="startTourBtn">
+        <i class="fas fa-play-circle"></i>
+        Start Platform Tour
+    </button>
 
-  <!-- Profile Container -->
-  <div class="profile-container" style="margin-bottom: 30px;">
-    <div style="border: 1px solid #ddd; border-radius: 12px; padding: 30px; background: white; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
-      <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 20px;">
-        <h2 style="margin: 0; color: #333;">Your Profile</h2>
-        <button style="padding: 8px 16px; background: #F58220; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: 500;">
-          ✏️ Edit Profile Details
-        </button>
-      </div>
-      <div style="display: grid; grid-template-columns: auto 1fr auto; gap: 30px; align-items: start;">
-        <div style="width: 80px; height: 80px; border-radius: 50%; background: linear-gradient(135deg, #F58220 0%, #E07515 100%); display: flex; align-items: center; justify-content: center; color: white; font-size: 32px; font-weight: 600;">
-          AK
-        </div>
-        <div>
-          <h3 style="margin: 0 0 8px 0; color: #1a1a1a;">Ahmad Konainah</h3>
-          <p style="color: #666; margin: 5px 0;"><strong>Location:</strong> Beirut</p>
-          <p style="color: #666; margin: 5px 0;"><strong>Native in:</strong> Arabic - SYRIAN ARAB REPUBLIC (ar - SY)</p>
-          <p style="color: #F58220; margin: 5px 0; font-weight: 600;">
-            <strong>65,286</strong> words donated | <strong>1</strong> hours donated
-          </p>
-          <p style="color: #666; margin: 12px 0 5px 0;"><strong>Language Pair(s):</strong></p>
-          <p style="color: #666; margin: 5px 0;">English ↔ Arabic, Modern Standard (TWB Translator)</p>
-        </div>
-        <div style="background: #FFF3E0; padding: 20px; border-radius: 8px; text-align: center; border: 2px solid #FFE0B2;">
-          <div style="font-size: 48px; margin-bottom: 8px;">🏆</div>
-          <h4 style="margin: 0 0 8px 0; color: #F58220;">Recognition Points</h4>
-          <p style="font-size: 32px; font-weight: bold; margin: 0; color: #1a1a1a;">65,286</p>
-          <p style="font-size: 12px; color: #666; margin: 8px 0 0 0;">Words Donated</p>
-        </div>
-      </div>
-    </div>
-  </div>
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
-</div>
+    <!-- Tour Script -->
+    <script>
+        const tourSteps = [
+            {
+                element: '#resources-dropdown',
+                title: 'Resources Menu',
+                content: 'Access important resources through this dropdown menu. Find the Community Forum to ask questions and connect with other translators, the Learning Center for courses and training, and the Community Library for guidelines and reference materials.',
+                icon: '📚',
+                position: 'bottom'
+            },
+            {
+                element: '#profile-dropdown',
+                title: 'Profile & Account',
+                content: 'Click on your name to access your Profile settings, view My Tasks to see all your assigned work, or Log out when you\'re done. Next to your profile, you\'ll find the theme toggle button (sun/moon icon) to switch between light and dark mode.',
+                icon: '👤',
+                position: 'bottom'
+            },
+            {
+                element: '#available-tasks-section',
+                title: 'Available Tasks',
+                content: 'This is where you\'ll find all available translation and revision tasks. You can browse through tasks that match your language pairs and skills.',
+                icon: '📋',
+                position: 'right'
+            },
+            {
+                element: '#task-card-1',
+                title: 'Task Cards',
+                content: 'Each task card shows important information including the task type, word count, language pair, deadline, and organization. Click "View Task" to see more details or claim the task.',
+                icon: '📝',
+                position: 'right'
+            },
+            {
+                element: '#news-section',
+                title: 'News & Updates',
+                content: 'Stay informed with the latest news, reports, events, and newsletters from TWB. This section keeps you up-to-date with important announcements and community updates.',
+                icon: '📰',
+                position: 'left'
+            },
+            {
+                element: '#resources-section',
+                title: 'Resources & Tools',
+                content: 'Access helpful resources, guidelines, glossaries, and tools to support your translation work. These materials will help you deliver high-quality translations.',
+                icon: '📖',
+                position: 'left'
+            },
+            {
+                element: '#survey-section',
+                title: 'Community Survey',
+                content: 'Share your feedback and help shape the future of TWB! Your input helps us improve our platform and better support volunteers like you.',
+                icon: '💬',
+                position: 'left'
+            },
+            {
+                element: '#feedback-section',
+                title: 'Feedback & Suggestions',
+                content: 'Have ideas or encountered issues? Use this form to submit feedback directly to our team. We value your input and use it to continuously improve the platform.',
+                icon: '💡',
+                position: 'left'
+            }
+        ];
 
-<!-- TOUR OVERLAY -->
-<div class="tour-overlay" id="tourOverlay"></div>
+        let currentStep = 0;
+        let tourActive = false;
 
-<!-- TOUR SPOTLIGHT -->
-<div class="tour-spotlight" id="tourSpotlight"></div>
+        const tourOverlay = document.getElementById('tourOverlay');
+        const tourHighlight = document.getElementById('tourHighlight');
+        const tourTooltip = document.getElementById('tourTooltip');
+        const startTourBtn = document.getElementById('startTourBtn');
 
-<!-- TOUR MODAL -->
-<div class="tour-modal" id="tourModal">
-  <button class="tour-skip" id="tourSkip">Skip</button>
-  <div id="tourContent"></div>
-</div>
-
-<!-- TOUR TOOLTIP -->
-<div class="tour-tooltip" id="tourTooltip">
-  <h3 id="tooltipTitle"></h3>
-  <p id="tooltipBody"></p>
-  <div class="tour-buttons" id="tooltipButtons"></div>
-  <div class="tour-progress" id="tooltipProgress"></div>
-</div>
-
-<script>
-class VirtualTour {
-  constructor() {
-    this.currentStep = 0;
-    this.totalSteps = 6;
-    this.isActive = false;
-
-    this.steps = [
-      {
-        type: "modal",
-        title: "Welcome to Your New Home!",
-        body:
-          "We've redesigned your dashboard to make finding and completing tasks easier. Let us show you what's changed.",
-        buttons: [
-          { text: "Show Me Around", action: "next", type: "primary" },
-          { text: "I'll explore on my own", action: "skip", type: "text" }
-        ]
-      },
-      {
-        type: "spotlight",
-        target: ".available-tasks",
-        title: "Your Tasks, Front and Center",
-        body:
-          'See translation opportunities matched to your skills right on your homepage. Word counts and task progress are shown upfront. Click "View Task" when you find something that fits your schedule.',
-        tip: 'Use "Browse All Tasks" to see the complete list.',
-        position: "bottom"
-      },
-      {
-        type: "spotlight",
-        target: ".community-sidebar",
-        title: "Stay Connected",
-        body:
-          "Share your thoughts through surveys and feedback forms. Your input helps us support volunteers better and improve the platform.",
-        position: "bottom"
-      },
-      {
-        type: "spotlight",
-        target: ".task-details-container",
-        title: "Everything You Need to Know",
-        body:
-          "When you open a task, you'll see completion dates, time estimates, and which organization you're helping. Filter tasks by type and status using the sidebar, or sort by deadline.",
-        position: "bottom"
-      },
-      {
-        type: "spotlight",
-        target: ".profile-container",
-        title: "Track Your Impact",
-        body:
-          "Your profile shows your contributed words, completed courses, and recognition points. Update your skills, manage notifications, and see your translation history all in one place.",
-        position: "bottom"
-      },
-      {
-        type: "modal",
-        title: "You're Ready to Go",
-        body:
-          "Questions? Check the Resources menu for the Community Forum, Learning Center, and reference materials.",
-        buttons: [
-          { text: "Browse Tasks", action: "finish", type: "primary" },
-          { text: "Close", action: "finish", type: "secondary" }
-        ]
-      }
-    ];
-
-    this.elements = {
-      overlay: document.getElementById("tourOverlay"),
-      modal: document.getElementById("tourModal"),
-      tooltip: document.getElementById("tourTooltip"),
-      spotlight: document.getElementById("tourSpotlight"),
-      skip: document.getElementById("tourSkip")
-    };
-
-    this.init();
-  }
-
-  init() {
-    // Always start tour for testing - comment this out in production
-    setTimeout(() => this.start(), 500);
-
-    this.elements.skip.addEventListener("click", () => this.skip());
-  }
-
-  start() {
-    this.isActive = true;
-    this.currentStep = 0;
-    // Scroll to top before starting
-    window.scrollTo({ top: 0, behavior: "smooth" });
-    setTimeout(() => this.showStep(0), 300);
-  }
-
-  showStep(stepIndex) {
-    const step = this.steps[stepIndex];
-
-    if (step.type === "modal") {
-      this.showModal(step);
-    } else if (step.type === "spotlight") {
-      this.showSpotlight(step);
-    }
-  }
-
-  showModal(step) {
-    this.hideAll();
-
-    this.elements.overlay.classList.add("active");
-    this.elements.modal.classList.add("active");
-
-    this.elements.skip.style.display =
-      this.currentStep === 0 || this.currentStep === this.totalSteps - 1
-        ? "none"
-        : "block";
-
-    let buttonsHTML = "";
-    step.buttons.forEach((btn) => {
-      const btnClass =
-        btn.type === "primary"
-          ? "tour-btn-primary"
-          : btn.type === "secondary"
-          ? "tour-btn-secondary"
-          : "tour-btn-text";
-      buttonsHTML += `<button class="${btnClass}" onclick="tour.${btn.action}()">${btn.text}</button>`;
-    });
-
-    document.getElementById("tourContent").innerHTML = `
-      <h2>${step.title}</h2>
-      <p>${step.body}</p>
-      <div class="tour-buttons">${buttonsHTML}</div>
-    `;
-  }
-
-  showSpotlight(step) {
-    this.hideAll();
-
-    const targetElement = document.querySelector(step.target);
-    if (!targetElement) {
-      console.warn(`Tour target not found: ${step.target}`);
-      this.next();
-      return;
-    }
-
-    // Scroll element into view first
-    targetElement.scrollIntoView({ behavior: "smooth", block: "center" });
-
-    // Wait for scroll to finish before positioning
-    setTimeout(() => {
-      this.positionSpotlight(targetElement, step);
-    }, 400);
-  }
-
-  positionSpotlight(targetElement, step) {
-    this.elements.overlay.classList.add("active");
-    this.elements.spotlight.classList.add("active");
-    this.elements.tooltip.classList.add("active");
-
-    // Get element position relative to document
-    const rect = targetElement.getBoundingClientRect();
-    const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-    const scrollLeft =
-      window.pageXOffset || document.documentElement.scrollLeft;
-
-    const spotlight = this.elements.spotlight;
-    spotlight.style.top = `${rect.top + scrollTop - 8}px`;
-    spotlight.style.left = `${rect.left + scrollLeft - 8}px`;
-    spotlight.style.width = `${rect.width + 16}px`;
-    spotlight.style.height = `${rect.height + 16}px`;
-
-    // Position tooltip
-    this.positionTooltip(step, rect, scrollTop, scrollLeft);
-
-    // Build tooltip content
-    document.getElementById("tooltipTitle").textContent = step.title;
-    document.getElementById("tooltipBody").innerHTML =
-      step.body + (step.tip ? `<span class="tip">${step.tip}</span>` : "");
-
-    // Build buttons
-    const buttonsContainer = document.getElementById("tooltipButtons");
-    buttonsContainer.innerHTML = "";
-
-    if (this.currentStep > 1) {
-      const backBtn = document.createElement("button");
-      backBtn.className = "tour-btn-secondary tour-back";
-      backBtn.textContent = "← Back";
-      backBtn.onclick = () => this.previous();
-      buttonsContainer.appendChild(backBtn);
-    }
-
-    const nextBtn = document.createElement("button");
-    nextBtn.className = "tour-btn-primary";
-    nextBtn.textContent = "Next →";
-    nextBtn.onclick = () => this.next();
-    buttonsContainer.appendChild(nextBtn);
-
-    // Build progress indicator
-    this.updateProgress();
-  }
-
-  positionTooltip(step, targetRect, scrollTop, scrollLeft) {
-    const tooltip = this.elements.tooltip;
-
-    let top, left;
-
-    switch (step.position) {
-      case "bottom":
-        top = targetRect.bottom + scrollTop + 20;
-        left = targetRect.left + scrollLeft + targetRect.width / 2 - 200;
-        break;
-      case "left":
-        top = targetRect.top + scrollTop;
-        left = targetRect.left + scrollLeft - 420;
-        break;
-      case "right":
-        top = targetRect.top + scrollTop;
-        left = targetRect.right + scrollLeft + 20;
-        break;
-      case "top":
-      default:
-        top = targetRect.top + scrollTop - 300;
-        left = targetRect.left + scrollLeft + targetRect.width / 2 - 200;
-    }
-
-    // Ensure tooltip stays within viewport
-    const viewportWidth = window.innerWidth;
-    if (left < 20) left = 20;
-    if (left + 400 > viewportWidth) left = viewportWidth - 420;
-
-    tooltip.style.top = `${top}px`;
-    tooltip.style.left = `${left}px`;
-  }
-
-  updateProgress() {
-    const progressContainer = document.getElementById("tooltipProgress");
-    progressContainer.innerHTML = "";
-
-    const spotlightSteps = [1, 2, 3, 4];
-    const currentSpotlightIndex = spotlightSteps.indexOf(this.currentStep);
-
-    if (currentSpotlightIndex !== -1) {
-      for (let i = 0; i < spotlightSteps.length; i++) {
-        const dot = document.createElement("div");
-        dot.className = "tour-progress-dot";
-        if (i === currentSpotlightIndex) {
-          dot.classList.add("active");
+        function startTour() {
+            tourActive = true;
+            currentStep = 0;
+            startTourBtn.style.display = 'none';
+            tourOverlay.classList.add('active');
+            showStep(currentStep);
         }
-        progressContainer.appendChild(dot);
-      }
-    }
-  }
 
-  hideAll() {
-    this.elements.overlay.classList.remove("active");
-    this.elements.modal.classList.remove("active");
-    this.elements.tooltip.classList.remove("active");
-    this.elements.spotlight.classList.remove("active");
-  }
+        function endTour() {
+            tourActive = false;
+            tourOverlay.classList.remove('active');
+            tourHighlight.style.display = 'none';
+            tourTooltip.style.display = 'none';
+            startTourBtn.style.display = 'flex';
+            window.location.href = "https://twbplatform.org";
+        }
 
-  next() {
-    if (this.currentStep < this.totalSteps - 1) {
-      this.currentStep++;
-      this.showStep(this.currentStep);
-    } else {
-      this.finish();
-    }
-  }
+        function showStep(stepIndex) {
+            if (stepIndex < 0 || stepIndex >= tourSteps.length) {
+                endTour();
+                return;
+            }
 
-  previous() {
-    if (this.currentStep > 0) {
-      this.currentStep--;
-      this.showStep(this.currentStep);
-    }
-  }
+            const step = tourSteps[stepIndex];
+            const element = document.querySelector(step.element);
+            
+            if (!element) {
+                console.error('Element not found:', step.element);
+                return;
+            }
 
-  skip() {
-    this.finish();
-  }
+            // Scroll element into view
+            element.scrollIntoView({ behavior: 'smooth', block: 'center' });
 
-  finish() {
-    this.hideAll();
-    this.isActive = false;
-    localStorage.setItem("twb_tour_completed", "true");
-    window.location.href = "https://twbplatform.org";
-  }
+            setTimeout(() => {
+                // Position highlight
+                const rect = element.getBoundingClientRect();
+                tourHighlight.style.display = 'block';
+                tourHighlight.style.top = rect.top + 'px';
+                tourHighlight.style.left = rect.left + 'px';
+                tourHighlight.style.width = rect.width + 'px';
+                tourHighlight.style.height = rect.height + 'px';
 
-  restart() {
-    localStorage.removeItem("twb_tour_completed");
-    window.scrollTo({ top: 0, behavior: "smooth" });
-    setTimeout(() => this.start(), 300);
-  }
-}
+                // Create tooltip content
+                const isLastStep = stepIndex === tourSteps.length - 1;
+                const isFirstStep = stepIndex === 0;
 
-// Initialize tour
-let tour;
-document.addEventListener("DOMContentLoaded", () => {
-  tour = new VirtualTour();
+                tourTooltip.innerHTML = `
+                    <div class="tour-tooltip-header">
+                        <div class="tour-tooltip-icon">${step.icon}</div>
+                        <h3 class="tour-tooltip-title">${step.title}</h3>
+                    </div>
+                    <div class="tour-tooltip-content">${step.content}</div>
+                    <div class="tour-tooltip-footer">
+                        <div class="tour-progress">Step ${stepIndex + 1} of ${tourSteps.length}</div>
+                        <div class="tour-buttons">
+                            <button class="tour-btn tour-btn-skip" onclick="endTour()">Skip Tour</button>
+                            ${!isFirstStep ? '<button class="tour-btn tour-btn-prev" onclick="previousStep()">Previous</button>' : ''}
+                            <button class="tour-btn tour-btn-next" onclick="${isLastStep ? 'endTour()' : 'nextStep()'}">${isLastStep ? 'Finish' : 'Next'}</button>
+                        </div>
+                    </div>
+                `;
 
-  // Dropdown functionality
-  const resourcesToggle = document.querySelector(".resources-toggle");
-  const resourcesDropdown = document.querySelector(".nav-dropdown");
+                // Position tooltip
+                tourTooltip.style.display = 'block';
+                const tooltipRect = tourTooltip.getBoundingClientRect();
+                
+                if (step.position === 'bottom') {
+                    // Position below the element (for navbar items)
+                    tourTooltip.style.left = Math.max(20, rect.left + rect.width / 2 - tooltipRect.width / 2) + 'px';
+                    tourTooltip.style.top = (rect.bottom + 20) + 'px';
+                    
+                    // Ensure tooltip stays on screen horizontally
+                    const tooltipLeft = parseFloat(tourTooltip.style.left);
+                    if (tooltipLeft + tooltipRect.width > window.innerWidth - 20) {
+                        tourTooltip.style.left = (window.innerWidth - tooltipRect.width - 20) + 'px';
+                    }
+                } else if (step.position === 'right') {
+                    tourTooltip.style.left = (rect.right + 20) + 'px';
+                    tourTooltip.style.top = Math.max(20, rect.top - (tooltipRect.height - rect.height) / 2) + 'px';
+                } else {
+                    tourTooltip.style.left = Math.max(20, rect.left - tooltipRect.width - 20) + 'px';
+                    tourTooltip.style.top = Math.max(20, rect.top - (tooltipRect.height - rect.height) / 2) + 'px';
+                }
 
-  if (resourcesToggle) {
-    resourcesToggle.addEventListener("click", (e) => {
-      e.stopPropagation();
-      resourcesDropdown.classList.toggle("open");
-      document.querySelector(".user-dropdown")?.classList.remove("open");
-    });
-  }
+                // Ensure tooltip stays on screen
+                const tooltipBottom = tourTooltip.getBoundingClientRect().bottom;
+                if (tooltipBottom > window.innerHeight - 20) {
+                    tourTooltip.style.top = (window.innerHeight - tooltipRect.height - 20) + 'px';
+                }
+            }, 600);
+        }
 
-  const userToggle = document.querySelector(".user-toggle");
-  const userDropdown = document.querySelector(".user-dropdown");
+        function nextStep() {
+            currentStep++;
+            showStep(currentStep);
+        }
 
-  if (userToggle) {
-    userToggle.addEventListener("click", (e) => {
-      e.stopPropagation();
-      userDropdown.classList.toggle("open");
-      document.querySelector(".nav-dropdown")?.classList.remove("open");
-    });
-  }
+        function previousStep() {
+            currentStep--;
+            showStep(currentStep);
+        }
 
-  document.addEventListener("click", () => {
-    document.querySelector(".nav-dropdown")?.classList.remove("open");
-    document.querySelector(".user-dropdown")?.classList.remove("open");
-  });
+        // Event listeners
+        startTourBtn.addEventListener('click', startTour);
 
-  document.querySelectorAll(".resources-menu, .user-menu").forEach((menu) => {
-    menu.addEventListener("click", (e) => {
-      e.stopPropagation();
-    });
-  });
+        // Close tour on overlay click
+        tourOverlay.addEventListener('click', endTour);
 
-  // Platform tour link
-  const platformTourLink = document.querySelector(".platform-tour-link");
-  if (platformTourLink) {
-    platformTourLink.addEventListener("click", (e) => {
-      e.preventDefault();
-      document.querySelector(".nav-dropdown")?.classList.remove("open");
-      if (tour) {
-        tour.restart();
-      }
-    });
-  }
-});
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (!tourActive) return;
+            
+            if (e.key === 'Escape') {
+                endTour();
+            } else if (e.key === 'ArrowRight') {
+                nextStep();
+            } else if (e.key === 'ArrowLeft') {
+                previousStep();
+            }
+        });
 
-// Expose restart function
-function restartTour() {
-  if (tour) {
-    tour.restart();
-  }
-}
-</script>
+        // Auto-start tour after 2 seconds (optional - remove if not desired)
+        setTimeout(() => {
+            if (!sessionStorage.getItem('tourCompleted')) {
+                // Uncomment to auto-start: startTour();
+            }
+        }, 2000);
 
+        // Mark tour as completed when ended
+        const originalEndTour = endTour;
+        endTour = function() {
+            sessionStorage.setItem('tourCompleted', 'true');
+            originalEndTour();
+        };
+    </script>
 </body>
 </html>
