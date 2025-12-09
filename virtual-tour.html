@@ -367,10 +367,26 @@
             z-index: 9998;
             display: none;
             animation: fadeIn 0.3s;
+            pointer-events: all; /* Block all interactions */
         }
 
         .tour-overlay.active {
             display: block;
+        }
+
+        /* Block page interactions during tour */
+        body.tour-active {
+            overflow: hidden;
+        }
+
+        body.tour-active * {
+            pointer-events: none !important;
+        }
+
+        body.tour-active .tour-overlay,
+        body.tour-active .tour-tooltip,
+        body.tour-active .tour-tooltip * {
+            pointer-events: all !important;
         }
 
         @keyframes fadeIn {
@@ -383,7 +399,7 @@
             position: fixed;
             z-index: 9999;
             pointer-events: none;
-            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .tour-highlight::before {
@@ -420,7 +436,7 @@
             padding: 1.5rem;
             box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
             max-width: 400px;
-            animation: slideUp 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            animation: slideUp 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             pointer-events: all;
         }
 
@@ -634,6 +650,16 @@
             opacity: 0.6;
         }
 
+        /* Hover Shadow Effect */
+        .hover-shadow {
+            transition: box-shadow 0.3s, transform 0.3s;
+        }
+
+        .hover-shadow:hover {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            transform: translateY(-2px);
+        }
+
         /* Responsive */
         @media (max-width: 991px) {
             .start-tour-btn {
@@ -702,6 +728,8 @@
                             <li><a class="dropdown-item" href="#">🎓 Community Forum</a></li>
                             <li><a class="dropdown-item" href="#">📚 Learning Center</a></li>
                             <li><a class="dropdown-item" href="#">💬 Community Library</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="#" id="restart-tour-link">🎯 Platform Tour</a></li>
                         </ul>
                     </li>
                     <li class="nav-item dropdown" id="profile-dropdown">
@@ -733,7 +761,61 @@
             <div class="row g-4">
                 <!-- Left Column - Available Tasks -->
                 <div class="col-lg-8" id="available-tasks-section">
-                    <div class="sidebar-card">
+                    <!-- My Tasks Section -->
+                    <div class="sidebar-card mb-4" id="my-tasks-section">
+                        <div class="section-header">
+                            <h2 class="section-title">My Tasks</h2>
+                            <a href="#" class="section-link">
+                                Go to My Tasks <i class="fas fa-arrow-right"></i>
+                            </a>
+                        </div>
+
+                        <!-- My Task Items -->
+                        <div class="space-y-3">
+                            <div class="d-flex align-items-center justify-content-between p-3 rounded-3 shadow-sm border bg-white hover-shadow" style="transition: all 0.3s;">
+                                <div class="d-flex align-items-center">
+                                    <div class="me-3">
+                                        <img src="data:image/svg+xml,%3Csvg width='40' height='40' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='20' cy='20' r='20' fill='%23ED1C24'/%3E%3Ctext x='20' y='26' font-family='Arial' font-size='12' font-weight='bold' fill='white' text-anchor='middle'%3ETWB%3C/text%3E%3C/svg%3E" alt="Organisation logo" class="rounded-circle" width="40" height="40" />
+                                    </div>
+                                    <div>
+                                        <div class="fw-bold">
+                                            <a href="#" class="task-title" style="font-size: 1rem;">1 Kató big.docx</a>
+                                            <span class="task-badge translation" style="font-size: 0.7rem; padding: 0.25rem 0.6rem;">Translation</span>
+                                        </div>
+                                        <p class="text-muted small mb-0">English → French | (In Progress)</p>
+                                    </div>
+                                </div>
+                                <div class="text-end">
+                                    <p class="small fw-medium text-danger mb-0">
+                                        <i class="far fa-clock"></i> 2025-10-15 12:48:00
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div class="d-flex align-items-center justify-content-between p-3 rounded-3 shadow-sm border bg-white hover-shadow" style="transition: all 0.3s;">
+                                <div class="d-flex align-items-center">
+                                    <div class="me-3">
+                                        <img src="data:image/svg+xml,%3Csvg width='40' height='40' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='20' cy='20' r='20' fill='%23ED1C24'/%3E%3Ctext x='20' y='26' font-family='Arial' font-size='12' font-weight='bold' fill='white' text-anchor='middle'%3ETWB%3C/text%3E%3C/svg%3E" alt="Organisation logo" class="rounded-circle" width="40" height="40" />
+                                    </div>
+                                    <div>
+                                        <div class="fw-bold">
+                                            <a href="#" class="task-title" style="font-size: 1rem;">1 Kató big.docx</a>
+                                            <span class="task-badge revision" style="font-size: 0.7rem; padding: 0.25rem 0.6rem;">Revision</span>
+                                        </div>
+                                        <p class="text-muted small mb-0">English → French | (Claimed)</p>
+                                    </div>
+                                </div>
+                                <div class="text-end">
+                                    <p class="small fw-medium text-danger mb-0">
+                                        <i class="far fa-clock"></i> 2025-10-15 07:38:00
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Available Tasks Section -->
+                    <div class="sidebar-card" id="available-tasks-card">
                         <div class="section-header">
                             <h2 class="section-title">Available Tasks</h2>
                             <a href="#" class="section-link">
@@ -1006,7 +1088,7 @@
             {
                 element: '#resources-dropdown',
                 title: 'Resources Menu',
-                content: 'Access important resources through this dropdown menu. Find the Community Forum to ask questions and connect with other translators, the Learning Center for courses and training, and the Community Library for guidelines and reference materials.',
+                content: 'Access important resources through this dropdown menu. Find the Community Forum to ask questions and connect with other translators, the Learning Center for courses and training, the Community Library for guidelines and reference materials, and the Platform Tour to revisit this guided tour anytime.',
                 icon: '📚',
                 position: 'bottom'
             },
@@ -1018,7 +1100,14 @@
                 position: 'bottom'
             },
             {
-                element: '#available-tasks-section',
+                element: '#my-tasks-section',
+                title: 'My Tasks',
+                content: 'This section displays all the tasks you have claimed or are currently working on. You can see the task status (In Progress, Claimed, etc.), language pairs, and deadlines. Click "Go to My Tasks" to view your complete task list.',
+                icon: '📌',
+                position: 'right'
+            },
+            {
+                element: '#available-tasks-card',
                 title: 'Available Tasks',
                 content: 'This is where you\'ll find all available translation and revision tasks. You can browse through tasks that match your language pairs and skills.',
                 icon: '📋',
@@ -1074,6 +1163,7 @@
             currentStep = 0;
             startTourBtn.style.display = 'none';
             tourOverlay.classList.add('active');
+            document.body.classList.add('tour-active'); // Block page interactions
             showStep(currentStep);
         }
 
@@ -1083,6 +1173,8 @@
             tourHighlight.style.display = 'none';
             tourTooltip.style.display = 'none';
             startTourBtn.style.display = 'flex';
+            document.body.classList.remove('tour-active'); // Re-enable page interactions
+            sessionStorage.setItem('tourCompleted', 'true');
             window.location.href = "https://twbplatform.org";
         }
 
@@ -1094,7 +1186,7 @@
 
             const step = tourSteps[stepIndex];
             const element = document.querySelector(step.element);
-            
+
             if (!element) {
                 console.error('Element not found:', step.element);
                 return;
@@ -1104,8 +1196,10 @@
             element.scrollIntoView({ behavior: 'smooth', block: 'center' });
 
             setTimeout(() => {
-                // Position highlight
+                // Get fresh positioning after scroll
                 const rect = element.getBoundingClientRect();
+
+                // Position highlight
                 tourHighlight.style.display = 'block';
                 tourHighlight.style.top = rect.top + 'px';
                 tourHighlight.style.left = rect.left + 'px';
@@ -1125,7 +1219,7 @@
                     <div class="tour-tooltip-footer">
                         <div class="tour-progress">Step ${stepIndex + 1} of ${tourSteps.length}</div>
                         <div class="tour-buttons">
-                            <button class="tour-btn tour-btn-skip" onclick="endTour()">Skip Tour</button>
+                            <button class="tour-btn tour-btn-skip" onclick="skipTourWithConfirmation()">Skip Tour</button>
                             ${!isFirstStep ? '<button class="tour-btn tour-btn-prev" onclick="previousStep()">Previous</button>' : ''}
                             <button class="tour-btn tour-btn-next" onclick="${isLastStep ? 'endTour()' : 'nextStep()'}">${isLastStep ? 'Finish' : 'Next'}</button>
                         </div>
@@ -1134,32 +1228,55 @@
 
                 // Position tooltip
                 tourTooltip.style.display = 'block';
-                const tooltipRect = tourTooltip.getBoundingClientRect();
-                
-                if (step.position === 'bottom') {
-                    // Position below the element (for navbar items)
-                    tourTooltip.style.left = Math.max(20, rect.left + rect.width / 2 - tooltipRect.width / 2) + 'px';
-                    tourTooltip.style.top = (rect.bottom + 20) + 'px';
-                    
-                    // Ensure tooltip stays on screen horizontally
-                    const tooltipLeft = parseFloat(tourTooltip.style.left);
-                    if (tooltipLeft + tooltipRect.width > window.innerWidth - 20) {
-                        tourTooltip.style.left = (window.innerWidth - tooltipRect.width - 20) + 'px';
-                    }
-                } else if (step.position === 'right') {
-                    tourTooltip.style.left = (rect.right + 20) + 'px';
-                    tourTooltip.style.top = Math.max(20, rect.top - (tooltipRect.height - rect.height) / 2) + 'px';
-                } else {
-                    tourTooltip.style.left = Math.max(20, rect.left - tooltipRect.width - 20) + 'px';
-                    tourTooltip.style.top = Math.max(20, rect.top - (tooltipRect.height - rect.height) / 2) + 'px';
-                }
 
-                // Ensure tooltip stays on screen
-                const tooltipBottom = tourTooltip.getBoundingClientRect().bottom;
-                if (tooltipBottom > window.innerHeight - 20) {
-                    tourTooltip.style.top = (window.innerHeight - tooltipRect.height - 20) + 'px';
-                }
-            }, 600);
+                // Small delay to ensure tooltip is rendered and we can get its dimensions
+                setTimeout(() => {
+                    const tooltipRect = tourTooltip.getBoundingClientRect();
+                    const viewportWidth = window.innerWidth;
+                    const viewportHeight = window.innerHeight;
+
+                    let tooltipLeft, tooltipTop;
+
+                    if (step.position === 'bottom') {
+                        // Position below the element (for navbar items)
+                        tooltipLeft = Math.max(20, Math.min(
+                            rect.left + rect.width / 2 - tooltipRect.width / 2,
+                            viewportWidth - tooltipRect.width - 20
+                        ));
+                        tooltipTop = rect.bottom + 20;
+
+                        // If tooltip goes off bottom of screen, position above instead
+                        if (tooltipTop + tooltipRect.height > viewportHeight - 20) {
+                            tooltipTop = Math.max(20, rect.top - tooltipRect.height - 20);
+                        }
+                    } else if (step.position === 'right') {
+                        tooltipLeft = rect.right + 20;
+                        tooltipTop = rect.top + rect.height / 2 - tooltipRect.height / 2;
+
+                        // If tooltip goes off right of screen, position on left instead
+                        if (tooltipLeft + tooltipRect.width > viewportWidth - 20) {
+                            tooltipLeft = Math.max(20, rect.left - tooltipRect.width - 20);
+                        }
+
+                        // Ensure tooltip stays vertically within viewport
+                        tooltipTop = Math.max(20, Math.min(tooltipTop, viewportHeight - tooltipRect.height - 20));
+                    } else { // left
+                        tooltipLeft = rect.left - tooltipRect.width - 20;
+                        tooltipTop = rect.top + rect.height / 2 - tooltipRect.height / 2;
+
+                        // If tooltip goes off left of screen, position on right instead
+                        if (tooltipLeft < 20) {
+                            tooltipLeft = rect.right + 20;
+                        }
+
+                        // Ensure tooltip stays vertically within viewport
+                        tooltipTop = Math.max(20, Math.min(tooltipTop, viewportHeight - tooltipRect.height - 20));
+                    }
+
+                    tourTooltip.style.left = tooltipLeft + 'px';
+                    tourTooltip.style.top = tooltipTop + 'px';
+                }, 10);
+            }, 400);
         }
 
         function nextStep() {
@@ -1172,11 +1289,39 @@
             showStep(currentStep);
         }
 
+        function skipTourWithConfirmation() {
+            if (confirm('Are you sure you want to skip the tour? You can access it anytime from the Resources menu under "Platform Tour".')) {
+                endTour();
+            }
+        }
+
         // Event listeners
         startTourBtn.addEventListener('click', startTour);
 
-        // Close tour on overlay click
-        tourOverlay.addEventListener('click', endTour);
+        // Platform Tour link in Resources dropdown
+        const restartTourLink = document.getElementById('restart-tour-link');
+        if (restartTourLink) {
+            restartTourLink.addEventListener('click', (e) => {
+                e.preventDefault();
+                // Close the dropdown
+                const dropdown = bootstrap.Dropdown.getInstance(document.querySelector('#resources-dropdown .dropdown-toggle'));
+                if (dropdown) dropdown.hide();
+                // Start tour
+                sessionStorage.removeItem('tourCompleted');
+                startTour();
+            });
+        }
+
+        // Handle window resize/zoom - reposition tour elements
+        let resizeTimeout;
+        window.addEventListener('resize', () => {
+            if (tourActive && currentStep >= 0) {
+                clearTimeout(resizeTimeout);
+                resizeTimeout = setTimeout(() => {
+                    showStep(currentStep);
+                }, 100);
+            }
+        });
 
         // Keyboard navigation
         document.addEventListener('keydown', (e) => {
@@ -1191,19 +1336,23 @@
             }
         });
 
-        // Auto-start tour after 2 seconds (optional - remove if not desired)
-        setTimeout(() => {
+        // Auto-start tour on first visit
+        window.addEventListener('load', () => {
             if (!sessionStorage.getItem('tourCompleted')) {
-                // Uncomment to auto-start: startTour();
+                setTimeout(() => {
+                    startTour();
+                }, 800); // Start after 0.8 seconds
             }
-        }, 2000);
+        });
 
-        // Mark tour as completed when ended
-        const originalEndTour = endTour;
-        endTour = function() {
-            sessionStorage.setItem('tourCompleted', 'true');
-            originalEndTour();
-        };
+        // Close tour on overlay click
+        tourOverlay.addEventListener('click', (e) => {
+            if (e.target === tourOverlay) {
+                if (confirm('Are you sure you want to skip the tour? You can access it anytime from the Resources menu.')) {
+                    endTour();
+                }
+            }
+        });
     </script>
 </body>
 </html>
