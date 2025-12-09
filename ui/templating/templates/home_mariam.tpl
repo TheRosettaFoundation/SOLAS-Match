@@ -53,8 +53,8 @@
                                     {assign var="task_id" value=$task->getId()}
                                     {assign var="type_id" value=$task->getTaskType()}
                                     {assign var="status_id" value=$task->getTaskStatus()}
-                                    {if mb_strlen($task->getTitle()) > 38}
-                                        {assign var="task_title" value=TemplateHelper::uiCleanseHTMLNewlineAndTabs(mb_substr($task->getTitle(), 0, 38))}
+                                    {if mb_strlen($task->getTitle()) > 37}
+                                        {assign var="task_title" value=TemplateHelper::uiCleanseHTMLNewlineAndTabs(mb_substr($task->getTitle(), 0, 37))}
                                         {assign var="task_title" value="`$task_title`..."}
                                     {else}
                                         {assign var="task_title" value=TemplateHelper::uiCleanseHTMLNewlineAndTabs($task->getTitle())}
@@ -111,8 +111,8 @@
                                 {foreach from=$tasks item=task}
                                     {assign var="task_id" value=$task->getId()}
                                     {assign var="type_id" value=$task->getTaskType()}
-                                    {if mb_strlen($task->getTitle()) > 38}
-                                        {assign var="task_title" value=TemplateHelper::uiCleanseHTMLNewlineAndTabs(mb_substr($task->getTitle(), 0, 38))}
+                                    {if mb_strlen($task->getTitle()) > 37}
+                                        {assign var="task_title" value=TemplateHelper::uiCleanseHTMLNewlineAndTabs(mb_substr($task->getTitle(), 0, 37))}
                                         {assign var="task_title" value="`$task_title`..."}
                                     {else}
                                         {assign var="task_title" value=TemplateHelper::uiCleanseHTMLNewlineAndTabs($task->getTitle())}
