@@ -56,7 +56,7 @@
             {if !empty($image)}
             <img src="data:image/jpeg;base64,{$image}" alt="{$alt}" alt="{$alt}" class="w-100 mt-4 rounded-3 object-fit-cover" />
             {else}
-            <img src="https://placehold.co/702x468/{$col}/ffffff?text={$txt}" alt="{$alt}" class="w-100 mt-4 rounded-3 object-fit-cover" />
+<!--            <img src="https://placehold.co/702x468/{$col}/ffffff?text={$txt}" alt="{$alt}" class="w-100 mt-4 rounded-3 object-fit-cover" /> -->
             {/if}
         </div>
 
