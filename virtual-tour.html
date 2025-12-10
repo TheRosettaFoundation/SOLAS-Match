@@ -1,0 +1,1352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TWB Platform Tour - Translators without Borders</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --twb-orange: #F89728;
+            --twb-blue: #1064C4;
+            --twb-green: #1D8A11;
+            --twb-red: #ED1C24;
+            --twb-accent: #F89728;
+            --core-blue: #1064C4;
+            --text-dark: #2C3E50;
+            --bg-light: #F8F9FA;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f5f5;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Navigation */
+        .navbar {
+            background: white !important;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            padding: 0.75rem 0;
+        }
+
+        .navbar-brand img {
+            height: 40px;
+        }
+
+        .nav-link {
+            color: #333 !important;
+            font-weight: 600;
+            font-size: 1rem;
+            padding: 0.5rem 1rem !important;
+            transition: color 0.3s;
+        }
+
+        .nav-link:hover {
+            color: var(--twb-orange) !important;
+        }
+
+        .nav-link.active {
+            color: var(--twb-orange) !important;
+        }
+
+        /* Profile Section */
+        .profile-section {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .profile-section img {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+        }
+
+        .theme-toggle {
+            cursor: pointer;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: background 0.3s;
+        }
+
+        .theme-toggle:hover {
+            background: #f0f0f0;
+        }
+
+        /* Main Content */
+        main {
+            flex: 1;
+            padding: 2rem 0;
+        }
+
+        /* Task Cards */
+        .task-card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            border: 1px solid #e0e0e0;
+            border-left: 4px solid var(--twb-orange);
+            transition: transform 0.3s, box-shadow 0.3s;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .task-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+        }
+
+        .task-badge {
+            display: inline-block;
+            padding: 0.35rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: white;
+            margin-right: 0.5rem;
+        }
+
+        .task-badge.revision {
+            background: var(--twb-blue);
+        }
+
+        .task-badge.translation {
+            background: var(--twb-green);
+        }
+
+        .word-count-badge {
+            background: #f0f0f0;
+            color: #333;
+            padding: 0.35rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .task-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin: 0.75rem 0;
+            text-decoration: none;
+        }
+
+        .task-title:hover {
+            color: var(--twb-blue);
+        }
+
+        .org-logo {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        .task-meta {
+            color: #666;
+            font-size: 0.9rem;
+            margin: 0.5rem 0;
+        }
+
+        .task-deadline {
+            color: #dc3545;
+            font-size: 0.875rem;
+            font-weight: 600;
+            margin: 0.5rem 0;
+        }
+
+        .btn-view-task {
+            background: var(--twb-blue);
+            color: white;
+            padding: 0.625rem 1.5rem;
+            border-radius: 6px;
+            border: none;
+            font-weight: 600;
+            transition: background 0.3s;
+            text-decoration: none;
+            display: inline-block;
+            margin-top: auto;
+        }
+
+        .btn-view-task:hover {
+            background: #0d4fa3;
+            color: white;
+        }
+
+        /* Section Headers */
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid #e0e0e0;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin: 0;
+        }
+
+        .section-link {
+            color: var(--twb-blue);
+            text-decoration: none;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: gap 0.3s;
+        }
+
+        .section-link:hover {
+            gap: 0.75rem;
+        }
+
+        /* Sidebar Cards */
+        .sidebar-card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border: 1px solid #e0e0e0;
+            border-top: 4px solid var(--twb-blue);
+        }
+
+        .news-item {
+            padding: 1rem 0;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .news-item:last-child {
+            border-bottom: none;
+        }
+
+        .news-item a {
+            text-decoration: none;
+            color: var(--text-dark);
+            display: flex;
+            align-items: start;
+            gap: 0.75rem;
+            transition: background 0.3s;
+            padding: 0.5rem;
+            border-radius: 6px;
+        }
+
+        .news-item a:hover {
+            background: #f8f9fa;
+        }
+
+        .news-icon {
+            font-size: 1.25rem;
+            flex-shrink: 0;
+        }
+
+        .news-title {
+            font-weight: 600;
+            font-size: 1rem;
+            margin: 0;
+        }
+
+        .news-date {
+            color: #666;
+            font-size: 0.875rem;
+            margin: 0;
+        }
+
+        /* Survey & Feedback Cards */
+        .action-card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border: 1px solid #e0e0e0;
+            border-top: 4px solid var(--twb-orange);
+        }
+
+        .action-card h3 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .action-card p {
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .btn-action {
+            background: var(--twb-orange);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 25px;
+            border: none;
+            font-weight: 600;
+            transition: background 0.3s, transform 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+        }
+
+        .btn-action:hover {
+            background: #e07d1a;
+            transform: translateY(-2px);
+            color: white;
+        }
+
+        /* Footer */
+        footer {
+            background: white;
+            margin-top: 3rem;
+            padding: 2rem 0 0;
+        }
+
+        .footer-bottom {
+            background: var(--twb-blue);
+            color: white;
+            padding: 1.5rem 0;
+            margin-top: 2rem;
+        }
+
+        .footer-bottom a {
+            color: white;
+            text-decoration: none;
+            transition: opacity 0.3s;
+        }
+
+        .footer-bottom a:hover {
+            opacity: 0.8;
+        }
+
+        .social-links {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .social-links img {
+            width: 24px;
+            height: 24px;
+            transition: transform 0.3s;
+        }
+
+        .social-links img:hover {
+            transform: scale(1.2);
+        }
+
+        /* Virtual Tour Overlay */
+        .tour-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 9998;
+            display: none;
+            animation: fadeIn 0.3s;
+            pointer-events: all; /* Block all interactions */
+        }
+
+        .tour-overlay.active {
+            display: block;
+        }
+
+        /* Block page interactions during tour */
+        body.tour-active {
+            overflow: hidden;
+        }
+
+        body.tour-active * {
+            pointer-events: none !important;
+        }
+
+        body.tour-active .tour-overlay,
+        body.tour-active .tour-tooltip,
+        body.tour-active .tour-tooltip * {
+            pointer-events: all !important;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* Tour Highlight */
+        .tour-highlight {
+            position: fixed;
+            z-index: 9999;
+            pointer-events: none;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .tour-highlight::before {
+            content: '';
+            position: absolute;
+            top: -8px;
+            left: -8px;
+            right: -8px;
+            bottom: -8px;
+            border: 3px solid var(--twb-orange);
+            border-radius: 12px;
+            box-shadow: 0 0 0 4px rgba(248, 151, 40, 0.3),
+                        0 0 30px rgba(248, 151, 40, 0.5);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                box-shadow: 0 0 0 4px rgba(248, 151, 40, 0.3),
+                            0 0 30px rgba(248, 151, 40, 0.5);
+            }
+            50% {
+                box-shadow: 0 0 0 8px rgba(248, 151, 40, 0.2),
+                            0 0 40px rgba(248, 151, 40, 0.6);
+            }
+        }
+
+        /* Tour Tooltip */
+        .tour-tooltip {
+            position: fixed;
+            z-index: 10000;
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            max-width: 400px;
+            animation: slideUp 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            pointer-events: all;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .tour-tooltip-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+        }
+
+        .tour-tooltip-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--twb-orange), var(--twb-blue));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.25rem;
+            flex-shrink: 0;
+        }
+
+        .tour-tooltip-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin: 0;
+        }
+
+        .tour-tooltip-content {
+            color: #666;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+
+        .tour-tooltip-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .tour-progress {
+            color: #999;
+            font-size: 0.875rem;
+            font-weight: 600;
+        }
+
+        .tour-buttons {
+            display: flex;
+            gap: 0.75rem;
+        }
+
+        .tour-btn {
+            padding: 0.625rem 1.25rem;
+            border-radius: 6px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.9rem;
+        }
+
+        .tour-btn-skip {
+            background: #f0f0f0;
+            color: #666;
+        }
+
+        .tour-btn-skip:hover {
+            background: #e0e0e0;
+        }
+
+        .tour-btn-prev {
+            background: #f0f0f0;
+            color: var(--twb-blue);
+        }
+
+        .tour-btn-prev:hover {
+            background: #e0e0e0;
+        }
+
+        .tour-btn-next {
+            background: var(--twb-orange);
+            color: white;
+        }
+
+        .tour-btn-next:hover {
+            background: #e07d1a;
+            transform: translateX(2px);
+        }
+
+        /* Start Tour Button */
+        .start-tour-btn {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: linear-gradient(135deg, var(--twb-orange), var(--twb-blue));
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            border: none;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            transition: all 0.3s;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        .start-tour-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4);
+            animation: none;
+        }
+
+        .start-tour-btn i {
+            font-size: 1.25rem;
+        }
+
+        /* Browse All Tasks Button */
+        .btn-browse-all {
+            background: white;
+            border: 2px solid var(--twb-blue);
+            color: var(--twb-blue);
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s;
+        }
+
+        .btn-browse-all:hover {
+            background: var(--twb-blue);
+            color: white;
+        }
+
+        /* View All Buttons */
+        .btn-view-all {
+            width: 100%;
+            background: white;
+            border: 2px solid var(--twb-blue);
+            color: var(--twb-blue);
+            padding: 0.75rem;
+            border-radius: 8px;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+            transition: all 0.3s;
+        }
+
+        .btn-view-all:hover {
+            background: var(--twb-blue);
+            color: white;
+        }
+
+        /* Resources List */
+        .resources-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .resources-list li {
+            padding: 0.75rem 0;
+        }
+
+        .resources-list a {
+            text-decoration: none;
+            color: var(--text-dark);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 600;
+            transition: color 0.3s;
+        }
+
+        .resources-list a:hover {
+            color: var(--twb-blue);
+        }
+
+        .resources-list a::before {
+            content: '→';
+            color: var(--twb-blue);
+            opacity: 0.6;
+        }
+
+        /* Hover Shadow Effect */
+        .hover-shadow {
+            transition: box-shadow 0.3s, transform 0.3s;
+        }
+
+        .hover-shadow:hover {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            transform: translateY(-2px);
+        }
+
+        /* Responsive */
+        @media (max-width: 991px) {
+            .start-tour-btn {
+                bottom: 1rem;
+                right: 1rem;
+                padding: 0.875rem 1.5rem;
+                font-size: 0.9rem;
+            }
+
+            .tour-tooltip {
+                max-width: 90%;
+                left: 5% !important;
+                right: 5% !important;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .task-card {
+                margin-bottom: 1rem;
+            }
+
+            .tour-tooltip-footer {
+                flex-direction: column;
+                gap: 0.75rem;
+            }
+
+            .tour-buttons {
+                width: 100%;
+            }
+
+            .tour-btn {
+                flex: 1;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 50'%3E%3Ctext x='10' y='35' font-family='Arial, sans-serif' font-size='24' font-weight='bold' fill='%23F89728'%3ETranslators%3C/text%3E%3Ctext x='10' y='48' font-family='Arial, sans-serif' font-size='10' fill='%23333'%3Ewithout Borders%3C/text%3E%3C/svg%3E" alt="Translators without Borders">
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto align-items-center">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">My Tasks</a>
+                    </li>
+                    <li class="nav-item dropdown" id="resources-dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                            Resources
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="#">🎓 Community Forum</a></li>
+                            <li><a class="dropdown-item" href="#">📚 Learning Center</a></li>
+                            <li><a class="dropdown-item" href="#">💬 Community Library</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="#" id="restart-tour-link">🎯 Platform Tour</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item dropdown" id="profile-dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                            <div class="profile-section">
+                                <img src="https://www.gravatar.com/avatar/b47accd9b56ed83428ff9ae17b6a3637?s=32&r=g" alt="Profile">
+                                <span class="fw-semibold">sarah.martinez</span>
+                            </div>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="#">👤 Profile</a></li>
+                            <li><a class="dropdown-item" href="#">📋 My Tasks</a></li>
+                            <li><a class="dropdown-item" href="#">🚪 Log out</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item" id="theme-toggle-section">
+                        <div class="theme-toggle">
+                            <i class="fas fa-sun"></i>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main>
+        <div class="container">
+            <div class="row g-4">
+                <!-- Left Column - Available Tasks -->
+                <div class="col-lg-8" id="available-tasks-section">
+                    <!-- My Tasks Section -->
+                    <div class="sidebar-card mb-4" id="my-tasks-section">
+                        <div class="section-header">
+                            <h2 class="section-title">My Tasks</h2>
+                            <a href="#" class="section-link">
+                                Go to My Tasks <i class="fas fa-arrow-right"></i>
+                            </a>
+                        </div>
+
+                        <!-- My Task Items -->
+                        <div class="space-y-3">
+                            <div class="d-flex align-items-center justify-content-between p-3 rounded-3 shadow-sm border bg-white hover-shadow" style="transition: all 0.3s;">
+                                <div class="d-flex align-items-center">
+                                    <div class="me-3">
+                                        <img src="data:image/svg+xml,%3Csvg width='40' height='40' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='20' cy='20' r='20' fill='%23ED1C24'/%3E%3Ctext x='20' y='26' font-family='Arial' font-size='12' font-weight='bold' fill='white' text-anchor='middle'%3ETWB%3C/text%3E%3C/svg%3E" alt="Organisation logo" class="rounded-circle" width="40" height="40" />
+                                    </div>
+                                    <div>
+                                        <div class="fw-bold">
+                                            <a href="#" class="task-title" style="font-size: 1rem;">UNHCR Emergency Response Guide.docx</a>
+                                            <span class="task-badge translation" style="font-size: 0.7rem; padding: 0.25rem 0.6rem;">Translation</span>
+                                        </div>
+                                        <p class="text-muted small mb-0">English → French | (In Progress)</p>
+                                    </div>
+                                </div>
+                                <div class="text-end">
+                                    <p class="small fw-medium text-danger mb-0">
+                                        <i class="far fa-clock"></i> 2025-10-15 12:48:00
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div class="d-flex align-items-center justify-content-between p-3 rounded-3 shadow-sm border bg-white hover-shadow" style="transition: all 0.3s;">
+                                <div class="d-flex align-items-center">
+                                    <div class="me-3">
+                                        <img src="data:image/svg+xml,%3Csvg width='40' height='40' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='20' cy='20' r='20' fill='%23ED1C24'/%3E%3Ctext x='20' y='26' font-family='Arial' font-size='12' font-weight='bold' fill='white' text-anchor='middle'%3ETWB%3C/text%3E%3C/svg%3E" alt="Organisation logo" class="rounded-circle" width="40" height="40" />
+                                    </div>
+                                    <div>
+                                        <div class="fw-bold">
+                                            <a href="#" class="task-title" style="font-size: 1rem;">WHO Health Guidelines 2024.pdf</a>
+                                            <span class="task-badge revision" style="font-size: 0.7rem; padding: 0.25rem 0.6rem;">Revision</span>
+                                        </div>
+                                        <p class="text-muted small mb-0">English → French | (Claimed)</p>
+                                    </div>
+                                </div>
+                                <div class="text-end">
+                                    <p class="small fw-medium text-danger mb-0">
+                                        <i class="far fa-clock"></i> 2025-10-15 07:38:00
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Available Tasks Section -->
+                    <div class="sidebar-card" id="available-tasks-card">
+                        <div class="section-header">
+                            <h2 class="section-title">Available Tasks</h2>
+                            <a href="#" class="section-link">
+                                Browse All Tasks <i class="fas fa-arrow-right"></i>
+                            </a>
+                        </div>
+
+                        <!-- Task Cards Grid -->
+                        <div class="row g-3 mb-4">
+                            <!-- Task Card 1 -->
+                            <div class="col-md-6" id="task-card-1">
+                                <div class="task-card">
+                                    <div class="d-flex justify-content-between align-items-start mb-2">
+                                        <div class="flex-grow-1">
+                                            <div class="mb-2">
+                                                <span class="task-badge revision">Revision</span>
+                                                <span class="word-count-badge">2847 words</span>
+                                            </div>
+                                            <h5 class="task-title">
+                                                <a href="#" class="task-title">Red Cross Disaster Preparedness Manual.docx</a>
+                                            </h5>
+                                        </div>
+                                        <img src="data:image/svg+xml,%3Csvg width='40' height='40' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='20' cy='20' r='20' fill='%23ED1C24'/%3E%3Ctext x='20' y='26' font-family='Arial' font-size='12' font-weight='bold' fill='white' text-anchor='middle'%3ETWB%3C/text%3E%3C/svg%3E" alt="TWB" class="org-logo">
+                                    </div>
+                                    <p class="task-meta">
+                                        <strong>Languages:</strong> English, US → Arabic, Modern Standard
+                                    </p>
+                                    <p class="task-deadline">
+                                        <i class="far fa-clock"></i> Deadline: 2025-10-10 02:38:00
+                                    </p>
+                                    <a href="#" class="btn-view-task">View Task</a>
+                                </div>
+                            </div>
+
+                            <!-- Task Card 2 -->
+                            <div class="col-md-6">
+                                <div class="task-card">
+                                    <div class="d-flex justify-content-between align-items-start mb-2">
+                                        <div class="flex-grow-1">
+                                            <div class="mb-2">
+                                                <span class="task-badge translation">Translation</span>
+                                                <span class="word-count-badge">1523 words</span>
+                                            </div>
+                                            <h5 class="task-title">
+                                                <a href="#" class="task-title">UNICEF Education Program Report.pdf</a>
+                                            </h5>
+                                        </div>
+                                        <img src="data:image/svg+xml,%3Csvg width='40' height='40' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='20' cy='20' r='20' fill='%23ED1C24'/%3E%3Ctext x='20' y='26' font-family='Arial' font-size='12' font-weight='bold' fill='white' text-anchor='middle'%3ETWB%3C/text%3E%3C/svg%3E" alt="TWB" class="org-logo">
+                                    </div>
+                                    <p class="task-meta">
+                                        <strong>Languages:</strong> English, US → Chinese Simplified
+                                    </p>
+                                    <p class="task-deadline">
+                                        <i class="far fa-clock"></i> Deadline: 2025-10-07 07:44:00
+                                    </p>
+                                    <a href="#" class="btn-view-task">View Task</a>
+                                </div>
+                            </div>
+
+                            <!-- Task Card 3 -->
+                            <div class="col-md-6">
+                                <div class="task-card">
+                                    <div class="d-flex justify-content-between align-items-start mb-2">
+                                        <div class="flex-grow-1">
+                                            <div class="mb-2">
+                                                <span class="task-badge translation">Translation</span>
+                                                <span class="word-count-badge">3201 words</span>
+                                            </div>
+                                            <h5 class="task-title">
+                                                <a href="#" class="task-title">MSF Medical Protocol Guidelines.docx</a>
+                                            </h5>
+                                        </div>
+                                        <img src="data:image/svg+xml,%3Csvg width='40' height='40' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='20' cy='20' r='20' fill='%23ED1C24'/%3E%3Ctext x='20' y='26' font-family='Arial' font-size='12' font-weight='bold' fill='white' text-anchor='middle'%3ETWB%3C/text%3E%3C/svg%3E" alt="TWB" class="org-logo">
+                                    </div>
+                                    <p class="task-meta">
+                                        <strong>Languages:</strong> English, US → Bengali, India
+                                    </p>
+                                    <p class="task-deadline">
+                                        <i class="far fa-clock"></i> Deadline: 2025-10-07 07:44:00
+                                    </p>
+                                    <a href="#" class="btn-view-task">View Task</a>
+                                </div>
+                            </div>
+
+                            <!-- Task Card 4 -->
+                            <div class="col-md-6">
+                                <div class="task-card">
+                                    <div class="d-flex justify-content-between align-items-start mb-2">
+                                        <div class="flex-grow-1">
+                                            <div class="mb-2">
+                                                <span class="task-badge translation">Translation</span>
+                                                <span class="word-count-badge">896 words</span>
+                                            </div>
+                                            <h5 class="task-title">
+                                                <a href="#" class="task-title">Save the Children Annual Report 2024.pdf</a>
+                                            </h5>
+                                        </div>
+                                        <img src="data:image/svg+xml,%3Csvg width='40' height='40' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='20' cy='20' r='20' fill='%23ED1C24'/%3E%3Ctext x='20' y='26' font-family='Arial' font-size='12' font-weight='bold' fill='white' text-anchor='middle'%3ETWB%3C/text%3E%3C/svg%3E" alt="TWB" class="org-logo">
+                                    </div>
+                                    <p class="task-meta">
+                                        <strong>Languages:</strong> English, US → Chinese Simplified
+                                    </p>
+                                    <p class="task-deadline">
+                                        <i class="far fa-clock"></i> Deadline: 2025-10-07 07:42:00
+                                    </p>
+                                    <a href="#" class="btn-view-task">View Task</a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="text-center">
+                            <a href="#" class="btn-browse-all">View More Available Tasks</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Column - Sidebar -->
+                <div class="col-lg-4">
+                    <!-- News & Updates -->
+                    <div class="sidebar-card" id="news-section">
+                        <div class="section-header" style="border-bottom: none;">
+                            <h3 class="section-title" style="font-size: 1.25rem;">
+                                <span style="margin-right: 0.5rem;">📰</span> News & Updates
+                            </h3>
+                        </div>
+                        <div>
+                            <div class="news-item">
+                                <a href="#">
+                                    <span class="news-icon">🗞</span>
+                                    <div>
+                                        <p class="news-title">New Language Pairs Added: Hausa and Tigrinya</p>
+                                        <p class="news-date">• 2025-11-30</p>
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="news-item">
+                                <a href="#">
+                                    <span class="news-icon">📊</span>
+                                    <div>
+                                        <p class="news-title">Q4 2024 Translation Impact Report</p>
+                                        <p class="news-date">• 2025-11-30</p>
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="news-item">
+                                <a href="#">
+                                    <span class="news-icon">💡</span>
+                                    <div>
+                                        <p class="news-title">Translation Best Practices - Dec 15</p>
+                                        <p class="news-date">• 2025-11-30</p>
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="news-item">
+                                <a href="#">
+                                    <span class="news-icon">📰</span>
+                                    <div>
+                                        <p class="news-title">TWB Monthly Newsletter - December 2024</p>
+                                        <p class="news-date">• 2025-11-30</p>
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="news-item">
+                                <a href="#">
+                                    <span class="news-icon">🗞</span>
+                                    <div>
+                                        <p class="news-title">Celebrating 100,000 Words Translated This Month</p>
+                                        <p class="news-date">• 2025-11-20</p>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                        <a href="#" class="btn-view-all mt-3">
+                            View All News <i class="fas fa-arrow-right ms-1"></i>
+                        </a>
+                    </div>
+
+                    <!-- Resources & Tools -->
+                    <div class="sidebar-card" id="resources-section">
+                        <div class="section-header" style="border-bottom: none;">
+                            <h3 class="section-title" style="font-size: 1.25rem;">
+                                <span style="margin-right: 0.5rem;">📖</span> Resources & Tools
+                            </h3>
+                        </div>
+                        <ul class="resources-list">
+                            <li>
+                                <a href="#">Style Guide for Humanitarian Translation</a>
+                            </li>
+                        </ul>
+                        <a href="#" class="btn-view-all mt-3">
+                            View All Resources <i class="fas fa-arrow-right ms-1"></i>
+                        </a>
+                    </div>
+
+                    <!-- Community Survey -->
+                    <div class="action-card" id="survey-section">
+                        <h3>
+                            <span style="width: 40px; height: 40px; background: rgba(16, 100, 196, 0.1); border-radius: 50%; display: inline-flex; align-items: center; justify-content: center;">💬</span>
+                            Community Survey
+                        </h3>
+                        <p>We want to hear from you! Take our annual Community Survey and help shape future opportunities and support for volunteers. It's anonymous and only takes 7–10 minutes.</p>
+                        <a href="#" class="btn-action">
+                            💡 Submit Response
+                        </a>
+                    </div>
+
+                    <!-- Feedback & Suggestions -->
+                    <div class="action-card" id="feedback-section">
+                        <h3>Feedback & Suggestions</h3>
+                        <p>Please share your feedback with our team to help fix any issues and deliver a better experience to our community.</p>
+                        <a href="#" class="btn-action">
+                            💡 Submit Feedback
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container text-center py-4">
+            <p class="mb-2">Maintained by <a href="#" style="color: var(--twb-orange); text-decoration: none;">Translators without Borders</a></p>
+            <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='48' viewBox='0 0 100 48'%3E%3Ctext x='10' y='30' font-family='Arial, sans-serif' font-size='24' font-weight='bold' fill='%23F89728'%3ESolas%3C/text%3E%3C/svg%3E" alt="Solas" style="height: 48px;">
+            <p class="mt-2">TWB Platform is powered by <a href="#" style="color: var(--twb-blue); text-decoration: none;">Solas</a></p>
+        </div>
+        <div class="footer-bottom">
+            <div class="container">
+                <div class="row align-items-center">
+                    <div class="col-md-4 mb-3 mb-md-0">
+                        <div class="social-links">
+                            <span>Follow Us:</span>
+                            <a href="#"><i class="fab fa-facebook"></i></a>
+                            <a href="#"><i class="fab fa-twitter"></i></a>
+                            <a href="#"><i class="fab fa-youtube"></i></a>
+                            <a href="#"><i class="fab fa-linkedin"></i></a>
+                            <a href="#"><i class="fab fa-instagram"></i></a>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-3 mb-md-0 text-center">
+                        <a href="#">Contact Us</a> | 
+                        <a href="#">Terms and Conditions</a> | 
+                        <a href="#">Privacy Policy</a>
+                    </div>
+                    <div class="col-md-4 text-md-end">
+                        <a href="#"><i class="fas fa-envelope me-2"></i>Subscribe To TWB Newsletter</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Tour Overlay -->
+    <div class="tour-overlay" id="tourOverlay"></div>
+    <div class="tour-highlight" id="tourHighlight"></div>
+    <div class="tour-tooltip" id="tourTooltip"></div>
+
+    <!-- Start Tour Button -->
+    <button class="start-tour-btn" id="startTourBtn">
+        <i class="fas fa-play-circle"></i>
+        Start Platform Tour
+    </button>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Tour Script -->
+    <script>
+        const tourSteps = [
+            {
+                element: '#resources-dropdown',
+                title: 'Resources Menu',
+                content: 'Access important resources through this dropdown menu. Find the Community Forum to ask questions and connect with other translators, the Learning Center for courses and training, the Community Library for guidelines and reference materials, and the Platform Tour to revisit this guided tour anytime.',
+                icon: '📚',
+                position: 'bottom'
+            },
+            {
+                element: '#profile-dropdown',
+                title: 'Profile & Account',
+                content: 'Click on your name to access your Profile settings, view My Tasks to see all your assigned work, or Log out when you\'re done. Next to your profile, you\'ll find the theme toggle button (sun/moon icon) to switch between light and dark mode.',
+                icon: '👤',
+                position: 'bottom'
+            },
+            {
+                element: '#my-tasks-section',
+                title: 'My Tasks',
+                content: 'This section displays all the tasks you have claimed or are currently working on. You can see the task status (In Progress, Claimed, etc.), language pairs, and deadlines. Click "Go to My Tasks" to view your complete task list.',
+                icon: '📌',
+                position: 'right'
+            },
+            {
+                element: '#available-tasks-card',
+                title: 'Available Tasks',
+                content: 'This is where you\'ll find all available translation and revision tasks. You can browse through tasks that match your language pairs and skills.',
+                icon: '📋',
+                position: 'right'
+            },
+            {
+                element: '#task-card-1',
+                title: 'Task Cards',
+                content: 'Each task card shows important information including the task type, word count, language pair, deadline, and organization. Click "View Task" to see more details or claim the task.',
+                icon: '📝',
+                position: 'right'
+            },
+            {
+                element: '#news-section',
+                title: 'News & Updates',
+                content: 'Stay informed with the latest news, reports, events, and newsletters from TWB. This section keeps you up-to-date with important announcements and community updates.',
+                icon: '📰',
+                position: 'left'
+            },
+            {
+                element: '#resources-section',
+                title: 'Resources & Tools',
+                content: 'Access helpful resources, guidelines, glossaries, and tools to support your translation work. These materials will help you deliver high-quality translations.',
+                icon: '📖',
+                position: 'left'
+            },
+            {
+                element: '#survey-section',
+                title: 'Community Survey',
+                content: 'Share your feedback and help shape the future of TWB! Your input helps us improve our platform and better support volunteers like you.',
+                icon: '💬',
+                position: 'left'
+            },
+            {
+                element: '#feedback-section',
+                title: 'Feedback & Suggestions',
+                content: 'Have ideas or encountered issues? Use this form to submit feedback directly to our team. We value your input and use it to continuously improve the platform.',
+                icon: '💡',
+                position: 'left'
+            }
+        ];
+
+        let currentStep = 0;
+        let tourActive = false;
+
+        const tourOverlay = document.getElementById('tourOverlay');
+        const tourHighlight = document.getElementById('tourHighlight');
+        const tourTooltip = document.getElementById('tourTooltip');
+        const startTourBtn = document.getElementById('startTourBtn');
+
+        function startTour() {
+            tourActive = true;
+            currentStep = 0;
+            startTourBtn.style.display = 'none';
+            tourOverlay.classList.add('active');
+            document.body.classList.add('tour-active'); // Block page interactions
+            showStep(currentStep);
+        }
+
+        function endTour() {
+            tourActive = false;
+            tourOverlay.classList.remove('active');
+            tourHighlight.style.display = 'none';
+            tourTooltip.style.display = 'none';
+            startTourBtn.style.display = 'flex';
+            document.body.classList.remove('tour-active'); // Re-enable page interactions
+            sessionStorage.setItem('tourCompleted', 'true');
+            window.location.href = "https://twbplatform.org";
+        }
+
+        function showStep(stepIndex) {
+            if (stepIndex < 0 || stepIndex >= tourSteps.length) {
+                endTour();
+                return;
+            }
+
+            const step = tourSteps[stepIndex];
+            const element = document.querySelector(step.element);
+
+            if (!element) {
+                console.error('Element not found:', step.element);
+                return;
+            }
+
+            // Scroll element into view
+            element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+            setTimeout(() => {
+                // Get fresh positioning after scroll
+                const rect = element.getBoundingClientRect();
+
+                // Position highlight
+                tourHighlight.style.display = 'block';
+                tourHighlight.style.top = rect.top + 'px';
+                tourHighlight.style.left = rect.left + 'px';
+                tourHighlight.style.width = rect.width + 'px';
+                tourHighlight.style.height = rect.height + 'px';
+
+                // Create tooltip content
+                const isLastStep = stepIndex === tourSteps.length - 1;
+                const isFirstStep = stepIndex === 0;
+
+                tourTooltip.innerHTML = `
+                    <div class="tour-tooltip-header">
+                        <div class="tour-tooltip-icon">${step.icon}</div>
+                        <h3 class="tour-tooltip-title">${step.title}</h3>
+                    </div>
+                    <div class="tour-tooltip-content">${step.content}</div>
+                    <div class="tour-tooltip-footer">
+                        <div class="tour-progress">Step ${stepIndex + 1} of ${tourSteps.length}</div>
+                        <div class="tour-buttons">
+                            <button class="tour-btn tour-btn-skip" onclick="skipTourWithConfirmation()">Skip Tour</button>
+                            ${!isFirstStep ? '<button class="tour-btn tour-btn-prev" onclick="previousStep()">Previous</button>' : ''}
+                            <button class="tour-btn tour-btn-next" onclick="${isLastStep ? 'endTour()' : 'nextStep()'}">${isLastStep ? 'Finish' : 'Next'}</button>
+                        </div>
+                    </div>
+                `;
+
+                // Position tooltip
+                tourTooltip.style.display = 'block';
+
+                // Small delay to ensure tooltip is rendered and we can get its dimensions
+                setTimeout(() => {
+                    const tooltipRect = tourTooltip.getBoundingClientRect();
+                    const viewportWidth = window.innerWidth;
+                    const viewportHeight = window.innerHeight;
+
+                    let tooltipLeft, tooltipTop;
+
+                    if (step.position === 'bottom') {
+                        // Position below the element (for navbar items)
+                        tooltipLeft = Math.max(20, Math.min(
+                            rect.left + rect.width / 2 - tooltipRect.width / 2,
+                            viewportWidth - tooltipRect.width - 20
+                        ));
+                        tooltipTop = rect.bottom + 20;
+
+                        // If tooltip goes off bottom of screen, position above instead
+                        if (tooltipTop + tooltipRect.height > viewportHeight - 20) {
+                            tooltipTop = Math.max(20, rect.top - tooltipRect.height - 20);
+                        }
+                    } else if (step.position === 'right') {
+                        tooltipLeft = rect.right + 20;
+                        tooltipTop = rect.top + rect.height / 2 - tooltipRect.height / 2;
+
+                        // If tooltip goes off right of screen, position on left instead
+                        if (tooltipLeft + tooltipRect.width > viewportWidth - 20) {
+                            tooltipLeft = Math.max(20, rect.left - tooltipRect.width - 20);
+                        }
+
+                        // Ensure tooltip stays vertically within viewport
+                        tooltipTop = Math.max(20, Math.min(tooltipTop, viewportHeight - tooltipRect.height - 20));
+                    } else { // left
+                        tooltipLeft = rect.left - tooltipRect.width - 20;
+                        tooltipTop = rect.top + rect.height / 2 - tooltipRect.height / 2;
+
+                        // If tooltip goes off left of screen, position on right instead
+                        if (tooltipLeft < 20) {
+                            tooltipLeft = rect.right + 20;
+                        }
+
+                        // Ensure tooltip stays vertically within viewport
+                        tooltipTop = Math.max(20, Math.min(tooltipTop, viewportHeight - tooltipRect.height - 20));
+                    }
+
+                    tourTooltip.style.left = tooltipLeft + 'px';
+                    tourTooltip.style.top = tooltipTop + 'px';
+                }, 10);
+            }, 400);
+        }
+
+        function nextStep() {
+            currentStep++;
+            showStep(currentStep);
+        }
+
+        function previousStep() {
+            currentStep--;
+            showStep(currentStep);
+        }
+
+        function skipTourWithConfirmation() {
+            if (confirm('Are you sure you want to skip the tour? You can access it anytime from the Resources menu under "Platform Tour".')) {
+                endTour();
+            }
+        }
+
+        // Event listeners
+        startTourBtn.addEventListener('click', startTour);
+
+        // Platform Tour link in Resources dropdown
+        const restartTourLink = document.getElementById('restart-tour-link');
+        if (restartTourLink) {
+            restartTourLink.addEventListener('click', (e) => {
+                e.preventDefault();
+                // Close the dropdown
+                const dropdown = bootstrap.Dropdown.getInstance(document.querySelector('#resources-dropdown .dropdown-toggle'));
+                if (dropdown) dropdown.hide();
+                // Start tour
+                sessionStorage.removeItem('tourCompleted');
+                startTour();
+            });
+        }
+
+        // Handle window resize/zoom - reposition tour elements
+        let resizeTimeout;
+        window.addEventListener('resize', () => {
+            if (tourActive && currentStep >= 0) {
+                clearTimeout(resizeTimeout);
+                resizeTimeout = setTimeout(() => {
+                    showStep(currentStep);
+                }, 100);
+            }
+        });
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (!tourActive) return;
+            
+            if (e.key === 'Escape') {
+                endTour();
+            } else if (e.key === 'ArrowRight') {
+                nextStep();
+            } else if (e.key === 'ArrowLeft') {
+                previousStep();
+            }
+        });
+
+        // Auto-start tour on first visit
+        window.addEventListener('load', () => {
+            if (!sessionStorage.getItem('tourCompleted')) {
+                setTimeout(() => {
+                    startTour();
+                }, 800); // Start after 0.8 seconds
+            }
+        });
+
+        // Close tour on overlay click
+        tourOverlay.addEventListener('click', (e) => {
+            if (e.target === tourOverlay) {
+                if (confirm('Are you sure you want to skip the tour? You can access it anytime from the Resources menu.')) {
+                    endTour();
+                }
+            }
+        });
+    </script>
+</body>
+</html>
