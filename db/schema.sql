@@ -11743,6 +11743,7 @@ BEGIN
         pcd.project_t_code,
         pcd.purchase_requisition,
         pcd.allocated_budget,
+        spr.approvalStatus,
         SUM(                           IF(t.`word-count`>1, IF(ttd.divide_rate_by_60, t.`word-count`*tp.unit_rate/60, t.`word-count`*tp.unit_rate), 0)    ) AS total_expected_cost,
         SUM(IF(tc.user_id IS NOT NULL, IF(t.`word-count`>1, IF(ttd.divide_rate_by_60, t.`word-count`*tp.unit_rate/60, t.`word-count`*tp.unit_rate), 0), 0)) AS total_expected_cost_claimed,
         SUM(IF(t.`task-status_id`=4  , IF(t.`word-count`>1, IF(ttd.divide_rate_by_60, t.`word-count`*tp.unit_rate/60, t.`word-count`*tp.unit_rate), 0), 0)) AS total_expected_cost_complete,
@@ -11769,6 +11770,7 @@ BEGIN
     JOIN      Countries               c1 ON p.country_id=c1.id
     LEFT JOIN TaskClaims              tc ON t.id=tc.task_id
     LEFT JOIN hubspot_deals           hd ON pcd.deal_id=hd.deal_id
+    LEFT JOIN sun_purchase_requisitions spr ON pcd.purchase_requisition=spr.purchase_requisition
     GROUP BY p.id
     ORDER BY pcd.project_id DESC;
 END//

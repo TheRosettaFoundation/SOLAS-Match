@@ -34,12 +34,13 @@
             <th width="4%"></th>
             <th width="14%">Project</th>
             <th width="8%">Deal ID</th>
-            <th width="8%">Allocated Budget</th>
-            <th width="8%">Project Cost</th>
-            <th width="8%">Remaining Budget</th>
-            <th width="8%">Waived Tasks</th>
+            <th width="7%">Sun PR</th>
+            <th width="7%">Allocated Budget</th>
+            <th width="7%">Project Cost</th>
+            <th width="7%">Remaining Budget</th>
+            <th width="7%">Waived Tasks</th>
             <th width="7%">Status</th>
-            <th width="18%">Organization</th>
+            <th width="15%">Organization</th>
             <th width="5%">Source Language</th>
             <th width="6%">Project Start&nbsp;&nbsp;Date</th>
             <th width="6%">Project Deadline</th>
@@ -48,8 +49,15 @@
             {foreach $paid_projects as $paid_project}
             <tr style="overflow-wrap: break-word;">
                 <td>{$paid_project['project_id']}</td>
-                <td><a href="{urlFor name="project-view" options="project_id.{$paid_project['project_id']}"}" target="_blank">{TemplateHelper::uiCleanseHTMLNewlineAndTabs($paid_project['title'])}</a></td>
+                <td><a href="{urlFor name="project-view" options="project_id.{$paid_project['project_id']}"}" target="_blank">{TemplateHelper::uiCleanseHTMLNewlineAndTabs($paid_project['title'])}</a>
+                    {if !empty($paid_project['project_t_code'])}<br />{$paid_project['project_t_code']}{/if}
+                </td>
                 <td>{if $paid_project['deal_id'] > 0}<a href="{urlFor name="deal_id_report" options="deal_id.{$paid_project['deal_id']}"}" target="_blank">{$paid_project['deal_id']}</a>{else}{$paid_project['deal_id']}{/if}</td>
+                <td>
+                    {if !empty($paid_project['purchase_requisition'])}{$paid_project['purchase_requisition']}<br />
+                    {if $paid_project['approvalStatus'] == 0}Not Approved{/if}{if $paid_project['approvalStatus'] == 1}Approved{/if}{if $paid_project['approvalStatus'] == 99}Not Applicable{/if}
+                    {/if}
+                </td>
                 <td>${round($paid_project['allocated_budget'], 2)}</td>
                 <td>${round($paid_project['total_expected_cost'], 2)}</td>
                 <td>{if round($paid_project['allocated_budget'] - $paid_project['total_expected_cost'], 2) >= 0}${round($paid_project['allocated_budget'] - $paid_project['total_expected_cost'], 2)}{else}<strong><span style="color: red">${round($paid_project['allocated_budget'] - $paid_project['total_expected_cost'], 2)}</span></strong>{/if}</td>
