@@ -61,15 +61,39 @@
 
         /* Profile Section */
         .profile-section {
-            display: flex;
+            display: inline-flex;
             align-items: center;
             gap: 0.5rem;
+            white-space: nowrap;
+            flex-wrap: nowrap;
         }
 
         .profile-section img {
             width: 32px;
             height: 32px;
             border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        /* Prevent profile dropdown from wrapping */
+        #profile-dropdown .nav-link {
+            white-space: nowrap !important;
+            display: inline-flex !important;
+            align-items: center !important;
+            flex-wrap: nowrap !important;
+            gap: 0.25rem;
+        }
+        
+        #profile-dropdown .nav-link .profile-section {
+            flex-shrink: 0;
+            display: inline-flex;
+        }
+        
+        /* Keep dropdown arrow inline */
+        #profile-dropdown .nav-link::after {
+            display: inline-block !important;
+            margin-left: 0.25rem !important;
+            vertical-align: middle !important;
         }
 
         .theme-toggle {
@@ -363,7 +387,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.7);
+            background: transparent; /* Changed from rgba(0, 0, 0, 0.7) - spotlight handles this now */
             z-index: 9998;
             display: none;
             animation: fadeIn 0.3s;
@@ -385,7 +409,9 @@
 
         body.tour-active .tour-overlay,
         body.tour-active .tour-tooltip,
-        body.tour-active .tour-tooltip * {
+        body.tour-active .tour-tooltip *,
+        body.tour-active .tour-highlight-target,
+        body.tour-active .tour-highlight-target * {
             pointer-events: all !important;
         }
 
@@ -397,9 +423,11 @@
         /* Tour Highlight */
         .tour-highlight {
             position: fixed;
-            z-index: 9999;
+            z-index: 10000;
             pointer-events: none;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            /* Create spotlight effect - cut out the gray overlay in this area */
+            box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.7);
         }
 
         .tour-highlight::before {
@@ -414,6 +442,13 @@
             box-shadow: 0 0 0 4px rgba(248, 151, 40, 0.3),
                         0 0 30px rgba(248, 151, 40, 0.5);
             animation: pulse 2s infinite;
+            pointer-events: none;
+        }
+
+        /* Make highlighted element appear normal (remove gray overlay effect) */
+        .tour-highlight-target {
+            position: relative !important;
+            z-index: 10001 !important;
         }
 
         @keyframes pulse {
@@ -430,7 +465,7 @@
         /* Tour Tooltip */
         .tour-tooltip {
             position: fixed;
-            z-index: 10000;
+            z-index: 10002;
             background: white;
             border-radius: 12px;
             padding: 1.5rem;
@@ -700,7 +735,7 @@
     <!-- Navigation -->
     <nav class="navbar navbar-expand-lg">
         <div class="container">
-            <a class="navbar-brand" href="#">
+            <a class="navbar-brand" href="https://twbplatform.org">
                 <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 50'%3E%3Ctext x='10' y='35' font-family='Arial, sans-serif' font-size='24' font-weight='bold' fill='%23F89728'%3ETranslators%3C/text%3E%3Ctext x='10' y='48' font-family='Arial, sans-serif' font-size='10' fill='%23333'%3Ewithout Borders%3C/text%3E%3C/svg%3E" alt="Translators without Borders">
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
@@ -709,34 +744,34 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto align-items-center">
                     <li class="nav-item">
-                        <a class="nav-link active" href="#">Home</a>
+                        <a class="nav-link active" href="https://twbplatform.org">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">My Tasks</a>
+                        <a class="nav-link" href="https://twbplatform.org">My Tasks</a>
                     </li>
                     <li class="nav-item dropdown" id="resources-dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                        <a class="nav-link dropdown-toggle" href="https://twbplatform.org" role="button" data-bs-toggle="dropdown">
                             Resources
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="#">🎓 Community Forum</a></li>
-                            <li><a class="dropdown-item" href="#">📚 Learning Center</a></li>
-                            <li><a class="dropdown-item" href="#">💬 Community Library</a></li>
+                            <li><a class="dropdown-item" href="https://twbplatform.org">🎓 Community Forum</a></li>
+                            <li><a class="dropdown-item" href="https://twbplatform.org">📚 Learning Center</a></li>
+                            <li><a class="dropdown-item" href="https://twbplatform.org">💬 Community Library</a></li>
                             <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item" href="#" id="restart-tour-link">🎯 Platform Tour</a></li>
+                            <li><a class="dropdown-item" href="https://twbplatform.org" id="restart-tour-link">🎯 Platform Tour</a></li>
                         </ul>
                     </li>
                     <li class="nav-item dropdown" id="profile-dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                        <a class="nav-link dropdown-toggle" href="https://twbplatform.org" role="button" data-bs-toggle="dropdown">
                             <div class="profile-section">
                                 <img src="https://www.gravatar.com/avatar/b47accd9b56ed83428ff9ae17b6a3637?s=32&r=g" alt="Profile">
-                                <span class="fw-semibold">sarah.martinez</span>
+                                <span class="fw-semibold">s.mar</span>
                             </div>
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="#">👤 Profile</a></li>
-                            <li><a class="dropdown-item" href="#">📋 My Tasks</a></li>
-                            <li><a class="dropdown-item" href="#">🚪 Log out</a></li>
+                            <li><a class="dropdown-item" href="https://twbplatform.org">👤 Profile</a></li>
+                            <li><a class="dropdown-item" href="https://twbplatform.org">📋 My Tasks</a></li>
+                            <li><a class="dropdown-item" href="https://twbplatform.org">🚪 Log out</a></li>
                         </ul>
                     </li>
                     <li class="nav-item" id="theme-toggle-section">
@@ -759,7 +794,7 @@
                     <div class="sidebar-card mb-4" id="my-tasks-section">
                         <div class="section-header">
                             <h2 class="section-title">My Tasks</h2>
-                            <a href="#" class="section-link">
+                            <a href="https://twbplatform.org" class="section-link">
                                 Go to My Tasks <i class="fas fa-arrow-right"></i>
                             </a>
                         </div>
@@ -773,7 +808,7 @@
                                     </div>
                                     <div>
                                         <div class="fw-bold">
-                                            <a href="#" class="task-title" style="font-size: 1rem;">UNHCR Emergency Response Guide.docx</a>
+                                            <a href="https://twbplatform.org" class="task-title" style="font-size: 1rem;">UNHCR Emergency Response Guide.docx</a>
                                             <span class="task-badge translation" style="font-size: 0.7rem; padding: 0.25rem 0.6rem;">Translation</span>
                                         </div>
                                         <p class="text-muted small mb-0">English → French | (In Progress)</p>
@@ -793,7 +828,7 @@
                                     </div>
                                     <div>
                                         <div class="fw-bold">
-                                            <a href="#" class="task-title" style="font-size: 1rem;">WHO Health Guidelines 2024.pdf</a>
+                                            <a href="https://twbplatform.org" class="task-title" style="font-size: 1rem;">WHO Health Guidelines 2024.pdf</a>
                                             <span class="task-badge revision" style="font-size: 0.7rem; padding: 0.25rem 0.6rem;">Revision</span>
                                         </div>
                                         <p class="text-muted small mb-0">English → French | (Claimed)</p>
@@ -812,7 +847,7 @@
                     <div class="sidebar-card" id="available-tasks-card">
                         <div class="section-header">
                             <h2 class="section-title">Available Tasks</h2>
-                            <a href="#" class="section-link">
+                            <a href="https://twbplatform.org" class="section-link">
                                 Browse All Tasks <i class="fas fa-arrow-right"></i>
                             </a>
                         </div>
@@ -829,7 +864,7 @@
                                                 <span class="word-count-badge">2847 words</span>
                                             </div>
                                             <h5 class="task-title">
-                                                <a href="#" class="task-title">Red Cross Disaster Preparedness Manual.docx</a>
+                                                <a href="https://twbplatform.org" class="task-title">Red Cross Disaster Preparedness Manual.docx</a>
                                             </h5>
                                         </div>
                                         <img src="data:image/svg+xml,%3Csvg width='40' height='40' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='20' cy='20' r='20' fill='%23ED1C24'/%3E%3Ctext x='20' y='26' font-family='Arial' font-size='12' font-weight='bold' fill='white' text-anchor='middle'%3ETWB%3C/text%3E%3C/svg%3E" alt="TWB" class="org-logo">
@@ -840,7 +875,7 @@
                                     <p class="task-deadline">
                                         <i class="far fa-clock"></i> Deadline: 2025-10-10 02:38:00
                                     </p>
-                                    <a href="#" class="btn-view-task">View Task</a>
+                                    <a href="https://twbplatform.org" class="btn-view-task">View Task</a>
                                 </div>
                             </div>
 
@@ -854,7 +889,7 @@
                                                 <span class="word-count-badge">1523 words</span>
                                             </div>
                                             <h5 class="task-title">
-                                                <a href="#" class="task-title">UNICEF Education Program Report.pdf</a>
+                                                <a href="https://twbplatform.org" class="task-title">UNICEF Education Program Report.pdf</a>
                                             </h5>
                                         </div>
                                         <img src="data:image/svg+xml,%3Csvg width='40' height='40' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='20' cy='20' r='20' fill='%23ED1C24'/%3E%3Ctext x='20' y='26' font-family='Arial' font-size='12' font-weight='bold' fill='white' text-anchor='middle'%3ETWB%3C/text%3E%3C/svg%3E" alt="TWB" class="org-logo">
@@ -865,7 +900,7 @@
                                     <p class="task-deadline">
                                         <i class="far fa-clock"></i> Deadline: 2025-10-07 07:44:00
                                     </p>
-                                    <a href="#" class="btn-view-task">View Task</a>
+                                    <a href="https://twbplatform.org" class="btn-view-task">View Task</a>
                                 </div>
                             </div>
 
@@ -879,7 +914,7 @@
                                                 <span class="word-count-badge">3201 words</span>
                                             </div>
                                             <h5 class="task-title">
-                                                <a href="#" class="task-title">MSF Medical Protocol Guidelines.docx</a>
+                                                <a href="https://twbplatform.org" class="task-title">MSF Medical Protocol Guidelines.docx</a>
                                             </h5>
                                         </div>
                                         <img src="data:image/svg+xml,%3Csvg width='40' height='40' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='20' cy='20' r='20' fill='%23ED1C24'/%3E%3Ctext x='20' y='26' font-family='Arial' font-size='12' font-weight='bold' fill='white' text-anchor='middle'%3ETWB%3C/text%3E%3C/svg%3E" alt="TWB" class="org-logo">
@@ -890,7 +925,7 @@
                                     <p class="task-deadline">
                                         <i class="far fa-clock"></i> Deadline: 2025-10-07 07:44:00
                                     </p>
-                                    <a href="#" class="btn-view-task">View Task</a>
+                                    <a href="https://twbplatform.org" class="btn-view-task">View Task</a>
                                 </div>
                             </div>
 
@@ -904,7 +939,7 @@
                                                 <span class="word-count-badge">896 words</span>
                                             </div>
                                             <h5 class="task-title">
-                                                <a href="#" class="task-title">Save the Children Annual Report 2024.pdf</a>
+                                                <a href="https://twbplatform.org" class="task-title">Save the Children Annual Report 2024.pdf</a>
                                             </h5>
                                         </div>
                                         <img src="data:image/svg+xml,%3Csvg width='40' height='40' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='20' cy='20' r='20' fill='%23ED1C24'/%3E%3Ctext x='20' y='26' font-family='Arial' font-size='12' font-weight='bold' fill='white' text-anchor='middle'%3ETWB%3C/text%3E%3C/svg%3E" alt="TWB" class="org-logo">
@@ -915,13 +950,13 @@
                                     <p class="task-deadline">
                                         <i class="far fa-clock"></i> Deadline: 2025-10-07 07:42:00
                                     </p>
-                                    <a href="#" class="btn-view-task">View Task</a>
+                                    <a href="https://twbplatform.org" class="btn-view-task">View Task</a>
                                 </div>
                             </div>
                         </div>
 
                         <div class="text-center">
-                            <a href="#" class="btn-browse-all">View More Available Tasks</a>
+                            <a href="https://twbplatform.org" class="btn-browse-all">View More Available Tasks</a>
                         </div>
                     </div>
                 </div>
@@ -937,7 +972,7 @@
                         </div>
                         <div>
                             <div class="news-item">
-                                <a href="#">
+                                <a href="https://twbplatform.org">
                                     <span class="news-icon">🗞</span>
                                     <div>
                                         <p class="news-title">New Language Pairs Added: Hausa and Tigrinya</p>
@@ -946,7 +981,7 @@
                                 </a>
                             </div>
                             <div class="news-item">
-                                <a href="#">
+                                <a href="https://twbplatform.org">
                                     <span class="news-icon">📊</span>
                                     <div>
                                         <p class="news-title">Q4 2024 Translation Impact Report</p>
@@ -955,16 +990,16 @@
                                 </a>
                             </div>
                             <div class="news-item">
-                                <a href="#">
+                                <a href="https://twbplatform.org">
                                     <span class="news-icon">💡</span>
                                     <div>
-                                        <p class="news-title">Translation Best Practices - Dec 15</p>
+                                        <p class="news-title">Webinar: Translation Best Practices - Dec 15</p>
                                         <p class="news-date">• 2025-11-30</p>
                                     </div>
                                 </a>
                             </div>
                             <div class="news-item">
-                                <a href="#">
+                                <a href="https://twbplatform.org">
                                     <span class="news-icon">📰</span>
                                     <div>
                                         <p class="news-title">TWB Monthly Newsletter - December 2024</p>
@@ -973,7 +1008,7 @@
                                 </a>
                             </div>
                             <div class="news-item">
-                                <a href="#">
+                                <a href="https://twbplatform.org">
                                     <span class="news-icon">🗞</span>
                                     <div>
                                         <p class="news-title">Celebrating 100,000 Words Translated This Month</p>
@@ -982,7 +1017,7 @@
                                 </a>
                             </div>
                         </div>
-                        <a href="#" class="btn-view-all mt-3">
+                        <a href="https://twbplatform.org" class="btn-view-all mt-3">
                             View All News <i class="fas fa-arrow-right ms-1"></i>
                         </a>
                     </div>
@@ -996,10 +1031,10 @@
                         </div>
                         <ul class="resources-list">
                             <li>
-                                <a href="#">Style Guide for Humanitarian Translation</a>
+                                <a href="https://twbplatform.org">Style Guide for Humanitarian Translation</a>
                             </li>
                         </ul>
-                        <a href="#" class="btn-view-all mt-3">
+                        <a href="https://twbplatform.org" class="btn-view-all mt-3">
                             View All Resources <i class="fas fa-arrow-right ms-1"></i>
                         </a>
                     </div>
@@ -1011,7 +1046,7 @@
                             Community Survey
                         </h3>
                         <p>We want to hear from you! Take our annual Community Survey and help shape future opportunities and support for volunteers. It's anonymous and only takes 7–10 minutes.</p>
-                        <a href="#" class="btn-action">
+                        <a href="https://twbplatform.org" class="btn-action">
                             💡 Submit Response
                         </a>
                     </div>
@@ -1020,7 +1055,7 @@
                     <div class="action-card" id="feedback-section">
                         <h3>Feedback & Suggestions</h3>
                         <p>Please share your feedback with our team to help fix any issues and deliver a better experience to our community.</p>
-                        <a href="#" class="btn-action">
+                        <a href="https://twbplatform.org" class="btn-action">
                             💡 Submit Feedback
                         </a>
                     </div>
@@ -1032,9 +1067,9 @@
     <!-- Footer -->
     <footer>
         <div class="container text-center py-4">
-            <p class="mb-2">Maintained by <a href="#" style="color: var(--twb-orange); text-decoration: none;">Translators without Borders</a></p>
+            <p class="mb-2">Maintained by <a href="https://twbplatform.org" style="color: var(--twb-orange); text-decoration: none;">Translators without Borders</a></p>
             <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='48' viewBox='0 0 100 48'%3E%3Ctext x='10' y='30' font-family='Arial, sans-serif' font-size='24' font-weight='bold' fill='%23F89728'%3ESolas%3C/text%3E%3C/svg%3E" alt="Solas" style="height: 48px;">
-            <p class="mt-2">TWB Platform is powered by <a href="#" style="color: var(--twb-blue); text-decoration: none;">Solas</a></p>
+            <p class="mt-2">TWB Platform is powered by <a href="https://twbplatform.org" style="color: var(--twb-blue); text-decoration: none;">Solas</a></p>
         </div>
         <div class="footer-bottom">
             <div class="container">
@@ -1042,20 +1077,20 @@
                     <div class="col-md-4 mb-3 mb-md-0">
                         <div class="social-links">
                             <span>Follow Us:</span>
-                            <a href="#"><i class="fab fa-facebook"></i></a>
-                            <a href="#"><i class="fab fa-twitter"></i></a>
-                            <a href="#"><i class="fab fa-youtube"></i></a>
-                            <a href="#"><i class="fab fa-linkedin"></i></a>
-                            <a href="#"><i class="fab fa-instagram"></i></a>
+                            <a href="https://twbplatform.org"><i class="fab fa-facebook"></i></a>
+                            <a href="https://twbplatform.org"><i class="fab fa-twitter"></i></a>
+                            <a href="https://twbplatform.org"><i class="fab fa-youtube"></i></a>
+                            <a href="https://twbplatform.org"><i class="fab fa-linkedin"></i></a>
+                            <a href="https://twbplatform.org"><i class="fab fa-instagram"></i></a>
                         </div>
                     </div>
                     <div class="col-md-4 mb-3 mb-md-0 text-center">
-                        <a href="#">Contact Us</a> | 
-                        <a href="#">Terms and Conditions</a> | 
-                        <a href="#">Privacy Policy</a>
+                        <a href="https://twbplatform.org">Contact Us</a> | 
+                        <a href="https://twbplatform.org">Terms and Conditions</a> | 
+                        <a href="https://twbplatform.org">Privacy Policy</a>
                     </div>
                     <div class="col-md-4 text-md-end">
-                        <a href="#"><i class="fas fa-envelope me-2"></i>Subscribe To TWB Newsletter</a>
+                        <a href="https://twbplatform.org"><i class="fas fa-envelope me-2"></i>Subscribe To TWB Newsletter</a>
                     </div>
                 </div>
             </div>
@@ -1080,30 +1115,9 @@
     <script>
         const tourSteps = [
             {
-                element: '#resources-dropdown',
-                title: 'Resources Menu',
-                content: 'Access important resources through this dropdown menu. Find the Community Forum to ask questions and connect with other translators, the Learning Center for courses and training, the Community Library for guidelines and reference materials, and the Platform Tour to revisit this guided tour anytime.',
-                icon: '📚',
-                position: 'bottom'
-            },
-            {
-                element: '#profile-dropdown',
-                title: 'Profile & Account',
-                content: 'Click on your name to access your Profile settings, view My Tasks to see all your assigned work, or Log out when you\'re done. Next to your profile, you\'ll find the theme toggle button (sun/moon icon) to switch between light and dark mode.',
-                icon: '👤',
-                position: 'bottom'
-            },
-            {
-                element: '#my-tasks-section',
-                title: 'My Tasks',
-                content: 'This section displays all the tasks you have claimed or are currently working on. You can see the task status (In Progress, Claimed, etc.), language pairs, and deadlines. Click "Go to My Tasks" to view your complete task list.',
-                icon: '📌',
-                position: 'right'
-            },
-            {
                 element: '#available-tasks-card',
                 title: 'Available Tasks',
-                content: 'This is where you\'ll find all available translation and revision tasks. You can browse through tasks that match your language pairs and skills.',
+                content: 'This is where you will find available tasks. You can browse through tasks that match your language pairs and skills.',
                 icon: '📋',
                 position: 'right'
             },
@@ -1115,6 +1129,27 @@
                 position: 'right'
             },
             {
+                element: '#my-tasks-section',
+                title: 'My Tasks',
+                content: 'This section displays all the tasks you have claimed or are currently working on. You can see the task status (In Progress, Claimed, etc.), language pairs, and deadlines. Click "Go to My Tasks" to view your complete task list.',
+                icon: '📌',
+                position: 'right'
+            },
+            {
+                element: '#profile-dropdown',
+                title: 'Profile & Account',
+                content: 'Click on your name to access your <strong>Profile</strong> settings, view <strong>My Tasks</strong> to see all your assigned work, or log out when you\'re done. Next to your profile, you\'ll find the theme toggle button (sun/moon icon) to switch between light and dark mode.',
+                icon: '👤',
+                position: 'bottom'
+            },
+            {
+                element: '#resources-dropdown',
+                title: 'Resources Menu',
+                content: 'Access important resources through this dropdown menu. Find the <strong>Community Forum</strong> to ask questions and connect with other translators, the <strong>Learning Center</strong> for courses and training, the <strong>Community Library</strong> for guidelines and reference materials, and the <strong>Platform Tour</strong> to revisit this guided tour anytime.',
+                icon: '📚',
+                position: 'bottom'
+            },
+            {
                 element: '#news-section',
                 title: 'News & Updates',
                 content: 'Stay informed with the latest news, reports, events, and newsletters from TWB. This section keeps you up-to-date with important announcements and community updates.',
@@ -1124,7 +1159,7 @@
             {
                 element: '#resources-section',
                 title: 'Resources & Tools',
-                content: 'Access helpful resources, guidelines, glossaries, and tools to support your translation work. These materials will help you deliver high-quality translations.',
+                content: 'Access helpful resources, guidelines, glossaries, and tools to support your work. These materials will help you deliver high-quality work.',
                 icon: '📖',
                 position: 'left'
             },
@@ -1168,6 +1203,13 @@
             tourTooltip.style.display = 'none';
             startTourBtn.style.display = 'flex';
             document.body.classList.remove('tour-active'); // Re-enable page interactions
+            
+            // Remove highlight class from any element
+            const highlightedElement = document.querySelector('.tour-highlight-target');
+            if (highlightedElement) {
+                highlightedElement.classList.remove('tour-highlight-target');
+            }
+            
             sessionStorage.setItem('tourCompleted', 'true');
             window.location.href = "https://twbplatform.org";
         }
@@ -1179,12 +1221,22 @@
             }
 
             const step = tourSteps[stepIndex];
+            
+            // Remove highlight class from previous element
+            const previousHighlight = document.querySelector('.tour-highlight-target');
+            if (previousHighlight) {
+                previousHighlight.classList.remove('tour-highlight-target');
+            }
+            
             const element = document.querySelector(step.element);
-
+            
             if (!element) {
                 console.error('Element not found:', step.element);
                 return;
             }
+
+            // Add highlight class to current element to keep it visible
+            element.classList.add('tour-highlight-target');
 
             // Scroll element into view
             element.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -1192,7 +1244,7 @@
             setTimeout(() => {
                 // Get fresh positioning after scroll
                 const rect = element.getBoundingClientRect();
-
+                
                 // Position highlight
                 tourHighlight.style.display = 'block';
                 tourHighlight.style.top = rect.top + 'px';
@@ -1222,15 +1274,15 @@
 
                 // Position tooltip
                 tourTooltip.style.display = 'block';
-
+                
                 // Small delay to ensure tooltip is rendered and we can get its dimensions
                 setTimeout(() => {
                     const tooltipRect = tourTooltip.getBoundingClientRect();
                     const viewportWidth = window.innerWidth;
                     const viewportHeight = window.innerHeight;
-
+                    
                     let tooltipLeft, tooltipTop;
-
+                    
                     if (step.position === 'bottom') {
                         // Position below the element (for navbar items)
                         tooltipLeft = Math.max(20, Math.min(
@@ -1238,7 +1290,7 @@
                             viewportWidth - tooltipRect.width - 20
                         ));
                         tooltipTop = rect.bottom + 20;
-
+                        
                         // If tooltip goes off bottom of screen, position above instead
                         if (tooltipTop + tooltipRect.height > viewportHeight - 20) {
                             tooltipTop = Math.max(20, rect.top - tooltipRect.height - 20);
@@ -1246,27 +1298,27 @@
                     } else if (step.position === 'right') {
                         tooltipLeft = rect.right + 20;
                         tooltipTop = rect.top + rect.height / 2 - tooltipRect.height / 2;
-
+                        
                         // If tooltip goes off right of screen, position on left instead
                         if (tooltipLeft + tooltipRect.width > viewportWidth - 20) {
                             tooltipLeft = Math.max(20, rect.left - tooltipRect.width - 20);
                         }
-
+                        
                         // Ensure tooltip stays vertically within viewport
                         tooltipTop = Math.max(20, Math.min(tooltipTop, viewportHeight - tooltipRect.height - 20));
                     } else { // left
                         tooltipLeft = rect.left - tooltipRect.width - 20;
                         tooltipTop = rect.top + rect.height / 2 - tooltipRect.height / 2;
-
+                        
                         // If tooltip goes off left of screen, position on right instead
                         if (tooltipLeft < 20) {
                             tooltipLeft = rect.right + 20;
                         }
-
+                        
                         // Ensure tooltip stays vertically within viewport
                         tooltipTop = Math.max(20, Math.min(tooltipTop, viewportHeight - tooltipRect.height - 20));
                     }
-
+                    
                     tourTooltip.style.left = tooltipLeft + 'px';
                     tourTooltip.style.top = tooltipTop + 'px';
                 }, 10);
