@@ -34,36 +34,42 @@
                             {assign var="col" value="143878"}
                             {assign var="txt" value="OTHER"}
                             {assign var="alt" value="Other"}
+                            {assign var="img" value="ArticleTWB.png"}
                         {if $new['type'] == 11}
                             {assign var="col" value="143878"}
                             {assign var="txt" value="ARTICLE"}
                             {assign var="alt" value="Article"}
+                            {assign var="img" value="ArticleTWB.png"}
                         {/if}
                         {if $new['type'] == 13}
                             {assign var="col" value="E8991C"}
                             {assign var="txt" value="EVENT"}
                             {assign var="alt" value="Event"}
+                            {assign var="img" value="EventTWB.png"}
                         {/if}
                         {if $new['type'] == 12}
                             {assign var="col" value="143878"}
                             {assign var="txt" value="NEWSLETTER"}
                             {assign var="alt" value="Newsletter"}
+                            {assign var="img" value="NewsletterTWB.png"}
                         {/if}
                         {if $new['type'] == 14}
                             {assign var="col" value="29528D"}
                             {assign var="txt" value="REPORT"}
                             {assign var="alt" value="Report"}
+                            {assign var="img" value="ReportTWB.png"}
                         {/if}
                         {if $new['type'] == 21}
                             {assign var="col" value="143878"}
                             {assign var="txt" value="RESOURCE"}
                             {assign var="alt" value="Resource"}
+                            {assign var="img" value="ResourceTWB.png"}
                         {/if}
 
                         {if !empty($images[$new['id']])}
                         <img src="data:image/jpeg;base64,{$images[$new['id']]}" alt="{$alt}" class="card-img-top" />
                         {else}
-                        <img src="https://placehold.co/120x80/{$col}/ffffff?text={$txt}" alt="{$alt}" class="card-img-top" />
+                        <img src="{urlFor name='home'}ui/img/{$img}" alt="{$alt}" class="card-img-top" />
                         {/if}
                     </div>
                 </a>
