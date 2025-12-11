@@ -37,9 +37,9 @@
     {/if}
 
 {if !empty($org_id)}
-    <a href="{urlFor name="content_item_org" options="content_id.0|org_id.$org_id"}" target="_blank">Create a new Organisation Resource</a>
+    <a href="{urlFor name="content_item_org" options="content_id.0|org_id.$org_id"}">Create a new Organisation Resource</a>
 {else}
-    <a href="{urlFor name="content_item" options="content_id.0"}" target="_blank">Create a new Resource</a>
+    <a href="{urlFor name="content_item" options="content_id.0"}">Create a new Resource</a>
 {/if}
 
 {if !empty($items)}
@@ -66,9 +66,9 @@
         <tr>
             <td>
             {if !empty($item['owner_org_id'])}
-            <a href="{urlFor name="content_item_org" options="content_id.{$item['id']}|org_id.{$item['owner_org_id']}"}" target="_blank">{$item['id']}</a>
+            <a href="{urlFor name="content_item_org" options="content_id.{$item['id']}|org_id.{$item['owner_org_id']}"}">{$item['id']}</a>
             {else}
-            <a href="{urlFor name="content_item" options="content_id.{$item['id']}"}" target="_blank">{$item['id']}</a>
+            <a href="{urlFor name="content_item" options="content_id.{$item['id']}"}">{$item['id']}</a>
             {/if}
             </td>
 
