@@ -206,6 +206,7 @@
             text-decoration: none;
             display: inline-block;
             margin-top: auto;
+            text-align: center;
         }
 
         .btn-view-task:hover {
@@ -387,11 +388,11 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: transparent; /* Changed from rgba(0, 0, 0, 0.7) - spotlight handles this now */
+            background: transparent;
             z-index: 9998;
             display: none;
             animation: fadeIn 0.3s;
-            pointer-events: all; /* Block all interactions */
+            pointer-events: all;
         }
 
         .tour-overlay.active {
@@ -410,8 +411,7 @@
         body.tour-active .tour-overlay,
         body.tour-active .tour-tooltip,
         body.tour-active .tour-tooltip *,
-        body.tour-active .tour-highlight-target,
-        body.tour-active .tour-highlight-target * {
+        body.tour-active .tour-click-blocker {
             pointer-events: all !important;
         }
 
@@ -426,7 +426,6 @@
             z-index: 10000;
             pointer-events: none;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            /* Create spotlight effect - cut out the gray overlay in this area */
             box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.7);
         }
 
@@ -445,12 +444,6 @@
             pointer-events: none;
         }
 
-        /* Make highlighted element appear normal (remove gray overlay effect) */
-        .tour-highlight-target {
-            position: relative !important;
-            z-index: 10001 !important;
-        }
-
         @keyframes pulse {
             0%, 100% {
                 box-shadow: 0 0 0 4px rgba(248, 151, 40, 0.3),
@@ -460,6 +453,22 @@
                 box-shadow: 0 0 0 8px rgba(248, 151, 40, 0.2),
                             0 0 40px rgba(248, 151, 40, 0.6);
             }
+        }
+
+        /* Transparent click blocker over highlighted area */
+        .tour-click-blocker {
+            position: fixed;
+            z-index: 10001;
+            background: transparent;
+            pointer-events: all;
+            cursor: not-allowed;
+            display: none;
+        }
+
+        /* Make highlighted element appear normal */
+        .tour-highlight-target {
+            position: relative !important;
+            z-index: 10001 !important;
         }
 
         /* Tour Tooltip */
@@ -727,6 +736,16 @@
 
             .tour-btn {
                 flex: 1;
+            }
+            
+            /* Mobile tooltip positioning to avoid covering highlighted content */
+            .tour-tooltip {
+                position: fixed !important;
+                bottom: 20px !important;
+                top: auto !important;
+                left: 5% !important;
+                right: 5% !important;
+                max-width: 90% !important;
             }
         }
     </style>
@@ -1100,6 +1119,7 @@
     <!-- Tour Overlay -->
     <div class="tour-overlay" id="tourOverlay"></div>
     <div class="tour-highlight" id="tourHighlight"></div>
+    <div class="tour-click-blocker" id="tourClickBlocker"></div>
     <div class="tour-tooltip" id="tourTooltip"></div>
 
     <!-- Start Tour Button -->
@@ -1184,6 +1204,7 @@
 
         const tourOverlay = document.getElementById('tourOverlay');
         const tourHighlight = document.getElementById('tourHighlight');
+        const tourClickBlocker = document.getElementById('tourClickBlocker');
         const tourTooltip = document.getElementById('tourTooltip');
         const startTourBtn = document.getElementById('startTourBtn');
 
@@ -1192,7 +1213,7 @@
             currentStep = 0;
             startTourBtn.style.display = 'none';
             tourOverlay.classList.add('active');
-            document.body.classList.add('tour-active'); // Block page interactions
+            document.body.classList.add('tour-active');
             showStep(currentStep);
         }
 
@@ -1200,11 +1221,11 @@
             tourActive = false;
             tourOverlay.classList.remove('active');
             tourHighlight.style.display = 'none';
+            tourClickBlocker.style.display = 'none';
             tourTooltip.style.display = 'none';
             startTourBtn.style.display = 'flex';
-            document.body.classList.remove('tour-active'); // Re-enable page interactions
+            document.body.classList.remove('tour-active');
             
-            // Remove highlight class from any element
             const highlightedElement = document.querySelector('.tour-highlight-target');
             if (highlightedElement) {
                 highlightedElement.classList.remove('tour-highlight-target');
@@ -1222,7 +1243,6 @@
 
             const step = tourSteps[stepIndex];
             
-            // Remove highlight class from previous element
             const previousHighlight = document.querySelector('.tour-highlight-target');
             if (previousHighlight) {
                 previousHighlight.classList.remove('tour-highlight-target');
@@ -1235,14 +1255,10 @@
                 return;
             }
 
-            // Add highlight class to current element to keep it visible
             element.classList.add('tour-highlight-target');
-
-            // Scroll element into view
             element.scrollIntoView({ behavior: 'smooth', block: 'center' });
 
             setTimeout(() => {
-                // Get fresh positioning after scroll
                 const rect = element.getBoundingClientRect();
                 
                 // Position highlight
@@ -1252,7 +1268,13 @@
                 tourHighlight.style.width = rect.width + 'px';
                 tourHighlight.style.height = rect.height + 'px';
 
-                // Create tooltip content
+                // Position click blocker over highlighted area
+                tourClickBlocker.style.display = 'block';
+                tourClickBlocker.style.top = rect.top + 'px';
+                tourClickBlocker.style.left = rect.left + 'px';
+                tourClickBlocker.style.width = rect.width + 'px';
+                tourClickBlocker.style.height = rect.height + 'px';
+
                 const isLastStep = stepIndex === tourSteps.length - 1;
                 const isFirstStep = stepIndex === 0;
 
@@ -1272,10 +1294,8 @@
                     </div>
                 `;
 
-                // Position tooltip
                 tourTooltip.style.display = 'block';
                 
-                // Small delay to ensure tooltip is rendered and we can get its dimensions
                 setTimeout(() => {
                     const tooltipRect = tourTooltip.getBoundingClientRect();
                     const viewportWidth = window.innerWidth;
@@ -1283,15 +1303,17 @@
                     
                     let tooltipLeft, tooltipTop;
                     
-                    if (step.position === 'bottom') {
-                        // Position below the element (for navbar items)
+                    // On mobile, always position at bottom
+                    if (viewportWidth <= 768) {
+                        tooltipLeft = viewportWidth * 0.05;
+                        tooltipTop = viewportHeight - tooltipRect.height - 20;
+                    } else if (step.position === 'bottom') {
                         tooltipLeft = Math.max(20, Math.min(
                             rect.left + rect.width / 2 - tooltipRect.width / 2,
                             viewportWidth - tooltipRect.width - 20
                         ));
                         tooltipTop = rect.bottom + 20;
                         
-                        // If tooltip goes off bottom of screen, position above instead
                         if (tooltipTop + tooltipRect.height > viewportHeight - 20) {
                             tooltipTop = Math.max(20, rect.top - tooltipRect.height - 20);
                         }
@@ -1299,23 +1321,19 @@
                         tooltipLeft = rect.right + 20;
                         tooltipTop = rect.top + rect.height / 2 - tooltipRect.height / 2;
                         
-                        // If tooltip goes off right of screen, position on left instead
                         if (tooltipLeft + tooltipRect.width > viewportWidth - 20) {
                             tooltipLeft = Math.max(20, rect.left - tooltipRect.width - 20);
                         }
                         
-                        // Ensure tooltip stays vertically within viewport
                         tooltipTop = Math.max(20, Math.min(tooltipTop, viewportHeight - tooltipRect.height - 20));
-                    } else { // left
+                    } else {
                         tooltipLeft = rect.left - tooltipRect.width - 20;
                         tooltipTop = rect.top + rect.height / 2 - tooltipRect.height / 2;
                         
-                        // If tooltip goes off left of screen, position on right instead
                         if (tooltipLeft < 20) {
                             tooltipLeft = rect.right + 20;
                         }
                         
-                        // Ensure tooltip stays vertically within viewport
                         tooltipTop = Math.max(20, Math.min(tooltipTop, viewportHeight - tooltipRect.height - 20));
                     }
                     
@@ -1341,24 +1359,19 @@
             }
         }
 
-        // Event listeners
         startTourBtn.addEventListener('click', startTour);
 
-        // Platform Tour link in Resources dropdown
         const restartTourLink = document.getElementById('restart-tour-link');
         if (restartTourLink) {
             restartTourLink.addEventListener('click', (e) => {
                 e.preventDefault();
-                // Close the dropdown
                 const dropdown = bootstrap.Dropdown.getInstance(document.querySelector('#resources-dropdown .dropdown-toggle'));
                 if (dropdown) dropdown.hide();
-                // Start tour
                 sessionStorage.removeItem('tourCompleted');
                 startTour();
             });
         }
 
-        // Handle window resize/zoom - reposition tour elements
         let resizeTimeout;
         window.addEventListener('resize', () => {
             if (tourActive && currentStep >= 0) {
@@ -1369,12 +1382,11 @@
             }
         });
 
-        // Keyboard navigation
         document.addEventListener('keydown', (e) => {
             if (!tourActive) return;
             
             if (e.key === 'Escape') {
-                endTour();
+                skipTourWithConfirmation();
             } else if (e.key === 'ArrowRight') {
                 nextStep();
             } else if (e.key === 'ArrowLeft') {
@@ -1382,16 +1394,14 @@
             }
         });
 
-        // Auto-start tour on first visit
         window.addEventListener('load', () => {
             if (!sessionStorage.getItem('tourCompleted')) {
                 setTimeout(() => {
                     startTour();
-                }, 800); // Start after 0.8 seconds
+                }, 800);
             }
         });
 
-        // Close tour on overlay click
         tourOverlay.addEventListener('click', (e) => {
             if (e.target === tourOverlay) {
                 if (confirm('Are you sure you want to skip the tour? You can access it anytime from the Resources menu.')) {
