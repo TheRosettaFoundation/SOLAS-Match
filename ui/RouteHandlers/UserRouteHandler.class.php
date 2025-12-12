@@ -288,6 +288,7 @@ class UserRouteHandler
 
         $userDao = new DAO\UserDao();
         $projectDao = new DAO\ProjectDao();
+        $orgDao = new DAO\OrganisationDao();
 
         $claimed_tasks = $userDao->getFilteredUserClaimedTasks($user_id, 2, 4, 0, 0, 3);
         if (empty($claimed_tasks)) $claimed_tasks = [];
@@ -295,6 +296,8 @@ class UserRouteHandler
         $deadline_timestamps = [];
         $matecat_urls = [];
         $orgs = [];
+        $org_names = [];
+        $org_images = [];
         foreach ($claimed_tasks as $task) {
             $task_id = $task->getId();
             $deadline = $task->getDeadline();
@@ -308,8 +311,9 @@ class UserRouteHandler
             if (!$projectDao->are_translations_not_all_complete($task, $projectDao->get_memsource_task($task_id))) $matecat_urls[$task_id] = 1;
 
             $project = $projectDao->getProject($task->getProjectId());
-            $org_images[$task_id] = $userDao->get_org_image($project->getOrganisationId());
             $orgs[$task_id] = $project->getOrganisationId();
+            $org_names[$task_id] = $orgDao->getOrganisation($orgs[$task_id])->getName();
+            $org_images[$task_id] = $userDao->get_org_image($orgs[$task_id]);
         }
 
         $tasks = $userDao->getUserPageTasks($user_id, 4, 0, NULL, NULL, NULL);
@@ -327,8 +331,9 @@ class UserRouteHandler
             $deadline_timestamps[$task_id] = gmmktime($selected_hour, $selected_minute, 0, $selected_month, $selected_day, $selected_year);
 
             $project = $projectDao->getProject($task->getProjectId());
-            $org_images[$task_id] = $userDao->get_org_image($project->getOrganisationId());
             $orgs[$task_id] = $project->getOrganisationId();
+            $org_names[$task_id] = $orgDao->getOrganisation($orgs[$task_id])->getName();
+            $org_images[$task_id] = $userDao->get_org_image($orgs[$task_id]);
         }
         $chunks = $userDao->getUserTaskChunks(...$task_ids);
 
@@ -349,6 +354,7 @@ class UserRouteHandler
             'chunks' => $chunks,
             'org_images' => $org_images,
             'orgs' => $orgs,
+            'org_names' => $org_names,
             'news' => $userDao->get_content_items(null, 1, null, 1, 1, null, null, null, 0, 0),
             'resources' => $userDao->get_content_items(null, 2, null, 1, 1, null, null, null, 0, 0),
             ]);

@@ -64,10 +64,10 @@
                                         <div class="me-3">
                                             {if !empty($org_images[$task_id])}
                                             <a href="{$siteLocation}org/{$orgs[$task_id]}/profile">
-                                            <img src="data:image/jpeg;base64,{$org_images[$task_id]}" alt="Organisation logo" class="rounded-circle" width="60" height="60" />
+                                            <img src="data:image/jpeg;base64,{$org_images[$task_id]}" alt="{$org_names[$task_id]} logo" title="{$org_names[$task_id]}" class="rounded-circle" width="60" height="60" />
                                             </a>
                                             {else}
-                                            <img src="https://placehold.co/60x60/ED1C24/ffffff?text=TWB" alt="Organisation logo" class="rounded-circle" width="60" height="60" />
+                                            <img src="https://placehold.co/60x60/ED1C24/ffffff?text=TWB" alt="{$org_names[$task_id]} logo" title="{$org_names[$task_id]}" class="rounded-circle" width="60" height="60" />
                                             {/if}
                                         </div>
                                         <div>
@@ -137,10 +137,10 @@
                                                 </div>
                                                 {if !empty($org_images[$task_id])}
                                                 <a href="{$siteLocation}org/{$orgs[$task_id]}/profile">
-                                                <img src="data:image/jpeg;base64,{$org_images[$task_id]}" alt="Organisation logo" class="rounded-circle ms-3" width="60" height="60" />
+                                                <img src="data:image/jpeg;base64,{$org_images[$task_id]}" alt="{$org_names[$task_id]} logo" title="{$org_names[$task_id]}" class="rounded-circle ms-3" width="60" height="60" />
                                                 </a>
                                                 {else}
-                                                <img src="https://placehold.co/60x60/ED1C24/ffffff?text=TWB" alt="Organisation logo" class="rounded-circle ms-3" width="60" height="60" />
+                                                <img src="https://placehold.co/60x60/ED1C24/ffffff?text=TWB" alt="{$org_names[$task_id]} logo" title="{$org_names[$task_id]}" class="rounded-circle ms-3" width="60" height="60" />
                                                 {/if}
                                             </div>
                                             {if TaskTypeEnum::$enum_to_UI[$type_id]['source_and_target']}
