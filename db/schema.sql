@@ -15096,6 +15096,7 @@ BEGIN
     IF p_id IS NULL THEN
         INSERT INTO content_items (
             creation_date,
+            update_date,
             type,
             scope,
             highlight,
@@ -15111,6 +15112,7 @@ BEGIN
             owner_org_id,
             admin_id)
         VALUES (
+            NOW(),
             NOW(),
             p_type,
             p_scope,
