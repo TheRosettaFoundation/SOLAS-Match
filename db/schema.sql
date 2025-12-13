@@ -1395,7 +1395,7 @@ CREATE TABLE IF NOT EXISTS `project_complete_dates` (
   incremental_sourcing INT NOT NULL DEFAULT 1,
   complete_date DATETIME NOT NULL,
   deal_id       BIGINT UNSIGNED NOT NULL DEFAULT 0,
-  allocated_budget INT UNSIGNED NOT NULL DEFAULT 0,
+  allocated_budget     FLOAT NOT NULL DEFAULT 0,
   project_t_code       VARCHAR(255) NOT NULL DEFAULT '',
   purchase_requisition VARCHAR(255) NOT NULL DEFAULT '',
   restriction_JSON JSON NOT NULL DEFAULT ('[]'),
@@ -11293,7 +11293,7 @@ DELIMITER ;
 
 DROP PROCEDURE IF EXISTS `update_project_allocated_budget`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `update_project_allocated_budget`(IN pID INT UNSIGNED, IN budget INT UNSIGNED)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `update_project_allocated_budget`(IN pID INT UNSIGNED, IN budget FLOAT)
 BEGIN
     UPDATE project_complete_dates SET allocated_budget=budget WHERE project_id=pID;
 END//

@@ -1379,7 +1379,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                                          if ($post['project_hubspot'] != $taskDao->get_project_complete_date($project_id)['deal_id']) $taskDao->update_project_deal_id($project_id, $post['project_hubspot']);
                                          if ($taskDao->update_hubspot_deals($post['project_hubspot']) != 1) UserRouteHandler::flash('error', 'Deal ID not found in HubSpot table');
                                      }
-                                     if (!empty($post['project_allocated_budget']) && is_numeric($post['project_allocated_budget']) && ($post['project_allocated_budget'] = (int)$post['project_allocated_budget']) > 0) {
+                                     if (!empty($post['project_allocated_budget']) && is_numeric($post['project_allocated_budget']) && $post['project_allocated_budget'] > 0) {
                                          if ($post['project_allocated_budget'] != $taskDao->get_project_complete_date($project_id)['allocated_budget']) $taskDao->update_project_allocated_budget($project_id, $post['project_allocated_budget']);
                                      }
                                      if (!empty($post['purchase_requisition'])) $post['purchase_requisition'] = trim($post['purchase_requisition']);
