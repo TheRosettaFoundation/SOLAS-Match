@@ -1678,6 +1678,7 @@ class OrgRouteHandler
                 }
                 if (isset($post['set_image_for_org'])) {
                     if (empty($_FILES['org_image']['error']) && !empty($_FILES['org_image']['tmp_name']) && (($data = file_get_contents($_FILES['org_image']['tmp_name'])) !== false)) {
+                      if (in_array($_FILES['org_image']['type'], ['image/jpeg', 'image/png', 'image/webp'])) {
                         list($width, $height) = getimagesize($_FILES['org_image']['tmp_name']);
                         $ratio = min(200/$width, 200/$height);
                         $new_width  = floor($width*$ratio);
@@ -1688,6 +1689,7 @@ class OrgRouteHandler
                             if (imagecopyresampled($tci, $img, 0, 0, 0, 0, $new_width, $new_height, $width, $height)) imagejpeg($tci, $_FILES['org_image']['tmp_name'], 100);
                         }
                         if (($data = file_get_contents($_FILES['org_image']['tmp_name'])) !== false) $userDao->add_org_image($org_id, $_FILES['org_image']['type'], $data, $current_user_id);
+                      } else UserRouteHandler::flash('error', 'Only JPEG, PNG and WEBP are supported, but only JPEG will be resized to a suitable size.');
                     }
                 }
             }
