@@ -3662,7 +3662,7 @@ foreach ($rows as $index => $row) {
                         if (imagecopyresampled($tci, $img, 0, 0, 0, 0, $new_width, $new_height, $width, $height)) imagejpeg($tci, $_FILES['image']['tmp_name'][$i], 100);
                     }
                     if (($data = file_get_contents($_FILES['image']['tmp_name'][$i])) !== false) $userDao->add_content_item_attachment($content_id, 1, $_FILES['image']['name'][$i], $_FILES['image']['type'][$i], $data, $admin_id);
-                  } else UserRouteHandler::flashNow('error', 'Only JPEG, PNG and WEBP are supported, but only JPEG will be resized to a suitable size.');
+                  }
                 }
                 if (!empty($_FILES['attachments']['name'][$i]) && empty($_FILES['attachments']['error'][$i]) && !empty($_FILES['attachments']['tmp_name'][$i]) && (($data = file_get_contents($_FILES['attachments']['tmp_name'][$i])) !== false)) {
                     $userDao->add_content_item_attachment($content_id, 0, $_FILES['attachments']['name'][$i], $_FILES['attachments']['type'][$i], $data, $admin_id);
