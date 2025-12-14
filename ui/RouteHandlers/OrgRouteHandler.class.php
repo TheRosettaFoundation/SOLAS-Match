@@ -1689,7 +1689,7 @@ class OrgRouteHandler
                             if (imagecopyresampled($tci, $img, 0, 0, 0, 0, $new_width, $new_height, $width, $height)) imagejpeg($tci, $_FILES['org_image']['tmp_name'], 100);
                         }
                         if (($data = file_get_contents($_FILES['org_image']['tmp_name'])) !== false) $userDao->add_org_image($org_id, $_FILES['org_image']['type'], $data, $current_user_id);
-                      } else UserRouteHandler::flash('error', 'Only JPEG, PNG and WEBP are supported, but only JPEG will be resized to a suitable size.');
+                      } else UserRouteHandler::flashNow('error', 'Only JPEG, PNG and WEBP are supported, but only JPEG will be resized to a suitable size.');
                     }
                 }
             }
