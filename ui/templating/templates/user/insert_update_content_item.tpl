@@ -285,7 +285,7 @@
               </div>
               <div class="row" style="margin-top:10px">
                 <div class="col">
-                  <label for="image">Image</label>
+                  <label for="image">Image (JPEG, PNG or WEBP, but only JPEG will be resized to a suitable size)</label>
                   <input type="file" id="image" name="image[]" accept="image/jpeg" onchange="previewImage(event)" />
                   <div id="imgPreview" style="margin-top:8px"></div>
                 </div>
