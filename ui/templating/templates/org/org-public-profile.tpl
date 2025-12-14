@@ -777,7 +777,7 @@
     </form>
 
     <p style="margin-bottom: 40px"></p>
-    <h1 class="page-header">Organization Image</h1><small>JPEG, PNG or WEBP, but only JPEG will be resized to a suitable size.</small>
+    <h1 class="page-header">Organization Image <small>JPEG, PNG or WEBP, but only JPEG will be resized to a suitable size.</small></h1>
     <form method="post" action="{urlFor name="org-public-profile" options="org_id.$org_id"}" enctype="multipart/form-data">
         <table>
             <tr>
