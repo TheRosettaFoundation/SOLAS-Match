@@ -455,6 +455,12 @@
             }
         }
 
+        /* Remove border for welcome screen (full-page highlight) */
+        .tour-highlight[style*="width: 100%"]::before,
+        .tour-highlight[style*="height: 100%"]::before {
+            display: none;
+        }
+
         /* Transparent click blocker over highlighted area */
         .tour-click-blocker {
             position: fixed;
@@ -755,13 +761,13 @@
     <nav class="navbar navbar-expand-lg">
         <div class="container">
             <a class="navbar-brand" href="https://twbplatform.org">
-                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 50'%3E%3Ctext x='10' y='35' font-family='Arial, sans-serif' font-size='24' font-weight='bold' fill='%23F89728'%3ETranslators%3C/text%3E%3Ctext x='10' y='48' font-family='Arial, sans-serif' font-size='10' fill='%23333'%3Ewithout Borders%3C/text%3E%3C/svg%3E" alt="Translators without Borders">
+                <img src="data:image/webp;base64,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" alt="Translators without Borders" style="height: 80px;">
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto align-items-center">
+                <ul class="navbar-nav align-items-center">
                     <li class="nav-item">
                         <a class="nav-link active" href="https://twbplatform.org">Home</a>
                     </li>
@@ -780,6 +786,8 @@
                             <li><a class="dropdown-item" href="https://twbplatform.org" id="restart-tour-link">🎯 Platform Tour</a></li>
                         </ul>
                     </li>
+                </ul>
+                <ul class="navbar-nav ms-auto align-items-center">
                     <li class="nav-item dropdown" id="profile-dropdown">
                         <a class="nav-link dropdown-toggle" href="https://twbplatform.org" role="button" data-bs-toggle="dropdown">
                             <div class="profile-section">
@@ -1135,9 +1143,16 @@
     <script>
         const tourSteps = [
             {
+                element: 'body',
+                title: 'Welcome!',
+                content: 'Welcome to the tutorial for the TWB Platform.<br><br>Join us on a virtual tour of the revamped TWB Homepage.',
+                icon: '👋',
+                position: 'center'
+            },
+            {
                 element: '#available-tasks-card',
                 title: 'Available Tasks',
-                content: 'Welcome to the tutorial for the TWB Platform. Join us on a virtual tour of the revamped TWB Homepage. This is where you will find available tasks. You can browse through tasks that match your language pairs and skills.',
+                content: 'This is where you will find available tasks. You can browse through tasks that match your language pairs and skills.',
                 icon: '📋',
                 position: 'right'
             },
@@ -1248,6 +1263,59 @@
                 previousHighlight.classList.remove('tour-highlight-target');
             }
             
+            // Handle welcome screen (centered)
+            if (step.position === 'center') {
+                // Show full-page overlay
+                tourHighlight.style.display = 'block';
+                tourHighlight.style.top = '0';
+                tourHighlight.style.left = '0';
+                tourHighlight.style.width = '100%';
+                tourHighlight.style.height = '100%';
+                
+                // Block entire page from clicks
+                tourClickBlocker.style.display = 'block';
+                tourClickBlocker.style.top = '0';
+                tourClickBlocker.style.left = '0';
+                tourClickBlocker.style.width = '100%';
+                tourClickBlocker.style.height = '100%';
+                
+                const isLastStep = stepIndex === tourSteps.length - 1;
+                const isFirstStep = stepIndex === 0;
+
+                tourTooltip.innerHTML = `
+                    <div class="tour-tooltip-header">
+                        <div class="tour-tooltip-icon">${step.icon}</div>
+                        <h3 class="tour-tooltip-title">${step.title}</h3>
+                    </div>
+                    <div class="tour-tooltip-content" style="text-align: center;">${step.content}</div>
+                    <div class="tour-tooltip-footer">
+                        <div class="tour-progress">Step ${stepIndex + 1} of ${tourSteps.length}</div>
+                        <div class="tour-buttons">
+                            <button class="tour-btn tour-btn-skip" onclick="skipTourWithConfirmation()">Skip Tour</button>
+                            ${!isFirstStep ? '<button class="tour-btn tour-btn-prev" onclick="previousStep()">Previous</button>' : ''}
+                            <button class="tour-btn tour-btn-next" onclick="${isLastStep ? 'endTour()' : 'nextStep()'}">${isLastStep ? 'Finish' : 'Next'}</button>
+                        </div>
+                    </div>
+                `;
+
+                tourTooltip.style.display = 'block';
+                
+                // Center the tooltip
+                setTimeout(() => {
+                    const tooltipRect = tourTooltip.getBoundingClientRect();
+                    const viewportWidth = window.innerWidth;
+                    const viewportHeight = window.innerHeight;
+                    
+                    const tooltipLeft = (viewportWidth - tooltipRect.width) / 2;
+                    const tooltipTop = (viewportHeight - tooltipRect.height) / 2;
+                    
+                    tourTooltip.style.left = tooltipLeft + 'px';
+                    tourTooltip.style.top = tooltipTop + 'px';
+                }, 10);
+                
+                return;
+            }
+            
             const element = document.querySelector(step.element);
             
             if (!element) {
@@ -1268,12 +1336,12 @@
                 tourHighlight.style.width = rect.width + 'px';
                 tourHighlight.style.height = rect.height + 'px';
 
-                // Position click blocker over highlighted area
+                // Position click blocker to cover entire page
                 tourClickBlocker.style.display = 'block';
-                tourClickBlocker.style.top = rect.top + 'px';
-                tourClickBlocker.style.left = rect.left + 'px';
-                tourClickBlocker.style.width = rect.width + 'px';
-                tourClickBlocker.style.height = rect.height + 'px';
+                tourClickBlocker.style.top = '0';
+                tourClickBlocker.style.left = '0';
+                tourClickBlocker.style.width = '100%';
+                tourClickBlocker.style.height = '100%';
 
                 const isLastStep = stepIndex === tourSteps.length - 1;
                 const isFirstStep = stepIndex === 0;
