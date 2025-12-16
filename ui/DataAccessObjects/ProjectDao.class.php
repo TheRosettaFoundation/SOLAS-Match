@@ -2048,20 +2048,24 @@ error_log("Create PO fail delete: $result");
                     'errorOutputURI' => "storage://SSC/{$po_number}_errors.json",
                     'uniqueErrorOutputURI' => true,
                 ];
-foreach ($tasks as $t => $row) 
                 $linguist_t_code      = str_replace(['&', '<', '>'], ['&amp;', '&lt;', '&gt;'], $po['linguist_t_code']);
-                $title                = str_replace(['&', '<', '>'], ['&amp;', '&lt;', '&gt;'], mb_substr($po['title'], 0, 50));
                 $purchase_requisition = str_replace(['&', '<', '>'], ['&amp;', '&lt;', '&gt;'], $po['purchase_requisition']);
                 $project_t_code       = str_replace(['&', '<', '>'], ['&amp;', '&lt;', '&gt;'], $po['project_t_code']);
-                $total_paid_words = $po['total_paid_words'];
-                $unit_rate = $po['unit_rate'];
-                $amount = $total_paid_words*$unit_rate;
-                $EA = ['Words' => 'WORD', 'Terms' => 'TERM', 'Labor hours' => 'HR'][$po['pricing_and_recognition_unit_text_hours']];
                 $date = date("dmY");
+
+                $line_number = 1;
 $xml = '<?xml version="1.0" encoding="UTF-8"?><SSC><SunSystemsContext><BusinessUnit>CLG</BusinessUnit></SunSystemsContext><Payload><PurchaseOrder><PurchaseTransactionType>PO002</PurchaseTransactionType>' .
-"<PurchaseOrderReference>$po_number</PurchaseOrderReference><SupplierCode>$linguist_t_code</SupplierCode><PurchaseOrderLine><LineNumber>1</LineNumber><ItemCode>2.9.2</ItemCode>" .
+"<PurchaseOrderReference>$po_number</PurchaseOrderReference><SupplierCode>$linguist_t_code</SupplierCode>";
+                foreach ($tasks as $t => $row) {
+                    $title = str_replace(['&', '<', '>'], ['&amp;', '&lt;', '&gt;'], mb_substr($row['title'], 0, 50));
+                    $total_paid_words = $row['total_paid_words'];
+                    $unit_rate = $row['unit_rate'];
+                    $amount = $total_paid_words*$unit_rate;
+                    $EA = ['Words' => 'WORD', 'Terms' => 'TERM', 'Labor hours' => 'HR'][$row['pricing_and_recognition_unit_text_hours']];
+$xml .=
+"<PurchaseOrderLine><LineNumber>$line_number</LineNumber><ItemCode>2.9.2</ItemCode>" .
 "<Description>$title</Description><UnitOfPurchase>$EA</UnitOfPurchase><CurrencyCode>USD</CurrencyCode>" .
-"<OrderDate>$date</OrderDate><OwnDueDate>$date</OwnDueDate><PurchaseRequisitionTransRef>$purchase_requisition</PurchaseRequisitionTransRef><MiscellaneousReference1>$purchase_requisition</MiscellaneousReference1><MiscellaneousInput2>$task_id</MiscellaneousInput2><AnalysisQuantity>" .
+"<OrderDate>$date</OrderDate><OwnDueDate>$date</OwnDueDate><PurchaseRequisitionTransRef>$purchase_requisition</PurchaseRequisitionTransRef><MiscellaneousReference1>$purchase_requisition</MiscellaneousReference1><MiscellaneousInput2>$t</MiscellaneousInput2><AnalysisQuantity>" .
 "<Analysis1><VPolCatAnalysis_AnlCatId>01</VPolCatAnalysis_AnlCatId><VPolCatAnalysis_AnlCode>$project_t_code</VPolCatAnalysis_AnlCode></Analysis1>" .
 '<Analysis5><VPolCatAnalysis_AnlCatId>05</VPolCatAnalysis_AnlCatId><VPolCatAnalysis_AnlCode>LST</VPolCatAnalysis_AnlCode></Analysis5>' .
 '<Analysis6><VPolCatAnalysis_AnlCatId>06</VPolCatAnalysis_AnlCatId><VPolCatAnalysis_AnlCode>GLOB</VPolCatAnalysis_AnlCode></Analysis6>' .
@@ -2072,7 +2076,10 @@ $xml = '<?xml version="1.0" encoding="UTF-8"?><SSC><SunSystemsContext><BusinessU
 "<VLAB4><Trans><VPolVlabEntry_Val>$unit_rate</VPolVlabEntry_Val><VPolVlabEntry_VlabId>4</VPolVlabEntry_VlabId></Trans></VLAB4>" .
 "<VLAB7><Base><VPolVlabEntry_Val>$amount</VPolVlabEntry_Val><VPolVlabEntry_VlabId>7</VPolVlabEntry_VlabId><VPolVlabEntry_UserOverridden>0</VPolVlabEntry_UserOverridden><VPolVlabEntry_UlabCode>$EA</VPolVlabEntry_UlabCode></Base></VLAB7>" .
 "<VLAB8><Trans><VPolVlabEntry_Val>$unit_rate</VPolVlabEntry_Val><VPolVlabEntry_VlabId>8</VPolVlabEntry_VlabId><VPolVlabEntry_UserOverridden>1</VPolVlabEntry_UserOverridden></Trans></VLAB8>" .
-'</PurchaseOrderLine></PurchaseOrder></Payload></SSC>';
+'</PurchaseOrderLine>';
+                        $line_number++;
+                    }
+$xml .= '</PurchaseOrder></Payload></SSC>';
 error_log("Create PO: $xml");
                 $xml = urlencode($xml);
                 $ch = curl_init("https://mingle-ionapi.eu3.inforcloudsuite.com/VGK6STV88YNKAKGZ_$PRD/SUN/payload-v1/api/payload/v1/request-text?overwritePayloadURI=false&payload=$xml");
