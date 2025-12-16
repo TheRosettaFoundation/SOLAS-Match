@@ -1994,7 +1994,7 @@ GROUP BY c.id, u.id';
 error_log("Create PO response: $result");
 
             if (!empty($result) && strpos($result, 'status="success"')) {
-                LibAPI\PDOWrapper::call('insert_purchase_order', LibAPI\PDOWrapper::cleanseWrapStr($po_number) . ',' . LibAPI\PDOWrapper::cleanse($task_id));
+                foreach (json_decode($tasks, true) as $t) LibAPI\PDOWrapper::call('insert_purchase_order', LibAPI\PDOWrapper::cleanseWrapStr($po_number) . ',' . LibAPI\PDOWrapper::cleanse($t));
 error_log("Create PO success: $po_number, $task_id");
             } elseif (!empty($result) && strpos($result, '"statusCode":404')) {
                 LibAPI\PDOWrapper::call('queue_po_response', LibAPI\PDOWrapper::cleanseWrapStr($po_number) . ',' . LibAPI\PDOWrapper::cleanseWrapStr($result) . ',' . LibAPI\PDOWrapper::cleanse($task_id) . ',' . LibAPI\PDOWrapper::cleanseNullOrWrapStr($tasks)); // Retry in 1 minute
