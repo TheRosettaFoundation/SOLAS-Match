@@ -1463,7 +1463,7 @@
         });
 
         window.addEventListener('load', () => {
-            if (!sessionStorage.getItem('tourCompleted')) {
+            if (true && !sessionStorage.getItem('tourCompleted')) {
                 setTimeout(() => {
                     startTour();
                 }, 800);
