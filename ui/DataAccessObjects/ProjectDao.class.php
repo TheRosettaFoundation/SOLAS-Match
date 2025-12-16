@@ -2027,6 +2027,12 @@ error_log("Create PO fail delete: $result");
         if (false && ($result = LibAPI\PDOWrapper::call('get_next_po_to_create', ''))) {
             $po = $result[0];
             $task_id = $po['task_id'];
+            $tasks = [$task_id => ['task_id' => $po['task_id'], 'title' => $po['title'], 'total_paid_words' => $po['total_paid_words'], 'unit_rate' => $po['unit_rate'], 'pricing_and_recognition_unit_text_hours' => $po['pricing_and_recognition_unit_text_hours']]];
+
+            $all_tasks = LibAPI\PDOWrapper::call('get_all_tasks_for_po', LibAPI\PDOWrapper::cleanse($po['user_id']) . ',' . LibAPI\PDOWrapper::cleanseWrapStr($po['purchase_requisition']));
+            if (empty($all_tasks)) $all_tasks = [];
+            foreach ($all_tasks as $row) $tasks[$row['task_id']] = $row;
+
             if (!$po['po_create_failed'] || $po['po_create_failed'] > 65) {
                 LibAPI\PDOWrapper::call('increment_po_number', '');
 
@@ -2042,6 +2048,7 @@ error_log("Create PO fail delete: $result");
                     'errorOutputURI' => "storage://SSC/{$po_number}_errors.json",
                     'uniqueErrorOutputURI' => true,
                 ];
+foreach ($tasks as $t => $row) 
                 $linguist_t_code      = str_replace(['&', '<', '>'], ['&amp;', '&lt;', '&gt;'], $po['linguist_t_code']);
                 $title                = str_replace(['&', '<', '>'], ['&amp;', '&lt;', '&gt;'], mb_substr($po['title'], 0, 50));
                 $purchase_requisition = str_replace(['&', '<', '>'], ['&amp;', '&lt;', '&gt;'], $po['purchase_requisition']);
