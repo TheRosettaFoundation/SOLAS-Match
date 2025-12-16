@@ -2089,10 +2089,10 @@ error_log("Create PO: $xml");
                 curl_setopt($ch, CURLOPT_TIMEOUT, 300);
                 $result = curl_exec($ch);
 error_log("Create PO ref: $result");
-                LibAPI\PDOWrapper::call('reset_po_create_failed', LibAPI\PDOWrapper::cleanse($task_id));
+                foreach ($tasks as $t => $row) LibAPI\PDOWrapper::call('reset_po_create_failed', LibAPI\PDOWrapper::cleanse($t));
                 LibAPI\PDOWrapper::call('queue_po_response', LibAPI\PDOWrapper::cleanseWrapStr($po_number) . ',' . LibAPI\PDOWrapper::cleanseWrapStr($result) . ',' . LibAPI\PDOWrapper::cleanse($task_id));
             } else {
-                LibAPI\PDOWrapper::call('increment_po_create_failed', LibAPI\PDOWrapper::cleanse($task_id));
+                foreach ($tasks as $t => $row) LibAPI\PDOWrapper::call('increment_po_create_failed', LibAPI\PDOWrapper::cleanse($t));
             }
         }
 
