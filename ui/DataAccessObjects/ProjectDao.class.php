@@ -1981,6 +1981,7 @@ GROUP BY c.id, u.id';
             $po_number = $po['po_number'];
             $response = $po['response'];
             $task_id = $po['task_id'];
+            $tasks = $po['tasks'];
 
             $access_token = $this->get_sun_access_token($PRD);
             $ch = curl_init("https://mingle-ionapi.eu3.inforcloudsuite.com/VGK6STV88YNKAKGZ_$PRD/SUN/payload-v1/api/payload/v1/response?storeResponse=true");
@@ -1996,7 +1997,7 @@ error_log("Create PO response: $result");
                 LibAPI\PDOWrapper::call('insert_purchase_order', LibAPI\PDOWrapper::cleanseWrapStr($po_number) . ',' . LibAPI\PDOWrapper::cleanse($task_id));
 error_log("Create PO success: $po_number, $task_id");
             } elseif (!empty($result) && strpos($result, '"statusCode":404')) {
-                LibAPI\PDOWrapper::call('queue_po_response', LibAPI\PDOWrapper::cleanseWrapStr($po_number) . ',' . LibAPI\PDOWrapper::cleanseWrapStr($result) . ',' . LibAPI\PDOWrapper::cleanse($task_id)); // Retry in 1 minute
+                LibAPI\PDOWrapper::call('queue_po_response', LibAPI\PDOWrapper::cleanseWrapStr($po_number) . ',' . LibAPI\PDOWrapper::cleanseWrapStr($result) . ',' . LibAPI\PDOWrapper::cleanse($task_id) . ',' . LibAPI\PDOWrapper::cleanseNullOrWrapStr($tasks)); // Retry in 1 minute
 error_log("Create PO wait: $po_number, $task_id");
             } else {
                 $matches = [];
@@ -2090,7 +2091,7 @@ error_log("Create PO: $xml");
                 $result = curl_exec($ch);
 error_log("Create PO ref: $result");
                 foreach ($tasks as $t => $row) LibAPI\PDOWrapper::call('reset_po_create_failed', LibAPI\PDOWrapper::cleanse($t));
-                LibAPI\PDOWrapper::call('queue_po_response', LibAPI\PDOWrapper::cleanseWrapStr($po_number) . ',' . LibAPI\PDOWrapper::cleanseWrapStr($result) . ',' . LibAPI\PDOWrapper::cleanse($task_id));
+                LibAPI\PDOWrapper::call('queue_po_response', LibAPI\PDOWrapper::cleanseWrapStr($po_number) . ',' . LibAPI\PDOWrapper::cleanseWrapStr($result) . ',' . LibAPI\PDOWrapper::cleanse($task_id) . ',' . LibAPI\PDOWrapper::cleanseNullOrWrapStr('[' . implode(',', array_keys($tasks)) . ']'));
             } else {
                 foreach ($tasks as $t => $row) LibAPI\PDOWrapper::call('increment_po_create_failed', LibAPI\PDOWrapper::cleanse($t));
             }
