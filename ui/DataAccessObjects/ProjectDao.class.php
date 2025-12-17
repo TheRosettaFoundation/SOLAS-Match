@@ -1982,6 +1982,7 @@ GROUP BY c.id, u.id';
             $response = $po['response'];
             $task_id = $po['task_id'];
             $tasks = $po['tasks'];
+error_log("tasks: $tasks");//(**)
 
             $access_token = $this->get_sun_access_token($PRD);
             $ch = curl_init("https://mingle-ionapi.eu3.inforcloudsuite.com/VGK6STV88YNKAKGZ_$PRD/SUN/payload-v1/api/payload/v1/response?storeResponse=true");
@@ -1994,6 +1995,7 @@ $result = '6789 status="success"';//(**)            $result = curl_exec($ch);
 error_log("Create PO response: $result");
 
             if (!empty($result) && strpos($result, 'status="success"')) {
+foreach (json_decode($tasks, true) as $t) foreach ($tasks as $t => $row) error_log("t: $t");//(**)
                 foreach (json_decode($tasks, true) as $t) LibAPI\PDOWrapper::call('insert_purchase_order', LibAPI\PDOWrapper::cleanseWrapStr($po_number) . ',' . LibAPI\PDOWrapper::cleanse($t));
 error_log("Create PO success: $po_number, $task_id");
             } elseif (!empty($result) && strpos($result, '"statusCode":404')) {
@@ -2029,10 +2031,12 @@ error_log("Create PO fail delete: $result");
             $po = $result[0];
             $task_id = $po['task_id'];
             $tasks = [$task_id => ['task_id' => $po['task_id'], 'title' => $po['title'], 'total_paid_words' => $po['total_paid_words'], 'unit_rate' => $po['unit_rate'], 'pricing_and_recognition_unit_text_hours' => $po['pricing_and_recognition_unit_text_hours']]];
+error_log(print_r($tasks, 1));//(**)
 
             $all_tasks = LibAPI\PDOWrapper::call('get_all_tasks_for_po', LibAPI\PDOWrapper::cleanse($po['user_id']) . ',' . LibAPI\PDOWrapper::cleanseWrapStr($po['purchase_requisition']));
             if (empty($all_tasks)) $all_tasks = [];
             foreach ($all_tasks as $row) $tasks[$row['task_id']] = $row;
+error_log(print_r($tasks, 1));//(**)
 
             if (!$po['po_create_failed'] || $po['po_create_failed'] > 65) {
                 LibAPI\PDOWrapper::call('increment_po_number', '');
@@ -2090,6 +2094,7 @@ error_log("Create PO: $xml");
                 curl_setopt($ch, CURLOPT_TIMEOUT, 300);
 $result = '12345';//(**)                $result = curl_exec($ch);
 error_log("Create PO ref: $result");
+foreach ($tasks as $t => $row) error_log("Create PO t: $t");;//(**)
                 foreach ($tasks as $t => $row) LibAPI\PDOWrapper::call('reset_po_create_failed', LibAPI\PDOWrapper::cleanse($t));
                 LibAPI\PDOWrapper::call('queue_po_response', LibAPI\PDOWrapper::cleanseWrapStr($po_number) . ',' . LibAPI\PDOWrapper::cleanseWrapStr($result) . ',' . LibAPI\PDOWrapper::cleanse($task_id) . ',' . LibAPI\PDOWrapper::cleanseNullOrWrapStr('[' . implode(',', array_keys($tasks)) . ']'));
             } else {
