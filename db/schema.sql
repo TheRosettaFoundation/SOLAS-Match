@@ -14805,7 +14805,7 @@ BEGIN
         t.`task-status_id`=4 AND
         tp.processed>=0 AND
         pcd.purchase_requisition=pr AND
-        tc.user_d=uID AND
+        tc.user_id=uID AND
         (tp.po_create_failed=0 OR tp.po_create_failed>65)
     ORDER BY
         o.name, p.title, t.title, t.id;
