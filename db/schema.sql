@@ -14775,6 +14775,43 @@ BEGIN
 END//
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `get_all_tasks_for_po`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_all_tasks_for_po`(IN uID INT UNSIGNED, IN pr VARCHAR(255))
+BEGIN
+    SELECT
+        t.id AS task_id,
+        t.title,
+        t.project_id,
+        p.organisation_id,
+        o.name,
+        IF(ttd.divide_rate_by_60, t.`word-count`/60, t.`word-count`) AS total_paid_words,
+        tp.unit_rate,
+        IF(ttd.divide_rate_by_60, t.`word-count`*tp.unit_rate/60, t.`word-count`*tp.unit_rate) AS total_expected_cost,
+        ttd.pricing_and_recognition_unit_text_hours,
+    FROM TaskPaids                      tp
+    JOIN Tasks                           t ON tp.task_id=t.id
+    JOIN task_type_details             ttd ON t.`task-type_id`=ttd.type_enum
+    JOIN Projects                        p ON t.project_id=p.id
+    JOIN Organisations                   o ON p.organisation_id=o.id
+    JOIN project_complete_dates        pcd ON p.id=pcd.project_id
+    JOIN TaskClaims                     tc ON t.id=tc.task_id
+    WHERE
+        pcd.deal_id!=0 AND
+        pcd.project_t_code!='' AND
+        t.`word-count`>1 AND
+        tp.purchase_order='0' AND
+        tp.payment_status NOT IN ('In-kind', 'In-house', 'Waived') AND
+        t.`task-status_id`=4 AND
+        tp.processed>=0 AND
+        pcd.purchase_requisition=pr AND
+        tc.user_d=uID AND
+        (tp.po_create_failed=0 OR tp.po_create_failed>65)
+    ORDER BY
+        o.name, p.title, t.title, t.id;
+END//
+DELIMITER ;
+
 DROP PROCEDURE IF EXISTS `increment_po_number`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `increment_po_number`()
@@ -14804,14 +14841,15 @@ CREATE TABLE IF NOT EXISTS `queue_po_responses` (
   task_id   BIGINT UNSIGNED NOT NULL,
   po_number VARCHAR(50) NOT NULL,
   response  VARCHAR(2000) NOT NULL,
+  tasks     JSON NOT NULL DEFAULT ('[]'),
   PRIMARY KEY (task_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 DROP PROCEDURE IF EXISTS `queue_po_response`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `queue_po_response`(IN po VARCHAR(50), IN res VARCHAR(2000), IN tID BIGINT UNSIGNED)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `queue_po_response`(IN po VARCHAR(50), IN res VARCHAR(2000), IN tID BIGINT UNSIGNED, IN ts JSON)
 BEGIN
-    INSERT INTO queue_po_responses VALUES (tID, po, res);
+    INSERT INTO queue_po_responses VALUES (tID, po, res, ts);
 END//
 DELIMITER ;
 
@@ -14820,10 +14858,10 @@ DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `get_queue_po_response`()
 BEGIN
     SET @tID=NULL;
-    SELECT task_id, po_number, response INTO @tID, @po, @res FROM queue_po_responses ORDER BY task_id LIMIT 1;
+    SELECT task_id, po_number, response, tasks INTO @tID, @po, @res, @ts FROM queue_po_responses ORDER BY task_id LIMIT 1;
     IF @tID IS NOT NULL THEN
         DELETE FROM queue_po_responses WHERE task_id=@tID;
-        SELECT @tID AS task_id, @po AS po_number, @res AS response;
+        SELECT @tID AS task_id, @po AS po_number, @res AS response, @ts AS tasks;
     END IF;
 END//
 DELIMITER ;
@@ -14837,7 +14875,7 @@ BEGIN
         lpi.linguist_t_code,
         IF(ttd.divide_rate_by_60, t.`word-count`*tp.unit_rate/60, t.`word-count`*tp.unit_rate),
         CONCAT(l1.code, '-', l2.code, ', ', ttd.type_text, ', ', t.title, ', ', p.title, ', ', o.name)
-        INTO @supplier, @supplier_reference, @total, @description
+        INTO @supplier, @supplier_reference, @total_part, @description_part
     FROM TaskPaids                      tp
     JOIN Tasks                           t ON tp.task_id=t.id
     JOIN task_type_details             ttd ON t.`task-type_id`=ttd.type_enum
@@ -14850,24 +14888,28 @@ BEGIN
     WHERE
         t.id=tID;
 
-    INSERT INTO zahara_purchase_orders (
-        purchase_order,
-        creation_date,
-        supplier,
-        supplier_reference,
-        total,
-        currency,
-        description,
-        division_name)
-    VALUES (
-        po,
-        NOW(),
-        @supplier,
-        @supplier_reference,
-        @total,
-        'USD',
-        @description,
-        'Language Service Team (LST)');
+    IF NOT EXISTS (SELECT 1 FROM zahara_purchase_orders WHERE purchase_order=po) THEN
+        INSERT INTO zahara_purchase_orders (
+            purchase_order,
+            creation_date,
+            supplier,
+            supplier_reference,
+            total,
+            currency,
+            description,
+            division_name)
+        VALUES (
+            po,
+            NOW(),
+            @supplier,
+            @supplier_reference,
+            @total_part,
+            'USD',
+            @description_part,
+            'Language Service Team (LST)');
+    ELSE
+        UPDATE zahara_purchase_orders SET total=total + @total_part, description=IF((CHAR_LENGTH(description) + CHAR_LENGTH(@description_part) + 2) <= 2500, CONCAT(description, '; ', @description_part), description) WHERE purchase_order=po;
+    END IF;
 
     UPDATE TaskPaids SET purchase_order=po WHERE task_id=tID;
 END//
