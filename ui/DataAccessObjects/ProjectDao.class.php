@@ -1990,7 +1990,7 @@ GROUP BY c.id, u.id';
             curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json', "Authorization: Bearer $access_token"]);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
             curl_setopt($ch, CURLOPT_TIMEOUT, 300);
-            $result = curl_exec($ch);
+$result = '6789 status="success"';//(**)            $result = curl_exec($ch);
 error_log("Create PO response: $result");
 
             if (!empty($result) && strpos($result, 'status="success"')) {
@@ -2025,7 +2025,7 @@ error_log("Create PO fail: $po_number, $task_id");
 error_log("Create PO fail delete: $result");
             }
         }
-        if (false && ($result = LibAPI\PDOWrapper::call('get_next_po_to_create', ''))) {
+        if ($result = LibAPI\PDOWrapper::call('get_next_po_to_create', '')) {
             $po = $result[0];
             $task_id = $po['task_id'];
             $tasks = [$task_id => ['task_id' => $po['task_id'], 'title' => $po['title'], 'total_paid_words' => $po['total_paid_words'], 'unit_rate' => $po['unit_rate'], 'pricing_and_recognition_unit_text_hours' => $po['pricing_and_recognition_unit_text_hours']]];
@@ -2088,7 +2088,7 @@ error_log("Create PO: $xml");
                 curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: multipart/form-data; boundary=l0H0X8tcUK3pm', 'Accept: application/json', "Authorization: Bearer $access_token"]);
                 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
                 curl_setopt($ch, CURLOPT_TIMEOUT, 300);
-                $result = curl_exec($ch);
+$result = '12345';//(**)                $result = curl_exec($ch);
 error_log("Create PO ref: $result");
                 foreach ($tasks as $t => $row) LibAPI\PDOWrapper::call('reset_po_create_failed', LibAPI\PDOWrapper::cleanse($t));
                 LibAPI\PDOWrapper::call('queue_po_response', LibAPI\PDOWrapper::cleanseWrapStr($po_number) . ',' . LibAPI\PDOWrapper::cleanseWrapStr($result) . ',' . LibAPI\PDOWrapper::cleanse($task_id) . ',' . LibAPI\PDOWrapper::cleanseNullOrWrapStr('[' . implode(',', array_keys($tasks)) . ']'));
