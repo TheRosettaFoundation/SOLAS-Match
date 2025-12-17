@@ -14788,7 +14788,7 @@ BEGIN
         IF(ttd.divide_rate_by_60, t.`word-count`/60, t.`word-count`) AS total_paid_words,
         tp.unit_rate,
         IF(ttd.divide_rate_by_60, t.`word-count`*tp.unit_rate/60, t.`word-count`*tp.unit_rate) AS total_expected_cost,
-        ttd.pricing_and_recognition_unit_text_hours,
+        ttd.pricing_and_recognition_unit_text_hours
     FROM TaskPaids                      tp
     JOIN Tasks                           t ON tp.task_id=t.id
     JOIN task_type_details             ttd ON t.`task-type_id`=ttd.type_enum
