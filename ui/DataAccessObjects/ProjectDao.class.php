@@ -1995,7 +1995,7 @@ $result = '6789 status="success"';//(**)            $result = curl_exec($ch);
 error_log("Create PO response: $result");
 
             if (!empty($result) && strpos($result, 'status="success"')) {
-foreach (json_decode($tasks, true) as $t) foreach ($tasks as $t => $row) error_log("t: $t");//(**)
+foreach (json_decode($tasks, true) as $t) error_log("t: $t");//(**)
                 foreach (json_decode($tasks, true) as $t) LibAPI\PDOWrapper::call('insert_purchase_order', LibAPI\PDOWrapper::cleanseWrapStr($po_number) . ',' . LibAPI\PDOWrapper::cleanse($t));
 error_log("Create PO success: $po_number, $task_id");
             } elseif (!empty($result) && strpos($result, '"statusCode":404')) {
