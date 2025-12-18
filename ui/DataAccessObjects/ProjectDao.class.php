@@ -1992,6 +1992,7 @@ error_log("tasks: $tasks");//(**)
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
             curl_setopt($ch, CURLOPT_TIMEOUT, 300);
 $result = '6789 status="success"';//(**)            $result = curl_exec($ch);
+$result = '6789 "statusCode":404';//(**)
 error_log("Create PO response: $result");
 
             if (!empty($result) && strpos($result, 'status="success"')) {
