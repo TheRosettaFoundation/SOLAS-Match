@@ -1982,7 +1982,6 @@ GROUP BY c.id, u.id';
             $response = $po['response'];
             $task_id = $po['task_id'];
             $tasks = $po['tasks'];
-error_log("tasks: $tasks");//(**)
 
             $access_token = $this->get_sun_access_token($PRD);
             $ch = curl_init("https://mingle-ionapi.eu3.inforcloudsuite.com/VGK6STV88YNKAKGZ_$PRD/SUN/payload-v1/api/payload/v1/response?storeResponse=true");
@@ -1991,13 +1990,10 @@ error_log("tasks: $tasks");//(**)
             curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json', "Authorization: Bearer $access_token"]);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
             curl_setopt($ch, CURLOPT_TIMEOUT, 300);
-$result = '6789 status="success"';//(**)            $result = curl_exec($ch);
-//$result = '6789 "statusCode":404';//(**)
-//$result = '6789 "<Message>FAIL BUT NOT WAIT</Message>":404';//(**)
+            $result = curl_exec($ch);
 error_log("Create PO response: $result");
 
             if (!empty($result) && strpos($result, 'status="success"')) {
-foreach (json_decode($tasks, true) as $t) error_log("t: $t");//(**)
                 foreach (json_decode($tasks, true) as $t) LibAPI\PDOWrapper::call('insert_purchase_order', LibAPI\PDOWrapper::cleanseWrapStr($po_number) . ',' . LibAPI\PDOWrapper::cleanse($t));
 error_log("Create PO success: $po_number, $task_id");
             } elseif (!empty($result) && strpos($result, '"statusCode":404')) {
@@ -2024,7 +2020,7 @@ error_log("Create PO wait: $po_number, $task_id");
                 curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: multipart/form-data; boundary=l0H0X8tcUK3pm', 'Accept: application/json', "Authorization: Bearer $access_token"]);
                 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
                 curl_setopt($ch, CURLOPT_TIMEOUT, 300);
-//(**)                $result = curl_exec($ch);
+                $result = curl_exec($ch);
 error_log("Create PO fail: $po_number, $task_id");
 error_log("Create PO fail delete: $result");
             }
@@ -2033,14 +2029,11 @@ error_log("Create PO fail delete: $result");
             $po = $result[0];
             $task_id = $po['task_id'];
             $po_create_failed = $po['po_create_failed'];
-error_log(">>>get_next_po_to_create po_create_failed: $po_create_failed");//(**)
             $tasks = [$task_id => ['task_id' => $po['task_id'], 'title' => $po['title'], 'total_paid_words' => $po['total_paid_words'], 'unit_rate' => $po['unit_rate'], 'pricing_and_recognition_unit_text_hours' => $po['pricing_and_recognition_unit_text_hours']]];
-error_log(print_r($tasks, 1));//(**)
 
             $all_tasks = LibAPI\PDOWrapper::call('get_all_tasks_for_po', LibAPI\PDOWrapper::cleanse($po['user_id']) . ',' . LibAPI\PDOWrapper::cleanseWrapStr($po['purchase_requisition']) . ',' . LibAPI\PDOWrapper::cleanse($po_create_failed));
             if (empty($all_tasks)) $all_tasks = [];
             foreach ($all_tasks as $row) $tasks[$row['task_id']] = $row;
-error_log(print_r($tasks, 1));//(**)
 
             if (!$po_create_failed || $po_create_failed > 65) {
                 LibAPI\PDOWrapper::call('increment_po_number', '');
@@ -2096,9 +2089,8 @@ error_log("Create PO: $xml");
                 curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: multipart/form-data; boundary=l0H0X8tcUK3pm', 'Accept: application/json', "Authorization: Bearer $access_token"]);
                 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
                 curl_setopt($ch, CURLOPT_TIMEOUT, 300);
-$result = '12345';//(**)                $result = curl_exec($ch);
+                $result = curl_exec($ch);
 error_log("Create PO ref: $result");
-foreach ($tasks as $t => $row) error_log("Create PO t: $t");;//(**)
                 foreach ($tasks as $t => $row) LibAPI\PDOWrapper::call('reset_po_create_failed', LibAPI\PDOWrapper::cleanse($t));
                 LibAPI\PDOWrapper::call('queue_po_response', LibAPI\PDOWrapper::cleanseWrapStr($po_number) . ',' . LibAPI\PDOWrapper::cleanseWrapStr($result) . ',' . LibAPI\PDOWrapper::cleanse($task_id) . ',' . LibAPI\PDOWrapper::cleanseNullOrWrapStr('[' . implode(',', array_keys($tasks)) . ']'));
             } else {
