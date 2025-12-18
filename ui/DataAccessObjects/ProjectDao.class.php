@@ -1993,6 +1993,7 @@ error_log("tasks: $tasks");//(**)
             curl_setopt($ch, CURLOPT_TIMEOUT, 300);
 $result = '6789 status="success"';//(**)            $result = curl_exec($ch);
 //$result = '6789 "statusCode":404';//(**)
+$result = '6789 "FAIL BUT NOT WAIT":404';//(**)
 error_log("Create PO response: $result");
 
             if (!empty($result) && strpos($result, 'status="success"')) {
@@ -2023,7 +2024,7 @@ error_log("Create PO wait: $po_number, $task_id");
                 curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: multipart/form-data; boundary=l0H0X8tcUK3pm', 'Accept: application/json', "Authorization: Bearer $access_token"]);
                 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
                 curl_setopt($ch, CURLOPT_TIMEOUT, 300);
-                $result = curl_exec($ch);
+//(**)                $result = curl_exec($ch);
 error_log("Create PO fail: $po_number, $task_id");
 error_log("Create PO fail delete: $result");
             }
