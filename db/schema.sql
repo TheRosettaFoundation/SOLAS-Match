@@ -14777,7 +14777,7 @@ DELIMITER ;
 
 DROP PROCEDURE IF EXISTS `get_all_tasks_for_po`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `get_all_tasks_for_po`(IN uID INT UNSIGNED, IN pr VARCHAR(255))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_all_tasks_for_po`(IN uID INT UNSIGNED, IN pr VARCHAR(255), IN failed INT)
 BEGIN
     SELECT
         t.id AS task_id,
@@ -14806,7 +14806,7 @@ BEGIN
         tp.processed>=0 AND
         pcd.purchase_requisition=pr AND
         tc.user_id=uID AND
-        (tp.po_create_failed=0 OR tp.po_create_failed>65)
+        tp.po_create_failed=failed
     ORDER BY
         o.name, p.title, t.title, t.id;
 END//

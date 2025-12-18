@@ -2031,15 +2031,17 @@ error_log("Create PO fail delete: $result");
         if ($result = LibAPI\PDOWrapper::call('get_next_po_to_create', '')) {
             $po = $result[0];
             $task_id = $po['task_id'];
+            $po_create_failed = $po['po_create_failed'];
+error_log(">>>get_next_po_to_create po_create_failed: $po_create_failed");//(**)
             $tasks = [$task_id => ['task_id' => $po['task_id'], 'title' => $po['title'], 'total_paid_words' => $po['total_paid_words'], 'unit_rate' => $po['unit_rate'], 'pricing_and_recognition_unit_text_hours' => $po['pricing_and_recognition_unit_text_hours']]];
 error_log(print_r($tasks, 1));//(**)
 
-            $all_tasks = LibAPI\PDOWrapper::call('get_all_tasks_for_po', LibAPI\PDOWrapper::cleanse($po['user_id']) . ',' . LibAPI\PDOWrapper::cleanseWrapStr($po['purchase_requisition']));
+            $all_tasks = LibAPI\PDOWrapper::call('get_all_tasks_for_po', LibAPI\PDOWrapper::cleanse($po['user_id']) . ',' . LibAPI\PDOWrapper::cleanseWrapStr($po['purchase_requisition']) . ',' . LibAPI\PDOWrapper::cleanse($po_create_failed));
             if (empty($all_tasks)) $all_tasks = [];
             foreach ($all_tasks as $row) $tasks[$row['task_id']] = $row;
 error_log(print_r($tasks, 1));//(**)
 
-            if (!$po['po_create_failed'] || $po['po_create_failed'] > 65) {
+            if (!$po_create_failed || $po_create_failed > 65) {
                 LibAPI\PDOWrapper::call('increment_po_number', '');
 
                 $access_token = $this->get_sun_access_token($PRD);
