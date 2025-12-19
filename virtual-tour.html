@@ -486,8 +486,35 @@
             padding: 1.5rem;
             box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
             max-width: 400px;
-            animation: slideUp 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             pointer-events: all;
+        }
+
+        /* No animation for welcome screen */
+        .tour-tooltip:not(.welcome-highlight) {
+            animation: slideUp 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* Orange border for welcome tooltip */
+        .tour-tooltip.welcome-highlight {
+            position: fixed;
+            z-index: 10005 !important;
+            animation: none !important;
+        }
+
+        .tour-tooltip.welcome-highlight::before {
+            content: '';
+            position: absolute;
+            top: -8px;
+            left: -8px;
+            right: -8px;
+            bottom: -8px;
+            border: 3px solid var(--twb-orange);
+            border-radius: 12px;
+            box-shadow: 0 0 0 4px rgba(248, 151, 40, 0.3),
+                        0 0 30px rgba(248, 151, 40, 0.5);
+            animation: pulse 2s infinite;
+            pointer-events: none;
+            z-index: -1;
         }
 
         @keyframes slideUp {
@@ -1224,6 +1251,17 @@
         const startTourBtn = document.getElementById('startTourBtn');
 
         function startTour() {
+            // Clean up any previous tour state
+            const previousHighlight = document.querySelector('.tour-highlight-target');
+            if (previousHighlight) {
+                previousHighlight.classList.remove('tour-highlight-target');
+            }
+            tourHighlight.style.display = 'none';
+            tourClickBlocker.style.display = 'none';
+            tourTooltip.style.display = 'none';
+            tourTooltip.classList.remove('welcome-highlight');
+            tourOverlay.style.background = 'transparent';
+            
             tourActive = true;
             currentStep = 0;
             startTourBtn.style.display = 'none';
@@ -1235,9 +1273,11 @@
         function endTour() {
             tourActive = false;
             tourOverlay.classList.remove('active');
+            tourOverlay.style.background = 'transparent'; // Reset overlay background
             tourHighlight.style.display = 'none';
             tourClickBlocker.style.display = 'none';
             tourTooltip.style.display = 'none';
+            tourTooltip.classList.remove('welcome-highlight'); // Remove welcome class
             startTourBtn.style.display = 'flex';
             document.body.classList.remove('tour-active');
             
@@ -1245,8 +1285,6 @@
             if (highlightedElement) {
                 highlightedElement.classList.remove('tour-highlight-target');
             }
-            
-            sessionStorage.setItem('tourCompleted', 'true');
             window.location.href = "https://twbplatform.org";
         }
 
@@ -1263,14 +1301,16 @@
                 previousHighlight.classList.remove('tour-highlight-target');
             }
             
+            // Remove welcome-highlight class if it exists from previous step
+            tourTooltip.classList.remove('welcome-highlight');
+            
             // Handle welcome screen (centered)
             if (step.position === 'center') {
-                // Show full-page overlay
-                tourHighlight.style.display = 'block';
-                tourHighlight.style.top = '0';
-                tourHighlight.style.left = '0';
-                tourHighlight.style.width = '100%';
-                tourHighlight.style.height = '100%';
+                // Hide the highlight completely for welcome screen
+                tourHighlight.style.display = 'none';
+                
+                // Use the dark overlay from tour-overlay instead
+                tourOverlay.style.background = 'rgba(0, 0, 0, 0.7)';
                 
                 // Block entire page from clicks
                 tourClickBlocker.style.display = 'block';
@@ -1298,23 +1338,27 @@
                     </div>
                 `;
 
-                tourTooltip.style.display = 'block';
+                // Pre-calculate center position
+                const viewportWidth = window.innerWidth;
+                const viewportHeight = window.innerHeight;
+                const tooltipLeft = Math.max(20, (viewportWidth - 400) / 2);
+                const tooltipTop = Math.max(20, (viewportHeight - 300) / 2);
                 
-                // Center the tooltip
-                setTimeout(() => {
-                    const tooltipRect = tourTooltip.getBoundingClientRect();
-                    const viewportWidth = window.innerWidth;
-                    const viewportHeight = window.innerHeight;
-                    
-                    const tooltipLeft = (viewportWidth - tooltipRect.width) / 2;
-                    const tooltipTop = (viewportHeight - tooltipRect.height) / 2;
-                    
-                    tourTooltip.style.left = tooltipLeft + 'px';
-                    tourTooltip.style.top = tooltipTop + 'px';
-                }, 10);
+                // Force visibility with explicit styles
+                tourTooltip.style.display = 'block';
+                tourTooltip.style.left = tooltipLeft + 'px';
+                tourTooltip.style.top = tooltipTop + 'px';
+                tourTooltip.style.zIndex = '10005';
+                tourTooltip.style.opacity = '1';
+                tourTooltip.style.visibility = 'visible';
+                tourTooltip.style.transform = 'none';
+                tourTooltip.classList.add('welcome-highlight');
                 
                 return;
             }
+            
+            // Reset overlay background for non-welcome steps
+            tourOverlay.style.background = 'transparent';
             
             const element = document.querySelector(step.element);
             
@@ -1363,6 +1407,7 @@
                 `;
 
                 tourTooltip.style.display = 'block';
+                tourTooltip.classList.remove('welcome-highlight');
                 
                 setTimeout(() => {
                     const tooltipRect = tourTooltip.getBoundingClientRect();
@@ -1435,7 +1480,6 @@
                 e.preventDefault();
                 const dropdown = bootstrap.Dropdown.getInstance(document.querySelector('#resources-dropdown .dropdown-toggle'));
                 if (dropdown) dropdown.hide();
-                sessionStorage.removeItem('tourCompleted');
                 startTour();
             });
         }
@@ -1455,19 +1499,13 @@
             
             if (e.key === 'Escape') {
                 skipTourWithConfirmation();
-            } else if (e.key === 'ArrowRight') {
-                nextStep();
-            } else if (e.key === 'ArrowLeft') {
-                previousStep();
             }
         });
 
         window.addEventListener('load', () => {
-            if (!sessionStorage.getItem('tourCompleted')) {
-                setTimeout(() => {
-                    startTour();
-                }, 800);
-            }
+            setTimeout(() => {
+                startTour();
+            }, 800);
         });
 
         tourOverlay.addEventListener('click', (e) => {
