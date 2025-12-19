@@ -14962,6 +14962,10 @@ BEGIN
         IF(mu.user_id IS NOT NULL AND mu.user_id!=99269, mu.user_id, IFNULL(pf.user_id, u3.id)) AS creator_id,
         IF( u.email   IS NOT NULL AND  u.email!='projects@translatorswithoutborders.org', u.email, IFNULL(u2.email, u3.email)) AS creator_email,
         IF(tcd.complete_date IS NOT NULL AND tcd.complete_date<CAST(DATE_FORMAT(NOW(), '%Y-%m-01 00:00:01') as DATETIME), 1, 0) AS before_current_month,
+[[
+what about tp.po_create_failed =9 imples has not tried yet!
+        IF(tcd.complete_date IS NOT NULL AND tcd.complete_date>co.po_cut_off, 1, 0) AS outside_cut_off,
+]]
         ttd.type_text,
         CONCAT(l1.code, '-', c1.code, '<br />', l2.code, '-', c2.code) AS language_pair,
         IF(t.`word-count`>1, IF(ttd.divide_rate_by_60, t.`word-count`             /60, t.`word-count`             ), 0) AS total_paid_words,
@@ -14981,6 +14985,7 @@ BEGIN
     JOIN Languages                           l2 ON t.`language_id-target`=l2.id
     JOIN Countries                           c1 ON t.`country_id-source`=c1.id
     JOIN Countries                           c2 ON t.`country_id-target`=c2.id
+    JOIN po_cut_off_sun                      co ON co.poll=0
     LEFT JOIN TaskClaims                     tc ON t.id=tc.task_id
     LEFT JOIN TaskCompleteDates             tcd ON t.id=tcd.task_id
     LEFT JOIN UserPersonalInformation       upi ON tc.user_id=upi.user_id
