@@ -14725,6 +14725,13 @@ BEGIN
 END//
 DELIMITER ;
 
+CREATE TABLE IF NOT EXISTS `po_cut_off_sun` (
+  poll       INT NOT NULL,
+  po_cut_off DATETIME NOT NULL,
+  PRIMARY KEY (poll)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+INSERT INTO po_cut_off_sun VALUES (0, '2025-01-01 23:59:59');
+
 DROP PROCEDURE IF EXISTS `get_next_po_to_create`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `get_next_po_to_create`()
@@ -14755,6 +14762,8 @@ BEGIN
     JOIN linguist_payment_informations lpi ON tc.user_id=lpi.user_id
     JOIN sun_purchase_requisitions     spr ON pcd.purchase_requisition=spr.purchase_requisition
     JOIN poll_sun                       ps ON ps.poll=0
+    JOIN po_cut_off_sun                 co ON co.poll=0
+    JOIN TaskCompleteDates             tcd ON t.id=tcd.task_id
     WHERE
         pcd.purchase_requisition!='' AND
         pcd.deal_id!=0 AND
@@ -14767,6 +14776,7 @@ BEGIN
         lpi.linguist_t_code!='' AND
         lpi.google_drive_link!='' AND
         t.`task-status_id`=4 AND
+        tcd.complete_date<co.po_cut_off AND
         tp.processed>=0
     ORDER BY
         IF(tp.po_create_failed=0, t.id, 999999999) ASC,
@@ -14796,6 +14806,8 @@ BEGIN
     JOIN Organisations                   o ON p.organisation_id=o.id
     JOIN project_complete_dates        pcd ON p.id=pcd.project_id
     JOIN TaskClaims                     tc ON t.id=tc.task_id
+    JOIN po_cut_off_sun                 co ON co.poll=0
+    JOIN TaskCompleteDates             tcd ON t.id=tcd.task_id
     WHERE
         pcd.deal_id!=0 AND
         pcd.project_t_code!='' AND
@@ -14806,6 +14818,7 @@ BEGIN
         tp.processed>=0 AND
         pcd.purchase_requisition=pr AND
         tc.user_id=uID AND
+        tcd.complete_date<co.po_cut_off AND
         tp.po_create_failed=failed
     ORDER BY
         o.name, p.title, t.title, t.id;
@@ -14949,6 +14962,8 @@ BEGIN
         IF(mu.user_id IS NOT NULL AND mu.user_id!=99269, mu.user_id, IFNULL(pf.user_id, u3.id)) AS creator_id,
         IF( u.email   IS NOT NULL AND  u.email!='projects@translatorswithoutborders.org', u.email, IFNULL(u2.email, u3.email)) AS creator_email,
         IF(tcd.complete_date IS NOT NULL AND tcd.complete_date<CAST(DATE_FORMAT(NOW(), '%Y-%m-01 00:00:01') as DATETIME), 1, 0) AS before_current_month,
+        IF(tcd.complete_date IS NULL OR tcd.complete_date>co.po_cut_off, 1, 0) AS outside_cut_off,
+        tp.po_create_failed,
         ttd.type_text,
         CONCAT(l1.code, '-', c1.code, '<br />', l2.code, '-', c2.code) AS language_pair,
         IF(t.`word-count`>1, IF(ttd.divide_rate_by_60, t.`word-count`             /60, t.`word-count`             ), 0) AS total_paid_words,
@@ -14968,6 +14983,7 @@ BEGIN
     JOIN Languages                           l2 ON t.`language_id-target`=l2.id
     JOIN Countries                           c1 ON t.`country_id-source`=c1.id
     JOIN Countries                           c2 ON t.`country_id-target`=c2.id
+    JOIN po_cut_off_sun                      co ON co.poll=0
     LEFT JOIN TaskClaims                     tc ON t.id=tc.task_id
     LEFT JOIN TaskCompleteDates             tcd ON t.id=tcd.task_id
     LEFT JOIN UserPersonalInformation       upi ON tc.user_id=upi.user_id
