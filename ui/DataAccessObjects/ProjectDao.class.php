@@ -2025,7 +2025,7 @@ error_log("Create PO fail: $po_number, $task_id");
 error_log("Create PO fail delete: $result");
             }
         }
-        if ($result = LibAPI\PDOWrapper::call('XXXTESTget_next_po_to_create', '')) {
+        if ($result = LibAPI\PDOWrapper::call('get_next_po_to_create', '')) {
             $po = $result[0];
             $task_id = $po['task_id'];
             $po_create_failed = $po['po_create_failed'];
