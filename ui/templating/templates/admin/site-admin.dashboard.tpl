@@ -230,15 +230,13 @@
 {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER + 128)}
 
   {if !($roles & ($SITE_ADMIN + 128))}
-        <table style="width: 40%">
+        <table>
             <tr>
-                <td colspan="2">
+                <td>
                     <h2>Purchase Order Creation Cutoff Date <small>(tasks completed before the end of day for this date will have SUN POs generated automatically)</small></h2>
                 </td>
             </tr>
             <tr>
-                <td>
-                </td>
                 <td valign="top">
                         <label for="po_cut_off">Cutoff</label>
                         <input type="date" value="{$po_cut_off}" disabled />
@@ -247,7 +245,7 @@
         </table>
   {/if}
   {if $roles & ($SITE_ADMIN + 128)}
-        <table style="width: 40%">
+        <table>
             <tr>
                 <td>
                     <h2>Purchase Order Creation Cutoff Date <small>(tasks completed before the end of day for this date will have SUN POs generated automatically)</small></h2>
