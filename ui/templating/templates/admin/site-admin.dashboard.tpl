@@ -228,7 +228,61 @@
 {/if}
 
 {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER + 128)}
+[[[
+  {if !($roles & ($SITE_ADMIN + 128))}
+
+<label for="startDate">Start</label>
+<input id="startDate" type="date" value="{$po_cut_off}" disabled />
+
+        <table style="width: 40%">
+            <tr>
+                <td colspan="2">
+                    <h2>Generate Invoices (normally for month)</h2>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                </td>
+                <td valign="top">
+                    <form method="post" enctype="multipart/form-data" action="{urlFor name="site-admin-dashboard"}" accept-charset="utf-8">
+                    <button class="btn btn-success" type="submit" name="generate_invoices" value="1" id="generate_invoices">
+                        <i class="icon-star icon-white"></i>
+                        Generate Invoices
+                    </button>
+                    {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
+                    </form>
+                </td>
+            </tr>
+        </table>
+  {/if}
+]]]
   {if $roles & ($SITE_ADMIN + 128)}
+[[[
+        <table style="width: 40%">
+            <tr>
+                <td colspan="2">
+                    <h2>Purchase Order Creation Cutoff Date (tasks completed before the end of day for this date will have POs generated)</h2>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                </td>
+                <td valign="top">
+                    <form method="post" enctype="multipart/form-data" action="{urlFor name="site-admin-dashboard"}" accept-charset="utf-8">
+                        <label for="startDate">Cutoff</label>
+<input name="po_cut_off" type="date" value="{$po_cut_off}" />
+
+
+                    <button class="btn btn-success" type="submit" name="generate_invoices" value="1" id="generate_invoices">
+                        <i class="icon-star icon-white"></i>
+                        Generate Invoices
+                    </button>
+                    {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
+                    </form>
+                </td>
+            </tr>
+        </table>
+]]]
         <table style="width: 40%">
             <tr>
                 <td colspan="2">
