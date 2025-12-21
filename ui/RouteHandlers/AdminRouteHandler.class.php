@@ -186,6 +186,11 @@ class AdminRouteHandler
                 }
             }
 
+            if (($roles & (SITE_ADMIN | FINANCE)) && isset($post['set_cut_off'])) {
+                $taskDao->update_po_cut_off_sun($post['po_cut_off']);
+                UserRouteHandler::flashNow('generate_invoices_success', 'Purchase Order Creation Cutoff Date Set');
+            }
+
             if (($roles & (SITE_ADMIN | FINANCE)) && isset($post['generate_invoices'])) {
                 [$tasks, $invoices] = $taskDao->generate_invoices();
                 if ($invoices) {
