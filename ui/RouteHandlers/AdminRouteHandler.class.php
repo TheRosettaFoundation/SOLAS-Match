@@ -325,6 +325,7 @@ class AdminRouteHandler
                     "current_page"  => 'site-admin-dashboard',
                     "siteName"      => $siteName,
                     'roles'         => $roles,
+                    'po_cut_off'    => $taskDao->get_po_cut_off_sun(),
                     "extra_scripts" => $extra_scripts
         ));
 

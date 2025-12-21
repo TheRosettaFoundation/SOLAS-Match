@@ -14732,6 +14732,14 @@ CREATE TABLE IF NOT EXISTS `po_cut_off_sun` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 INSERT INTO po_cut_off_sun VALUES (0, '2025-01-01 23:59:59');
 
+DROP PROCEDURE IF EXISTS `get_po_cut_off_sun`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_po_cut_off_sun`()
+BEGIN
+    SELECT * FROM po_cut_off_sun WHERE poll=0;
+END//
+DELIMITER ;
+
 DROP PROCEDURE IF EXISTS `update_po_cut_off_sun`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `update_po_cut_off_sun`(IN cut_off DATETIME)
