@@ -245,6 +245,7 @@
                         </div>
                         {/if}
 
+{if false}
                         <div class="card bg-light-mariam custom-card p-4 card-border-top-accent">
                             <div class="d-flex align-items-center mb-3 border-bottom pb-3">
                                 <div class="p-2 rounded-circle me-3" style="background-color: var(--core-blue); opacity: 0.1;">
@@ -257,6 +258,7 @@
                                 💡 Submit Response
                             </a>
                         </div>
+{/if}
 
                         <div class="card bg-light-mariam custom-card p-4 card-border-top-blue">
                             <h3 class="fs-3 fw-bold text-dark-mariam mb-2">Feedback & Suggestions</h3>
