@@ -1093,18 +1093,6 @@
                         </a>
                     </div>
 
-                    <!-- Community Survey -->
-                    <div class="action-card" id="survey-section">
-                        <h3>
-                            <span style="width: 40px; height: 40px; background: rgba(16, 100, 196, 0.1); border-radius: 50%; display: inline-flex; align-items: center; justify-content: center;">💬</span>
-                            Community Survey
-                        </h3>
-                        <p>We want to hear from you! Take our annual Community Survey and help shape future opportunities and support for volunteers. It's anonymous and only takes 7–10 minutes.</p>
-                        <a href="https://twbplatform.org" class="btn-action">
-                            💡 Submit Response
-                        </a>
-                    </div>
-
                     <!-- Feedback & Suggestions -->
                     <div class="action-card" id="feedback-section">
                         <h3>Feedback & Suggestions</h3>
@@ -1226,13 +1214,6 @@
                 position: 'left'
             },
             {
-                element: '#survey-section',
-                title: 'Community Survey',
-                content: 'Share your feedback and help shape the future of TWB! Your input helps us improve our platform and better support volunteers like you.',
-                icon: '💬',
-                position: 'left'
-            },
-            {
                 element: '#feedback-section',
                 title: 'Feedback & Suggestions',
                 content: 'Have ideas or encountered issues? Use this form to submit feedback directly to our team. We value your input and use it to continuously improve the platform.',
@@ -1285,6 +1266,8 @@
             if (highlightedElement) {
                 highlightedElement.classList.remove('tour-highlight-target');
             }
+            
+            // Redirect to TWB platform after tour ends
             window.location.href = "https://twbplatform.org";
         }
 
