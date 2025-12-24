@@ -233,7 +233,7 @@
         <table>
             <tr>
                 <td>
-                    <h2>Purchase Order Creation Cutoff Date <small>(tasks completed before the end of day for this date will have SUN POs generated automatically)</small></h2>
+                    <h2>Purchase Order Creation Cutoff Date <small>(tasks completed before the end of day for this date will have SUN POs generated)</small></h2>
                 </td>
             </tr>
             <tr>
@@ -248,7 +248,7 @@
         <table>
             <tr>
                 <td>
-                    <h2>Purchase Order Creation Cutoff Date <small>(tasks completed before the end of day for this date will have SUN POs generated automatically)</small></h2>
+                    <h2>Purchase Order Creation Cutoff Date <small>(tasks completed before the end of day for this date will have SUN POs generated)</small></h2>
                 </td>
             </tr>
             <tr>
