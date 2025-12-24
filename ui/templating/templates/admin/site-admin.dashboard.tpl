@@ -238,7 +238,6 @@
             </tr>
             <tr>
                 <td valign="top">
-                        <label for="po_cut_off">Cutoff</label>
                         <input type="date" value="{substr($po_cut_off, 0, 10)}" disabled />
                 </td>
             </tr>
@@ -254,7 +253,6 @@
             <tr>
                 <td valign="top">
                     <form method="post" enctype="multipart/form-data" action="{urlFor name="site-admin-dashboard"}" accept-charset="utf-8">
-                        <label for="po_cut_off">Cutoff</label>
                         <input type="date" name="po_cut_off" id="po_cut_off" value="{substr($po_cut_off, 0, 10)}" />
                         <button class="btn btn-success" type="submit" name="set_cut_off" id="set_cut_off" value="1">
                             <i class="icon-star icon-white"></i>
