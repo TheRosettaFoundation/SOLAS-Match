@@ -2003,6 +2003,7 @@ error_log("Create PO wait: $po_number, $task_id");
                 $matches = [];
                 if (preg_match('#<Message>(.*?)</Message>#s', $result, $matches) || preg_match('#"errors":\[(.*?)\]#s', $result, $matches)) {
                     LibAPI\PDOWrapper::call('insert_sun_po_error', LibAPI\PDOWrapper::cleanse($task_id) . ',' . LibAPI\PDOWrapper::cleanseWrapStr(str_replace("\n", '<br />', $matches[1])));
+                    LibAPI\PDOWrapper::call('insert_queue_request', '3,39,0,0,0,0,' . LibAPI\PDOWrapper::cleanse($task_id) . ",-1,''"); // email error to twblinguistcode@clearglobal.org
                 }
                 $data = [
                     'requestReference' => $po_number,
