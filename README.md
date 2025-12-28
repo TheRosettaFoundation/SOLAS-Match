@@ -40,6 +40,10 @@ For full terms see License.txt or http://www.gnu.org/licenses/lgpl-3.0.txt
 
 # Release Notes
 
+## Version 20.1
+
+- There is now a date control and a "Set Cuttoff Date" button below: "Purchase Order Creation Cutoff Date" on the Admin page. All tasks completed before the end of day for this date will have SUN POs automatically generated (at a rate of about one per minute, if there are no errors). If there are errors, they will be added to the Slack Channel.
+
 ## Version 20.0
 
 - There is now a new (logged in) home page with news content and resources.
