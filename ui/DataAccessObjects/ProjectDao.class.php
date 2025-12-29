@@ -1973,6 +1973,15 @@ GROUP BY c.id, u.id';
 
     public function poll_sun()
     {
+//(**)
+            $task_id = 99999;
+            $result = 'XXX<Message>This is the message.</Message>YYY';
+                $matches = [];
+                if (preg_match('#<Message>(.*?)</Message>#s', $result, $matches) || preg_match('#"errors":\[(.*?)\]#s', $result, $matches)) {
+                    LibAPI\PDOWrapper::call('insert_sun_po_error', LibAPI\PDOWrapper::cleanse($task_id) . ',' . LibAPI\PDOWrapper::cleanseWrapStr(str_replace("\n", '<br />', $matches[1])));
+                    LibAPI\PDOWrapper::call('insert_queue_request', '3,39,0,0,0,0,' . LibAPI\PDOWrapper::cleanse($task_id) . ",-1,''"); // email error to twblinguistcode@clearglobal.org
+                }
+//(**)
         if (strpos($this->siteApi, 'twbplatform')) $PRD = 'PRD';
         else                                       $PRD = 'TST';
 
