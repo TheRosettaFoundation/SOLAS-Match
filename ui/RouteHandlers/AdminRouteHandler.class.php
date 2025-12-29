@@ -130,6 +130,7 @@ class AdminRouteHandler
         $adminDao = new DAO\AdminDao();
         $userDao = new DAO\UserDao();
         $orgDao = new DAO\OrganisationDao();
+        $taskDao = new DAO\TaskDao();
 
         $roles = $adminDao->isSiteAdmin_any_or_org_admin_any_for_any_org($userId);
 
@@ -138,7 +139,6 @@ class AdminRouteHandler
         if ($post = $request->getParsedBody()) {
             if ($fail_CSRF = Common\Lib\UserSession::checkCSRFKey($post, 'adminDashboard')) return $response->withStatus(302)->withHeader('Location', $fail_CSRF);
 
-            $taskDao = new DAO\TaskDao();
             $statsDao = new DAO\StatisticsDao();
 
             if (($roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER)) && !empty($post['search_user'])) {
@@ -184,6 +184,11 @@ class AdminRouteHandler
                 } else {
                     UserRouteHandler::flashNow('sync_hubspot_error', 'HubSpot NOT Synchronized');
                 }
+            }
+
+            if (($roles & (SITE_ADMIN | FINANCE)) && isset($post['set_cut_off'])) {
+                $taskDao->update_po_cut_off_sun($post['po_cut_off']);
+                UserRouteHandler::flashNow('generate_invoices_success', 'Purchase Order Creation Cutoff Date Set');
             }
 
             if (($roles & (SITE_ADMIN | FINANCE)) && isset($post['generate_invoices'])) {
@@ -320,6 +325,7 @@ class AdminRouteHandler
                     "current_page"  => 'site-admin-dashboard',
                     "siteName"      => $siteName,
                     'roles'         => $roles,
+                    'po_cut_off'    => $taskDao->get_po_cut_off_sun(),
                     "extra_scripts" => $extra_scripts
         ));
 

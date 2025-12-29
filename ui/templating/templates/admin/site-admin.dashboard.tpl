@@ -228,7 +228,42 @@
 {/if}
 
 {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER + 128)}
+
+  {if !($roles & ($SITE_ADMIN + 128))}
+        <table>
+            <tr>
+                <td>
+                    <h2>Purchase Order Creation Cutoff Date <small>(tasks completed before the end of day for this date will have SUN POs generated)</small></h2>
+                </td>
+            </tr>
+            <tr>
+                <td valign="top">
+                        <input type="date" value="{substr($po_cut_off, 0, 10)}" disabled />
+                </td>
+            </tr>
+        </table>
+  {/if}
   {if $roles & ($SITE_ADMIN + 128)}
+        <table>
+            <tr>
+                <td>
+                    <h2>Purchase Order Creation Cutoff Date <small>(tasks completed before the end of day for this date will have SUN POs generated)</small></h2>
+                </td>
+            </tr>
+            <tr>
+                <td valign="top">
+                    <form method="post" enctype="multipart/form-data" action="{urlFor name="site-admin-dashboard"}" accept-charset="utf-8">
+                        <input type="date" name="po_cut_off" id="po_cut_off" value="{substr($po_cut_off, 0, 10)}" />
+                        <button class="btn btn-success" type="submit" name="set_cut_off" id="set_cut_off" value="1">
+                            <i class="icon-star icon-white"></i>
+                            Set Cutoff Date
+                        </button>
+                        {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
+                    </form>
+                </td>
+            </tr>
+        </table>
+
         <table style="width: 40%">
             <tr>
                 <td colspan="2">
