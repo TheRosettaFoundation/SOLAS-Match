@@ -582,7 +582,7 @@ class TaskRouteHandler
                 $userDao = new DAO\UserDao();
                 $file = $userDao->memsource_get_target_file($memsource_project['memsource_project_uid'], $memsource_task['memsource_task_uid']);
                 if (empty($file)) {
-                    UserRouteHandler::flash('error', 'Could not retrieve file');
+                    UserRouteHandler::flash('error', 'We are unable to retrieve files that are more than 12 months old. If your file is more recent, please get in touch.');
                     return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('home'));
                 }
                 $task_file_info = $taskDao->getTaskInfo($task_id, 0);
