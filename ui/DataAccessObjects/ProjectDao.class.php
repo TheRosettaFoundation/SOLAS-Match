@@ -1681,7 +1681,7 @@ GROUP BY c.id, u.id';
                 $max_criteria = [];
                 foreach ($result as $row) {
                     $data[] = $row;
-                    if (!empty($row['completions'])) {
+                    if (!empty($row['completions']) && !empty($row['timecompleted'])) {
                         if (empty($max_criteria[$row['courseid']])) $max_criteria[$row['courseid']] = $row['completions'];
                         else                                        $max_criteria[$row['courseid']] = max($row['completions'], $max_criteria[$row['courseid']]);
                     }
