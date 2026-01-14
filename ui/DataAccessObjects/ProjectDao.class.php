@@ -2084,9 +2084,13 @@ $xml .=
                     }
 $xml .= '</PurchaseOrder></Payload></SSC>';
 error_log("Create PO: $xml");
+/* Replace with XML IN POST...
                 $xml = urlencode($xml);
                 $ch = curl_init("https://mingle-ionapi.eu3.inforcloudsuite.com/VGK6STV88YNKAKGZ_$PRD/SUN/payload-v1/api/payload/v1/request-text?overwritePayloadURI=false&payload=$xml");
                 curl_setopt($ch, CURLOPT_POSTFIELDS, "--l0H0X8tcUK3pm\r\nContent-Disposition: form-data; name=\"request\"\r\nContent-Type: application/json\r\n\r\n" . json_encode($data) . "\r\n--l0H0X8tcUK3pm--\r\n");
+*/
+                $ch = curl_init("https://mingle-ionapi.eu3.inforcloudsuite.com/VGK6STV88YNKAKGZ_$PRD/SUN/payload-v1/api/payload/v1/request?overwritePayloadURI=false");
+                curl_setopt($ch, CURLOPT_POSTFIELDS, "--l0H0X8tcUK3pm\r\nContent-Disposition: form-data; name=\"request\"\r\nContent-Type: application/json\r\n\r\n" . json_encode($data) . "\r\n--l0H0X8tcUK3pm\r\nContent-Disposition: form-data; name=\"payload\"; filename=\"{$po_number}_xml.xml\"\r\nContent-Type: application/xml\r\n\r\n$xml\r\n--l0H0X8tcUK3pm--\r\n");
                 curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: multipart/form-data; boundary=l0H0X8tcUK3pm', 'Accept: application/json', "Authorization: Bearer $access_token"]);
                 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
                 curl_setopt($ch, CURLOPT_TIMEOUT, 300);
