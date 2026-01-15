@@ -13916,12 +13916,16 @@ DROP PROCEDURE IF EXISTS `pr_report`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `pr_report`()
 BEGIN
+SELECT
+    report.*,
+    total_po_part.total_po
+FROM
+(
     SELECT
         spr.*,
         SUM(IF(tp.payment_status IS NOT NULL AND tp.payment_status NOT IN ('In-kind', 'In-house', 'Waived')                                   , IF(t.`word-count`>1, IF(ttd.divide_rate_by_60, t.`word-count`*tp.unit_rate/60, t.`word-count`*tp.unit_rate), 0), 0)) AS total_tasks_for_pr,
         SUM(IF(tp.payment_status IS NOT NULL AND tp.payment_status NOT IN ('In-kind', 'In-house', 'Waived') AND t.`task-status_id`=4          , IF(t.`word-count`>1, IF(ttd.divide_rate_by_60, t.`word-count`*tp.unit_rate/60, t.`word-count`*tp.unit_rate), 0), 0)) AS total_completed_tasks_for_pr,
-        SUM(IF(tp.payment_status IS NOT NULL AND tp.payment_status     IN ('In-kind', 'In-house', 'Waived')                                   , IF(t.`word-count`>1, IF(ttd.divide_rate_by_60, t.`word-count`*tp.unit_rate/60, t.`word-count`*tp.unit_rate), 0), 0)) AS total_waived_tasks_for_pr,
-        SUM(IF(tp.payment_status IS NOT NULL AND tp.payment_status NOT IN ('In-kind', 'In-house', 'Waived') AND pos.purchase_order IS NOT NULL, pos.total, 0)) AS total_po
+        SUM(IF(tp.payment_status IS NOT NULL AND tp.payment_status     IN ('In-kind', 'In-house', 'Waived')                                   , IF(t.`word-count`>1, IF(ttd.divide_rate_by_60, t.`word-count`*tp.unit_rate/60, t.`word-count`*tp.unit_rate), 0), 0)) AS total_waived_tasks_for_pr
     FROM sun_purchase_requisitions   spr
     LEFT JOIN project_complete_dates pcd ON spr.purchase_requisition=pcd.purchase_requisition
     LEFT JOIN Projects                 p ON pcd.project_id=p.id
@@ -13929,9 +13933,32 @@ BEGIN
     LEFT JOIN Tasks                    t ON p.id=t.project_id
     LEFT JOIN task_type_details      ttd ON t.`task-type_id`=ttd.type_enum
     LEFT JOIN TaskPaids               tp ON t.id=tp.task_id
-    LEFT JOIN zahara_purchase_orders pos ON tp.purchase_order=pos.purchase_order AND pos.purchase_order!='0'
     GROUP BY spr.purchase_requisition
-    ORDER BY spr.purchase_requisition DESC;
+) AS report
+LEFT JOIN
+(
+    SELECT
+        list_po.purchase_requisition,
+        SUM(list_po.total_po) AS total_po
+    FROM (
+        SELECT
+            spr.purchase_requisition,
+            tp.purchase_order,
+            MAX(pos.total) AS total_po
+        FROM sun_purchase_requisitions   spr
+        LEFT JOIN project_complete_dates pcd ON spr.purchase_requisition=pcd.purchase_requisition
+        LEFT JOIN Projects                 p ON pcd.project_id=p.id
+        LEFT JOIN Tasks                    t ON p.id=t.project_id
+        LEFT JOIN TaskPaids               tp ON t.id=tp.task_id
+        LEFT JOIN zahara_purchase_orders pos ON tp.purchase_order=pos.purchase_order AND pos.purchase_order!='0'
+        WHERE
+            pos.purchase_order IS NOT NULL AND
+            pos.purchase_order!='0'
+        GROUP BY spr.purchase_requisition, tp.purchase_order
+    ) AS list_po
+    GROUP BY purchase_requisition
+) AS total_po_part ON report.purchase_requisition=total_po_part.purchase_requisition
+    ORDER BY report.purchase_requisition DESC;
 END//
 DELIMITER ;
 
