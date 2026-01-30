@@ -1593,7 +1593,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                              $extension = substr($projectFileName, $extensionStartIndex + 1);
                              $extension = strtolower($extension);
                              $projectFileName = substr($projectFileName, 0, $extensionStartIndex + 1) . $extension;
-                            if (in_array($extension, ['pdf', 'jpg', 'png', 'gif'])) {
+                            if (!in_array($extension, ['docx', 'xslx', 'pptx', 'odt', 'txt', 'csv'])) {
                                 error_log("Project File wrong extension $projectFileName ($user_id): " . $post['project_title']);
                                 $success = false;
                             }
@@ -1612,7 +1612,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                         }
                         }
                         if (!$success) {
-                            UserRouteHandler::flashNow('error', sprintf(Lib\Localisation::getTranslation('common_error_file_stopped_by_extension')));
+                            UserRouteHandler::flashNow('error', 'File upload stopped by extension, only DOCX, XSLX, PPTX, ODT, TXT and CSV file types are allowed.');
                             try {
                                 $projectDao->deleteProject($project->getId());
                             } catch (\Exception $e) {

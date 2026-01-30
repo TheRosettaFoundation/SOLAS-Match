@@ -198,7 +198,7 @@ function loadingComplete()
 {
   if (getSetting("split") == 1) {
     document.getElementById("source_text_desc").innerHTML =
-      "Upload your source file for the project. Do not upload PDF files, ZIP files, or image files with text like JPG, PNG or GIF. If the total word count of the file exceeds 2000 words, it will be split into multiple tasks for translation. "
+      "Upload your source file for the project. Allowed file types: DOCX, XSLX, PPTX, ODT, TXT, CSV. If the total word count of the file exceeds 2000 words, it will be split into multiple tasks for translation. "
       + parameters.getTranslation("common_maximum_file_size_is").replace("%s", maxFileSize / 1024 / 1024);
   } else {
   document.getElementById("source_text_desc").innerHTML =
