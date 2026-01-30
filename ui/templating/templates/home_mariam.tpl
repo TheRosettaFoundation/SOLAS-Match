@@ -245,20 +245,18 @@
                         </div>
                         {/if}
 
-{if false}
                         <div class="card bg-light-mariam custom-card p-4 card-border-top-accent">
                             <div class="d-flex align-items-center mb-3 border-bottom pb-3">
                                 <div class="p-2 rounded-circle me-3" style="background-color: var(--core-blue); opacity: 0.1;">
                                     💬
                                </div>
-                               <h3 class="fs-3 fw-bold text-dark-mariam mb-0">Community Survey</h3>
+                               <h3 class="fs-3 fw-bold text-dark-mariam mb-0">TWB 2025 Community Survey Results!</h3>
                             </div>
-                            <p class="small text-muted mb-3">We want to hear from you! Take our annual Community Survey and help shape future opportunities and support for volunteers. It’s anonymous and only takes 7–10 minutes.</p>
-                            <a href="https://forms.translatorswb.org/view.php?id=56405" class="btn rounded-pill text-white fw-medium transition-colors" style="background-color: var(--twb-accent);">
-                                💡 Submit Response
+                            <!-- <p class="small text-muted mb-3">We want to hear from you! Take our annual Community Survey and help shape future opportunities and support for volunteers. It’s anonymous and only takes 7–10 minutes.</p> -->
+                            <a href="https://twbplatform.org/user_TWB_Dashboard_Final.html" class="btn rounded-pill text-white fw-medium transition-colors" style="background-color: var(--twb-accent);">
+                                💡 See the Results
                             </a>
                         </div>
-{/if}
 
                         <div class="card bg-light-mariam custom-card p-4 card-border-top-blue">
                             <h3 class="fs-3 fw-bold text-dark-mariam mb-2">Feedback & Suggestions</h3>
