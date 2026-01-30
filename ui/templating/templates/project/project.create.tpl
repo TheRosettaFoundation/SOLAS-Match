@@ -88,7 +88,7 @@
             <div class="projFormTopBlock">
                 <div class="projFormInput">
                     <div>
-                        <h3><a href="https://communitylibrary.translatorswb.org/books/12-self-managed-partners/page/launching-your-translation-project-on-the-twb-platform" target="_blank">How to launch a translation project</a></h3>
+                        <h2>Click: <a href="https://communitylibrary.translatorswb.org/books/12-self-managed-partners/page/launching-your-translation-project-on-the-twb-platform" target="_blank">How to launch a translation project</a></h2>
                     </div>
                 </div>
                 <div class="projFormInput">
