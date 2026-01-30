@@ -1803,7 +1803,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
         $deadline_timestamp = gmmktime($selected_hour, $selected_minute, 0, $selected_month, $selected_day, $selected_year);
 
         $extraScripts  = "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/Parameters.js\"></script>";
-        $extraScripts .= "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/ProjectCreate13.js\"></script>";
+        $extraScripts .= "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/ProjectCreate14.js\"></script>";
 
         $template_data = array_merge($template_data, array(
             "siteLocation"          => Common\Lib\Settings::get('site.location'),
