@@ -267,7 +267,7 @@
         <table style="width: 40%">
             <tr>
                 <td colspan="2">
-                    <h2>Generate Invoices (for all tasks with POs)</h2>
+                    <h2>Generate Invoices (all tasks with POs)</h2>
                 </td>
             </tr>
             <tr>
