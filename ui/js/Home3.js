@@ -311,8 +311,8 @@ function renderTaskDetails() {
 
     const count_external_clicks = document.querySelectorAll(".count_external_clicks");
 
-    async function increment_content_item_views({ click_id, sesskey }) {
-        let url = `/increment_content_item_views/${click_id}/`;
+    async function content_item_increment_views({ click_id, sesskey }) {
+        let url = `/content_item_increment_views/${click_id}/`;
         const key = { sesskey };
         try {
             const response = await fetch(url, {
@@ -340,7 +340,7 @@ function renderTaskDetails() {
                     click_id,
                     sesskey,
                 };
-                increment_content_item_views(codes);
+                content_item_increment_views(codes);
             });
         });
     }
