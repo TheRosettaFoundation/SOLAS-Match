@@ -308,6 +308,42 @@ function renderTaskDetails() {
         );
         $(this).css("visibility", "visible");
     });
+
+    const count_external_clicks = document.querySelectorAll(".count_external_clicks");
+
+    async function increment_content_item_views({ click_id, sesskey }) {
+        let url = `/increment_content_item_views/${click_id}/`;
+        const key = { sesskey };
+        try {
+            const response = await fetch(url, {
+                method: "POST",
+                body: new URLSearchParams(key),
+            });
+
+            if (!response.ok) {
+                throw new Error("error");
+            }
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+    const array_count_external_clicks = [...count_external_clicks];
+
+    if (array_count_external_clicks.length > 0) {
+        array_count_external_clicks.forEach(function (curr, index, array_count_external_clicks) {
+            let codes = {};
+            curr.addEventListener("click", function (e) {
+                let click_id = curr.getAttribute("click_id");
+                let sesskey = curr.getAttribute("sesskey");
+                codes = {
+                    click_id,
+                    sesskey,
+                };
+                increment_content_item_views(codes);
+            });
+        });
+    }
 }
 
 //Clickable actions on the homepage btns

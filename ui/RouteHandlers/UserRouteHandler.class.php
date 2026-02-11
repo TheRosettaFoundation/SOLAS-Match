@@ -239,6 +239,11 @@ class UserRouteHandler
             ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin_any')
             ->setName('content_item');
 
+        $app->map(['GET', 'POST'],
+            '/increment_content_item_views/{id}[/]',
+            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:increment_content_item_views')
+            ->setName('increment_content_item_views');
+
         $app->get(
             '/download_attachment/{content_id}/is_image/{is_image}/sorting_order/{sorting_order}/org/{org_id}[/]',
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:download_attachment')
@@ -357,6 +362,7 @@ class UserRouteHandler
             'org_names' => $org_names,
             'news' => $userDao->get_content_items(null, 1, null, 1, 1, null, null, null, 0, 0),
             'resources' => $userDao->get_content_items(null, 2, null, 1, 1, null, null, null, 0, 0),
+            'sesskey' => Common\Lib\UserSession::getCSRFKey(),
             ]);
 
         return UserRouteHandler::render('home_mariam.tpl', $response);
@@ -3777,6 +3783,7 @@ foreach ($rows as $index => $row) {
             'news'   => $news,
             'images' => $images,
             'type'   => $args['type'],
+            'sesskey' => Common\Lib\UserSession::getCSRFKey(),
             ]);
 
         return UserRouteHandler::render('content_list.tpl', $response);
@@ -3812,6 +3819,18 @@ foreach ($rows as $index => $row) {
             ]);
 
         return UserRouteHandler::render('content_display.tpl', $response);
+    }
+
+    public function increment_content_item_views(Request $request, Response $response, $args)
+    {
+        $userDao = new DAO\UserDao();
+
+        $result = 1;
+        if (Common\Lib\UserSession::checkCSRFKey($request->getParsedBody(), 'increment_content_item_views')) $result = 0;
+        if ($result) $userDao->increment_content_item_views($args['id']);
+        $results = json_encode(['result'=> $result]);
+        $response->getBody()->write($results);
+        return $response->withHeader('Content-Type', 'application/json');
     }
 
     public static function flash($key, $value)
