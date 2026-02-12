@@ -108,7 +108,7 @@
                         {/if}
                     </ul>
                     <ul class=" pull-right main_nav_right" style="max-height: 38px">
-                               <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/us/" target="_blank"><img class="wp-image-2357 pull-right" src="https://translatorswithoutborders.org/wp-content/uploads/2016/04/image001-150x150.png" alt="image001" width="50" height="50"></a>
+                               <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank"><img class="wp-image-2357 pull-right" src="https://translatorswithoutborders.org/wp-content/uploads/2016/04/image001-150x150.png" alt="image001" width="50" height="50"></a>
 
                            
                         
@@ -144,7 +144,7 @@
         </div> -->
     
 
-                     <!--   <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/us/" target="_blank"><img class="wp-image-2357 pull-right" src="https://translatorswithoutborders.org/wp-content/uploads/2016/04/image001-150x150.png" alt="image001" width="50" height="50"></a> -->
+                     <!--   <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank"><img class="wp-image-2357 pull-right" src="https://translatorswithoutborders.org/wp-content/uploads/2016/04/image001-150x150.png" alt="image001" width="50" height="50"></a> -->
              </div>
 
                 
