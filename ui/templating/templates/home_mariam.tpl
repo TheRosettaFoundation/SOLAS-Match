@@ -253,7 +253,7 @@
                                <h3 class="fs-3 fw-bold text-dark-mariam mb-0">TWB 2025 Community Survey Results!</h3>
                             </div>
                             <!-- <p class="small text-muted mb-3">We want to hear from you! Take our annual Community Survey and help shape future opportunities and support for volunteers. It’s anonymous and only takes 7–10 minutes.</p> -->
-                            <a href="https://twbplatform.org/user_TWB_Dashboard_Final.html" class="btn rounded-pill text-white fw-medium transition-colors" style="background-color: var(--twb-accent);">
+                            <a href="https://twbplatform.org/user_TWB_Dashboard_Final.html" click_id="8" sesskey="{$sesskey}" class="btn rounded-pill text-white fw-medium transition-colors count_external_clicks" style="background-color: var(--twb-accent);">
                                 💡 See the Results
                             </a>
                         </div>
