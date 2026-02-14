@@ -114,6 +114,7 @@ class Localisation
         $filePaths = glob(__DIR__."/../localisation/strings_*.xml");
         $langDao = new DAO\LanguageDao();
         $locales[] = $langDao->getLanguageByCode(Common\Lib\Settings::get('site.default_site_language_code'));
+error_log('BEFORE' . print_r($locales, 1));
         foreach ($filePaths as $filePath) {
             preg_match('/_(.*)\.xml/', realpath($filePath), $matches);
             $lang = Common\Lib\CacheHelper::getCached(
@@ -126,6 +127,7 @@ class Localisation
                 $locales[] = $lang;
             }
         }
+error_log('AFTER' . print_r($locales, 1));
         return $locales;
     }
 }
