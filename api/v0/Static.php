@@ -31,11 +31,6 @@ class StaticAPI
             '\SolasMatch\API\V0\StaticAPI:getStatisticByName');
 
         $app->get(
-            '/api/v0/localisation/siteLanguages/',
-            '\SolasMatch\API\V0\StaticAPI:getSiteLanguagesDart')
-            ->add('\SolasMatch\API\Lib\Middleware:isLoggedIn');
-
-        $app->get(
             '/api/v0/stats/',
             '\SolasMatch\API\V0\StaticAPI:getStatistics');
 
@@ -70,25 +65,6 @@ class StaticAPI
     {
         $data = API\Lib\TipSelector::selectTip();
         return Dispatcher::sendResponse($response, $data, null);
-    }
-    
-    public static function getSiteLanguagesDart(Request $request, Response $response)
-    {
-        $matches = array();
-        $locales = array();
-        
-        $filePaths = glob(__DIR__."/../../ui/localisation/strings_*.xml");
-        foreach ($filePaths as $filePath) {
-            preg_match('/_(.*)\.xml/', realpath($filePath), $matches);
-            $lang = Common\Lib\CacheHelper::getCached(
-                Common\Lib\CacheHelper::LOADED_LANGUAGES."_$matches[1]",
-                Common\Enums\TimeToLiveEnum::QUARTER_HOUR,
-                '\SolasMatch\API\Lib\Languages:getLanguage',
-                array(null, $matches[1], null)
-            );
-            $locales[] = $lang;
-        }
-        return API\Dispatcher::sendResponse($response, $locales, null);
     }
 }
 

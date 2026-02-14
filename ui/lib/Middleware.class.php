@@ -123,8 +123,6 @@ class Middleware
                 Common\Lib\UserSession::clearAccessToken();
             }
         }
-        $template_data = array_merge($template_data, ['locs' => Localisation::loadTranslationFiles()]);
-
         return $handler->handle($request);
     }
 
