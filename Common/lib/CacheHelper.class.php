@@ -10,7 +10,6 @@ class CacheHelper
     const TOP_TAGS              = "TopTags";
     const GET_USER              = "GetUser";
     const SITE_LANGUAGE         = "SiteLanguage";
-    const LOADED_LANGUAGES      = "LoadedLanguages";
     const SELECTIONS            = 'Selections';
     const TASK_TYPE_DETAILS     = 'task_type_details';
 

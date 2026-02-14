@@ -106,28 +106,4 @@ class Localisation
     {
         return file_get_contents(__DIR__."/../localisation/$lang");
     }
-    
-    public static function loadTranslationFiles()
-    {
-        $matches = array();
-        $locales = array();
-        $filePaths = glob(__DIR__."/../localisation/strings_*.xml");
-        $langDao = new DAO\LanguageDao();
-        $locales[] = $langDao->getLanguageByCode(Common\Lib\Settings::get('site.default_site_language_code'));
-error_log('BEFORE' . print_r($locales, 1));
-        foreach ($filePaths as $filePath) {
-            preg_match('/_(.*)\.xml/', realpath($filePath), $matches);
-            $lang = Common\Lib\CacheHelper::getCached(
-                Common\Lib\CacheHelper::LOADED_LANGUAGES."_$matches[1]",
-                Common\Enums\TimeToLiveEnum::QUARTER_HOUR,
-                array($langDao, 'getLanguageByCode'),
-                $matches[1]
-            );
-            if (!in_array($lang, $locales)) {
-                $locales[] = $lang;
-            }
-        }
-error_log('AFTER' . print_r($locales, 1));
-        return $locales;
-    }
 }
