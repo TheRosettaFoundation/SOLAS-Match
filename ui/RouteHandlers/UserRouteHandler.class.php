@@ -3257,8 +3257,7 @@ EOF;
 
         header('Content-type: image/png');
         header('X-Frame-Options: ALLOWALL');
-        header('Pragma: no-cache');
-        header('Cache-control: no-cache, must-revalidate, no-transform');
+        header('Expires: ' . gmdate('D, d M Y H:i:s \G\M\T', time() + (20*60*60)));
 
         $logo = imagecreatefrompng('/repo/SOLAS-Match/ui/img/badge.png');
         $size = 60;
