@@ -1417,6 +1417,7 @@ class TaskRouteHandler
                 'sesskey' => $sesskey,
                 'siteLocation' => $siteLocation,
                 "extra_scripts" => $extra_scripts,
+                'extra_styles' => file_get_contents(__DIR__ . '/../../resources/css/task_page.css'),
                 "project" => $project,
                 'task' => $task,
                 'chunks' => $chunks,
@@ -1447,7 +1448,8 @@ class TaskRouteHandler
                 'current_user_id' => $user_id,
         ));
 
-        return UserRouteHandler::render("task/task.view.tpl", $response);
+        //return UserRouteHandler::render("task/task.view.tpl", $response);(**)
+        return UserRouteHandler::render('task/task_page.tpl', $response);
     }
 
     public function task_search_translators_any_country_no_source(Request $request, Response $response, $args)
