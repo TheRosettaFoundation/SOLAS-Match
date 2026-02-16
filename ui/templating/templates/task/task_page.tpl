@@ -1,5 +1,8 @@
 {include file="new_header.tpl"}
 
+  {assign var="task_id" value=$task->getId()}
+  {assign var="type_id" value=$task->getTaskType()}
+
   <div class="container-fluid app-shell py-4"> <!-- was main -->
     <!-- Header card -->
     <div class="card mb-4">
