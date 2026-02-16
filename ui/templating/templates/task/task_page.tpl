@@ -124,8 +124,12 @@
       <div class="k">
         <div class="ico"><i class="bi bi-file-text"></i></div>
         <div>
-          <div class="label">Word count</div>
-          <div class="value">424 words</div>
+          <span class="d-none">
+            <div id="siteLocationURL">{Settings::get("site.location")}</div>
+            <div id="project_id_for_updated_wordcount">{$task->getProjectId()}</div>
+          </span>
+          <div class="label">{TaskTypeEnum::$enum_to_UI[$type_id]['unit_count_text']}</div>
+          <div class="value"><div id="put_updated_wordcount_here">{if $task->getWordCount() != '' && $task->getWordCount() > 1}{$task->getWordCount()}{if $task->get_word_count_original() > 0 && $task->getWordCount() != $task->get_word_count_original()} ({$task->get_word_count_original()}){/if}{else}-{/if}</div> {TaskTypeEnum::$enum_to_UI[$type_id]['unit_count_text_short']}</div>
         </div>
       </div>
     </div>
