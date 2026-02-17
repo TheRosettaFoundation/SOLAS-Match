@@ -2,6 +2,7 @@
 
   {assign var="task_id" value=$task->getId()}
   {assign var="type_id" value=$task->getTaskType()}
+  {assign var="project_id" value=$task->getProjectId()}
 
   <div class="container-fluid app-shell py-4"> <!-- was main -->
     <!-- Header card -->
@@ -11,12 +12,23 @@
           <div class="d-flex align-items-start gap-3">
             <div class="rounded-3 bg-light border d-grid place-items-center" style="width:46px;height:46px;">
               <span class="fw-bold text-primary fs-4">U</span>
+[[[
+                                        <div class="me-3">
+                                            {if !empty($org_images[$task_id])}
+                                            <a href="{$siteLocation}org/{$org_id}/profile">
+                                            <img src="data:image/jpeg;base64,{$org_images[$task_id]}" alt="{TemplateHelper::uiCleanseHTML($org_name)} logo" title="{TemplateHelper::uiCleanseHTML($org_name)}" class="rounded-circle" width="60" height="60" />
+                                            </a>
+                                            {else}
+                                            <img src="https://placehold.co/60x60/ED1C24/ffffff?text=TWB" alt="{$org_names[$task_id]} logo" title="{$org_names[$task_id]}" class="rounded-circle" width="60" height="60" />
+                                            {/if}
+                                        </div>
+]]]
             </div>
             <div>
-              <div class="soft-muted small">UNICEF U-Report</div>
-              <div class="h4 mb-1">Poll on Gender-Based Violence</div>
+              <div class="soft-muted small"><a href="{$siteLocation}org/{$org_id}/profile">{TemplateHelper::uiCleanseHTML($org_name)}</a></div>
+              <div class="h4 mb-1"><a href="{urlFor name="project-view" options="project_id.$project_id"}">{TemplateHelper::uiCleanseHTMLNewlineAndTabs($project->getTitle())}</a></div>
               <div class="d-flex flex-wrap align-items-center gap-2">
-                <span class="soft-muted small">1 poll - GBV 2025.xlsx</span>
+                <span class="soft-muted small">{TemplateHelper::uiCleanseHTML($task->getTitle())}</span>
                 <span class="badge rounded-pill badge-task">Revision task</span>
               </div>
             </div>
@@ -129,7 +141,7 @@
         <div>
           <span class="d-none">
             <div id="siteLocationURL">{Settings::get("site.location")}</div>
-            <div id="project_id_for_updated_wordcount">{$task->getProjectId()}</div>
+            <div id="project_id_for_updated_wordcount">{$project_id}</div>
           </span>
           <div class="label">{TaskTypeEnum::$enum_to_UI[$type_id]['unit_count_text']}</div>
           <div class="value"><span id="put_updated_wordcount_here">{if $task->getWordCount() != '' && $task->getWordCount() > 1}{$task->getWordCount()}{if $task->get_word_count_original() > 0 && $task->getWordCount() != $task->get_word_count_original()} ({$task->get_word_count_original()}){/if}{else}-{/if}</span> {TaskTypeEnum::$enum_to_UI[$type_id]['unit_count_text_short']}</div>
