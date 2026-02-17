@@ -1440,6 +1440,7 @@ class TaskRouteHandler
                 'details_claimant' => $details_claimant,
                 'org_id' => $org_id,
                 'org_name' => $orgDao->getOrganisation($org_id)->getName(),
+                'org_image' => $userDao->get_org_image($org_id),
                 'memsource_task' => $memsource_task,
                 'is_denied_for_task' => $userDao->is_denied_for_task($user_id, $task_id),
                 'user_within_limitations' => $taskDao->user_within_limitations($user_id, $task_id),

@@ -12,14 +12,14 @@
           <div class="d-flex align-items-start gap-3">
             <div class="rounded-3 bg-light border d-grid place-items-center" style="width:46px;height:46px;">
               <span class="fw-bold text-primary fs-4">U</span>
-[[[
+[[[46 or 60?????
                                         <div class="me-3">
-                                            {if !empty($org_images[$task_id])}
+                                            {if !empty($org_image)}
                                             <a href="{$siteLocation}org/{$org_id}/profile">
-                                            <img src="data:image/jpeg;base64,{$org_images[$task_id]}" alt="{TemplateHelper::uiCleanseHTML($org_name)} logo" title="{TemplateHelper::uiCleanseHTML($org_name)}" class="rounded-circle" width="60" height="60" />
+                                            <img src="data:image/jpeg;base64,{$org_image}" alt="{TemplateHelper::uiCleanseHTML($org_name)} logo" title="{TemplateHelper::uiCleanseHTML($org_name)}" class="rounded-circle" width="60" height="60" />
                                             </a>
                                             {else}
-                                            <img src="https://placehold.co/60x60/ED1C24/ffffff?text=TWB" alt="{$org_names[$task_id]} logo" title="{$org_names[$task_id]}" class="rounded-circle" width="60" height="60" />
+                                            <img src="https://placehold.co/60x60/ED1C24/ffffff?text=TWB" alt="{TemplateHelper::uiCleanseHTML($org_name)} logo" title="{TemplateHelper::uiCleanseHTML($org_name)}" class="rounded-circle" width="60" height="60" />
                                             {/if}
                                         </div>
 ]]]
