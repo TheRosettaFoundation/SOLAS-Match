@@ -113,8 +113,8 @@
       <div class="k">
         <div class="ico"><i class="bi bi-globe2"></i></div>
         <div>
-          <div class="label">Language pair</div>
-          <div class="value">English, US (en) → Arabic, Modern Standard (ar)</div>
+          <div class="label">{if TaskTypeEnum::$enum_to_UI[$type_id]['source_and_target']}Language pair{else}Language{/if}</div>
+          <div class="value">{if TaskTypeEnum::$enum_to_UI[$type_id]['source_and_target']}{TemplateHelper::getLanguageAndCountry($task->getSourceLocale())} → {/if}{TemplateHelper::getLanguageAndCountry($task->getTargetLocale())}</div>
         </div>
       </div>
       <div class="k">
