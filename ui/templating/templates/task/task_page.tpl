@@ -121,7 +121,7 @@
         <div class="ico"><i class="bi bi-clock"></i></div>
         <div>
           <div class="label">Task deadline</div>
-          <div class="value">January 26 at 16:00 (Europe/Madrid)</div>
+          <div class="value"><div class="convert_utc_to_local_deadline_natural" style="visibility: hidden">{$task->getDeadline()}</div></div>
         </div>
       </div>
       <div class="k">
