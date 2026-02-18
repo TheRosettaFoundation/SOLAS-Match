@@ -11,15 +11,13 @@
         <div class="d-flex flex-column flex-lg-row align-items-start align-items-lg-center justify-content-between gap-3">
           <div class="d-flex align-items-start gap-3">
             <div class="rounded-3 bg-light border d-grid place-items-center">
-              <div class="me-3">
+                <a href="{$siteLocation}org/{$org_id}/profile">
                   {if !empty($org_image)}
-                  <a href="{$siteLocation}org/{$org_id}/profile">
                   <img src="data:image/jpeg;base64,{$org_image}" alt="{TemplateHelper::uiCleanseHTML($org_name)} logo" title="{TemplateHelper::uiCleanseHTML($org_name)}" class="rounded-circle" width="60" height="60" />
-                  </a>
                   {else}
                   <img src="https://placehold.co/60x60/ED1C24/ffffff?text=TWB" alt="{TemplateHelper::uiCleanseHTML($org_name)} logo" title="{TemplateHelper::uiCleanseHTML($org_name)}" class="rounded-circle" width="60" height="60" />
                   {/if}
-              </div>
+                </a>
             </div>
             <div>
               <div class="soft-muted small"><a href="{$siteLocation}org/{$org_id}/profile">{TemplateHelper::uiCleanseHTML($org_name)}</a></div>
