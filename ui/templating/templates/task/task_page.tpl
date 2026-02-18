@@ -21,7 +21,7 @@
             </div>
             <div>
               <div><a href="{$siteLocation}org/{$org_id}/profile" style="text-decoration: none;"><span class="soft-muted small">{TemplateHelper::uiCleanseHTML($org_name)}</span></a></div>
-              <div><a href="{urlFor name="project-view" options="project_id.$project_id"}" style="text-decoration: none;"><span class="h4 mb-1">{TemplateHelper::uiCleanseHTMLNewlineAndTabs($project->getTitle())}</span></a></div>
+              <div><a href="{urlFor name="project-view" options="project_id.$project_id"}" style="text-decoration: none;"><span class="h4 mb-1" style="color: black;">{TemplateHelper::uiCleanseHTMLNewlineAndTabs($project->getTitle())}</span></a></div>
               <div class="d-flex flex-wrap align-items-center gap-2">
                 <span class="soft-muted small">{TemplateHelper::uiCleanseHTML($task->getTitle())}</span>
                 <span class="badge rounded-pill badge-task">Revision task</span>
