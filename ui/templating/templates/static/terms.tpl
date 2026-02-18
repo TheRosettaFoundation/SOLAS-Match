@@ -73,7 +73,7 @@
                {sprintf(Localisation::getTranslation('terms_34'), Settings::get("site.name"))}
            </li>
            <li>
-               {sprintf(Localisation::getTranslation('terms_36'), "http://creativecommons.org/licenses/by/3.0/ie/", "Creative Commons Attribution 3.0 Ireland License")} 
+               {sprintf(Localisation::getTranslation('terms_36'), "https://creativecommons.org/licenses/by-nc-sa/4.0/", "Attribution-NonCommercial-ShareAlike 4.0 International Deed")}
            </li>
         </ol>
     </p>

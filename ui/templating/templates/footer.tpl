@@ -14,11 +14,11 @@
                     <table>
                         <tr>
                             <td width="31%" style="text-align: center">
-                                <a rel="license" href="http://creativecommons.org/licenses/by/3.0/ie/">
+                                <a rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
                                     <img alt="Creative Commons Licence" style="border-width:0" src="{urlFor name='home'}ui/img/88x31.png" />
                                 </a>
                                 <br />
-                                {sprintf(Localisation::getTranslation('footer_0'), "http://creativecommons.org/licenses/by/3.0/ie/", {urlFor name='terms'})}
+                                {sprintf(Localisation::getTranslation('footer_0'), "https://creativecommons.org/licenses/by-nc-sa/4.0/", {urlFor name='terms'})}
                             </td>
                             <td width="38%" style="text-align: center">
                                 {sprintf(Localisation::getTranslation('footer_maintained_by'), "https://translatorswithoutborders.org", "Translators without Borders")}
