@@ -20,7 +20,7 @@
                 </a>
             </div>
             <div>
-              <div><a href="{$siteLocation}org/{$org_id}/profile"><span class="soft-muted small" style="text-decoration: none;">{TemplateHelper::uiCleanseHTML($org_name)}</span></a></div>
+              <div><a href="{$siteLocation}org/{$org_id}/profile" style="text-decoration: none;"><span class="soft-muted small">{TemplateHelper::uiCleanseHTML($org_name)}</span></a></div>
               <div class="h4 mb-1"><a href="{urlFor name="project-view" options="project_id.$project_id"}">{TemplateHelper::uiCleanseHTMLNewlineAndTabs($project->getTitle())}</a></div>
               <div class="d-flex flex-wrap align-items-center gap-2">
                 <span class="soft-muted small">{TemplateHelper::uiCleanseHTML($task->getTitle())}</span>
