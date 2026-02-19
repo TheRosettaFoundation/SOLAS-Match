@@ -114,7 +114,7 @@
     .k .value{ font-size:.92rem; font-weight:600; line-height:1.2; }
 
 /* Blur background */
-.blur-active > *:not(.revision-highlight):not(.revision-overlay) {
+.blur-active > *:not(.revision-highlight) {
     filter: blur(5px);
     pointer-events: none;
     user-select: none;
