@@ -272,6 +272,7 @@ function highlightRevisionCard() {
     // Move card above blur
     revisionCard.classList.add('revision-highlight');
     add_instructions.appendChild(revisionCard); // bring to top layer
+    window.scrollTo(0, 0);
 }
 
 function removeRevisionHighlight() {
