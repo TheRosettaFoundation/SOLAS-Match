@@ -30,7 +30,7 @@
           </div>
 
           <div class="ms-lg-auto">
-            <button class="btn btn-orange">
+            <button class="btn btn-orange show-revision-btn">
               Review the instructions
             </button>
           </div>
@@ -271,7 +271,7 @@
 
       <!-- Right column -->
       <div class="col-12 col-lg-4">
-        <div class="card mb-4">
+        <div class="card mb-4 revision-instructions-card">
           <div class="card-body p-4">
             <div class="d-flex align-items-center justify-content-between mb-2">
               <div class="section-title mb-0">Revision instructions</div>

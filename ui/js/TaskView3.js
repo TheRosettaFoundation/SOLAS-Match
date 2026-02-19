@@ -157,6 +157,8 @@ function documentReady()
       $(this).css("visibility", "visible");
     }
   );
+
+  document.querySelector('#show-revision-btn').addEventListener('click', highlightRevisionCard);
 }
 
 function DAOgetWordCount()
@@ -250,5 +252,33 @@ function DAOTaskInvitesSentToUsers(userIDs, functionOnSuccess, functionOnFail)
       }
     )
   .fail(functionOnFail);
+}
+
+function highlightRevisionCard() {
+    const revisionCard = document.querySelector('.revision-instructions-card');
+    if (!revisionCard) return;
+
+    // Add overlay
+    const overlay = document.createElement('div');
+    overlay.classList.add('revision-overlay');
+    document.body.appendChild(overlay);
+
+    // Blur background
+    document.body.classList.add('blur-active');
+
+    // Highlight card
+    revisionCard.classList.add('revision-highlight');
+
+    // Optional: click overlay to remove highlight
+    overlay.addEventListener('click', removeRevisionHighlight);
+}
+
+function removeRevisionHighlight() {
+    const revisionCard = document.querySelector('.revision-instructions-card');
+    const overlay = document.querySelector('.revision-overlay');
+
+    document.body.classList.remove('blur-active');
+    revisionCard?.classList.remove('revision-highlight');
+    overlay?.remove();
 }
 </script>

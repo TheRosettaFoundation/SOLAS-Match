@@ -112,4 +112,29 @@
     }
     .k .label{ font-size:.78rem; color: var(--twb-muted); margin-bottom:.1rem; }
     .k .value{ font-size:.92rem; font-weight:600; line-height:1.2; }
+
+/* Blur background */
+.blur-active > *:not(.revision-highlight):not(.revision-overlay) {
+    filter: blur(5px);
+    pointer-events: none;
+    user-select: none;
+}
+
+/* Overlay */
+.revision-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.4);
+    z-index: 999;
+    backdrop-filter: blur(3px);
+}
+
+/* Highlighted card */
+.revision-highlight {
+    position: relative;
+    z-index: 1000;
+    box-shadow: 0 0 0 4px #ffc107, 0 20px 40px rgba(0,0,0,0.4);
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
   </style>
