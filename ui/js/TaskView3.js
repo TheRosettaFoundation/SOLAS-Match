@@ -278,10 +278,12 @@ function removeRevisionHighlight() {
     const revisionCard = document.querySelector('.revision-instructions-card');
     const overlay = document.querySelector('.revision-overlay');
     const page = document.getElementById('page-content');
+    const position_revision-instructions-card = document.getElementById('position_revision-instructions-card');
 
     page?.classList.remove('blur-active');
     revisionCard?.classList.remove('revision-highlight');
     overlay?.remove();
     add_instructions.removeChild(revisionCard);
+    position_revision-instructions-card?.appendChild(revisionCard);
 }
 </script>
