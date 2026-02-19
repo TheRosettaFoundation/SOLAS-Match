@@ -159,6 +159,7 @@ function documentReady()
   );
 
   document.querySelector('#show-revision-btn').addEventListener('click', highlightRevisionCard);
+  document.getElementById('confirm_read_instructions').addEventListener('click', removeRevisionHighlight);
 }
 
 function DAOgetWordCount()
@@ -271,8 +272,6 @@ function highlightRevisionCard() {
     // Move card above blur
     revisionCard.classList.add('revision-highlight');
     add_instructions.appendChild(revisionCard); // bring to top layer
-
-    overlay.addEventListener('click', removeRevisionHighlight);
 }
 
 function removeRevisionHighlight() {

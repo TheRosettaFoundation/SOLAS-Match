@@ -289,7 +289,7 @@
               perform a final read, and seek clarification if needed before completion.
             </p>
 
-            <button class="btn btn-orange w-100">
+            <button class="btn btn-orange w-100" id="confirm_read_instructions">
               <i class="bi bi-check2-circle me-2"></i> I confirm I have read the task instructions.
             </button>
           </div>
