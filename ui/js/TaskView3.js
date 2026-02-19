@@ -282,5 +282,6 @@ function removeRevisionHighlight() {
     page?.classList.remove('blur-active');
     revisionCard?.classList.remove('revision-highlight');
     overlay?.remove();
+    add_instructions.removeChild(revisionCard);
 }
 </script>
