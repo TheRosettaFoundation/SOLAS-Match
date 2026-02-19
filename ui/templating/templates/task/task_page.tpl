@@ -30,7 +30,7 @@
           </div>
 
           <div class="ms-lg-auto">
-            <button class="btn btn-orange show-revision-btn">
+            <button class="btn btn-orange" id="show-revision-btn">
               Review the instructions
             </button>
           </div>
