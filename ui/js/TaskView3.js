@@ -278,12 +278,12 @@ function removeRevisionHighlight() {
     const revisionCard = document.querySelector('.revision-instructions-card');
     const overlay = document.querySelector('.revision-overlay');
     const page = document.getElementById('page-content');
-    const position_revision-instructions-card = document.getElementById('position_revision-instructions-card');
+    const position_revision_instructions_card = document.getElementById('position_revision_instructions_card');
 
     page?.classList.remove('blur-active');
     revisionCard?.classList.remove('revision-highlight');
     overlay?.remove();
     add_instructions.removeChild(revisionCard);
-    position_revision-instructions-card?.appendChild(revisionCard);
+    position_revision_instructions_card?.appendChild(revisionCard);
 }
 </script>

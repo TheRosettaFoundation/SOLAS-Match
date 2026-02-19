@@ -273,7 +273,7 @@
 
       <!-- Right column -->
       <div class="col-12 col-lg-4">
-        <div id=position_revision-instructions-card></div>
+        <div id=position_revision_instructions_card></div>
         <div class="card mb-4 revision-instructions-card">
           <div class="card-body p-4">
             <div class="d-flex align-items-center justify-content-between mb-2">
