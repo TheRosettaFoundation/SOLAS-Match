@@ -4,7 +4,7 @@
   {assign var="type_id" value=$task->getTaskType()}
   {assign var="project_id" value=$task->getProjectId()}
 
-  <div class="container-fluid app-shell py-4"> <!-- was main -->
+  <div class="container-fluid app-shell py-4" id="page-content"> <!-- was main -->
     <!-- Header card -->
     <div class="card mb-4">
       <div class="card-body p-4">

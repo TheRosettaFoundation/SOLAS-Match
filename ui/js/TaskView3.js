@@ -256,28 +256,30 @@ function DAOTaskInvitesSentToUsers(userIDs, functionOnSuccess, functionOnFail)
 
 function highlightRevisionCard() {
     const revisionCard = document.querySelector('.revision-instructions-card');
-    if (!revisionCard) return;
+    const page = document.getElementById('page-content');
+    if (!revisionCard || !page) return;
 
-    // Add overlay
+    // Create overlay
     const overlay = document.createElement('div');
-    overlay.classList.add('revision-overlay');
+    overlay.className = 'revision-overlay';
     document.body.appendChild(overlay);
 
-    // Blur background
-    document.body.classList.add('blur-active');
+    // Blur wrapper (NOT body)
+    page.classList.add('blur-active');
 
-    // Highlight card
+    // Move card above blur
     revisionCard.classList.add('revision-highlight');
+    document.body.appendChild(revisionCard); // bring to top layer
 
-    // Optional: click overlay to remove highlight
     overlay.addEventListener('click', removeRevisionHighlight);
 }
 
 function removeRevisionHighlight() {
     const revisionCard = document.querySelector('.revision-instructions-card');
     const overlay = document.querySelector('.revision-overlay');
+    const page = document.getElementById('page-content');
 
-    document.body.classList.remove('blur-active');
+    page?.classList.remove('blur-active');
     revisionCard?.classList.remove('revision-highlight');
     overlay?.remove();
 }
