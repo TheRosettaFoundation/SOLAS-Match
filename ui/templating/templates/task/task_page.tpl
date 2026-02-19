@@ -4,7 +4,9 @@
   {assign var="type_id" value=$task->getTaskType()}
   {assign var="project_id" value=$task->getProjectId()}
 
-  <div class="container-fluid app-shell py-4" id="page-content"> <!-- was main -->
+  <div class="container-fluid app-shell py-4"> <!-- was main -->
+   <div id="add_instructions"></div>
+   <div id="page-content">
     <!-- Header card -->
     <div class="card mb-4">
       <div class="card-body p-4">
@@ -303,6 +305,7 @@
         </div>
       </div>
     </div>
+   </div>
   </div> <!-- was main -->
 
 {include file="footer2.tpl"}

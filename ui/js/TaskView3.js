@@ -257,19 +257,20 @@ function DAOTaskInvitesSentToUsers(userIDs, functionOnSuccess, functionOnFail)
 function highlightRevisionCard() {
     const revisionCard = document.querySelector('.revision-instructions-card');
     const page = document.getElementById('page-content');
-    if (!revisionCard || !page) return;
+    const add_instructions = document.getElementById('add_instructions');
+    if (!revisionCard || !page || !add_instructions) return;
 
     // Create overlay
     const overlay = document.createElement('div');
     overlay.className = 'revision-overlay';
-    document.body.appendChild(overlay);
+    page.appendChild(overlay);
 
     // Blur wrapper (NOT body)
     page.classList.add('blur-active');
 
     // Move card above blur
     revisionCard.classList.add('revision-highlight');
-    document.body.appendChild(revisionCard); // bring to top layer
+    add_instructions.appendChild(revisionCard); // bring to top layer
 
     overlay.addEventListener('click', removeRevisionHighlight);
 }
