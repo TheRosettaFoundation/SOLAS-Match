@@ -211,7 +211,7 @@ $from_neon_to_trommons_pair = array(
 'Bambara' => array('bm', '--'),
 'Tamasheq' => array('taq', 'ML'),
 
-'Nigerian Pidgin' => array('pcm', 'NG'),
+'Nigerian Pidgin English' => array('pcm', 'NG'),
 
 'Dogon, Tene Kan' => array('dtk', '--'),
 'Songhay, Koyraboro Senni' => array('ses', '--'),
