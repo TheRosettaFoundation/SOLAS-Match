@@ -5,8 +5,6 @@
   {assign var="project_id" value=$task->getProjectId()}
 
   <div class="container-fluid app-shell py-4"> <!-- was main -->
-   <div id="add_instructions"></div>
-   <div id="page-content">
     <!-- Header card -->
     <div class="card mb-4">
       <div class="card-body p-4">
@@ -273,7 +271,6 @@
 
       <!-- Right column -->
       <div class="col-12 col-lg-4">
-        <div id=position_revision_instructions_card></div>
         <div class="card mb-4 revision-instructions-card">
           <div class="card-body p-4">
             <div class="d-flex align-items-center justify-content-between mb-2">
@@ -306,7 +303,6 @@
         </div>
       </div>
     </div>
-   </div>
   </div> <!-- was main -->
 
 {include file="footer2.tpl"}

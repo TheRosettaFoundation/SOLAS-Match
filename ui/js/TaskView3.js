@@ -256,35 +256,37 @@ function DAOTaskInvitesSentToUsers(userIDs, functionOnSuccess, functionOnFail)
 }
 
 function highlightRevisionCard() {
-    const revisionCard = document.querySelector('.revision-instructions-card');
-    const page = document.getElementById('page-content');
-    const add_instructions = document.getElementById('add_instructions');
-    if (!revisionCard || !page || !add_instructions) return;
+    const card = document.querySelector('.revision-instructions-card');
+    if (!card) return;
 
-    // Create overlay
+    // Prevent duplicate overlay
+    if (document.querySelector('.revision-overlay')) return;
+
     const overlay = document.createElement('div');
     overlay.className = 'revision-overlay';
-    page.appendChild(overlay);
+    document.body.appendChild(overlay);
 
-    // Blur wrapper (NOT body)
-    page.classList.add('blur-active');
+    // Activate animation
+    requestAnimationFrame(() => {
+        overlay.classList.add('active');
+    });
 
-    // Move card above blur
-    revisionCard.classList.add('revision-highlight');
-    add_instructions.appendChild(revisionCard); // bring to top layer
-    window.scrollTo(0, 0);
+    // Bring card above overlay
+    card.classList.add('revision-highlight');
+
+    // Optional: smooth scroll into view
+    card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+    overlay.addEventListener('click', removeRevisionHighlight);
 }
 
 function removeRevisionHighlight() {
-    const revisionCard = document.querySelector('.revision-instructions-card');
     const overlay = document.querySelector('.revision-overlay');
-    const page = document.getElementById('page-content');
-    const position_revision_instructions_card = document.getElementById('position_revision_instructions_card');
+    const card = document.querySelector('.revision-instructions-card');
 
-    page?.classList.remove('blur-active');
-    revisionCard?.classList.remove('revision-highlight');
-    overlay?.remove();
-    add_instructions.removeChild(revisionCard);
-    position_revision_instructions_card?.appendChild(revisionCard);
+    overlay?.classList.remove('active');
+    card?.classList.remove('revision-highlight');
+
+    setTimeout(() => overlay?.remove(), 250);
 }
 </script>

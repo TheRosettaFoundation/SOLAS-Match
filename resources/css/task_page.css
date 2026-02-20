@@ -113,26 +113,30 @@
     .k .label{ font-size:.78rem; color: var(--twb-muted); margin-bottom:.1rem; }
     .k .value{ font-size:.92rem; font-weight:600; line-height:1.2; }
 
-/* Blur the page */
-#page-content.blur-active {
-    filter: blur(5px);
-    pointer-events: none;
-    user-select: none;
-}
-
-/* Overlay */
+/* Overlay sits below highlighted card but above everything else */
 .revision-overlay {
     position: fixed;
     inset: 0;
     background: rgba(0, 0, 0, 0.4);
-    z-index: 999;
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    z-index: 1050; /* Higher than navbar (Bootstrap uses ~1030-1040) */
+    opacity: 0;
+    transition: opacity 0.25s ease;
 }
 
-/* Highlight card */
+/* Visible state */
+.revision-overlay.active {
+    opacity: 1;
+}
+
+/* Highlighted revision card */
 .revision-highlight {
     position: relative;
-    z-index: 1000;
-    box-shadow: 0 0 0 4px #ffc107, 0 20px 40px rgba(0,0,0,0.4);
-    border-radius: 8px;
+    z-index: 1100; /* Higher than overlay */
+    box-shadow: 0 0 0 4px #ffc107,
+                0 25px 60px rgba(0,0,0,0.5);
+    border-radius: 10px;
+    transition: 0.25s ease;
 }
   </style>
