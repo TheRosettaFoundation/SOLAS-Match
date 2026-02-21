@@ -40,6 +40,7 @@
 
         <!-- Stages -->
         <div class="row g-3">
+[[[[[
           <div class="col-12 col-md-6 col-lg-3">
             <div class="stage-pill">
               <div class="d-flex align-items-start justify-content-between">
@@ -110,6 +111,7 @@
               </div>
             </div>
           </div>
+]]]]]
         </div>
 
       </div>
