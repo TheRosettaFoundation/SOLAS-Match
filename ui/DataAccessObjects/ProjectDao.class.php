@@ -1949,6 +1949,37 @@ GROUP BY c.id, u.id';
         return $max_translation_deadline;
     }
 
+    public function find_all_workflow_steps($task)
+    {
+        $memsource_task = $this->get_memsource_task($task->getId());
+        $type_id = $task->getTaskType();
+        if ($memsource_task && ($type_id <= Common\Enums\TaskTypeEnum::APPROVAL || $type_id == Common\Enums\TaskTypeEnum::SPOT_QUALITY_INSPECTION || $type_id == Common\Enums\TaskTypeEnum::QUALITY_EVALUATION)) {
+            $now = gmdate('Y-m-d H:i:s');
+            $top_level = $this->get_top_level($memsource_task['internalId']);
+            $project_tasks = $this->get_tasks_for_project($task->getProjectId());
+            foreach ($project_tasks as $project_task) {
+                if ($top_level == $this->get_top_level($project_task['internalId'])) {
+                    if (($memsource_task['beginIndex'] <= $project_task['endIndex']) && ($project_task['beginIndex'] <= $memsource_task['endIndex'])) { // Overlap
+                        if (empty($steps[$project_task['workflowLevel']) {
+                            $steps[$project_task['workflowLevel']] = ['type' => $project_task['task-type_id'], 'status' => $project_task['task-status_id'], 'deadline' => $project_task['deadline'], 'delayed' => 0, 'translations_not_all_complete' => 0];
+                        } else {
+                            $steps[$project_task['workflowLevel']]['status'] = min($project_task['task-status_id'], $steps['status']);
+                            $steps[$project_task['workflowLevel']]['deadline'] = max($project_task['deadline'], $steps['deadline']);
+                        }
+                        $steps[$project_task['workflowLevel']]['this'] = $memsource_task['workflowLevel'] == $project_task['workflowLevel'];
+
+                        if ($memsource_task['workflowLevel'] > $project_task['workflowLevel'] && $project_task['task-status_id'] != Common\Enums\TaskStatusEnum::COMPLETE) {
+                            if (($project_task['deadline'] < $now) $steps[$project_task['workflowLevel']]['delayed'] = 1;
+                            $steps[$memsource_task['workflowLevel']]['translations_not_all_complete'] = 1;
+                        }
+                    }
+                }
+            }
+            ksort($steps);
+            return $steps;
+        } else return ['type' => $type_id, 'status' => $task->getTaskStatus(), 'deadline' => $task->getDeadline(), 'this' => 1, 'delayed' => 0, 'translations_not_all_complete' => 0];
+    }
+
     public function ngo_linguists_by_language_pair($org_id)
     {
         $result = LibAPI\PDOWrapper::call('ngo_linguists_by_language_pair', LibAPI\PDOWrapper::cleanse($org_id));

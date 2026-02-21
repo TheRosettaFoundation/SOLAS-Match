@@ -1448,6 +1448,7 @@ class TaskRouteHandler
                 'max_translation_deadline' => $projectDao->max_translation_deadline($task),
                 'required_qualification_for_details' => ($roles&(SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER)) ? $taskDao->getRequiredTaskQualificationLevel($task_id) : 0,
                 'current_user_id' => $user_id,
+                'steps' => $projectDao->find_all_workflow_steps($task),
         ));
 
         //return UserRouteHandler::render("task/task.view.tpl", $response);(**)
