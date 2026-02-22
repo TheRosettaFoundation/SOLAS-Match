@@ -1398,7 +1398,7 @@ class TaskRouteHandler
         $taskStatusTexts[1] = Lib\Localisation::getTranslation('common_waiting');
         $taskStatusTexts[2] = Lib\Localisation::getTranslation('common_unclaimed');
         $taskStatusTexts[10] = 'Claimed';
-        $taskStatusTexts[3] = Lib\Localisation::getTranslation('common_in_progress');
+        $taskStatusTexts[3] = 'In progress';
         $taskStatusTexts[4] = Lib\Localisation::getTranslation('common_complete');
         $chunks =  $userDao->getUserTaskChunks($task_id);
         $viewedTaskIds = [];   

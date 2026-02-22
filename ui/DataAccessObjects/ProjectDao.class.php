@@ -1954,7 +1954,6 @@ GROUP BY c.id, u.id';
         $memsource_task = $this->get_memsource_task($task->getId());
         $type_id = $task->getTaskType();
         if ($memsource_task && ($type_id <= Common\Enums\TaskTypeEnum::APPROVAL || $type_id == Common\Enums\TaskTypeEnum::SPOT_QUALITY_INSPECTION || $type_id == Common\Enums\TaskTypeEnum::QUALITY_EVALUATION)) {
-            $now = gmdate('Y-m-d H:i:s');
             $top_level = $this->get_top_level($memsource_task['internalId']);
             $project_tasks = $this->get_tasks_for_project($task->getProjectId());
             foreach ($project_tasks as $project_task) {
@@ -1967,15 +1966,20 @@ GROUP BY c.id, u.id';
                             $steps[$project_task['workflowLevel']]['deadline'] = max($project_task['deadline'], $steps['deadline']);
                         }
                         $steps[$project_task['workflowLevel']]['this'] = $memsource_task['workflowLevel'] == $project_task['workflowLevel'];
-
-                        if ($memsource_task['workflowLevel'] > $project_task['workflowLevel'] && $project_task['task-status_id'] != Common\Enums\TaskStatusEnum::COMPLETE) {
-                            if (($project_task['deadline'] < $now) $steps[$project_task['workflowLevel']]['delayed'] = 1;
-                            $steps[$memsource_task['workflowLevel']]['translations_not_all_complete'] = 1;
-                        }
                     }
                 }
             }
             ksort($steps);
+
+            $now = gmdate('Y-m-d H:i:s');
+            foreach ($steps as $workflow => $step) {
+                foreach ($steps as $wf => $s) {
+                    if ($workflow > $wf && $s['status'] != Common\Enums\TaskStatusEnum::COMPLETE) {
+                        if ($s['deadline'] < $now) $steps[$wf]['delayed'] = 1;
+                        $steps[$workflow]['translations_not_all_complete'] = 1;
+                    }
+                }
+            }
             return $steps;
         } else return ['type' => $type_id, 'status' => $task->getTaskStatus(), 'deadline' => $task->getDeadline(), 'this' => 1, 'delayed' => 0, 'translations_not_all_complete' => 0];
     }
