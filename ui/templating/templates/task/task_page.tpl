@@ -42,7 +42,7 @@
         <div class="row g-3">
           {foreach $steps as $step}
           <div class="col-12 col-md-6 col-lg-3">
-            <div class="stage-pill{if $step['this']} active{/if}">
+            <div class="stage-pill{if $step['this']} active{/if}" {if $step['this']}style="background: #F6F6F8"{/if}>
               <div class="d-flex align-items-start justify-content-between">
                 <div>
                   <div class="stage-title"><i class="bi {if $step['type'] == 3}bi-pencil-square{elseif $step['type'] == 4}bi-spellcheck{else}bi-translate{/if} me-1"></i> {TaskTypeEnum::$enum_to_UI[$step['type']]['type_text_short']}</div>
@@ -59,7 +59,7 @@
                   <div class="list-group-item list-group-item-action px-0 py-1 border-0">
                     <i class="bi bi-check-circle me-2"></i> Review the instructions
                   </div>
-                  <div class="list-group-item list-group-item-action px-0 py-1 border-0 text-secondary">
+                  <div class="list-group-item list-group-item-action px-0 py-1 border-0 text-secondary" {if true}style="background: #D7E8F5"{/if}>
                     <i class="bi bi-gear-fill me-2"></i> Work on the task
                   </div>
                   <div class="list-group-item list-group-item-action px-0 py-1 border-0 text-secondary">
