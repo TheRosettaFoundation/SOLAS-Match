@@ -1981,7 +1981,7 @@ GROUP BY c.id, u.id';
                 }
             }
             return $steps;
-        } else return ['type' => $type_id, 'status' => $task->getTaskStatus(), 'deadline' => $task->getDeadline(), 'this' => 1, 'delayed' => 0, 'translations_not_all_complete' => 0];
+        } else return [['type' => $type_id, 'status' => $task->getTaskStatus(), 'deadline' => $task->getDeadline(), 'this' => 1, 'delayed' => 0, 'translations_not_all_complete' => 0]];
     }
 
     public function ngo_linguists_by_language_pair($org_id)
