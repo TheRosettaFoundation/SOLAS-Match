@@ -46,7 +46,7 @@
               <div class="d-flex align-items-start justify-content-between">
                 <div>
                   <div class="stage-title"><i class="bi {if $type_id == 3}bi-pencil-square{elseif $type_id == 4}bi-spellcheck{else}bi-translate{/if} me-1"></i> {TaskTypeEnum::$enum_to_UI[$type_id]['type_text_short']}</div>
-                  <div class="stage-meta">{if $step['status'] == TaskStatusEnum::IN_PROGRESS && $step['translations_not_all_complete']}{$taskStatusTexts[10]}{else}$taskStatusTexts[$step['status']]{/if}</div>
+                  <div class="stage-meta">{if $step['status'] == TaskStatusEnum::IN_PROGRESS && $step['translations_not_all_complete']}{$taskStatusTexts[10]}{else}{$taskStatusTexts[$step['status']]}{/if}</div>
                   {if $step['delayed']}<span class="badge rounded-pill badge-task" style="color: LemonChiffon">Delayed</span>{/if}
                 </div>
               </div>
