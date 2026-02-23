@@ -147,11 +147,10 @@ function documentReady()
       var hour    = dUTC.substring(11, 13);
       var minutes = dUTC.substring(14, 16);
       var seconds = dUTC.substring(17, 19);
-
       var d = new Date(Date.UTC(year, month, day, hour, minutes, seconds));
 
-      const formatter = new Intl.DateTimeFormat((new Intl.DateTimeFormat()).resolvedOptions().locale, {month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric', timeZoneName: 'short'});
-
+      const formatter = new Intl.DateTimeFormat((new Intl.DateTimeFormat()).resolvedOptions().locale, {month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric', timeZoneName: 'shortGeneric'});
+//[[[ + " " + Intl.DateTimeFormat().resolvedOptions().timeZone]]]
       $(this).html(formatter.format(d));
 
       $(this).css("visibility", "visible");
