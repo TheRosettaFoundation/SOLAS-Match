@@ -56,13 +56,13 @@
               {if $step['this']}
               <div class="mt-3">
                 <div class="list-group list-group-flush small">
-                  <div class="list-group-item list-group-item-action px-0 py-1 border-0">
+                  <div class="list-group-item list-group-item-action px-0 py-1 border-0" {if true}style="background: #EEF4FA"{/if}>
                     <i class="bi bi-check-circle me-2"></i> Review the instructions
                   </div>
                   <div class="list-group-item list-group-item-action px-0 py-1 border-0 text-secondary" {if true}style="background: #D7E8F5"{/if}>
                     <i class="bi bi-gear-fill me-2"></i> Work on the task
                   </div>
-                  <div class="list-group-item list-group-item-action px-0 py-1 border-0 text-secondary">
+                  <div class="list-group-item list-group-item-action px-0 py-1 border-0 text-secondary" {if true}style="background: #EEF4FA"{/if}>
                     <i class="bi bi-gear-fill me-2"></i> Provide feedback
                   </div>
                 </div>
