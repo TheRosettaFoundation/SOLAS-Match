@@ -1529,6 +1529,8 @@ INSERT INTO task_type_details VALUES
 UPDATE task_type_details SET claimed_template='task/task.claimed-spot_quality_inspection.tpl' WHERE type_enum=38;
 UPDATE task_type_details SET claimed_template='task/task.claimed-quality_evaluation.tpl'      WHERE type_enum=39;
 
+UPDATE task_type_details SET unit_count_text='Word count' WHERE unit_count_text='Word Count';
+
 /*
 # "Labour Hours" or "Words" etc. for when user enters pricing rates
 UPDATE task_type_details SET pricing_and_recognition_unit_text_hours='Words' WHERE type_enum=1;
