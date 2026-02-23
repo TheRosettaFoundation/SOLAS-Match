@@ -40,78 +40,48 @@
 
         <!-- Stages -->
         <div class="row g-3">
-[[[[[
+          {foreach $steps as $step}
           <div class="col-12 col-md-6 col-lg-3">
-            <div class="stage-pill">
+            <div class="stage-pill{if $step['this']} active{/if}">
               <div class="d-flex align-items-start justify-content-between">
                 <div>
-                  <div class="stage-title"><i class="bi bi-translate me-1"></i> Translation</div>
-                  <div class="stage-meta">In progress</div>
+                  <div class="stage-title"><i class="bi {if $type_id == 3}bi-pencil-square{elseif $type_id == 4}bi-spellcheck{else}bi-translate{/if} me-1"></i> {TaskTypeEnum::$enum_to_UI[$type_id]['type_text_short']}</div>
+                  <div class="stage-meta">{if $step['status'] == TaskStatusEnum::IN_PROGRESS && $step['translations_not_all_complete']}{$taskStatusTexts[10]}{else}$taskStatusTexts[$step['status']]{/if}</div>
+                  {if $step['delayed']}<span class="badge rounded-pill badge-task" style="color: LemonChiffon">Delayed</span>{/if}
                 </div>
-                <i class="bi bi-dot text-warning fs-3"></i>
               </div>
               <div class="stage-meta mt-2">
-                <i class="bi bi-clock me-1"></i> Due on January 20<br>
-                10:00 (Europe/Madrid)
+                  {if $step['this'] && $step['translations_not_all_complete']}Wait for Previous step ({/if}<i class="bi bi-clock me-1"></i>{if $step['this'] && $step['translations_not_all_complete']}This step due{else}Due{/if} on <span class="convert_utc_to_local_deadline_natural" style="visibility: hidden">{$step['deadline']}</span>{if $step['this'] && $step['translations_not_all_complete']}){/if}
               </div>
-            </div>
-          </div>
-
-          <div class="col-12 col-md-6 col-lg-3">
-            <div class="stage-pill active">
-              <div class="d-flex align-items-start justify-content-between">
-                <div>
-                  <div class="stage-title"><i class="bi bi-pencil-square me-1"></i> Revision</div>
-                  <div class="stage-meta">Claimed</div>
-                </div>
-                <i class="bi bi-check-circle-fill text-primary fs-5"></i>
-              </div>
-
-              <div class="stage-meta mt-2">
-                <i class="bi bi-clock me-1"></i> Due on January 26<br>
-                10:00 (Europe/Madrid)
-              </div>
-
+              {if $step['this']}
               <div class="mt-3">
                 <div class="list-group list-group-flush small">
-                  <button class="list-group-item list-group-item-action px-0 py-1 border-0">
-                    <i class="bi bi-info-circle me-2"></i> Review the instructions
-                  </button>
-                  <button class="list-group-item list-group-item-action px-0 py-1 border-0 text-secondary" disabled>
-                    <i class="bi bi-wrench-adjustable-circle me-2"></i> Work on the task
-                  </button>
-                  <button class="list-group-item list-group-item-action px-0 py-1 border-0 text-secondary" disabled>
-                    <i class="bi bi-chat-left-dots me-2"></i> Provide feedback
-                  </button>
+                  <div class="list-group-item list-group-item-action px-0 py-1 border-0">
+                    <i class="bi bi-check-circle me-2"></i> Review the instructions
+                  </div>
+                  <div class="list-group-item list-group-item-action px-0 py-1 border-0 text-secondary">
+                    <i class="bi bi-gear-fill me-2"></i> Work on the task
+                  </div>
+                  <div class="list-group-item list-group-item-action px-0 py-1 border-0 text-secondary">
+                    <i class="bi bi-gear-fill me-2"></i> Provide feedback
+                  </div>
                 </div>
               </div>
+              {/if}
             </div>
           </div>
-
-          <div class="col-12 col-md-6 col-lg-3">
-            <div class="stage-pill">
-              <div class="d-flex align-items-start justify-content-between">
-                <div>
-                  <div class="stage-title"><i class="bi bi-spellcheck me-1"></i> Proofreading</div>
-                  <div class="stage-meta">Pending</div>
-                </div>
-                <i class="bi bi-dash-circle text-secondary fs-5"></i>
-              </div>
-            </div>
-          </div>
+          {/foreach}
 
           <div class="col-12 col-md-6 col-lg-3">
             <div class="stage-pill">
               <div class="d-flex align-items-start justify-content-between">
                 <div>
                   <div class="stage-title"><i class="bi bi-truck me-1"></i> Delivery</div>
-                  <div class="stage-meta">—</div>
+                  <div class="stage-meta">Pending</div>
                 </div>
-                <i class="bi bi-dash-circle text-secondary fs-5"></i>
               </div>
             </div>
           </div>
-]]]]]
         </div>
 
       </div>
