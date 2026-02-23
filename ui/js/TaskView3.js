@@ -150,7 +150,6 @@ function documentReady()
       var d = new Date(Date.UTC(year, month, day, hour, minutes, seconds));
 
       const formatter = new Intl.DateTimeFormat((new Intl.DateTimeFormat()).resolvedOptions().locale, {month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric', timeZoneName: 'shortGeneric'});
-//[[[ + " " + Intl.DateTimeFormat().resolvedOptions().timeZone]]]
       $(this).html(formatter.format(d));
 
       $(this).css("visibility", "visible");
