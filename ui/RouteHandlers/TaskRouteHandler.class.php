@@ -1340,7 +1340,7 @@ class TaskRouteHandler
                 return $response->withHeader('Content-Type', 'application/json');
             }
             if (isset($post['number'])) {
-                $taskDao->set_user_instruction($post['category'], $post['number'], $user_id, $task_id)
+                $taskDao->set_user_instruction($post['category'], $post['number'], $user_id, $task_id);
                 $response->getBody()->write(json_encode(['result'=> 1]));
                 return $response->withHeader('Content-Type', 'application/json');
             }
