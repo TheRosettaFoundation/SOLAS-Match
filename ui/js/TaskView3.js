@@ -253,7 +253,7 @@ function DAOTaskInvitesSentToUsers(userIDs, functionOnSuccess, functionOnFail)
   .fail(functionOnFail);
 }
 
-function highlightRevisionCard() {
+async function highlightRevisionCard() {
     const json = await get_user_instructions();
 console.log(json);
 
