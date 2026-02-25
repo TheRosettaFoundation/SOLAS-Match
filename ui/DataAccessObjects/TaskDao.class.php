@@ -1204,4 +1204,23 @@ error_log("createTaskDirectly: $args");
         }
         return $views;
     }
+
+    public function get_user_instructions($category, $user_id, $task_id)
+    {
+        $result = LibAPI\PDOWrapper::call('get_user_instructions',
+            LibAPI\PDOWrapper::cleanse($category) . ',' .
+            LibAPI\PDOWrapper::cleanse($user_id) . ',' .
+            LibAPI\PDOWrapper::cleanse($task_id));
+        if (empty($result)) return [];
+        return $result;
+    }
+
+    public function set_user_instruction($category, $number, $user_id, $task_id)
+    {
+        LibAPI\PDOWrapper::call('set_user_instruction',
+            LibAPI\PDOWrapper::cleanse($category) . ',' .
+            LibAPI\PDOWrapper::cleanse($number) . ',' .
+            LibAPI\PDOWrapper::cleanse($user_id) . ',' .
+            LibAPI\PDOWrapper::cleanse($task_id));
+    }
 }

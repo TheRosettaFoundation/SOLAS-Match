@@ -1,4 +1,9 @@
 {include file="new_header.tpl"}
+<div class="d-none">
+  <div id="task_id">{$task_id}</div>
+  <div id="user_id">{$current_user_id}</div>
+  <div id="sesskey">{$sesskey}</div>
+</div>
 
   {assign var="task_id" value=$task->getId()}
   {assign var="type_id" value=$task->getTaskType()}

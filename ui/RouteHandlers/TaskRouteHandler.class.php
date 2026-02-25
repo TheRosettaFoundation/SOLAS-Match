@@ -1335,6 +1335,15 @@ class TaskRouteHandler
                     UserRouteHandler::flashNow('success', 'Source Units updated.');
                 } else UserRouteHandler::flashNow('error', 'Source Units must be a (>0) integer.');
             }
+            if (isset($post['category'])) {
+                $response->getBody()->write(json_encode($taskDao->get_user_instructions($post['category'], $user_id, $task_id)));
+                return $response->withHeader('Content-Type', 'application/json');
+            }
+            if (isset($post['number'])) {
+                $taskDao->set_user_instruction($post['category'], $post['number'], $user_id, $task_id)
+                $response->getBody()->write(json_encode(['result'=> 1]));
+                return $response->withHeader('Content-Type', 'application/json');
+            }
         }
 
         $taskMetaData = array();

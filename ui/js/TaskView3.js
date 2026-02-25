@@ -254,6 +254,9 @@ function DAOTaskInvitesSentToUsers(userIDs, functionOnSuccess, functionOnFail)
 }
 
 function highlightRevisionCard() {
+    const json = await get_user_instructions();
+console.log(json);
+
     const card = document.querySelector('.revision-instructions-card');
     if (!card) return;
 
@@ -287,4 +290,48 @@ function removeRevisionHighlight() {
 
     setTimeout(() => overlay?.remove(), 250);
 }
+
+    async function get_user_instructions() {
+        try {
+            const task_id = document.getElementById("task_id").innerHTML;
+            const response = await fetch(`/task/${task_id}/view`, {
+                method: "POST",
+                body: new URLSearchParams(
+                    {
+                        category: 1,
+                        user_id: document.getElementById("user_id").innerHTML,
+                        sesskey: document.getElementById("sesskey").innerHTML,
+                    }
+                )
+            });
+            if (!response.ok) {
+                throw new Error("error");
+            }
+            return response.json();
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+    async function set_user_instruction(number) {
+        try {
+            const task_id = document.getElementById("task_id").innerHTML;
+            const response = await fetch(`/task/${task_id}/view`, {
+                method: "POST",
+                body: new URLSearchParams(
+                    {
+                        category: 1,
+                        user_id: document.getElementById("user_id").innerHTML,
+                        number: number,
+                        sesskey: document.getElementById("sesskey").innerHTML,
+                    }
+                )
+            });
+            if (!response.ok) {
+                throw new Error("error");
+            }
+        } catch (error) {
+            console.error(error);
+        }
+    }
 </script>
