@@ -257,6 +257,16 @@ async function highlightRevisionCard() {
     const json = await get_user_instructions();
 console.log(json);
 
+
+        json.forEach((elt) => {
+console.log("-----");
+console.log(elt);
+console.log(elt[0]);
+const number = elt[0].number;
+console.log(number);
+        });
+
+
     const card = document.querySelector('.revision-instructions-card');
     if (!card) return;
 
