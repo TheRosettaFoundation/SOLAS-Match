@@ -1,6 +1,6 @@
 {include file="new_header.tpl"}
 <div class="d-none">
-  <div id="task_id">{$task_id}</div>
+  <div id="task_id">{$task->getId()}</div>
   <div id="user_id">{$current_user_id}</div>
   <div id="sesskey">{$sesskey}</div>
 </div>
