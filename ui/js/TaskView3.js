@@ -261,8 +261,7 @@ console.log(json);
         json.forEach((elt) => {
 console.log("-----");
 console.log(elt);
-console.log(elt[0]);
-const number = elt[0].number;
+const number = elt.number;
 console.log(number);
         });
 
