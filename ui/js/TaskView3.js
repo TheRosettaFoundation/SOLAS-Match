@@ -257,16 +257,26 @@ var highlight_index = 0;
 
 async function highlightRevisionCard() {
     const json = await get_user_instructions();
-console.log(json);
+    const read = [];
+    json.forEach((elem) => { read.push(elem.number); });
 
+[[[[[[[[[
+revision-instructions-card highlight_0
+"Project-specific instructions" highlight_1
+"References and style guides" highlight_2
+"Source file" highlight_3
+list of stages
 
-        json.forEach((elt) => {
-console.log("-----");
-console.log(elt);
-const number = elt.number;
-console.log(number);
-        });
-//var highlight_index = 0
+let target = 0
+for (; target < 4; target++) if (!read.includes(target)) break;
+
+if target == 4 then all done
+
+got to target
+
+// set_user_instruction(number);
+]]]]]]]]]
+
 
     const card = document.querySelector('.highlight_' + highlight_index);
     if (!card) return;
