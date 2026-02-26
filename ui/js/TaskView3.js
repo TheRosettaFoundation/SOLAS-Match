@@ -260,23 +260,11 @@ async function highlightRevisionCard() {
     const read = [];
     json.forEach((elem) => { read.push(elem.number); });
 
-[[[[[[[[[
-revision-instructions-card highlight_0
-"Project-specific instructions" highlight_1
-"References and style guides" highlight_2
-"Source file" highlight_3
-list of stages
+    highlight_index = 0
+    for (; highlight_index < 4; highlight_index++) if (!read.includes(highlight_index)) break;
 
-let target = 0
-for (; target < 4; target++) if (!read.includes(target)) break;
-
-if target == 4 then all done
-
-got to target
-
-// set_user_instruction(number);
-]]]]]]]]]
-
+//(**)if highlight_index == 4 then all done
+//(**)set_user_instruction(number);
 
     const card = document.querySelector('.highlight_' + highlight_index);
     if (!card) return;
