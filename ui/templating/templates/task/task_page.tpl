@@ -183,11 +183,11 @@
             <div class="accordion accordion-flush" id="acc2">
               <div class="accordion-item">
                 <h2 class="accordion-header">
-                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#c2">
+                  <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#c2" aria-expanded="true">
                     References and style guides
                   </button>
                 </h2>
-                <div id="c2" class="accordion-collapse collapse" data-bs-parent="#acc2">
+                <div id="c2" class="accordion-collapse collapse show" data-bs-parent="#acc2">
                   <div class="accordion-body p-4">
                     <div class="small mb-3">
                       <div class="soft-muted">Link:</div>
