@@ -136,7 +136,7 @@
         </div>
 
         <!-- Project-specific instructions -->
-        <div class="card mb-4">
+        <div class="card mb-4 highlight_1">
           <div class="card-body p-0">
             <div class="accordion accordion-flush" id="acc1">
               <div class="accordion-item">
@@ -178,7 +178,7 @@
         </div>
 
         <!-- References and style guides -->
-        <div class="card mb-4">
+        <div class="card mb-4 highlight_2">
           <div class="card-body p-0">
             <div class="accordion accordion-flush" id="acc2">
               <div class="accordion-item">
@@ -211,7 +211,7 @@
         </div>
 
         <!-- Source file -->
-        <div class="card">
+        <div class="card highlight_3">
           <div class="card-body p-0">
             <div class="accordion accordion-flush" id="acc3">
               <div class="accordion-item">
@@ -248,7 +248,7 @@
 
       <!-- Right column -->
       <div class="col-12 col-lg-4">
-        <div class="card mb-4 revision-instructions-card">
+        <div class="card mb-4 highlight_0">
           <div class="card-body p-4">
             <div class="d-flex align-items-center justify-content-between mb-2">
               <div class="section-title mb-0">Revision instructions</div>

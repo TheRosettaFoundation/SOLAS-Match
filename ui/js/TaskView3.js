@@ -253,6 +253,8 @@ function DAOTaskInvitesSentToUsers(userIDs, functionOnSuccess, functionOnFail)
   .fail(functionOnFail);
 }
 
+var highlight_index = 0;
+
 async function highlightRevisionCard() {
     const json = await get_user_instructions();
 console.log(json);
@@ -264,9 +266,9 @@ console.log(elt);
 const number = elt.number;
 console.log(number);
         });
+//var highlight_index = 0
 
-
-    const card = document.querySelector('.revision-instructions-card');
+    const card = document.querySelector('.highlight_' + highlight_index);
     if (!card) return;
 
     // Prevent duplicate overlay
@@ -292,7 +294,7 @@ console.log(number);
 
 function removeRevisionHighlight() {
     const overlay = document.querySelector('.revision-overlay');
-    const card = document.querySelector('.revision-instructions-card');
+    const card = document.querySelector('.highlight_' + highlight_index);
 
     overlay?.classList.remove('active');
     card?.classList.remove('revision-highlight');
