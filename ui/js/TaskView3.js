@@ -257,17 +257,13 @@ var highlight_index = 0;
 
 async function highlightRevisionCard() {
     const json = await get_user_instructions();
-console.log(json);
     const read = [];
     json.forEach((elem) => { read.push(elem.number); });
-console.log(read);
 
     highlight_index = 0
     for (; highlight_index < 4; highlight_index++) if (!read.includes(highlight_index)) break;
-console.log(highlight_index);
 
 //(**)if highlight_index == 4 then all done
-//(**)set_user_instruction(number);
 
     const card = document.querySelector('.highlight_' + highlight_index);
     if (!card) return;
