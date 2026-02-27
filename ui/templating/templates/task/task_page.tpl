@@ -267,6 +267,9 @@
             <button class="btn btn-orange w-100" id="confirm_read_instructions">
               <i class="bi bi-check2-circle me-2"></i> I confirm I have read the task instructions.
             </button>
+            <div class="btn btn-green-white w-100">
+              <i class="bi bi-check-circle me-2"></i> I confirm I have read the task instructions.
+            </div>
           </div>
         </div>
 
