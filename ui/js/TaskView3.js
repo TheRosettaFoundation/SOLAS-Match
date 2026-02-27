@@ -156,11 +156,11 @@ function documentReady()
     }
   );
 
-  document.querySelector('#show-revision-btn').addEventListener('click', highlightRevisionCard);
-  document.getElementById('confirm_read_instructions').addEventListener('click', confirm_read_instructions);
-  document.getElementById('confirm_read_project_instructions').addEventListener('click', confirm_read_project_instructions);
-  document.getElementById('confirm_read_reference_instructions').addEventListener('click', confirm_read_reference_instructions);
-  document.getElementById('confirm_read_source_instructions').addEventListener('click', confirm_read_source_instructions);
+  document.querySelector('#show-revision-btn')?.addEventListener('click', highlightRevisionCard);
+  document.getElementById('confirm_read_instructions')?.addEventListener('click', confirm_read_instructions);
+  document.getElementById('confirm_read_project_instructions')?.addEventListener('click', confirm_read_project_instructions);
+  document.getElementById('confirm_read_reference_instructions')?.addEventListener('click', confirm_read_reference_instructions);
+  document.getElementById('confirm_read_source_instructions')?.addEventListener('click', confirm_read_source_instructions);
 }
 
 function DAOgetWordCount()
@@ -293,27 +293,27 @@ async function highlightRevisionCard() {
 }
 
 function confirm_read_instructions() {
-    document.getElementById('confirm_read_instructions').removeEventListener('click', confirm_read_instructions);
+    document.getElementById('confirm_read_instructions')?.removeEventListener('click', confirm_read_instructions);
     set_user_instruction(0);
-    document.getElementById("head_confirm_read_instructions").innerHTML = '<div class="btn btn-green-white w-100"><i class="bi bi-check-circle me-2"></i> I confirm I have read the task instructions.</div>';
+    document.getElementById("head_confirm_read_instructions")?.innerHTML = '<div class="btn btn-green-white w-100"><i class="bi bi-check-circle me-2"></i> I confirm I have read the task instructions.</div>';
     removeRevisionHighlight();
 }
 function confirm_read_project_instructions() {
-    document.getElementById('confirm_read_project_instructions').removeEventListener('click', confirm_read_project_instructions);
+    document.getElementById('confirm_read_project_instructions')?.removeEventListener('click', confirm_read_project_instructions);
     set_user_instruction(1);
-    document.getElementById("head_confirm_read_project_instructions").innerHTML = '<div class="btn btn-green-white w-100"><i class="bi bi-check-circle me-2"></i> I confirm I have read the project-specific instructions.</div>';
+    document.getElementById("head_confirm_read_project_instructions")?.innerHTML = '<div class="btn btn-green-white w-100"><i class="bi bi-check-circle me-2"></i> I confirm I have read the project-specific instructions.</div>';
     removeRevisionHighlight();
 }
 function confirm_read_reference_instructions() {
-    document.getElementById('confirm_read_reference_instructions').removeEventListener('click', confirm_read_reference_instructions);
+    document.getElementById('confirm_read_reference_instructions')?.removeEventListener('click', confirm_read_reference_instructions);
     set_user_instruction(2);
-    document.getElementById("head_confirm_read_reference_instructions").innerHTML = '<div class="btn btn-green-white w-100"><i class="bi bi-check-circle me-2"></i> I confirm I have reviewed the references and style guides.</div>';
+    document.getElementById("head_confirm_read_reference_instructions")?.innerHTML = '<div class="btn btn-green-white w-100"><i class="bi bi-check-circle me-2"></i> I confirm I have reviewed the references and style guides.</div>';
     removeRevisionHighlight();
 }
 function confirm_read_source_instructions() {
-    document.getElementById('confirm_read_source_instructions').removeEventListener('click', confirm_read_source_instructions);
+    document.getElementById('confirm_read_source_instructions')?.removeEventListener('click', confirm_read_source_instructions);
     set_user_instruction(3);
-    document.getElementById("head_confirm_read_source_instructions").innerHTML = '<div class="btn btn-green-white w-100"><i class="bi bi-check-circle me-2"></i> I confirm I have reviewed the references and style guides.</div>';
+    document.getElementById("head_confirm_read_source_instructions")?.innerHTML = '<div class="btn btn-green-white w-100"><i class="bi bi-check-circle me-2"></i> I confirm I have reviewed the references and style guides.</div>';
     removeRevisionHighlight();
 }
 
