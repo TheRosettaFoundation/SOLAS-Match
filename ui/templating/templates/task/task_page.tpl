@@ -166,9 +166,11 @@
                     </div>
 
                     <div class="mt-4">
-                      <button class="confirm-bar" type="button" id="confirm_read_project_instructions">
-                        <i class="bi bi-check2-circle me-2"></i> I confirm I have read the project-specific instructions.
-                      </button>
+                      <div id="head_confirm_read_project_instructions">
+                        <button class="confirm-bar" type="button" id="confirm_read_project_instructions">
+                          <i class="bi bi-check2-circle me-2"></i> I confirm I have read the project-specific instructions.
+                        </button>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -199,9 +201,11 @@
                     </button>
 
                     <div class="mt-4">
-                      <button class="confirm-bar" type="button" id="confirm_read_reference_instructions">
-                        <i class="bi bi-check2-circle me-2"></i> I confirm I have reviewed the references and style guides.
-                      </button>
+                      <div id="head_confirm_read_reference_instructions">
+                        <button class="confirm-bar" type="button" id="confirm_read_reference_instructions">
+                          <i class="bi bi-check2-circle me-2"></i> I confirm I have reviewed the references and style guides.
+                        </button>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -234,9 +238,11 @@
                       </div>
                     </div>
 
-                    <button class="confirm-bar" type="button" id="confirm_read_source_instructions">
-                      <i class="bi bi-check2-circle me-2"></i> I confirm I have reviewed the source file.
-                    </button>
+                    <div id="head_confirm_read_source_instructions">
+                      <button class="confirm-bar" type="button" id="confirm_read_source_instructions">
+                        <i class="bi bi-check2-circle me-2"></i> I confirm I have reviewed the source file.
+                      </button>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -264,11 +270,10 @@
               perform a final read, and seek clarification if needed before completion.
             </p>
 
-            <button class="btn btn-orange w-100" id="confirm_read_instructions">
-              <i class="bi bi-check2-circle me-2"></i> I confirm I have read the task instructions.
-            </button>
-            <div class="btn btn-green-white w-100">
-              <i class="bi bi-check-circle me-2"></i> I confirm I have read the task instructions.
+            <div id="head_confirm_read_instructions">
+              <button class="btn btn-orange w-100" id="confirm_read_instructions">
+                <i class="bi bi-check2-circle me-2"></i> I confirm I have read the task instructions.
+              </button>
             </div>
           </div>
         </div>
