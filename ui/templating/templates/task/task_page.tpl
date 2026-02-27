@@ -166,7 +166,7 @@
                     </div>
 
                     <div class="mt-4">
-                      <button class="confirm-bar" type="button">
+                      <button class="confirm-bar" type="button" id="confirm_read_project_instructions">
                         <i class="bi bi-check2-circle me-2"></i> I confirm I have read the project-specific instructions.
                       </button>
                     </div>
@@ -199,7 +199,7 @@
                     </button>
 
                     <div class="mt-4">
-                      <button class="confirm-bar" type="button">
+                      <button class="confirm-bar" type="button" id="confirm_read_reference_instructions">
                         <i class="bi bi-check2-circle me-2"></i> I confirm I have reviewed the references and style guides.
                       </button>
                     </div>
@@ -234,7 +234,7 @@
                       </div>
                     </div>
 
-                    <button class="confirm-bar" type="button">
+                    <button class="confirm-bar" type="button" id="confirm_read_source_instructions">
                       <i class="bi bi-check2-circle me-2"></i> I confirm I have reviewed the source file.
                     </button>
                   </div>
