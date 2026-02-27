@@ -171,6 +171,15 @@ function documentReady()
 
   if (read.length == 4) {
 WIP
+
+"//(**)if highlight_index == 4 then all done"
+need mechanism for top right action buttom only aplies to reading instruction
+is claimed but not completed
+either review or work on
+so just need status for
+...
+
+
   } else {
     document.querySelector('#show-revision-btn')?.addEventListener('click', highlightRevisionCard);
     document.getElementById('confirm_read_instructions')?.addEventListener('click', confirm_read_instructions);
