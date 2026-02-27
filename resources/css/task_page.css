@@ -51,11 +51,7 @@
     .btn-green-white{
       --bs-btn-bg: white;
       --bs-btn-border-color: #009951;
-      --bs-btn-hover-bg: #e78a18;
-      --bs-btn-hover-border-color: #e78a18;
-      --bs-btn-active-bg: #d97f14;
-      --bs-btn-active-border-color: #d97f14;
-      --bs-btn-color: #fff;
+      --bs-btn-color: #009951;
     }
 
     .section-title{
