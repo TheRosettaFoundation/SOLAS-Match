@@ -156,11 +156,28 @@ function documentReady()
     }
   );
 
-  document.querySelector('#show-revision-btn')?.addEventListener('click', highlightRevisionCard);
-  document.getElementById('confirm_read_instructions')?.addEventListener('click', confirm_read_instructions);
-  document.getElementById('confirm_read_project_instructions')?.addEventListener('click', confirm_read_project_instructions);
-  document.getElementById('confirm_read_reference_instructions')?.addEventListener('click', confirm_read_reference_instructions);
-  document.getElementById('confirm_read_source_instructions')?.addEventListener('click', confirm_read_source_instructions);
+  const json = await get_user_instructions();
+  const read = [];
+  json.forEach((elem) => { read.push(elem.number); });
+
+  for (let index = 0; index < 4; index++) {
+    if (read.includes(index)) {
+      if (index == 0) document.getElementById("head_confirm_read_instructions")?.innerHTML = '<div class="btn btn-green-white w-100"><i class="bi bi-check-circle me-2"></i> I confirm I have read the task instructions.</div>';
+      if (index == 1) document.getElementById("head_confirm_read_project_instructions")?.innerHTML = '<div class="btn btn-green-white w-100"><i class="bi bi-check-circle me-2"></i> I confirm I have read the project-specific instructions.</div>';
+      if (index == 2) document.getElementById("head_confirm_read_reference_instructions")?.innerHTML = '<div class="btn btn-green-white w-100"><i class="bi bi-check-circle me-2"></i> I confirm I have reviewed the references and style guides.</div>';
+      if (index == 3) document.getElementById("head_confirm_read_source_instructions")?.innerHTML = '<div class="btn btn-green-white w-100"><i class="bi bi-check-circle me-2"></i> I confirm I have reviewed the references and style guides.</div>';
+    }
+  }
+
+  if (read.length == 4) {
+WIP
+  } else {
+    document.querySelector('#show-revision-btn')?.addEventListener('click', highlightRevisionCard);
+    document.getElementById('confirm_read_instructions')?.addEventListener('click', confirm_read_instructions);
+    document.getElementById('confirm_read_project_instructions')?.addEventListener('click', confirm_read_project_instructions);
+    document.getElementById('confirm_read_reference_instructions')?.addEventListener('click', confirm_read_reference_instructions);
+    document.getElementById('confirm_read_source_instructions')?.addEventListener('click', confirm_read_source_instructions);
+  }
 }
 
 function DAOgetWordCount()
