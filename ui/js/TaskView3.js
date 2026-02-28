@@ -170,8 +170,9 @@ function documentReady()
   }
 
   if (read.length == 4) {
-WIP
 
+
+const show_matecat_url = document.getElementById('show_matecat_url').innerHTML;
 "//(**)if highlight_index == 4 then all done"
 need mechanism for top right action buttom only aplies to reading instruction
 is claimed but not completed
@@ -179,6 +180,7 @@ either review or work on
 so just need status for
 ...
 
+Work on the task  target="_blank"
 
   } else {
     document.querySelector('#show-revision-btn')?.addEventListener('click', highlightRevisionCard);

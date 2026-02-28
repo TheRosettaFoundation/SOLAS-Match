@@ -2,6 +2,12 @@
 <div class="d-none">
   <div id="task_id">{$task->getId()}</div>
   <div id="user_id">{$current_user_id}</div>
+
+  {if !empty($matecat_url) && !empty($details_claimant) && $details_claimant->getId() == $current_user_id && $task->getTaskStatus() == TaskStatusEnum::IN_PROGRESS}
+    <div id="show_matecat_url">1</div>
+  {else}
+    <div id="show_matecat_url">0</div>
+  {/if}
   <div id="sesskey">{$sesskey}</div>
 </div>
 
