@@ -1,6 +1,7 @@
 {include file="new_header.tpl"}
 <div class="d-none">
   <div id="task_id">{$task->getId()}</div>
+  <div id="status_id">{$task->getTaskStatus()}</div>
   <div id="user_id">{$current_user_id}</div>
 
   {if !empty($details_claimant) && $details_claimant->getId() == $current_user_id}
@@ -10,17 +11,7 @@
   {/if}
   <div id="is_claimer">{$is_claimer}</div>
 
-"Review the instructions"... "Wait for previous step"... ["You are working on the task"] OR "Work on the task"... ["You have completed the task" popper/"Provide feedback"]
-                             optional                    if no matecat_url                  if matecat_url
-
-
-
-
-  {if !empty($matecat_url) && $is_claimer && $task->getTaskStatus() == TaskStatusEnum::IN_PROGRESS}
-    <div id="show_matecat_url">1</div>
-  {else}
-    <div id="show_matecat_url">0</div>
-  {/if}
+  <div id="matecat_url">{$matecat_url}</div>
   <div id="sesskey">{$sesskey}</div>
 </div>
 

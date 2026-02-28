@@ -156,37 +156,50 @@ function documentReady()
     }
   );
 
-  if (document.getElementById('is_claimer').innerHTML == 1) {
-    const json = await get_user_instructions();
-    const read = [];
-    json.forEach((elem) => { read.push(elem.number); });
+  if (document.getElementById("is_claimer").innerHTML == 1) {
+    if (document.getElementById("status_id").innerHTML == 4) {
 
-    for (let index = 0; index < 4; index++) {
-      if (read.includes(index)) {
-        if (index == 0) document.getElementById("head_confirm_read_instructions")?.innerHTML = '<div class="btn btn-green-white w-100"><i class="bi bi-check-circle me-2"></i> I confirm I have read the task instructions.</div>';
-        if (index == 1) document.getElementById("head_confirm_read_project_instructions")?.innerHTML = '<div class="btn btn-green-white w-100"><i class="bi bi-check-circle me-2"></i> I confirm I have read the project-specific instructions.</div>';
-        if (index == 2) document.getElementById("head_confirm_read_reference_instructions")?.innerHTML = '<div class="btn btn-green-white w-100"><i class="bi bi-check-circle me-2"></i> I confirm I have reviewed the references and style guides.</div>';
-        if (index == 3) document.getElementById("head_confirm_read_source_instructions")?.innerHTML = '<div class="btn btn-green-white w-100"><i class="bi bi-check-circle me-2"></i> I confirm I have reviewed the references and style guides.</div>';
-      }
-    }
-
-    if (read.length == 4) {
-
-"Review the instructions"... "Wait for previous step"... "Work on the task"... ["You have completed the task" popper/"Provide feedback"]
-                             optional                     if matecat
-
-const show_matecat_url = document.getElementById('show_matecat_url').innerHTML;
-
-
-Work on the task  target="_blank"
-
+(**)UI COMPLETED ["You have completed the task" popper/"Provide feedback"]
 
     } else {
-      document.querySelector('#show-revision-btn')?.addEventListener('click', highlightRevisionCard);
-      document.getElementById('confirm_read_instructions')?.addEventListener('click', confirm_read_instructions);
-      document.getElementById('confirm_read_project_instructions')?.addEventListener('click', confirm_read_project_instructions);
-      document.getElementById('confirm_read_reference_instructions')?.addEventListener('click', confirm_read_reference_instructions);
-      document.getElementById('confirm_read_source_instructions')?.addEventListener('click', confirm_read_source_instructions);
+      const json = await get_user_instructions();
+      const read = [];
+      json.forEach((elem) => { read.push(elem.number); });
+
+      for (let index = 0; index < 4; index++) {
+        if (read.includes(index)) {
+          if (index == 0) document.getElementById("head_confirm_read_instructions")?.innerHTML = '<div class="btn btn-green-white w-100"><i class="bi bi-check-circle me-2"></i> I confirm I have read the task instructions.</div>';
+          if (index == 1) document.getElementById("head_confirm_read_project_instructions")?.innerHTML = '<div class="btn btn-green-white w-100"><i class="bi bi-check-circle me-2"></i> I confirm I have read the project-specific instructions.</div>';
+          if (index == 2) document.getElementById("head_confirm_read_reference_instructions")?.innerHTML = '<div class="btn btn-green-white w-100"><i class="bi bi-check-circle me-2"></i> I confirm I have reviewed the references and style guides.</div>';
+          if (index == 3) document.getElementById("head_confirm_read_source_instructions")?.innerHTML = '<div class="btn btn-green-white w-100"><i class="bi bi-check-circle me-2"></i> I confirm I have reviewed the references and style guides.</div>';
+        }
+      }
+
+      if (read.length == 4) {
+        if (document.getElementById("status_id").innerHTML == 10) {
+
+(**)UI "Wait for previous step"... 
+
+        } else {
+          if (document.getElementById("matecat_url").innerHTML != "") {
+
+
+(**)UI"Work on the task"
+Work on the task  target="_blank"
+
+          } else {
+
+(**)UI["You are working on the task"]
+
+          }
+        }
+      } else {
+        document.querySelector("#show-revision-btn")?.addEventListener("click", highlightRevisionCard);
+        document.getElementById("confirm_read_instructions")?.addEventListener("click", confirm_read_instructions);
+        document.getElementById("confirm_read_project_instructions")?.addEventListener("click", confirm_read_project_instructions);
+        document.getElementById("confirm_read_reference_instructions")?.addEventListener("click", confirm_read_reference_instructions);
+        document.getElementById("confirm_read_source_instructions")?.addEventListener("click", confirm_read_source_instructions);
+      }
     }
   }
 }
@@ -321,25 +334,25 @@ async function highlightRevisionCard() {
 }
 
 function confirm_read_instructions() {
-    document.getElementById('confirm_read_instructions')?.removeEventListener('click', confirm_read_instructions);
+    document.getElementById("confirm_read_instructions")?.removeEventListener("click", confirm_read_instructions);
     set_user_instruction(0);
     document.getElementById("head_confirm_read_instructions")?.innerHTML = '<div class="btn btn-green-white w-100"><i class="bi bi-check-circle me-2"></i> I confirm I have read the task instructions.</div>';
     removeRevisionHighlight();
 }
 function confirm_read_project_instructions() {
-    document.getElementById('confirm_read_project_instructions')?.removeEventListener('click', confirm_read_project_instructions);
+    document.getElementById("confirm_read_project_instructions")?.removeEventListener("click", confirm_read_project_instructions);
     set_user_instruction(1);
     document.getElementById("head_confirm_read_project_instructions")?.innerHTML = '<div class="btn btn-green-white w-100"><i class="bi bi-check-circle me-2"></i> I confirm I have read the project-specific instructions.</div>';
     removeRevisionHighlight();
 }
 function confirm_read_reference_instructions() {
-    document.getElementById('confirm_read_reference_instructions')?.removeEventListener('click', confirm_read_reference_instructions);
+    document.getElementById("confirm_read_reference_instructions")?.removeEventListener("click", confirm_read_reference_instructions);
     set_user_instruction(2);
     document.getElementById("head_confirm_read_reference_instructions")?.innerHTML = '<div class="btn btn-green-white w-100"><i class="bi bi-check-circle me-2"></i> I confirm I have reviewed the references and style guides.</div>';
     removeRevisionHighlight();
 }
 function confirm_read_source_instructions() {
-    document.getElementById('confirm_read_source_instructions')?.removeEventListener('click', confirm_read_source_instructions);
+    document.getElementById("confirm_read_source_instructions")?.removeEventListener("click", confirm_read_source_instructions);
     set_user_instruction(3);
     document.getElementById("head_confirm_read_source_instructions")?.innerHTML = '<div class="btn btn-green-white w-100"><i class="bi bi-check-circle me-2"></i> I confirm I have reviewed the references and style guides.</div>';
     removeRevisionHighlight();
