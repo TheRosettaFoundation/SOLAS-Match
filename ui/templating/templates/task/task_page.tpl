@@ -3,7 +3,20 @@
   <div id="task_id">{$task->getId()}</div>
   <div id="user_id">{$current_user_id}</div>
 
-  {if !empty($matecat_url) && !empty($details_claimant) && $details_claimant->getId() == $current_user_id && $task->getTaskStatus() == TaskStatusEnum::IN_PROGRESS}
+  {if !empty($details_claimant) && $details_claimant->getId() == $current_user_id}
+    {assign var="is_claimer" 1}
+  {else}
+    {assign var="is_claimer" 0}
+  {/if}
+  <div id="is_claimer">{$is_claimer}</div>
+
+"Review the instructions"... "Wait for previous step"... ["You are working on the task"] OR "Work on the task"... ["You have completed the task" popper/"Provide feedback"]
+                             optional                    if no matecat_url                  if matecat_url
+
+
+
+
+  {if !empty($matecat_url) && $is_claimer && $task->getTaskStatus() == TaskStatusEnum::IN_PROGRESS}
     <div id="show_matecat_url">1</div>
   {else}
     <div id="show_matecat_url">0</div>
@@ -41,9 +54,11 @@
           </div>
 
           <div class="ms-lg-auto">
+            {if $is_claimer}
             <button class="btn btn-orange" id="show-revision-btn">
               Review the instructions
             </button>
+            {/if}
           </div>
         </div>
 
