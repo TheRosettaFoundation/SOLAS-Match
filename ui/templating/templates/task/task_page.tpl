@@ -45,11 +45,13 @@
           </div>
 
           <div class="ms-lg-auto">
-            {if $is_claimer}
-            <button class="btn btn-orange" id="show-revision-btn">
-              Review the instructions
-            </button>
-            {/if}
+            <div id="head_show-revision-btn">
+              {if $is_claimer}
+              <button class="btn btn-orange" id="show-revision-btn">
+                Review the instructions
+              </button>
+              {/if}
+            </div>
           </div>
         </div>
 

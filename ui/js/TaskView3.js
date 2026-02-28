@@ -158,9 +158,8 @@ function documentReady()
 
   if (document.getElementById("is_claimer").innerHTML == 1) {
     if (document.getElementById("status_id").innerHTML == 4) {
-
-(**)UI COMPLETED ["You have completed the task" popper/"Provide feedback"]
-
+      document.getElementById("head_show-revision-btn")?.innerHTML = '<div>You have completed the task</div><a class="btn btn-orange" id="show-revision-btn">Provide feedback</a>';
+//(**)URL href
     } else {
       const json = await get_user_instructions();
       const read = [];
@@ -177,20 +176,12 @@ function documentReady()
 
       if (read.length == 4) {
         if (document.getElementById("status_id").innerHTML == 10) {
-
-(**)UI "Wait for previous step"... 
-
+          document.getElementById("head_show-revision-btn")?.innerHTML = '<div>Wait for previous step</div>';//(**)??
         } else {
           if (document.getElementById("matecat_url").innerHTML != "") {
-
-
-(**)UI"Work on the task"
-Work on the task  target="_blank"
-
+            document.getElementById("head_show-revision-btn")?.innerHTML = '<a href="' + document.getElementById("matecat_url").innerHTML + " target="_blank" class="btn btn-orange" id="show-revision-btn">Work on the task</a>';
           } else {
-
-(**)UI["You are working on the task"]
-
+            document.getElementById("head_show-revision-btn")?.innerHTML = '<div>You are working on the task</div>';//(**)??
           }
         }
       } else {
@@ -306,8 +297,6 @@ async function highlightRevisionCard() {
 
     highlight_index = 0
     for (; highlight_index < 4; highlight_index++) if (!read.includes(highlight_index)) break;
-
-//(**)if highlight_index == 4 then all done
 
     const card = document.querySelector('.highlight_' + highlight_index);
     if (!card) return;
