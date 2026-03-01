@@ -1967,8 +1967,8 @@ error_log("empty workflow level: " . $project_task['workflowLevel'] . "status: "
 error_log("new status: " . $steps[$project_task['workflowLevel']]['status']);//(**)
                         } else {
 error_log("Supdtae workflow level: " . $project_task['workflowLevel']);//(**)
-                            $steps[$project_task['workflowLevel']]['status'] = min($project_task['task-status_id'], $steps['status']);
-                            $steps[$project_task['workflowLevel']]['deadline'] = max($project_task['deadline'], $steps['deadline']);
+                            $steps[$project_task['workflowLevel']]['status'] = min($project_task['task-status_id'], $steps[$project_task['workflowLevel']]['status']);
+                            $steps[$project_task['workflowLevel']]['deadline'] = max($project_task['deadline'], $steps[$project_task['workflowLevel']]['deadline']);
                         }
                         $steps[$project_task['workflowLevel']]['this'] = $memsource_task['workflowLevel'] == $project_task['workflowLevel'];
                     }
