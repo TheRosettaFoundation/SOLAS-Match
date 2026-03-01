@@ -3,7 +3,11 @@
 var intervalID = null; // Global ID for interval timer for getting wordcount
 
 
-$(document).ready(documentReady);
+$(document).ready(documentReady1);
+function documentReady1()//(**)
+{//(**)
+console.log("documentReady()");//(**)//(**)
+}//(**)
 
 /**
  * Called by the DOM when the Document is Ready.
