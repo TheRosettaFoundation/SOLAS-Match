@@ -159,54 +159,7 @@ console.log("documentReady()");//(**)
 
 console.log(document.getElementById("is_claimer").innerHTML);//(**)
 console.log("outside");//(**)
-
-task_page();
-async function task_page() {
-console.log("inside");//(**)
-console.log(document.getElementById("is_claimer").innerHTML);//(**)
-
-  if (document.getElementById("is_claimer").innerHTML == 1) {
-console.log("is_claimer");//(**)
-    if (document.getElementById("status_id").innerHTML == 4) {
-console.log("ststus_id 4");//(**)
-      document.getElementById("head_show-revision-btn").innerHTML = '<div>You have completed the task</div><a ' + 'href="' + document.getElementById("siteLocationURL").innerHTML + 'task/' + document.getElementById('task_id').innerHTML + '/task_complete/"' + ' class="btn btn-orange" id="show-revision-btn">Provide feedback</a>';
-    } else {
-      const json = await get_user_instructions();
-      const read = [];
-      json.forEach((elem) => { read.push(elem.number); });
-
-      for (let index = 0; index < 4; index++) {
-        if (read.includes(index)) {
-          if (index == 0) document.getElementById("head_confirm_read_instructions").innerHTML = '<div class="btn btn-green-white w-100"><i class="bi bi-check-circle me-2"></i> I confirm I have read the task instructions.</div>';
-          if (index == 1) document.getElementById("head_confirm_read_project_instructions").innerHTML = '<div class="btn btn-green-white w-100"><i class="bi bi-check-circle me-2"></i> I confirm I have read the project-specific instructions.</div>';
-          if (index == 2) document.getElementById("head_confirm_read_reference_instructions").innerHTML = '<div class="btn btn-green-white w-100"><i class="bi bi-check-circle me-2"></i> I confirm I have reviewed the references and style guides.</div>';
-          if (index == 3) document.getElementById("head_confirm_read_source_instructions").innerHTML = '<div class="btn btn-green-white w-100"><i class="bi bi-check-circle me-2"></i> I confirm I have reviewed the references and style guides.</div>';
-        }
-      }
-
-      if (read.length == 4) {
-        if (document.getElementById("status_id").innerHTML == 10) {
-          document.getElementById("head_show-revision-btn").innerHTML = '<div>Wait for previous step</div>';//(**)??
-        } else {
-          if (document.getElementById("matecat_url").innerHTML != "") {
-            document.getElementById("head_show-revision-btn").innerHTML = '<a href="' + document.getElementById("matecat_url").innerHTML + '" target="_blank" class="btn btn-orange" id="show-revision-btn">Work on the task</a>';
-          } else {
-            document.getElementById("head_show-revision-btn").innerHTML = '<div>You are working on the task</div>';//(**)??
-          }
-        }
-      } else {
-        document.querySelector("#show-revision-btn")?.addEventListener("click", highlightRevisionCard);
-        document.getElementById("confirm_read_instructions")?.addEventListener("click", confirm_read_instructions);
-        document.getElementById("confirm_read_project_instructions")?.addEventListener("click", confirm_read_project_instructions);
-        document.getElementById("confirm_read_reference_instructions")?.addEventListener("click", confirm_read_reference_instructions);
-        document.getElementById("confirm_read_source_instructions")?.addEventListener("click", confirm_read_source_instructions);
-console.log("addEventListener(click, highlightRevisionCard)");//(**)
-      }
-    }
-  }
-}
-
-
+  task_page();
 }
 
 function DAOgetWordCount()
@@ -300,6 +253,51 @@ function DAOTaskInvitesSentToUsers(userIDs, functionOnSuccess, functionOnFail)
       }
     )
   .fail(functionOnFail);
+}
+
+async function task_page() {
+console.log("inside");//(**)
+console.log(document.getElementById("is_claimer").innerHTML);//(**)
+
+  if (document.getElementById("is_claimer").innerHTML == 1) {
+console.log("is_claimer");//(**)
+    if (document.getElementById("status_id").innerHTML == 4) {
+console.log("ststus_id 4");//(**)
+      document.getElementById("head_show-revision-btn").innerHTML = '<div>You have completed the task</div><a ' + 'href="' + document.getElementById("siteLocationURL").innerHTML + 'task/' + document.getElementById('task_id').innerHTML + '/task_complete/"' + ' class="btn btn-orange" id="show-revision-btn">Provide feedback</a>';
+    } else {
+      const json = await get_user_instructions();
+      const read = [];
+      json.forEach((elem) => { read.push(elem.number); });
+
+      for (let index = 0; index < 4; index++) {
+        if (read.includes(index)) {
+          if (index == 0) document.getElementById("head_confirm_read_instructions").innerHTML = '<div class="btn btn-green-white w-100"><i class="bi bi-check-circle me-2"></i> I confirm I have read the task instructions.</div>';
+          if (index == 1) document.getElementById("head_confirm_read_project_instructions").innerHTML = '<div class="btn btn-green-white w-100"><i class="bi bi-check-circle me-2"></i> I confirm I have read the project-specific instructions.</div>';
+          if (index == 2) document.getElementById("head_confirm_read_reference_instructions").innerHTML = '<div class="btn btn-green-white w-100"><i class="bi bi-check-circle me-2"></i> I confirm I have reviewed the references and style guides.</div>';
+          if (index == 3) document.getElementById("head_confirm_read_source_instructions").innerHTML = '<div class="btn btn-green-white w-100"><i class="bi bi-check-circle me-2"></i> I confirm I have reviewed the references and style guides.</div>';
+        }
+      }
+
+      if (read.length == 4) {
+        if (document.getElementById("status_id").innerHTML == 10) {
+          document.getElementById("head_show-revision-btn").innerHTML = '<div>Wait for previous step</div>';//(**)??
+        } else {
+          if (document.getElementById("matecat_url").innerHTML != "") {
+            document.getElementById("head_show-revision-btn").innerHTML = '<a href="' + document.getElementById("matecat_url").innerHTML + '" target="_blank" class="btn btn-orange" id="show-revision-btn">Work on the task</a>';
+          } else {
+            document.getElementById("head_show-revision-btn").innerHTML = '<div>You are working on the task</div>';//(**)??
+          }
+        }
+      } else {
+        document.querySelector("#show-revision-btn")?.addEventListener("click", highlightRevisionCard);
+        document.getElementById("confirm_read_instructions")?.addEventListener("click", confirm_read_instructions);
+        document.getElementById("confirm_read_project_instructions")?.addEventListener("click", confirm_read_project_instructions);
+        document.getElementById("confirm_read_reference_instructions")?.addEventListener("click", confirm_read_reference_instructions);
+        document.getElementById("confirm_read_source_instructions")?.addEventListener("click", confirm_read_source_instructions);
+console.log("addEventListener(click, highlightRevisionCard)");//(**)
+      }
+    }
+  }
 }
 
 var highlight_index = 0;
