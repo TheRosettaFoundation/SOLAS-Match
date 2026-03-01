@@ -1,5 +1,6 @@
 {include file="new_header.tpl"}
 <div class="d-none">
+  <div id="siteLocationURL">{Settings::get('site.location')}</div>
   <div id="task_id">{$task->getId()}</div>
   <div id="status_id">{$task->getTaskStatus()}</div>
   <div id="user_id">{$current_user_id}</div>
