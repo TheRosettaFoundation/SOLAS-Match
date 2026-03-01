@@ -8,7 +8,7 @@ $(document).ready(documentReady);
 /**
  * Called by the DOM when the Document is Ready.
  */
-function documentReady()
+async function documentReady()
 {
   $(".convert_utc_to_local").each(function ()
     {
