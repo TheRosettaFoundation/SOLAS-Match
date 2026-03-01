@@ -156,6 +156,7 @@ async function documentReady()
     }
   );
 
+console.log(document.getElementById("is_claimer").innerHTML);//(**)
   if (document.getElementById("is_claimer").innerHTML == 1) {
 console.log("is_claimer");//(**)
     if (document.getElementById("status_id").innerHTML == 4) {
