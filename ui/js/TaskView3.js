@@ -10,7 +10,6 @@ $(document).ready(documentReady);
  */
 function documentReady()
 {
-console.log("documentReady()");//(**)
   $(".convert_utc_to_local").each(function ()
     {
       $(this).removeClass("convert_utc_to_local");
@@ -157,8 +156,6 @@ console.log("documentReady()");//(**)
     }
   );
 
-console.log(document.getElementById("is_claimer").innerHTML);//(**)
-console.log("outside");//(**)
   task_page();
 }
 
@@ -256,13 +253,11 @@ function DAOTaskInvitesSentToUsers(userIDs, functionOnSuccess, functionOnFail)
 }
 
 async function task_page() {
-console.log("inside");//(**)
-console.log(document.getElementById("is_claimer").innerHTML);//(**)
+console.log("is_claimer: " + document.getElementById("is_claimer").innerHTML);//(**)
+console.log("status_id: " + document.getElementById("status_id").innerHTML);//(**)
 
   if (document.getElementById("is_claimer").innerHTML == 1) {
-console.log("is_claimer");//(**)
     if (document.getElementById("status_id").innerHTML == 4) {
-console.log("ststus_id 4");//(**)
       document.getElementById("head_show-revision-btn").innerHTML = '<div>You have completed the task</div><a ' + 'href="' + document.getElementById("siteLocationURL").innerHTML + 'task/' + document.getElementById('task_id').innerHTML + '/task_complete/"' + ' class="btn btn-orange" id="show-revision-btn">Provide feedback</a>';
     } else {
       const json = await get_user_instructions();
