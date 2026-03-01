@@ -159,7 +159,7 @@ function documentReady()
   if (document.getElementById("is_claimer").innerHTML == 1) {
     if (document.getElementById("status_id").innerHTML == 4) {
 
-document.getElementById("head_show-revision-btn")?.innerHTML = 'xx';
+document.getElementById("head_show-revision-btn").innerHTML = 'xx';
 //'<div>You have completed the task</div><a ' +
 //'href="' +
 //document.getElementById("siteLocationURL").innerHTML +
