@@ -178,7 +178,7 @@ async function documentReady()
           document.getElementById("head_show-revision-btn").innerHTML = '<div>Wait for previous step</div>';//(**)??
         } else {
           if (document.getElementById("matecat_url").innerHTML != "") {
-            document.getElementById("head_show-revision-btn").innerHTML = '<a href="' + document.getElementById("matecat_url").innerHTML + " target="_blank" class="btn btn-orange" id="show-revision-btn">Work on the task</a>';
+            document.getElementById("head_show-revision-btn").innerHTML = '<a href="' + document.getElementById("matecat_url").innerHTML + '" target="_blank" class="btn btn-orange" id="show-revision-btn">Work on the task</a>';
           } else {
             document.getElementById("head_show-revision-btn").innerHTML = '<div>You are working on the task</div>';//(**)??
           }
