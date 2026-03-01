@@ -1951,6 +1951,7 @@ GROUP BY c.id, u.id';
 
     public function find_all_workflow_steps($task)
     {
+        $steps = [];
         $memsource_task = $this->get_memsource_task($task->getId());
         $type_id = $task->getTaskType();
         if ($memsource_task && ($type_id <= Common\Enums\TaskTypeEnum::APPROVAL || $type_id == Common\Enums\TaskTypeEnum::SPOT_QUALITY_INSPECTION || $type_id == Common\Enums\TaskTypeEnum::QUALITY_EVALUATION)) {
