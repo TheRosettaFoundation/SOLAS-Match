@@ -189,6 +189,7 @@ async function documentReady()
         document.getElementById("confirm_read_project_instructions")?.addEventListener("click", confirm_read_project_instructions);
         document.getElementById("confirm_read_reference_instructions")?.addEventListener("click", confirm_read_reference_instructions);
         document.getElementById("confirm_read_source_instructions")?.addEventListener("click", confirm_read_source_instructions);
+console.log("addEventListener(click, highlightRevisionCard)");//(**)
       }
     }
   }
@@ -296,6 +297,7 @@ async function highlightRevisionCard() {
 
     highlight_index = 0
     for (; highlight_index < 4; highlight_index++) if (!read.includes(highlight_index)) break;
+console.log("highlight_index" + highlight_index);//(**)
 
     const card = document.querySelector('.highlight_' + highlight_index);
     if (!card) return;
@@ -319,6 +321,7 @@ async function highlightRevisionCard() {
     card.scrollIntoView({ behavior: 'smooth', block: 'center' });
 
     overlay.addEventListener('click', removeRevisionHighlight);
+console.log("End highlightRevisionCard");//(**)
 }
 
 function confirm_read_instructions() {
