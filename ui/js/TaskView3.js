@@ -157,7 +157,9 @@ async function documentReady()
   );
 
   if (document.getElementById("is_claimer").innerHTML == 1) {
+console.log("is_claimer");//(**)
     if (document.getElementById("status_id").innerHTML == 4) {
+console.log("ststus_id 4");//(**)
       document.getElementById("head_show-revision-btn").innerHTML = '<div>You have completed the task</div><a ' + 'href="' + document.getElementById("siteLocationURL").innerHTML + 'task/' + document.getElementById('task_id').innerHTML + '/task_complete/"' + ' class="btn btn-orange" id="show-revision-btn">Provide feedback</a>';
     } else {
       const json = await get_user_instructions();
