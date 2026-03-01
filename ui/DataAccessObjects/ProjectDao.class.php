@@ -1959,14 +1959,10 @@ GROUP BY c.id, u.id';
             $project_tasks = $this->get_tasks_for_project($task->getProjectId());
             foreach ($project_tasks as $project_task) {
                 if ($top_level == $this->get_top_level($project_task['internalId'])) {
-error_log("workflow level: " . $project_task['workflowLevel']);//(**)
                     if (($memsource_task['beginIndex'] <= $project_task['endIndex']) && ($project_task['beginIndex'] <= $memsource_task['endIndex'])) { // Overlap
                         if (empty($steps[$project_task['workflowLevel']])) {
-error_log("empty workflow level: " . $project_task['workflowLevel'] . "status: " . $project_task['task-status_id']);//(**)
                             $steps[$project_task['workflowLevel']] = ['type' => $project_task['task-type_id'], 'status' => $project_task['task-status_id'], 'deadline' => $project_task['deadline'], 'delayed' => 0, 'translations_not_all_complete' => 0];
-error_log("new status: " . $steps[$project_task['workflowLevel']]['status']);//(**)
                         } else {
-error_log("Supdtae workflow level: " . $project_task['workflowLevel']);//(**)
                             $steps[$project_task['workflowLevel']]['status'] = min($project_task['task-status_id'], $steps[$project_task['workflowLevel']]['status']);
                             $steps[$project_task['workflowLevel']]['deadline'] = max($project_task['deadline'], $steps[$project_task['workflowLevel']]['deadline']);
                         }
