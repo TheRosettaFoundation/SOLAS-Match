@@ -3,16 +3,12 @@
 var intervalID = null; // Global ID for interval timer for getting wordcount
 
 
-$(document).ready(documentReady1);
-async function documentReady1()//(**)
-{//(**)
-console.log("documentReady()");//(**)//(**)
-}//(**)
+$(document).ready(documentReady);
 
 /**
  * Called by the DOM when the Document is Ready.
  */
-async function documentReady()
+function documentReady()
 {
 console.log("documentReady()");//(**)
   $(".convert_utc_to_local").each(function ()
@@ -162,6 +158,13 @@ console.log("documentReady()");//(**)
   );
 
 console.log(document.getElementById("is_claimer").innerHTML);//(**)
+console.log("outside");//(**)
+
+task_page();
+async function task_page() {
+console.log("inside");//(**)
+console.log(document.getElementById("is_claimer").innerHTML);//(**)
+
   if (document.getElementById("is_claimer").innerHTML == 1) {
 console.log("is_claimer");//(**)
     if (document.getElementById("status_id").innerHTML == 4) {
@@ -201,6 +204,9 @@ console.log("addEventListener(click, highlightRevisionCard)");//(**)
       }
     }
   }
+}
+
+
 }
 
 function DAOgetWordCount()
