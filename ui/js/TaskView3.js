@@ -274,7 +274,7 @@ async function configure_buttons() {
 
   highlight_index = 0
   for (; highlight_index < 4; highlight_index++) if (!read.includes(highlight_index)) break;
-console.log("highlight_index" + highlight_index);//(**)
+console.log("highlight_index: " + highlight_index);//(**)
 
   for (let index = 0; index < 4; index++) {
     if (read.includes(index)) {
@@ -285,7 +285,7 @@ console.log("highlight_index" + highlight_index);//(**)
     }
   }
 
-  if (read.length == 4) {
+  if (highlight_index >= 4) {
     if (document.getElementById("status_id").innerHTML == 10) {
       document.getElementById("head_show-revision-btn").innerHTML = '<div>Wait for previous step</div>';//(**)??
     } else {
@@ -317,7 +317,7 @@ console.log("highlight_index" + highlight_index);//(**)
 }
 
 function highlight_next_card() {
-    if (highlight_index > 3) {
+    if (highlight_index >= 4) {
         window.scrollTo(0, 0);
         return;
     }
