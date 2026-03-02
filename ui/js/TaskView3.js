@@ -265,7 +265,6 @@ console.log("status_id: " + document.getElementById("status_id").innerHTML);//(*
       document.getElementById("confirm_read_project_instructions")?.addEventListener("click", confirm_read_project_instructions);
       document.getElementById("confirm_read_reference_instructions")?.addEventListener("click", confirm_read_reference_instructions);
       document.getElementById("confirm_read_source_instructions")?.addEventListener("click", confirm_read_source_instructions);
-console.log("e.g. addEventListener(click, highlightRevisionCard)");//(**)
       configure_buttons();
     }
   }
@@ -274,16 +273,12 @@ console.log("e.g. addEventListener(click, highlightRevisionCard)");//(**)
 var highlight_index = 0;
 
 async function configure_buttons() {
-console.log("configure_buttons()");//(**)
   const json = await get_user_instructions();
   const read = [];
   json.forEach((elem) => { read.push(elem.number); });
-console.log("read:");//(**)
-console.log(read);//(**)
 
   highlight_index = 0
   for (; highlight_index < 4; highlight_index++) if (!read.includes(highlight_index)) break;
-console.log("highlight_index: " + highlight_index);//(**)
 
   for (let index = 0; index < 4; index++) {
     if (read.includes(index)) {
@@ -304,22 +299,16 @@ console.log("highlight_index: " + highlight_index);//(**)
         document.getElementById("head_show-revision-btn").innerHTML = '<div>You are working on the task</div>';//(**)??
       }
     }
-  } else {
-//(**)
   }
 }
 
 async function highlightRevisionCard() {
-console.log("highlightRevisionCard()");//(**)
     const json = await get_user_instructions();
     const read = [];
     json.forEach((elem) => { read.push(elem.number); });
-console.log("read:");//(**)
-console.log(read);//(**)
 
     highlight_index = 0
     for (; highlight_index < 4; highlight_index++) if (!read.includes(highlight_index)) break;
-console.log("highlight_index: " + highlight_index);//(**)
     highlight_next_card();
 }
 
@@ -335,7 +324,6 @@ console.log("highlight_next_card() highlight_index: " + highlight_index);//(**)
 
     // Prevent duplicate overlay
     if (document.querySelector('.revision-overlay')) return;
-console.log("highlight_next_card() NOT RETURN highlight_index: " + highlight_index);//(**)
 
     const overlay = document.createElement('div');
     overlay.className = 'revision-overlay';
@@ -353,7 +341,6 @@ console.log("highlight_next_card() NOT RETURN highlight_index: " + highlight_ind
     card.scrollIntoView({ behavior: 'smooth', block: 'center' });
 
     overlay.addEventListener('click', removeRevisionHighlight);
-console.log("End highlight_next_card");//(**)
 }
 
 async function confirm_read_instructions() {
@@ -393,7 +380,6 @@ function removeRevisionHighlight() {
     card?.classList.remove('revision-highlight');
 
     overlay?.remove();
-    //setTimeout(() => overlay?.remove(), 250);//(**)???????????
 }
 
     async function get_user_instructions() {
@@ -419,7 +405,6 @@ function removeRevisionHighlight() {
     }
 
     async function set_user_instruction(number) {
-console.log("============================================");//(**)
 console.log("set_user_instruction(number): " + number);//(**)
         try {
             const task_id = document.getElementById("task_id").innerHTML;
