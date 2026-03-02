@@ -156,6 +156,33 @@ function documentReady()
     }
   );
 
+  $(".convert_utc_to_local_deadline_natural_this").each(function ()
+    {
+      $(this).removeClass("convert_utc_to_local_deadline_natural_this");
+      const dUTC = $(this).text();
+      const year    = dUTC.substring(0, 4);
+      const month   = dUTC.substring(5, 7) -1;
+      const day     = dUTC.substring(8, 10);
+      const hour    = dUTC.substring(11, 13);
+      const minutes = dUTC.substring(14, 16);
+      const seconds = dUTC.substring(17, 19);
+      const d = new Date(Date.UTC(year, month, day, hour, minutes, seconds)) - new Date();
+      let text;
+      if (d < 0) text = "Overdue";
+      else {
+        const days  = Math.floor(d/(1000*60*60*24));
+        const hours = Math.floor(d/(1000*60*60));
+        if (days <= 0) text = hours + " hours remaining";
+        else           text = days + " days remaining";
+      }
+
+      $(this).html(text);
+
+      $(this).css("visibility", "visible");
+    }
+  );
+
+  // Adjust DOM
   task_page();
 }
 

@@ -71,7 +71,7 @@
                 </div>
               </div>
               <div class="stage-meta mt-2">
-                  {if $step['this'] && $step['translations_not_all_complete']}Wait for Previous step ({/if}<i class="bi bi-clock me-1"></i>{if $step['this'] && $step['translations_not_all_complete']}This step due{else}Due{/if} on <span class="convert_utc_to_local_deadline_natural" style="visibility: hidden">{$step['deadline']}</span>{if $step['this'] && $step['translations_not_all_complete']}){/if}
+                  {if $step['this'] && $step['translations_not_all_complete']}Wait for Previous step ({/if}<i class="bi bi-clock me-1"></i>{if $step['this'] && $step['translations_not_all_complete']}This step due{else}Due{/if} on <span class="convert_utc_to_local_deadline_natural{if $step['this']}_this{/if}" style="visibility: hidden">{$step['deadline']}</span>{if $step['this'] && $step['translations_not_all_complete']}){/if}
               </div>
               {if $step['this']}
               <div class="mt-3">
