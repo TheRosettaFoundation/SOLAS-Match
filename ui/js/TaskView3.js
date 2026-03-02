@@ -312,7 +312,7 @@ async function highlightRevisionCard() {
 
     highlight_index = 0
     for (; highlight_index < 4; highlight_index++) if (!read.includes(highlight_index)) break;
-console.log("highlight_index" + highlight_index);//(**)
+console.log("highlight_index: " + highlight_index);//(**)
     highlight_next_card();
 }
 
@@ -321,14 +321,14 @@ function highlight_next_card() {
         window.scrollTo(0, 0);
         return;
     }
-console.log("highlight_next_card() highlight_index" + highlight_index);//(**)
+console.log("highlight_next_card() highlight_index: " + highlight_index);//(**)
 
     const card = document.querySelector('.highlight_' + highlight_index);
     if (!card) return;
 
     // Prevent duplicate overlay
     if (document.querySelector('.revision-overlay')) return;
-console.log("highlight_next_card() NOT RETURN highlight_index" + highlight_index);//(**)
+console.log("highlight_next_card() NOT RETURN highlight_index: " + highlight_index);//(**)
 
     const overlay = document.createElement('div');
     overlay.className = 'revision-overlay';
