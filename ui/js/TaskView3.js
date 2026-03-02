@@ -260,6 +260,12 @@ console.log("status_id: " + document.getElementById("status_id").innerHTML);//(*
     if (document.getElementById("status_id").innerHTML == 4) {
       document.getElementById("head_show-revision-btn").innerHTML = '<div>You have completed the task</div><a ' + 'href="' + document.getElementById("siteLocationURL").innerHTML + 'task/' + document.getElementById('task_id').innerHTML + '/task_complete/"' + ' class="btn btn-orange" id="show-revision-btn">Provide feedback</a>';
     } else {
+      document.querySelector("#show-revision-btn")?.addEventListener("click", highlightRevisionCard);
+      document.getElementById("confirm_read_instructions")?.addEventListener("click", confirm_read_instructions);
+      document.getElementById("confirm_read_project_instructions")?.addEventListener("click", confirm_read_project_instructions);
+      document.getElementById("confirm_read_reference_instructions")?.addEventListener("click", confirm_read_reference_instructions);
+      document.getElementById("confirm_read_source_instructions")?.addEventListener("click", confirm_read_source_instructions);
+console.log("e.g. addEventListener(click, highlightRevisionCard)");//(**)
       configure_buttons();
     }
   }
@@ -301,12 +307,7 @@ console.log("highlight_index: " + highlight_index);//(**)
       }
     }
   } else {
-    document.querySelector("#show-revision-btn")?.addEventListener("click", highlightRevisionCard);
-    document.getElementById("confirm_read_instructions")?.addEventListener("click", confirm_read_instructions);
-    document.getElementById("confirm_read_project_instructions")?.addEventListener("click", confirm_read_project_instructions);
-    document.getElementById("confirm_read_reference_instructions")?.addEventListener("click", confirm_read_reference_instructions);
-    document.getElementById("confirm_read_source_instructions")?.addEventListener("click", confirm_read_source_instructions);
-console.log("addEventListener(click, highlightRevisionCard)");//(**)
+//(**)
   }
 }
 
