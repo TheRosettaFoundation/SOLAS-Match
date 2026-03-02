@@ -270,10 +270,12 @@ var highlight_index = 0;
 async function configure_buttons() {
 console.log("configure_buttons()");//(**)
   const json = await get_user_instructions();
-console.log("json: " + json);//(**)
+console.log("json:");//(**)
+console.log(json);//(**)
   const read = [];
   json.forEach((elem) => { read.push(elem.number); });
-console.log("read: " + read);//(**)
+console.log("read:");//(**)
+console.log(read);//(**)
 
   highlight_index = 0
   for (; highlight_index < 4; highlight_index++) if (!read.includes(highlight_index)) break;
