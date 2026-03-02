@@ -419,6 +419,7 @@ function removeRevisionHighlight() {
     }
 
     async function set_user_instruction(number) {
+console.log("============================================");//(**)
 console.log("set_user_instruction(number): " + number);//(**)
         try {
             const task_id = document.getElementById("task_id").innerHTML;
