@@ -73,7 +73,7 @@
               <div class="stage-meta mt-2">
                   {if $step['this'] && $step['translations_not_all_complete']}Wait for Previous step ({/if}<i class="bi bi-clock me-1"></i>{if $step['this'] && $step['translations_not_all_complete']}This step: {/if}<span class="convert_utc_to_local_deadline_natural{if $step['this']}_this{/if}" style="visibility: hidden">{$step['deadline']}</span>{if $step['this'] && $step['translations_not_all_complete']}){/if}
               </div>
-              {if $step['this']}
+              {if $step['this'] && ($is_claimer || ($step['status'] > 2 && ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER + $NGO_ADMIN + $NGO_PROJECT_OFFICER))))}
               <div class="mt-3">
                 <div class="list-group list-group-flush small">
                   <div class="list-group-item list-group-item-action px-0 py-1 border-0" {if true}style="background: #DFEEFD"{/if}>
