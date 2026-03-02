@@ -276,8 +276,6 @@ var highlight_index = 0;
 async function configure_buttons() {
 console.log("configure_buttons()");//(**)
   const json = await get_user_instructions();
-console.log("json:");//(**)
-console.log(json);//(**)
   const read = [];
   json.forEach((elem) => { read.push(elem.number); });
 console.log("read:");//(**)
@@ -314,8 +312,6 @@ console.log("highlight_index: " + highlight_index);//(**)
 async function highlightRevisionCard() {
 console.log("highlightRevisionCard()");//(**)
     const json = await get_user_instructions();
-console.log("json:");//(**)
-console.log(json);//(**)
     const read = [];
     json.forEach((elem) => { read.push(elem.number); });
 console.log("read:");//(**)
@@ -396,7 +392,8 @@ function removeRevisionHighlight() {
     overlay?.classList.remove('active');
     card?.classList.remove('revision-highlight');
 
-    setTimeout(() => overlay?.remove(), 250);
+    overlay?.remove();
+    //setTimeout(() => overlay?.remove(), 250);//(**)???????????
 }
 
     async function get_user_instructions() {
