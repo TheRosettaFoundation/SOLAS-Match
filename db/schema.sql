@@ -15630,6 +15630,40 @@ END//
 DELIMITER ;
 
 
+CREATE TABLE IF NOT EXISTS `user_instructions` (
+  category INT NOT NULL DEFAULT 1,
+  number   INT NOT NULL,
+  user_id  INT UNSIGNED NOT NULL,
+  task_id  BIGINT UNSIGNED NOT NULL,
+  KEY (category, user_id, task_id),
+  CONSTRAINT FK_user_instructions_user_id FOREIGN KEY (user_id) REFERENCES Users (id) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT FK_user_instructions_task_id FOREIGN KEY (task_id) REFERENCES Tasks (id) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+DROP PROCEDURE IF EXISTS `get_user_instructions`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_user_instructions`(IN cat INT, IN uID INT UNSIGNED, IN tID BIGINT UNSIGNED)
+BEGIN
+    SELECT *
+    FROM user_instructions
+    WHERE
+        category=cat AND
+        user_id=uID AND
+        task_id=tID
+    ORDER BY number;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `set_user_instruction`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `set_user_instruction`(IN cat INT, IN num INT, IN uID INT UNSIGNED, IN tID BIGINT UNSIGNED)
+BEGIN
+    INSERT INTO user_instructions (category, number, user_id, task_id)
+    VALUES                        (     cat,    num,     uID,     tID);
+END//
+DELIMITER ;
+
+
 /*---------------------------------------end of procs----------------------------------------------*/
 
 
