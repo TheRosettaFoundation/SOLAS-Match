@@ -311,9 +311,14 @@ console.log("addEventListener(click, highlightRevisionCard)");//(**)
 }
 
 async function highlightRevisionCard() {
+console.log("highlightRevisionCard()");//(**)
     const json = await get_user_instructions();
+console.log("json:");//(**)
+console.log(json);//(**)
     const read = [];
     json.forEach((elem) => { read.push(elem.number); });
+console.log("read:");//(**)
+console.log(read);//(**)
 
     highlight_index = 0
     for (; highlight_index < 4; highlight_index++) if (!read.includes(highlight_index)) break;
@@ -354,30 +359,30 @@ console.log("highlight_next_card() NOT RETURN highlight_index: " + highlight_ind
 console.log("End highlight_next_card");//(**)
 }
 
-function confirm_read_instructions() {
+async function confirm_read_instructions() {
     document.getElementById("confirm_read_instructions")?.removeEventListener("click", confirm_read_instructions);
-    set_user_instruction(0);
+    await set_user_instruction(0);
     removeRevisionHighlight();
     configure_buttons();
     highlight_next_card();
 }
-function confirm_read_project_instructions() {
+async function confirm_read_project_instructions() {
     document.getElementById("confirm_read_project_instructions")?.removeEventListener("click", confirm_read_project_instructions);
-    set_user_instruction(1);
+    await set_user_instruction(1);
     removeRevisionHighlight();
     configure_buttons();
     highlight_next_card();
 }
-function confirm_read_reference_instructions() {
+async function confirm_read_reference_instructions() {
     document.getElementById("confirm_read_reference_instructions")?.removeEventListener("click", confirm_read_reference_instructions);
-    set_user_instruction(2);
+    await set_user_instruction(2);
     removeRevisionHighlight();
     configure_buttons();
     highlight_next_card();
 }
-function confirm_read_source_instructions() {
+async function confirm_read_source_instructions() {
     document.getElementById("confirm_read_source_instructions")?.removeEventListener("click", confirm_read_source_instructions);
-    set_user_instruction(3);
+    await set_user_instruction(3);
     removeRevisionHighlight();
     highlight_next_card();
     configure_buttons();
@@ -416,6 +421,7 @@ function removeRevisionHighlight() {
     }
 
     async function set_user_instruction(number) {
+console.log("set_user_instruction(number): " + number);//(**)
         try {
             const task_id = document.getElementById("task_id").innerHTML;
             const response = await fetch(`/task/${task_id}/view`, {
