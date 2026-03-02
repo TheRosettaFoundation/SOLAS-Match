@@ -360,29 +360,29 @@ async function confirm_read_instructions() {
     document.getElementById("confirm_read_instructions")?.removeEventListener("click", confirm_read_instructions);
     await set_user_instruction(0);
     removeRevisionHighlight();
-    configure_buttons();
+    await configure_buttons();
     highlight_next_card();
 }
 async function confirm_read_project_instructions() {
     document.getElementById("confirm_read_project_instructions")?.removeEventListener("click", confirm_read_project_instructions);
     await set_user_instruction(1);
     removeRevisionHighlight();
-    configure_buttons();
+    await configure_buttons();
     highlight_next_card();
 }
 async function confirm_read_reference_instructions() {
     document.getElementById("confirm_read_reference_instructions")?.removeEventListener("click", confirm_read_reference_instructions);
     await set_user_instruction(2);
     removeRevisionHighlight();
-    configure_buttons();
+    await configure_buttons();
     highlight_next_card();
 }
 async function confirm_read_source_instructions() {
     document.getElementById("confirm_read_source_instructions")?.removeEventListener("click", confirm_read_source_instructions);
     await set_user_instruction(3);
     removeRevisionHighlight();
+    await configure_buttons();
     highlight_next_card();
-    configure_buttons();
 }
 
 function removeRevisionHighlight() {
