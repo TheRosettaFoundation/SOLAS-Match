@@ -268,9 +268,12 @@ console.log("status_id: " + document.getElementById("status_id").innerHTML);//(*
 var highlight_index = 0;
 
 async function configure_buttons() {
+console.log("configure_buttons()");//(**)
   const json = await get_user_instructions();
+console.log("json: " + json);//(**)
   const read = [];
   json.forEach((elem) => { read.push(elem.number); });
+console.log("read: " + read);//(**)
 
   highlight_index = 0
   for (; highlight_index < 4; highlight_index++) if (!read.includes(highlight_index)) break;
