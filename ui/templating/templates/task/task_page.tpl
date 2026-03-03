@@ -46,6 +46,14 @@
           </div>
 
           <div class="ms-lg-auto">
+            {if $status_id == TaskStatusEnum::PENDING_CLAIM && !$is_denied_for_task && !TaskTypeEnum::$enum_to_UI[$type_id]['shell_task']}
+              {if ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER + $LINGUIST + $NGO_LINGUIST)) && $user_within_limitations}
+              <button class="btn btn-orange" id="claim_button">
+                Claim the task
+              </button>
+              {/if}
+            {/if}
+
             <div id="head_show-revision-btn">
               {if $is_claimer}
               <button class="btn btn-orange" id="show-revision-btn">
