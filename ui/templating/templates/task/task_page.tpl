@@ -5,7 +5,7 @@
   <div id="status_id">{$task->getTaskStatus()}</div>
   <div id="user_id">{$current_user_id}</div>
 
-  {assign var="status_id" value=$projectTask->getTaskStatus()}
+  {assign var="status_id" value=$task->getTaskStatus()}
 
   {if !empty($details_claimant) && $details_claimant->getId() == $current_user_id}
     {assign var="is_claimer" 1}
