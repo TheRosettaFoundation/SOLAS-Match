@@ -77,7 +77,7 @@
               <div class="mt-3">
                 <div class="list-group list-group-flush small">
                   {if $step['status'] == 10 || $step['status'] == 3}
-                  <div head_center>
+                  <div id="head_center">
                     <div class="list-group-item list-group-item-action px-0 py-1 border-0" style="background: #D7E8F5">
                       <i class="bi bi-gear-fill me-2"></i> Review the instructions
                     </div>
