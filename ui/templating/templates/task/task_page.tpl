@@ -46,6 +46,7 @@
           </div>
 
           <div class="ms-lg-auto">
+{$roles} {$user_within_limitations} {$is_denied_for_task}XXX
             {if $status_id == TaskStatusEnum::PENDING_CLAIM && !$is_denied_for_task && !TaskTypeEnum::$enum_to_UI[$type_id]['shell_task']}
               {if ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER + $LINGUIST + $NGO_LINGUIST)) && $user_within_limitations}
               <button class="btn btn-orange" id="claim_button">
