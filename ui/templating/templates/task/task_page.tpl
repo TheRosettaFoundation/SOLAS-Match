@@ -76,15 +76,29 @@
               {if $step['this'] && ($is_claimer || ($step['status'] > 2 && ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER + $NGO_ADMIN + $NGO_PROJECT_OFFICER))))}
               <div class="mt-3">
                 <div class="list-group list-group-flush small">
-                  <div class="list-group-item list-group-item-action px-0 py-1 border-0" {if true}style="background: #DFEEFD"{/if}>
-                    <i class="bi bi-check-circle me-2"></i> Review the instructions
+                  {if $step['status'] == 10 || $step['status'] == 3}
+                  <div head_center>
+                    <div class="list-group-item list-group-item-action px-0 py-1 border-0" style="background: #D7E8F5">
+                      <i class="bi bi-gear-fill me-2"></i> Review the instructions
+                    </div>
+                    <div class="list-group-item list-group-item-action px-0 py-1 border-0 text-secondary" style="background: #DFEEFD">
+                      <i class="bi bi-gear-fill me-2"></i> Work on the task
+                    </div>
+                    <div class="list-group-item list-group-item-action px-0 py-1 border-0 text-secondary" style="background: #DFEEFD">
+                      <i class="bi bi-gear-fill me-2"></i> Provide feedback
+                    </div>
                   </div>
-                  <div class="list-group-item list-group-item-action px-0 py-1 border-0 text-secondary" {if true}style="background: #D7E8F5"{/if}>
-                    <i class="bi bi-gear-fill me-2"></i> Work on the task
-                  </div>
-                  <div class="list-group-item list-group-item-action px-0 py-1 border-0 text-secondary" {if true}style="background: #DFEEFD"{/if}>
-                    <i class="bi bi-gear-fill me-2"></i> Provide feedback
-                  </div>
+                  {else}
+                    <div class="list-group-item list-group-item-action px-0 py-1 border-0" style="background: #DFEEFD">
+                      <i class="bi bi-check-circle me-2"></i> Review the instructions
+                    </div>
+                    <div class="list-group-item list-group-item-action px-0 py-1 border-0 text-secondary" style="background: #DFEEFD">
+                      <i class="bi bi-check-circle me-2"></i> Work on the task
+                    </div>
+                    <div class="list-group-item list-group-item-action px-0 py-1 border-0 text-secondary" style="background: #D7E8F5">
+                      <i class="bi bi-gear-fill me-2"></i> Provide feedback
+                    </div>
+                  {/if}
                 </div>
               </div>
               {/if}
