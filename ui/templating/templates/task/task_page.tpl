@@ -329,4 +329,49 @@
     </div>
   </div> <!-- was main -->
 
+<!-- Confirmation Modal -->
+<div class="modal fade" id="revisionModal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+
+      <div class="modal-header">
+        <h5 class="modal-title">I confirm that:</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+
+      <div class="modal-body">
+        <div class="form-check mb-3">
+          <input class="form-check-input confirm-check" type="checkbox" id="check1">
+          <label class="form-check-label" for="check1">
+            I am capable to <strong>revise</strong> this file in
+            <strong>Arabic Modern Standard (ar)</strong>.
+          </label>
+        </div>
+
+        <div class="form-check mb-3">
+          <input class="form-check-input confirm-check" type="checkbox" id="check2">
+          <label class="form-check-label" for="check2">
+            I have the time to revise this file (424 words) and I will complete it by
+            <strong>January 26 at 16:00 (Europe/Madrid)</strong>.
+          </label>
+        </div>
+
+        <p class="text-muted small">
+          You can start working on the task once the previous step has been completed.
+        </p>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          Bring me back
+        </button>
+        <button type="button" class="btn btn-primary" id="confirmBtn" disabled>
+          I confirm I will revise this file.
+        </button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
 {include file="footer2.tpl"}
