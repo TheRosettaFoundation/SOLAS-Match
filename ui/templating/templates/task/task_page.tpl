@@ -334,41 +334,56 @@
   <div class="modal-dialog">
     <div class="modal-content">
 
-      <div class="modal-header">
-        <h5 class="modal-title">I confirm that:</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-      </div>
+      <form method="POST" action="/accept-revision">
 
-      <div class="modal-body">
-        <div class="form-check mb-3">
-          <input class="form-check-input confirm-check" type="checkbox" id="check1">
-          <label class="form-check-label" for="check1">
-            I am capable to <strong>revise</strong> this file in
-            <strong>Arabic Modern Standard (ar)</strong>.
-          </label>
+        <div class="modal-header">
+          <h5 class="modal-title">I confirm that:</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
         </div>
 
-        <div class="form-check mb-3">
-          <input class="form-check-input confirm-check" type="checkbox" id="check2">
-          <label class="form-check-label" for="check2">
-            I have the time to revise this file (424 words) and I will complete it by
-            <strong>January 26 at 16:00 (Europe/Madrid)</strong>.
-          </label>
+        <div class="modal-body">
+
+          <input type="hidden" name="language" value="Arabic Modern Standard">
+          <input type="hidden" name="deadline" value="2026-01-26 16:00:00">
+          <input type="hidden" name="wordCount" value="424">
+
+          <div class="form-check mb-3">
+            <input class="form-check-input confirm-check"
+                   type="checkbox"
+                   name="confirm_capable"
+                   value="1"
+                   required>
+            <label class="form-check-label">
+              I am capable to <strong>revise</strong> this file in
+              <strong>Arabic Modern Standard (ar)</strong>.
+            </label>
+          </div>
+
+          <div class="form-check mb-3">
+            <input class="form-check-input confirm-check"
+                   type="checkbox"
+                   name="confirm_deadline"
+                   value="1"
+                   required>
+            <label class="form-check-label">
+              I have the time to revise this file (424 words) and I will complete it by
+              <strong>January 26 at 16:00 (Europe/Madrid)</strong>.
+            </label>
+          </div>
+
         </div>
 
-        <p class="text-muted small">
-          You can start working on the task once the previous step has been completed.
-        </p>
-      </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+            Bring me back
+          </button>
 
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-          Bring me back
-        </button>
-        <button type="button" class="btn btn-primary" id="confirmBtn" disabled>
-          I confirm I will revise this file.
-        </button>
-      </div>
+          <button type="submit" class="btn btn-primary" id="confirmBtn" disabled>
+            I confirm I will revise this file.
+          </button>
+        </div>
+
+      </form>
 
     </div>
   </div>

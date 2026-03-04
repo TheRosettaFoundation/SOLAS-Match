@@ -184,6 +184,17 @@ function documentReady()
 
   document.getElementById("claim_button")?.addEventListener("click", claim_button_clicked);
 
+  document.addEventListener("DOMContentLoaded", function () {
+    const checkboxes = document.querySelectorAll(".confirm-check");
+    const confirmBtn = document.getElementById("confirmBtn");
+
+    function toggleButton() {
+      confirmBtn.disabled = ![...checkboxes].every(cb => cb.checked);
+    }
+
+    checkboxes.forEach(cb => cb.addEventListener("change", toggleButton));
+  });
+
   // Adjust DOM
   task_page();
 }
