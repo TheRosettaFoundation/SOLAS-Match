@@ -371,6 +371,10 @@
             </label>
           </div>
 
+          <p class="text-muted small">
+            You can start working on the task once the previous step has been completed.
+          </p>
+
         </div>
 
         <div class="modal-footer">
