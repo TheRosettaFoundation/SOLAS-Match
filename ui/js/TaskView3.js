@@ -346,10 +346,10 @@ async function configure_buttons() {
           '<i class="bi bi-check-circle me-2"></i> Review the instructions' +
         '</div>' +
         '<div class="list-group-item list-group-item-action px-0 py-1 border-0 text-secondary" style="background: #D7E8F5">' +
-          '<i class="bi bi-gear-fill me-2"></i> Work on the task' +
+          '<i class="bi bi-circle me-2"></i> Work on the task' +
         '</div>' +
         '<div class="list-group-item list-group-item-action px-0 py-1 border-0 text-secondary" style="background: #DFEEFD">' +
-          '<i class="bi bi-gear-fill me-2"></i> Provide feedback' +
+          '<i class="bi bi-circle me-2"></i> Provide feedback' +
         '</div>';
     }
   }
