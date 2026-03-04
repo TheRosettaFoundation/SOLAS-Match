@@ -182,6 +182,8 @@ function documentReady()
     }
   );
 
+  document.getElementById("claim_button")?.addEventListener("click", claim_button_clicked);
+
   // Adjust DOM
   task_page();
 }
@@ -466,4 +468,9 @@ console.log("set_user_instruction(number): " + number);//(**)
             console.error(error);
         }
     }
+
+function claim_button_clicked() {
+    const revisionModal = new bootstrap.Modal(document.getElementById("revisionModal"));
+    revisionModal.show();
+}
 </script>
