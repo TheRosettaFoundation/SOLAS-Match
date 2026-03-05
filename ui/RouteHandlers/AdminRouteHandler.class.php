@@ -187,8 +187,8 @@ class AdminRouteHandler
             }
 
             if (($roles & (SITE_ADMIN | FINANCE)) && isset($post['set_cut_off'])) {
-                $taskDao->update_po_cut_off_sun($post['po_cut_off']);
-                UserRouteHandler::flashNow('generate_invoices_success', 'Purchase Order Creation Cutoff Date Set');
+                $taskDao->update_po_cut_off_sun();
+                UserRouteHandler::flashNow('generate_invoices_success', 'Purchase Order Creation Initiated');
             }
 
             if (($roles & (SITE_ADMIN | FINANCE)) && isset($post['generate_invoices'])) {
@@ -325,7 +325,6 @@ class AdminRouteHandler
                     "current_page"  => 'site-admin-dashboard',
                     "siteName"      => $siteName,
                     'roles'         => $roles,
-                    'po_cut_off'    => $taskDao->get_po_cut_off_sun(),
                     "extra_scripts" => $extra_scripts
         ));
 

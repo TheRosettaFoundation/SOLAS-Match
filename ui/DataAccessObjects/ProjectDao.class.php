@@ -2026,7 +2026,10 @@ error_log("Create PO fail: $po_number, $task_id");
 error_log("Create PO fail delete: $result");
             }
         }
-        if ($result = LibAPI\PDOWrapper::call('get_next_po_to_create', '')) {
+
+if (LibAPI\PDOWrapper::call('get_po_creation_today', '')[0]['result']) error_log("get_po_creation_today TRUE");//(**)DEL
+else error_log("get_po_creation_today FALSE");//(**)DEL
+        if (LibAPI\PDOWrapper::call('get_po_creation_today', '')[0]['result'] && ($result = LibAPI\PDOWrapper::call('get_next_po_to_create', ''))) {
             $po = $result[0];
             $task_id = $po['task_id'];
             $po_create_failed = $po['po_create_failed'];

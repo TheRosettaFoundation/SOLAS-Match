@@ -14760,7 +14760,9 @@ CREATE TABLE IF NOT EXISTS `po_cut_off_sun` (
   PRIMARY KEY (poll)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 INSERT INTO po_cut_off_sun VALUES (0, '2025-01-01 23:59:59');
+INSERT INTO po_cut_off_sun VALUES (1, '2025-01-01 23:59:59');
 
+# Not currently used...
 DROP PROCEDURE IF EXISTS `get_po_cut_off_sun`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `get_po_cut_off_sun`()
@@ -14771,9 +14773,18 @@ DELIMITER ;
 
 DROP PROCEDURE IF EXISTS `update_po_cut_off_sun`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `update_po_cut_off_sun`(IN cut_off DATETIME)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `update_po_cut_off_sun`()
 BEGIN
-    UPDATE po_cut_off_sun SET po_cut_off=cut_off WHERE poll=0;
+    UPDATE po_cut_off_sun SET po_cut_off=DATE_FORMAT(CURRENT_DATE, '%Y-%m-01 00:00:00') WHERE poll=0;
+    UPDATE po_cut_off_sun SET po_cut_off=CONCAT(CURDATE(), ' 23:59:59')                 WHERE poll=1;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `get_po_creation_today`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_po_creation_today`()
+BEGIN
+    SELECT IF(DATE(po_cut_off)=DATE(NOW()), 1, 0) AS result FROM po_cut_off_sun WHERE poll=1;
 END//
 DELIMITER ;
 
