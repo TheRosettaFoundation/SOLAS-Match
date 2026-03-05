@@ -993,7 +993,7 @@ error_log("createTaskDirectly: $args");
         return $result;
     }
 
-    public function update_po_cut_off_sun($cut_off)
+    public function update_po_cut_off_sun()
     {
         LibAPI\PDOWrapper::call('update_po_cut_off_sun', '');
     }
