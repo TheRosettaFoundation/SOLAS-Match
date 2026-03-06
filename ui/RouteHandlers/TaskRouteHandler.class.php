@@ -1344,7 +1344,7 @@ class TaskRouteHandler
                 $response->getBody()->write(json_encode($taskDao->get_user_instructions($post['category'], $user_id, $task_id)));
                 return $response->withHeader('Content-Type', 'application/json');
             }
-            if (isset($post['mark_claim_task']) && $task->getTaskStatus() == TaskStatusEnum::PENDING_CLAIM) {
+            if (isset($post['mark_claim_task']) && $task->getTaskStatus() == Common\Enums\TaskStatusEnum::PENDING_CLAIM) {
                 $success = $userDao->claimTask($user_id, $task_id, $memsource_task, $task->getProjectId(), $task);
                 if ($success == 1) {
                 } elseif ($success == -1) {
