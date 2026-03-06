@@ -355,14 +355,14 @@
           <div class="form-check mb-3">
             <input type="checkbox" name="confirm_capable" class="form-check-input confirm-check" value="1" required>
             <label class="form-check-label">
-              I am capable to <strong>revise</strong> this file in <strong>Arabic Modern Standard (ar)</strong>.
+              I am capable to <strong>{TaskTypeEnum::$enum_to_UI[$type_id]['type_text_short']}</strong> this file in <strong>{TemplateHelper::getLanguageAndCountry($task->getTargetLocale())}</strong>.
             </label>
           </div>
 
           <div class="form-check mb-3">
             <input type="checkbox" name="confirm_deadline" class="form-check-input confirm-check" value="1" required>
             <label class="form-check-label">
-              I have the time to revise this file (424 words) and I will complete it by <strong>January 26 at 16:00 (Europe/Madrid)</strong>.
+              I have the time to {TaskTypeEnum::$enum_to_UI[$type_id]['type_text_short']} this file ({$task->getWordCount()} {TaskTypeEnum::$enum_to_UI[$type_id]['unit_count_text_short']}) and I will complete it by <strong><span class="convert_utc_to_local_deadline_natural" style="visibility: hidden">{$task->getDeadline()}</span></strong>.
             </label>
           </div>
 
@@ -377,7 +377,7 @@
           </button>
 
           <button type="submit" class="btn btn-primary" id="confirmBtn" disabled>
-            I confirm I will revise this file.
+            I confirm I will {TaskTypeEnum::$enum_to_UI[$type_id]['type_text_short']} this file.
           </button>
         </div>
       </form>
