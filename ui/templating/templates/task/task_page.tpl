@@ -23,6 +23,13 @@
   {assign var="project_id" value=$task->getProjectId()}
 
   <div class="container-fluid app-shell py-4"> <!-- was main -->
+
+    {if isset($flash['error'])}
+      <p class="alert alert-error">
+        {TemplateHelper::uiCleanseHTMLKeepMarkup($flash['error'])}
+      </p>
+    {/if}
+
     <!-- Header card -->
     <div class="card mb-4">
       <div class="card-body p-4">
