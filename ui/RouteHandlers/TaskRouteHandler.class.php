@@ -1344,6 +1344,19 @@ class TaskRouteHandler
                 $response->getBody()->write(json_encode($taskDao->get_user_instructions($post['category'], $user_id, $task_id)));
                 return $response->withHeader('Content-Type', 'application/json');
             }
+            if (isset($post['mark_claim_task']) && $task->getTaskStatus() == TaskStatusEnum::PENDING_CLAIM) {
+                $success = $userDao->claimTask($user_id, $task_id, $memsource_task, $task->getProjectId(), $task);
+                if ($success == 1) {
+                } elseif ($success == -1) {
+                    UserRouteHandler::flashNow('error', 'Unable to create user in Phrase TMS.');
+                } else {
+                    UserRouteHandler::flashNow('error', 'This task can no longer be claimed, the job has been removed from Phrase TMS and will soon be removed from here.');
+                }
+                $task = $taskDao->getTask($task_id);
+                $taskClaimed = $taskDao->isTaskClaimed($task_id);
+                if ($taskClaimed) $details_claimant = $taskDao->getUserClaimedTask($task_id);
+                else              $details_claimant = 0;
+            }
         }
 
         $taskMetaData = array();
