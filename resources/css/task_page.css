@@ -145,4 +145,14 @@
     border-radius: 10px;
     transition: 0.25s ease;
 }
+
+.form-check-input {
+    border: 2px solid #666;
+    background-color: #fff;
+}
+
+.form-check-input:focus {
+    border-color: #444;
+    box-shadow: none;
+}
   </style>
