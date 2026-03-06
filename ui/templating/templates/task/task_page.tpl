@@ -366,9 +366,13 @@
             </label>
           </div>
 
-          <p class="text-muted small">
-            You can start working on the task once the previous step has been completed.
-          </p>
+          {foreach $steps as $step}
+            {if $step['this'] && $step['translations_not_all_complete']}
+            <p class="text-muted small">
+              You can start working on the task once the previous step has been completed.
+            </p>
+            {/if}
+          {/foreach}
         </div>
 
         <div class="modal-footer">
