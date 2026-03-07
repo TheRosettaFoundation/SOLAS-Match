@@ -156,13 +156,13 @@
     box-shadow: none;
 }
 
-.tooltip {
+.task_tooltip {
   position: relative;
   display: inline-block;
   border-bottom: 1px dotted black;
   cursor: pointer;
 }
-.tooltiptext {
+.task_tooltiptext {
   visibility: hidden;
   width: 120px;
   background-color: black;
@@ -176,7 +176,7 @@
   left: 50%;
   margin-left: -60px;
 }
-.tooltiptext::after {
+.task_tooltiptext::after {
   content: "";
   position: absolute;
   top: 100%;
@@ -186,7 +186,7 @@
   border-style: solid;
   border-color: black transparent transparent transparent;
 }
-.tooltip:hover .tooltiptext {
+.task_tooltip:hover .tooltiptext {
   visibility: visible;
 }
   </style>
