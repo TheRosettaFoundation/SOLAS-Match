@@ -322,10 +322,10 @@ async function configure_buttons() {
 
   for (let index = 0; index < 4; index++) {
     if (read.includes(index)) {
-      if (index == 0) document.getElementById("head_confirm_read_instructions").innerHTML = '<div class="btn btn-green-white w-100"><i class="bi bi-check-circle me-2"></i> I confirm I have read the task instructions.</div>';
-      if (index == 1) document.getElementById("head_confirm_read_project_instructions").innerHTML = '<div class="btn btn-green-white w-100"><i class="bi bi-check-circle me-2"></i> I confirm I have read the project-specific instructions.</div>';
-      if (index == 2) document.getElementById("head_confirm_read_reference_instructions").innerHTML = '<div class="btn btn-green-white w-100"><i class="bi bi-check-circle me-2"></i> I confirm I have reviewed the references and style guides.</div>';
-      if (index == 3) document.getElementById("head_confirm_read_source_instructions").innerHTML = '<div class="btn btn-green-white w-100"><i class="bi bi-check-circle me-2"></i> I confirm I have reviewed the references and style guides.</div>';
+      if (index == 0) document.getElementById("head_confirm_read_instructions").innerHTML = '<div class="btn btn-green-white w-100" aria-disabled="true"><i class="bi bi-check-circle me-2"></i> I confirm I have read the task instructions.</div>';
+      if (index == 1) document.getElementById("head_confirm_read_project_instructions").innerHTML = '<div class="btn btn-green-white w-100" aria-disabled="true"><i class="bi bi-check-circle me-2"></i> I confirm I have read the project-specific instructions.</div>';
+      if (index == 2) document.getElementById("head_confirm_read_reference_instructions").innerHTML = '<div class="btn btn-green-white w-100" aria-disabled="true"><i class="bi bi-check-circle me-2"></i> I confirm I have reviewed the references and style guides.</div>';
+      if (index == 3) document.getElementById("head_confirm_read_source_instructions").innerHTML = '<div class="btn btn-green-white w-100" aria-disabled="true"><i class="bi bi-check-circle me-2"></i> I confirm I have reviewed the references and style guides.</div>';
     }
   }
 
@@ -336,7 +336,7 @@ async function configure_buttons() {
       if (document.getElementById("matecat_url").innerHTML != "") {
         document.getElementById("head_show-revision-btn").innerHTML = '<a href="' + document.getElementById("matecat_url").innerHTML + '" target="_blank" class="btn btn-orange" id="show-revision-btn">Work on the task</a>';
       } else {
-        document.getElementById("head_show-revision-btn").innerHTML = '<div>You are working on the task</div>';//(**)??
+        document.getElementById("head_show-revision-btn").innerHTML = '<div class="btn btn-disabled-grey" aria-disabled="true">You are working on the task</div>';
       }
     }
     const head_center = document.getElementById("head_center");
