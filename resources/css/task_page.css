@@ -48,7 +48,7 @@
       --bs-btn-color: #fff;
     }
 
-    .btn-green-white{
+    .btn-green-white {
       --bs-btn-bg: white;
       --bs-btn-border-color: #009951;
       --bs-btn-hover-bg: white;
@@ -56,6 +56,8 @@
       --bs-btn-active-bg: white;
       --bs-btn-active-border-color: #009951;
       --bs-btn-color: #009951;
+      pointer-events: none;
+      cursor: default;
     }
 
     .btn-disabled-grey {
