@@ -51,7 +51,21 @@
     .btn-green-white{
       --bs-btn-bg: white;
       --bs-btn-border-color: #009951;
+      --bs-btn-hover-bg: white;
+      --bs-btn-hover-border-color: #009951;
+      --bs-btn-active-bg: white;
+      --bs-btn-active-border-color: #009951;
       --bs-btn-color: #009951;
+    }
+
+    .btn-disabled-grey {
+      --bs-btn-bg: LightGray;
+      --bs-btn-border-color: gray;
+      --bs-btn-hover-bg: LightGray;
+      --bs-btn-hover-border-color: gray;
+      --bs-btn-active-bg: LightGray;
+      --bs-btn-active-border-color: gray;
+      --bs-btn-color: gray;
     }
 
     .section-title{
