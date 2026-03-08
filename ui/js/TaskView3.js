@@ -331,9 +331,9 @@ async function configure_buttons() {
 
   if (highlight_index >= 4) {
     if (document.getElementById("status_id").innerHTML == 10) {
-//      document.getElementById("head_show-revision-btn").innerHTML = '<a href="https://twbplatform.org" class="task_tooltip" style="pointer-events: none; color: gray; cursor: default;" aria-disabled="true">Work on the task<span class="task_tooltiptext">You must wait for the completion of the previous step before starting on this task.</span></a>';
+      document.getElementById("head_show-revision-btn").innerHTML = '<a href="https://twbplatform.org" class="task_tooltip" style="pointer-events: none; color: gray; cursor: default;" aria-disabled="true">Work on the task<span class="task_tooltiptext">You must wait for the completion of the previous step before starting on this task.</span></a>';
 //      document.getElementById("head_show-revision-btn").innerHTML = '<a href="https://twbplatform.org" class="task_tooltip" aria-disabled="true">Work on the task<span class="task_tooltiptext">You must wait for the completion of the previous step before starting on this task.</span></a>';
-      document.getElementById("head_show-revision-btn").innerHTML = '<div href="https://twbplatform.org" class="task_tooltip" aria-disabled="true">Work on the task<span class="task_tooltiptext">You must wait for the completion of the previous step before starting on this task.</span></div>';
+//      document.getElementById("head_show-revision-btn").innerHTML = '<div href="https://twbplatform.org" class="task_tooltip" aria-disabled="true">Work on the task<span class="task_tooltiptext">You must wait for the completion of the previous step before starting on this task.</span></div>';
     } else {
       if (document.getElementById("matecat_url").innerHTML != "") {
         document.getElementById("head_show-revision-btn").innerHTML = '<a href="' + document.getElementById("matecat_url").innerHTML + '" target="_blank" class="btn btn-orange" id="show-revision-btn">Work on the task</a>';
