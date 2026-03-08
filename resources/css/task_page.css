@@ -186,7 +186,7 @@
   border-style: solid;
   border-color: black transparent transparent transparent;
 }
-.task_tooltip:hover .tooltiptext {
+.task_tooltip:hover .task_tooltiptext {
   visibility: visible;
 }
   </style>
