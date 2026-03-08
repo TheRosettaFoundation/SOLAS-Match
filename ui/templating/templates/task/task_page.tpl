@@ -72,6 +72,10 @@
               </div>
               {/if}
             </div>
+
+            {if !empty($matecat_url) && (($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)) || (in_array($project->getOrganisationId(), $ORG_EXCEPTIONS) && $roles & ($NGO_ADMIN + $NGO_PROJECT_OFFICER) && !TaskTypeEnum::$enum_to_UI[$type_id]['shell_task']))}
+              <a href="{$matecat_url}" target="_blank" class="btn btn-orange">Work URL</a>
+            {/if}
           </div>
         </div>
 
