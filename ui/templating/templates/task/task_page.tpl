@@ -86,8 +86,20 @@
           {if !$is_claimer && !($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER + $NGO_ADMIN + $NGO_PROJECT_OFFICER)) &&
             ($status_id >= TaskStatusEnum::PENDING_CLAIM || $is_denied_for_task || !$user_within_limitations || TaskTypeEnum::$enum_to_UI[$type_id]['shell_task'])}
 
-
-
+            <div class="col-12 col-md-6 col-lg-3">
+              <div class="stage-pill" style="background: WhiteSmoke">
+                <div class="d-flex align-items-start justify-content-between">
+                  <div>
+                    This task is no longer available. Feel free to check if there are other open tasks, explore our Learning Center to keep building your skills, or visit our Community Library for practical guidelines, tips, and best practices.
+                  </div>
+                  <div>
+                    <a class="btn btn-orange" href="{urlFor name="home"}">Available tasks</a>
+                    <a class="btn btn-orange" href="https://elearn.translatorswb.org/" target="_blank"">Learning Center</a>
+                    <a class="btn btn-orange" href="https://communitylibrary.translatorswb.org/login" target="_blank"">Community Library</a>
+                  </div>
+                </div>
+              </div>
+            </div>
 
           {else}
 
