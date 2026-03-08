@@ -353,6 +353,8 @@ async function configure_buttons() {
         '</div>';
     }
   }
+  const remove_style = document.querySelector('.remove_style');
+  remove_style?.classList.remove('d-none');
 }
 
 async function highlightRevisionCard() {

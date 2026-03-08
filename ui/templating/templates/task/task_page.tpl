@@ -65,9 +65,11 @@
 
             <div id="head_show-revision-btn">
               {if $is_claimer}
-              <button class="btn btn-orange" id="show-revision-btn">
-                Review the instructions
-              </button>
+              <div class="d-none remove_style">
+               <button class="btn btn-orange" id="show-revision-btn">
+                 Review the instructions
+               </button>
+              <div>
               {/if}
             </div>
           </div>
