@@ -90,12 +90,14 @@
               <div class="stage-pill" style="background: WhiteSmoke">
                 <div class="d-flex align-items-start justify-content-between">
                   <div>
-                    This task is no longer available. Feel free to check if there are other open tasks, explore our Learning Center to keep building your skills, or visit our Community Library for practical guidelines, tips, and best practices.
-                  </div>
-                  <div>
-                    <a class="btn btn-orange" href="{urlFor name="home"}">Available tasks</a>
-                    <a class="btn btn-orange" href="https://elearn.translatorswb.org/" target="_blank"">Learning Center</a>
-                    <a class="btn btn-orange" href="https://communitylibrary.translatorswb.org/login" target="_blank"">Community Library</a>
+                    <div>
+                      This task is no longer available. Feel free to check if there are other open tasks, explore our Learning Center to keep building your skills, or visit our Community Library for practical guidelines, tips, and best practices.
+                    </div>
+                    <div>
+                      <a class="btn btn-orange" href="{urlFor name="home"}">Available tasks</a>
+                      <a class="btn btn-orange" href="https://elearn.translatorswb.org/" target="_blank"">Learning Center</a>
+                      <a class="btn btn-orange" href="https://communitylibrary.translatorswb.org/login" target="_blank"">Community Library</a>
+                    </div>
                   </div>
                 </div>
               </div>
