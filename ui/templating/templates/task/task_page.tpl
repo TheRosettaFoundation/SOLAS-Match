@@ -69,7 +69,7 @@
                <button class="btn btn-orange" id="show-revision-btn">
                  Review the instructions
                </button>
-              <div>
+              </div>
               {/if}
             </div>
           </div>
