@@ -333,17 +333,14 @@
         <div class="card mb-4 highlight_0">
           <div class="card-body p-4">
             <div class="d-flex align-items-center justify-content-between mb-2">
-              <div class="section-title mb-0">Revision instructions</div>
-              <button class="btn btn-outline-secondary btn-sm">
+              <div class="section-title mb-0">{TaskTypeEnum::$enum_to_UI[$type_id]['type_text_short']} instructions</div>
+              <a href="{TaskTypeEnum::$enum_to_UI[$type_id]['bookstack_url_1']}" target="_blank" class="btn btn-outline-secondary btn-sm">
                 <i class="bi bi-layout-text-window-reverse me-1"></i> Full instructions
-              </button>
+              </a>
             </div>
 
             <p class="small mb-3">
-              Review the translation against the source text and project requirements. Ensure accuracy, fluency,
-              terminology, style, formatting, and consistency with provided resources. Apply necessary corrections,
-              follow project-specific instructions, and preserve tags and layout. Run a QA check, resolve all issues,
-              perform a final read, and seek clarification if needed before completion.
+              {TaskTypeEnum::$enum_to_UI[$type_id]['type_description']}
             </p>
 
             <div id="head_confirm_read_instructions">
