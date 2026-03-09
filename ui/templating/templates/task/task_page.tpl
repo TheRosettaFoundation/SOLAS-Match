@@ -313,7 +313,6 @@
                     </a>
 
                     {if !empty($file_preview_path)}
-                    <div class="preview-shell mb-3">
 
                       <div class="py-4 d-flex  justify-content-between align-items-center flex-wrap">
                         <div class="d-flex ">
@@ -326,7 +325,6 @@
                         </iframe>
                       </div>
 
-                    </div>
                     {/if}
 
                     <div id="head_confirm_read_source_instructions">
