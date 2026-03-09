@@ -318,9 +318,10 @@ async function configure_buttons() {
   json.forEach((elem) => { read.push(elem.number); });
 
   highlight_index = 0
-  for (; highlight_index < 4; highlight_index++) if (!read.includes(highlight_index)) break;
+  const number_of_review_panels = document.getElementById("number_of_review_panels").innerHTML;
+  for (; highlight_index < number_of_review_panels; highlight_index++) if (!read.includes(highlight_index)) break;
 
-  for (let index = 0; index < 4; index++) {
+  for (let index = 0; index < number_of_review_panels; index++) {
     if (read.includes(index)) {
       if (index == 0) document.getElementById("head_confirm_read_instructions").innerHTML = '<div class="btn btn-green-white w-100" aria-disabled="true"><i class="bi bi-check-circle me-2"></i> I confirm I have read the task instructions.</div>';
       if (index == 1) document.getElementById("head_confirm_read_project_instructions").innerHTML = '<div class="btn btn-green-white w-100" aria-disabled="true"><i class="bi bi-check-circle me-2"></i> I confirm I have read the project-specific instructions.</div>';
@@ -329,7 +330,7 @@ async function configure_buttons() {
     }
   }
 
-  if (highlight_index >= 4) {
+  if (highlight_index >= number_of_review_panels) {
     if (document.getElementById("status_id").innerHTML == 10) {
       document.getElementById("head_show-revision-btn").innerHTML = '<div class="btn btn-disabled-grey task_tooltip" aria-disabled="true">Work on the task<span class="task_tooltiptext">You must wait for the completion of the previous step before starting on this task.</span></div>';
     } else {
@@ -363,12 +364,12 @@ async function highlightRevisionCard() {
     json.forEach((elem) => { read.push(elem.number); });
 
     highlight_index = 0
-    for (; highlight_index < 4; highlight_index++) if (!read.includes(highlight_index)) break;
+    for (; highlight_index < document.getElementById("number_of_review_panels").innerHTML; highlight_index++) if (!read.includes(highlight_index)) break;
     highlight_next_card();
 }
 
 function highlight_next_card() {
-    if (highlight_index >= 4) {
+    if (highlight_index >= document.getElementById("number_of_review_panels").innerHTML) {
         window.scrollTo(0, 0);
         return;
     }
