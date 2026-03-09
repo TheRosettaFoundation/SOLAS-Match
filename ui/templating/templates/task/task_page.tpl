@@ -5,7 +5,10 @@
   <div id="status_id">{$task->getTaskStatus()}</div>
   <div id="user_id">{$current_user_id}</div>
 
+  {assign var="task_id" value=$task->getId()}
+  {assign var="type_id" value=$task->getTaskType()}
   {assign var="status_id" value=$task->getTaskStatus()}
+  {assign var="project_id" value=$task->getProjectId()}
 
   {if !empty($details_claimant) && $details_claimant->getId() == $current_user_id}
     {assign var="is_claimer" 1}
@@ -14,13 +17,15 @@
   {/if}
   <div id="is_claimer">{$is_claimer}</div>
 
+  {if TaskTypeEnum::$enum_to_UI[$type_id]['shell_task']}
+    <div id="number_of_review_panels">3</div>
+  {else}
+    <div id="number_of_review_panels">4</div>
+  {/if}
+
   <div id="matecat_url">{$matecat_url}</div>
   <div id="sesskey">{$sesskey}</div>
 </div>
-
-  {assign var="task_id" value=$task->getId()}
-  {assign var="type_id" value=$task->getTaskType()}
-  {assign var="project_id" value=$task->getProjectId()}
 
   <div class="container-fluid app-shell py-4"> <!-- was main -->
 
