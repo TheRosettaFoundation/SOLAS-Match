@@ -312,32 +312,27 @@
                       <i class="bi bi-download me-1"></i> Download source file
                     </a>
 
+                    {if !empty($file_preview_path)}
                     <div class="preview-shell mb-3">
                       <div class="preview-btn">
                         <button class="btn btn-outline-dark">
                           <i class="bi bi-eye me-1"></i> Preview source file
                         </button>
-<!-- [[[
-         {if !empty($file_preview_path)}
-          <div class="py-4 d-flex  justify-content-between align-items-center flex-wrap">
-          <div class="fw-bold">
-                {Localisation::getTranslation('task_view_source_document_preview')} - {TemplateHelper::uiCleanseHTML($filename)}
-          </div>
-          <div class="d-flex ">
-                        <img src="{urlFor name='home'}ui/img/print.svg" alt="print" id="print" class="mx-4 d-none" />
-                         <a class="d-none" href="https://docs.google.com/viewer?url={$file_preview_path}&embedded=true"  download="{$file_preview_path}"  id="download-file"> <img src="{urlFor name='home'}ui/img/download.svg" id="downing" alt="download" /> </a>
-          </div>
-          </div>
-         <div style="padding-bottom:56.25%; position:relative; display:block; width: 100%">
-            <iframe width="100%" height="100%" id="iframe"
-                src="https://docs.google.com/viewer?url={$file_preview_path}&embedded=true"
-                frameborder="0" allowfullscreen="" style="position:absolute; top:0; left: 0">
-            </iframe>
-         </div>
-        {/if}
-]]] -->
+
+                        <div class="py-4 d-flex  justify-content-between align-items-center flex-wrap">
+                          <div class="d-flex ">
+                          <img src="{urlFor name='home'}ui/img/print.svg" alt="print" id="print" class="mx-4 d-none" />
+                          <a class="d-none" href="https://docs.google.com/viewer?url={$file_preview_path}&embedded=true"  download="{$file_preview_path}"  id="download-file"> <img src="{urlFor name='home'}ui/img/download.svg" id="downing" alt="download" /> </a>
+                          </div>
+                        </div>
+                        <div style="padding-bottom:56.25%; position:relative; display:block; width: 100%">
+                          <iframe width="100%" height="100%" id="iframe" src="https://docs.google.com/viewer?url={$file_preview_path}&embedded=true" frameborder="0" allowfullscreen="" style="position:absolute; top:0; left: 0">
+                          </iframe>
+                        </div>
+
                       </div>
                     </div>
+                    {/if}
 
                     <div id="head_confirm_read_source_instructions">
                       <button class="confirm-bar" type="button" id="confirm_read_source_instructions">
