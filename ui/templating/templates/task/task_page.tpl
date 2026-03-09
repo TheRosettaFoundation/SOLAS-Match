@@ -354,9 +354,9 @@
         <div class="card">
           <div class="card-body p-4">
             <div class="section-title">Do you have any questions or comments?</div>
-            <button class="btn btn-dark w-100">
+            <a href="https://community.translatorswb.org/t/{$discourse_slug}" target="_blank" class="btn btn-dark w-100">
               <i class="bi bi-chat-left-text me-2"></i> Project forum
-            </button>
+            </a>
           </div>
         </div>
       </div>
