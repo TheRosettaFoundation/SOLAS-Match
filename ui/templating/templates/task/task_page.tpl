@@ -248,9 +248,11 @@
 
                     <div class="mt-4">
                       <div id="head_confirm_read_project_instructions">
+                        {if $is_claimer}
                         <button class="confirm-bar" type="button" id="confirm_read_project_instructions">
                           <i class="bi bi-check2-circle me-2"></i> I confirm I have read the project-specific instructions.
                         </button>
+                        {/if}
                       </div>
                     </div>
                   </div>
@@ -283,9 +285,11 @@
 
                     <div class="mt-4">
                       <div id="head_confirm_read_reference_instructions">
+                        {if $is_claimer}
                         <button class="confirm-bar" type="button" id="confirm_read_reference_instructions">
                           <i class="bi bi-check2-circle me-2"></i> I confirm I have reviewed the references and style guides.
                         </button>
+                        {/if}
                       </div>
                     </div>
                   </div>
@@ -328,9 +332,11 @@
                     {/if}
 
                     <div id="head_confirm_read_source_instructions">
+                      {if $is_claimer}
                       <button class="confirm-bar" type="button" id="confirm_read_source_instructions">
                         <i class="bi bi-check2-circle me-2"></i> I confirm I have reviewed the source file.
                       </button>
+                      {/if}
                     </div>
                   </div>
                 </div>
@@ -358,9 +364,11 @@
             </p>
 
             <div id="head_confirm_read_instructions">
+              {if $is_claimer}
               <button class="btn btn-orange w-100" id="confirm_read_instructions">
                 <i class="bi bi-check2-circle me-2"></i> I confirm I have read the task instructions.
               </button>
+              {/if}
             </div>
           </div>
         </div>
