@@ -1469,6 +1469,8 @@ CREATE TABLE IF NOT EXISTS `task_type_details` (
   bookstack_url_2                   VARCHAR(250) NOT NULL DEFAULT '',
   bookstack_words_1                 VARCHAR(100) NOT NULL DEFAULT '',
   bookstack_words_2                 VARCHAR(100) NOT NULL DEFAULT '',
+  type_description                  VARCHAR(1000) NOT NULL DEFAULT '',
+  type_text_verb                    VARCHAR(50)   NOT NULL DEFAULT '',
   PRIMARY KEY (type_enum),
           KEY FK_type_category (type_category),
   CONSTRAINT FK_type_category FOREIGN KEY (type_category) REFERENCES task_type_categorys (type_category) ON DELETE CASCADE ON UPDATE CASCADE
@@ -1708,6 +1710,9 @@ ALTER TABLE task_type_details ADD bookstack_url_1   VARCHAR(250) NOT NULL DEFAUL
 ALTER TABLE task_type_details ADD bookstack_url_2   VARCHAR(250) NOT NULL DEFAULT '' AFTER bookstack_url_1;
 ALTER TABLE task_type_details ADD bookstack_words_1 VARCHAR(100) NOT NULL DEFAULT '' AFTER bookstack_url_2;
 ALTER TABLE task_type_details ADD bookstack_words_2 VARCHAR(100) NOT NULL DEFAULT '' AFTER bookstack_words_1;
+ALTER TABLE task_type_details ADD type_description  VARCHAR(1000) NOT NULL DEFAULT '' AFTER bookstack_words_2;
+ALTER TABLE task_type_details ADD type_text_verb    VARCHAR(50)   NOT NULL DEFAULT '' AFTER type_description;
+
 
 UPDATE task_type_details SET bookstack_url_1='https://communitylibrary.translatorswb.org/books/09-audiovisual-services-instructions/page/captioning-instructions' WHERE type_enum=12;
 UPDATE task_type_details SET bookstack_url_1='https://communitylibrary.translatorswb.org/books/09-audiovisual-services-instructions/page/subtitling-instructions' WHERE type_enum=11;
@@ -1742,6 +1747,43 @@ UPDATE task_type_details SET bookstack_url_1='https://communitylibrary.translato
 UPDATE task_type_details SET bookstack_url_1='https://communitylibrary.translatorswb.org/books/07-translation-and-editing-instructions/page/subject-matter-expert-sme-review-instructions' WHERE type_enum=17;
 UPDATE task_type_details SET bookstack_url_1='https://communitylibrary.translatorswb.org/books/07-translation-and-editing-instructions/page/translation-instructions' WHERE type_enum=26;
 UPDATE task_type_details SET bookstack_url_1='https://communitylibrary.translatorswb.org/books/07-translation-and-editing-instructions/page/revision-instructions' WHERE type_enum=27;
+
+UPDATE task_type_details SET type_description='Translate the source content accurately and naturally into the target language. Preserve meaning, intent, and tone. Follow project instructions, terminology, and style guides, ensuring linguistic quality, correct formatting, and suitability for the target audience.', type_text_verb='translate' WHERE type_enum=2;
+UPDATE task_type_details SET type_description='Review the translation against the source and project requirements. Ensure accuracy, fluency, terminology, style, formatting, and consistency. Apply corrections, preserve tags and layout, do a final read, run QA checks, and clarify issues before final delivery.', type_text_verb='revise' WHERE type_enum=3;
+UPDATE task_type_details SET type_description='Review the final target-language content to ensure accuracy, consistency, formatting, and readiness for delivery. Make minor fixes and approve only when it’s complete and publication-ready.', type_text_verb='proofread' WHERE type_enum=6;
+UPDATE task_type_details SET type_description='Translate and validate terms accurately, keeping correct meaning, usage, and domain context. Ensure terms reflect correct meaning, usage, and domain context, and are consistent with existing glossaries and style guides. Avoid full-sentence translation, focus on term precision, and flag uncertainties or alternatives for review when needed.', type_text_verb='translate' WHERE type_enum=7;
+UPDATE task_type_details SET type_description='Check final files for layout, formatting, typography, and visual accuracy. Ensure text fits, all characters display correctly, and files match project specs before approving for delivery.', type_text_verb='signoff' WHERE type_enum=8;
+UPDATE task_type_details SET type_description='Record the text naturally and accurately in the target language. Ensure clarity, correct pronunciation, tone, pacing, and style. Follow project instructions for timing, terminology, and tech requirements. Deliver properly formatted audio of a good quality.', type_text_verb='record' WHERE type_enum=9;
+UPDATE task_type_details SET type_description='Create accurate, well-timed subtitles matching the source audio and its intent. Follow reading speed, line length, segmentation, style, and tone guidelines, ensuring correct spelling, punctuation, and synchronization.', type_text_verb='translate' WHERE type_enum=10;
+UPDATE task_type_details SET type_description='Check subtitles for accuracy, timing, readability, style, and synchronization with audio. Correct spelling, punctuation, and tone to ensure they match project guidelines and the source intent.', type_text_verb='revise' WHERE type_enum=11;
+UPDATE task_type_details SET type_description='Create accessible captions that accurately reflect speech and relevant sounds. Ensure correct timing and synchronization, readability, line breaks and formatting. Include required non-speech info, and follow accessibility and style guidelines.', type_text_verb='caption' WHERE type_enum=12;
+UPDATE task_type_details SET type_description='Convert spoken audio or video content into accurate written text. Capture all relevant speech faithfully, following project conventions for punctuation, formatting, timestamps, and speaker labels. Ensure completeness, clarity, and consistency, while respecting any guidelines on verbatim level, omissions, or non-speech elements.', type_text_verb='transcribe' WHERE type_enum=13;
+UPDATE task_type_details SET type_description='Record the source content naturally and accurately in the target language. Ensure clarity, pronunciation, tone, pacing, and style. Follow project instructions for timing, terminology, and technical requirements. Deliver properly formatted audio of a good quality.', type_text_verb='voiceover' WHERE type_enum=14;
+UPDATE task_type_details SET type_description='No instructions', type_text_verb='assess' WHERE type_enum=15;
+UPDATE task_type_details SET type_description='Align source and target texts accurately at segment level. Ensure each segment correctly matches its corresponding content without omissions, additions, or misalignments. Preserve structure, punctuation, and formatting, and follow project-specific guidelines to ensure the aligned output can be reliably reused.', type_text_verb='align' WHERE type_enum=16;
+UPDATE task_type_details SET type_description='Review content for technical accuracy, completeness, and correctness. Verify terminology and content quality, suggest corrections, and ensure it meets domain standards and project requirements. Focus on content quality rather than linguistic style.', type_text_verb='review' WHERE type_enum=17;
+UPDATE task_type_details SET type_description='Run automated QA checks in Phrase to find issues like terminology mismatches, formatting errors, missing tags, spelling, or number inconsistencies. Review and fix flagged issues to ensure the content meets project, linguistic, and technical requirements.', type_text_verb='check' WHERE type_enum=18;
+UPDATE task_type_details SET type_description='Assess the translation for accuracy, fluency, terminology, style, and technical compliance. Identify and classify errors without editing. Record findings according to LQI guidelines for quality monitoring.', type_text_verb='assess' WHERE type_enum=19;
+UPDATE task_type_details SET type_description='Review the target text for grammar, spelling, punctuation, style, and consistency. Make it natural, coherent, and suitable for the intended audience and purpose, without focusing heavily on the source.', type_text_verb='proofread' WHERE type_enum=20;
+UPDATE task_type_details SET type_description='Edit MT content for accuracy, terminology, grammar, style, and formatting. Preserve meaning, follow project instructions, and deliver fluent, natural text suitable for its purpose.', type_text_verb='edit' WHERE type_enum=21;
+UPDATE task_type_details SET type_description='No instructions', type_text_verb='assess' WHERE type_enum=22;
+UPDATE task_type_details SET type_description='Edit content to make it clear, concise, and easy to understand. Simplify language and structure while keeping meaning, ensuring accessibility, good flow, and alignment with project guidelines.', type_text_verb='edit' WHERE type_enum=23;
+UPDATE task_type_details SET type_description='No instructions', type_text_verb='train' WHERE type_enum=24;
+UPDATE task_type_details SET type_description='Translate and validate terms accurately, keeping correct meaning, usage, and domain context. Ensure terms reflect correct meaning, usage, and domain context, and are consistent with existing glossaries and style guides. Avoid full-sentence translation, focus on term precision, and flag uncertainties or alternatives for review when needed.', type_text_verb='revise' WHERE type_enum=25;
+UPDATE task_type_details SET type_description='Translate the source content accurately and naturally into the target language. Preserve meaning, intent, and tone while following project instructions, terminology, and style guides. Ensure linguistic quality, correct formatting and tags, and suitability for the target audience before delivering the completed translation.', type_text_verb='translate' WHERE type_enum=26;
+UPDATE task_type_details SET type_description='Review the translation against the source and project requirements. Ensure accuracy, fluency, terminology, style, formatting, and consistency. Apply corrections, preserve tags and layout, do a final read, run QA checks, and clarify issues before final delivery.', type_text_verb='revise' WHERE type_enum=27;
+UPDATE task_type_details SET type_description='No instructions', type_text_verb='sign off' WHERE type_enum=28;
+UPDATE task_type_details SET type_description='The TWB Learning Center is CLEAR Global’s free, online, self-paced training platform offering courses in humanitarian translation and language services.', type_text_verb='learn' WHERE type_enum=29;
+UPDATE task_type_details SET type_description='No instructions', type_text_verb='process' WHERE type_enum=30;
+UPDATE task_type_details SET type_description='No instructions', type_text_verb='process' WHERE type_enum=31;
+UPDATE task_type_details SET type_description='No instructions', type_text_verb='interpret' WHERE type_enum=32;
+UPDATE task_type_details SET type_description='No instructions', type_text_verb='interpret' WHERE type_enum=33;
+UPDATE task_type_details SET type_description='No instructions', type_text_verb='interpret' WHERE type_enum=34;
+UPDATE task_type_details SET type_description='No instructions', type_text_verb='interpret' WHERE type_enum=35;
+UPDATE task_type_details SET type_description='No instructions', type_text_verb='recognise' WHERE type_enum=36;
+UPDATE task_type_details SET type_description='No instructions', type_text_verb='voice' WHERE type_enum=37;
+UPDATE task_type_details SET type_description='Review a short sample of a completed translation to identify and flag quality issues before delivery. Assess accuracy, fluency, terminology, style, and technical compliance using provided resources and QA checks. Record major or critical issues and share a concise, neutral quality assessment to support learning and continuous improvement.', type_text_verb='review' WHERE type_enum=38;
+UPDATE task_type_details SET type_description='Review a short sample of a completed translation to identify and flag quality issues before delivery. Assess accuracy, fluency, terminology, style, and technical compliance using provided resources and QA checks. Record major or critical issues and share a concise, neutral quality assessment to support learning and continuous improvement.', type_text_verb='review' WHERE type_enum=39;
 */
 
 

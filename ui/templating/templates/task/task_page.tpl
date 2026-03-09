@@ -385,14 +385,14 @@
           <div class="form-check mb-3">
             <input type="checkbox" name="confirm_capable" class="form-check-input confirm-check" value="1" required>
             <label class="form-check-label">
-              I am capable to <strong>{TaskTypeEnum::$enum_to_UI[$type_id]['type_text_short']}</strong> this file in <strong>{TemplateHelper::getLanguageAndCountry($task->getTargetLocale())}</strong>.
+              I am capable to <strong>{TaskTypeEnum::$enum_to_UI[$type_id]['type_text_verb']}</strong> this file in <strong>{TemplateHelper::getLanguageAndCountry($task->getTargetLocale())}</strong>.
             </label>
           </div>
 
           <div class="form-check mb-3">
             <input type="checkbox" name="confirm_deadline" class="form-check-input confirm-check" value="1" required>
             <label class="form-check-label">
-              I have the time to {TaskTypeEnum::$enum_to_UI[$type_id]['type_text_short']} this file ({$task->getWordCount()} {TaskTypeEnum::$enum_to_UI[$type_id]['unit_count_text_short']}) and I will complete it by <strong><span class="convert_utc_to_local_deadline_natural" style="visibility: hidden">{$task->getDeadline()}</span></strong>.
+              I have the time to {TaskTypeEnum::$enum_to_UI[$type_id]['type_text_verb']} this file ({$task->getWordCount()} {TaskTypeEnum::$enum_to_UI[$type_id]['unit_count_text_short']}) and I will complete it by <strong><span class="convert_utc_to_local_deadline_natural" style="visibility: hidden">{$task->getDeadline()}</span></strong>.
             </label>
           </div>
 
@@ -411,7 +411,7 @@
           </button>
 
           <button type="submit" class="btn btn-primary" id="confirmBtn" disabled>
-            I confirm I will {TaskTypeEnum::$enum_to_UI[$type_id]['type_text_short']} this file.
+            I confirm I will {TaskTypeEnum::$enum_to_UI[$type_id]['type_text_verb']} this file.
           </button>
         </div>
       </form>
