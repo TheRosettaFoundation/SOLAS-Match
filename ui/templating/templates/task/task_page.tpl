@@ -302,9 +302,11 @@
                 </h2>
                 <div id="c3" class="accordion-collapse collapse show" data-bs-parent="#acc3">
                   <div class="accordion-body p-4">
+                    {if !TaskTypeEnum::$enum_to_UI[$type_id]['shell_task']}
                     <a href="{urlFor name="download-task" options="task_id.$task_id"}" class="btn btn-dark btn-sm mb-3">
                       <i class="bi bi-download me-1"></i> Download source file
                     </a>
+                    {/if}
 
                     <div class="preview-shell mb-3">
                       <div class="preview-btn">
