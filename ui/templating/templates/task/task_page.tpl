@@ -267,7 +267,7 @@
                       {if empty($language_style)}
                         No specific style guides
                       {else}
-                        {$content[0]['body']}
+                        {$language_style[0]['body']}
                       {/if}
                     </div>
 
