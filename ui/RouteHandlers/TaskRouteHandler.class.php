@@ -1471,7 +1471,7 @@ class TaskRouteHandler
                 'required_qualification_for_details' => ($roles&(SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER)) ? $taskDao->getRequiredTaskQualificationLevel($task_id) : 0,
                 'current_user_id' => $user_id,
                 'steps' => $projectDao->find_all_workflow_steps($task),
-                'language_style' => $userDao->get_content_items(null, null, null, null, null, null, "[\"{$task->getTargetLocale()->getCountryCode()}-{$task->getTargetLocale()->getCountryName()}\"]", null, null, 0),
+                'language_style' => $userDao->get_content_items(null, null, null, null, null, null, "[\"{$task->getTargetLocale()->getLanguageCode()}-{$task->getTargetLocale()->getCountryCode()}\"]", null, null, 0),
         ));
 
         //return UserRouteHandler::render("task/task.view.tpl", $response);(**)
