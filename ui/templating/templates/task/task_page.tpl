@@ -230,23 +230,7 @@
                 </h2>
                 <div id="c1" class="accordion-collapse collapse show" data-bs-parent="#acc1">
                   <div class="accordion-body p-4">
-                    <p class="mb-3">
-                      Please make sure to use colloquial, gender-appropriate, and user-friendly language.
-                      Remember to adjust your style to the target audience: youth/mothers on U-report social media pages.
-                    </p>
-                    <div class="small">
-                      <div class="mb-2"><strong>French:</strong> Please ALWAYS use the informal “tu” and NEVER use “vous”!</div>
-                      <div class="mb-3"><strong>Arabic:</strong> Please use a colloquial language, but always stick to MSA (Modern Standard Arabic).</div>
-                      <div class="divider-soft my-3"></div>
-                      <p class="mb-3">
-                        This project has been pre-translated using <strong>machine translation (MT)</strong> and your task is to fully post-edit it.
-                        Learn more about MT post-editing (MTPE) in our Community Library.
-                      </p>
-
-                      <button class="btn btn-outline-secondary btn-sm">
-                        <i class="bi bi-book me-1"></i> MTPE instructions
-                      </button>
-                    </div>
+                    <div class="ql-editor">{TemplateHelper::clean_project_description($project->getDescription())}</div>
 
                     <div class="mt-4">
                       <div id="head_confirm_read_project_instructions">
