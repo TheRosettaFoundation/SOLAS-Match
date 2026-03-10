@@ -232,6 +232,8 @@
                   <div class="accordion-body p-4">
                     <div class="ql-editor">{TemplateHelper::clean_project_description($project->getDescription())}</div>
 
+                    <div>{TemplateHelper::uiCleanseHTMLNewlineAndTabs($task->getComment())}</div>
+
                     <div class="mt-4">
                       <div id="head_confirm_read_project_instructions">
                         {if $is_claimer}
