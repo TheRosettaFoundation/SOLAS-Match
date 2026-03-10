@@ -262,14 +262,14 @@
                 </h2>
                 <div id="c2" class="accordion-collapse collapse show" data-bs-parent="#acc2">
                   <div class="accordion-body p-4">
-                    <div class="small mb-3">
-                      <div class="soft-muted">Link:</div>
-                      <a href="#" class="text-decoration-none">https://www.example.com/</a>
-                    </div>
 
-                    <button class="btn btn-outline-secondary btn-sm">
-                      <i class="bi bi-file-earmark-text me-1"></i> Arabic style guide
-                    </button>
+                    <div>
+                      {if empty($language_style)}
+                        No specific style guides
+                      {else}
+                        {$content[0]['body']}
+                      {/if}
+                    </div>
 
                     <div class="mt-4">
                       <div id="head_confirm_read_reference_instructions">
