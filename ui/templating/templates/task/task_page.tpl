@@ -205,16 +205,18 @@
     <div class="row g-4">
       <!-- Left column -->
       <div class="col-12 col-lg-8">
+
+        {if $project->getImpact() != ''}
         <!-- Description -->
         <div class="card mb-4">
           <div class="card-body p-4">
             <div class="section-title">Description</div>
             <p class="mb-0">
-              This project is a part of a series of polls/brochures for UNICEF. Our target audience are
-              “U-Reporters” – 16-24 years old.
+              {TemplateHelper::uiCleanseHTMLNewlineAndTabs($project->getImpact())}
             </p>
           </div>
         </div>
+        {/if}
 
         <!-- Project-specific instructions -->
         <div class="card mb-4 highlight_1">
