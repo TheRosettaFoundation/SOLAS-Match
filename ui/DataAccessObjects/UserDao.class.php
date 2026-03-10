@@ -2635,7 +2635,9 @@ error_log(print_r($result, true));//(**)
         LibAPI\PDOWrapper::cleanseNullOrWrapStr($selected_service_JSON) . ',' .
         LibAPI\PDOWrapper::cleanseNull($owner_org_id) . ',' .
         LibAPI\PDOWrapper::cleanseNull($project_id);
+error_log($args);//(**)
         $result = LibAPI\PDOWrapper::call('get_content_items', $args);
+error_log(print_r($result, 1));//(**)
         if (empty($result)) return [];
         return $result;
     }
