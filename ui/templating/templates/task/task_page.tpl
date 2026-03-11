@@ -234,6 +234,17 @@
 
                     <div>{TemplateHelper::uiCleanseHTMLNewlineAndTabs($task->getComment())}</div>
 
+                      {if $mt_used}
+                      <p class="mb-3">
+                        This project has been pre-translated using <strong>machine translation (MT)</strong> and your task is to fully post-edit it.
+                        Learn more about MT post-editing (MTPE) in our Community Library.
+                      </p>
+
+                      <button class="btn btn-outline-secondary btn-sm">
+                        <i class="bi bi-book me-1"></i> MTPE instructions
+                      </button>
+                      {/if}
+
                     <div class="mt-4">
                       <div id="head_confirm_read_project_instructions">
                         {if $is_claimer}

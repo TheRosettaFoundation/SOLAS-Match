@@ -1472,6 +1472,7 @@ class TaskRouteHandler
                 'current_user_id' => $user_id,
                 'steps' => $projectDao->find_all_workflow_steps($task),
                 'language_style' => $userDao->get_content_items(null, null, null, null, null, null, "[\"{$task->getTargetLocale()->getLanguageCode()}-{$task->getTargetLocale()->getCountryCode()}\"]", null, null, 0),
+                'mt_used' => $projectDao->is_task_using_mt($task, $memsource_task),
         ));
 
         //return UserRouteHandler::render("task/task.view.tpl", $response);(**)

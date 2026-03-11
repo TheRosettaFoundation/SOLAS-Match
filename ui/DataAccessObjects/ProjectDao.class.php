@@ -2239,7 +2239,7 @@ error_log("Create PO ref: $result");
 
     function is_task_using_mt($task, $memsource_task)
     {
-        if (!$memsource_task) return -1;
+        if (!$memsource_task || preg_match('/^\d*$/', $memsource_task['memsource_task_uid'])) return -1;
         if ($memsource_task['mt_used']) return $memsource_task['mt_used'];
 
         $authorization = 'Authorization: Bearer ' . Common\Lib\Settings::get('memsource.memsource_api_token');
