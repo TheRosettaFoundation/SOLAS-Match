@@ -234,7 +234,7 @@
 
                     <div>{TemplateHelper::uiCleanseHTMLNewlineAndTabs($task->getComment())}</div>
 
-                      {if $mt_used}
+                      {if $mt_used == 1}
                       <p class="mb-3">
                         This project has been pre-translated using <strong>machine translation (MT)</strong> and your task is to fully post-edit it.
                         Learn more about MT post-editing (MTPE) in our Community Library.
