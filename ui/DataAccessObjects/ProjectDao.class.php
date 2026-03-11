@@ -2249,21 +2249,20 @@ error_log("Create PO ref: $result");
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         $result = curl_exec($ch);
         $resultset = json_decode($result, true);
-        $mt_used = 1;
+        $mt_used = -1;
         if (!empty($resultset['mtSettingsPerLangList'])) {
             $memsource_code = $this->convert_language_country_to_memsource($task->getTargetLocale()->getLanguageCode(), $task->getTargetLocale()->getCountryCode());
             foreach ($resultset['mtSettingsPerLangList'] as $item) {
                 if (empty($item['targetLang'])) {
-                    if ($item['machineTranslateSettings']['name'] == 'No MT') $mt_used = -1;
+                    if ($item['machineTranslateSettings']['name'] != 'No MT') $mt_used = 1;
                     break;
                 }
                 if ($item['targetLang'] == $memsource_code) {
-                    if ($item['machineTranslateSettings']['name'] == 'No MT') $mt_used = -1;
+                    if ($item['machineTranslateSettings']['name'] != 'No MT') $mt_used = 1;
                     break;
                 }
             }
-        } else $mt_used = -1;
-
+        }
         LibAPI\PDOWrapper::call('update_mt_used', LibAPI\PDOWrapper::cleanse($task->getId()) . ',' . LibAPI\PDOWrapper::cleanseNullOrWrapStr($mt_used));
     }
 }
