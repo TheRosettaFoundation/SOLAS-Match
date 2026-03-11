@@ -2236,4 +2236,34 @@ error_log("Create PO ref: $result");
     public function update_project_budget_closed($project_id, $budget_closed) {
         LibAPI\PDOWrapper::call('update_project_budget_closed', LibAPI\PDOWrapper::cleanse($project_id) . ',' . LibAPI\PDOWrapper::cleanse($budget_closed));
     }
+
+    function is_task_using_mt($task, $memsource_task)
+    {
+        if (!$memsource_task) return -1;
+        if ($memsource_task['mt_used']) return $memsource_task['mt_used'];
+
+        $authorization = 'Authorization: Bearer ' . Common\Lib\Settings::get('memsource.memsource_api_token');
+        $memsource_project_uid = $this->get_memsource_project($task->getProjectId())['memsource_project_uid'];
+        $ch = curl_init("https://cloud.memsource.com/web/api2/v1/projects/$memsource_project_uid/mtSettings");
+        curl_setopt($ch, CURLOPT_HTTPHEADER, [$authorization]);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $result = curl_exec($ch);
+        $resultset = json_decode($result, true);
+        $mt_used = 1;
+        if (!empty($resultset['mtSettingsPerLangList'])) {
+            $memsource_code = $this->convert_language_country_to_memsource($task->getTargetLocale()->getLanguageCode(), $task->getTargetLocale()->getCountryCode());
+            foreach ($resultset['mtSettingsPerLangList'] as $item) {
+                if (empty($item['targetLang'])) {
+                    if ($item['machineTranslateSettings']['name'] == 'No MT') $mt_used = -1;
+                    break;
+                }
+                if ($item['targetLang'] == $memsource_code) {
+                    if ($item['machineTranslateSettings']['name'] == 'No MT') $mt_used = -1;
+                    break;
+                }
+            }
+        } else $mt_used = -1;
+
+        LibAPI\PDOWrapper::call('update_mt_used', LibAPI\PDOWrapper::cleanse($task->getId()) . ',' . LibAPI\PDOWrapper::cleanseNullOrWrapStr($mt_used));
+    }
 }

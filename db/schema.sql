@@ -1239,10 +1239,19 @@ CREATE TABLE IF NOT EXISTS `MemsourceTasks` (
   beginIndex         INT(10) UNSIGNED NOT NULL,
   endIndex           INT(10) UNSIGNED NOT NULL,
   prerequisite       BIGINT(20) UNSIGNED NOT NULL,
+  mt_used            INT NOT NULL DEFAULT 0, # 0 not set, 1 yes, -1 no
   PRIMARY KEY FK_MemsourceTasks_task_id (task_id),
   UNIQUE  KEY memsource_task_uid        (memsource_task_uid),
   CONSTRAINT FK_MemsourceTasks_task_id FOREIGN KEY (task_id) REFERENCES Tasks (id) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+DROP PROCEDURE IF EXISTS `update_mt_used`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `update_mt_used`(IN tID BIGINT, IN used INT)
+BEGIN
+    UPDATE MemsourceTasks SET mt_used=used WHERE task_id=tID;
+END//
+DELIMITER ;
 
 
 CREATE TABLE IF NOT EXISTS `ProcessedMemsourceTaskUIDs` (
