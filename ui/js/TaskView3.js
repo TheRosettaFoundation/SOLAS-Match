@@ -187,7 +187,7 @@ function documentReady()
   // Adjust DOM
   task_page();
 
-  setTimeout(() => { window.location.reload(); console.log("TO");}, 10000); // 10000 milliseconds = 10 seconds
+  setTimeout(() => { window.location.reload(); }, 60000*15); // 15 minutes
 }
 
 document.addEventListener("DOMContentLoaded", function () {
