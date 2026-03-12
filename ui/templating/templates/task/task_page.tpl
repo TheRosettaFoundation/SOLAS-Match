@@ -80,7 +80,11 @@
             </div>
 
             {if !empty($matecat_url) && (($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)) || (in_array($project->getOrganisationId(), $ORG_EXCEPTIONS) && $roles & ($NGO_ADMIN + $NGO_PROJECT_OFFICER) && !TaskTypeEnum::$enum_to_UI[$type_id]['shell_task']))}
-              <a href="{$matecat_url}" target="_blank" class="btn btn-orange">Work URL</a>
+              <a href="{$matecat_url}" target="_blank" class="btn btn-orange mt-2">Work URL</a>
+            {/if}
+
+            {if ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $NGO_ADMIN + $NGO_PROJECT_OFFICER))}
+              <a href="{urlFor name="task-alter" options="task_id.$task_id"}" class='btn btn-orange mt-2'><img src="{urlFor name='home'}ui/img/edit.svg" alt="edit-icon" class="me-2">Edit task details</a>
             {/if}
           </div>
         </div>
