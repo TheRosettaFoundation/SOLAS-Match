@@ -29,6 +29,11 @@
 
   <div class="container-fluid app-shell py-4"> <!-- was main -->
 
+    {if isset($flash['success'])}
+      <p class="alert alert-success">
+        {TemplateHelper::uiCleanseHTMLKeepMarkup($flash['success'])}
+      </p>
+    {/if}
     {if isset($flash['error'])}
       <p class="alert alert-error">
         {TemplateHelper::uiCleanseHTMLKeepMarkup($flash['error'])}
