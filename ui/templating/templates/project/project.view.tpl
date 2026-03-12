@@ -218,7 +218,7 @@
         <div class="table-responsive mt-4  ">   
         <table class="table table-borderless ">
             <thead class="fs-5">
-            <th >{Localisation::getTranslation('common_description')}</th>
+            <th>Project-specific Instructions</th>
             <th></th>   
             </thead>
             <tbody class="fs-4 ">
@@ -239,7 +239,7 @@
                 
                  <tr>
                     <td colspan="2">
-                        <strong>{Localisation::getTranslation('common_impact')}</strong>
+                        <strong>Description</strong>
                     </td>
                 </tr>
                 <tr>                
