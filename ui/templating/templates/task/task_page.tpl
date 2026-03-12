@@ -55,6 +55,7 @@
               <div class="d-flex flex-wrap align-items-center gap-2">
                 <span class="soft-muted small">{TemplateHelper::uiCleanseHTML($task->getTitle())}</span>
                 <span class="badge rounded-pill badge-task" style="color: {TaskTypeEnum::$enum_to_UI[$type_id]['colour']}">{TaskTypeEnum::$enum_to_UI[$type_id]['type_text']} task</span>
+                {if isset($chunks[$task_id])} - <span> [Part {$chunks[$task_id]['low_level'] }</span><span>/{$chunks[$task_id]['number_of_chunks'] }]</span>{/if}
               </div>
             </div>
           </div>
