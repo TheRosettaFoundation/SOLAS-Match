@@ -308,6 +308,267 @@
           </div>
         </div>
 
+<!-- Admin -->
+{if isset($show_actions)}
+
+<div class="d-flex align-items-center mt-4 mb-4">
+<div class="flex-fill border-top border-1 border-body-subtle " ></div>
+<div class=" text-center mx-4 text-muted fw-bold">Admin</div>
+<div class=" flex-fill border-top border-1 border-body-subtle" ></div>
+</div>
+<div class="bg-body p-2 border-secondary rounded-3 mt-4">
+  <div class=" table table-responsive mt-4">
+    <table class="table">
+        <thead>
+         <tr class="fs-5 align-middle">
+            <th>{Localisation::getTranslation('common_publish_task')}</th>
+            {if $status_id == TaskStatusEnum::IN_PROGRESS && ($roles & ($SITE_ADMIN + $PROJECT_OFFICER) || in_array($project->getOrganisationId(), $ORG_EXCEPTIONS) && $roles & ($NGO_ADMIN + $NGO_PROJECT_OFFICER)) && TaskTypeEnum::$enum_to_UI[$type_id]['shell_task']}
+            <th>Mark Shell Task Complete</th>
+            {/if}
+            <th>Cancelled?</th>
+            <th>{Localisation::getTranslation('common_tracking')}</th>
+            {if ($roles & ($SITE_ADMIN + $PROJECT_OFFICER)) && isset($paid_status)}<th>Paid?</th>{/if}
+            {if !empty($details_claimant)}
+            <th>{Localisation::getTranslation('common_claimed_date')}</th>
+            <th>{Localisation::getTranslation('common_claimed_by')}</th>
+            {/if}
+         </tr>
+        </thead>
+        <tbody class="fs-4">
+        <tr class="py-2">
+            <td>
+              <form method="post" action="{urlFor name="task-view" options="task_id.$task_id"}">
+                    <input type="hidden" name="task_id" value="{$task_id}" />
+                    {if $task->getPublished() == 1}
+                        <input type="hidden" name="published" value="0" />
+                        <a href="#" onclick="this.parentNode.submit()" class="btn-grayish">
+                            <img src="{urlFor name='home'}ui/img/unpublish.svg" alt="unpublish" >
+                             {Localisation::getTranslation('common_unpublish')}
+                        </a>
+                    {else}
+                        <input type="hidden" name="published" value="1" />
+                        <a href="#" onclick="this.parentNode.submit()" class="btngray">
+                             {Localisation::getTranslation('common_publish')}
+                        </a>
+                    {/if}
+                    {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
+                </form>
+
+            </td>
+            {if $status_id == TaskStatusEnum::IN_PROGRESS && ($roles & ($SITE_ADMIN + $PROJECT_OFFICER) || in_array($project->getOrganisationId(), $ORG_EXCEPTIONS) && $roles & ($NGO_ADMIN + $NGO_PROJECT_OFFICER)) && TaskTypeEnum::$enum_to_UI[$type_id]['shell_task']}
+            <td>
+                <form id="complete_form_{$task_id}" method="post" action="{urlFor name="project-view" options="project_id.$projectId"}">
+                    <input type="hidden" name="task_id" value="{$task_id}" />
+                    <input type="hidden" name="complete_task" value="1" />
+
+                    <a class="btn-grayish " onclick="$('#complete_form_{$task_id}').submit();" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Set Status Complete">
+                         <img src="{urlFor name='home'}ui/img/check.svg" alt="check" >
+                    </a>
+                    {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
+                </form>
+            </td>
+            {/if}
+            <td>
+                {if $task->get_cancelled()}
+                    <a href="#" class="btn-grayish opacity-50" disabled>
+                       Yes
+                    </a>
+                {else}
+                        <a href="#" class="btngray opacity-50" disabled>
+                             No
+                        </a>
+                {/if}
+            </td>
+            <td>
+                <form method="post" action="{urlFor name="task-view" options="task_id.$task_id"}">
+                    <input type="hidden" name="task_id" value="{$task_id}" />
+                    {if $taskMetaData[$task_id]['tracking']}
+                        <input type="hidden" name="track" value="Ignore" />
+
+                        <a href="#" onclick="this.parentNode.submit()" class="btn-grayish">
+                        <i class="fa-regular fa-circle-xmark fa-lg"></i> {Localisation::getTranslation('common_untrack_task')}
+                        </a>
+                    {else}
+                        <input type="hidden" name="track" value="Track" />
+
+                        <a href="#" onclick="this.parentNode.submit()" class="btngray">
+                        <i class="fa-solid fa-envelope fa-lg"></i> {Localisation::getTranslation('common_track_task')}
+                        </a>
+                    {/if}
+                    {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
+                </form>
+            </td>
+            {if ($roles & ($SITE_ADMIN + $PROJECT_OFFICER)) && isset($paid_status)}
+            <td>
+                <form method="post" action="{urlFor name="task-view" options="task_id.$task_id"}">
+                    <input type="hidden" name="task_id" value="{$task_id}" />
+                    {if empty($paid_status)}
+
+                        <input type="hidden" name="paid_status" value="2" />
+                        <a href="#" onclick="this.parentNode.submit()" class="btngray">
+                        <i class="fa-regular fa-circle-check fa-lg"></i> Make Paid
+                        </a>
+                    {else}
+                        <input type="hidden" name="paid_status" value="1" />
+                        <a href="#" onclick="this.parentNode.submit()" class="btn-grayish">
+                        <i class="fa-regular fa-circle-xmark fa-lg"></i> Make Unpaid
+                        </a>
+                    {/if}
+                    {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
+                </form>
+            </td>
+            {/if}
+            {if !empty($details_claimant)}
+            <td>
+                <div class="convert_utc_to_local_deadline" style="visibility: hidden">{$details_claimed_date}</div>
+            </td>
+            <td>
+                <a href="{urlFor name="user-public-profile" options="user_id.$user_id"}">{TemplateHelper::uiCleanseHTML($details_claimant->getDisplayName())}</a>
+            </td>
+            {/if}
+        </tr>
+       </tbody>
+    </table>
+    </div>
+{/if}
+
+{if $roles & ($SITE_ADMIN + $PROJECT_OFFICER)}
+
+    <div class="table-responsive mt-4">
+    <table class="table  ">
+        <thead>
+          <tr class="fs-5 align-middle">
+          {if !empty($paid_status)}
+            <th>Purchase Order</th>
+            <th>Payment Status</th>
+            <th>Linguist Unit Rate for {TaskTypeEnum::$enum_to_UI[$type_id]['pricing_and_recognition_unit_text_hours']}</th>
+            <th>Partner Unit Price for {TaskTypeEnum::$enum_to_UI[$type_id]['pricing_and_recognition_unit_text_hours']}</th>
+            <th>Source Units in {TaskTypeEnum::$enum_to_UI[$type_id]['source_unit_for_later_stats']}</th>
+          {else}
+            <th>Partner weighted Pricing Units in {TaskTypeEnum::$enum_to_UI[$type_id]['pricing_and_recognition_unit_text']}</th>
+            <th>Source Units in {TaskTypeEnum::$enum_to_UI[$type_id]['source_unit_for_later_stats']}</th>
+          {/if}
+        </tr>
+        </thead>
+        <tbody class="fs-4">
+        <tr >
+{if !empty($paid_status)}
+            <td>
+                {$paid_status['purchase_order']}
+            </td>
+            <td>
+                {$paid_status['payment_status']}
+                {if $paid_status['payment_status'] == 'Unsettled'}
+                    <form method="post" action="{urlFor name="task-view" options="task_id.$task_id"}">
+                        <input type="submit" class="btngray-sm mt-2" name="payment_status_submit" value="Change to In-kind" />
+                        <input type="hidden" name="mark_payment_status" value="In-kind" />
+                        {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
+                    </form>
+                    <form method="post" action="{urlFor name="task-view" options="task_id.$task_id"}">
+                        <input type="submit" class="btngray-sm mt-2" name="payment_status_submit" value="Change to In-house" />
+                        <input type="hidden" name="mark_payment_status" value="In-house" />
+                        {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
+                    </form>
+                    <form method="post" action="{urlFor name="task-view" options="task_id.$task_id"}">
+                        <input type="submit" class="btngray-sm mt-2" name="payment_status_submit" value="Change to Waived" />
+                        <input type="hidden" name="mark_payment_status" value="Waived" />
+                        {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
+                    </form>
+                {/if}
+
+                {if $paid_status['payment_status'] == 'In-kind' || $paid_status['payment_status'] == 'In-house' || $paid_status['payment_status'] == 'Waived'}
+                    <form method="post" action="{urlFor name="task-view" options="task_id.$task_id"}">
+                        <input type="submit" class="btngray-sm mt-2" name="payment_status_submit" value="Change to Unsettled" />
+                        <input type="hidden" name="mark_payment_status" value="Unsettled" />
+                        {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
+                    </form>
+                {/if}
+
+                {if $paid_status['payment_status'] == 'Company'}
+                    <form method="post" action="{urlFor name="task-view" options="task_id.$task_id"}">
+                        <input type="submit" class="btngray-sm mt-2" name="payment_status_submit" value="Change to In-kind" />
+                        <input type="hidden" name="mark_payment_status" value="In-kind" />
+                        {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
+                    </form>
+                {/if}
+                {if $paid_status['payment_status'] == 'In-kind'}
+                    <form method="post" action="{urlFor name="task-view" options="task_id.$task_id"}">
+                        <input type="submit" class="btngray-sm mt-2" name="payment_status_submit" value="Change to Company" />
+                        <input type="hidden" name="mark_payment_status" value="Company" />
+                        {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
+                    </form>
+                {/if}
+            </td>
+            <td>
+                <form method="post" action="{urlFor name="task-view" options="task_id.$task_id"}">
+                    <input style="width:60px;" type='text' value="{$paid_status['unit_rate']}" name="unit_rate" id="unit_rate" />
+                    <input type="submit" class="btngray-sm mt-2" name="unit_rate_submit" value="Submit" />
+                    <input type="hidden" name="mark_unit_rate" value="1" />
+                    {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
+                 <hr />
+
+                <div class="mt-4  fs-5">  <span class="fw-bold" >Default: </span>  ${TaskTypeEnum::$enum_to_UI[$type_id]['unit_rate']}</div>
+                <hr/>
+
+                <div class="mt-4 fw-bold fs-5">Total Expected Cost</div>
+                <hr />
+                <div>
+            ${if $paid_status['payment_status'] == 'In-kind' || $paid_status['payment_status'] == 'In-house' || $paid_status['payment_status'] == 'Waived'}<del>{round($total_expected_cost, 2)}</del>{else}{round($total_expected_cost, 2)}{/if} for {if $task->getWordCount() != '' && $task->getWordCount() > 1}{$task->getWordCount()}{else}-{/if} {TaskTypeEnum::$enum_to_UI[$type_id]['unit_count_text_short']}
+                </div>
+                </form>
+            </td>
+            <td>
+            <form method="post" action="{urlFor name="task-view" options="task_id.$task_id"}">
+            <input style="width:60px;" type='text' value="{$paid_status['unit_rate_pricing']}" name="unit_rate_pricing" id="unit_rate_pricing" />
+            <input type="submit" class="btngray-sm mt-2" name="unit_rate_pricing_submit" value="Submit" />
+            <input type="hidden" name="mark_unit_rate_pricing" value="1" />
+            {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
+                <hr />
+
+                <div class="fs-5 mt-4"> <span class="fw-bold">Default: </span> ${TaskTypeEnum::$enum_to_UI[$type_id]['unit_rate_pricing_default']}   </div>
+                <hr />
+
+                <div class="fs-5 fw-bold mt-4"> Total Expected Price</div>
+                <hr />
+                <div>
+                   ${round($total_expected_price, 2)} for {$task->get_word_count_partner_weighted()} {TaskTypeEnum::$enum_to_UI[$type_id]['unit_count_text_short']}
+                </div>
+            </form>
+
+             </td>
+
+             <td>
+             <form method="post" action="{urlFor name="task-view" options="task_id.$task_id"}">
+             <input style="width:60px;" type='text' value="{$task->get_source_quantity()}" name="source_quantity" id="source_quantity" />
+             <input type="submit" class="btngray-sm fs-5 mt-2 md:mt-0" name="source_quantity_submit" value="Submit" />
+             <input type="hidden" name="mark_source_quantity" value="1" />
+             {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
+         </form>
+             </td>
+          {else}
+             <td>
+             {if $task->getWordCount() != '' && $task->getWordCount() > 1}{$task->getWordCount()}{else}-{/if}
+        </td>
+        <td>
+             <form method="post" action="{urlFor name="task-view" options="task_id.$task_id"}">
+             <input style="width:60px;" type='text' value="{$task->get_source_quantity()}" name="source_quantity" id="source_quantity" />
+             <input type="submit" class="btngray-sm fs-5 mt-2 md:mt-0" name="source_quantity_submit" value="Submit" />
+             <input type="hidden" name="mark_source_quantity" value="1" />
+             {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
+         </form>
+         </td>
+          {/if}
+
+        </tr>
+       </tbody>
+    </table>
+    </div>
+{/if}
+{if isset($show_actions)}
+</div>
+{/if}
+<!-- End Admin -->
+
         {if !TaskTypeEnum::$enum_to_UI[$type_id]['shell_task']}
         <!-- Source file -->
         <div class="card highlight_3">
