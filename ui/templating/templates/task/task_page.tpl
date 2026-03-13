@@ -94,7 +94,7 @@
           </div>
         </div>
 
-        <hr class="my-4">
+        <hr class="my-4" />
 
         <!-- Stages -->
         <div class="row g-3">
@@ -508,7 +508,7 @@
                  <hr />
 
                 <div class="mt-4  fs-5">  <span class="fw-bold" >Default: </span>  ${TaskTypeEnum::$enum_to_UI[$type_id]['unit_rate']}</div>
-                <hr/>
+                <hr />
 
                 <div class="mt-4 fw-bold fs-5">Total Expected Cost</div>
                 <hr />
@@ -567,6 +567,125 @@
 {if isset($show_actions)}
 </div>
 {/if}
+
+        <!-- Admin Assign -->
+        {if ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $NGO_ADMIN + $NGO_PROJECT_OFFICER)) && $task->getTaskStatus() < TaskStatusEnum::IN_PROGRESS}
+        <div class="bg-body p-2 border-secondary rounded-3 mt-2">
+          <div class="d-none d-md-flex justify-content-around p-2">
+            <div class="fs-5 fw-bold w-75"> {Localisation::getTranslation('task_view_assign_label')}</div>
+            <div class="fs-5 fw-bold w-75"> Remove a user from deny list for this task:</div>
+          </div>
+
+          <hr class="d-none d-md-block" />
+
+          <div class=" d-block d-md-flex p-2 fs-6 mt-2">
+            <div class="w-50" >
+              <div class="fs-5 fw-bold w-75 mb-4 d-block d-md-none"> {Localisation::getTranslation('task_view_assign_label')}</div>
+
+              <form id="assignTaskToUserForm" method="post" action="{urlFor name="task-view" options="task_id.$task_id"}" onsubmit="return confirm('{Localisation::getTranslation("task_view_assign_confirmation")}');">
+
+                {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
+                  <input id="input" class="fs-6" type="email" name="userIdOrEmail" placeholder="{Localisation::getTranslation('task_view_assign_placeholder')}"><br />
+                {/if}
+
+                {if !empty($list_qualified_translators)}
+                <select  name="assignUserSelect" id="assignUserSelect" class="select mt-2">
+                  <option value="">...</option>
+                  {foreach $list_qualified_translators as $list_qualified_translator}
+                  <option value="{$list_qualified_translator['user_id']}">{TemplateHelper::uiCleanseHTML($list_qualified_translator['name'])}</option>
+                  {/foreach}
+                </select>
+                <br />
+                {/if}
+
+                <br />
+                <a class="btngray-sm mt-2" onclick="$('#assignTaskToUserForm').submit();" href="#">
+                  <img src="{urlFor name='home'}ui/img/add-user.svg" alt="Add user" class="mx-1" /> &nbsp;{Localisation::getTranslation('task_view_assign_button')}
+                </a>
+                {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
+              </form>
+
+            </div>
+
+            <div class="w-50">
+              <div class="fs-5 fw-bold w-75 mb-4 mt-4  d-block d-md-none"> Remove a user from deny list for this task:</div>
+              <form id="removeUserFromDenyListForm" method="post" action="{urlFor name="task-view" options="task_id.$task_id"}" onsubmit="return confirm('{Localisation::getTranslation("task_view_assign_confirmation")}');" >
+
+                <input type="text" class="fs-6 mb-4" id='input' name="userIdOrEmailDenyList" placeholder="{Localisation::getTranslation('task_view_assign_placeholder')}" /><br />
+                <a class="btngray-sm mt-2" href="#" onclick="$('#removeUserFromDenyListForm').submit();">
+                  <img src="{urlFor name='home'}ui/img/remove-user.svg" alt="remove user" class="mx-1" /> Remove User from deny list
+                </a>
+                {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
+              </form>
+            </div>
+          </div>
+
+          <a href="{urlFor name="task-search_translators" options="task_id.$task_id"}" class="btngray-sm mt-4 mb-2">
+            <img src="{urlFor name='home'}ui/img/search-user.svg" alt="arrow" class="mx-1" ></i>&nbsp;Search for Translators
+          </a>
+        </div>
+        {/if}
+
+        {if ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER + $NGO_ADMIN + $NGO_PROJECT_OFFICER)) && $task->getTaskStatus() > TaskStatusEnum::PENDING_CLAIM}
+        <div class="mb-2 mt-3">
+          <strong>{Localisation::getTranslation('task_org_feedback_user_feedback')}</strong><hr />
+
+          <form id="taskUserFeedback" enctype="application/x-www-form-urlencoded" method="post" action="{urlFor name="task-view" options="task_id.$task_id"}" accept-charset="utf-8">
+            <textarea wrap="soft" style="width: 99%" maxlength="4096" rows="10" name="feedback" placeholder="{Localisation::getTranslation('task_org_feedback_1')}"></textarea>
+
+            <div class="d-flex justify-content-between mt-2 flex-wrap">
+              <span>
+                <button type="submit" value="1" name="revokeTask" class="btngray-sm">
+                  {Localisation::getTranslation('task_org_feedback_2')}
+                </button>
+
+                <label class="checkbox clear_brand">
+                  <input type="checkbox" name="deny_user" value="1" /> Add user to deny list
+                </label>
+              </span>
+
+              <span class="">
+                <button type="submit" value="Submit" name="submit" class="btngray-sm me-2">
+                  {Localisation::getTranslation('common_submit_feedback')}
+                </button>
+                <button type="reset" value="Reset" name="reset" class="btngray-sm">
+                  {Localisation::getTranslation('common_reset')}
+                </button>
+              </span>
+            </div>
+
+            {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
+          </form>
+        </div>
+        {/if}
+
+        {if ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER + $NGO_ADMIN + $NGO_PROJECT_OFFICER)) && $task->getTaskStatus() == TaskStatusEnum::COMPLETE && !TaskTypeEnum::$enum_to_UI[$type_id]['shell_task']}
+          {if !empty($memsource_task)}
+          <p class="mt-4">{Localisation::getTranslation('org_task_review_0')}</p>
+          <p>
+            <a class="btngray-sm" href="{urlFor name="download-task-latest-version" options="task_id.$task_id"}">
+              {Localisation::getTranslation('org_task_review_download_output_file')}
+            </a>
+          </p>
+          {/if}
+
+          <h2 class="page-header mt-5">
+            {Localisation::getTranslation('org_task_review_review_this_file')}
+            <span class=" fs-4 text-muted ">{Localisation::getTranslation('org_task_review_1')}</span>
+          </h2>
+
+          <p>{Localisation::getTranslation('org_task_complete_provide_or_view_review')}</p>
+          <p>
+            <a class="btngray-sm me-2" href="{urlFor name="org-task-review" options="org_id.$org_id|task_id.$task_id"}">
+              {Localisation::getTranslation('org_task_complete_provide_a_review')}
+            </a>
+            <a class="btngray-sm" href="{urlFor name="org-task-reviews" options="org_id.$org_id|task_id.$task_id"}">
+              {Localisation::getTranslation('org_task_complete_view_reviews')}
+            </a>
+          </p>
+        {/if}
+        <!-- End Admin Assign -->
+
 <!-- End Admin -->
 
         {if !TaskTypeEnum::$enum_to_UI[$type_id]['shell_task']}
