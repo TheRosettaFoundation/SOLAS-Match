@@ -25,7 +25,6 @@
 
     .stage-pill{
       border: 1px solid var(--twb-border);
-/*      background: #fff; */
       border-radius: 10px;
       padding: .65rem .75rem;
       min-height: 78px;
@@ -118,7 +117,7 @@
       padding: .9rem 1rem;
       border: 1px solid var(--twb-border);
       border-radius: 12px;
-      background: #fff;
+/*      background: #fff; */
       box-shadow: var(--twb-shadow);
     }
     .keyrow .k{
@@ -232,5 +231,12 @@
 }
 [data-bs-theme=dark] .light_blue_background {
   background: DarkBlue;
+}
+
+[data-bs-theme=light] .keyrow {
+  background: #fff;
+}
+[data-bs-theme=dark] .keyrow {
+  background: #212529;
 }
   </style>
