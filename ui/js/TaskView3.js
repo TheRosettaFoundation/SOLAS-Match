@@ -345,13 +345,13 @@ async function configure_buttons() {
     const head_center = document.getElementById("head_center");
     if (head_center) {
       head_center.innerHTML =
-        '<div class="list-group-item list-group-item-action px-0 py-1 border-0" style="background: #DFEEFD">' +
+        '<div class="list-group-item list-group-item-action px-0 py-1 border-0 light_blue_background">' +
           '<i class="bi bi-check-circle me-2"></i> Review the instructions' +
         '</div>' +
-        '<div class="list-group-item list-group-item-action px-0 py-1 border-0 text-secondary" style="background: #C8DFF6">' +
+        '<div class="list-group-item list-group-item-action px-0 py-1 border-0 text-secondary blue_background">' +
           '<i class="bi bi-circle me-2"></i> Work on the task' +
         '</div>' +
-        '<div class="list-group-item list-group-item-action px-0 py-1 border-0 text-secondary" style="background: #DFEEFD">' +
+        '<div class="list-group-item list-group-item-action px-0 py-1 border-0 text-secondary light_blue_background">' +
           '<i class="bi bi-circle me-2"></i> Provide feedback' +
         '</div>';
     }

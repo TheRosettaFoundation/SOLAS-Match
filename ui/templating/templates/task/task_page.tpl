@@ -138,24 +138,24 @@
                 <div class="list-group list-group-flush small">
                   {if $step['status'] == 10 || $step['status'] == 3}
                   <div id="head_center">
-                    <div class="list-group-item list-group-item-action px-0 py-1 border-0" style="background: #C8DFF6">
+                    <div class="list-group-item list-group-item-action px-0 py-1 border-0 blue_background">
                       <i class="bi bi-circle me-2"></i> Review the instructions
                     </div>
-                    <div class="list-group-item list-group-item-action px-0 py-1 border-0 text-secondary" style="background: #DFEEFD">
+                    <div class="list-group-item list-group-item-action px-0 py-1 border-0 text-secondary light_blue_background">
                       <i class="bi bi-circle me-2"></i> Work on the task
                     </div>
-                    <div class="list-group-item list-group-item-action px-0 py-1 border-0 text-secondary" style="background: #DFEEFD">
+                    <div class="list-group-item list-group-item-action px-0 py-1 border-0 text-secondary light_blue_background">
                       <i class="bi bi-circle me-2"></i> Provide feedback
                     </div>
                   </div>
                   {else}
-                    <div class="list-group-item list-group-item-action px-0 py-1 border-0" style="background: #DFEEFD">
+                    <div class="list-group-item list-group-item-action px-0 py-1 border-0 light_blue_background">
                       <i class="bi bi-check-circle me-2"></i> Review the instructions
                     </div>
-                    <div class="list-group-item list-group-item-action px-0 py-1 border-0 text-secondary" style="background: #DFEEFD">
+                    <div class="list-group-item list-group-item-action px-0 py-1 border-0 text-secondary light_blue_background">
                       <i class="bi bi-check-circle me-2"></i> Work on the task
                     </div>
-                    <div class="list-group-item list-group-item-action px-0 py-1 border-0 text-secondary" style="background: #C8DFF6">
+                    <div class="list-group-item list-group-item-action px-0 py-1 border-0 text-secondary blue_background">
                       <i class="bi bi-circle me-2"></i> Provide feedback
                     </div>
                   {/if}

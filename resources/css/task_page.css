@@ -233,6 +233,13 @@
   background: DarkBlue;
 }
 
+[data-bs-theme=light] .blue_background {
+  background: #C8DFF6;
+}
+[data-bs-theme=dark] .blue_background {
+  background: Blue;
+}
+
 [data-bs-theme=light] .keyrow {
   background: #fff;
 }
