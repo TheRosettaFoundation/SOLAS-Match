@@ -4,7 +4,6 @@
       --twb-orange:#f29a2e;
       --twb-orange-2:#f6b25b;
       --twb-muted:#6c757d;
-/*      --twb-bg:#f7f8fa; */
       --twb-card:#ffffff;
       --twb-border:#e6e8ee;
       --twb-shadow: 0 1px 2px rgba(16,24,40,.06), 0 1px 1px rgba(16,24,40,.04);
@@ -26,7 +25,7 @@
 
     .stage-pill{
       border: 1px solid var(--twb-border);
-      background: #fff;
+/*      background: #fff; */
       border-radius: 10px;
       padding: .65rem .75rem;
       min-height: 78px;
@@ -219,5 +218,12 @@
 }
 [data-bs-theme=dark] .project_colour {
   color: white;
+}
+
+[data-bs-theme=light] .stage-pill {
+  background: WhiteSmoke;
+}
+[data-bs-theme=dark] .stage-pill {
+  background: #212529;
 }
   </style>
