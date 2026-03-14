@@ -743,7 +743,7 @@
           <div class="card-body p-4">
             <div class="d-flex align-items-center justify-content-between mb-2">
               <div class="section-title mb-0">{TaskTypeEnum::$enum_to_UI[$type_id]['type_text_short']} instructions</div>
-              <a href="{TaskTypeEnum::$enum_to_UI[$type_id]['bookstack_url_1']}" target="_blank" class="btn btn-outline-secondary btn-sm">
+              <a href="{TaskTypeEnum::$enum_to_UI[$type_id]['bookstack_url_1']}" target="_blank" class="btn btn-dark btn-sm">
                 <i class="bi bi-layout-text-window-reverse me-1"></i> Full instructions
               </a>
             </div>
