@@ -226,4 +226,11 @@
 [data-bs-theme=dark] .stage-pill {
   background: #212529;
 }
+
+[data-bs-theme=light] .light_blue_background {
+  background: #DFEEFD;
+}
+[data-bs-theme=dark] .light_blue_background {
+  background: DarkBlue;
+}
   </style>
