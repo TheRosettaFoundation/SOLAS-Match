@@ -213,4 +213,11 @@
 [data-bs-theme=dark] {
   --twb-bg:#212529;
 }
+
+[data-bs-theme=light] .project_colour {
+  color: black;
+}
+[data-bs-theme=dark] .project_colour {
+  color: white;
+}
   </style>
