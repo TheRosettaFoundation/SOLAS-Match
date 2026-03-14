@@ -4,7 +4,7 @@
       --twb-orange:#f29a2e;
       --twb-orange-2:#f6b25b;
       --twb-muted:#6c757d;
-      --twb-bg:#f7f8fa;
+/*      --twb-bg:#f7f8fa; */
       --twb-card:#ffffff;
       --twb-border:#e6e8ee;
       --twb-shadow: 0 1px 2px rgba(16,24,40,.06), 0 1px 1px rgba(16,24,40,.04);
@@ -203,5 +203,14 @@
 }
 .task_tooltip:hover .task_tooltiptext {
   visibility: visible;
+}
+
+:root,
+[data-bs-theme=light] {
+  --twb-bg:#f7f8fa;
+}
+
+[data-bs-theme=dark] {
+  --twb-bg:#212529;
 }
   </style>
