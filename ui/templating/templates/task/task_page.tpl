@@ -250,7 +250,7 @@
                         Learn more about MT post-editing (MTPE) in our Community Library.
                       </p>
 
-                      <button class="btn btn-outline-secondary btn-sm">
+                      <button class="btn btn-dark btn-sm">
                         <i class="bi bi-book me-1"></i> MTPE instructions
                       </button>
                       {/if}
