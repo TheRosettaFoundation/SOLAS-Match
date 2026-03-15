@@ -295,9 +295,6 @@ function DAOTaskInvitesSentToUsers(userIDs, functionOnSuccess, functionOnFail)
 }
 
 function task_page() {
-console.log("is_claimer: " + document.getElementById("is_claimer").innerHTML);//(**)
-console.log("status_id: " + document.getElementById("status_id").innerHTML);//(**)
-
   if (document.getElementById("is_claimer").innerHTML == 1) {
     if (document.getElementById("status_id").innerHTML == 4) {
       document.getElementById("head_show-revision-btn").innerHTML = '<div>You have completed the task</div><a ' + 'href="' + document.getElementById("siteLocationURL").innerHTML + 'task/' + document.getElementById('task_id').innerHTML + '/task_complete/"' + ' class="btn btn-orange" id="show-revision-btn">Provide feedback</a>';
@@ -375,8 +372,6 @@ function highlight_next_card() {
         window.scrollTo(0, 0);
         return;
     }
-console.log("highlight_next_card() highlight_index: " + highlight_index);//(**)
-
     const card = document.querySelector('.highlight_' + highlight_index);
     if (!card) return;
 
