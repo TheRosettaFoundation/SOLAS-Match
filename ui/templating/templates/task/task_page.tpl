@@ -423,7 +423,7 @@
                 <div class="convert_utc_to_local_deadline" style="visibility: hidden">{$details_claimed_date}</div>
             </td>
             <td>
-                <a href="{urlFor name="user-public-profile" options="user_id.$user_id"}">{TemplateHelper::uiCleanseHTML($details_claimant->getDisplayName())}</a>
+                <a href="{urlFor name="user-public-profile" options="user_id.{$details_claimant->getId()}"}">{TemplateHelper::uiCleanseHTML($details_claimant->getDisplayName())}</a>
             </td>
             {/if}
         </tr>
