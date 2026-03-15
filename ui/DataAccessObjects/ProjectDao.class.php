@@ -2254,10 +2254,12 @@ error_log("Create PO ref: $result");
             $memsource_code = $this->convert_language_country_to_memsource($task->getTargetLocale()->getLanguageCode(), $task->getTargetLocale()->getCountryCode());
             foreach ($resultset['mtSettingsPerLangList'] as $item) {
                 if (empty($item['targetLang'])) {
+$mt_used = 1;//(**)DELDEL
                     if ($item['machineTranslateSettings']['name'] != 'No MT') $mt_used = 1;
                     break;
                 }
                 if ($item['targetLang'] == $memsource_code) {
+$mt_used = 1;//(**)DELDEL
                     if ($item['machineTranslateSettings']['name'] != 'No MT') $mt_used = 1;
                     break;
                 }
