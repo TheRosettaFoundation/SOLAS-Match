@@ -187,7 +187,9 @@ function documentReady()
   // Adjust DOM
   task_page();
 
-  setTimeout(() => { window.location.reload(); }, 60000*15); // 15 minutes
+  if (document.getElementById("is_claimer").innerHTML == 1 && document.getElementById("status_id").innerHTML != 4) {
+    setTimeout(() => { window.location.reload(); }, 60000*15); // 15 minutes
+  }
 }
 
 document.addEventListener("DOMContentLoaded", function () {
