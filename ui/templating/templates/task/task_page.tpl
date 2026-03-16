@@ -242,10 +242,10 @@
                   <div class="accordion-body p-4">
                     <div class="ql-editor">{TemplateHelper::clean_project_description($project->getDescription())}</div>
 
-                    <div>{TemplateHelper::uiCleanseHTMLNewlineAndTabs($task->getComment())}</div>
+                    <div class="mt-2">{TemplateHelper::uiCleanseHTMLNewlineAndTabs($task->getComment())}</div>
 
                       {if $mt_used == 1}
-                      <p class="mb-3">
+                      <p class="mt-2 mb-3">
                         This project has been pre-translated using <strong>machine translation (MT)</strong> and your task is to fully post-edit it.
                         Learn more about MT post-editing (MTPE) in our Community Library.
                       </p>
