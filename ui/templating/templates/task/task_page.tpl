@@ -105,7 +105,7 @@
               <div class="stage-pill">
                 <div class="d-flex align-items-start justify-content-between">
                   <div>
-                    <div>
+                    <div class="mb-2">
                       This task is no longer available. Feel free to check if there are other open tasks, explore our Learning Center to keep building your skills, or visit our Community Library for practical guidelines, tips, and best practices.
                     </div>
                     <div>
