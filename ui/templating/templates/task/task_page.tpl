@@ -99,7 +99,7 @@
         <!-- Stages -->
         <div class="row g-3">
           {if !$is_claimer && !($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER + $NGO_ADMIN + $NGO_PROJECT_OFFICER)) &&
-            ($status_id >= TaskStatusEnum::PENDING_CLAIM || $is_denied_for_task || !$user_within_limitations || TaskTypeEnum::$enum_to_UI[$type_id]['shell_task'])}
+            ($status_id > TaskStatusEnum::PENDING_CLAIM || $is_denied_for_task || !$user_within_limitations || TaskTypeEnum::$enum_to_UI[$type_id]['shell_task'])}
 
             <div class="col-12 col-md-6 col-lg-6">
               <div class="stage-pill">
