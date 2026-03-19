@@ -110,8 +110,8 @@
                     </div>
                     <div class="d-flex justify-content-center">
                       <a class="btn btn-orange" href="{urlFor name="home"}">Available tasks</a>
-                      <a class="btn btn-orange" href="https://elearn.translatorswb.org/" target="_blank"">Learning Center</a>
-                      <a class="btn btn-orange" href="https://communitylibrary.translatorswb.org/login" target="_blank"">Community Library</a>
+                      <a class="btn btn-orange mx-2" href="https://elearn.translatorswb.org/" target="_blank">Learning Center</a>
+                      <a class="btn btn-orange" href="https://communitylibrary.translatorswb.org/login" target="_blank">Community Library</a>
                     </div>
                   </div>
                 </div>
