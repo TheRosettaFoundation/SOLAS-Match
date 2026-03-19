@@ -106,7 +106,14 @@
                 <div class="d-flex align-items-start justify-content-between">
                   <div>
                     <div class="mb-2">
-                      This task is no longer available. Feel free to check if there are other open tasks, explore our Learning Center to keep building your skills, or visit our Community Library for practical guidelines, tips, and best practices.
+                      {if $is_denied_for_task && $type_id != TaskTypeEnum::TRANSLATION}
+                        You cannot claim this task, because you have previously claimed the matching translation task.
+                      {elseif $is_denied_for_task}
+                        You cannot claim this task, because you have previously claimed the matching revision or proofreading task.
+                      {else}
+                        This task is no longer available.
+                      {/if}
+                      Feel free to check if there are other open tasks, explore our Learning Center to keep building your skills, or visit our Community Library for practical guidelines, tips, and best practices.
                     </div>
                     <div class="d-flex justify-content-center">
                       <a class="btn btn-orange" href="{urlFor name="home"}">Available tasks</a>
