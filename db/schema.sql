@@ -1540,6 +1540,9 @@ INSERT INTO task_type_details VALUES
 UPDATE task_type_details SET claimed_template='task/task.claimed-spot_quality_inspection.tpl' WHERE type_enum=38;
 UPDATE task_type_details SET claimed_template='task/task.claimed-quality_evaluation.tpl'      WHERE type_enum=39;
 
+UPDATE task_type_details SET source_and_target=1 WHERE type_enum=38;
+UPDATE task_type_details SET source_and_target=1 WHERE type_enum=39;
+
 UPDATE task_type_details SET unit_count_text='Word count' WHERE unit_count_text='Word Count';
 
 /*
