@@ -257,9 +257,9 @@
                         Learn more about MT post-editing (MTPE) in our Community Library.
                       </p>
 
-                      <button class="btn btn-dark btn-sm">
+                      <a href="https://communitylibrary.translatorswb.org/books/07-translation-and-editing-instructions/page/post-editing-machine-translation-tips-and-best-practice" target="_blank" class="btn btn-dark btn-sm">
                         <i class="bi bi-book me-1"></i> MTPE instructions
-                      </button>
+                      </a>
                       {/if}
 
                     <div class="mt-4">

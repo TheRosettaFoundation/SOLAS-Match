@@ -1745,11 +1745,11 @@ UPDATE task_type_details SET bookstack_words_2='Alignment in Matecat' WHERE type
 UPDATE task_type_details SET bookstack_url_1='https://communitylibrary.translatorswb.org/books/07-translation-and-editing-instructions/page/language-quality-inspection-lqi-in-phrase-tms-instructions' WHERE type_enum=19;
 UPDATE task_type_details SET bookstack_url_1='https://communitylibrary.translatorswb.org/books/07-translation-and-editing-instructions/page/lexiqa-instructions' WHERE type_enum=15;
 
+UPDATE task_type_details SET bookstack_url_1='https://communitylibrary.translatorswb.org/books/07-translation-and-editing-instructions/page/monolingual-proofreading-phrase-tms-edit-instructions' WHERE type_enum=20;
+UPDATE task_type_details SET bookstack_url_2='https://communitylibrary.translatorswb.org/books/07-translation-and-editing-instructions/page/monolingual-proofreading-native-edit-instructions' WHERE type_enum=20;
+UPDATE task_type_details SET bookstack_words_1='Monolingual Proofreading - Phrase TMS' WHERE type_enum=20;
+UPDATE task_type_details SET bookstack_words_2='Monolingual Proofreading - Native Edit' WHERE type_enum=20;
 
-UPDATE task_type_details SET bookstack_url_1='https://communitylibrary.translatorswb.org/books/07-translation-and-editing-instructions/page/monolingual-proofreading-native-edit-instructions' WHERE type_enum=20;
-UPDATE task_type_details SET bookstack_url_2='https://communitylibrary.translatorswb.org/books/07-translation-and-editing-instructions/page/monolingual-proofreading-phrase-tms-edit-instructions' WHERE type_enum=20;
-UPDATE task_type_details SET bookstack_words_1='Monolingual Proofreading - Native Edit' WHERE type_enum=20;
-UPDATE task_type_details SET bookstack_words_2='Monolingual Proofreading - Phrase TMS' WHERE type_enum=20;
 
 UPDATE task_type_details SET bookstack_url_1='https://communitylibrary.translatorswb.org/books/07-translation-and-editing-instructions/page/post-editing-machine-translation-tips-and-best-practice' WHERE type_enum=21;
 UPDATE task_type_details SET bookstack_url_1='https://communitylibrary.translatorswb.org/books/06-phrase-tms/page/how-to-run-qa-quality-assurance-checks-in-phrase-tms' WHERE type_enum=18;
