@@ -108,7 +108,7 @@
                     <div class="mb-2">
                       This task is no longer available. Feel free to check if there are other open tasks, explore our Learning Center to keep building your skills, or visit our Community Library for practical guidelines, tips, and best practices.
                     </div>
-                    <div>
+                    <div class="d-flex justify-content-center">
                       <a class="btn btn-orange" href="{urlFor name="home"}">Available tasks</a>
                       <a class="btn btn-orange" href="https://elearn.translatorswb.org/" target="_blank"">Learning Center</a>
                       <a class="btn btn-orange" href="https://communitylibrary.translatorswb.org/login" target="_blank"">Community Library</a>
