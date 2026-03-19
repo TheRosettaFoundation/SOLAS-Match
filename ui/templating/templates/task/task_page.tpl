@@ -69,7 +69,7 @@
             {if $status_id == TaskStatusEnum::PENDING_CLAIM && !$is_denied_for_task && !TaskTypeEnum::$enum_to_UI[$type_id]['shell_task']}
               {if ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER + $LINGUIST + $NGO_LINGUIST)) && $user_within_limitations}
               <button class="btn btn-orange" id="claim_button">
-                Claim the task
+                Claim the {strtolower(TaskTypeEnum::$enum_to_UI[$type_id]['type_text'])} task
               </button>
               {/if}
             {/if}
