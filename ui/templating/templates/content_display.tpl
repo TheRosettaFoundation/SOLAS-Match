@@ -44,6 +44,11 @@
                 {assign var="txt" value="RESOURCE"}
                 {assign var="alt" value="Resource"}
             {/if}
+            {if $new['type'] == 31}
+                {assign var="col" value="143878"}
+                {assign var="txt" value="LANGUAGE RESOURCE"}
+                {assign var="alt" value="Language Resource"}
+            {/if}
             <span class="badge rounded-pill text-white twb-bg-core-blue fw-semibold p-2 px-3">
                 {$alt}
             </span>
