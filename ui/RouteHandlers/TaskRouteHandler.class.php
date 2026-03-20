@@ -1471,7 +1471,7 @@ class TaskRouteHandler
                 'required_qualification_for_details' => ($roles&(SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER)) ? $taskDao->getRequiredTaskQualificationLevel($task_id) : 0,
                 'current_user_id' => $user_id,
                 'steps' => $projectDao->find_all_workflow_steps($task),
-                'language_style' => $userDao->get_content_items(null, null, null, null, null, null, "[\"{$task->getTargetLocale()->getLanguageCode()}-{$task->getTargetLocale()->getCountryCode()}\"]", null, null, 0),
+                'language_style' => $userDao->get_content_items(null, 3, null, null, 1, "[\"{$task->getTargetLocale()->getLanguageCode()}\"]", null, null, null, 0),
                 'mt_used' => $projectDao->is_task_using_mt($task, $memsource_task),
         ));
 

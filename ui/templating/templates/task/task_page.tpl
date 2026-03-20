@@ -295,7 +295,9 @@
                       {if empty($language_style)}
                         No specific style guides
                       {else}
-                        {$language_style[0]['body']}
+                        {foreach $language_style as $style}
+                          <div>{$style['body']}</div>
+                        {/foreach}
                       {/if}
                     </div>
 
