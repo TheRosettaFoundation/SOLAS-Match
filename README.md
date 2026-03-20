@@ -14,7 +14,7 @@ and re-uploaded. Development began in February 2011.
 
 This software is licensed under the terms of the GNU LESSER GENERAL PUBLIC LICENSE
 Version 3, 29 June 2007
-For full terms see License.txt or http://www.gnu.org/licenses/lgpl-3.0.txt
+For full terms see License.txt or https://www.gnu.org/licenses/lgpl-3.0.txt
 
 # Contact
 

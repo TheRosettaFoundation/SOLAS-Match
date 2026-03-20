@@ -171,7 +171,7 @@
                                 {/foreach}
                             </div>
                             <div class="text-center mt-4">
-                                <a class="btn btn-secondary fs-5 px-3" href="{urlFor name="home"}">View More Available Tasks</a>
+                                <a class="btn btn-secondary fs-5 px-3" href="{urlFor name="task_stream"}">View More Available Tasks</a>
                             </div>
                             {else}
                             <div class="text-center mt-4">

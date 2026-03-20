@@ -671,7 +671,7 @@ Our staff will process your request and get back to you within 2 business days.
 The points are cumulative and never reset to zero, so you keep accruing points even if you claim any rewards.</p>
 <p>Please remember that the quality of the work we submit is of utmost importance,
 as it can influence the lives of people affected by humanitarian crises.
-Only work that meets our minimum quality standards (as described in <a  class="custom-link" href="https://translatorswithoutborders.org/wp-content/uploads/2022/03/Plain-language-Code-of-Conduct-for-Translators.pdf" target="_blank">TWB’s Code of Conduct</a>)
+Only work that meets our minimum quality standards (as described in <a  class="custom-link" href="https://twbplatform.org/user%202026%20Code%20of%20Conduct%20for%20Translators%20and%20Interpreters.pdf" target="_blank">TWB’s Code of Conduct</a>)
 will qualify towards our Community Recognition Program.
 If you work on a revision task or a proofreading/approval task and notice that the quality of the translation is not fit for purpose, please contact us at
 <a  class="custom-link" href="mailto:recognition@translatorswithoutborders.org?subject=Feedback" target="_blank">recognition@translatorswithoutborders.org</a>.
