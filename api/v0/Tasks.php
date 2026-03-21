@@ -32,11 +32,6 @@ class Tasks
             '\SolasMatch\API\V0\Tasks:sendOrgFeedbackDeclined');
 
         $app->get(
-            '/api/v0/tasks/{taskId}/alsoViewedTasks/{limit}/{offset}/',
-            '\SolasMatch\API\V0\Tasks:getAlsoViewedTasks')
-            ->add('\SolasMatch\API\Lib\Middleware:isloggedIn');
-
-        $app->get(
             '/api/v0/tasks/{taskId}/tags/',
             '\SolasMatch\API\V0\Tasks:getTasksTags');
 
@@ -119,21 +114,6 @@ class Tasks
         else error_log("Security mismatch: $task_claimant_user !== $task_id,$claimant_id,$user_id");
 
         return API\Dispatcher::sendResponse($response, null, null);
-    }
-
-    public static function getAlsoViewedTasks(Request $request, Response $response, $args)
-    {
-        $taskId = $args['taskId'];
-        $limit = $args['limit'];
-        $offset = $args['offset'];
-        return API\Dispatcher::sendResponse($response,
-            DAO\TaskDao::getAlsoViewedTasks(
-                $taskId,
-                $limit,
-                $offset
-            ),
-            null
-        );
     }
 
     public static function getTasksTags(Request $request, Response $response, $args)
