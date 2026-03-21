@@ -556,8 +556,6 @@ class TaskRouteHandler
         ));
 
         return UserRouteHandler::render('task/recent-tasks.tpl', $response);
-
-    
     }
 
     public function downloadTaskLatestVersion(Request $request, Response $response, $args)
@@ -1377,37 +1375,9 @@ class TaskRouteHandler
 
         $extra_scripts = file_get_contents(__DIR__."/../js/TaskView3.js");
 
-        $alsoViewedTasks = [];
-        $alsoViewedTasksCount = 0;
-        $deadline_timestamps = [];
-        $projectAndOrgs = [];
         $list_qualified_translators = [];
 
         if (!$taskClaimed) {
-            $alsoViewedTasks = $taskDao->getAlsoViewedTasks($task_id, $user_id, 0);
-            if (!empty($alsoViewedTasks)) $alsoViewedTasksCount = count($alsoViewedTasks);
-            if (is_array($alsoViewedTasks) || is_object($alsoViewedTasks)) {
-                foreach ($alsoViewedTasks as $alsoViewedTask) {
-                    $viewedTaskId = $alsoViewedTask->getId();
-                    $viewedProject = $projectDao->getProject($alsoViewedTask->getProjectId());
-                    $viewedOrgId = $viewedProject->getOrganisationId();
-                    $viewedOrg = $orgDao->getOrganisation($viewedOrgId);
-                    $deadline = $alsoViewedTask->getDeadline();
-                    $deadline_timestamps[$viewedTaskId] = $deadline;
-                    $viewedProjectUri = "{$siteLocation}project/{$project->getId()}/view";
-                    $viewedProjectName = $viewedProject->getTitle();
-                    $viewedOrgUri = "{$siteLocation}org/{$org_id}/profile";
-                    $viewedOrgName = $viewedOrg->getName();
-                    $projectAndOrgs[$viewedTaskId]=sprintf(
-                        Lib\Localisation::getTranslation('common_part_of_for'),
-                        $viewedProjectUri,
-                        htmlspecialchars($viewedProjectName, ENT_COMPAT, 'UTF-8'),
-                        $viewedOrgUri,
-                        htmlspecialchars($viewedOrgName, ENT_COMPAT, 'UTF-8')
-                    );
-                }
-            }
-
             $more = 0;
             if (in_array($org_id, ORG_EXCEPTIONS)) $more = NGO_ADMIN | NGO_PROJECT_OFFICER;
             if ($roles & (SITE_ADMIN | PROJECT_OFFICER | NGO_ADMIN | NGO_PROJECT_OFFICER)) $list_qualified_translators = $taskDao->list_qualified_translators($task_id, $org_id, $roles & (SITE_ADMIN | PROJECT_OFFICER | $more));
@@ -1423,9 +1393,6 @@ class TaskRouteHandler
         $taskStatusTexts[3] = 'In progress';
         $taskStatusTexts[4] = Lib\Localisation::getTranslation('common_complete');
         $chunks =  $userDao->getUserTaskChunks($task_id);
-        $viewedTaskIds = [];   
-        if(is_array($alsoViewedTasks)) $viewedTaskIds = array_map(function($element){return $element->id; },$alsoViewedTasks);
-        $chunksAlsoViews =$userDao->getUserTaskChunks(...$viewedTaskIds);
 
         $total_expected_cost = 0;
         $total_expected_price = 0;
@@ -1443,13 +1410,8 @@ class TaskRouteHandler
                 "project" => $project,
                 'task' => $task,
                 'chunks' => $chunks,
-                'chunksViews' => $chunksAlsoViews,
                 'taskMetaData' => $taskMetaData,
                 'roles'        => $roles,
-                'alsoViewedTasks' => $alsoViewedTasks,
-                'alsoViewedTasksCount' => $alsoViewedTasksCount,
-                'deadline_timestamps' => $deadline_timestamps,
-                'projectAndOrgs' => $projectAndOrgs,
                 'discourse_slug' => $projectDao->discourse_parameterize($project),
                 'memsource_task' => $memsource_task,
                 'matecat_url' => !Common\Enums\TaskTypeEnum::$enum_to_UI[$task->getTaskType()]['shell_task'] ? $taskDao->get_matecat_url_regardless($task, $memsource_task) : $taskDao->get_task_url($task_id),
