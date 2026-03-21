@@ -4684,16 +4684,18 @@ DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `get_taskviews_for_user`(IN uID INT, IN t0 BIGINT, IN t1 BIGINT, IN t2 BIGINT, IN t3 BIGINT, IN t4 BIGINT, IN t5 BIGINT)
 BEGIN
     SELECT
-        tv.task_id,
-        COUNT(*) AS count,
-        MAX(tv.`viewed-time`) AS date_viewed_task
-    FROM TaskClaims tc
-    JOIN TaskViews  tv ON tc.task_id=tv.task_id AND tv.user_id=uID AND tc.`claimed-time`<tv.`viewed-time`
+        ui.task_id,
+        SUM(IF(ui.number=0, 1, 0) + IF(ui.number=1, 1, 0) + IF(ui.number=2, 1, 0) + IF(ui.number=3, 1, 0)) AS number_count,
+        IF(t.`task-type_id`<=6 OR t.`task-type_id`=38 OR t.`task-type_id`=39, 4, 3) AS number_desired
+    FROM user_instructions ui
+    JOIN Tasks              t ON ui.task_id=t.id
     WHERE
-        tc.user_id=uID AND
-        (tc.task_id=t0 OR tc.task_id=t1 OR tc.task_id=t2 OR tc.task_id=t3 OR tc.task_id=t4 OR tc.task_id=t5)
-    GROUP BY tc.task_id
-    ORDER BY tc.task_id;
+        ui.category=1 AND
+        ui.user_id=uID AND
+        (ui.task_id=t0 OR ui.task_id=t1 OR ui.task_id=t2 OR ui.task_id=t3 OR ui.task_id=t4 OR ui.task_id=t5)
+    GROUP BY ui.task_id
+    HAVING number_count>=number_desired
+    ORDER BY ui.task_id;
 END//
 DELIMITER ;
 
