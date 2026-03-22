@@ -70,18 +70,6 @@ class TaskRouteHandler
             '\SolasMatch\UI\RouteHandlers\TaskRouteHandler:downloadTaskExternal')
             ->setName('download-task-external');
 
-        $app->map(['GET', 'POST'],
-            '/task/{task_id}/claim[/]',
-            '\SolasMatch\UI\RouteHandlers\TaskRouteHandler:taskClaim')
-            ->add('\SolasMatch\UI\Lib\Middleware:isBlackListed')
-            ->setName('task-claim-page');
-
-        $app->get(
-            '/task/{task_id}/claimed[/]',
-            '\SolasMatch\UI\RouteHandlers\TaskRouteHandler:taskClaimed')
-            ->add('\SolasMatch\UI\Lib\Middleware:authenticateUserForTask')
-            ->setName('task-claimed');
-
         $app->get(
             '/task/{task_id}/download-file/v/{version}[/]',
             '\SolasMatch\UI\RouteHandlers\TaskRouteHandler:downloadTaskVersion')
@@ -711,109 +699,6 @@ class TaskRouteHandler
         $calcmac = hash_hmac('sha256', $ciphertext_raw, $key, true);
         if (hash_equals($hmac, $calcmac)) return $original_plaintext;
         return 999999999;
-    }
-
-    /*
-     *  Claim and download a task
-     */
-    public function taskClaim(Request $request, Response $response, $args)
-    {
-        global $app, $template_data;
-        $taskId = $args['task_id'];
-
-        $taskDao = new DAO\TaskDao();
-        $userDao = new DAO\UserDao();
-        $languageDao = new DAO\LanguageDao();
-        $projectDao = new DAO\ProjectDao();
-        $adminDao = new DAO\AdminDao();
-
-        $sesskey = Common\Lib\UserSession::getCSRFKey();
-
-        $taskClaimed = $taskDao->isTaskClaimed($taskId);
-        if ($taskClaimed) { // Protect against someone inappropriately creating URL for this route
-            return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('task-view', array('task_id' => $taskId)));
-        }
-
-        $user_id = Common\Lib\UserSession::getCurrentUserID();
-        $task = $taskDao->getTask($taskId);
-        $project = $projectDao->getProject($task->getProjectId());
-        $roles = $adminDao->get_roles($user_id, $project->getOrganisationId());
-        if (!($roles&(SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER | LINGUIST | NGO_LINGUIST)) || $taskDao->isUserRestrictedFromTask($taskId, $user_id) || !$taskDao->user_within_limitations($user_id, $taskId)) {
-            UserRouteHandler::flash('error', "You are not authorized to view this page");
-            return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('home'));
-        }
-
-        $memsource_task = $projectDao->get_memsource_task($taskId);
-
-        if (Common\Enums\TaskTypeEnum::$enum_to_UI[$task->getTaskType()]['shell_task']) {
-            UserRouteHandler::flash('error', 'This type of task cannot be claimed');
-            return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('home'));
-        }
-//        if (!$task->getPublished() && !$adminDao->isSiteAdmin($user_id)) {
-//            UserRouteHandler::flash('error', 'This task is not published');
-//            return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('home'));
-//        }
-
-        if ($request->getMethod() === 'POST') {
-            $post = $request->getParsedBody();
-            if ($fail_CSRF = Common\Lib\UserSession::checkCSRFKey($post, 'taskClaim')) return $response->withStatus(302)->withHeader('Location', $fail_CSRF);
-
-            $user_id = Common\Lib\UserSession::getCurrentUserID();
-
-            $success = $userDao->claimTask($user_id, $taskId, $memsource_task, $task->getProjectId(), $task);
-            if ($success == 1) {
-                return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('task-claimed', array('task_id' => $taskId)));
-            } elseif ($success == -1) {
-                UserRouteHandler::flashNow('error', 'Unable to create user in Phrase TMS.');
-            } else {
-                UserRouteHandler::flashNow('error', 'This task can no longer be claimed, the job has been removed from Phrase TMS and will soon be removed from here.');
-            }
-        }
-
-        $sourcelocale = $task->getSourceLocale();
-        $targetLocale = $task->getTargetLocale();
-        $taskMetaData = $taskDao->getTaskInfo($taskId);
-
-        // Used in proofreading page, link to original project file
-        $projectFileDownload = $app->getRouteCollector()->getRouteParser()->urlFor("home")."project/".$task->getProjectId()."/file";
-
-
-        $template_data = array_merge($template_data, array(
-                    'sesskey' => $sesskey,
-                    "projectFileDownload" => $projectFileDownload,
-                    "task"          => $task,
-                    'matecat_url'   => '',
-                    'allow_download'=> $taskDao->get_allow_download($task, $memsource_task),
-                    'memsource_task'=> $memsource_task,
-                    "taskMetadata"  => $taskMetaData
-        ));
-
-        return UserRouteHandler::render("task/task.claim.tpl", $response);
-    }
-
-    public function taskClaimed(Request $request, Response $response, $args)
-    {
-        global $template_data;
-        $task_id = $args['task_id'];
-
-        $taskDao = new DAO\TaskDao();
-        $adminDao = new DAO\AdminDao();
-        $projectDao = new DAO\ProjectDao();
-
-        $task = $taskDao->getTask($task_id);
-
-        $memsource_task = $projectDao->get_memsource_task($task_id);
-
-        $template_data = array_merge($template_data, array(
-            'task' => $task,
-            'matecat_url' => $taskDao->get_matecat_url($task, $memsource_task),
-            'allow_download' => $taskDao->get_allow_download($task, $memsource_task),
-            'memsource_task' => $memsource_task,
-            'translations_not_all_complete' => $projectDao->are_translations_not_all_complete($task, $memsource_task),
-            'isSiteAdmin'    => $adminDao->get_roles(Common\Lib\UserSession::getCurrentUserID()) & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER),
-        ));
-
-        return UserRouteHandler::render("task/task.claimed.tpl", $response);
     }
 
     public function downloadTaskVersion(Request $request, Response $response, $args)
