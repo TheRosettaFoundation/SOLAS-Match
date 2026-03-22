@@ -689,18 +689,6 @@ class UserDao
         return $ret;
     }
     
-    public static function isBlacklistedForTaskByAdmin($userId, $taskId)
-    {
-        $ret = null;
-        $args = Lib\PDOWrapper::cleanseNull($userId).",".
-                Lib\PDOWrapper::cleanseNull($taskId);
-        $result = Lib\PDOWrapper::call("isUserBlacklistedForTaskByAdmin", $args);
-        if ($result) {
-            return $result[0]['result'];
-        }
-        return $ret;
-    }
-    
     public static function getByOAuthToken($token)
     {
         $ret = null;

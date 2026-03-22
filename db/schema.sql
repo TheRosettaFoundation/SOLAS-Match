@@ -5006,6 +5006,7 @@ BEGIN
 END//
 DELIMITER ;
 
+# Not currently used...
 DROP PROCEDURE IF EXISTS `isUserBlacklistedForTaskByAdmin`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `isUserBlacklistedForTaskByAdmin`(IN `userId` INT, IN `taskId` INT)

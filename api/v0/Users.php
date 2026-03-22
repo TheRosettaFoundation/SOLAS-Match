@@ -214,11 +214,6 @@ class Users
             '\SolasMatch\API\V0\Users:isBlacklistedForTask')
             ->add('\SolasMatch\API\Lib\Middleware:isloggedIn');
 
-        $app->get(
-            '/api/v0/users/isBlacklistedForTaskByAdmin/{userId}/{taskId}/',
-            '\SolasMatch\API\V0\Users:isBlacklistedForTaskByAdmin')
-            ->add('\SolasMatch\API\Lib\Middleware:isloggedIn');
-
         $app->put(
             '/api/v0/users/assignBadge/{email}/{badgeId}/',
             '\SolasMatch\API\V0\Users:assignBadge')
@@ -678,13 +673,6 @@ error_log("userClaimTask($userId, $taskId)");
         return API\Dispatcher::sendResponse($response, DAO\UserDao::isBlacklistedForTask($userId, $taskId), null);
     }
     
-    public static function isBlacklistedForTaskByAdmin(Request $request, Response $response, $args)
-    {
-        $userId = $args['userId'];
-        $taskId = $args['taskId'];
-        return API\Dispatcher::sendResponse($response, DAO\UserDao::isBlacklistedForTaskByAdmin($userId, $taskId), null);
-    }
-
     public static function assignBadge(Request $request, Response $response, $args)
     {
         $email = $args['email'];

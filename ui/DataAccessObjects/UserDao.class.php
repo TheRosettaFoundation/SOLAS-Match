@@ -1366,14 +1366,6 @@ error_log("claimTask_shell($userId, $taskId)");
         return $result[0]['result'];
     }
 
-    public function isBlacklistedForTaskByAdmin($userId, $taskId)
-    {
-        $ret = null;
-        $request = "{$this->siteApi}v0/users/isBlacklistedForTaskByAdmin/$userId/$taskId";
-        $ret = $this->client->call(null, $request);
-        return $ret;
-    }
-
     public function getUserURLs($user_id)
     {
         $result = LibAPI\PDOWrapper::call('getUserURLs', LibAPI\PDOWrapper::cleanse($user_id));

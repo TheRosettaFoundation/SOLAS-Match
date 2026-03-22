@@ -1433,7 +1433,6 @@ class TaskRouteHandler
                 'mt_used' => $projectDao->is_task_using_mt($task, $memsource_task),
         ));
 
-        //return UserRouteHandler::render("task/task.view.tpl", $response);(**)
         return UserRouteHandler::render('task/task_page.tpl', $response);
     }
 
