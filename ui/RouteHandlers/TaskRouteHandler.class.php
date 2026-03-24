@@ -1316,6 +1316,7 @@ class TaskRouteHandler
                 'steps' => $projectDao->find_all_workflow_steps($task),
                 'language_style' => $userDao->get_content_items(null, 3, null, null, 1, "[\"{$task->getTargetLocale()->getLanguageCode()}\"]", null, null, null, 0),
                 'mt_used' => $projectDao->is_task_using_mt($task, $memsource_task),
+                'review_done' => $task->getTaskStatus() == Common\Enums\TaskStatusEnum::COMPLETE && $details_claimant && $userDao->getUserTaskReviews($details_claimant->getId(), $task_id),
         ));
 
         return UserRouteHandler::render('task/task_page.tpl', $response);

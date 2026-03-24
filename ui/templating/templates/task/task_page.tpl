@@ -163,7 +163,7 @@
                       <i class="bi bi-check-circle me-2"></i> Work on the task
                     </div>
                     <div class="list-group-item list-group-item-action px-0 py-1 border-0 text-secondary blue_background">
-                      <i class="bi bi-circle me-2"></i> Provide feedback
+                      <i class="bi {if $review_done}bi-check-circle{else}bi-circle{/if} me-2"></i> Provide feedback
                     </div>
                   {/if}
                 </div>
