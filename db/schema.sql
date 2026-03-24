@@ -3936,6 +3936,16 @@ BEGIN
 END//
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `get_review_done`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_review_done`(IN tID BIGINT UNSIGNED, IN uID INT UNSIGNED)
+    READS SQL DATA
+BEGIN
+    SELECT * FROM TaskReviews WHERE revise_task_id=tID AND user_id=uID;
+END//
+DELIMITER ;
+
+
 DROP PROCEDURE IF EXISTS `getTaskTagIds`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getTaskTagIds`(IN `lim` INT, IN `offs` INT)

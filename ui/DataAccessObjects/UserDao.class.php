@@ -178,6 +178,13 @@ class UserDao extends BaseDao
         return Common\Lib\ModelFactory::buildModel('TaskReview', $result[0]);
     }
 
+    public function get_review_done($task_id, $user_id)
+    {
+        $result = LibAPI\PDOWrapper::call('get_review_done', LibAPI\PDOWrapper::cleanseNull($task_id) . ',' . LibAPI\PDOWrapper::cleanseNull($user_id));
+        if (empty($result)) return 0;
+        return $result[0];
+    }
+
     public function getUserTaskStreamNotification($userId)
     {
         $ret = null;
