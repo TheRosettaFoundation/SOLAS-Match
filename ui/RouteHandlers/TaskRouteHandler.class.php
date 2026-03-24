@@ -1725,6 +1725,7 @@ class TaskRouteHandler
                             $dummyTask->setTitle($project_task['title']);
                             $dummyTask->set_cancelled($project_task['beginIndex']);
                             $dummyTask->setTaskStatus($project_task['endIndex']);
+                            $dummyTask->setTaskType($project_task['task-type_id']);
                             $preReqTasks[] = $dummyTask;
                             error_log('preReqTasks for memsource PROOFREADING Task... ' . print_r($preReqTasks, true));
                         }
