@@ -297,7 +297,7 @@
                       {else}
                         {foreach $language_style as $style}
                           {if !empty($style['external_link'])}
-                            <div><a href="{$style['external_link']}" target="_blank">$style['title']</a></div>
+                            <div><a href="{$style['external_link']}" style="text-decoration: none;" target="_blank"><span class="h4 project_colour">{$style['title']}</span></a></div>
                           {elseif !empty($style['body'])}
                             <div>{$style['body']}</div>
                           {/if}
