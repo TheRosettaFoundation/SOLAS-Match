@@ -296,7 +296,11 @@
                         No specific style guides
                       {else}
                         {foreach $language_style as $style}
-                          <div>{$style['body']}</div>
+                          {if !empty($style['external_link'])}
+                            <div><a href="{$style['external_link']}" target="_blank">$style['title']</a></div>
+                          {elseif !empty($style['body'])}
+                            <div>{$style['body']}</div>
+                          {/if}
                         {/foreach}
                       {/if}
                     </div>
