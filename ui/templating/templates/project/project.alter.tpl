@@ -54,6 +54,9 @@
                     <label for="title" style="font-size: large"><strong>{Localisation::getTranslation('common_title')}</strong><span style="color: red">*</span></label>
                     <textarea wrap="soft" cols="1" rows="4" style="width: 400px; margin-bottom: 40px" name="project_title" id="project_title" {if empty($memsource_project)}onblur="checkTitleNotUsed();"{/if}>{$project->getTitle()|escape:'html':'UTF-8'}</textarea>
 
+                    <label for="impact" style="font-size: large"><strong>Project Summary/Description</strong><span style="color: red">*</span></label>
+                    <textarea wrap="soft" cols="1" rows="4" style="width: 400px; margin-bottom: 40px" name="project_impact" id="project_impact">{$project->getImpact()|escape:'html':'UTF-8'}</textarea>
+
                     <label for="description" style="font-size: large"><strong>Project-specific Instructions</strong><span style="color: red">*</span></label>
                     <textarea wrap="soft" cols="1" rows="6" style="display:none ;" name="project_description" id="project_description">{$project->getDescription()|escape:'html':'UTF-8'}</textarea>
 
@@ -86,9 +89,6 @@
                     <div id="editor" style="width: 400px; margin-bottom: 40px">
                     </div>
                     <br />
-
-                    <label for="impact" style="font-size: large"><strong>Project Summary/Description</strong><span style="color: red">*</span></label>
-                    <textarea wrap="soft" cols="1" rows="4" style="width: 400px; margin-bottom: 40px" name="project_impact" id="project_impact">{$project->getImpact()|escape:'html':'UTF-8'}</textarea>
 
                     <label for="wordCountInput" style="font-size: large"><strong>{Localisation::getTranslation('common_word_count')}</strong><span style="color: red">*</span></label>
                     <input type="text" maxlength="6" value="{$project->getWordCount()}" style="width: 400px;  margin-bottom: 20px" name="wordCountInput" id="wordCountInput" {if !($roles & ($SITE_ADMIN + $PROJECT_OFFICER))}disabled{/if} />
