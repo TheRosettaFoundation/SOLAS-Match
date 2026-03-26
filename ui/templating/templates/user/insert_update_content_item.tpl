@@ -154,6 +154,7 @@
                     <option value="14" {if $selected_type == 14}selected="selected"{/if}>Report</option>
                     <option value="21" {if $selected_type == 21}selected="selected"{/if}>Resource</option>
                     <option value="31" {if $selected_type == 31}selected="selected"{/if}>Language Resource</option>
+                    <option value="41" {if $selected_type == 41}selected="selected"{/if}>Style Guide</option>
                     {else}
 <!--                    <option value="0">External content</option> -->
                     <option value="50" {if $selected_type == 50}selected="selected"{/if}>Organization</option>

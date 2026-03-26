@@ -89,6 +89,7 @@
             {if $item['type'] == 14}Report{/if}
             {if $item['type'] == 21}Resource{/if}
             {if $item['type'] == 31}Language Resource{/if}
+            {if $item['type'] == 41}Style Guide{/if}
             {if $item['type'] == 50}Organization{/if}
             {if $item['type'] == 60}Project{/if}
             </td>

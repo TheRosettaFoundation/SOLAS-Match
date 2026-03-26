@@ -10,7 +10,7 @@
 
 <div class="container py-4" style="max-width: 800px;">
     <a href="{$siteLocation}content_list/{intdiv($new['type'], 10)}/" class="text-decoration-none fw-medium transition-colors mb-3 d-inline-flex align-items-center twb-core-blue">
-        &larr; Back to {if intdiv($new['type'], 10) == 2}Resources{elseif intdiv($new['type'], 10) == 3}Language Resources{else}News{/if} Archive
+        &larr; Back to {if intdiv($new['type'], 10) == 2}Resources{elseif intdiv($new['type'], 10) == 3}Language Resources{elseif intdiv($new['type'], 10) == 4}Style Guides{else}News{/if} Archive
     </a>
 
     <div class="bg-light-mariam p-4 p-sm-5 rounded-3 shadow-lg mt-4">
@@ -48,6 +48,11 @@
                 {assign var="col" value="143878"}
                 {assign var="txt" value="LANGUAGE RESOURCE"}
                 {assign var="alt" value="Language Resource"}
+            {/if}
+            {if $new['type'] == 41}
+                {assign var="col" value="143878"}
+                {assign var="txt" value="STYLE GUIDE"}
+                {assign var="alt" value="Style Guide"}
             {/if}
             <span class="badge rounded-pill text-white twb-bg-core-blue fw-semibold p-2 px-3">
                 {$alt}
