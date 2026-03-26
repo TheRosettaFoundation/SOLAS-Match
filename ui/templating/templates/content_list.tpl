@@ -71,6 +71,12 @@
                             {assign var="alt" value="Language Resource"}
                             {assign var="img" value="ResourceTWB.png"}
                         {/if}
+                        {if $new['type'] == 41}
+                            {assign var="col" value="143878"}
+                            {assign var="txt" value="STYLE GUIDE"}
+                            {assign var="alt" value="Style Guide"}
+                            {assign var="img" value="ResourceTWB.png"}
+                        {/if}
 
                         {if !empty($images[$new['id']])}
                         <img src="data:image/jpeg;base64,{$images[$new['id']]}" alt="{$alt}" class="card-img-top" />
@@ -98,6 +104,9 @@
                         {/if}
                         {if $new['type'] == 31}
                         <span class="badge rounded-pill text-white twb-bg-core-blue fw-semibold p-1 px-2">Language Resource</span>
+                        {/if}
+                        {if $new['type'] == 41}
+                        <span class="badge rounded-pill text-white twb-bg-core-blue fw-semibold p-1 px-2">Style Guide</span>
                         {/if}
                         <span class="text-sm text-muted">Updated: {substr($new['update_date'], 0, 10)}</span>
                     </div>
