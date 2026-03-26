@@ -218,16 +218,16 @@
         <div class="table-responsive mt-4  ">   
         <table class="table table-borderless ">
             <thead class="fs-5">
-            <th>Project-specific Instructions</th>
+            <th>Description</th>
             <th></th>   
             </thead>
             <tbody class="fs-4 ">
                 <tr >
                     <td>
-                        {if $project->getDescription() != ''}
-                            <div class="ql-editor">{TemplateHelper::clean_project_description($project->getDescription())}</div>
+                        {if $project->getImpact() != ''}
+                            {TemplateHelper::uiCleanseHTMLNewlineAndTabs($project->getImpact())}
                         {else}
-                            {Localisation::getTranslation('common_no_description_has_been_listed')}
+                            No Description has been listed.
                         {/if}  
                     </td>
                     <td></td>
@@ -239,18 +239,16 @@
                 
                  <tr>
                     <td colspan="2">
-                        <strong>Description</strong>
+                        <strong>Project-specific Instructions</strong>
                     </td>
                 </tr>
                 <tr>                
                     <td  colspan="2">
-                        <i>
-	                        {if $project->getImpact() != ''}
-                              {TemplateHelper::uiCleanseHTMLNewlineAndTabs($project->getImpact())}
-	                        {else}
-	                            {Localisation::getTranslation('No impact has been listed')}
-	                        {/if}  
-                        </i> 
+                        {if $project->getDescription() != ''}
+                            <div class="ql-editor">{TemplateHelper::clean_project_description($project->getDescription())}</div>
+                        {else}
+                            No Project-specific Instructions have been listed.
+                        {/if}
                     </td>                
                 </tr>
                 <tr>
