@@ -1314,7 +1314,7 @@ class TaskRouteHandler
                 'user_within_limitations' => $taskDao->user_within_limitations($user_id, $task_id),
                 'current_user_id' => $user_id,
                 'steps' => $projectDao->find_all_workflow_steps($task),
-                'language_style' => $userDao->get_content_items(null, 3, null, null, 1, "[\"{$task->getTargetLocale()->getLanguageCode()}\"]", null, null, null, 0),
+                'language_style' => array_merge($userDao->get_content_items(null, 3, null, null, 1, "[\"{$task->getTargetLocale()->getLanguageCode()}\"]", null, null, null, 0), $userDao->get_content_items(null, 3, null, null, 1, null, null, null, null, 0)),
                 'mt_used' => $projectDao->is_task_using_mt($task, $memsource_task),
                 'review_done' => $task->getTaskStatus() == Common\Enums\TaskStatusEnum::COMPLETE && $details_claimant && $userDao->get_review_done($task_id, $details_claimant->getId()),
         ));
