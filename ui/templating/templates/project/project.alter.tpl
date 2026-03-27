@@ -297,6 +297,10 @@ impact_quill.on('text-change', function(delta, oldDelta, source) {
 } )
 
 function impact_updateFormattedText() {
+console.log(impact_quill);
+console.log(impact_quill.root);
+console.log("-------------------");
+console.log(impact_quill.root.innerHTML);
     let htmlContent = impact_quill.root.innerHTML;
     // remove the color code black and background
     htmlContent = htmlContent.replace(/style="color: black;"/g ,'');
