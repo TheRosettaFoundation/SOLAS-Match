@@ -54,17 +54,17 @@
                     <p style="margin-bottom:40px;"></p>
                 </div>
                 <div class="projFormInput">
-                    <h2>{Localisation::getTranslation('common_description')}: <span style="color: red">*</span></h2>
-                    <p class="desc">{Localisation::getTranslation('project_create_2')}</p>
-                    <textarea wrap="soft" cols="1" rows="8" style="width: 400px" name="project_description" id="project_description"></textarea>
-                    <p style="margin-bottom:37.5px;"></p>
-                </div>
-                <div class="projFormInput">
-                    <h2>{Localisation::getTranslation('common_impact')}: <span style="color: red">*</span></h2>
+                    <h2>Project Summary/Description: <span style="color: red">*</span></h2>
                     <p class="desc">
                         {Localisation::getTranslation('project_create_3')}<br/> {Localisation::getTranslation('project_create_4')}
                     </p>
                     <textarea wrap="soft" cols="1" rows="3" style="width: 400px" name="project_impact" id="project_impact"></textarea>
+                    <p style="margin-bottom:37.5px;"></p>
+                </div>
+                <div class="projFormInput">
+                    <h2>Project-specific Instructions: <span style="color: red">*</span></h2>
+                    <p class="desc">Any specific instructions to the translators.</p>
+                    <textarea wrap="soft" cols="1" rows="8" style="width: 400px" name="project_description" id="project_description"></textarea>
                     <p style="margin-bottom:37.5px;"></p>
                 </div>
                 <div class="projFormInput">
