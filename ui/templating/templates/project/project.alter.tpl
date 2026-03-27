@@ -55,7 +55,36 @@
                     <textarea wrap="soft" cols="1" rows="4" style="width: 400px; margin-bottom: 40px" name="project_title" id="project_title" {if empty($memsource_project)}onblur="checkTitleNotUsed();"{/if}>{$project->getTitle()|escape:'html':'UTF-8'}</textarea>
 
                     <label for="impact" style="font-size: large"><strong>Project Summary/Description</strong><span style="color: red">*</span></label>
-                    <textarea wrap="soft" cols="1" rows="4" style="width: 400px; margin-bottom: 40px" name="project_impact" id="project_impact">{$project->getImpact()|escape:'html':'UTF-8'}</textarea>
+                    <textarea wrap="soft" cols="1" rows="4" style="display:none ;" name="project_impact" id="project_impact">{$project->getImpact()|escape:'html':'UTF-8'}</textarea>
+
+                    <div id="impact_toolbar_container" style="width: 400px">
+                        <!-- Add the color picker to the toolbar -->
+                        <span class="ql-formats">
+                            <button class="ql-bold"></button>
+                            <button class="ql-italic"></button>
+                            <button class="ql-underline"></button>
+                        </span>
+                        <span class="ql-formats">
+                            <select class="ql-color">
+                                <option value="black"></option>
+                                <option value="red"></option>
+                            </select>
+                        </span>
+                        <span class="ql-formats">
+                            <button class="ql-list" value="ordered"></button>
+                            <button class="ql-list" value="bullet"></button>
+                            <button class="ql-indent" value="-1"></button>
+                            <button class="ql-indent" value="+1"></button>
+                        </span>
+                        <span class="ql-formats">
+                            <select class="ql-align"></select>
+                        </span>
+                        <span class="ql-formats">
+                            <button class="ql-link"></button>
+                        </span>
+                    </div>
+                    <div id="impact_editor" style="width: 400px; margin-bottom: 40px">
+                    </div>
 
                     <label for="description" style="font-size: large"><strong>Project-specific Instructions</strong><span style="color: red">*</span></label>
                     <textarea wrap="soft" cols="1" rows="6" style="display:none ;" name="project_description" id="project_description">{$project->getDescription()|escape:'html':'UTF-8'}</textarea>
@@ -241,6 +270,39 @@ function updateFormattedText() {
     htmlContent = htmlContent.replace(/style="background-color: transparent; color: rgb(0, 0, 0);"/g ,'');
     let delta = quill.getContents();
     textarea.value = htmlContent;
+}
+
+const impact_quill = new Quill('#impact_editor', {
+    theme: 'snow',
+    modules: {
+        toolbar: {
+            container: '#impact_toolbar_container'
+        }
+    }
+});
+
+let impact_textarea = document.getElementById("project_impact");
+let impact_htmlText = impact_textarea.value;
+let impact_cleanText = impact_htmlText.replace(/\\r\\n|\\n|\\r/g, '<br/>');
+impact_cleanText = impact_cleanText.replace(/\\t/g, '&nbsp;&nbsp;&nbsp;&nbsp;');
+impact_textarea.value = impact_cleanText;
+var delta = impact_quill.clipboard.convert(impact_cleanText);
+
+impact_quill.root.innerHTML = impact_cleanText;
+
+impact_quill.on('text-change', function(delta, oldDelta, source) {
+   if (source =='user') {
+       impact_updateFormattedText();
+   }
+} )
+
+function impact_updateFormattedText() {
+    let htmlContent = impact_quill.root.innerHTML;
+    // remove the color code black and background
+    htmlContent = htmlContent.replace(/style="color: black;"/g ,'');
+    htmlContent = htmlContent.replace(/style="background-color: transparent; color: rgb(0, 0, 0);"/g ,'');
+    let delta = impact_quill.getContents();
+    impact_textarea.value = htmlContent;
 }
 </script>
     
