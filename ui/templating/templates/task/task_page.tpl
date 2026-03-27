@@ -229,7 +229,7 @@
           <div class="card-body p-4">
             <div class="section-title">Description</div>
             <p class="mb-0">
-              {TemplateHelper::uiCleanseHTMLNewlineAndTabs($project->getImpact())}
+              <div class="ql-editor">{TemplateHelper::clean_project_description($project->getImpact())}</div>
             </p>
           </div>
         </div>
