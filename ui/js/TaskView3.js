@@ -182,6 +182,9 @@ function documentReady()
     }
   );
 
+  const is_claimer_test = document.getElementById("is_claimer");
+  if (!is_claimer_test) return;
+
   document.getElementById("claim_button")?.addEventListener("click", claim_button_clicked);
 
   // Adjust DOM
@@ -460,7 +463,6 @@ function removeRevisionHighlight() {
     }
 
     async function set_user_instruction(number) {
-console.log("set_user_instruction(number): " + number);//(**)
         try {
             const task_id = document.getElementById("task_id").innerHTML;
             const response = await fetch(`/task/${task_id}/view`, {
