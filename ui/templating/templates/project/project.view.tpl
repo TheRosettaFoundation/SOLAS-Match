@@ -225,7 +225,7 @@
                 <tr >
                     <td>
                         {if $project->getImpact() != ''}
-                            {TemplateHelper::clean_project_description($project->getImpact())}
+                            <div class="ql-editor">{TemplateHelper::clean_project_description($project->getImpact())}</div>
                         {else}
                             No Description has been listed.
                         {/if}  
