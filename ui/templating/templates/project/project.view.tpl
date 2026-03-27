@@ -225,7 +225,7 @@
                 <tr >
                     <td>
                         {if $project->getImpact() != ''}
-                            {TemplateHelper::uiCleanseHTMLNewlineAndTabs($project->getImpact())}
+                            {TemplateHelper::clean_project_description($project->getImpact())}
                         {else}
                             No Description has been listed.
                         {/if}  
