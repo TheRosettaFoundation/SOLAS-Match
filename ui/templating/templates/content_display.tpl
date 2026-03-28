@@ -71,7 +71,7 @@
         </div>
 
         <div class="article-content text-secondary-emphasis">
-            {$new['body']}
+            <div class="ql-editor">{TemplateHelper::clean_project_description($new['body'])}</div>
         </div>
     </div>
 </div>
