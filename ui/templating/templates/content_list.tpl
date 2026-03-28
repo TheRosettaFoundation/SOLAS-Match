@@ -114,7 +114,7 @@
                         {$new['title']}
                     </a>
                     <p class="text-sm text-muted mt-2 line-clamp-3">
-                        {if !empty($new['snippet'])}{$new['snippet']}{/if}
+                        {if !empty($new['snippet'])}<div class="ql-editor">{TemplateHelper::clean_project_description($new['snippet'])}</div>{/if}
                     </p>
                 </div>
                 <div class="card-footer bg-light-mariam border-0 p-4 pt-0">
