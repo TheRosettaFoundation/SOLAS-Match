@@ -299,7 +299,7 @@
                           {if !empty($style['external_link'])}
                             <div><a href="{$style['external_link']}"target="_blank">{$style['title']}</a></div>
                           {elseif !empty($style['body'])}
-                            <div>{$style['body']}</div>
+                            <div class="ql-editor">{TemplateHelper::clean_project_description($style['body'])}</div>
                           {/if}
                         {/foreach}
                       {/if}
