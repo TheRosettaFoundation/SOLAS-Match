@@ -102,13 +102,11 @@
             </tr>
             <tr valign="top">                
                 <td>
-                    <i>
                     {if $project->getImpact() != ''}
-                        {TemplateHelper::uiCleanseHTMLNewlineAndTabs($project->getImpact())}
+                        <div class="ql-editor">{TemplateHelper::clean_project_description($project->getImpact())}</div>
                     {else}
                         {Localisation::getTranslation('No impact has been listed')}
                     {/if}  
-                    </i> 
                 </td>    
                 <td></td>
                 <td>
