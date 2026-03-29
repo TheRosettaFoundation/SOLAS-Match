@@ -1258,7 +1258,7 @@ class TaskRouteHandler
             $template_data = array_merge($template_data, ['show_actions' => 1]);
         }
 
-        $extra_scripts = file_get_contents(__DIR__."/../js/TaskView3.js");
+        $extra_scripts = file_get_contents(__DIR__."/../js/TaskView4.js");
 
         $list_qualified_translators = [];
 
@@ -1416,7 +1416,7 @@ class TaskRouteHandler
             }
         }
 
-        $extra_scripts  = file_get_contents(__DIR__."/../js/TaskView3.js");
+        $extra_scripts  = file_get_contents(__DIR__."/../js/TaskView4.js");
         $extra_scripts .= "
     <link rel=\"stylesheet\" href=\"https://cdn.datatables.net/1.13.1/css/jquery.dataTables.min.css\"/>
     <script type=\"text/javascript\" src=\"https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js\"></script>
