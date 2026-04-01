@@ -245,6 +245,10 @@
                         </div>
                         {/if}
 
+                        <div class="card bg-light-mariam custom-card p-4 card-border-top-blue">
+<iframe onload="javascript:parent.scrollTo(0,0);" height="449" allowTransparency="true" scrolling="no" frameborder="0" sandbox="allow-forms allow-modals allow-orientation-lock allow-pointer-lock allow-popups allow-popups-to-escape-sandbox allow-presentation allow-same-origin allow-scripts allow-top-navigation allow-top-navigation-by-user-activation" style="width:100%;border:none" src="https://forms.translatorswb.org/embed.php?id=58294" title="Quick Survey"><a href="https://forms.translatorswb.org/view.php?id=58294" title="Quick Survey">Quick Survey</a></iframe>
+                        </div>
+
                         <div class="card bg-light-mariam custom-card p-4 card-border-top-accent">
                             <div class="d-flex align-items-center mb-3 border-bottom pb-3">
                                 <div class="p-2 rounded-circle me-3" style="background-color: var(--core-blue); opacity: 0.1;">
