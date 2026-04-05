@@ -40,6 +40,12 @@ class OrgRouteHandler
             ->add('\SolasMatch\UI\Lib\Middleware:authUserForOrg_incl_community_officer')
             ->setName('home_ngo');
 
+        $app->get(
+            '/org/{org_id}/metabase[/]',
+            '\SolasMatch\UI\RouteHandlers\OrgRouteHandler:metabase')
+            ->add('\SolasMatch\UI\Lib\Middleware:authUserForOrg_incl_community_officer')
+            ->setName('metabase_ngo');
+
         $app->map(['GET', 'POST'],
             '/org/{org_id}/private[/]',
             '\SolasMatch\UI\RouteHandlers\OrgRouteHandler:orgPrivateProfile')
@@ -619,6 +625,12 @@ class OrgRouteHandler
         ]);
 
         return UserRouteHandler::render('home_ngo.tpl', $response);
+    }
+
+    public function metabase(Request $request, Response $response, $args)
+    {
+        require_once '/repo/metabase_reports/metabase_ngo.php';
+        die;
     }
 
     public function orgPrivateProfile(Request $request, Response $response, $args)
