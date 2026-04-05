@@ -3528,6 +3528,57 @@ BEGIN
 END//
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `get_org_current_projects`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_org_current_projects`(IN oID INT UNSIGNED)
+BEGIN
+    SELECT
+        p.*,
+        SUM(IFNULL(IF(t.`task-status_id`!=4 AND t.`deadline`<NOW(), 1, 0), 0)) AS number_overdue,
+        IFNULL(SUM(IF(t.`task-status_id`=4 AND t.`word-count`>1, t.`word-count`, 0))/SUM(t.`word-count`), 0) AS fraction,
+        GROUP_CONCAT(DISTINCT CONCAT(l.code, '-', c.code) ORDER BY CONCAT(l.code, '-', c.code)) AS codes
+    FROM      Projects                 p
+    JOIN      project_complete_dates pcd ON p.id=pcd.project_id
+    LEFT JOIN Tasks                    t ON p.id=t.project_id
+    LEFT JOIN Languages                l ON t.`language_id-target`=l.id
+    LEFT JOIN Countries                c ON t.`country_id-target`=c.id
+    WHERE
+        p.organisation_id=oID AND
+        pcd.status!=1 AND
+        (t.cancelled=0 OR t.cancelled IS NULL)
+    GROUP BY p.id
+    ORDER BY p.created DESC;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `get_org_completed_files`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_org_completed_files`(IN oID INT UNSIGNED, IN months INT)
+BEGIN
+    SELECT
+        p.id,
+        p.title AS p_title,
+        IF(LOCATE(' ', MIN(t.title)), SUBSTRING(MIN(t.title), LOCATE(' ', MIN(t.title)) + 1), MIN(t.title)) AS t_filename,
+        MIN(t.title) AS t_title,
+        MAX(t.`word-count`) AS t_wordcount,
+        MAX(t.`task-type_id`) AS t_type,
+        CONCAT(MAX(l.code), '-', MAX(c.code)) AS codes,
+        MIN(t.`task-status_id`) AS t_status
+    FROM Projects                 p
+    JOIN project_complete_dates pcd ON p.id=pcd.project_id
+    JOIN Tasks                    t ON p.id=t.project_id
+    JOIN MemsourceTasks          mt ON t.id=mt.task_id
+    JOIN Languages                l ON t.`language_id-target`=l.id
+    JOIN Countries                c ON t.`country_id-target`=c.id
+    WHERE
+        p.organisation_id=oID AND
+        t.cancelled=0 AND
+        (pcd.complete_date > DATE_SUB(NOW(), INTERVAL months MONTH) OR pcd.complete_date='1000-01-01 00:00:00')
+    GROUP BY p.id, IF(internalId=0, t.id, 0) + SUBSTRING_INDEX(mt.internalId, '.', 1)
+    ORDER BY p.created DESC, IF(MAX(internalId)=0, 1, 0), t_filename, codes;
+END//
+DELIMITER ;
+
 DROP PROCEDURE IF EXISTS `get_project_id_for_latest_org_image`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `get_project_id_for_latest_org_image`(IN `orgId` INT)
