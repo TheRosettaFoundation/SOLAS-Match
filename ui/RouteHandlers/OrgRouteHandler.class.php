@@ -585,6 +585,42 @@ class OrgRouteHandler
         return UserRouteHandler::render('org/org.dashboard.tpl', $response);
     }
 
+    public function home_ngo(Request $request, Response $response)
+    {
+        global $app, $template_data;
+        $org_id = $args['org_id'];
+
+        $user_id = Common\Lib\UserSession::getCurrentUserID();
+
+        $userDao = new DAO\UserDao();
+        $projectDao = new DAO\ProjectDao();
+        $adminDao = new DAO\AdminDao();
+
+        $current_projects = $projectDao->get_org_current_projects($org_id);
+        $completed_files = $projectDao->get_org_completed_files($org_id, 3);
+
+        $extra_scripts  = "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/Parameters.js\"></script>";
+        $extra_scripts .= "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/Home4.js\" async></script>";
+        $extra_styles = "<link rel=\"stylesheet\" href=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}resources/css/home_styles2.css\" />";
+
+        $roles = $adminDao->get_roles($user_id, $org_id);
+
+        $template_data = array_merge($template_data, [
+            'org_id' => $org_id,
+            'user_id'       => $user_id,
+            'roles' => $roles,
+            'siteLocation'  => Common\Lib\Settings::get('site.location'),
+            'extra_scripts' => $extra_scripts,
+            'extra_styles'  => $extra_styles,
+            'org_names' => $org_names,
+            'news' => $userDao->get_content_items(null, 1, null, 1, 1, null, null, null, 0, 0),
+            'resources' => $userDao->get_content_items(null, 7, null, 1, 1, null, null, null, 0, 0),
+            'sesskey' => Common\Lib\UserSession::getCSRFKey(),
+        ]);
+
+        return UserRouteHandler::render('home_ngo.tpl', $response);
+    }
+
     public function orgPrivateProfile(Request $request, Response $response, $args)
     {
         global $app, $template_data;
