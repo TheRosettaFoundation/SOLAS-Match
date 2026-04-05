@@ -34,6 +34,12 @@ class OrgRouteHandler
             ->add('\SolasMatch\UI\Lib\Middleware:authUserIsLoggedIn')
             ->setName('org-projects');
 
+        $app->get(
+            '/org/{org_id}/home_ngo[/]',
+            '\SolasMatch\UI\RouteHandlers\OrgRouteHandler:home_ngo')
+            ->add('\SolasMatch\UI\Lib\Middleware:authUserForOrg_incl_community_officer')
+            ->setName('home_ngo');
+
         $app->map(['GET', 'POST'],
             '/org/{org_id}/private[/]',
             '\SolasMatch\UI\RouteHandlers\OrgRouteHandler:orgPrivateProfile')
