@@ -448,6 +448,20 @@ $replace = array(
         return $result;
     }
 
+    public function get_org_current_projects($org_id)
+    {
+        $result = LibAPI\PDOWrapper::call('get_org_current_projects', LibAPI\PDOWrapper::cleanse($org_id));
+        if (empty($result)) return [];
+        return $result;
+    }
+
+    public function get_org_completed_files($org_id, $months)
+    {
+        $result = LibAPI\PDOWrapper::call('get_org_completed_files', LibAPI\PDOWrapper::cleanse($org_id) . ',' . LibAPI\PDOWrapper::cleanse($months));
+        if (empty($result)) return [];
+        return $result;
+    }
+
     public function get_project_id_for_latest_org_image($org_id)
     {
         $result = LibAPI\PDOWrapper::call('get_project_id_for_latest_org_image', LibAPI\PDOWrapper::cleanse($org_id));
