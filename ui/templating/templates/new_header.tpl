@@ -101,7 +101,7 @@
         <ul class="navbar-nav   d-flex align-items-center ">
                 {if !isset($admin)}
                     <li class="nav-item ms-md-6 fw-bold">
-                    <a href="{urlFor name="home"}" class="fs-5 nav-link fw-bold" {if isset($current_page) && $current_page == 'home'} {/if}>{Localisation::getTranslation('header_home')}</a>
+                    <a href="{urlFor name="home"}" class="fs-5 nav-link fw-bold">{Localisation::getTranslation('header_home')}</a>
                     </li>
                 {/if}
 
@@ -120,7 +120,7 @@
 
                 {if isset($show_admin_dashboard)}
                 {assign var="user_id" value=$user->getId()}
-                    <li class="nav-item fw-bold" {if isset($current_page) && $current_page == 'site-admin-dashboard'}" {/if}>
+                    <li class="nav-item fw-bold">
                         <a href="{urlFor name="site-admin-dashboard" options="user_id.$user_id"}"  class="fs-5 nav-link fw-bold">{Localisation::getTranslation('header_admin')}  </a>
                     </li>
                 {/if}
@@ -159,7 +159,7 @@
                     </a>
                     </li>
                   
-                    <li {if isset($current_page) && $current_page == 'faq'}" {/if} class="p-2 " > <a  href="https://communitylibrary.translatorswb.org/login" target="_blank" class="dropdown-item py-2 fw-bold">
+                    <li class="p-2"> <a href="https://communitylibrary.translatorswb.org/login" target="_blank" class="dropdown-item py-2 fw-bold">
                         <div>
                             <div><span class="mx-2">💬</span> Community Library</div>
                             <div class="mt-2 fs-5 fw-lighter mx-2">Instructions, guidelines and reference material</div>
