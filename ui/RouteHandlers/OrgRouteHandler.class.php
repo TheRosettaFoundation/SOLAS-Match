@@ -605,6 +605,7 @@ class OrgRouteHandler
         $template_data = array_merge($template_data, [
             'org_id' => $org_id,
             'roles'  => $adminDao->get_roles($user_id, $org_id),
+            'orgs'   => $adminDao->get_orgs_if_ngo($user_id),
             'extra_scripts' => "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/home_ngo.js\" async></script>",
             'extra_styles'  => "<link rel=\"stylesheet\" href=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}resources/css/home_styles2.css\" />",
             'current_projects' => $projectDao->get_org_current_projects($org_id),
