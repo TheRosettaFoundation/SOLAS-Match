@@ -13227,6 +13227,32 @@ BEGIN
 END//
 DELIMITER ;
 
+CREATE TABLE IF NOT EXISTS `user_org_defaults` (
+  user_id      INT UNSIGNED NOT NULL,
+  org_id       INT UNSIGNED NOT NULL,
+  PRIMARY KEY (user_id),
+  CONSTRAINT FK_user_org_defaults_user_id FOREIGN KEY (user_id) REFERENCES Users (id) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT FK_user_org_defaults_org_id  FOREIGN KEY (org_id)  REFERENCES Organisations (id) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+DROP PROCEDURE IF EXISTS `get_orgs_if_ngo`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_orgs_if_ngo`(IN uID INT UNSIGNED)
+BEGIN
+    SELECT
+        a.organisation_id,
+        o.name
+    FROM      Admins              a
+    JOIN      Organisations       o ON a.organisation_id=o.id
+    LEFT JOIN user_org_defaults uod ON a.user_id=uod.user_id
+    WHERE
+        a.user_id=uID AND
+        (roles&12)>0
+    ORDER BY
+        IF(a.organisation_id=uod.org_id, 1, 0) DESC, o.name;
+END//
+DELIMITER ;
+
 DROP PROCEDURE IF EXISTS `isSiteAdmin_any_or_org_admin_any_or_linguist_for_any_org`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `isSiteAdmin_any_or_org_admin_any_or_linguist_for_any_org`(IN uID INT UNSIGNED)
