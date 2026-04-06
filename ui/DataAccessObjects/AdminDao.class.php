@@ -128,6 +128,13 @@ class AdminDao extends BaseDao
         return $result[0]['roles'];
     }
 
+    public function get_orgs_if_ngo($user_id)
+    {
+        $result = LibAPI\PDOWrapper::call('get_orgs_if_ngo', LibAPI\PDOWrapper::cleanse($user_id));
+        if (empty($result)) return [];
+        return $result;
+    }
+
     public function isSiteAdmin_any_or_org_admin_any_or_linguist_for_any_org($user_id)
     {
         $result = LibAPI\PDOWrapper::call('isSiteAdmin_any_or_org_admin_any_or_linguist_for_any_org', LibAPI\PDOWrapper::cleanse($user_id));
