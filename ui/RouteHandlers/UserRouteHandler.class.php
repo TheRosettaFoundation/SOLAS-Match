@@ -1014,6 +1014,8 @@ class UserRouteHandler
                             // Next line should not happen in this path?
                             if ($terms_accepted == 1) return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('googleregister', array('user_id' => $user->getId())));
                             if ($terms_accepted  < 3) $userDao->update_terms_accepted($user->getId(), 3);
+                            $orgs = $adminDao->get_orgs_if_ngo($user->getId());
+                            if (!empty($orgs)) return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('home_ngo', ['org_id' => $orgs[0]['organisation_id']]));
                             return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('org-dashboard'));
                         } else {
                             $nativeLocale = $user->getNativeLocale();
@@ -1117,6 +1119,8 @@ class UserRouteHandler
                     if ($adminDao->isSiteAdmin_any_or_org_admin_any_for_any_org($user->getId())) {
                         if ($terms_accepted == 1) return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('googleregister', array('user_id' => $user->getId())));
                         if ($terms_accepted  < 3) $userDao->update_terms_accepted($user->getId(), 3);
+                        $orgs = $adminDao->get_orgs_if_ngo($user->getId());
+                        if (!empty($orgs)) return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('home_ngo', ['org_id' => $orgs[0]['organisation_id']]));
                         return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('org-dashboard'));
                     } else {
                         $nativeLocale = $user->getNativeLocale();
@@ -1194,6 +1198,8 @@ class UserRouteHandler
 
             if ($adminDao->isSiteAdmin_any_or_org_admin_any_for_any_org($user_id)) {
                 $userDao->update_terms_accepted($user_id, 3);
+                $orgs = $adminDao->get_orgs_if_ngo($user_id);
+                if (!empty($orgs)) return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('home_ngo', ['org_id' => $orgs[0]['organisation_id']]));
                 return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('org-dashboard'));
             }
             return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('user-private-profile', array('user_id' => $user_id)));
