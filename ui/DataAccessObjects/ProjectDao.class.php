@@ -462,6 +462,12 @@ $replace = array(
         return $result;
     }
 
+    public function set_org_default_for_user($user_id, $org_id)
+    {
+        LibAPI\PDOWrapper::call('set_org_default_for_user', LibAPI\PDOWrapper::cleanse($user_id) . ',' . LibAPI\PDOWrapper::cleanse($org_id));
+    }
+
+
     public function get_project_id_for_latest_org_image($org_id)
     {
         $result = LibAPI\PDOWrapper::call('get_project_id_for_latest_org_image', LibAPI\PDOWrapper::cleanse($org_id));
