@@ -615,7 +615,7 @@ class OrgRouteHandler
             'extra_scripts' => "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/home_ngo.js\" async></script>",
             'extra_styles'  => "<link rel=\"stylesheet\" href=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}resources/css/home_styles2.css\" />",
             'current_projects' => $projectDao->get_org_current_projects($org_id),
-            'completed_files'  => $projectDao->get_org_completed_files($org_id, 3),
+            'completed_files'  => $projectDao->get_org_completed_files($org_id, 6),
             'news'      => $userDao->get_content_items(null, 1, null, 1, 1, null, null, null, 0, 0),
             'resources' => $userDao->get_content_items(null, 7, null, 1, 1, null, null, null, 0, 0),
             'sesskey' => Common\Lib\UserSession::getCSRFKey(),
