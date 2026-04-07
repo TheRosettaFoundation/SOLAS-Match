@@ -13253,6 +13253,14 @@ BEGIN
 END//
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `set_org_default_for_user`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `set_org_default_for_user`(IN uID INT UNSIGNED, IN oID INT UNSIGNED)
+BEGIN
+    REPLACE INTO user_org_defaults (user_id, org_id) VALUES (uID, oID);
+END//
+DELIMITER ;
+
 DROP PROCEDURE IF EXISTS `isSiteAdmin_any_or_org_admin_any_or_linguist_for_any_org`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `isSiteAdmin_any_or_org_admin_any_or_linguist_for_any_org`(IN uID INT UNSIGNED)
