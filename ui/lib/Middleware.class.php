@@ -110,7 +110,6 @@ class Middleware
                 $tasks = $userDao->getUserTasks($current_user_id);
                 if (!empty($tasks)) $template_data = array_merge($template_data, ['user_has_active_tasks' => 1]);
                 if ($roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER | FINANCE)) $template_data = array_merge($template_data, ['site_admin' => 1]);
-                if ($roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER | FINANCE | NGO_ADMIN)) $template_data = array_merge($template_data, ['show_admin_dashboard' => 1]);                
               } catch (Common\Exceptions\SolasMatchException $e) {
                 Common\Lib\UserSession::clearCurrentUserID();
                 Common\Lib\UserSession::clearAccessToken();

@@ -233,7 +233,7 @@
                                 <a href="{urlFor name="user-public-profile" options="user_id.$user_id"}">{Localisation::getTranslation('header_profile')}</a>
                             </li>
                         {/if}
-                        {if isset($show_admin_dashboard)}
+                        {if isset($site_admin)}
                             {assign var="user_id" value=$user->getId()}
                             <li {if isset($current_page) && $current_page == 'site-admin-dashboard'}class="active" {/if}>
                                 <a href="{urlFor name="site-admin-dashboard" options="user_id.$user_id"}">{Localisation::getTranslation('header_admin')}</a>
