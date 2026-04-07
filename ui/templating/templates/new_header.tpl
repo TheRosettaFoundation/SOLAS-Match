@@ -105,7 +105,7 @@
                     </li>
                 {/if}
 
-                {if isset($dashboard)}
+                {if isset($site_admin)}
                              <li {if isset($current_page) && $current_page == 'org-dashboard'} class="nav-item fw-bold"{/if} >
                                  <a href="{urlFor name="org-dashboard"}" class="fs-5 nav-link fw-bold">{Localisation::getTranslation('header_dashboard')}</a>
                              </li>

@@ -106,7 +106,6 @@ class Middleware
                 $template_data = array_merge($template_data, ['user' => $current_user]);
                 $adminDao = new DAO\AdminDao();
                 $roles = $adminDao->isSiteAdmin_any_or_org_admin_any_for_any_org($current_user_id);
-                if ($roles) $template_data = array_merge($template_data, ['dashboard' => 1]);
                 $tasks = $userDao->getUserTasks($current_user_id);
                 if (!empty($tasks)) $template_data = array_merge($template_data, ['user_has_active_tasks' => 1]);
                 if ($roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER | FINANCE)) $template_data = array_merge($template_data, ['site_admin' => 1]);
