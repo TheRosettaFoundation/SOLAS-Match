@@ -1016,7 +1016,7 @@ class UserRouteHandler
                             if ($terms_accepted  < 3) $userDao->update_terms_accepted($user->getId(), 3);
                             $orgs = $adminDao->get_orgs_if_ngo($user->getId());
                             if (!empty($orgs)) return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('home_ngo', ['org_id' => $orgs[0]['organisation_id']]));
-                            return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('org-dashboard'));
+                            return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('home'));
                         } else {
                             $nativeLocale = $user->getNativeLocale();
                             if ($nativeLocale && $nativeLocale->getLanguageCode()) {
@@ -1121,7 +1121,7 @@ class UserRouteHandler
                         if ($terms_accepted  < 3) $userDao->update_terms_accepted($user->getId(), 3);
                         $orgs = $adminDao->get_orgs_if_ngo($user->getId());
                         if (!empty($orgs)) return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('home_ngo', ['org_id' => $orgs[0]['organisation_id']]));
-                        return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('org-dashboard'));
+                        return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('home'));
                     } else {
                         $nativeLocale = $user->getNativeLocale();
                         if ($nativeLocale && $nativeLocale->getLanguageCode()) {
@@ -1200,7 +1200,7 @@ class UserRouteHandler
                 $userDao->update_terms_accepted($user_id, 3);
                 $orgs = $adminDao->get_orgs_if_ngo($user_id);
                 if (!empty($orgs)) return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('home_ngo', ['org_id' => $orgs[0]['organisation_id']]));
-                return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('org-dashboard'));
+                return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('home'));
             }
             return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('user-private-profile', array('user_id' => $user_id)));
         } else {
