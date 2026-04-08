@@ -208,7 +208,17 @@
                 <li class="nav-item dropdown ">
                         <a class="nav-link dropdown-toggle no-caret " href="#" id="hoverDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         <img src="https://www.gravatar.com/avatar/{md5( strtolower( trim($user->getEmail())))}?s=20{urlencode("&")}r=g" alt="" />
-                                       <span class="profile_name"> {TemplateHelper::uiCleanseHTML($user->getDisplayName())} </span>
+                            <span class="profile_name"> {TemplateHelper::uiCleanseHTML($user->getDisplayName())}
+                                {if !empty($ngo_orgs)}
+                                    {if mb_strlen($ngo_orgs[0]['name']) > 20}
+                                        {assign var="org_name" value=TemplateHelper::uiCleanseHTML(mb_substr($ngo_orgs[0]['name'], 0, 20))}
+                                        {assign var="org_name" value="`$org_name`..."}
+                                    {else}
+                                        {assign var="org_name" value=TemplateHelper::uiCleanseHTML($ngo_orgs[0]['name'])}
+                                    {/if}
+                                    <div class="fs-6">{$org_name}</div>
+                                {/if}
+                            </span>
                         </a>
                     <ul class="dropdown-menu py-2"   aria-labelledby="hoverDropdown">
                             <li><a href="{urlFor name="user-public-profile" options="user_id.$user_id"}"   class="dropdown-item fs-5 " id="dropdown-menu-user" >Profile</a></li>
@@ -217,6 +227,33 @@
                             <li class="nav-item fw-bold" >
                                 <a href="{urlFor name="claimed-tasks" options="user_id.$tmp_id"}" class="dropdown-item fs-5 " id="dropdown-menu-user"  {if isset($current_page) && $current_page == 'claimed-tasks'} class="nav-link " {/if}>My Tasks</a>
                             </li>
+
+                            {if !empty($ngo_orgs)}
+                            <li>------------</li>
+
+                            <li class="nav-item fw-bold" >
+                                <a href="{urlFor name="org-public-profile" options="org_id.$ngo_orgs[0]['organisation_id']"}" class="dropdown-item fs-5" id="dropdown-menu-user" {if isset($current_page) && $current_page == 'org-public-profile'}class="nav-link"{/if}>{$org_name}</a>
+                            </li>
+
+                            <li>------------</li>
+                            {/if}
+
+                            {if !empty($ngo_orgs) && count($ngo_orgs) > 1}
+
+                            {foreach $ngo_orgs as $ngo_org}
+                            <li>
+                                {if mb_strlen($ngo_org['name']) > 20}
+                                    {assign var="org_name" value=TemplateHelper::uiCleanseHTML(mb_substr($ngo_org['name'], 0, 20))}
+                                    {assign var="org_name" value="`$org_name`..."}
+                                {else}
+                                    {assign var="org_name" value=TemplateHelper::uiCleanseHTML($ngo_org['name'])}
+                                {/if}
+                                <a href="{urlFor name="home_ngo" options="org_id.$ngo_org['organisation_id']"}" class="dropdown-item fs-5" id="dropdown-menu-user">Switch to: {$org_name}</a>
+                            </li>
+                            {/foreach}
+
+                            <li>------------</li>
+                            {/if}
 
                             <li> <a href="{urlFor name="logout"}" class="dropdown-item fs-5" id="dropdown-menu-user">{Localisation::getTranslation('header_log_out')}</a></li>
                     </ul>

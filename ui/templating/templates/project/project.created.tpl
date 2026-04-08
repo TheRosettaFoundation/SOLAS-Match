@@ -9,7 +9,7 @@
             {Localisation::getTranslation('project_created_success')}
         </p>
         <p>
-            {sprintf(Localisation::getTranslation('project_created_1'), {urlFor name="org-dashboard" options="org_id.$org_id"})}
+            It is now listed on your organization's <a href="{urlFor name="home_ngo" options="org_id.$org_id"}">home page</a>.
         </p>
         <p>
             {sprintf(Localisation::getTranslation('project_created_2'), {urlFor name="project-view" options="project_id.$project_id"})}
