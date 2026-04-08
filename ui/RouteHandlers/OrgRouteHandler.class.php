@@ -591,7 +591,7 @@ class OrgRouteHandler
         return UserRouteHandler::render('org/org.dashboard.tpl', $response);
     }
 
-    public function home_ngo(Request $request, Response $response)
+    public function home_ngo(Request $request, Response $response, $args)
     {
         global $app, $template_data;
         $org_id = $args['org_id'];
