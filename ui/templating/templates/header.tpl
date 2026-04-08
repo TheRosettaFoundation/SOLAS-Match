@@ -239,6 +239,13 @@
                                 <a href="{urlFor name="site-admin-dashboard" options="user_id.$user_id"}">{Localisation::getTranslation('header_admin')}</a>
                             </li>
                         {/if}
+
+                        {if !empty($ngo_orgs)}
+                            <li {if isset($current_page) && $current_page == 'ngo_projects'}class="active"{/if}>
+                                <a href="{urlFor name="org-projects" options="org_id.$ngo_orgs[0]['organisation_id']"}">Projects</a>
+                            </li>
+                        {/if}
+
                         {if !isset($site_admin)}
                              <li {if isset($current_page) && $current_page == 'faq'}class="active" {/if}>
                                 <a href="https://communitylibrary.translatorswb.org/login" target="_blank">Library</a>
@@ -254,6 +261,13 @@
                                 <a href="{urlFor name="analytics"}" target="_blank">Analytics</a>
                             </li>
                         {/if}
+
+                        {if !empty($ngo_orgs)}
+                            <li>
+                                <a href="{urlFor name="metabase_ngo" options="org_id.$ngo_orgs[0]['organisation_id']"}" target="_blank">Analytics</a>
+                            </li>
+                        {/if}
+
                         {if !isset($site_admin)}
                             <li>
                                 {if isset($user)}

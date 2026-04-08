@@ -111,6 +111,12 @@
                              </li>
                 {/if}
 
+                {if !empty($ngo_orgs)}
+                    <li {if isset($current_page) && $current_page == 'ngo_projects'}class="nav-item fw-bold"{/if}>
+                        <a href="{urlFor name="org-projects" options="org_id.$ngo_orgs[0]['organisation_id']"}" class="fs-5 nav-link fw-bold">Projects</a>
+                    </li>
+                {/if}
+
                 {if isset($user_has_active_tasks) && !isset($site_admin)}
                     {assign var="tmp_id" value=$user->getId()}
                     <li class="nav-item fw-bold" >
@@ -129,6 +135,12 @@
                             <li class="nav-item">
                                 <a href="{urlFor name="analytics"}"  class=" fs-5 nav-link fw-bold">Analytics</a>
                             </li>
+                {/if}
+
+                {if !empty($ngo_orgs)}
+                    <li class="nav-item">
+                        <a href="{urlFor name="metabase_ngo" options="org_id.$ngo_orgs[0]['organisation_id']"}" class="fs-5 nav-link fw-bold">Analytics</a>
+                    </li>
                 {/if}
 
             <li class="nav-item dropdown fw-bold text-secondary">
