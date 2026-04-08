@@ -91,7 +91,7 @@
         <nav data-bs-theme="light" id="nav" class="navbar navbar-expand-lg bg-body-tertiary shadow bg-secondary d-flex ">
         <div class="container py-2">
 
-                <a class="navbar-brand" href={urlFor name='home'}> <img  src="{urlFor name='home'}ui/img/TWB_Logo.svg" class="logo"> </a>
+                <a class="navbar-brand" href={if empty($ngo_orgs)}{urlFor name="home"}{else}{urlFor name="home_ngo" options="org_id.$ngo_orgs[0]['organisation_id']"}{/if}> <img  src="{urlFor name='home'}ui/img/TWB_Logo.svg" class="logo"> </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
                 </button>
@@ -101,7 +101,7 @@
         <ul class="navbar-nav   d-flex align-items-center ">
                 {if !isset($admin)}
                     <li class="nav-item ms-md-6 fw-bold">
-                    <a href="{urlFor name="home"}" class="fs-5 nav-link fw-bold">{Localisation::getTranslation('header_home')}</a>
+                    <a href="{if empty($ngo_orgs)}{urlFor name="home"}{else}{urlFor name="home_ngo" options="org_id.$ngo_orgs[0]['organisation_id']"}{/if}" class="fs-5 nav-link fw-bold">{Localisation::getTranslation('header_home')}</a>
                     </li>
                 {/if}
 

@@ -209,11 +209,11 @@
         <div class="navbar navbar-fixed-top">
            <div class="navbar-inner">
                 <div class="container">
-                    <a href="{urlFor name='home'}" class="pull-left header-link"><img height="60px" style="margin-right: 25px;"  src="{urlFor name='home'}ui/img/TWB_logo1.PNG"></a> 
+                    <a href="{if empty($ngo_orgs)}{urlFor name="home"}{else}{urlFor name="home_ngo" options="org_id.$ngo_orgs[0]['organisation_id']"}{/if}" class="pull-left header-link"><img height="60px" style="margin-right: 25px;"  src="{urlFor name='home'}ui/img/TWB_logo1.PNG"></a> 
                     <ul class="nav main_nav">
                         {if !isset($site_admin)}
                         <li {if isset($current_page) && $current_page == 'home'}class="active"{/if} >
-                            <a href="{urlFor name="home"}">{Localisation::getTranslation('header_home')}</a>
+                            <a href="{if empty($ngo_orgs)}{urlFor name="home"}{else}{urlFor name="home_ngo" options="org_id.$ngo_orgs[0]['organisation_id']"}{/if}">{Localisation::getTranslation('header_home')}</a>
                         </li> 
                         {/if}
                         {if isset($site_admin)}
@@ -313,7 +313,7 @@
         </div>
         <div class="container">
         
-        {assign var="home_page" value="{urlFor name="home"}"}
+        {assign var="home_page" value="{if empty($ngo_orgs)}{urlFor name="home"}{else}{urlFor name="home_ngo" options="org_id.$ngo_orgs[0]['organisation_id']"}{/if}"}
         
         {if ((Settings::get('banner.enabled') == 'y') and (isset($user) or ($smarty.server.REQUEST_URI!=$home_page)))}
             
