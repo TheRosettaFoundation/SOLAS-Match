@@ -40,7 +40,7 @@
                 <div class="row g-4">
                     <div class="col-lg-8 order-1 order-lg-1 space-y-8">
 
-                        {if $org_id}
+                        {if true || $org_id}
                         <div class="card bg-light-mariam custom-card p-4 card-border-top-accent">
                             <div class="d-flex justify-content-between align-items-center mb-4 border-bottom pb-3">
                                 <h2 class="fs-3 fw-bold text-dark-mariam mb-0">Current projects</h2>
