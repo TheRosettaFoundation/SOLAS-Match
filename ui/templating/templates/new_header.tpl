@@ -91,7 +91,7 @@
         <nav data-bs-theme="light" id="nav" class="navbar navbar-expand-lg bg-body-tertiary shadow bg-secondary d-flex ">
         <div class="container py-2">
 
-                <a class="navbar-brand" href={if empty($ngo_orgs)}{urlFor name="home"}{else}{urlFor name="home_ngo" options="org_id.$ngo_orgs[0]['organisation_id']"}{/if}> <img  src="{urlFor name='home'}ui/img/TWB_Logo.svg" class="logo"> </a>
+                <a class="navbar-brand" href={if empty($ngo_orgs)}{urlFor name="home"}{else}{urlFor name="home_ngo" options="org_id.{$ngo_orgs[0]['organisation_id']}"}{/if}> <img  src="{urlFor name='home'}ui/img/TWB_Logo.svg" class="logo"> </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
                 </button>
@@ -101,7 +101,7 @@
         <ul class="navbar-nav   d-flex align-items-center ">
                 {if !isset($admin)}
                     <li class="nav-item ms-md-6 fw-bold">
-                    <a href="{if empty($ngo_orgs)}{urlFor name="home"}{else}{urlFor name="home_ngo" options="org_id.$ngo_orgs[0]['organisation_id']"}{/if}" class="fs-5 nav-link fw-bold">{Localisation::getTranslation('header_home')}</a>
+                    <a href="{if empty($ngo_orgs)}{urlFor name="home"}{else}{urlFor name="home_ngo" options="org_id.{$ngo_orgs[0]['organisation_id']}"}{/if}" class="fs-5 nav-link fw-bold">{Localisation::getTranslation('header_home')}</a>
                     </li>
                 {/if}
 
@@ -113,7 +113,7 @@
 
                 {if !empty($ngo_orgs)}
                     <li {if isset($current_page) && $current_page == 'ngo_projects'}class="nav-item fw-bold"{/if}>
-                        <a href="{urlFor name="org-projects" options="org_id.$ngo_orgs[0]['organisation_id']"}" class="fs-5 nav-link fw-bold">Projects</a>
+                        <a href="{urlFor name="org-projects" options="org_id.{$ngo_orgs[0]['organisation_id']}"}" class="fs-5 nav-link fw-bold">Projects</a>
                     </li>
                 {/if}
 
@@ -139,7 +139,7 @@
 
                 {if !empty($ngo_orgs)}
                     <li class="nav-item">
-                        <a href="{urlFor name="metabase_ngo" options="org_id.$ngo_orgs[0]['organisation_id']"}" class="fs-5 nav-link fw-bold">Analytics</a>
+                        <a href="{urlFor name="metabase_ngo" options="org_id.{$ngo_orgs[0]['organisation_id']}"}" class="fs-5 nav-link fw-bold">Analytics</a>
                     </li>
                 {/if}
 
@@ -232,7 +232,7 @@
                             <li>------------</li>
 
                             <li class="nav-item fw-bold" >
-                                <a href="{urlFor name="org-public-profile" options="org_id.$ngo_orgs[0]['organisation_id']"}" class="dropdown-item fs-5" id="dropdown-menu-user" {if isset($current_page) && $current_page == 'org-public-profile'}class="nav-link"{/if}>{$org_name}</a>
+                                <a href="{urlFor name="org-public-profile" options="org_id.{$ngo_orgs[0]['organisation_id']}"}" class="dropdown-item fs-5" id="dropdown-menu-user" {if isset($current_page) && $current_page == 'org-public-profile'}class="nav-link"{/if}>{$org_name}</a>
                             </li>
 
                             <li>------------</li>
@@ -248,7 +248,7 @@
                                 {else}
                                     {assign var="org_name" value=TemplateHelper::uiCleanseHTML($ngo_org['name'])}
                                 {/if}
-                                <a href="{urlFor name="home_ngo" options="org_id.$ngo_org['organisation_id']"}" class="dropdown-item fs-5" id="dropdown-menu-user">Switch to: {$org_name}</a>
+                                <a href="{urlFor name="home_ngo" options="org_id.{$ngo_org['organisation_id']}"}" class="dropdown-item fs-5" id="dropdown-menu-user">Switch to: {$org_name}</a>
                             </li>
                             {/foreach}
 
