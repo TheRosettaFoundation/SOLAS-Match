@@ -40,65 +40,69 @@
                 <div class="row g-4">
                     <div class="col-lg-8 order-1 order-lg-1 space-y-8">
 
-    {if $org_id}
-    <div class="card bg-light-mariam custom-card p-4 card-border-top-accent">
-DIV REMOVED
-            <div class="d-flex justify-content-between align-items-center mb-4 border-bottom pb-3">
-                <h2 class="fs-3 fw-bold text-dark-mariam mb-0">Current projects</h2>
-                <div class="d-flex gap-2">
-                    <a href="{urlFor name="ngo_projects"   options="org_id.{$org_id}"}" class="btn text-white fw-bold px-3 py-1" style="background-color: #f7941d; border: none;">All projects</a>
-                    <a href="{urlFor name="project-create" options="org_id.{$org_id}"}" class="btn text-white fw-bold px-3 py-1" style="background-color: #f7941d; border: none;">+ New project</a>
-                </div>
-            </div>
-
-{if !empty($current_projects)}
-            <div class="row g-0 py-2 border-bottom d-none d-md-flex text-muted small">
-                <div class="col-1">Status</div>
-                <div class="col-4">Title</div>
-                <div class="col-2">Progress</div>
-                <div class="col-2">Due date</div>
-                <div class="col-3">Target languages</div>
-            </div>
-
-            {foreach from=$current_projects item=project}
-            {assign var="project_id" value=$project['id']}
-            <div class="row g-0 py-3 border-bottom align-items-center">
-                <div class="col-1">
-                    {if $project['status'] == 2}
-                        <i class="fa-solid fa-circle-info"></i>
-                    {else}
-                        <i class="fa-solid fa-spinner fa-spin text-muted"></i>
-                    {/if}
-                </div>
-                <div class="col-11 col-md-4">
-                    <a id="task-{$task_id}" href="{$siteLocation}task/{$task_id}/view" class="text-decoration-none fw-bold text-dark d-block">
-                        {TemplateHelper::uiCleanseHTMLNewlineAndTabs($task->getTitle())}
-                    </a>
-                </div>
-                <div class="col-6 col-md-2 mt-2 mt-md-0">
-                    <div class="progress" style="height: 12px; border-radius: 10px; background-color: #f0f0f0; width: 80%;">
-                        <div class="progress-bar bg-success" role="progressbar" style="width: 65%; border-radius: 10px;"></div>
-                    </div>
-                </div>
-                <div class="col-6 col-md-2 mt-2 mt-md-0 small">
-                    {$deadline_timestamps[$task_id]}
-                </div>
-                <div class="col-12 col-md-3 mt-2 mt-md-0">
-                    <div class="d-flex gap-1 flex-wrap">
-                        <span class="badge border text-dark fw-normal bg-light px-2 py-1">fr-FR</span>
-                        <span class="badge border text-dark fw-normal bg-light px-2 py-1">zh-CN</span>
-                        <span class="badge border text-dark fw-normal bg-light px-2 py-1">pt-BR</span>
-                    </div>
-                </div>
-            </div>
-            {/foreach}
-{else}
-                            <div class="text-center mt-4">
-                                It looks like we don't have any tasks available for your language pair at the moment. In the meantime, you can take a course from our Learning Center:<br />
+                        {if $org_id}
+                        <div class="card bg-light-mariam custom-card p-4 card-border-top-accent">
+                            <div class="d-flex justify-content-between align-items-center mb-4 border-bottom pb-3">
+                                <h2 class="fs-3 fw-bold text-dark-mariam mb-0">Current projects</h2>
+                                <div class="d-flex gap-2">
+                                    <a href="{urlFor name="ngo_projects"   options="org_id.{$org_id}"}" class="btn text-white fw-bold px-3 py-1" style="background-color: #f7941d; border: none;">All projects</a>
+                                    <a href="{urlFor name="project-create" options="org_id.{$org_id}"}" class="btn text-white fw-bold px-3 py-1" style="background-color: #f7941d; border: none;">+ New project</a>
+                                </div>
                             </div>
-ENDDIV REMOVED
-    </div>
-    {/if}
+
+                            {if !empty($current_projects)}
+                            <div class="row g-0 py-2 border-bottom d-none d-md-flex text-muted small">
+                                <div class="col-1">Status</div>
+                                <div class="col-4">Title</div>
+                                <div class="col-2">Progress</div>
+                                <div class="col-2">Due date</div>
+                                <div class="col-3">Target languages</div>
+                            </div>
+
+                            {foreach from=$current_projects item=project}
+                            {assign var="project_id" value=$project['id']}
+                            <div class="row g-0 py-3 border-bottom align-items-center">
+                                <div class="col-1">
+                                    {if $project['status'] == 2}
+                                        <i class="fa-solid fa-circle-info"></i>
+                                    {else}
+                                        <i class="fa-solid fa-spinner fa-spin text-muted"></i>
+                                    {/if}
+                                </div>
+                                <div class="col-11 col-md-4">
+                                    <a href="{urlFor name="project-view" options="project_id.{$project_id}" class="text-decoration-none fw-bold text-dark d-block">
+                                        {if mb_strlen($project['title']) > 31}
+                                            {assign var="project_title" value=TemplateHelper::uiCleanseHTMLNewlineAndTabs(mb_substr($project['title'], 0, 31))}
+                                            {assign var="project_title" value="`$project_title`..."}
+                                        {else}
+                                            {assign var="project_title" value=TemplateHelper::uiCleanseHTMLNewlineAndTabs($project['title'])}
+                                        {/if}
+                                        {$project_title}
+                                    </a>
+                                </div>
+                                <div class="col-6 col-md-2 mt-2 mt-md-0">
+                                    <div class="progress" style="height: 12px; border-radius: 10px; background-color: #f0f0f0; width: 80%;">
+                                        <div class="progress-bar bg-success" role="progressbar" style="width: 65%; border-radius: 10px;"></div>
+                                    </div>
+                                </div>
+                                <div class="col-6 col-md-2 mt-2 mt-md-0 small">
+                                    {$project['deadline']}
+                                </div>
+                                <div class="col-12 col-md-3 mt-2 mt-md-0">
+                                    <div class="d-flex gap-1 flex-wrap">
+                                        <span class="badge border text-dark fw-normal bg-light px-2 py-1">fr-FR</span>
+                                        <span class="badge border text-dark fw-normal bg-light px-2 py-1">zh-CN</span>
+                                        <span class="badge border text-dark fw-normal bg-light px-2 py-1">pt-BR</span>
+                                    </div>
+                                </div>
+                            </div>
+                            {/foreach}
+                            {else}
+                            <div class="text-center mt-4">
+                                There are currently no projects.
+                            </div>
+                            {/if}
+                        </div>
 
     <div class="card shadow-sm border-0 rounded-3">
         <div class="card-body p-4">
