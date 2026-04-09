@@ -40,6 +40,96 @@
                 <div class="row g-4">
                     <div class="col-lg-8 order-1 order-lg-1 space-y-8">
 
+    <div class="card shadow-sm border-0 rounded-3 mb-4">
+        <div class="card-body p-4">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2 class="h4 fw-bold mb-0">Current projects</h2>
+                <div class="d-flex gap-2">
+                    <button class="btn text-white fw-bold px-3 py-1" style="background-color: #f7941d; border: none;">All projects</button>
+                    <button class="btn text-white fw-bold px-3 py-1" style="background-color: #f7941d; border: none;">+ New project</button>
+                </div>
+            </div>
+
+            <div class="row g-0 py-2 border-bottom d-none d-md-flex text-muted small">
+                <div class="col-1">Status</div>
+                <div class="col-4">Title</div>
+                <div class="col-2">Progress</div>
+                <div class="col-2">Due date</div>
+                <div class="col-3">Target languages</div>
+            </div>
+
+            {foreach from=$claimed_tasks item=task}
+            {assign var="task_id" value=$task->getId()}
+            <div class="row g-0 py-3 border-bottom align-items-center">
+                <div class="col-1">
+                    {if $task->getTaskStatus() == 3}
+                        <i class="fa-solid fa-circle-info"></i>
+                    {else}
+                        <i class="fa-solid fa-spinner fa-spin text-muted"></i>
+                    {/if}
+                </div>
+                <div class="col-11 col-md-4">
+                    <a id="task-{$task_id}" href="{$siteLocation}task/{$task_id}/view" class="text-decoration-none fw-bold text-dark d-block">
+                        {TemplateHelper::uiCleanseHTMLNewlineAndTabs($task->getTitle())} [cite: 10]
+                    </a>
+                </div>
+                <div class="col-6 col-md-2 mt-2 mt-md-0">
+                    <div class="progress" style="height: 12px; border-radius: 10px; background-color: #f0f0f0; width: 80%;">
+                        <div class="progress-bar bg-success" role="progressbar" style="width: 65%; border-radius: 10px;"></div>
+                    </div>
+                </div>
+                <div class="col-6 col-md-2 mt-2 mt-md-0 small">
+                    {$deadline_timestamps[$task_id]} [cite: 25]
+                </div>
+                <div class="col-12 col-md-3 mt-2 mt-md-0">
+                    <div class="d-flex gap-1 flex-wrap">
+                        <span class="badge border text-dark fw-normal bg-light px-2 py-1">fr-FR</span>
+                        <span class="badge border text-dark fw-normal bg-light px-2 py-1">zh-CN</span>
+                        <span class="badge border text-dark fw-normal bg-light px-2 py-1">pt-BR</span>
+                    </div>
+                </div>
+            </div>
+            {/foreach}
+        </div>
+    </div>
+
+    <div class="card shadow-sm border-0 rounded-3">
+        <div class="card-body p-4">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2 class="h4 fw-bold mb-0">Recently completed files</h2>
+                <button class="btn text-white fw-bold px-3 py-1" style="background-color: #f7941d; border: none;">All projects</button>
+            </div>
+
+            <div class="row g-0 py-2 border-bottom d-none d-md-flex text-muted small">
+                <div class="col-6">File title</div>
+                <div class="col-3">Word count</div>
+                <div class="col-3">Target languages</div>
+            </div>
+
+            {foreach from=$tasks item=task}
+            <div class="row g-0 py-3 border-bottom align-items-center">
+                <div class="col-12 col-md-6">
+                    <div class="mb-1">
+                        <span class="badge bg-light text-muted border fw-normal">ERICC Briefs</span>
+                    </div>
+                    <a href="{$siteLocation}task/{$task->getId()}/view" class="text-decoration-none fw-bold text-dark d-block">
+                        {$task->getTitle()}
+                    </a>
+                </div>
+                <div class="col-6 col-md-3 mt-2 mt-md-0 small">
+                    {$task->getWordCount()} words [cite: 39]
+                </div>
+                <div class="col-6 col-md-3 mt-2 mt-md-0">
+                    <div class="d-flex gap-1 flex-wrap">
+                        <span class="badge border text-dark fw-normal bg-light px-2 py-1">fr-FR <i class="fa-solid fa-arrow-down small ms-1"></i></span>
+                        <span class="badge border text-dark fw-normal bg-light px-2 py-1">so-SO <i class="fa-solid fa-arrow-down small ms-1"></i></span>
+                    </div>
+                </div>
+            </div>
+            {/foreach}
+        </div>
+    </div>
+
                         {if !empty($claimed_tasks)}
                         <div class="card bg-light-mariam custom-card p-4 card-border-top-accent">
                             <div class="d-flex justify-content-between align-items-center mb-4 border-bottom pb-3">
