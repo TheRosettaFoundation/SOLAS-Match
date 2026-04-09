@@ -50,6 +50,7 @@
                 </div>
             </div>
 
+{if !empty($claimed_tasks)}
             <div class="row g-0 py-2 border-bottom d-none d-md-flex text-muted small">
                 <div class="col-1">Status</div>
                 <div class="col-4">Title</div>
@@ -70,7 +71,7 @@
                 </div>
                 <div class="col-11 col-md-4">
                     <a id="task-{$task_id}" href="{$siteLocation}task/{$task_id}/view" class="text-decoration-none fw-bold text-dark d-block">
-                        {TemplateHelper::uiCleanseHTMLNewlineAndTabs($task->getTitle())} [cite: 10]
+                        {TemplateHelper::uiCleanseHTMLNewlineAndTabs($task->getTitle())}
                     </a>
                 </div>
                 <div class="col-6 col-md-2 mt-2 mt-md-0">
@@ -90,6 +91,12 @@
                 </div>
             </div>
             {/foreach}
+{else}
+                            <div class="text-center mt-4">
+                                It looks like we don't have any tasks available for your language pair at the moment. In the meantime, you can take a course from our Learning Center:<br />
+                                <a class="btn btn-secondary fs-5 px-3" href="https://elearn.translatorswb.org/">Learning Center</a>
+                            </div>
+{/if}
         </div>
     </div>
 
