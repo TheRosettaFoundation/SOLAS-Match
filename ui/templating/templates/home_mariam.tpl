@@ -46,21 +46,12 @@ DIV REMOVED
             <div class="d-flex justify-content-between align-items-center mb-4 border-bottom pb-3">
                 <h2 class="fs-3 fw-bold text-dark-mariam mb-0">Current projects</h2>
                 <div class="d-flex gap-2">
-                    <button class="btn text-white fw-bold px-3 py-1" style="background-color: #f7941d; border: none;">All projects</button>
-[[[
-[[home mariam
-                                <a href="{urlFor name="ngo_projects" options="org_id.{$org_id}"}" class="text-decoration-none fw-semibold d-flex align-items-center" style="color: var(--twb-accent);">
-                                    Go to My Tasks <i class="fa-solid fa-arrow-right ms-2"></i>
-                                </a>
-]]
-
-<a href="{$matecat_url}" class="btn btn-orange mt-2">Work URL</a>
-]]]
-                    <button class="btn text-white fw-bold px-3 py-1" style="background-color: #f7941d; border: none;">+ New project</button>
+                    <a href="{urlFor name="ngo_projects"   options="org_id.{$org_id}"}" class="btn text-white fw-bold px-3 py-1" style="background-color: #f7941d; border: none;">All projects</a>
+                    <a href="{urlFor name="project-create" options="org_id.{$org_id}"}" class="btn text-white fw-bold px-3 py-1" style="background-color: #f7941d; border: none;">+ New project</a>
                 </div>
             </div>
 
-{if !empty($claimed_tasks)}
+{if !empty($current_projects)}
             <div class="row g-0 py-2 border-bottom d-none d-md-flex text-muted small">
                 <div class="col-1">Status</div>
                 <div class="col-4">Title</div>
@@ -69,11 +60,11 @@ DIV REMOVED
                 <div class="col-3">Target languages</div>
             </div>
 
-            {foreach from=$claimed_tasks item=task}
-            {assign var="task_id" value=$task->getId()}
+            {foreach from=$current_projects item=project}
+            {assign var="project_id" value=$project['id']}
             <div class="row g-0 py-3 border-bottom align-items-center">
                 <div class="col-1">
-                    {if $task->getTaskStatus() == 3}
+                    {if $project['status'] == 2}
                         <i class="fa-solid fa-circle-info"></i>
                     {else}
                         <i class="fa-solid fa-spinner fa-spin text-muted"></i>
@@ -104,9 +95,7 @@ DIV REMOVED
 {else}
                             <div class="text-center mt-4">
                                 It looks like we don't have any tasks available for your language pair at the moment. In the meantime, you can take a course from our Learning Center:<br />
-                                <a class="btn btn-secondary fs-5 px-3" href="https://elearn.translatorswb.org/">Learning Center</a>
                             </div>
-{/if}
 ENDDIV REMOVED
     </div>
     {/if}
@@ -147,6 +136,7 @@ ENDDIV REMOVED
             {/foreach}
         </div>
     </div>
+{/if}
 
                         {if !empty($claimed_tasks)}
                         <div class="card bg-light-mariam custom-card p-4 card-border-top-accent">

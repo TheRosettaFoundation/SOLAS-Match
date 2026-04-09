@@ -3534,6 +3534,7 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `get_org_current_projects`(IN oID IN
 BEGIN
     SELECT
         p.*,
+        pcd.status,
         SUM(IFNULL(IF(t.`task-status_id`!=4 AND t.`deadline`<NOW(), 1, 0), 0)) AS number_overdue,
         IFNULL(SUM(IF(t.`task-status_id`=4 AND t.`word-count`>1, t.`word-count`, 0))/SUM(t.`word-count`), 0) AS fraction,
         GROUP_CONCAT(DISTINCT CONCAT(l.code, '-', c.code) ORDER BY CONCAT(l.code, '-', c.code)) AS codes
