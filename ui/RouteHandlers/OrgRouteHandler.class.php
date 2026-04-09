@@ -593,35 +593,7 @@ class OrgRouteHandler
 
     public function home_ngo(Request $request, Response $response, $args)
     {
-        global $app, $template_data;
-        $org_id = $args['org_id'];
-
-        $user_id = Common\Lib\UserSession::getCurrentUserID();
-
-        $userDao = new DAO\UserDao();
-        $projectDao = new DAO\ProjectDao();
-        $adminDao = new DAO\AdminDao();
-
-        $orgs = $adminDao->get_orgs_if_ngo($user_id);
-        if ($orgs && $orgs[0]['organisation_id'] != $org_id) {
-            $projectDao->set_org_default_for_user($user_id, $org_id);
-            $orgs = $adminDao->get_orgs_if_ngo($user_id);
-        }
-
-        $template_data = array_merge($template_data, [
-            'org_id' => $org_id,
-            'roles'  => $adminDao->get_roles($user_id, $org_id),
-            'orgs'   => $orgs,
-            'extra_scripts' => "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/home_ngo.js\" async></script>",
-            'extra_styles'  => "<link rel=\"stylesheet\" href=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}resources/css/home_styles2.css\" />",
-            'current_projects' => $projectDao->get_org_current_projects($org_id),
-            'completed_files'  => $projectDao->get_org_completed_files($org_id, 6),
-            'news'      => $userDao->get_content_items(null, 1, null, 1, 1, null, null, null, 0, 0),
-            'resources' => $userDao->get_content_items(null, 7, null, 1, 1, null, null, null, 0, 0),
-            'sesskey' => Common\Lib\UserSession::getCSRFKey(),
-        ]);
-
-        return UserRouteHandler::render('home_ngo.tpl', $response);
+        return UserRouteHandler::home($request, $response, $args);
     }
 
     public function metabase(Request $request, Response $response, $args)
