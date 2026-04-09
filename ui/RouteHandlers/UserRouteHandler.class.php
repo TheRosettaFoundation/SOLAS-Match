@@ -287,6 +287,7 @@ class UserRouteHandler
         global $app, $template_data;
 
         $user_id = Common\Lib\UserSession::getCurrentUserID();
+        $org_id = $args ? $args['org_id'] : 0;
 
         $template_data = array_merge($template_data, ['current_page' => 'home']);
         if (empty($user_id)) return UserRouteHandler::render('index-home.tpl', $response);
@@ -294,6 +295,12 @@ class UserRouteHandler
         $userDao = new DAO\UserDao();
         $projectDao = new DAO\ProjectDao();
         $orgDao = new DAO\OrganisationDao();
+        $adminDao = new DAO\AdminDao();
+
+        if (!empty($template_data['ngo_orgs']) && $template_data['ngo_orgs'][0]['organisation_id'] != $org_id) {
+            $projectDao->set_org_default_for_user($user_id, $org_id);
+            $template_data['ngo_orgs'] = $adminDao->get_orgs_if_ngo($user_id);
+        }
 
         $claimed_tasks = $userDao->getFilteredUserClaimedTasks($user_id, 2, 4, 0, 0, 3);
         if (empty($claimed_tasks)) $claimed_tasks = [];
@@ -349,6 +356,8 @@ class UserRouteHandler
 
         $template_data = array_merge($template_data, [
             'user_id'       => $user_id,
+            'org_id'        => $org_id,
+            'roles'         => $org_id ? $adminDao->get_roles($user_id, $org_id) : 0,
             'siteLocation'  => Common\Lib\Settings::get('site.location'),
             'extra_scripts' => $extra_scripts,
             'extra_styles'  => $extra_styles,
@@ -360,8 +369,10 @@ class UserRouteHandler
             'org_images' => $org_images,
             'orgs' => $orgs,
             'org_names' => $org_names,
+            'current_projects' => $org_id ? $projectDao->get_org_current_projects($org_id) : [],
+            'completed_files'  => $org_id ? $projectDao->get_org_completed_files($org_id, 6) : [],
             'news' => $userDao->get_content_items(null, 1, null, 1, 1, null, null, null, 0, 0),
-            'resources' => $userDao->get_content_items(null, 2, null, 1, 1, null, null, null, 0, 0),
+            'resources' => $org_id ? $userDao->get_content_items(null, 7, null, 1, 1, null, null, null, 0, 0) : $userDao->get_content_items(null, 2, null, 1, 1, null, null, null, 0, 0),
             'sesskey' => Common\Lib\UserSession::getCSRFKey(),
             ]);
 
