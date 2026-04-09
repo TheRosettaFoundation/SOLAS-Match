@@ -44,7 +44,7 @@
                         <div class="card bg-light-mariam custom-card p-4 card-border-top-accent">
                             <div class="d-flex justify-content-between align-items-center mb-4 border-bottom pb-3">
                                 <h2 class="fs-3 fw-bold text-dark-mariam mb-0">Current projects</h2>
-<i class="bi bi-circle-half"></i><i class="fa-solid fa-circle-info"></i><i class="fa-solid fa-circle-half"></i><i class="fa-solid fa-spinner fa-spin text-muted"></i>
+<i class="fa fa-circle-half"></i><i class="bi bi-circle-half"></i><i class="fa-solid fa-circle-info"></i> --- </i><i class="fa-solid fa-spinner fa-spin text-muted"></i>
                                 <div class="d-flex gap-2">
                                     <a href="{urlFor name="ngo_projects"   options="org_id.{$org_id}"}" class="btn text-white fw-bold px-3 py-1" style="background-color: #f7941d; border: none;">All projects</a>
                                     <a href="{urlFor name="project-create" options="org_id.{$org_id}"}" class="btn text-white fw-bold px-3 py-1" style="background-color: #f7941d; border: none;">+ New project</a>
