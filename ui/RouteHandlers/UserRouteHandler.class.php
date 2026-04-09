@@ -282,7 +282,7 @@ class UserRouteHandler
             ->setName('content_display');
     }
 
-    public function home(Request $request, Response $response)
+    public function home(Request $request, Response $response, $args = [])
     {
         global $app, $template_data;
 
