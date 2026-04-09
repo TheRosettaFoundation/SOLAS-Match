@@ -35,12 +35,6 @@ class OrgRouteHandler
             ->setName('org-projects');
 
         $app->get(
-            '/org/{org_id}/home_ngo[/]',
-            '\SolasMatch\UI\RouteHandlers\OrgRouteHandler:home_ngo')
-            ->add('\SolasMatch\UI\Lib\Middleware:authUserForOrg_incl_community_officer')
-            ->setName('home_ngo');
-
-        $app->get(
             '/org/{org_id}/metabase[/]',
             '\SolasMatch\UI\RouteHandlers\OrgRouteHandler:metabase')
             ->add('\SolasMatch\UI\Lib\Middleware:authUserForOrg_incl_community_officer')
@@ -589,11 +583,6 @@ class OrgRouteHandler
             'current_page'    => 'org-dashboard'
         ));
         return UserRouteHandler::render('org/org.dashboard.tpl', $response);
-    }
-
-    public function home_ngo(Request $request, Response $response, $args)
-    {
-        return UserRouteHandler::home($request, $response, $args);
     }
 
     public function metabase(Request $request, Response $response, $args)

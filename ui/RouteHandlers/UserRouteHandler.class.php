@@ -25,6 +25,12 @@ class UserRouteHandler
             ->setName('home');
 
         $app->get(
+            '/org/{org_id}/home_ngo[/]',
+            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:home_ngo')
+            ->add('\SolasMatch\UI\Lib\Middleware:authUserForOrg_incl_community_officer')
+            ->setName('home_ngo');
+
+        $app->get(
             '/org/{org_id}/ngo_projects[/]',
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:ngo_projects')
             ->add('\SolasMatch\UI\Lib\Middleware:authUserForOrg_incl_community_officer')
@@ -383,6 +389,11 @@ class UserRouteHandler
             ]);
 
         return UserRouteHandler::render('home_mariam.tpl', $response);
+    }
+
+    public function home_ngo(Request $request, Response $response, $args)
+    {
+        return $this->home($request, $response, $args);
     }
 
     public function ngo_projects(Request $request, Response $response, $args)
