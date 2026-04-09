@@ -40,10 +40,18 @@
                 <div class="row g-4">
                     <div class="col-lg-8 order-1 order-lg-1 space-y-8">
 
-    <div class="card shadow-sm border-0 rounded-3 mb-4">
-        <div class="card-body p-4">
-            <div class="d-flex justify-content-between align-items-center mb-4">
-                <h2 class="h4 fw-bold mb-0">Current projects</h2>
+    <div class="card bg-light-mariam custom-card p-4 card-border-top-accent">
+DIV REMOVED
+            <div class="d-flex justify-content-between align-items-center mb-4 border-bottom pb-3">
+                <h2 class="fs-3 fw-bold text-dark-mariam mb-0">Current projects</h2>
+[[home mariam
+                                <a href="{urlFor name="claimed-tasks" options="user_id.{$user_id}"}" class="text-decoration-none fw-semibold d-flex align-items-center" style="color: var(--twb-accent);">
+                                    Go to My Tasks <i class="fa-solid fa-arrow-right ms-2"></i>
+                                </a>
+                            </div>
+                            <div class="space-y-4">
+                                {foreach from=$claimed_tasks item=task}
+]]
                 <div class="d-flex gap-2">
                     <button class="btn text-white fw-bold px-3 py-1" style="background-color: #f7941d; border: none;">All projects</button>
                     <button class="btn text-white fw-bold px-3 py-1" style="background-color: #f7941d; border: none;">+ New project</button>
@@ -97,7 +105,7 @@
                                 <a class="btn btn-secondary fs-5 px-3" href="https://elearn.translatorswb.org/">Learning Center</a>
                             </div>
 {/if}
-        </div>
+ENDDIV REMOVED
     </div>
 
     <div class="card shadow-sm border-0 rounded-3">
