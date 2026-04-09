@@ -63,8 +63,10 @@
                             {assign var="project_id" value=$project['id']}
                             <div class="row g-0 py-3 border-bottom align-items-center">
                                 <div class="col-1">
-                                    {if $project['status'] == 2}
+                                    {if $project['number_overdue']}
                                         <i class="fa-solid fa-circle-info"></i>
+                                    {elseif $project['status'] == 2} <!-- All at least in progress -->
+                                        <i class="fa-solid fa-circle-half"></i>
                                     {else}
                                         <i class="fa-solid fa-spinner fa-spin text-muted"></i>
                                     {/if}
@@ -77,7 +79,7 @@
                                         {else}
                                             {assign var="project_title" value=TemplateHelper::uiCleanseHTMLNewlineAndTabs($project['title'])}
                                         {/if}
-                                        {$project_title}
+                                        {$project_title}<i class="fa-solid fa-circle-info"></i><i class="fa-solid fa-circle-half"></i><i class="fa-solid fa-spinner fa-spin text-muted"></i>
                                     </a>
                                 </div>
                                 <div class="col-6 col-md-2 mt-2 mt-md-0">
@@ -86,7 +88,7 @@
                                     </div>
                                 </div>
                                 <div class="col-6 col-md-2 mt-2 mt-md-0 small">
-                                    {$project['deadline']}
+                                    <span class="convert_utc_to_local_deadline_day_mon_year" style="visibility: hidden">{$project['deadline']}</span>
                                 </div>
                                 <div class="col-12 col-md-3 mt-2 mt-md-0">
                                     <div class="d-flex gap-1 flex-wrap">
