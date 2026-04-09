@@ -79,7 +79,8 @@
                                         {else}
                                             {assign var="project_title" value=TemplateHelper::uiCleanseHTMLNewlineAndTabs($project['title'])}
                                         {/if}
-                                        {$project_title}<i class="fa-solid fa-circle-info"></i><i class="fa-solid fa-circle-half"></i><i class="fa-solid fa-spinner fa-spin text-muted"></i>
+                                        {$project_title}
+                                        <i class="fa-solid fa-circle-info"></i><i class="fa-solid fa-circle-half"></i><i class="fa-solid fa-spinner fa-spin text-muted"></i>
                                     </a>
                                 </div>
                                 <div class="col-6 col-md-2 mt-2 mt-md-0">
