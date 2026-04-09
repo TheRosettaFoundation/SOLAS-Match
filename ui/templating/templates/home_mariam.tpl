@@ -79,7 +79,7 @@
                     </div>
                 </div>
                 <div class="col-6 col-md-2 mt-2 mt-md-0 small">
-                    {$deadline_timestamps[$task_id]} [cite: 25]
+                    {$deadline_timestamps[$task_id]}
                 </div>
                 <div class="col-12 col-md-3 mt-2 mt-md-0">
                     <div class="d-flex gap-1 flex-wrap">
@@ -117,7 +117,7 @@
                     </a>
                 </div>
                 <div class="col-6 col-md-3 mt-2 mt-md-0 small">
-                    {$task->getWordCount()} words [cite: 39]
+                    {$task->getWordCount()} words
                 </div>
                 <div class="col-6 col-md-3 mt-2 mt-md-0">
                     <div class="d-flex gap-1 flex-wrap">
