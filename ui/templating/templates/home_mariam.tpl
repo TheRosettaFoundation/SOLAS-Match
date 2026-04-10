@@ -92,9 +92,12 @@
                                 </div>
                                 <div class="col-12 col-md-3 mt-2 mt-md-0">
                                     <div class="d-flex gap-1 flex-wrap">
-                                        <span class="badge border text-dark fw-normal bg-light px-2 py-1">fr-FR</span>
-                                        <span class="badge border text-dark fw-normal bg-light px-2 py-1">zh-CN</span>
-                                        <span class="badge border text-dark fw-normal bg-light px-2 py-1">pt-BR</span>
+                                        {if !empty($project['codes'])}
+                                        {assign var="codes" value=explode(',', $project['codes'])}
+                                            {foreach from=$codes item=code}
+                                                <span class="badge border text-dark fw-normal bg-light px-2 py-1">{$code}</span>
+                                            {/foreach}
+                                        {/if}
                                     </div>
                                 </div>
                             </div>
