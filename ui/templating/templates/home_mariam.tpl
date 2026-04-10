@@ -125,78 +125,52 @@
                             </div>
 
                             {foreach from=$completed_files item=file}
-                            {assign var="project_id" value=$project['id']}
                             <div class="row g-0 py-3 border-bottom align-items-center">
 [[[
-p_title truncate
-t_filename truncate
-t_wordcount
-t_type
-codes
-t_status downlaod or in progess or shell
-
-recently completed files might have no completed files at all
-
-if t_title changes or shell start new line
+(**)if t_title changes or shell start new line
 ]]]
                                 <div class="col-12 col-md-6">
                                     <div class="mb-1">
-                                        <span class="badge bg-light text-muted border fw-normal">ERICC Briefs</span>
+                                        {if mb_strlen($file['p_title']) > 31}
+                                            {assign var="project_title" value=TemplateHelper::uiCleanseHTMLNewlineAndTabs(mb_substr($file['p_title'], 0, 31))}
+                                            {assign var="project_title" value="`$project_title`..."}
+                                        {else}
+                                            {assign var="project_title" value=TemplateHelper::uiCleanseHTMLNewlineAndTabs($file['p_title'])}
+                                        {/if}
+                                        <span class="badge bg-light text-muted border fw-normal">{$project_title}</span>
                                     </div>
                                     <a href="{$siteLocation}task/{$task->getId()}/view" class="text-decoration-none fw-bold text-dark d-block">
-                                        {$task->getTitle()}
+                                        {if mb_strlen($file['t_filename']) > 31}
+                                            {assign var="file_name" value=TemplateHelper::uiCleanseHTMLNewlineAndTabs(mb_substr($file['t_filename'], 0, 31))}
+                                            {assign var="file_name" value="`$file_name`..."}
+                                        {else}
+                                            {assign var="file_name" value=TemplateHelper::uiCleanseHTMLNewlineAndTabs($file['t_filename'])}
+                                        {/if}
+                                        {$file_name}
                                     </a>
                                 </div>
                                 <div class="col-6 col-md-3 mt-2 mt-md-0 small">
-                                    {$task->getWordCount()} words
+                                    {$file['t_wordcount']} {TaskTypeEnum::$enum_to_UI[$file['t_type']]['unit_count_text_short']}
                                 </div>
                                 <div class="col-6 col-md-3 mt-2 mt-md-0">
                                     <div class="d-flex gap-1 flex-wrap">
-                                        <span class="badge border text-dark fw-normal bg-light px-2 py-1">fr-FR <i class="fa-solid fa-arrow-down small ms-1"></i></span>
-                                        <span class="badge border text-dark fw-normal bg-light px-2 py-1">so-SO <i class="fa-solid fa-arrow-down small ms-1"></i></span>
-                                    </div>
-                                </div>
+[[[
+(**)$file['codes']
 
-[[[[[[[[[[[[[[[[[[[just REFERENCE...
-                                <div class="col-1">
-                                    {if $project['number_overdue']}
-                                        <i class="bi bi-exclamation-circle-fill"></i>
-                                    {elseif $project['status'] == 2} <!-- All at least in progress -->
-                                        <i class="bi bi-circle-half"></i>
-                                    {else}
-                                        <i class="bi bi-circle-half"></i>
-                                    {/if}
-                                </div>
-                                <div class="col-11 col-md-4">
-                                    <a href="{urlFor name="project-view" options="project_id.{$project_id}"}" class="text-decoration-none fw-bold text-dark d-block">
-                                        {if mb_strlen($project['title']) > 31}
-                                            {assign var="project_title" value=TemplateHelper::uiCleanseHTMLNewlineAndTabs(mb_substr($project['title'], 0, 31))}
-                                            {assign var="project_title" value="`$project_title`..."}
-                                        {else}
-                                            {assign var="project_title" value=TemplateHelper::uiCleanseHTMLNewlineAndTabs($project['title'])}
-                                        {/if}
-                                        {$project_title}
-                                    </a>
-                                </div>
-                                <div class="col-6 col-md-2 mt-2 mt-md-0">
-                                    <div class="progress" style="height: 12px; border-radius: 10px; background-color: #f0f0f0; width: 80%;">
-                                        <div class="progress-bar bg-success" role="progressbar" style="width: {$project['fraction']*100}%; border-radius: 10px;"></div>
-                                    </div>
-                                </div>
-                                <div class="col-6 col-md-2 mt-2 mt-md-0 small">
-                                    <span class="convert_utc_to_local_deadline_day_mon_year" style="visibility: hidden">{$project['deadline']}</span>
-                                </div>
-                                <div class="col-12 col-md-3 mt-2 mt-md-0">
-                                    <div class="d-flex gap-1 flex-wrap">
+(**)$file['t_status'] downlaod or in progess or shell
+
+(**)
                                         {if !empty($project['codes'])}
                                         {assign var="codes" value=explode(',', $project['codes'])}
                                             {foreach from=$codes item=code}
                                                 <span class="badge border text-dark fw-normal bg-light px-2 py-1">{$code}</span>
                                             {/foreach}
                                         {/if}
+]]]
+                                        <span class="badge border text-dark fw-normal bg-light px-2 py-1">fr-FR <i class="fa-solid fa-arrow-down small ms-1"></i></span>
+                                        <span class="badge border text-dark fw-normal bg-light px-2 py-1">so-SO <i class="fa-solid fa-arrow-down small ms-1"></i></span>
                                     </div>
                                 </div>
-]]]]]]]]]]]]]]]]]]]
                             </div>
                             {/foreach}
                             {else}
