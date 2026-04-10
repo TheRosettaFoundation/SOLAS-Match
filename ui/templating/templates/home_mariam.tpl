@@ -126,9 +126,6 @@
 
                             {foreach from=$completed_files item=file}
                             <div class="row g-0 py-3 border-bottom align-items-center">
-[[[
-(**)if t_title changes or shell start new line
-]]]
                                 <div class="col-12 col-md-6">
                                     <div class="mb-1">
                                         {if mb_strlen($file['p_title']) > 31}
@@ -158,7 +155,6 @@
                                         {assign var="codes" value=explode(',', $file['codes'])}
                                             {foreach from=$codes item=code}
 [[
-(**)????????????? not loop
 (**)$file['t_status'] downlaod or in progess or shell
 ]]
                                                 <span class="badge border text-dark fw-normal bg-light px-2 py-1">{$code}<i class="fa-solid fa-arrow-down small ms-1"></i></span>
