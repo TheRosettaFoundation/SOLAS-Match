@@ -65,11 +65,11 @@
                             <div class="row g-0 py-3 border-bottom align-items-center">
                                 <div class="col-1">
                                     {if $project['number_overdue']}
-                                        <i class="fa-solid fa-circle-info"></i>
+                                        <i class="bi bi-exclamation-circle-fill"></i>
                                     {elseif $project['status'] == 2} <!-- All at least in progress -->
-                                        <i class="fa-solid fa-circle-half"></i>
+                                        <i class="bi bi-circle-half"></i>
                                     {else}
-                                        <i class="fa-solid fa-spinner fa-spin text-muted"></i>
+                                        <i class="bi bi-circle-half"></i>
                                     {/if}
                                 </div>
                                 <div class="col-11 col-md-4">
