@@ -113,7 +113,7 @@
 
                 {if !empty($ngo_orgs)}
                     <li {if isset($current_page) && $current_page == 'ngo_projects'}class="nav-item fw-bold"{/if}>
-                        <a href="{urlFor name="org-projects" options="org_id.{$ngo_orgs[0]['organisation_id']}"}" class="fs-5 nav-link fw-bold">Projects</a>
+                        <a href="{urlFor name="ngo_projects" options="org_id.{$ngo_orgs[0]['organisation_id']}"}" class="fs-5 nav-link fw-bold">Projects</a>
                     </li>
                 {/if}
 
