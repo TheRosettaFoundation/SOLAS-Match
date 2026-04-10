@@ -309,9 +309,13 @@ class UserRouteHandler
         $orgDao = new DAO\OrganisationDao();
         $adminDao = new DAO\AdminDao();
 
-        if (!empty($template_data['ngo_orgs']) && $template_data['ngo_orgs'][0]['organisation_id'] != $org_id) {
-            $projectDao->set_org_default_for_user($user_id, $org_id);
-            $template_data['ngo_orgs'] = $adminDao->get_orgs_if_ngo($user_id);
+        if (!empty($template_data['ngo_orgs'])) {
+            if ($org_id) {
+                if ($template_data['ngo_orgs'][0]['organisation_id'] != $org_id) {
+                    $projectDao->set_org_default_for_user($user_id, $org_id);
+                    $template_data['ngo_orgs'] = $adminDao->get_orgs_if_ngo($user_id);
+                }
+            } else $org_id = $template_data['ngo_orgs'][0]['organisation_id'];
         }
 
         $claimed_tasks = $userDao->getFilteredUserClaimedTasks($user_id, 2, 4, 0, 0, 3);
