@@ -154,21 +154,16 @@
                                 </div>
                                 <div class="col-6 col-md-3 mt-2 mt-md-0">
                                     <div class="d-flex gap-1 flex-wrap">
-[[[
-(**)$file['codes']
-
-(**)$file['t_status'] downlaod or in progess or shell
-
-(**)
-                                        {if !empty($project['codes'])}
-                                        {assign var="codes" value=explode(',', $project['codes'])}
+                                        {if !empty($file['codes'])}
+                                        {assign var="codes" value=explode(',', $file['codes'])}
                                             {foreach from=$codes item=code}
-                                                <span class="badge border text-dark fw-normal bg-light px-2 py-1">{$code}</span>
+[[
+(**)????????????? not loop
+(**)$file['t_status'] downlaod or in progess or shell
+]]
+                                                <span class="badge border text-dark fw-normal bg-light px-2 py-1">{$code}<i class="fa-solid fa-arrow-down small ms-1"></i></span>
                                             {/foreach}
                                         {/if}
-]]]
-                                        <span class="badge border text-dark fw-normal bg-light px-2 py-1">fr-FR <i class="fa-solid fa-arrow-down small ms-1"></i></span>
-                                        <span class="badge border text-dark fw-normal bg-light px-2 py-1">so-SO <i class="fa-solid fa-arrow-down small ms-1"></i></span>
                                     </div>
                                 </div>
                             </div>
