@@ -109,43 +109,103 @@
                             {/if}
                         </div>
 
-    <div class="card shadow-sm border-0 rounded-3">
-        <div class="card-body p-4">
-            <div class="d-flex justify-content-between align-items-center mb-4">
-                <h2 class="h4 fw-bold mb-0">Recently completed files</h2>
-                <button class="btn text-white fw-bold px-3 py-1" style="background-color: #f7941d; border: none;">All projects</button>
-            </div>
+                        <div class="card bg-light-mariam custom-card p-4 card-border-top-blue">
+                            <div class="d-flex justify-content-between align-items-center mb-4 border-bottom pb-3">
+                                <h2 class="fs-3 fw-bold text-dark-mariam mb-0">Recently completed files</h2>
+                                <div class="d-flex gap-2">
+                                    <a href="{urlFor name="ngo_projects" options="org_id.{$org_id}"}" class="btn text-white fw-bold px-3 py-1" style="background-color: #f7941d; border: none;">All projects</a>
+                                </div>
+                            </div>
 
-            <div class="row g-0 py-2 border-bottom d-none d-md-flex text-muted small">
-                <div class="col-6">File title</div>
-                <div class="col-3">Word count</div>
-                <div class="col-3">Target languages</div>
-            </div>
+                            {if !empty($completed_files)}
+                            <div class="row g-0 py-2 border-bottom d-none d-md-flex text-muted small">
+                                <div class="col-6">File title</div>
+                                <div class="col-3">Word count</div>
+                                <div class="col-3">Target languages</div>
+                            </div>
 
-            {foreach from=$tasks item=task}
-            <div class="row g-0 py-3 border-bottom align-items-center">
-                <div class="col-12 col-md-6">
-                    <div class="mb-1">
-                        <span class="badge bg-light text-muted border fw-normal">ERICC Briefs</span>
-                    </div>
-                    <a href="{$siteLocation}task/{$task->getId()}/view" class="text-decoration-none fw-bold text-dark d-block">
-                        {$task->getTitle()}
-                    </a>
-                </div>
-                <div class="col-6 col-md-3 mt-2 mt-md-0 small">
-                    {$task->getWordCount()} words
-                </div>
-                <div class="col-6 col-md-3 mt-2 mt-md-0">
-                    <div class="d-flex gap-1 flex-wrap">
-                        <span class="badge border text-dark fw-normal bg-light px-2 py-1">fr-FR <i class="fa-solid fa-arrow-down small ms-1"></i></span>
-                        <span class="badge border text-dark fw-normal bg-light px-2 py-1">so-SO <i class="fa-solid fa-arrow-down small ms-1"></i></span>
-                    </div>
-                </div>
-            </div>
-            {/foreach}
-        </div>
-    </div>
-{/if}
+                            {foreach from=$completed_files item=file}
+                            {assign var="project_id" value=$project['id']}
+                            <div class="row g-0 py-3 border-bottom align-items-center">
+[[[
+p_title truncate
+t_filename truncate
+t_wordcount
+t_type
+codes
+t_status downlaod or in progess or shell
+
+recently completed files might have no completed files at all
+
+if t_title changes or shell start new line
+]]]
+                                <div class="col-12 col-md-6">
+                                    <div class="mb-1">
+                                        <span class="badge bg-light text-muted border fw-normal">ERICC Briefs</span>
+                                    </div>
+                                    <a href="{$siteLocation}task/{$task->getId()}/view" class="text-decoration-none fw-bold text-dark d-block">
+                                        {$task->getTitle()}
+                                    </a>
+                                </div>
+                                <div class="col-6 col-md-3 mt-2 mt-md-0 small">
+                                    {$task->getWordCount()} words
+                                </div>
+                                <div class="col-6 col-md-3 mt-2 mt-md-0">
+                                    <div class="d-flex gap-1 flex-wrap">
+                                        <span class="badge border text-dark fw-normal bg-light px-2 py-1">fr-FR <i class="fa-solid fa-arrow-down small ms-1"></i></span>
+                                        <span class="badge border text-dark fw-normal bg-light px-2 py-1">so-SO <i class="fa-solid fa-arrow-down small ms-1"></i></span>
+                                    </div>
+                                </div>
+
+[[[[[[[[[[[[[[[[[[[just REFERENCE...
+                                <div class="col-1">
+                                    {if $project['number_overdue']}
+                                        <i class="bi bi-exclamation-circle-fill"></i>
+                                    {elseif $project['status'] == 2} <!-- All at least in progress -->
+                                        <i class="bi bi-circle-half"></i>
+                                    {else}
+                                        <i class="bi bi-circle-half"></i>
+                                    {/if}
+                                </div>
+                                <div class="col-11 col-md-4">
+                                    <a href="{urlFor name="project-view" options="project_id.{$project_id}"}" class="text-decoration-none fw-bold text-dark d-block">
+                                        {if mb_strlen($project['title']) > 31}
+                                            {assign var="project_title" value=TemplateHelper::uiCleanseHTMLNewlineAndTabs(mb_substr($project['title'], 0, 31))}
+                                            {assign var="project_title" value="`$project_title`..."}
+                                        {else}
+                                            {assign var="project_title" value=TemplateHelper::uiCleanseHTMLNewlineAndTabs($project['title'])}
+                                        {/if}
+                                        {$project_title}
+                                    </a>
+                                </div>
+                                <div class="col-6 col-md-2 mt-2 mt-md-0">
+                                    <div class="progress" style="height: 12px; border-radius: 10px; background-color: #f0f0f0; width: 80%;">
+                                        <div class="progress-bar bg-success" role="progressbar" style="width: {$project['fraction']*100}%; border-radius: 10px;"></div>
+                                    </div>
+                                </div>
+                                <div class="col-6 col-md-2 mt-2 mt-md-0 small">
+                                    <span class="convert_utc_to_local_deadline_day_mon_year" style="visibility: hidden">{$project['deadline']}</span>
+                                </div>
+                                <div class="col-12 col-md-3 mt-2 mt-md-0">
+                                    <div class="d-flex gap-1 flex-wrap">
+                                        {if !empty($project['codes'])}
+                                        {assign var="codes" value=explode(',', $project['codes'])}
+                                            {foreach from=$codes item=code}
+                                                <span class="badge border text-dark fw-normal bg-light px-2 py-1">{$code}</span>
+                                            {/foreach}
+                                        {/if}
+                                    </div>
+                                </div>
+]]]]]]]]]]]]]]]]]]]
+                            </div>
+                            {/foreach}
+                            {else}
+                            <div class="text-center mt-4">
+                                There are currently no files.
+                            </div>
+                            {/if}
+                        </div>
+                        {/if}
 
                         {if !empty($claimed_tasks)}
                         <div class="card bg-light-mariam custom-card p-4 card-border-top-accent">
