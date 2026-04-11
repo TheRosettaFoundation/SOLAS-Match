@@ -3557,26 +3557,39 @@ DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `get_org_completed_files`(IN oID INT UNSIGNED, IN months INT)
 BEGIN
     SELECT
-        p.id,
-        p.title AS p_title,
-        IF(LOCATE(' ', MIN(t.title)), SUBSTRING(MIN(t.title), LOCATE(' ', MIN(t.title)) + 1), MIN(t.title)) AS t_filename,
-        MIN(t.title) AS t_title,
-        MAX(t.`word-count`) AS t_wordcount,
-        MAX(t.`task-type_id`) AS t_type,
-        CONCAT(MAX(l.code), '-', MAX(c.code)) AS codes,
-        MIN(t.`task-status_id`) AS t_status
-    FROM Projects                 p
-    JOIN project_complete_dates pcd ON p.id=pcd.project_id
-    JOIN Tasks                    t ON p.id=t.project_id
-    JOIN MemsourceTasks          mt ON t.id=mt.task_id
-    JOIN Languages                l ON t.`language_id-target`=l.id
-    JOIN Countries                c ON t.`country_id-target`=c.id
-    WHERE
-        p.organisation_id=oID AND
-        t.cancelled=0 AND
-        (pcd.complete_date > DATE_SUB(NOW(), INTERVAL months MONTH) OR pcd.complete_date='1000-01-01 00:00:00')
-    GROUP BY p.id, IF(internalId=0, t.id, 0) + SUBSTRING_INDEX(mt.internalId, '.', 1)
-    ORDER BY p.created DESC, IF(MAX(internalId)=0, 1, 0), t_filename, codes;
+        by_internal_id.id,
+        by_internal_id.p_title,
+        MAX(by_internal_id.t_filename) AS t_filename,
+        MAX(by_internal_id.t_wordcount) AS t_wordcount,
+        MAX(by_internal_id.t_type) AS t_type,
+        GROUP_CONCAT(CONCAT(by_internal_id.codes, ';', by_internal_id.max_task_id, ';', by_internal_id.t_status) ORDER BY CONCAT(by_internal_id.codes, ';', by_internal_id.max_task_id)) AS codes
+    FROM (
+        SELECT
+            p.id,
+            p.title AS p_title,
+            p.created,
+            MAX(t.id) AS max_task_id,
+            MAX(SUBSTRING_INDEX(mt.internalId, '.', 1)) AS internal_id,
+            IF(LOCATE(' ', MIN(t.title)), SUBSTRING(MIN(t.title), LOCATE(' ', MIN(t.title)) + 1), MIN(t.title)) AS t_filename,
+            CONCAT(IF(LOCATE(' ', MIN(t.title)), SUBSTRING(MIN(t.title), LOCATE(' ', MIN(t.title)) + 1), MIN(t.title)), IF(MAX(mt.internalId)=0, MAX(t.id), '')) AS outer_group_by,
+            MAX(t.`word-count`) AS t_wordcount,
+            MAX(t.`task-type_id`) AS t_type,
+            CONCAT(MAX(l.code), '-', MAX(c.code)) AS codes,
+            MIN(t.`task-status_id`) AS t_status
+        FROM Projects                 p
+        JOIN project_complete_dates pcd ON p.id=pcd.project_id
+        JOIN Tasks                    t ON p.id=t.project_id
+        JOIN MemsourceTasks          mt ON t.id=mt.task_id
+        JOIN Languages                l ON t.`language_id-target`=l.id
+        JOIN Countries                c ON t.`country_id-target`=c.id
+        WHERE
+            p.organisation_id=oID AND
+            t.cancelled=0 AND
+            (pcd.complete_date > DATE_SUB(NOW(), INTERVAL months MONTH) OR pcd.complete_date='1000-01-01 00:00:00')
+        GROUP BY p.id, IF(internalId=0, t.id, 0) + SUBSTRING_INDEX(mt.internalId, '.', 1)
+        ) AS by_internal_id
+    GROUP BY by_internal_id.id, by_internal_id.outer_group_by
+    ORDER BY by_internal_id.created DESC, IF(MAX(by_internal_id.internal_id)=0, 1, 0), by_internal_id.outer_group_by;
 END//
 DELIMITER ;
 
