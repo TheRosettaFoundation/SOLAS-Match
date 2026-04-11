@@ -136,7 +136,7 @@
                                         {/if}
                                         <span class="badge bg-light text-muted border fw-normal">{$project_title}</span>
                                     </div>
-                                    <a href="{$siteLocation}task/{$task->getId()}/view" class="text-decoration-none fw-bold text-dark d-block">
+                                    <div class="text-decoration-none fw-bold text-dark d-block">
                                         {if mb_strlen($file['t_filename']) > 31}
                                             {assign var="file_name" value=TemplateHelper::uiCleanseHTMLNewlineAndTabs(mb_substr($file['t_filename'], 0, 31))}
                                             {assign var="file_name" value="`$file_name`..."}
@@ -144,7 +144,7 @@
                                             {assign var="file_name" value=TemplateHelper::uiCleanseHTMLNewlineAndTabs($file['t_filename'])}
                                         {/if}
                                         {$file_name}
-                                    </a>
+                                    </div>
                                 </div>
                                 <div class="col-6 col-md-3 mt-2 mt-md-0 small">
                                     {$file['t_wordcount']} {TaskTypeEnum::$enum_to_UI[$file['t_type']]['unit_count_text_short']}
@@ -153,11 +153,13 @@
                                     <div class="d-flex gap-1 flex-wrap">
                                         {if !empty($file['codes'])}
                                         {assign var="codes" value=explode(',', $file['codes'])}
-                                            {foreach from=$codes item=code}
-[[
-(**)$file['t_status'] downlaod or in progess or shell
-]]
-                                                <span class="badge border text-dark fw-normal bg-light px-2 py-1">{$code}<i class="fa-solid fa-arrow-down small ms-1"></i></span>
+                                            {foreach from=$codes item=item}
+                                                {assign var="code_id_status" value=explode(';', $item)}
+<!--
+(**)$code_id_status[2] downlaod or in progess or shell
+(**)add type???
+-->
+                                                <span class="badge border text-dark fw-normal bg-light px-2 py-1">{$code_id_status[0]}<i class="fa-solid fa-arrow-down small ms-1"></i></span>
                                             {/foreach}
                                         {/if}
                                     </div>
