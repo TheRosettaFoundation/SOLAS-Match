@@ -155,10 +155,6 @@
                                         {assign var="codes" value=explode(',', $file['codes'])}
                                             {foreach from=$codes item=item}
                                                 {assign var="code_id_status" value=explode(';', $item)}
-<!--
-(**)$code_id_status[2] downlaod or in progess or shell
-(**)add type???
--->
                                                 <span class="badge border text-dark fw-normal bg-light px-2 py-1">{$code_id_status[0]}<i class="fa-solid fa-arrow-down small ms-1"></i></span>
                                             {/foreach}
                                         {/if}

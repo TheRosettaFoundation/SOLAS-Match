@@ -3562,7 +3562,7 @@ BEGIN
         MAX(by_internal_id.t_filename) AS t_filename,
         MAX(by_internal_id.t_wordcount) AS t_wordcount,
         MAX(by_internal_id.t_type) AS t_type,
-        GROUP_CONCAT(CONCAT(by_internal_id.codes, ';', by_internal_id.max_task_id, ';', by_internal_id.t_status) ORDER BY CONCAT(by_internal_id.codes, ';', by_internal_id.max_task_id)) AS codes
+        GROUP_CONCAT(CONCAT(by_internal_id.codes, ';', by_internal_id.max_task_id, ';', by_internal_id.t_status, ';', by_internal_id.t_type) ORDER BY CONCAT(by_internal_id.codes, ';', by_internal_id.max_task_id)) AS codes
     FROM (
         SELECT
             p.id,
