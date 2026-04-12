@@ -64,11 +64,11 @@
                             <div class="row g-0 py-3 border-bottom align-items-center">
                                 <div class="col-1">
                                     {if $project['number_overdue']}
-                                        <i class="bi bi-exclamation-circle-fill"></i>
+                                        <i class="bi bi-exclamation-circle-fill home_tooltip"><span class="home_tooltiptext">Overdue tasks</span></i>
                                     {elseif $project['status'] == 2} <!-- All at least in progress -->
-                                        <i class="bi bi-circle-half"></i>
+                                        <i class="bi bi-circle-half home_tooltip"><span class="home_tooltiptext">In progress</span></i>
                                     {else}
-                                        <i class="bi bi-circle-half"></i>
+                                        <i class="bi bi-circle-half home_tooltip"><span class="home_tooltiptext">In progress</span></i>
                                     {/if}
                                 </div>
                                 <div class="col-11 col-md-4">
@@ -155,7 +155,13 @@
                                         {assign var="codes" value=explode(',', $file['codes'])}
                                             {foreach from=$codes item=item}
                                                 {assign var="code_id_status" value=explode(';', $item)}
-                                                <span class="badge border text-dark fw-normal bg-light px-2 py-1">{$code_id_status[0]}<i class="fa-solid fa-arrow-down small ms-1"></i></span>
+                                                {if !TaskTypeEnum::$enum_to_UI[$code_id_status[3]]['shell_task'] && $code_id_status[2] == 4}
+                                                    <a href="{urlFor name="download-task-latest-version" options="task_id.{$code_id_status[1]}"}"><span class="badge border text-dark fw-normal bg-light px-2 py-1 home_tooltip">{$code_id_status[0]}<i class="fa-solid fa-arrow-down small ms-1"></i><span class="home_tooltiptext">Download</span></span></a>
+                                                {elseif TaskTypeEnum::$enum_to_UI[$code_id_status[3]]['shell_task'] && $code_id_status[2] == 4}
+                                                    <span class="badge border text-dark fw-normal bg-light px-2 py-1 home_tooltip">{$code_id_status[0]}<span class="home_tooltiptext">Complete</span></span>
+                                                {else}
+                                                    <span class="badge border text-dark fw-normal bg-light px-2 py-1 home_tooltip">{$code_id_status[0]}<span class="home_tooltiptext">In progress</span></span>
+                                                {/if}
                                             {/foreach}
                                         {/if}
                                     </div>
