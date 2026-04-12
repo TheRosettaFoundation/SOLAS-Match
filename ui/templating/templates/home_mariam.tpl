@@ -46,7 +46,14 @@
                                 <h2 class="fs-3 fw-bold text-dark-mariam mb-0">Current projects</h2>
                                 <div class="d-flex gap-2">
                                     <a href="{urlFor name="ngo_projects"   options="org_id.{$org_id}"}" class="btn text-white fw-bold px-3 py-1" style="background-color: #f7941d; border: none;">All projects</a>
+
+                                    {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $NGO_ADMIN + $NGO_PROJECT_OFFICER)}
                                     <a href="{urlFor name="project-create" options="org_id.{$org_id}"}" class="btn text-white fw-bold px-3 py-1" style="background-color: #f7941d; border: none;">+ New project</a>
+                                    {/if}
+
+                                    {if $roles&($SITE_ADMIN + $PROJECT_OFFICER) || in_array($org_id, $ORG_EXCEPTIONS) && $roles&($NGO_ADMIN + $NGO_PROJECT_OFFICER)}
+                                    <a href="{urlFor name="project-create-empty" options="org_id.{$org_id}"}" class="btn text-white fw-bold px-3 py-1" style="background-color: #f7941d; border: none;">+ New non-Phrase project</a>
+                                    {/if}
                                 </div>
                             </div>
 
