@@ -46,7 +46,7 @@
                         </div>
 
                         {if !empty($current_projects)}
-                        <div class="row g-0 py-2 d-none d-md-flex text-muted small px-3 border-bottom">
+                        <div class="row g-0 py-2 d-md-flex text-muted small px-3 border-bottom">
                             <div class="col-md-4 ps-4">Title</div>
                             <div class="col-md-1 text-center">Progress</div>
                             <div class="col-md-1 text-center">Created</div>
