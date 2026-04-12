@@ -55,7 +55,7 @@
                             <div class="col-md-3">Target languages</div>
                         </div>
 
-                        {foreach from=$$current_projects item=project}
+                        {foreach from=$current_projects item=project}
                             {assign var="project_id" value={$project['id']}}
             
                             <div class="row g-0 py-3 align-items-center px-3 border-bottom hover-bg-light" 
