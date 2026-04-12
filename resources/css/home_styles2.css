@@ -110,3 +110,36 @@
   --bs-text-opacity: 1;
   color: rgba(var(--bs-light-rgb), var(--bs-text-opacity)) !important;
 }
+
+.home_tooltip {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+}
+.home_tooltiptext {
+  visibility: hidden;
+  width: 300px;
+  background-color: black;
+  color: #ffffff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px 0;
+  position: absolute;
+  z-index: 1;
+  bottom: 150%;
+  left: 50%;
+  margin-left: -150px;
+}
+.home_tooltiptext::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: black transparent transparent transparent;
+}
+.home_tooltip:hover .home_tooltiptext {
+  visibility: visible;
+}
