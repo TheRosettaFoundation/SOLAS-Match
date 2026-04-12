@@ -421,8 +421,8 @@ class UserRouteHandler
             'siteLocation'  => Common\Lib\Settings::get('site.location'),
             'extra_scripts' => $extra_scripts,
             'extra_styles'  => $extra_styles,
-            'current_projects' => $projectDao->get_org_current_projects($org_id),
-            'completed_files'  => $projectDao->get_org_completed_files($org_id, 6),
+            'current_projects' => $projectDao->get_org_current_projects($org_id, 1),
+            'completed_files'  => $projectDao->get_org_completed_files($org_id, 500),
             'sesskey' => Common\Lib\UserSession::getCSRFKey(),
             ]);
 

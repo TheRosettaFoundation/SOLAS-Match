@@ -448,9 +448,9 @@ $replace = array(
         return $result;
     }
 
-    public function get_org_current_projects($org_id)
+    public function get_org_current_projects($org_id, $select_all = 0)
     {
-        $result = LibAPI\PDOWrapper::call('get_org_current_projects', LibAPI\PDOWrapper::cleanse($org_id));
+        $result = LibAPI\PDOWrapper::call('get_org_current_projects', LibAPI\PDOWrapper::cleanse($org_id) . ',' . LibAPI\PDOWrapper::cleanse($select_all));
         if (empty($result)) return [];
         return $result;
     }

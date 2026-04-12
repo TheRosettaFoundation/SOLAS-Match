@@ -3530,7 +3530,7 @@ DELIMITER ;
 
 DROP PROCEDURE IF EXISTS `get_org_current_projects`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `get_org_current_projects`(IN oID INT UNSIGNED)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_org_current_projects`(IN oID INT UNSIGNED, IN select_all INT)
 BEGIN
     SELECT
         p.*,
@@ -3545,7 +3545,7 @@ BEGIN
     LEFT JOIN Countries                c ON t.`country_id-target`=c.id
     WHERE
         p.organisation_id=oID AND
-        pcd.status!=1 AND
+        (select_all>0 OR pcd.status!=1) AND
         (t.cancelled=0 OR t.cancelled IS NULL)
     GROUP BY p.id
     ORDER BY p.created DESC;
