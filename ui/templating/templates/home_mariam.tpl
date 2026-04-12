@@ -67,7 +67,7 @@
                             </div>
 
                             {foreach from=$current_projects item=project}
-                            {assign var="project_id" value=$project['id']}
+                            {assign var="project_id" value={$project['id']}}
                             <div class="row g-0 py-3 border-bottom align-items-center">
                                 <div class="col-1">
                                     {if $project['number_overdue']}
