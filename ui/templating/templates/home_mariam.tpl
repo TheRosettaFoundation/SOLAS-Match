@@ -64,11 +64,11 @@
                             <div class="row g-0 py-3 border-bottom align-items-center">
                                 <div class="col-1">
                                     {if $project['number_overdue']}
-                                        <i class="bi bi-exclamation-circle-fill home_tooltip"><span class="home_tooltiptext">Overdue tasks</span></i>
+                                        <i class="bi bi-exclamation-circle-fill home_tooltip"></i><span class="home_tooltiptext">Overdue tasks</span>
                                     {elseif $project['status'] == 2} <!-- All at least in progress -->
-                                        <i class="bi bi-circle-half home_tooltip"><span class="home_tooltiptext">In progress</span></i>
+                                        <i class="bi bi-circle-half home_tooltip"></i><span class="home_tooltiptext">In progress</span>
                                     {else}
-                                        <i class="bi bi-circle-half home_tooltip"><span class="home_tooltiptext">In progress</span></i>
+                                        <i class="bi bi-circle-half home_tooltip"></i><span class="home_tooltiptext">In progress</span>
                                     {/if}
                                 </div>
                                 <div class="col-11 col-md-4">
