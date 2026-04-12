@@ -28,8 +28,8 @@
             {if isset($user)}
                 <div class="pull-right">
                             {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER + $NGO_ADMIN + $NGO_PROJECT_OFFICER)}
-                            <a href="{urlFor name="org-projects" options="org_id.$org_id"}" class='btn btn-primary'>
-                                <i class="icon-briefcase icon-white"></i> Organization Dashboard
+                            <a href="{urlFor name="ngo_projects" options="org_id.$org_id"}" class='btn btn-primary'>
+                                <i class="icon-briefcase icon-white"></i> Organization Projects
                             </a>
                             {/if}
 
