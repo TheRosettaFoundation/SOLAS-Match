@@ -404,6 +404,100 @@ class UserRouteHandler
     {
         global $app, $template_data;
 
+        $user_id = Common\Lib\UserSession::getCurrentUserID();
+        $org_id = $args ? $args['org_id'] : 0;
+
+        $template_data = array_merge($template_data, ['current_page' => 'home']);
+        if (empty($user_id)) return UserRouteHandler::render('index-home.tpl', $response);
+
+        $userDao = new DAO\UserDao();
+        $projectDao = new DAO\ProjectDao();
+        $orgDao = new DAO\OrganisationDao();
+        $adminDao = new DAO\AdminDao();
+
+        if (!empty($template_data['ngo_orgs'])) {
+            if ($org_id) {
+                if ($template_data['ngo_orgs'][0]['organisation_id'] != $org_id) {
+                    $projectDao->set_org_default_for_user($user_id, $org_id);
+                    $template_data['ngo_orgs'] = $adminDao->get_orgs_if_ngo($user_id);
+                }
+            } else $org_id = $template_data['ngo_orgs'][0]['organisation_id'];
+        }
+
+        $claimed_tasks = $userDao->getFilteredUserClaimedTasks($user_id, 2, 4, 0, 0, 3);
+        if (empty($claimed_tasks)) $claimed_tasks = [];
+
+        $deadline_timestamps = [];
+        $matecat_urls = [];
+        $orgs = [];
+        $org_names = [];
+        $org_images = [];
+        foreach ($claimed_tasks as $task) {
+            $task_id = $task->getId();
+            $deadline = $task->getDeadline();
+            $selected_year   = (int)substr($deadline,  0, 4);
+            $selected_month  = (int)substr($deadline,  5, 2);
+            $selected_day    = (int)substr($deadline,  8, 2);
+            $selected_hour   = (int)substr($deadline, 11, 2); // These are UTC, they will be recalculated to local time by JavaScript (we do not what the local time zone is)
+            $selected_minute = (int)substr($deadline, 14, 2);
+            $deadline_timestamps[$task_id] = gmmktime($selected_hour, $selected_minute, 0, $selected_month, $selected_day, $selected_year);
+
+            if (!$projectDao->are_translations_not_all_complete($task, $projectDao->get_memsource_task($task_id))) $matecat_urls[$task_id] = 1;
+
+            $project = $projectDao->getProject($task->getProjectId());
+            $orgs[$task_id] = $project->getOrganisationId();
+            $org_names[$task_id] = $orgDao->getOrganisation($orgs[$task_id])->getName();
+            $org_images[$task_id] = $userDao->get_org_image($orgs[$task_id]);
+        }
+
+        $tasks = $userDao->getUserPageTasks($user_id, 4, 0, NULL, NULL, NULL);
+        if (empty($tasks)) $tasks = [];
+        $task_ids = [];
+        foreach ($tasks as $task) {
+            $task_id = $task->getId();
+            array_push($task_ids, $task_id);
+            $deadline = $task->getDeadline();
+            $selected_year   = (int)substr($deadline,  0, 4);
+            $selected_month  = (int)substr($deadline,  5, 2);
+            $selected_day    = (int)substr($deadline,  8, 2);
+            $selected_hour   = (int)substr($deadline, 11, 2); // These are UTC, they will be recalculated to local time by JavaScript (we do not what the local time zone is)
+            $selected_minute = (int)substr($deadline, 14, 2);
+            $deadline_timestamps[$task_id] = gmmktime($selected_hour, $selected_minute, 0, $selected_month, $selected_day, $selected_year);
+
+            $project = $projectDao->getProject($task->getProjectId());
+            $orgs[$task_id] = $project->getOrganisationId();
+            $org_names[$task_id] = $orgDao->getOrganisation($orgs[$task_id])->getName();
+            $org_images[$task_id] = $userDao->get_org_image($orgs[$task_id]);
+        }
+        $chunks = $userDao->getUserTaskChunks(...$task_ids);
+
+        $extra_scripts  = "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/Parameters.js\"></script>";
+        $extra_scripts .= "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/Home4.js\" async></script>";
+
+        $extra_styles = "<link rel=\"stylesheet\" href=\"https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css\" /><link rel=\"stylesheet\" href=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}resources/css/home_styles2.css\" />";
+
+        $template_data = array_merge($template_data, [
+            'user_id'       => $user_id,
+            'org_id'        => $org_id,
+            'roles'         => $org_id ? $adminDao->get_roles($user_id, $org_id) : 0,
+            'siteLocation'  => Common\Lib\Settings::get('site.location'),
+            'extra_scripts' => $extra_scripts,
+            'extra_styles'  => $extra_styles,
+            'claimed_tasks' => $claimed_tasks,
+            'matecat_urls'  => $matecat_urls,
+            'deadline_timestamps' => $deadline_timestamps,
+            'tasks' => $tasks,
+            'chunks' => $chunks,
+            'org_images' => $org_images,
+            'orgs' => $orgs,
+            'org_names' => $org_names,
+            'current_projects' => $org_id ? $projectDao->get_org_current_projects($org_id) : [],
+            'completed_files'  => $org_id ? $projectDao->get_org_completed_files($org_id, 6) : [],
+            'news' => $userDao->get_content_items(null, 1, null, 1, 1, null, null, null, 0, 0),
+            'resources' => $org_id ? $userDao->get_content_items(null, 7, null, 1, 1, null, null, null, 0, 0) : $userDao->get_content_items(null, 2, null, 1, 1, null, null, null, 0, 0),
+            'sesskey' => Common\Lib\UserSession::getCSRFKey(),
+            ]);
+
         return UserRouteHandler::render('ngo_projects.tpl', $response);
     }
 
