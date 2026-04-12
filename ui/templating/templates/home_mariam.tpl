@@ -58,7 +58,7 @@
                             </div>
 
                             {if !empty($current_projects)}
-                            <div class="row g-0 py-2 border-bottom d-none d-md-flex text-muted small">
+                            <div class="row g-0 py-2 border-bottom d-md-flex text-muted small">
                                 <div class="col-1">Status</div>
                                 <div class="col-4">Title</div>
                                 <div class="col-2">Progress</div>
@@ -125,7 +125,7 @@
                             </div>
 
                             {if !empty($completed_files)}
-                            <div class="row g-0 py-2 border-bottom d-none d-md-flex text-muted small">
+                            <div class="row g-0 py-2 border-bottom d-md-flex text-muted small">
                                 <div class="col-6">File title</div>
                                 <div class="col-3">Word count</div>
                                 <div class="col-3">Target languages</div>
