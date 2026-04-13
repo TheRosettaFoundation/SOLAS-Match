@@ -97,7 +97,7 @@
                                     {if !empty($project['codes'])}
                                         {assign var="codes" value=explode(',', $project['codes'])}
                                         {foreach from=$codes item=code}
-                                            <span class="badge border text-dark-mariam fw-normal bg-white px-2 py-1">{$code}</span>
+                                            <span class="badge border text-dark-mariam fw-normal bg-light-mariam px-2 py-1">{$code}</span>
                                         {/foreach}
                                     {/if}
                                 </div>
