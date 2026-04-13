@@ -104,7 +104,7 @@
                             </div>
 
                             <div class="collapse" id="project-group-{$project_id}">
-                                <div class="bg-white">
+                                <div>
                                     <div class="row g-0 py-2 ps-5 pe-3 border-bottom align-items-center">
                                         {foreach from=$completed_files item=file}
                                             {if $file['id'] == $project_id}
