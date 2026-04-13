@@ -210,8 +210,8 @@
                         <img src="https://www.gravatar.com/avatar/{md5( strtolower( trim($user->getEmail())))}?s=20{urlencode("&")}r=g" alt="" />
                             <span class="profile_name"> {TemplateHelper::uiCleanseHTML($user->getDisplayName())}
                                 {if !empty($ngo_orgs)}
-                                    {if mb_strlen($ngo_orgs[0]['name']) > 20}
-                                        {assign var="org_name" value=TemplateHelper::uiCleanseHTML(mb_substr($ngo_orgs[0]['name'], 0, 20))}
+                                    {if mb_strlen($ngo_orgs[0]['name']) > 30}
+                                        {assign var="org_name" value=TemplateHelper::uiCleanseHTML(mb_substr($ngo_orgs[0]['name'], 0, 30))}
                                         {assign var="org_name" value="`$org_name`..."}
                                     {else}
                                         {assign var="org_name" value=TemplateHelper::uiCleanseHTML($ngo_orgs[0]['name'])}
