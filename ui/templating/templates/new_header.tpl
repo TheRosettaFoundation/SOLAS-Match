@@ -241,6 +241,7 @@
                             {if !empty($ngo_orgs) && count($ngo_orgs) > 1}
 
                             {foreach $ngo_orgs as $ngo_org}
+                            {if $ngo_org['name'] != $org_name}
                             <li>
                                 {if mb_strlen($ngo_org['name']) > 20}
                                     {assign var="org_name" value=TemplateHelper::uiCleanseHTML(mb_substr($ngo_org['name'], 0, 20))}
@@ -250,6 +251,7 @@
                                 {/if}
                                 <a href="{urlFor name="home_ngo" options="org_id.{$ngo_org['organisation_id']}"}" class="dropdown-item fs-5" id="dropdown-menu-user">Switch to: {$org_name}</a>
                             </li>
+                            {/if}
                             {/foreach}
 
                             <li>------------</li>
