@@ -61,7 +61,7 @@
                             <div class="row g-0 py-3 align-items-center px-3 border-bottom hover-bg-light" 
                                  data-bs-toggle="collapse" 
                                  data-bs-target="#project-group-{$project_id}" 
-                                 style="cursor: pointer; background-color: #fcfcfc;">
+                                 style="cursor: pointer;">
                 
                                 <div class="col-12 col-md-4 fw-bold text-dark-mariam d-flex align-items-center">
                                     <i class="fa-solid fa-chevron-right me-3 small text-muted transition-icon"></i>
