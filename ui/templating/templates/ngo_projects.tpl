@@ -65,7 +65,7 @@
                 
                                 <div class="col-12 col-md-4 fw-bold text-dark-mariam d-flex align-items-center">
                                     <i class="fa-solid fa-chevron-right me-3 small text-muted transition-icon"></i>
-                                    <a href="{urlFor name="project-view" options="project_id.{$project_id}"}" class="text-decoration-none fw-bold text-dark d-block">
+                                    <a href="{urlFor name="project-view" options="project_id.{$project_id}"}" class="text-decoration-none fw-bold text-dark-mariam d-block">
                                         {if mb_strlen($project['title']) > 31}
                                             {assign var="project_title" value=TemplateHelper::uiCleanseHTMLNewlineAndTabs(mb_substr($project['title'], 0, 31))}
                                             {assign var="project_title" value="`$project_title`..."}
@@ -97,7 +97,7 @@
                                     {if !empty($project['codes'])}
                                         {assign var="codes" value=explode(',', $project['codes'])}
                                         {foreach from=$codes item=code}
-                                            <span class="badge border text-dark fw-normal bg-white px-2 py-1">{$code}</span>
+                                            <span class="badge border text-dark-mariam fw-normal bg-white px-2 py-1">{$code}</span>
                                         {/foreach}
                                     {/if}
                                 </div>
@@ -126,11 +126,11 @@
                                                     {foreach from=$codes item=item}
                                                         {assign var="code_id_status" value=explode(';', $item)}
                                                         {if !TaskTypeEnum::$enum_to_UI[$code_id_status[3]]['shell_task'] && $code_id_status[2] == 4}
-                                                            <a href="{urlFor name="download-task-latest-version" options="task_id.{$code_id_status[1]}"}"><span class="badge border text-dark fw-normal bg-light px-2 py-1 home_tooltip">{$code_id_status[0]}<i class="fa-solid fa-arrow-down small ms-1"></i><span class="home_tooltiptext">Download</span></span></a>
+                                                            <a href="{urlFor name="download-task-latest-version" options="task_id.{$code_id_status[1]}"}"><span class="badge border text-dark-mariam fw-normal bg-light-mariam px-2 py-1 home_tooltip">{$code_id_status[0]}<i class="fa-solid fa-arrow-down small ms-1"></i><span class="home_tooltiptext">Download</span></span></a>
                                                         {elseif TaskTypeEnum::$enum_to_UI[$code_id_status[3]]['shell_task'] && $code_id_status[2] == 4}
-                                                            <span class="badge border text-dark fw-normal bg-light px-2 py-1 home_tooltip">{$code_id_status[0]}<span class="home_tooltiptext">Complete</span></span>
+                                                            <span class="badge border text-dark-mariam fw-normal bg-light-mariam px-2 py-1 home_tooltip">{$code_id_status[0]}<span class="home_tooltiptext">Complete</span></span>
                                                         {else}
-                                                            <span class="badge border text-dark fw-normal bg-light px-2 py-1 home_tooltip">{$code_id_status[0]}<span class="home_tooltiptext">In progress</span></span>
+                                                            <span class="badge border text-dark-mariam fw-normal bg-light-mariam px-2 py-1 home_tooltip">{$code_id_status[0]}<span class="home_tooltiptext">In progress</span></span>
                                                         {/if}
                                                     {/foreach}
                                                 {/if}
