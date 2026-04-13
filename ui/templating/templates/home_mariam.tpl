@@ -370,7 +370,7 @@
                             <div class="d-flex align-items-center mb-3 border-bottom pb-3">
                                 <span class="me-2 fs-5" style="color: var(--core-blue);">📖</span>
                                 <a href="{$siteLocation}content_list/{intdiv($resources[0]['type'], 10)}/" class="fs-3 fw-bold text-dark-mariam text-decoration-none hover-text-secondary">
-                                    Resources & Tools{$org_id};{$resources[0]['type']};{$resources[0]['title']}
+                                    Resources & Tools
                                 </a>
                             </div>
                             <ul class="list-unstyled space-y-4">
@@ -382,7 +382,7 @@
                                 </li>
                                 {/foreach}
                             </ul>
-                            <a href="{$siteLocation}content_list/2/" class="mt-3 w-100 btn btn-outline-primary fw-semibold" style="color: var(--core-blue);">
+                            <a href="{$siteLocation}content_list/{intdiv($resources[0]['type'], 10)}/" class="mt-3 w-100 btn btn-outline-primary fw-semibold" style="color: var(--core-blue);">
                                 View All Resources <i class="fa-solid fa-arrow-right ms-1"></i>
                             </a>
                         </div>
