@@ -216,7 +216,7 @@
                                     {else}
                                         {assign var="org_name" value=TemplateHelper::uiCleanseHTML($ngo_orgs[0]['name'])}
                                     {/if}
-                                    <div class="fs-6">{$org_name}</div>
+                                    <br /><span class="fs-6">{$org_name}</span>
                                 {/if}
                             </span>
                         </a>
