@@ -369,7 +369,7 @@
                         <div class="card bg-light-mariam custom-card p-4">
                             <div class="d-flex align-items-center mb-3 border-bottom pb-3">
                                 <span class="me-2 fs-5" style="color: var(--core-blue);">📖</span>
-                                <a href="{$siteLocation}content_list/2/" class="fs-3 fw-bold text-dark-mariam text-decoration-none hover-text-secondary">
+                                <a href="{$siteLocation}content_list/{$resources[0]['type']/10}/" class="fs-3 fw-bold text-dark-mariam text-decoration-none hover-text-secondary">
                                     Resources & Tools
                                 </a>
                             </div>
