@@ -370,7 +370,7 @@
                             <div class="d-flex align-items-center mb-3 border-bottom pb-3">
                                 <span class="me-2 fs-5" style="color: var(--core-blue);">📖</span>
                                 <a href="{$siteLocation}content_list/{intdiv($resources[0]['type'], 10)}/" class="fs-3 fw-bold text-dark-mariam text-decoration-none hover-text-secondary">
-                                    Resources & Tools
+                                    Resources & Tools{$org_id};{$resources[0]['type']};{$resources[0]['title']}
                                 </a>
                             </div>
                             <ul class="list-unstyled space-y-4">
