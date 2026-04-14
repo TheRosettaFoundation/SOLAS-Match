@@ -65,8 +65,8 @@
                                         <i class="fa-solid fa-chevron-right me-3 small text-muted transition-icon"></i>
                                     </div>
                                     <a href="{urlFor name="project-view" options="project_id.{$project_id}"}" class="text-decoration-none fw-bold text-dark-mariam d-block">
-                                        {if mb_strlen($project['title']) > 31}
-                                            {assign var="project_title" value=TemplateHelper::uiCleanseHTMLNewlineAndTabs(mb_substr($project['title'], 0, 31))}
+                                        {if mb_strlen($project['title']) > 41}
+                                            {assign var="project_title" value=TemplateHelper::uiCleanseHTMLNewlineAndTabs(mb_substr($project['title'], 0, 41))}
                                             {assign var="project_title" value="`$project_title`..."}
                                         {else}
                                             {assign var="project_title" value=TemplateHelper::uiCleanseHTMLNewlineAndTabs($project['title'])}
@@ -108,8 +108,8 @@
                                         {foreach from=$completed_files item=file}
                                             {if $file['id'] == $project_id}
                                                 <div class="col-md-4 small text-muted">
-                                                    {if mb_strlen($file['t_filename']) > 31}
-                                                        {assign var="file_name" value=TemplateHelper::uiCleanseHTMLNewlineAndTabs(mb_substr($file['t_filename'], 0, 31))}
+                                                    {if mb_strlen($file['t_filename']) > 41}
+                                                        {assign var="file_name" value=TemplateHelper::uiCleanseHTMLNewlineAndTabs(mb_substr($file['t_filename'], 0, 41))}
                                                         {assign var="file_name" value="`$file_name`..."}
                                                     {else}
                                                         {assign var="file_name" value=TemplateHelper::uiCleanseHTMLNewlineAndTabs($file['t_filename'])}
