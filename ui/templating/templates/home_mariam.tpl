@@ -82,8 +82,8 @@
                                 </div>
                                 <div class="col-11 col-md-4">
                                     <a href="{urlFor name="project-view" options="project_id.{$project_id}"}" class="text-decoration-none fw-bold text-dark-mariam d-block">
-                                        {if mb_strlen($project['title']) > 31}
-                                            {assign var="project_title" value=TemplateHelper::uiCleanseHTMLNewlineAndTabs(mb_substr($project['title'], 0, 31))}
+                                        {if mb_strlen($project['title']) > 29}
+                                            {assign var="project_title" value=TemplateHelper::uiCleanseHTMLNewlineAndTabs(mb_substr($project['title'], 0, 29))}
                                             {assign var="project_title" value="`$project_title`..."}
                                         {else}
                                             {assign var="project_title" value=TemplateHelper::uiCleanseHTMLNewlineAndTabs($project['title'])}
