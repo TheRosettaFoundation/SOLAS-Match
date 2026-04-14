@@ -116,7 +116,7 @@
                                                     {/if}
                                                     {$file_name}
                                                 </div>
-                                                <div class="col-md-1 offset-md-4 text-center small">
+                                                <div class="col-md-1 offset-md-4 small">
                                                     {$file['t_wordcount']} {TaskTypeEnum::$enum_to_UI[$file['t_type']]['unit_count_text_short']}
                                                 </div>
                                                 <div class="col-md-3 d-flex gap-1 flex-wrap">
