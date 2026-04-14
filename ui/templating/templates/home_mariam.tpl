@@ -135,8 +135,8 @@
                             <div class="row g-0 py-3 border-bottom align-items-center">
                                 <div class="col-12 col-md-6">
                                     <div class="mb-1">
-                                        {if mb_strlen($file['p_title']) > 46}
-                                            {assign var="project_title" value=TemplateHelper::uiCleanseHTMLNewlineAndTabs(mb_substr($file['p_title'], 0, 46))}
+                                        {if mb_strlen($file['p_title']) > 56}
+                                            {assign var="project_title" value=TemplateHelper::uiCleanseHTMLNewlineAndTabs(mb_substr($file['p_title'], 0, 56))}
                                             {assign var="project_title" value="`$project_title`..."}
                                         {else}
                                             {assign var="project_title" value=TemplateHelper::uiCleanseHTMLNewlineAndTabs($file['p_title'])}
