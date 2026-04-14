@@ -58,13 +58,12 @@
                         {foreach from=$current_projects item=project}
                             {assign var="project_id" value={$project['id']}}
             
-                            <div class="row g-0 py-3 align-items-center px-3 border-bottom hover-bg-light" 
-                                 data-bs-toggle="collapse" 
-                                 data-bs-target="#project-group-{$project_id}" 
-                                 style="cursor: pointer;">
-                
+                            <div class="row g-0 py-3 align-items-center px-3 border-bottom hover-bg-light">
+
                                 <div class="col-12 col-md-4 fw-bold text-dark-mariam d-flex align-items-center">
-                                    <i class="fa-solid fa-chevron-right me-3 small text-muted transition-icon"></i>
+                                    <div data-bs-toggle="collapse" data-bs-target="#project-group-{$project_id}" style="cursor: pointer;">
+                                        <i class="fa-solid fa-chevron-right me-3 small text-muted transition-icon"></i>
+                                    </div>
                                     <a href="{urlFor name="project-view" options="project_id.{$project_id}"}" class="text-decoration-none fw-bold text-dark-mariam d-block">
                                         {if mb_strlen($project['title']) > 31}
                                             {assign var="project_title" value=TemplateHelper::uiCleanseHTMLNewlineAndTabs(mb_substr($project['title'], 0, 31))}
