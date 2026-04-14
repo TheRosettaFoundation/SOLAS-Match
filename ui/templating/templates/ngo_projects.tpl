@@ -108,8 +108,8 @@
                                         {foreach from=$completed_files item=file}
                                             {if $file['id'] == $project_id}
                                                 <div class="col-md-4 small text-muted">
-                                                    {if mb_strlen($file['t_filename']) > 41}
-                                                        {assign var="file_name" value=TemplateHelper::uiCleanseHTMLNewlineAndTabs(mb_substr($file['t_filename'], 0, 41))}
+                                                    {if mb_strlen($file['t_filename']) > 46}
+                                                        {assign var="file_name" value=TemplateHelper::uiCleanseHTMLNewlineAndTabs(mb_substr($file['t_filename'], 0, 46))}
                                                         {assign var="file_name" value="`$file_name`..."}
                                                     {else}
                                                         {assign var="file_name" value=TemplateHelper::uiCleanseHTMLNewlineAndTabs($file['t_filename'])}
