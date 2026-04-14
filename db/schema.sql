@@ -11155,7 +11155,8 @@ BEGIN
                     (tp.task_id IS NULL OR tp.payment_status IN ('In-kind', 'In-house', 'Waived')) AND
                     (t.`task-status_id`=4 OR (t.`task-status_id`=3 AND t.cancelled=2 AND t.`word-count`>1)) AND
                     sco.start IS NOT NULL AND
-                    t.`created-time`>=sco.start,
+                    t.`created-time`>=sco.start AND
+                    t.`created-time`< sco.end,
                     t.`word-count`, 0)*ttd.rate_for_recognition
             ), 0) +
             (SELECT IFNULL(SUM(ap.points), 0) FROM adjust_points_strategic ap WHERE u.id=ap.user_id)
