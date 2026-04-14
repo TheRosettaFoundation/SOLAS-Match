@@ -83,12 +83,8 @@
                                     </div>
                                 </div>
 
-                                <div class="col-6 col-md-1 mt-2 mt-md-0 text-center small">
-                                    <span class="convert_utc_to_local_deadline_day_mon_year" style="visibility: hidden">{$project['created']}</span>
-                                </div>
-
-                                <div class="col-6 col-md-1 mt-2 mt-md-0 text-center small text-danger fw-medium">
-                                    <span class="convert_utc_to_local_deadline_day_mon_year" style="visibility: hidden">{$project['deadline']}</span>
+                                <div class="col-6 col-md-2 mt-2 mt-md-0 text-center small">
+                                    <span class="convert_utc_to_local_deadline_day_mon_year" style="visibility: hidden">{$project['created']}</span> → <span class="convert_utc_to_local_deadline_day_mon_year" style="visibility: hidden">{$project['deadline']}</span>
                                 </div>
 
                                 <div class="col-6 col-md-2 mt-2 mt-md-0 text-center small">
