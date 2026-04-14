@@ -144,8 +144,8 @@
                                         <span class="badge bg-light-mariam text-muted border fw-normal">{$project_title}</span>
                                     </div>
                                     <div class="text-decoration-none fw-bold text-dark-mariam d-block">
-                                        {if mb_strlen($file['t_filename']) > 45}
-                                            {assign var="file_name" value=TemplateHelper::uiCleanseHTMLNewlineAndTabs(mb_substr($file['t_filename'], 0, 45))}
+                                        {if mb_strlen($file['t_filename']) > 40}
+                                            {assign var="file_name" value=TemplateHelper::uiCleanseHTMLNewlineAndTabs(mb_substr($file['t_filename'], 0, 40))}
                                             {assign var="file_name" value="`$file_name`..."}
                                         {else}
                                             {assign var="file_name" value=TemplateHelper::uiCleanseHTMLNewlineAndTabs($file['t_filename'])}
