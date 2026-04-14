@@ -135,8 +135,8 @@
                             <div class="row g-0 py-3 border-bottom align-items-center">
                                 <div class="col-12 col-md-6">
                                     <div class="mb-1">
-                                        {if mb_strlen($file['p_title']) > 31}
-                                            {assign var="project_title" value=TemplateHelper::uiCleanseHTMLNewlineAndTabs(mb_substr($file['p_title'], 0, 31))}
+                                        {if mb_strlen($file['p_title']) > 46}
+                                            {assign var="project_title" value=TemplateHelper::uiCleanseHTMLNewlineAndTabs(mb_substr($file['p_title'], 0, 46))}
                                             {assign var="project_title" value="`$project_title`..."}
                                         {else}
                                             {assign var="project_title" value=TemplateHelper::uiCleanseHTMLNewlineAndTabs($file['p_title'])}
@@ -144,8 +144,8 @@
                                         <span class="badge bg-light-mariam text-muted border fw-normal">{$project_title}</span>
                                     </div>
                                     <div class="text-decoration-none fw-bold text-dark-mariam d-block">
-                                        {if mb_strlen($file['t_filename']) > 31}
-                                            {assign var="file_name" value=TemplateHelper::uiCleanseHTMLNewlineAndTabs(mb_substr($file['t_filename'], 0, 31))}
+                                        {if mb_strlen($file['t_filename']) > 46}
+                                            {assign var="file_name" value=TemplateHelper::uiCleanseHTMLNewlineAndTabs(mb_substr($file['t_filename'], 0, 46))}
                                             {assign var="file_name" value="`$file_name`..."}
                                         {else}
                                             {assign var="file_name" value=TemplateHelper::uiCleanseHTMLNewlineAndTabs($file['t_filename'])}
