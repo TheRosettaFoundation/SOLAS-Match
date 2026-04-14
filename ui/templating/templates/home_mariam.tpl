@@ -58,6 +58,7 @@
                             </div>
 
                             {if !empty($current_projects)}
+<!--
                             <div class="row g-0 py-2 border-bottom d-md-flex text-muted small">
                                 <div class="col-1">Status</div>
                                 <div class="col-4">Title</div>
@@ -65,6 +66,7 @@
                                 <div class="col-2">Due date</div>
                                 <div class="col-3">Target languages</div>
                             </div>
+-->
 
                             {foreach from=$current_projects item=project}
                             {assign var="project_id" value={$project['id']}}
@@ -125,11 +127,13 @@
                             </div>
 
                             {if !empty($completed_files)}
+<!--
                             <div class="row g-0 py-2 border-bottom d-md-flex text-muted small">
                                 <div class="col-6">File title</div>
                                 <div class="col-3">Word count</div>
                                 <div class="col-3">Target languages</div>
                             </div>
+-->
 
                             {foreach from=$completed_files item=file}
                             <div class="row g-0 py-3 border-bottom align-items-center">
