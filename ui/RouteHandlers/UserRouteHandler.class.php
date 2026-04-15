@@ -366,9 +366,9 @@ class UserRouteHandler
         $chunks = $userDao->getUserTaskChunks(...$task_ids);
 
         $extra_scripts  = "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/Parameters.js\"></script>";
-        $extra_scripts .= "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/Home4.js\" async></script>";
+        $extra_scripts .= "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/Home5.js\" async></script>";
 
-        $extra_styles = "<link rel=\"stylesheet\" href=\"https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css\" /><link rel=\"stylesheet\" href=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}resources/css/home_styles2.css\" />";
+        $extra_styles = "<link rel=\"stylesheet\" href=\"https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css\" /><link rel=\"stylesheet\" href=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}resources/css/home_styles3.css\" />";
 
         $template_data = array_merge($template_data, [
             'user_id'       => $user_id,
@@ -413,9 +413,9 @@ class UserRouteHandler
         $adminDao = new DAO\AdminDao();
 
         $extra_scripts  = "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/Parameters.js\"></script>";
-        $extra_scripts .= "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/Home4.js\" async></script>";
+        $extra_scripts .= "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/Home5.js\" async></script>";
 
-        $extra_styles = "<link rel=\"stylesheet\" href=\"https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css\" /><link rel=\"stylesheet\" href=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}resources/css/home_styles2.css\" />";
+        $extra_styles = "<link rel=\"stylesheet\" href=\"https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css\" /><link rel=\"stylesheet\" href=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}resources/css/home_styles3.css\" />";
 
         $template_data = array_merge($template_data, [
             'siteLocation'  => Common\Lib\Settings::get('site.location'),
@@ -525,7 +525,7 @@ class UserRouteHandler
             }
 
         $extra_scripts  = "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/Parameters.js\"></script>";
-        $extra_scripts .= "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/Home4.js\" async></script>";
+        $extra_scripts .= "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/Home5.js\" async></script>";
         $extra_scripts .= "<script type=\"text/javascript\"  src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/pagination_task_stream.js\" defer ></script>";
 
         $org_admin = false;
@@ -3816,8 +3816,8 @@ foreach ($rows as $index => $row) {
         }
 
         $extra_scripts  = "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/Parameters.js\"></script>";
-        $extra_scripts .= "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/Home4.js\" async></script>";
-        $extra_styles = "<link rel=\"stylesheet\" href=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}resources/css/home_styles2.css\" />";
+        $extra_scripts .= "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/Home5.js\" async></script>";
+        $extra_styles = "<link rel=\"stylesheet\" href=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}resources/css/home_styles3.css\" />";
 
         $template_data = array_merge($template_data, [
             'siteLocation'  => Common\Lib\Settings::get('site.location'),
@@ -3850,8 +3850,8 @@ foreach ($rows as $index => $row) {
         $userDao->increment_content_item_views($args['item_id']);
 
         $extra_scripts  = "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/Parameters.js\"></script>";
-        $extra_scripts .= "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/Home4.js\" async></script>";
-        $extra_styles = "<link rel=\"stylesheet\" href=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}resources/css/home_styles2.css\" />";
+        $extra_scripts .= "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/Home5.js\" async></script>";
+        $extra_styles = "<link rel=\"stylesheet\" href=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}resources/css/home_styles3.css\" />";
 
         $template_data = array_merge($template_data, [
             'siteLocation'  => Common\Lib\Settings::get('site.location'),
