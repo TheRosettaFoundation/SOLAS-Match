@@ -262,7 +262,7 @@
                             </li>
                         {/if}
 
-                        {if false && !empty($ngo_orgs)}
+                        {if !empty($ngo_orgs)}
                             <li>
                                 <a href="{urlFor name="metabase_ngo" options="org_id.{$ngo_orgs[0]['organisation_id']}"}" target="_blank">Analytics</a>
                             </li>
