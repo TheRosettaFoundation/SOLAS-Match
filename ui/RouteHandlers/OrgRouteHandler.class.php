@@ -587,8 +587,13 @@ class OrgRouteHandler
 
     public function metabase(Request $request, Response $response, $args)
     {
-        require_once '/repo/metabase_reports/metabase_ngo.php';
-        die;
+        global  $template_data;
+
+        require_once '/repo/SOLAS-Match/analytics/vendor/autoload.php';
+        $metabase = new \Metabase\Embed('https://analytics.translatorswb.org/metabase', Common\Lib\Settings::get('metabase.key'), false, '100%', '800', true, 6*60*60);
+
+        $template_data = array_merge($template_data, ['iframe' => $metabase->dashboardIframe(291, ['org_id' => $args['org_id']])]);
+        return UserRouteHandler::render('org/metabase_ngo.tpl', $response);
     }
 
     public function orgPrivateProfile(Request $request, Response $response, $args)
