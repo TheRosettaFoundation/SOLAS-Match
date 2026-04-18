@@ -162,7 +162,7 @@ class OrganisationDao extends BaseDao
         LibAPI\PDOWrapper::cleanseNullOrWrapStr($json['validity_start']) . ',' .
         LibAPI\PDOWrapper::cleanseNullOrWrapStr($json['validity_end']) . ',' .
         LibAPI\PDOWrapper::cleanse($json['priority']) . ',' .
-        LibAPI\PDOWrapper::cleanse($json['status']));
+        LibAPI\PDOWrapper::cleanse($json['status']);
 
         LibAPI\PDOWrapper::call('set_entitlement', $args);
     }
