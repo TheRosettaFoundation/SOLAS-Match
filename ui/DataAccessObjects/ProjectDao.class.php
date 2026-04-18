@@ -2289,6 +2289,7 @@ error_log("Create PO ref: $result");
 
     public function set_entitlement($json)
     {
+        $args =
         LibAPI\PDOWrapper::cleanse($json['id']) . ',' .
         LibAPI\PDOWrapper::cleanse($json['org_id']) . ',' .
         LibAPI\PDOWrapper::cleanseNull($json['deal_id']) . ',' .
