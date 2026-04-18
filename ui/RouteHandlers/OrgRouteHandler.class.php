@@ -2216,7 +2216,7 @@ class OrgRouteHandler
         $json = json_decode($body, true);
         $result = 0;
         if (!empty($json['secret']) && $json['secret'] === Common\Lib\Settings::get('retool.secret')) {
-            error_log('set_entitlement: ' . print_r($json), true));
+            error_log('set_entitlement: ' . print_r($json, true));
             $orgDao->set_entitlement($json);
             $result = 1;
         } else error_log("set_entitlement not decoded: $body");
