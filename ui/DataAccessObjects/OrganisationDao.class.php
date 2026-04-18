@@ -148,4 +148,22 @@ class OrganisationDao extends BaseDao
         $ret = $this->client->call(null, $request, Common\Enums\HttpMethodEnum::DELETE);
         return $ret;
     }
+
+    function set_entitlement($json)
+    {
+        LibAPI\PDOWrapper::cleanse($json['id']) . ',' .
+        LibAPI\PDOWrapper::cleanse($json['org_id']) . ',' .
+        LibAPI\PDOWrapper::cleanseNull($json['deal_id']) . ',' .
+        LibAPI\PDOWrapper::cleanse($json['service']) . ',' .
+        LibAPI\PDOWrapper::cleanse($json['metric']) . ',' .
+        LibAPI\PDOWrapper::cleanse($json['limit_type']) . ',' .
+        LibAPI\PDOWrapper::cleanseNull($json['limit_value']) . ',' .
+        LibAPI\PDOWrapper::cleanse($json['metric_used']) . ',' .
+        LibAPI\PDOWrapper::cleanseNullOrWrapStr($json['validity_start']) . ',' .
+        LibAPI\PDOWrapper::cleanseNullOrWrapStr($json['validity_end']) . ',' .
+        LibAPI\PDOWrapper::cleanse($json['priority']) . ',' .
+        LibAPI\PDOWrapper::cleanse($json['status']));
+
+        LibAPI\PDOWrapper::call('set_entitlement', $args);
+    }
 }
