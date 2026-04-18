@@ -149,7 +149,7 @@ class OrganisationDao extends BaseDao
         return $ret;
     }
 
-    function set_entitlement($json)
+    public function set_entitlement($json)
     {
         LibAPI\PDOWrapper::cleanse($json['id']) . ',' .
         LibAPI\PDOWrapper::cleanse($json['org_id']) . ',' .
