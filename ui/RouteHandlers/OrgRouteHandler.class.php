@@ -2210,34 +2210,19 @@ class OrgRouteHandler
 
     public function set_entitlement(Request $request, Response $response)
     {
-        $userDao = new DAO\UserDao();
+        $orgDao = new DAO\OrganisationDao();
 
-        $result = 1;
-        if (Common\Lib\UserSession::checkCSRFKey($request->getParsedBody(), 'content_item_increment_views')) $result = 0;
-        if ($result) $userDao->increment_content_item_views($args['id']);
-        $results = json_encode(['result'=> $result]);
-        $response->getBody()->write($results);
-        return $response->withHeader('Content-Type', 'application/json');
-
-
-[[[
-    public function memsourceHook(Request $request)
-    {
-        global $app;
-        if ($request->getHeaderLine('X-Memsource-Token') !== Common\Lib\Settings::get('memsource.X-Memsource-Token')) {
-            error_log('X-Memsource-Token does not match!');
-            die;
-        }
         $body = (string)$request->getBody();
-        $hook = json_decode($body, true);
-        if (empty($hook)) {
-            error_log("Hook not decoded: $body");
-        }
-        error_log($hook['event'] . ' ' . print_r(json_decode($body, true), true));
-}[]
-]]]
+        $json = json_decode($body, true);
+        $result = 0;
+        if (!empty($json['secret']) && $json['secret'] === Common\Lib\Settings::get('retool.secret')) {
+            error_log('set_entitlement: ' . print_r($json), true));
+            $orgDao->set_entitlement($json);
+            $result = 1;
+        } else error_log("set_entitlement not decoded: $body");
 
-
+        $response->getBody()->write(json_encode(['result'=> $result]));
+        return $response->withHeader('Content-Type', 'application/json');
     }
 }
 
