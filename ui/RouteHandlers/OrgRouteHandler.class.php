@@ -105,6 +105,11 @@ class OrgRouteHandler
             '\SolasMatch\UI\RouteHandlers\OrgRouteHandler:org_members')
             ->add('\SolasMatch\UI\Lib\Middleware:auth_admin_any_or_ngo_admin')
             ->setName('org_members');
+
+        $app->map(['GET', 'POST'],
+            '/set_entitlement[/]',
+            '\SolasMatch\UI\RouteHandlers\OrgRouteHandler:set_entitlement')
+            ->setName('set_entitlement');
     }
 
     public function createOrg(Request $request, Response $response)
@@ -2201,6 +2206,38 @@ class OrgRouteHandler
         header('Cache-control: no-cache, must-revalidate, no-transform');
         echo $data;
         die;
+    }
+
+    public function set_entitlement(Request $request, Response $response)
+    {
+        $userDao = new DAO\UserDao();
+
+        $result = 1;
+        if (Common\Lib\UserSession::checkCSRFKey($request->getParsedBody(), 'content_item_increment_views')) $result = 0;
+        if ($result) $userDao->increment_content_item_views($args['id']);
+        $results = json_encode(['result'=> $result]);
+        $response->getBody()->write($results);
+        return $response->withHeader('Content-Type', 'application/json');
+
+
+[[[
+    public function memsourceHook(Request $request)
+    {
+        global $app;
+        if ($request->getHeaderLine('X-Memsource-Token') !== Common\Lib\Settings::get('memsource.X-Memsource-Token')) {
+            error_log('X-Memsource-Token does not match!');
+            die;
+        }
+        $body = (string)$request->getBody();
+        $hook = json_decode($body, true);
+        if (empty($hook)) {
+            error_log("Hook not decoded: $body");
+        }
+        error_log($hook['event'] . ' ' . print_r(json_decode($body, true), true));
+}[]
+]]]
+
+
     }
 }
 
