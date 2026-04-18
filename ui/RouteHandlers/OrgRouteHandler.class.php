@@ -2210,14 +2210,14 @@ class OrgRouteHandler
 
     public function set_entitlement(Request $request, Response $response)
     {
-        $orgDao = new DAO\OrganisationDao();
+        $projectDao = new DAO\ProjectDao();
 
         $body = (string)$request->getBody();
         $json = json_decode($body, true);
         $result = 0;
         if (!empty($json['secret']) && $json['secret'] === Common\Lib\Settings::get('retool.secret')) {
             error_log('set_entitlement: ' . print_r($json, true));
-            $orgDao->set_entitlement($json);
+            $projectDao->set_entitlement($json);
             $result = 1;
         } else error_log("set_entitlement not decoded: $body");
 
