@@ -2305,4 +2305,23 @@ error_log("Create PO ref: $result");
 
         LibAPI\PDOWrapper::call('set_entitlement', $args);
     }
+
+    public function get_entitlement_remaining($org_id, $metric)
+    {
+        $result = LibAPI\PDOWrapper::call('get_entitlement_remaining', LibAPI\PDOWrapper::cleanse($org_id) . ',' . LibAPI\PDOWrapper::cleanse($metric));
+        if (empty($result)) return [];
+        return $result;
+    }
+
+    public function increment_used_entitlement($org_id, $metric, $words)
+    {
+        LibAPI\PDOWrapper::call('increment_used_entitlement', LibAPI\PDOWrapper::cleanse($org_id) . ',' . LibAPI\PDOWrapper::cleanse($metric) . ',' . LibAPI\PDOWrapper::cleanse($words));
+    }
+
+    public function get_entitlements($org_id)
+    {
+        $result = LibAPI\PDOWrapper::call('get_entitlements', LibAPI\PDOWrapper::cleanse($org_id));
+        if (empty($result)) return [];
+        return $result;
+    }
 }
