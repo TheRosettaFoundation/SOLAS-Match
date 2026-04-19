@@ -463,6 +463,7 @@ error_log("set_memsource_task($task_id... {$part['uid']}...), success: $success"
                 error_log("delete_task_directly($task_id) because of set_memsource_task fail");
                 continue;
             }
+            if ($taskType == Common\Enums\TaskTypeEnum::TRANSLATION && !empty($part['wordsCount'])) $projectDao->increment_used_entitlement($project->getOrganisationId(), 0, $part['wordsCount']);
             $projectDao->set_task_resource_info_trigger($task_id);
 
             $forward_order = [];
