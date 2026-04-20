@@ -1516,6 +1516,12 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
         $taskDao = new DAO\TaskDao();
         $userDao = new DAO\UserDao();
 
+        $allowed = 1;
+        if (!$projectDao->get_entitlement_remaining($org_id, 0)) {
+            $allowed = 0;
+            UserRouteHandler::flashNow('error', 'This organisation does not have enough quota to create a project.');
+        }
+
         if (empty($_SESSION['SESSION_CSRF_KEY'])) {
             $_SESSION['SESSION_CSRF_KEY'] = $this->random_string(10);
         }
@@ -1523,7 +1529,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
 
         $create_memsource = 1; // This org uses memsource
 
-        if ($post = $request->getParsedBody()) {
+        if ($allowed && ($post = $request->getParsedBody())) {
             if (empty($post['sesskey']) || $post['sesskey'] !== $sesskey
                     || empty($post['project_title']) || empty($post['project_description']) || empty($post['project_impact'])
                     || empty($post['sourceLanguageSelect']) || empty($post['project_deadline'])
