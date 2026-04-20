@@ -815,8 +815,8 @@
         <tbody>
         {foreach $entitlements as $entitlement}
             <tr>
-                <td>{$entitlement['validity_start']}</td>
-                <td>{$entitlement['validity_end']}</td>
+                <td>{substr($entitlement['validity_start'], 0, 10)}</td>
+                <td>{substr($entitlement['validity_end'], 0, 10)}</td>
                 <td>{if $entitlement['limit_type']}Unlimited{else}{$entitlement['limit_value']}{/if}</td>
                 <td>{$entitlement['metric_used']}</td>
                 <td>{$entitlement['priority']}</td>
