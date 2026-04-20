@@ -1579,6 +1579,7 @@ class OrgRouteHandler
 
         $adminDao = new DAO\AdminDao();
         $orgDao = new DAO\OrganisationDao();
+        $projectDao = new DAO\ProjectDao();
         $userDao = new DAO\UserDao();
         $badgeDao = new DAO\BadgeDao();
 
@@ -1731,11 +1732,9 @@ class OrgRouteHandler
                 "org_badges" => $org_badges,
                 'start_date_error' => $start_dateError,
                 'extra_scripts' => $extra_scripts,
-                'no_suxxxbscription' => $no_subxxxscription,
-                'subscxxxription' => $subscrxxxiption,
                 'asana_board_for_org' => $userDao->get_asana_board_for_org($org_id),
                 'mt_for_org' => $userDao->get_mt_for_org($org_id),
-                'required_qualXXXXification_level' => $userDao->getRequiredOrXXXXgQualificationLevel($org_id),
+                'entitlements' => $projectDao->get_entitlements($org_id),
                 'siteName' => $siteName,
                 'org_image' => $userDao->get_org_image($org_id),
         ));
