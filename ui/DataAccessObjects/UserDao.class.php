@@ -633,6 +633,7 @@ error_log("claimTask_shell($userId, $taskId)");
                 $task->setPublished(0);
                 $taskDao->updateTask($task);
                 $projectDao->update_tasks_status_cancelled($task_id, $status_id, 1, $comment);
+                if ($status_id < Common\Enums\TaskStatusEnum::IN_PROGRESS && $task->getTaskType() == Common\Enums\TaskTypeEnum::TRANSLATION) LibAPI\PDOWrapper::call('increment_used_entitlement_task', LibAPI\PDOWrapper::cleanse($task_id) . ',0,' . LibAPI\PDOWrapper::cleanse(-$task->getWordCount()));
             }
         }
         if ($cancelled && $user_id && $task->getTaskStatus() == Common\Enums\TaskStatusEnum::IN_PROGRESS) { // email Linguist
