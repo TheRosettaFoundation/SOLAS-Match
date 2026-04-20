@@ -1340,20 +1340,6 @@ error_log("claimTask_shell($userId, $taskId)");
             error_log("removeUserQualifiedPair($user_id, $language_code_source, $country_code_source, $language_code_target, $country_code_target)");
     }
 
-    public function updateRequiredOrgQualificationLevel($org_id, $required_qualification_level)
-    {
-        LibAPI\PDOWrapper::call('updateRequiredOrgQualificationLevel',
-            LibAPI\PDOWrapper::cleanse($org_id) . ',' .
-            LibAPI\PDOWrapper::cleanse($required_qualification_level));
-    }
-
-    public function getRequiredOrgQualificationLevel($org_id)
-    {
-        $result = LibAPI\PDOWrapper::call('getRequiredOrgQualificationLevel', LibAPI\PDOWrapper::cleanse($org_id));
-        if (empty($result)) return 1;
-        return $result[0]['required_qualification_level'];
-    }
-
     public function deleteUser($userId)
     {
         $request = "{$this->siteApi}v0/users/$userId";

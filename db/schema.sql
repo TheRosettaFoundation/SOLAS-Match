@@ -822,6 +822,7 @@ CREATE TABLE IF NOT EXISTS `TaskViews` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
+# Not currently used...
 CREATE TABLE IF NOT EXISTS Subscriptions (
   organisation_id INT(10) UNSIGNED NOT NULL,
   level INT(10) UNSIGNED NOT NULL,
@@ -831,7 +832,7 @@ CREATE TABLE IF NOT EXISTS Subscriptions (
   PRIMARY KEY (organisation_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-
+# Not currently used...
 CREATE TABLE IF NOT EXISTS SubscriptionsRecorded (
   time_stamp DATETIME NOT NULL,
   organisation_id INT(10) UNSIGNED NOT NULL,
@@ -7194,6 +7195,7 @@ BEGIN
 END//
 DELIMITER ;
 
+# Not currently used...
 DROP PROCEDURE IF EXISTS `updateSubscription`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `updateSubscription`(IN `organisation_id` INT, IN `level` INT, IN `spare` INT, IN `start_date` DATETIME, IN `comment` VARCHAR(255))
@@ -7204,6 +7206,7 @@ BEGIN
 END//
 DELIMITER ;
 
+# Not currently used...
 DROP PROCEDURE IF EXISTS `getSubscription`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getSubscription`(IN `org_id` INT)
@@ -7212,6 +7215,7 @@ BEGIN
 END//
 DELIMITER ;
 
+# Not currently used...
 DROP PROCEDURE IF EXISTS `number_of_projects_ever`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `number_of_projects_ever`(IN `org_id` INT)
@@ -7224,6 +7228,7 @@ BEGIN
 END//
 DELIMITER ;
 
+# Not currently used...
 DROP PROCEDURE IF EXISTS `number_of_projects_since_last_donation`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `number_of_projects_since_last_donation`(IN `org_id` INT)
@@ -7239,6 +7244,7 @@ BEGIN
 END//
 DELIMITER ;
 
+# Not currently used...
 DROP PROCEDURE IF EXISTS `number_of_projects_since_donation_anniversary`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `number_of_projects_since_donation_anniversary`(IN `org_id` INT)
@@ -9099,6 +9105,7 @@ BEGIN
 END//
 DELIMITER ;
 
+# Not currently used...
 DROP PROCEDURE IF EXISTS `updateRequiredOrgQualificationLevel`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `updateRequiredOrgQualificationLevel`(IN orgID INT, IN requiredQualificationLevel INT)
@@ -9107,6 +9114,7 @@ BEGIN
 END//
 DELIMITER ;
 
+# Not currently used...
 DROP PROCEDURE IF EXISTS `getRequiredOrgQualificationLevel`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getRequiredOrgQualificationLevel`(IN orgID INT)

@@ -1677,20 +1677,6 @@ class OrgRouteHandler
                 }
             }
             if ($roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER)) {
-                if (isset($post['start_date']) && $post['start_date'] != '' && isset($post['level']) && ($post['level'] == 10 || $post['level'] == 20 || $post['level'] == 30 || $post['level'] == 100 || $post['level'] == 1000)) {
-                    if ($validTime = Lib\TemplateHelper::isValidDateTime($post['start_date'])) {
-                        $start_date = date("Y-m-d H:i:s", $validTime);
-                        $comment = '';
-                        if (!empty($post['comment'])) $comment = $post['comment'];
-                        $level = $post['level'];
-                        error_log("updateSubscription($org_id, $level, 0, $start_date, $comment)");
-                        $orgDao->updateSubscription($org_id, $post['level'], 0, $start_date, $comment);
-                    } else {
-                        $start_dateError = Lib\Localisation::getTranslation('task_alter_8');
-                    }
-                } elseif (!empty($post['required_qualification_level'])) {
-                    $userDao->updateRequiredOrgQualificationLevel($org_id, $post['required_qualification_level']);
-                }
                 if (isset($post['asana_board'])) {
                     if (preg_match('/^\d*$/', $post['asana_board'])) $userDao->set_asana_board_for_org($org_id, $post['asana_board']);
                     else UserRouteHandler::flash('error', 'Asana ID must consist only of decimal digits.');
@@ -1723,22 +1709,6 @@ class OrgRouteHandler
             $org_badges = $orgDao->getOrgBadges($org_id);
         }
 
-        $no_subscription = true;
-        $subscription = [];
-        if ($roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER)) {
-            $subscription = $orgDao->getSubscription($org_id);
-            if (empty($subscription)) {
-                $subscription = array(
-                    'organisation_id' => $org_id,
-                    'level' => 1000,
-                    'spare' => 0,
-                    'start_date' => gmdate('Y-m-d H:i:s'),
-                    'comment' => '');
-            } else {
-                $no_subscription = false;
-            }
-        }
-
         $siteName = Common\Lib\Settings::get("site.name");
         $template_data = array_merge($template_data, array(
                 'current_page' => 'org-public-profile',
@@ -1761,11 +1731,11 @@ class OrgRouteHandler
                 "org_badges" => $org_badges,
                 'start_date_error' => $start_dateError,
                 'extra_scripts' => $extra_scripts,
-                'no_subscription' => $no_subscription,
-                'subscription' => $subscription,
+                'no_suxxxbscription' => $no_subxxxscription,
+                'subscxxxription' => $subscrxxxiption,
                 'asana_board_for_org' => $userDao->get_asana_board_for_org($org_id),
                 'mt_for_org' => $userDao->get_mt_for_org($org_id),
-                'required_qualification_level' => $userDao->getRequiredOrgQualificationLevel($org_id),
+                'required_qualXXXXification_level' => $userDao->getRequiredOrXXXXgQualificationLevel($org_id),
                 'siteName' => $siteName,
                 'org_image' => $userDao->get_org_image($org_id),
         ));

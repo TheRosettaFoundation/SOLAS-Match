@@ -64,16 +64,6 @@ class Orgs
             ->add('\SolasMatch\API\Lib\Middleware:authenticateOrgAdmin');
 
         $app->get(
-            '/api/v0/subscription/{org_id}/',
-            '\SolasMatch\API\V0\Orgs:getSubscription')
-            ->add('\SolasMatch\API\Lib\Middleware:isloggedIn');
-
-        $app->post(
-            '/api/v0/subscription/{org_id}/level/{level}/spare/{spare}/start_date/{start_date}/',
-            '\SolasMatch\API\V0\Orgs:updateSubscription')
-            ->add('\SolasMatch\API\Lib\Middleware:authenticateSiteAdmin');
-
-        $app->get(
             '/api/v0/orgs/',
             '\SolasMatch\API\V0\Orgs:getOrgs')
             ->add('\SolasMatch\API\Lib\Middleware:isloggedIn');
@@ -187,24 +177,6 @@ class Orgs
             }
             return API\Dispatcher::sendResponse($response, $org, null);
         }
-    }
-
-    public static function getSubscription(Request $request, Response $response, $args)
-    {
-        $org_id = $args['org_id'];
-        $ret = DAO\OrganisationDao::getSubscription($org_id);
-        return API\Dispatcher::sendResponse($response, $ret, null);
-    }
-
-    public static function updateSubscription(Request $request, Response $response, $args)
-    {
-        $org_id = $args['org_id'];
-        $level = $args['level'];
-        $spare = $args['spare'];
-        $start_date = $args['start_date'];
-        $comment = (string)$request->getBody();
-        $comment = trim($comment);
-        return API\Dispatcher::sendResponse($response, DAO\OrganisationDao::updateSubscription($org_id, $level, $spare, urldecode($start_date), $comment), null);
     }
 }
 

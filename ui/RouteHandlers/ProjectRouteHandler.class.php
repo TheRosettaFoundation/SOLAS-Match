@@ -1512,7 +1512,6 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
         $adminDao = new DAO\AdminDao();
         $projectDao = new DAO\ProjectDao();
         $orgDao = new DAO\OrganisationDao();
-        $subscriptionDao = new DAO\SubscriptionDao();
         $taskDao = new DAO\TaskDao();
         $userDao = new DAO\UserDao();
 
@@ -1820,7 +1819,6 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
             "supportedImageFormats" => Common\Lib\Settings::get('projectImages.supported_formats'),
             "org_id"         => $org_id,
             "user_id"        => $user_id,
-            'subscription_text' => null,
             "extra_scripts"  => $extraScripts,
             'deadline_timestamp' => $deadline_timestamp,
             'selected_day'   => $selected_day,
