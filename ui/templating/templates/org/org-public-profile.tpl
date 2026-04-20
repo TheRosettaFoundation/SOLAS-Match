@@ -805,21 +805,22 @@
     {if !empty($entitlements)}
     <table class="table table-striped">
         <thead>
-            <th style="text-align: left">{Localisation::getTranslation('common_name')}</th>
-            <th>{Localisation::getTranslation('common_description')}</th>
-            <th>{Localisation::getTranslation('common_edit')}</th>
-            <th>{Localisation::getTranslation('common_assign')}</th>
-            <th>{Localisation::getTranslation('common_delete')}</th>
+            <th>Effective date</th>
+            <th>Expiry date</th>
+            <th>Words</th>
+            <th>Words used</th>
+            <th>Priority</th>
+            <th>Status</th>
         </thead>
         <tbody>
         {foreach $entitlements as $entitlement}
             <tr>
-                <td style="text-align: left" width="20%">
-                    <strong>{TemplateHelper::uiCleanseHTML($badge->getTitle())}</strong>
-                </td>
-                <td width="35%">
-                    {TemplateHelper::uiCleanseHTML($badge->getDescription())}
-                </td>
+                <td>{$entitlement['validity_start']}</td>
+                <td>{$entitlement['validity_end']}</td>
+                <td>{if $entitlement['limit_type']}Unlimited{else}{$entitlement['limit_value']}{/if}</td>
+                <td>{$entitlement['metric_used']}</td>
+                <td>{$entitlement['priority']}</td>
+                <td>{if $entitlement['status']}Cancelled{else}{/if}</td>
             </tr>
         {/foreach}
         </tbody>
