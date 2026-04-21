@@ -40,6 +40,10 @@ For full terms see License.txt or https://www.gnu.org/licenses/lgpl-3.0.txt
 
 # Release Notes
 
+## Version 20.3
+
+- Added new scheme of entitlements for NGO organizations.
+
 ## Version 20.2
 
 - Added new task page to replace task view which guides the linguist though the process.
