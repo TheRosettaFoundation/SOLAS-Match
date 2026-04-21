@@ -820,7 +820,7 @@
                 <td>{if $entitlement['limit_type']}Unlimited{else}{$entitlement['limit_value']}{/if}</td>
                 <td>{$entitlement['metric_used']}</td>
                 <td>{$entitlement['priority']}</td>
-                <td>{if $entitlement['status']}Cancelled{else}{/if}</td>
+                <td>{if $entitlement['status']}Cancelled{else}Active{/if}</td>
             </tr>
         {/foreach}
         </tbody>
