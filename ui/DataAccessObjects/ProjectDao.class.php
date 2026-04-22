@@ -2319,9 +2319,9 @@ error_log("Create PO ref: $result");
         return $result;
     }
 
-    public function increment_used_entitlement($org_id, $metric, $words)
+    public function increment_used_entitlement($task_id, $metric, $words)
     {
-        LibAPI\PDOWrapper::call('increment_used_entitlement', LibAPI\PDOWrapper::cleanse($org_id) . ',' . LibAPI\PDOWrapper::cleanse($metric) . ',' . LibAPI\PDOWrapper::cleanse($words));
+        LibAPI\PDOWrapper::call('increment_used_entitlement', LibAPI\PDOWrapper::cleanse($task_id) . ',' . LibAPI\PDOWrapper::cleanse($metric) . ',' . LibAPI\PDOWrapper::cleanse($words));
     }
 
     public function get_entitlements($org_id)
