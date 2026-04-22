@@ -2291,6 +2291,8 @@ error_log("Create PO ref: $result");
     {
         if ($json['validity_start']) $json['validity_start'] = substr($json['validity_start'], 0, 10) . ' 00:00:00';
         if ($json['validity_end'])   $json['validity_end']   = substr($json['validity_end'],   0, 10) . ' 23:59:59';
+        if (empty($json['admin_id'])) $json['admin_id'] = null;
+        if (empty($json['comment']))  $json['comment']  = null;
         $args =
         LibAPI\PDOWrapper::cleanse($json['id']) . ',' .
         LibAPI\PDOWrapper::cleanse($json['org_id']) . ',' .
