@@ -50,6 +50,7 @@
 
         <div id="placeholder_for_errors_1"></div>
 
+        {if $allowed}
         <form method="post" action="{urlFor name="project-create" options="org_id.$org_id"}" enctype="multipart/form-data" accept-charset="utf-8" onsubmit="create_project_button.disabled = true;">
 
             <div id ="projFormTop" class="pull-left">
@@ -299,6 +300,7 @@
             </div>
             <input type="hidden" name="sesskey" value="{$sesskey}" />
         </form>
+        {/if}
 
     </div>
 

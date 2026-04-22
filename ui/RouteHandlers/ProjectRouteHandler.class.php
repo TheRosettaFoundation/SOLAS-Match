@@ -1528,7 +1528,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
 
         $create_memsource = 1; // This org uses memsource
 
-        if ($allowed && ($post = $request->getParsedBody())) {
+        if ($post = $request->getParsedBody()) {
             if (empty($post['sesskey']) || $post['sesskey'] !== $sesskey
                     || empty($post['project_title']) || empty($post['project_description']) || empty($post['project_impact'])
                     || empty($post['sourceLanguageSelect']) || empty($post['project_deadline'])
@@ -1837,6 +1837,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
             'sesskey'        => $sesskey,
             'template1'      => '{"source": "en-GB", "targets": ["zh-CN", "zh-TW", "th-TH", "vi-VN", "id-ID", "tl-PH", "ko-KR", "ja-JP", "ms-MY", "my-MM", "hi-IN", "bn-IN"]}',
             'template2'      => '{"source": "en-GB", "targets": ["ar-SA", "hi-IN", "swh-KE", "fr-FR", "es-49", "pt-BR"]}',
+            'allowed'        => $allowed,
         ));
         return UserRouteHandler::render("project/project.create.tpl", $response);
     }
