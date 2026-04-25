@@ -15851,6 +15851,205 @@ END//
 DELIMITER ;
 
 
+CREATE TABLE IF NOT EXISTS `entitlements` (
+  id             INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  org_id         INT UNSIGNED NOT NULL,        # references "id" in "Organisations table", in that table "name" is the organisation name in UTF-8
+  deal_id        BIGINT UNSIGNED DEFAULT NULL, # must match deal_id in the table "hubspot_deals" or else be NULL
+  service        INT NOT NULL DEFAULT 0,       # 0 => translation, 1 => interpretation, 2 => audiovisual, 3 => training, 4 => dataset; we only initially only support 0
+  metric         INT NOT NULL DEFAULT 0,       # 0 => words, 1 => minutes, 3 => terms; we only initially only support 0
+  limit_type     INT NOT NULL DEFAULT 0,       # 0 => limited, 1 => unlimited
+  limit_value    INT UNSIGNED DEFAULT 0,       # in units of metric (if there is a limit)
+  metric_used    INT UNSIGNED DEFAULT 0,
+  validity_start DATETIME DEFAULT '1000-01-01 00:00:00',
+  validity_end   DATETIME DEFAULT '9999-12-31 23:59:59',
+  priority       INT DEFAULT 0,                # lower => consumed first
+  status         INT DEFAULT 0,                # 0 => active, 1 => cancelled
+  admin_id       INT UNSIGNED,                 # Optional User id of the Admin who created or edited the record
+  comment        TEXT,                         # Optional comment on the background to the entitlement
+  PRIMARY KEY (id),
+  CONSTRAINT FK_entitlements_org_id FOREIGN KEY (org_id)  REFERENCES Organisations (id) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS `entitlement_logs` (
+  entitlement_id INT UNSIGNED NOT NULL,
+  metric_used    INT NOT NULL,
+  task_id        BIGINT UNSIGNED NOT NULL,
+  date_added     DATETIME NOT NULL,
+  KEY (date_added),
+  CONSTRAINT FK_entitlement_logs_id FOREIGN KEY (entitlement_id) REFERENCES entitlements (id) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT FK_entitlement_logs_task_id FOREIGN KEY (task_id) REFERENCES Tasks (id) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+DROP PROCEDURE IF EXISTS `set_entitlement`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `set_entitlement`(
+    IN p_id             INT UNSIGNED,
+    IN p_org_id         INT UNSIGNED,
+    IN p_deal_id        BIGINT UNSIGNED,
+    IN p_service        INT,
+    IN p_metric         INT,
+    IN p_limit_type     INT,
+    IN p_limit_value    INT UNSIGNED,
+    IN p_metric_used    INT UNSIGNED,
+    IN p_validity_start DATETIME,
+    IN p_validity_end   DATETIME,
+    IN p_priority       INT,
+    IN p_status         INT,
+    IN p_admin_id       INT UNSIGNED,
+    IN p_comment        TEXT)
+BEGIN
+    IF p_id=0 THEN
+        INSERT INTO entitlements (
+            id,
+            org_id,
+            deal_id,
+            service,
+            metric,
+            limit_type,
+            limit_value,
+            metric_used,
+            validity_start,
+            validity_end,
+            priority,
+            status,
+            admin_id,
+            comment)
+        VALUES (
+            p_id,
+            p_org_id,
+            p_deal_id,
+            p_service,
+            p_metric,
+            p_limit_type,
+            p_limit_value,
+            p_metric_used,
+            p_validity_start,
+            p_validity_end,
+            p_priority,
+            p_status,
+            p_admin_id,
+            p_comment);
+    ELSE
+        UPDATE entitlements SET
+            org_id=p_org_id,
+            deal_id=p_deal_id,
+            service=p_service,
+            metric=p_metric,
+            limit_type=p_limit_type,
+            limit_value=p_limit_value,
+            metric_used=p_metric_used,
+            validity_start=p_validity_start,
+            validity_end=p_validity_end,
+            priority=p_priority,
+            status=p_status,
+            admin_id=p_admin_id,
+            comment=p_comment
+        WHERE id=p_id;
+    END IF;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `get_entitlement_remaining`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_entitlement_remaining`(IN p_org_id INT UNSIGNED, IN p_metric INT)
+BEGIN
+    SELECT *
+    FROM entitlements
+    WHERE
+        org_id=p_org_id AND
+        metric=p_metric AND
+        status=0 AND
+        IF(limit_type, 999999999, limit_value)>metric_used AND
+        (validity_start IS NULL OR validity_start<=NOW()) AND
+        (validity_end   IS NULL OR NOW()<validity_end)
+        ORDER BY limit_type DESC, priority ASC;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `increment_used_entitlement`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `increment_used_entitlement`(IN p_task_id BIGINT UNSIGNED, IN p_metric INT, IN p_words INT)
+BEGIN
+    SET @p_org_id=NULL;
+    SELECT
+        p.organisation_id INTO @p_org_id
+    FROM Tasks    t
+    JOIN Projects p ON t.project_id=p.id
+    WHERE
+        t.id=p_task_id;
+
+    SET @best_id=NULL;
+    SET @best_metric_used=NULL;
+    SELECT
+        id, metric_used INTO @best_id, @best_metric_used
+    FROM entitlements
+    WHERE
+        org_id=@p_org_id AND
+        metric=p_metric AND
+        status=0 AND
+        IF(limit_type, 999999999, limit_value)>metric_used AND
+        (validity_start IS NULL OR validity_start<=NOW()) AND
+        (validity_end   IS NULL OR NOW()<validity_end)
+    ORDER BY limit_type DESC, priority ASC
+    LIMIT 1;
+
+    IF @best_id IS NOT NULL THEN
+        SET @new_metric_used=0;
+        IF p_words>=0 OR @best_metric_used>(-p_words) THEN
+            SET @new_metric_used=@best_metric_used + p_words;
+        END IF;
+
+        UPDATE entitlements
+        SET metric_used=@new_metric_used
+        WHERE id=@best_id;
+
+        INSERT INTO entitlement_logs VALUES (@best_id, p_words, p_task_id, NOW());
+    ELSE
+        SET @max_date=NULL;
+        SELECT MAX(el.date_added) INTO @max_date
+        FROM entitlements e
+        JOIN entitlement_logs el ON e.id=el.entitlement_id
+        WHERE
+            e.org_id=@p_org_id AND
+            e.metric=p_metric
+        GROUP BY e.org_id;
+
+        IF @max_date IS NOT NULL THEN
+            SELECT e.id, e.metric_used INTO @best_id, @best_metric_used
+            FROM entitlements e
+            JOIN entitlement_logs el ON e.id=el.entitlement_id
+            WHERE
+                e.org_id=@p_org_id AND
+                e.metric=p_metric AND
+                date_added=@max_date
+            LIMIT 1;
+
+            IF @best_id IS NOT NULL THEN
+                SET @new_metric_used=0;
+                IF p_words>=0 OR @best_metric_used>(-p_words) THEN
+                    SET @new_metric_used=@best_metric_used + p_words;
+                END IF;
+
+                UPDATE entitlements
+                SET metric_used=@new_metric_used
+                WHERE id=@best_id;
+
+                INSERT INTO entitlement_logs VALUES (@best_id, p_words, p_task_id, NOW());
+            END IF;
+        END IF;
+    END IF;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `get_entitlements`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_entitlements`(IN p_org_id INT UNSIGNED)
+BEGIN
+    SELECT * FROM entitlements WHERE org_id=p_org_id;
+END//
+DELIMITER ;
+
+
 /*---------------------------------------end of procs----------------------------------------------*/
 
 
