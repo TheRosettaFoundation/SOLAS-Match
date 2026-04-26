@@ -297,7 +297,7 @@
                       {else}
                         {foreach $language_style as $style}
                           {if !empty($style['external_link'])}
-                            <div><a href="{$style['external_link']}"target="_blank">{$style['title']}</a></div>
+                            <div><a href="{$style['external_link']}" target="_blank" click_id="{$style['id']}" sesskey="{$sesskey}" class="count_external_clicks">{$style['title']}</a></div>
                           {elseif !empty($style['body'])}
                             <div class="ql-editor">{TemplateHelper::clean_project_description($style['body'])}</div>
                           {/if}
