@@ -807,8 +807,8 @@
         <thead>
             <th>Effective date</th>
             <th>Expiry date</th>
-            <th>Words</th>
-            <th>Words used</th>
+            <th>Word allocation</th>
+            <th>Allocation used</th>
             <th>Priority</th>
             <th>Status</th>
         </thead>
