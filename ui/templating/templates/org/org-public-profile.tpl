@@ -805,6 +805,7 @@
     {if !empty($entitlements)}
     <table class="table table-striped">
         <thead>
+            <th>Service</th>
             <th>Effective date</th>
             <th>Expiry date</th>
             <th>Word allocation</th>
@@ -815,6 +816,7 @@
         <tbody>
         {foreach $entitlements as $entitlement}
             <tr>
+                <td>{if $entitlement['service'] == 0}Translation{else}Other{/if}</td>
                 <td>{substr($entitlement['validity_start'], 0, 10)}</td>
                 <td>{substr($entitlement['validity_end'], 0, 10)}</td>
                 <td>{if $entitlement['limit_type']}Unlimited{else}{$entitlement['limit_value']}{/if}</td>
