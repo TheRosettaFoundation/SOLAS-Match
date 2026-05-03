@@ -159,12 +159,6 @@ class OrgRouteHandler
             } else {
                 $org->setBiography($post["biography"]);
             }
-            if (isset($post["address"])) {
-                $org->setAddress($post["address"]);
-            }
-            if (isset($post["city"])) {
-                $org->setCity($post["city"]);
-            }
             if (isset($post["country"])) {
                 $org->setCountry($post["country"]);
             }
@@ -185,12 +179,10 @@ class OrgRouteHandler
                 $errorList[] = Lib\Localisation::getTranslation('org_private_profile_organisation_error_email_not_set');
             }
 
-            $org->setRegionalFocus(implode(",", $regionalFocus));
-
             if (isset($post['facebook'])) {
                 if (trim($post['facebook']) != '') {
                     if (Lib\Validator::validateURL($post['facebook'])) {
-                        $org2->setFacebook(Lib\Validator::addhttp($post['facebook']));
+                        $org->setAddress(Lib\Validator::addhttp($post['facebook']))
                     } else {
                         $errorOccured = true;
                         $errorList[] = Lib\Localisation::getTranslation('common_invalid_url');
@@ -200,7 +192,7 @@ class OrgRouteHandler
             if (isset($post['linkedin'])) {
                 if (trim($post['linkedin']) != '') {
                     if (Lib\Validator::validateURL($post['linkedin'])) {
-                        $org2->setLinkedin(Lib\Validator::addhttp($post['linkedin']));
+                        $org->setCity(Lib\Validator::addhttp($post['linkedin']));
                     } else {
                         $errorOccured = true;
                         $errorList[] = Lib\Localisation::getTranslation('common_invalid_url');
@@ -210,7 +202,7 @@ class OrgRouteHandler
             if (isset($post['twitter'])) {
                 if (trim($post['twitter']) != '') {
                     if (Lib\Validator::validateURL($post['twitter'])) {
-                        $org2->setPrimaryContactEmail(Lib\Validator::addhttp($post['twitter']));
+                        $org->setRegionalFocus(Lib\Validator::addhttp($post['twitter']));
                     } else {
                         $errorOccured = true;
                         $errorList[] = Lib\Localisation::getTranslation('common_invalid_url');
@@ -508,12 +500,6 @@ class OrgRouteHandler
                 if (isset($post['biography'])) {
                     $org->setBiography($post['biography']);
                 }
-                if (isset($post['address'])) {
-                    $org->setAddress($post['address']);
-                }
-                if (isset($post['city'])) {
-                    $org->setCity($post['city']);
-                }
                 if (isset($post['country'])) {
                     $org->setCountry($post['country']);
                 }
@@ -534,37 +520,35 @@ class OrgRouteHandler
                     $errorList[] = Lib\Localisation::getTranslation('org_private_profile_organisation_error_email_not_set');
                 }
 
-                $org->setRegionalFocus(implode(",", $regionalFocus));
-
                 if (isset($post['facebook'])) {
                     if (trim($post['facebook']) != '') {
                         if (Lib\Validator::validateURL($post['facebook'])) {
-                            $org2->setFacebook(Lib\Validator::addhttp($post['facebook']));
+                            $org->setAddress(Lib\Validator::addhttp($post['facebook']));
                         } else {
                             $errorOccured = true;
                             $errorList[] = Lib\Localisation::getTranslation('common_invalid_url');
                         }
-                    } else $org2->setFacebook('');
+                    } else $org->setAddress('');
                 }
                 if (isset($post['linkedin'])) {
                     if (trim($post['linkedin']) != '') {
                         if (Lib\Validator::validateURL($post['linkedin'])) {
-                            $org2->setLinkedin(Lib\Validator::addhttp($post['linkedin']));
+                            $org->setCity(Lib\Validator::addhttp($post['linkedin']));
                         } else {
                             $errorOccured = true;
                             $errorList[] = Lib\Localisation::getTranslation('common_invalid_url');
                         }
-                    } else $org2->setLinkedin('');
+                    } else $org->setCity('');
                 }
                 if (isset($post['twitter'])) {
                     if (trim($post['twitter']) != '') {
                         if (Lib\Validator::validateURL($post['twitter'])) {
-                            $org2->setPrimaryContactEmail(Lib\Validator::addhttp($post['twitter']));
+                            $org->setRegionalFocus(Lib\Validator::addhttp($post['twitter']));
                         } else {
                             $errorOccured = true;
                             $errorList[] = Lib\Localisation::getTranslation('common_invalid_url');
                         }
-                    } else $org2->setPrimaryContactEmail('');
+                    } else $org->setRegionalFocus('');
                 }
 
                 if (!is_null($errorOccured)) {
