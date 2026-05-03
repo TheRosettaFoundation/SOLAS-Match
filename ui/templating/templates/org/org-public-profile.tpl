@@ -1,7 +1,6 @@
-{include file='header.tpl'}
-{* {include file='new_header.tpl'} *}
+{include file="new_header.tpl"}
+<!-- Editor Hint: ¿áéíóú -->
 
-{if isset($org)}
     {if isset($flash['error'])}
         <div class="alert alert-error">
             {TemplateHelper::uiCleanseHTMLKeepMarkup($flash['error'])}
@@ -17,819 +16,261 @@
             {TemplateHelper::uiCleanseHTMLKeepMarkup($flash['info'])}
         </div>
     {/if}
-    <div class='page-header'>
-        <h1>
-            {if $org->getName() != ''}
-                {$org->getName()}
-            {else}
-                {Localisation::getTranslation('common_organisation_profile')}
-            {/if}
-            {assign var="org_id" value=$org->getId()}
-            {if isset($user)}
-                <div class="pull-right">
-                            {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER + $NGO_ADMIN + $NGO_PROJECT_OFFICER)}
-                            <a href="{urlFor name="ngo_projects" options="org_id.$org_id"}" class='btn btn-primary'>
-                                <i class="icon-briefcase icon-white"></i> Organization Projects
-                            </a>
-                            {/if}
 
-                            {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER + $NGO_ADMIN)}
-                            <a href="{urlFor name="org-private-profile" options="org_id.$org_id"}" class='btn btn-primary'>
-                                <i class="icon-wrench icon-white"></i> {Localisation::getTranslation('org_public_profile_edit_organisation_details')}
-                            </a>
-                            {/if}
+    {assign var="org_id" value=$org->getId()}
 
-                            {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $NGO_ADMIN + $NGO_PROJECT_OFFICER)}
-                            <a class="btn btn-success" href="{urlFor name="project-create" options="org_id.$org_id"}">
-                                <i class="icon-upload icon-white"></i> New Phrase Project
-                            </a>
-                            {/if}
+    <div class="container">
 
-                            {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER) || in_array($org_id, $ORG_EXCEPTIONS) && $roles & ($NGO_ADMIN + $NGO_PROJECT_OFFICER)}
-                            <a class="btn btn-success" href="{urlFor name="project-create-empty" options="org_id.$org_id"}">
-                                <i class="icon-upload icon-white"></i> New non-Phrase Project
-                            </a>
-                            {/if}
-                </div>
-            {/if}
-        </h1>
-    </div>
-{/if}
-
-    <div class="well">
-        <table>
-            <tr valign="top">
-                <td  style="width: 48%">
-                    <img class="rounded-circle ms-3" width="100" title="Organisation Image" alt="Organisation Image" src="data:image/jpeg;base64,{$org_image}" />
-                </td>
-                <td style="width: 4%"/>
-                <td style="width: 48%">
-                </td>
-            </tr>
-            <tr valign="top">
-                <td  style="width: 48%">
-                    <div>
-                        <table border="0" width="40%" style="overflow-wrap: break-word; word-break:break-all;">
-                            <thead>                
-                                <th align="left">{Localisation::getTranslation('org_private_profile_organisation_overview')}<hr/></th>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td style="font-style: italic">
-                                        {if $org->getBiography() != ''}
-                                            {TemplateHelper::uiCleanseHTMLNewlineAndTabs($org->getBiography())}
-                                        {else}
-                                            {Localisation::getTranslation('org_public_profile_no_biography_listed')}
-                                        {/if}
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td style="padding-bottom: 40px"/>
-                                </tr>
-
-                                <tr valign="top">
-                                    <td colspan="1" >
-                                        <strong>{Localisation::getTranslation('org_private_profile_organisation_activity')}</strong><hr/>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td style="font-style: italic">
-                                        {TemplateHelper::expandSelectedOptionsSemicolon($activitys)}
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td style="padding-bottom: 40px"/>
-                                </tr>
-
-                                <tr valign="top">
-                                    <td colspan="1" >
-                                        <strong>{Localisation::getTranslation('org_private_profile_organisation_website')}</strong><hr/>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td style="font-style: italic">
-                                        {if $org->getHomepage() != 'https://' && $org->getHomepage() != ''}
-                                            <a href="{$org->getHomepage()}">{$org->getHomepage()}</a>
-                                        {else}
-                                            {Localisation::getTranslation('org_public_profile_no_home_page_listed')}
-                                        {/if}
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td style="padding-bottom: 40px"/>
-                                </tr>
-
-                                <tr valign="top">
-                                    <td colspan="1" >
-                                        <strong>{Localisation::getTranslation('org_private_profile_organisation_facebook')}</strong><hr/>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td style="font-style: italic">
-                                        {if $org2->getFacebook() != 'https://' && $org2->getFacebook() != ''}
-                                            <a href="{$org2->getFacebook()}">{$org2->getFacebook()}</a>
-                                        {/if}
-                                    </td>  
-                                </tr>
-                                <tr>
-                                    <td style="padding-bottom: 40px"/>
-                                </tr>
-
-                                <tr valign="top">
-                                    <td colspan="1" >
-                                        <strong>{Localisation::getTranslation('org_private_profile_organisation_linkedin')}</strong><hr/>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td style="font-style: italic">
-                                        {if $org2->getLinkedin() != 'https://' && $org2->getLinkedin() != ''}
-                                            <a href="{$org2->getLinkedin()}">{$org2->getLinkedin()}</a>
-                                        {/if}
-                                    </td>  
-                                </tr>
-                                <tr>
-                                    <td style="padding-bottom: 40px"/>
-                                </tr>
-
-                                <tr valign="top">
-                                    <td colspan="1" >
-                                        <strong>{Localisation::getTranslation('org_private_profile_organisation_twitter')}</strong><hr/>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td style="font-style: italic">
-                                        {if $org2->getPrimaryContactEmail() != 'https://' && $org2->getPrimaryContactEmail() != ''}
-                                            <a href="{$org2->getPrimaryContactEmail()}">{$org2->getPrimaryContactEmail()}</a>
-                                        {/if}
-                                    </td>
-                                </tr>
-
-                                {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER + $NGO_ADMIN + $NGO_PROJECT_OFFICER)}
-                                <tr>
-                                    <td style="padding-bottom: 40px"/>
-                                </tr>
-
-                                <tr valign="top">
-                                    <td colspan="1" >
-                                        <strong>{Localisation::getTranslation('org_private_profile_organisation_primary_contact_name')}</strong><hr/>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td style="font-style: italic">
-                                        {TemplateHelper::uiCleanseHTML($org2->getPrimaryContactName())}
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td style="padding-bottom: 40px"/>
-                                </tr>
-
-                                <tr valign="top">
-                                    <td colspan="1" >
-                                        <strong>{Localisation::getTranslation('org_private_profile_organisation_primary_contact_title')}</strong><hr/>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td style="font-style: italic">
-                                        {TemplateHelper::uiCleanseHTML($org2->getPrimaryContactTitle())}
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td style="padding-bottom: 40px"/>
-                                </tr>
-
-                                <tr valign="top">
-                                    <td colspan="1" >
-                                        <strong>{Localisation::getTranslation('org_private_profile_organisation_primary_contact_email')}</strong><hr/>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td style="font-style: italic">
-                                        {if $org->getEmail() != ''}
-                                            <a href="mailto:{$org->getEmail()}">{$org->getEmail()}</a>
-                                        {else}
-                                            {Localisation::getTranslation('org_public_profile_no_email_listed')}
-                                        {/if}
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td style="padding-bottom: 40px"/>
-                                </tr>
-
-                                <tr valign="top">
-                                    <td colspan="1" >
-                                        <strong>{Localisation::getTranslation('org_private_profile_organisation_primary_contact_phone')}</strong><hr/>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td style="font-style: italic">
-                                        {TemplateHelper::uiCleanseHTML($org2->getPrimaryContactPhone())}
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td style="padding-bottom: 40px"/>
-                                </tr>
-
-                                <tr valign="top">
-                                    <td colspan="1" >
-                                        <strong>{Localisation::getTranslation('org_private_profile_organisation_other_contacts')}</strong><hr/>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td style="font-style: italic">
-                                        {TemplateHelper::uiCleanseHTMLNewlineAndTabs($org2->getOtherContacts())}
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td style="padding-bottom: 40px"/>
-                                </tr>
-
-                                <tr valign="top">
-                                    <td colspan="1" >
-                                        <strong>{Localisation::getTranslation('org_private_profile_organisation_structure')}</strong><hr/>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td style="font-style: italic">
-                                        {TemplateHelper::uiCleanseHTMLNewlineAndTabs($org2->getStructure())}
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td style="padding-bottom: 40px"/>
-                                </tr>
-
-                                <tr valign="top">
-                                    <td colspan="1" >
-                                        <strong>{Localisation::getTranslation('org_private_profile_organisation_affiliations')}</strong><hr/>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td style="font-style: italic">
-                                        {TemplateHelper::uiCleanseHTMLNewlineAndTabs($org2->getAffiliations())}
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td style="padding-bottom: 40px"/>
-                                </tr>
-
-                                <tr valign="top">
-                                    <td colspan="1" >
-                                        <strong>{Localisation::getTranslation('org_private_profile_organisation_url_video_1')}<br />(1)</strong><hr/>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td style="font-style: italic">
-                                        {if $org2->getUrlVideo1() != 'https://' && $org2->getUrlVideo1() != ''}
-                                            <a href="{$org2->getUrlVideo1()}">{$org2->getUrlVideo1()}</a>
-                                        {/if}
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td style="padding-bottom: 40px"/>
-                                </tr>
-
-                                <tr valign="top">
-                                    <td colspan="1" >
-                                        <strong>(2)</strong><hr/>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td style="font-style: italic">
-                                        {if $org2->getUrlVideo2() != 'https://' && $org2->getUrlVideo2() != ''}
-                                            <a href="{$org2->getUrlVideo2()}">{$org2->getUrlVideo2()}</a>
-                                        {/if}
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td style="padding-bottom: 40px"/>
-                                </tr>
-
-                                <tr valign="top">
-                                    <td colspan="1" >
-                                        <strong>(3)</strong><hr/>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td style="font-style: italic">
-                                        {if $org2->getUrlVideo3() != 'https://' && $org2->getUrlVideo3() != ''}
-                                            <a href="{$org2->getUrlVideo3()}">{$org2->getUrlVideo3()}</a>
-                                        {/if}
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td style="padding-bottom: 40px"/>
-                                </tr>
-
-                                <tr valign="top">
-                                    <td colspan="1" >
-                                        <strong>{Localisation::getTranslation('org_private_profile_organisation_employee')}</strong><hr/>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td style="font-style: italic">
-                                        {TemplateHelper::expandSelectedOptions($employees)}
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td style="padding-bottom: 40px"/>
-                                </tr>
-
-                                <tr valign="top">
-                                    <td colspan="1" >
-                                        <strong>{Localisation::getTranslation('org_private_profile_organisation_funding')}</strong><hr/>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td style="font-style: italic">
-                                        {TemplateHelper::expandSelectedOptions($fundings)}
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td style="padding-bottom: 40px"/>
-                                </tr>
-
-                                <tr valign="top">
-                                    <td colspan="1" >
-                                        <strong>{Localisation::getTranslation('org_private_profile_organisation_find')}</strong><hr/>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td style="font-style: italic">
-                                        {TemplateHelper::expandSelectedOptions($finds)}
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td style="padding-bottom: 40px"/>
-                                </tr>
-
-                                <tr valign="top">
-                                    <td colspan="1" >
-                                        <strong>{Localisation::getTranslation('org_private_profile_organisation_translation')}</strong><hr/>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td style="font-style: italic">
-                                        {TemplateHelper::expandSelectedOptions($translations)}
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td style="padding-bottom: 40px"/>
-                                </tr>
-
-                                <tr valign="top">
-                                    <td colspan="1" >
-                                        <strong>{Localisation::getTranslation('org_private_profile_organisation_request')}</strong><hr/>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td style="font-style: italic">
-                                        {TemplateHelper::expandSelectedOptions($requests)}
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td style="padding-bottom: 40px"/>
-                                </tr>
-
-                                <tr valign="top">
-                                    <td colspan="1" >
-                                        <strong>{Localisation::getTranslation('org_private_profile_organisation_content')}</strong><hr/>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td style="font-style: italic">
-                                        {TemplateHelper::expandSelectedOptions($contents)}
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td style="padding-bottom: 40px"/>
-                                </tr>
-
-                                <tr valign="top">
-                                    <td colspan="1" >
-                                        <strong>{Localisation::getTranslation('org_private_profile_organisation_subject_matters')}</strong><hr/>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td style="font-style: italic">
-                                        {TemplateHelper::uiCleanseHTMLNewlineAndTabs($org2->getSubjectMatters())}
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td style="padding-bottom: 40px"/>
-                                </tr>
-
-                                <tr valign="top">
-                                    <td colspan="1" >
-                                        <strong>{Localisation::getTranslation('org_private_profile_organisation_pages')}</strong><hr/>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td style="font-style: italic">
-                                        {TemplateHelper::expandSelectedOptions($pages)}
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td style="padding-bottom: 40px"/>
-                                </tr>
-
-                                <tr valign="top">
-                                    <td colspan="1" >
-                                        <strong>{Localisation::getTranslation('org_private_profile_organisation_source')}</strong><hr/>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td style="font-style: italic">
-                                        {TemplateHelper::expandSelectedOptions($sources)}
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td style="padding-bottom: 40px"/>
-                                </tr>
-
-                                <tr valign="top">
-                                    <td colspan="1" >
-                                        <strong>{Localisation::getTranslation('org_private_profile_organisation_target')}</strong><hr/>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td style="font-style: italic">
-                                        {TemplateHelper::expandSelectedOptions($targets)}
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td style="padding-bottom: 40px"/>
-                                </tr>
-
-                                <tr valign="top">
-                                    <td colspan="1" >
-                                        <strong>{Localisation::getTranslation('org_private_profile_organisation_often')}</strong><hr/>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td style="font-style: italic">
-                                        {TemplateHelper::expandSelectedOptions($oftens)}
-                                    </td>
-                                </tr>
-                                {/if}
-                            </tbody>
-                        </table>
-                    </div>
-                </td>
-                <td style="width: 4%"/>
-                <td style="width: 48%">            
-                    <div>
-                        <table border="0" width="40%" style="overflow-wrap: break-word; word-break:break-all;">
-                            <thead>                
-                                <th align="left" width="48%">{Localisation::getTranslation('common_address')}<hr/></th>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td style="font-style: italic">
-                                        {if $org->getAddress() != ''}
-                                            {TemplateHelper::uiCleanseHTMLNewlineAndTabs($org->getAddress())}
-                                        {else}
-                                            {Localisation::getTranslation('org_public_profile_no_address_listed')}
-                                        {/if}
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td style="padding-bottom: 40px"/>
-                                </tr>
-
-                                <tr valign="top">
-                                    <td colspan="1" >
-                                        <strong>{Localisation::getTranslation('common_city')}</strong><hr/>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td style="font-style: italic">
-                                        {if $org->getCity() != ''}
-                                            {TemplateHelper::uiCleanseHTML($org->getCity())}
-                                        {else}
-                                            {Localisation::getTranslation('org_public_profile_no_city_listed')}
-                                        {/if}
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td style="padding-bottom: 40px"/>
-                                </tr>
-
-                                <tr valign="top">
-                                    <td colspan="1" >
-                                        <strong>{Localisation::getTranslation('common_country')}</strong><hr/>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td style="font-style: italic">
-                                        {if $org->getCountry() != ''}
-                                            {TemplateHelper::uiCleanseHTML($org->getCountry())}
-                                        {else}
-                                            {Localisation::getTranslation('org_public_profile_no_country_listed')}
-                                        {/if}
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td style="padding-bottom: 40px"/>
-                                </tr>
-
-                                <tr valign="top">
-                                    <td colspan="1" >
-                                        <strong>{Localisation::getTranslation('common_regional_focus')}</strong><hr/>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td style="font-style: italic">
-                                        {if $org->getRegionalFocus() != ''}
-                                            {$org->getRegionalFocus()}
-                                        {else}
-                                            {Localisation::getTranslation('org_public_profile_no_regional_focus_listed')}
-                                        {/if}
-                                    </td>  
-                                </tr>
-                                <tr>
-                                    <td style="padding-bottom: 40px"/>
-                                </tr>
-
-                                {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER + $NGO_ADMIN*0)}
-                                <tr valign="top">
-                                    <td colspan="1" >
-                                        <strong>Work Report</strong><hr/>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td style="font-style: italic">
-                                        <a href="{urlFor name="partner_deals" options="org_id.$org_id"}" target="_blank">Work Report</a>
-                                    </td>
-                                </tr>
-                                {/if}
-
-                            </tbody>
-                        </table>
-                    </div>
-                </td>
-            </tr>
-        </table>
-    </div>
-    
-                        
-                
-    <p style="margin-bottom: 60px" />         
-    <h1 class="page-header">
-        {Localisation::getTranslation('common_badges')}
-        <small>{Localisation::getTranslation('org_public_profile_badge_overview')}</small>
-
-        {if isset($user)}
-
-            {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER + $NGO_ADMIN + $NGO_PROJECT_OFFICER)}
-                <a href="{urlFor name="org-create-badge" options="org_id.$org_id"}" class='pull-right btn btn-success'>
-                    <i class="icon-star icon-white"></i> {Localisation::getTranslation('org_public_profile_create_badge')}
-                </a>
-            {/if}
-        {/if}
-    </h1>  
-    <p style="margin-bottom: 40px" />   
-
-{if !empty($org_badges)}
-    <table class="table table-striped">
-        <thead>            
-            <th style="text-align: left">{Localisation::getTranslation('common_name')}</th>
-            <th>{Localisation::getTranslation('common_description')}</th>
-
-            {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER + $NGO_ADMIN + $NGO_PROJECT_OFFICER)}
-                <th>{Localisation::getTranslation('common_edit')}</th>
-                <th>{Localisation::getTranslation('common_assign')}</th>
-                <th>{Localisation::getTranslation('common_delete')}</th>
-            {/if}
-        </thead>
-        <tbody>
-        {foreach $org_badges as $badge}
-            {assign var="badge_id" value=$badge->getId()}
-            {assign var="org_id" value=$org->getId()}
-            <tr>
-                <td style="text-align: left" width="20%">
-                    <strong>{TemplateHelper::uiCleanseHTML($badge->getTitle())}</strong>
-                </td>
-                <td width="35%">
-                    {TemplateHelper::uiCleanseHTML($badge->getDescription())}
-                </td>
-                {if ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER + $NGO_ADMIN + $NGO_PROJECT_OFFICER)) && isset($user)}
-                    <td>
-                        <a href="{urlFor name="org-edit-badge" options="org_id.$org_id|badge_id.$badge_id"}" class='btn'>
-                            <i class="icon-wrench icon-black"></i> {Localisation::getTranslation('org_public_profile_edit_badge')}
-                        </a>
-                    </td>
-                    <td>
-                        <a href="{urlFor name="org-manage-badge" options="org_id.$org_id|badge_id.$badge_id"}" class='btn'>
-                            <i class="icon-plus-sign icon-black"></i> {Localisation::getTranslation('common_assign_badge')}
-                        </a>
-                    </td>
-                    <td>                        
-                        <form method="post" action="{urlFor name="org-public-profile" options="org_id.$org_id"}">
-                            <input type="hidden" name="badge_id" value="{$badge_id}" />
-                            <input type="submit" class='btn btn-inverse' name="deleteBadge" value="    {Localisation::getTranslation('org_public_profile_delete_badge')}"
-                              onclick="return confirm('{Localisation::getTranslation('org_public_profile_confirm_delete_badge')}')" />                                 
-                            {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
-                        </form> 
-                        <i class="icon-fire icon-white" style="position:relative; right:44px; top:-40px;"></i> 
-                    </td>  
+        <div class="row align-items-center mb-4 g-3">
+            <div class="col">
+                <h1 class="h3 fw-bold mb-0" style="color: var(--twb-blue);">{TemplateHelper::uiCleanseHTML($org->getName())}</h1>
+                <p class="text-muted mb-0 small">Organization Profile</p>
+            </div>
+            <div class="col-md-auto d-flex gap-2">
+                {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER + $NGO_ADMIN + $NGO_PROJECT_OFFICER)}
+                    <a href="{urlFor name="ngo_projects" options="org_id.$org_id"}" class="btn btn-twb-primary btn-sm px-3">
+                        <i class="fas fa-briefcase me-1"></i> Projects
+                    </a>
                 {/if}
-            </tr>
-        {/foreach}
-        </tbody>
-    </table>
-<br />
-{else}
-    <p class="alert alert-info">
-        {Localisation::getTranslation('org_public_profile_no_badges_associated')}
-    </p>
-    <p style="margin-bottom:20px;"></p>
-{/if}
-      
-{if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER + $NGO_ADMIN + $NGO_PROJECT_OFFICER)}
-    <h1 class="page-header">
-        {Localisation::getTranslation('org_public_profile_organisation_members')}
-        <small>{Localisation::getTranslation('org_public_profile_member_list')}</small>
+                {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER + $NGO_ADMIN)}
+                    <a href="{urlFor name="org-private-profile" options="org_id.$org_id"}" class='btn btn-outline-secondary btn-sm px-3'>
+                        <i class="fas fa-cog"></i>
+                    </a>
+                {/if}
+            </div>
+        </div>
 
-      {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER + $NGO_ADMIN + $NGO_PROJECT_OFFICER)}
-        <a href="{urlFor name="invite_admins" options="org_id.$org_id"}" class='pull-right btn btn-success'>
-            <i class="icon-star icon-white"></i> Add users and assign roles
-        </a>
-      {/if}
-    </h1>
-    {if !empty($orgMembers)}
-        <form method="post" action="{urlFor name="org-public-profile" options="org_id.$org_id"}">
-            <table class="table table-striped">
-                <thead>
-                    <th>{Localisation::getTranslation('org_public_profile_member_type')}</th>
-                    <th>email</th>
-                    {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER + $NGO_ADMIN)}
-                        <th>Remove Role</th>
-                        <th>Add Role</th>
-                    {/if}
-                    <th>Language Pairs</th>
-                </thead>
-                <tbody>
-                    {foreach $orgMembers as $member}
-                      {if $roles&($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER) || $org_id != 707 || $member['source_of_user']}
-                      <tr>
-                            <td>
-                                {if $member['roles'] & $NGO_ADMIN}
-                                    <span class="marker org-admin-marker">ADMIN</span>
-                                {elseif $member['roles'] & $NGO_PROJECT_OFFICER}
-                                    <span class="marker org-member-marker">PROJECT OFFICER</span>
-                                {else}
-                                    <span class="marker org-member-marker">LINGUIST{if !($member['roles'] & $LINGUIST)} (exclusive){/if}</span>
+        <div class="row g-4 mb-5">
+
+            <div class="col-lg-4">
+                <div class="twb-card blue-border-top p-4 h-100 text-center">
+                    <div class="mb-3">
+                        <img src="data:image/jpeg;base64,{$org_image}" class="org-logo-full border" alt="{TemplateHelper::uiCleanseHTML($org->getName())} logo" title="{TemplateHelper::uiCleanseHTML($org->getName())}">
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-8">
+                <div class="twb-card accent-border-top p-4 h-100">
+                    <h5 class="fw-bold mb-3">Overview</h5>
+                    <p class="text-muted fst-italic">{if $org->getBiography() != NULL}{TemplateHelper::uiCleanseHTMLNewlineAndTabs($org->getBiography())}{/if}</p>
+
+                    <div class="row mt-auto pt-4">
+                        <div class="col-sm-6">
+                            <label class="small text-uppercase fw-bold text-muted d-block mb-1">Country</label>
+                            <span class="fw-semibold">{if $org->getCountry() != NULL}{TemplateHelper::uiCleanseHTML($org->getCountry())}{/if}</span>
+                        </div>
+                        <div class="col-sm-6 text-sm-end mt-3 mt-sm-0">
+                            <label class="small text-uppercase fw-bold text-muted d-block mb-1">Social Links</label>
+                            <div class="fs-5">
+
+                                {if $org->getHomepage() != NULL && $org->getHomepage() != 'https://' && $org->getHomepage() != ''}
+                                    <a href="{$org->getHomepage()}"      class="me-3 text-decoration-none" style="color: var(--twb-blue);"><i class="fas fa-globe"></i></a>
                                 {/if}
-                            </td>
-                            <td>
-                                <a href="{urlFor name="user-public-profile" options="user_id.{$member['id']}"}">{$member['email']}</a>
-                            </td>
-                        {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER + $NGO_ADMIN)}
-                            <td>
-                                {if $member['roles'] & $NGO_ADMIN}
-                                    <button type="submit" name="revokeOrgAdmin" value="{$member['id']}" class="btn btn-inverse"
-                                            onclick="return confirm('Are you sure you want to revoke ADMIN role from this user?')">
-                                        <i class="icon-fire icon-white"></i> Remove ADMIN Role and Make PROJECT OFFICER
-                                    </button>
-                                {elseif $member['roles'] & $NGO_PROJECT_OFFICER}
-                                    <button type="submit" name="revokeOrgPO" value="{$member['id']}" class="btn btn-inverse"
-                                            onclick="return confirm('Are you sure you want to revoke PROJECT OFFICER role from this user?')">
-                                        <i class="icon-fire icon-white"></i> Remove PROJECT OFFICER Role and Make LINGUIST
-                                    </button>
-                                {else}
-                                    <button type="submit" name="revokeUser" value="{$member['id']}" class="btn btn-inverse"
-                                            onclick="return confirm('Are you sure you want to permanently remove this user from Organization?')">
-                                        <i class="icon-fire icon-white"></i> Remove LINGUIST Permanently from this Organization
-                                    </button>
+
+                                {if $org->getCity() != NULL && $org->getCity() != 'https://' && $org->getCity() != ''}
+                                    <a href="{$org->getCity()}"          class="me-3 text-decoration-none" style="color: var(--twb-blue);"><i class="fab fa-linkedin"></i></a>
                                 {/if}
-                            </td>
-                            <td>
-                                {if $member['roles'] & $NGO_ADMIN}
-                                {elseif $member['roles'] & $NGO_PROJECT_OFFICER}
-                                    <button type="submit" name="makeOrgAdmin" value="{$member['id']}" class="btn btn-success" 
-                                            onclick="return confirm('Are you sure you want to make this user an ADMIN of this organization?')"> 
-                                            <i class="icon-star icon-white"></i> Create ADMIN
-                                    </button>
-                                {else}
-                                    <button type="submit" name="makeOrgPO" value="{$member['id']}" class="btn btn-success"
-                                            onclick="return confirm('Are you sure you want to make this user a PROJECT OFFICER of this organization?')">
-                                            <i class="icon-star icon-white"></i> Create PROJECT OFFICER
-                                    </button>
+
+                                {if $org->getAddress() != NULL && $org->getAddress() != 'https://' && $org->getAddress() != ''}
+                                    <a href="{$org->getAddress()}"       class="me-3 text-decoration-none" style="color: var(--twb-blue);"><i class="fab fa-facebook"></i></a>
                                 {/if}
-                            </td>
+
+                                {if $org->getRegionalFocus() != NULL && $org->getRegionalFocus() != 'https://' && $org->getRegionalFocus() != ''}
+                                    <a href="{$org->getRegionalFocus()}" class="text-decoration-none"      style="color: var(--twb-blue);"><i class="fab fa-twitter"></i></a>
+                                {/if}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER + $NGO_ADMIN + $NGO_PROJECT_OFFICER)}
+        <div class="mb-5">
+            <h4 class="fw-bold mb-3">Packages and subscriptions</h4>
+            <div class="twb-card overflow-hidden">
+                {if !empty($entitlements)}
+
+                <div class="row g-0 p-3 bg-light border-bottom fw-bold small text-muted d-none d-md-flex">
+                    <div class="col-md-4">PACKAGE NAME</div>
+                    <div class="col-md-4">VALIDITY PERIOD</div>
+                    <div class="col-md-4">ALLOCATION & USAGE</div>
+                </div>
+
+                {foreach $entitlements as $entitlement}
+                <div class="row g-0 p-3 align-items-center border-bottom">
+                    <div class="col-md-4 fw-bold text-dark">{if $entitlement['service'] == 0}Translation{else}Other{/if}{if $entitlement['inactive']} (Inactive){/if}</div>
+                    <div class="col-md-4 text-muted small">{substr($entitlement['validity_start'], 0, 10)} - {substr($entitlement['validity_end'], 0, 10)}</div>
+                    <div class="col-md-4">
+                        {if $entitlement['limit_type']}
+                            <span class="small text-muted">Unlimited</span>
+                        {else}
+                            <div class="progress mb-1" style="height: 6px;">
+                                <div class="progress-bar" style="width: {min($entitlement['metric_used']/$entitlement['limit_value']*100, 100)}%; background-color: var(--twb-blue);"></div>
+                            </div>
+                            <span class="small text-muted">{$entitlement['metric_used']} / {$entitlement['limit_value']} words used</span>
                         {/if}
-                            <td>
-                                {$member['language_pairs']}
-                            </td>
-                      </tr>
-                      {/if}
-                    {/foreach}
-                </tbody>
-            </table>
-            {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
-        </form>
+                    </div>
+                </div>
+                {/foreach}
 
-        <a href="{urlFor name="org_members" options="org_id.$org_id"}">Download Organization Members</a>
-    {else}
-        <p class="alert alert-info">{Localisation::getTranslation('org_public_profile_no_members')}</p>
-    {/if}
-{/if}
+                {else}
+                <div fw-bold text-dark>There are no subscriptions for this organization.</div>
+                {/if}
 
-{if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
-    <p style="margin-bottom: 40px"></p>
-    <h1 class="page-header">Asana Board for Partner</h1>
-    <form method="post" action="{urlFor name="org-public-profile" options="org_id.$org_id"}">
-        <table>
-            <tr>
-                <td>
-                    <label for="asana_board" style="font-size: large"><strong>Asana ID (not full URL) for this Partner's Board/Project</strong></label>
-                    <input type="text" name="asana_board" id="asana_board" maxlength="20" value="{$asana_board_for_org['asana_board']}" style="width: 80%" />
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <button type="submit" value="set_asana_board" name="set_asana_board" class="btn btn-primary">
-                        <i class="icon-refresh icon-white"></i> Update Asana ID
-                    </button>
-                </td>
-            </tr>
-        </table>
-        {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
-    </form>
+            </div>
+        </div>
+        {/if}
 
-    <p style="margin-bottom: 40px"></p>
-    <h1 class="page-header">Resources</h1>
-    <form method="post" action="{urlFor name="org-public-profile" options="org_id.$org_id"}">
-        <table>
-            <tr>
-                <td>
-                    <input type="checkbox" name="mt_for_org" id="mt_for_org" value="1" {if $mt_for_org}checked="checked"{/if} /> Use machine translation in projects for this organization
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <button type="submit" value="set_mt_for_org" name="set_mt_for_org" class="btn btn-primary">
-                        <i class="icon-refresh icon-white"></i> Update Resources
-                    </button>
-                </td>
-            </tr>
-        </table>
-        {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
-    </form>
+        {if $roles&($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER + $NGO_ADMIN + $NGO_PROJECT_OFFICER)}
+            <div class="mb-5">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h4 class="fw-bold m-0 text-dark">Organization Members</h4>
+                    <a href="{urlFor name="invite_admins" options="org_id.$org_id"}" class='btn btn-outline-secondary btn-sm rounded-pill px-4'>
+                        <i class="fas fa-user-plus me-1"></i> Add member
+                    </a>
+                </div>
 
-    <p style="margin-bottom: 40px"></p>
-    <h1 class="page-header">Organization Image <small>JPEG, PNG or WEBP, but only JPEG will be resized to a suitable size.</small></h1>
-    <form method="post" action="{urlFor name="org-public-profile" options="org_id.$org_id"}" enctype="multipart/form-data">
-        <table>
-            <tr>
-                <td>
-                    <input type="file" name="org_image" accept="image/jpeg" />
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <button type="submit" value="set_image_for_org" name="set_image_for_org" class="btn btn-primary">
-                        <i class="icon-refresh icon-white"></i> Update Image
-                    </button>
-                </td>
-            </tr>
-        </table>
-        {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
-    </form>
-{/if}
+                {if !empty($orgMembers)}
+                    <div class="row g-4">
+                        <form method="post" action="{urlFor name="org-public-profile" options="org_id.$org_id"}">
 
-{if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER + $NGO_ADMIN + $NGO_PROJECT_OFFICER)}
-    <p style="margin-bottom: 40px" />
-    <h1 class="page-header">
-        Packages and Subscriptions
-    </h1>
-    {if !empty($entitlements)}
-    <table class="table table-striped">
-        <thead>
-            <th>Service</th>
-            <th>Effective date</th>
-            <th>Expiry date</th>
-            <th>Word allocation</th>
-            <th>Allocation used</th>
-            <th>Priority</th>
-            <th>Status</th>
-        </thead>
-        <tbody>
-        {foreach $entitlements as $entitlement}
-            <tr>
-                <td>{if $entitlement['service'] == 0}Translation{else}Other{/if}</td>
-                <td>{substr($entitlement['validity_start'], 0, 10)}</td>
-                <td>{substr($entitlement['validity_end'], 0, 10)}</td>
-                <td>{if $entitlement['limit_type']}Unlimited{else}{$entitlement['limit_value']}{/if}</td>
-                <td>{$entitlement['metric_used']}</td>
-                <td>{$entitlement['priority']}</td>
-                <td>{if $entitlement['status']}Cancelled{else}Active{/if}</td>
-            </tr>
-        {/foreach}
-        </tbody>
-    </table>
-    {else}
-        <div style="font-size: large"><strong>There are no subscriptions for this organization.</strong></div>
-    {/if}
-{/if}
+                        {foreach [1, 0] as $display_admins}
+                        {foreach $orgMembers as $member}
+                        {if $display_admins && $member['roles']&($NGO_ADMIN + $NGO_PROJECT_OFFICER) || !$display_admins && !($member['roles']&($NGO_ADMIN + $NGO_PROJECT_OFFICER))}
+                            {if $roles&($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER) || $org_id != 707 || $member['source_of_user']}
+                            <div class="col-md-6 col-lg-4 col-xl-3">
+                                <div class="twb-card member-card shadow-sm border-0">
+                                    <div>
+                                        <div class="member-role">Administrator
+                                            {if $member['roles']&$NGO_ADMIN}ADMINISTRATOR
+                                            {elseif $member['roles']&$NGO_PROJECT_OFFICER}PROJECT OFFICER
+                                            {else}LINGUIST{if !($member['roles'] & $LINGUIST)} (exclusive){/if} {$member['language_pairs']}
+                                            {/if}
+                                        </div>
+                                        <div class="member-name">{TemplateHelper::uiCleanseHTML($member['first_name'])|capitalize} {TemplateHelper::uiCleanseHTML($member['last_name'])|capitalize}</div>
+                                        <div class="member-email text-truncate">{$member['email']}/div>
+                                    </div>
 
-{include file='footer.tpl'}
+                                    {if $roles&($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER + $NGO_ADMIN)}
+                                    <div class="dropdown">
+                                        <a class="btn btn-twb-outline btn-sm w-100 rounded-pill py-2 fw-bold dropdown-toggle no-caret" href="#" id="hover_drop_down" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                            Manage Member
+                                        </a>
+                                        <ul class="dropdown-menu" aria-labelledby="hover_drop_down">
+
+                                            {if $member['roles'] & $NGO_ADMIN}
+                                            <li><button type="submit" name="revokeOrgAdmin" value="{$member['id']}" class="btn btn-inverse"
+                                                    onclick="return confirm('Are you sure you want to revoke ADMIN role from this user?')">
+                                                <i class="icon-fire icon-white"></i> Remove ADMIN Role and Make PROJECT OFFICER
+                                            </button></li>
+
+                                            {elseif $member['roles'] & $NGO_PROJECT_OFFICER}
+                                            <li><button type="submit" name="revokeOrgPO" value="{$member['id']}" class="btn btn-inverse"
+                                                    onclick="return confirm('Are you sure you want to revoke PROJECT OFFICER role from this user?')">
+                                                <i class="icon-fire icon-white"></i> Remove PROJECT OFFICER Role and Make LINGUIST
+                                             </button></li>
+                                            {/if}
+
+                                            <li><button type="submit" name="revokeUser" value="{$member['id']}" class="btn btn-inverse"
+                                                    onclick="return confirm('Are you sure you want to permanently remove this user from Organization?')">
+                                                <i class="icon-fire icon-white"></i> Remove user Permanently from this Organization
+                                            </button></li>
+
+                                            {if $member['roles'] & $NGO_ADMIN}
+                                            {elseif $member['roles'] & $NGO_PROJECT_OFFICER}
+                                            <li><button type="submit" name="makeOrgAdmin" value="{$member['id']}" class="btn btn-success"
+                                                    onclick="return confirm('Are you sure you want to make this user an ADMIN of this organization?')">
+                                                <i class="icon-star icon-white"></i> Create ADMIN
+                                            </button></li>
+
+                                            {else}
+                                            <li><button type="submit" name="makeOrgPO" value="{$member['id']}" class="btn btn-success"
+                                                    onclick="return confirm('Are you sure you want to make this user a PROJECT OFFICER of this organization?')">
+                                                <i class="icon-star icon-white"></i> Create PROJECT OFFICER
+                                            </button></li>
+                                            {/if}
+
+                                        </ul>
+                                    </div>
+                                    {/if}
+
+                                </div>
+                            </div>
+                            {/if}
+                        {/if}
+                        {/foreach}
+                        {/foreach}
+
+                        {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
+                        </form>
+                    </div>
+                    <a href="{urlFor name="org_members" options="org_id.$org_id"}">Download Organization Members</a>
+                {/if}
+            </div>
+        {/if}
+
+        {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
+            <div class="bg-body-tertiary border border-2 rounded-4 p-4 p-md-5 mb-5 shadow-inner">
+                <h4 class="fw-bold mb-4" style="color: var(--twb-blue);"><i class="fas fa-user-shield me-2"></i>Admin Section</h4>
+                <div class="row g-4">
+
+                    <div class="col-md-4">
+                        <div class="twb-card p-4 h-100 border-0 shadow-sm">
+                            <h6 class="fw-bold mb-3">Work Report</h6>
+                            <p class="small text-muted mb-4">Access detailed financial and activity reports for this organization.</p>
+                            <a href="{urlFor name="partner_deals" options="org_id.$org_id"}" target="_blank" class="btn btn-info btn-sm w-100 text-white fw-bold">View Report</a>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="twb-card p-4 h-100 border-0 shadow-sm">
+                            <h6 class="fw-bold mb-3">Asana Board</h6>
+                            <p class="small text-muted mb-3">Enter the partner's Asana ID for their board/project below (not full URL).</p>
+                            <form method="post" action="{urlFor name="org-public-profile" options="org_id.$org_id"}">
+                                <div class="input-group">
+                                    <input type="text" name="asana_board" id="asana_board" class="form-control form-control-sm" placeholder="e.g. 12048593" value="{$asana_board_for_org['asana_board']}">
+                                    <button type="submit" value="set_asana_board" name="set_asana_board" class="btn btn-twb-primary btn-sm">Update</button>
+                                </div>
+                                {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
+                            </form>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="twb-card p-4 h-100 border-0 shadow-sm">
+                            <h6 class="fw-bold mb-3">Resources</h6>
+                            <form method="post" action="{urlFor name="org-public-profile" options="org_id.$org_id"}">
+                                <div class="form-check form-switch pt-2">
+                                    <input class="form-check-input" type="checkbox" name="mt_for_org" id="mt_for_org" value="1" {if $mt_for_org}checked="checked"{/if}>
+                                    <label class="form-check-label small fw-semibold" for="mt_for_org">Enable Machine Translation</label>
+                                </div>
+                                <button type="submit" value="set_mt_for_org" name="set_mt_for_org" class="btn btn-twb-primary btn-sm">Update</button>
+                                {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
+                            </form>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="twb-card p-4 h-100 border-0 shadow-sm">
+                            <h6 class="fw-bold mb-3">Organization Image</h6>
+                            <p class="small text-muted mb-3">JPEG, PNG or WEBP, but only JPEG will be resized to a suitable size.</p>
+                            <form method="post" action="{urlFor name="org-public-profile" options="org_id.$org_id"}" enctype="multipart/form-data">
+                                <div class="input-group">
+                                    <input type="file" name="org_image" accept="image/jpeg" class="form-control form-control-sm" />
+                                    <button type="submit" value="set_image_for_org" name="set_image_for_org" class="btn btn-twb-primary btn-sm">Update</button>
+                                </div>
+                                {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
+                            </form>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        {/if}
+
+    </div>
+
+{include file="footer2.tpl"}

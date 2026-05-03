@@ -251,6 +251,7 @@ CREATE TABLE IF NOT EXISTS `Organisations` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
+# Not currently used...
 CREATE TABLE IF NOT EXISTS `OrganisationExtendedProfiles` (
   `id` INT(10) UNSIGNED NOT NULL,
   `facebook`            VARCHAR(255)  NOT NULL DEFAULT '' COLLATE 'utf8mb4_unicode_ci',
@@ -5426,6 +5427,7 @@ END//
 DELIMITER ;
 
 
+# Not currently used...
 DROP PROCEDURE IF EXISTS `organisationExtendedProfileInsertAndUpdate`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `organisationExtendedProfileInsertAndUpdate`(
