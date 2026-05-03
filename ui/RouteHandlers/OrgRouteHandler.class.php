@@ -620,16 +620,6 @@ class OrgRouteHandler
         $currentUser = $userDao->getUser(Common\Lib\UserSession::getCurrentUserId());
         $current_user_id = $currentUser->getId();
         $roles = $adminDao->get_roles($current_user_id, $org_id);
-
-        $start_dateError = '';
-        if ($roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER)) {
-            $extra_scripts = "
-            <script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/lib/jquery-ui-timepicker-addon.js\"></script>
-            <script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/start_datePicker.js\"></script>";
-        } else {
-            $extra_scripts = '';
-        }
-
         $org = $orgDao->getOrganisation($org_id);
 
         if ($request->getMethod() === 'POST') {
@@ -695,12 +685,11 @@ class OrgRouteHandler
                 'sesskey' => $sesskey,
                 "org" => $org,
                 'orgMembers' => $orgMemberList,
-                'start_date_error' => $start_dateError,
-                'extra_scripts' => $extra_scripts,
                 'asana_board_for_org' => $userDao->get_asana_board_for_org($org_id),
                 'mt_for_org' => $userDao->get_mt_for_org($org_id),
                 'entitlements' => $projectDao->get_entitlements($org_id),
                 'org_image' => $userDao->get_org_image($org_id),
+                'extra_styles' => file_get_contents(__DIR__ . '/../../resources/css/task_page.css'),
         ));
 
         return UserRouteHandler::render("org/org-public-profile.tpl", $response);

@@ -1,0 +1,39 @@
+    <style>
+        :root {
+            --twb-blue: #143878;
+            --twb-orange: #e8991c;
+            --card-radius: 1rem;
+        }
+        body { background-color: #f8f9fa; }
+        
+        /* Nav/Menu Placeholder */
+        .twb-nav { background: white; border-bottom: 1px solid #dee2e6; min-height: 60px; }
+
+        .twb-card {
+            background: white;
+            border-radius: var(--card-radius);
+            border: 1px solid #e5e7eb;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+        
+        .member-card { padding: 1.5rem; height: 100%; display: flex; flex-direction: column; justify-content: space-between; }
+        .member-role { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: var(--twb-blue); margin-bottom: 0.5rem; }
+        .member-name { font-size: 1.1rem; font-weight: 700; color: #1f2937; margin-bottom: 0.25rem; }
+        .member-email { font-size: 0.875rem; color: #6b7280; margin-bottom: 1.5rem; }
+        
+        .accent-border-top { border-top: 4px solid var(--twb-orange) !important; }
+        .blue-border-top { border-top: 4px solid var(--twb-blue) !important; }
+        
+        .btn-twb-primary { background-color: var(--twb-blue); color: white; border: none; }
+        .btn-twb-outline { border: 1px solid var(--twb-blue); color: var(--twb-blue); transition: 0.2s; }
+        .btn-twb-outline:hover { background-color: var(--twb-blue); color: white; }
+
+        /* Full size logo container */
+        .org-logo-full {
+            width: 100%;
+            max-height: 120px;
+            object-fit: contain;
+            background: #fff;
+            border-radius: 0.5rem;
+        }
+    </style>
