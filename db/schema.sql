@@ -2386,7 +2386,6 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `deleteOrg`(IN `id` INT)
 BEGIN
 if EXISTS (select 1 from Organisations o where o.id=id) then
   DELETE FROM Organisations WHERE Organisations.id=id;
-  DELETE FROM OrganisationExtendedProfiles WHERE OrganisationExtendedProfiles.id=id;
   select 1 as result;
 else
   select 0 as result;
@@ -3251,6 +3250,7 @@ END//
 DELIMITER ;
 
 
+# Not currently used...
 DROP PROCEDURE IF EXISTS `getOrganisationExtendedProfile`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getOrganisationExtendedProfile`(IN `id` INT)
@@ -16047,7 +16047,12 @@ DROP PROCEDURE IF EXISTS `get_entitlements`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `get_entitlements`(IN p_org_id INT UNSIGNED)
 BEGIN
-    SELECT * FROM entitlements WHERE org_id=p_org_id;
+    SELECT
+        *,
+        IF((NOW()<validity_start OR NOW()>validity_end) OR status=1 OR (limit_type=0 && metric_used>=limit_value), 1, 0) AS inactive
+    FROM entitlements
+    WHERE org_id=p_org_id
+    ORDER BY inactive, validity_start, validity_end, priority;
 END//
 DELIMITER ;
 

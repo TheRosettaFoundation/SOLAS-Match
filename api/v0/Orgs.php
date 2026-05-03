@@ -26,11 +26,6 @@ class Orgs
             ->add('\SolasMatch\API\Lib\Middleware:isloggedIn');
 
         $app->get(
-            '/api/v0/orgs/{orgId}/badges/',
-            '\SolasMatch\API\V0\Orgs:getOrgBadges')
-            ->add('\SolasMatch\API\Lib\Middleware:isloggedIn');
-
-        $app->get(
             '/api/v0/orgs/getByName/{name}/',
             '\SolasMatch\API\V0\Orgs:getOrgByName')
             ->add('\SolasMatch\API\Lib\Middleware:isloggedIn');
@@ -52,15 +47,6 @@ class Orgs
         $app->delete(
             '/api/v0/orgs/{orgId}/',
             '\SolasMatch\API\V0\Orgs:deleteOrg')
-            ->add('\SolasMatch\API\Lib\Middleware:authenticateOrgAdmin');
-
-        $app->get(
-            '/api/v0/orgextended/{orgId}/',
-            '\SolasMatch\API\V0\Orgs:getOrganisationExtendedProfile');
-
-        $app->put(
-            '/api/v0/orgextended/{orgId}/',
-            '\SolasMatch\API\V0\Orgs:updateOrgExtendedProfile')
             ->add('\SolasMatch\API\Lib\Middleware:authenticateOrgAdmin');
 
         $app->get(
@@ -101,23 +87,10 @@ class Orgs
         return API\Dispatcher::sendResponse($response, $data, null);
     }
 
-    public static function getOrgBadges(Request $request, Response $response, $args)
-    {
-        $orgId = $args['orgId'];
-        return API\Dispatcher::sendResponse($response, DAO\BadgeDao::getOrgBadges($orgId), null);
-    }
-
     public static function getOrg(Request $request, Response $response, $args)
     {
         $orgId = $args['orgId'];
         $org = DAO\OrganisationDao::getOrg($orgId);
-        return API\Dispatcher::sendResponse($response, $org, null);
-    }
-
-    public static function getOrganisationExtendedProfile(Request $request, Response $response, $args)
-    {
-        $orgId = $args['orgId'];
-        $org = DAO\OrganisationDao::getOrganisationExtendedProfile($orgId);
         return API\Dispatcher::sendResponse($response, $org, null);
     }
 
@@ -134,16 +107,6 @@ class Orgs
             return API\Dispatcher::sendResponse($response, null, Common\Enums\HttpStatusEnum::CONFLICT);
         }
         return API\Dispatcher::sendResponse($response, DAO\OrganisationDao::insertAndUpdate($data), null);
-    }
-
-    public static function updateOrgExtendedProfile(Request $request, Response $response, $args)
-    {
-        $orgId = $args['orgId'];
-        $data = (string)$request->getBody();
-        $client = new Common\Lib\APIHelper('.json');
-        $data = $client->deserialize($data, "\SolasMatch\Common\Protobufs\Models\OrganisationExtendedProfile");
-        $data->setId($orgId);
-        return API\Dispatcher::sendResponse($response, DAO\OrganisationDao::insertAndUpdateExtendedProfile($data), null);
     }
 
     public static function deleteOrg(Request $request, Response $response, $args)

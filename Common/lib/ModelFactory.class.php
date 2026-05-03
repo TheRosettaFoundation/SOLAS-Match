@@ -63,9 +63,6 @@ class ModelFactory
             case "Organisation":
                 $ret = self::generateOrganisation($modelData);
                 break;
-            case "OrganisationExtendedProfile":
-                $ret = self::generateOrganisationExtendedProfile($modelData);
-                break;
             case "TaskMetadata":
                 $ret = self::generateTaskMetadata($modelData);
                 break;

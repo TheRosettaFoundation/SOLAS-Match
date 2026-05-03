@@ -23,14 +23,6 @@ class OrganisationDao extends BaseDao
         return $ret;
     }
 
-    public function getOrganisationExtendedProfile($id)
-    {
-        $ret = null;
-        $request = "{$this->siteApi}v0/orgextended/$id";
-        $ret = $this->client->call("\SolasMatch\Common\Protobufs\Models\OrganisationExtendedProfile", $request);
-        return $ret;
-    }
-
     public function getOrganisationByName($name)
     {
         $ret = null;
@@ -61,14 +53,6 @@ class OrganisationDao extends BaseDao
         $ret = null;
         $request = "{$this->siteApi}v0/orgs/$orgId/projects";
         $ret = $this->client->call(array("\SolasMatch\Common\Protobufs\Models\Project"), $request);
-        return $ret;
-    }
-
-    public function getOrgBadges($orgId)
-    {
-        $ret = null;
-        $request = "{$this->siteApi}v0/orgs/$orgId/badges";
-        $ret = $this->client->call(array("\SolasMatch\Common\Protobufs\Models\Badge"), $request);
         return $ret;
     }
 
@@ -112,17 +96,6 @@ class OrganisationDao extends BaseDao
                 throw new Common\Exceptions\SolasMatchException($ret, $this->client->getResponseCode());
                 break;
         }
-    }
-
-    public function updateOrgExtendedProfile($org)
-    {
-        $request = "{$this->siteApi}v0/orgextended/{$org->getId()}";
-        $this->client->call(
-            "\SolasMatch\Common\Protobufs\Models\OrganisationExtendedProfile",
-            $request,
-            Common\Enums\HttpMethodEnum::PUT,
-            $org
-        );
     }
 
     public function deleteOrg($orgId)

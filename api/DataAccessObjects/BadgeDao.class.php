@@ -87,26 +87,6 @@ class BadgeDao
         }
     }
 
-    //! Get Badge objects associated with the specified Organisation
-    /*!
-      Gets all the Badge objects that were created by the specified Organisation.
-      @param int $orgId is the id of the Organisation that owns the Badge objects.
-      @return Returns a list of Badge objects
-    */
-    public static function getOrgBadges($orgId)
-    {
-        $ret = null;
-        $args = "null,null,null,".Lib\PDOWrapper::cleanseNull($orgId);
-        $badge_array = Lib\PDOWrapper::call("getBadge", $args);
-        if ($badge_array) {
-            $ret = array();
-            foreach ($badge_array as $badge) {
-                $ret[] = Common\Lib\ModelFactory::buildModel("Badge", $badge);
-            }
-        }
-        return $ret;
-    }
-
     //! Used to assign a Badge to a User
     /*!
       @note This function sends an email request to the backend for UserBadgeAwardedEmail

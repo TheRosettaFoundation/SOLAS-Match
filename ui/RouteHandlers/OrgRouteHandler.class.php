@@ -599,7 +599,7 @@ class OrgRouteHandler
         
         $template_data = array_merge($template_data, array(
             'org'  => $org,
-            'sesskey'      => $sesskey,
+            'sesskey' => $sesskey,
         ));
 
         return UserRouteHandler::render("org/org-private-profile.tpl", $response);
@@ -614,7 +614,6 @@ class OrgRouteHandler
         $orgDao = new DAO\OrganisationDao();
         $projectDao = new DAO\ProjectDao();
         $userDao = new DAO\UserDao();
-        $badgeDao = new DAO\BadgeDao();
 
         $sesskey = Common\Lib\UserSession::getCSRFKey();
 
@@ -637,24 +636,6 @@ class OrgRouteHandler
             $post = $request->getParsedBody();
             if ($fail_CSRF = Common\Lib\UserSession::checkCSRFKey($post, 'orgPublicProfile')) return $response->withStatus(302)->withHeader('Location', $fail_CSRF);
                    
-            if (isset($post['deleteBadge'])) {
-                $badgeDao->deleteBadge($post['badge_id']);
-            }
-            
-            if (isset($post['title']) && isset($post['description'])) {
-                if ($post['title'] == "" || $post['description'] == "") {
-                    UserRouteHandler::flash("error", sprintf(Lib\Localisation::getTranslation('org_public_profile_19')));
-                } else {
-                    $badge = new Common\Protobufs\Models\Badge();
-                    $badge->setId($post['badge_id']);
-                    $badge->setTitle($post['title']);
-                    $badge->setDescription($post['description']);
-                    $badge->setOwnerId($org_id);
-                    $badgeDao->updateBadge($badge);
-                    return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor("org-public-profile", array("org_id" => $org_id)));
-                }
-            }
-            
             if ($roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER | NGO_ADMIN)) {
                 if (isset($post['revokeUser'])) {
                     $user_id = $post['revokeUser'];
@@ -708,13 +689,7 @@ class OrgRouteHandler
             }
         }
         $orgMemberList = $adminDao->getOrgMembers($org_id);
-        $org_badges = [];
 
-        if ($roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER | NGO_ADMIN | NGO_PROJECT_OFFICER)) {
-            $org_badges = $orgDao->getOrgBadges($org_id);
-        }
-
-        $siteName = Common\Lib\Settings::get("site.name");
         $template_data = array_merge($template_data, array(
                 'current_page' => 'org-public-profile',
                 'sesskey' => $sesskey,
@@ -725,7 +700,6 @@ class OrgRouteHandler
                 'asana_board_for_org' => $userDao->get_asana_board_for_org($org_id),
                 'mt_for_org' => $userDao->get_mt_for_org($org_id),
                 'entitlements' => $projectDao->get_entitlements($org_id),
-                'siteName' => $siteName,
                 'org_image' => $userDao->get_org_image($org_id),
         ));
 
