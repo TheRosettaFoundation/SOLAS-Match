@@ -245,7 +245,7 @@
                         <div class="twb-card p-4 h-100 border-0 shadow-sm">
                             <h6 class="fw-bold mb-3">Work Report</h6>
                             <p class="small text-muted mb-4">Access detailed financial and activity reports for this organization.</p>
-                            <a href="{urlFor name="partner_deals" options="org_id.$org_id"}" target="_blank" class="btn btn-info btn-sm w-100 text-white fw-bold">View Report</a>
+                            <a href="{urlFor name="partner_deals" options="org_id.$org_id"}" target="_blank" class="btn btn-twb-primary btn-sm w-100 text-white fw-bold">View Report</a>
                         </div>
                     </div>
 
