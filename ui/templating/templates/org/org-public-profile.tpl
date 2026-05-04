@@ -155,7 +155,7 @@
                         <button class="btn btn-twb-outline btn-sm w-100 rounded-pill py-2 fw-bold">Manage Member</button>
                     </div>
                 </div>
-                        <form method="post" action="{urlFor name="org-public-profile" options="org_id.$org_id"}">
+<!--                        <form method="post" action="{urlFor name="org-public-profile" options="org_id.$org_id"}"> -->
 
                         {foreach [1, 0] as $display_admins}
                         {foreach $orgMembers as $member}
@@ -245,7 +245,7 @@
                         {/foreach}
 
                         {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
-                        </form>
+<!--                        </form>  -->
                     </div>
                     <a href="{urlFor name="org_members" options="org_id.$org_id"}">Download Organization Members</a>
                 {/if}
