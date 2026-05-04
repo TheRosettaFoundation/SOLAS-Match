@@ -690,7 +690,7 @@ class OrgRouteHandler
             'mt_for_org' => $userDao->get_mt_for_org($org_id),
             'entitlements' => $projectDao->get_entitlements($org_id),
             'org_image' => $userDao->get_org_image($org_id),
-            'extra_styles' => file_get_contents(__DIR__ . '/../../resources/css/task_page.css'),
+            'extra_styles' => file_get_contents(__DIR__ . '/../../resources/css/org_page.css'),
         ]);
 
         return UserRouteHandler::render("org/org-public-profile.tpl", $response);
