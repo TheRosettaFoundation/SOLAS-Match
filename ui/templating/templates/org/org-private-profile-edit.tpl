@@ -47,8 +47,8 @@
 
                     <label for='facebook'><strong>{Localisation::getTranslation('org_private_profile_organisation_facebook')}</strong></label>
                     <input type='text' name='facebook' id='facebook' style="width: 80%"
-                    {if $org->getAddress != NULL && $org->getAddress != ''}
-                        value="{$org->getAddress}"
+                    {if $org->getAddress() != NULL && $org->getAddress() != ''}
+                        value="{$org->getAddress()}"
                     {else}
                         placeholder="https://"
                     {/if}
