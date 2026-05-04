@@ -142,18 +142,4 @@ class OrganisationDao
         }
         return $ret;
     }
-
-    //! Delete an Organisation
-    /*!
-      Permanently delete an Organisation from the system. There is currently no Organisation archive so it is not
-      possible to revive a deleted Organisation
-      @param int $orgId is the id of the Organisation being deleted
-      @return Returns '1' if the specified Organisation existed and was deleted, '0' otherwise
-    */
-    public static function delete($orgId)
-    {
-        $args = Lib\PDOWrapper::cleanse($orgId);
-        $result= Lib\PDOWrapper::call("deleteOrg", $args);
-        return $result[0]['result'];
-    }
 }

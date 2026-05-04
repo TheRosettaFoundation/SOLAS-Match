@@ -573,24 +573,6 @@ class OrgRouteHandler
                     }
                 }
             }
-
-            if (isset($post['deleteId']) && ($adminDao->get_roles($userId) & SITE_ADMIN)) {
-                $deleteId = $post['deleteId'];
-                if (false && $deleteId) {
-                    if (!empty($post['sesskey']) && $post['sesskey'] === $sesskey && $orgDao->deleteOrg($org->getId())) {
-                        UserRouteHandler::flash(
-                            "success",
-                            sprintf(
-                                Lib\Localisation::getTranslation('org_private_profile_delete_success'),
-                                $org->getName()
-                            )
-                        );
-                        return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor("home"));
-                    } else {
-                        UserRouteHandler::flashNow("error", Lib\Localisation::getTranslation('org_private_profile_delete_fail'));
-                    }
-                }
-            }
         }
 
         if ($adminDao->get_roles($userId) & SITE_ADMIN) {

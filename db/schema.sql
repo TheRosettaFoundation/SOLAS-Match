@@ -2380,6 +2380,7 @@ END//
 DELIMITER ;
 
 
+# Not currently used...
 DROP PROCEDURE IF EXISTS `deleteOrg`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `deleteOrg`(IN `id` INT)

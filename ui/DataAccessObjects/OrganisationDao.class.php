@@ -97,12 +97,4 @@ class OrganisationDao extends BaseDao
                 break;
         }
     }
-
-    public function deleteOrg($orgId)
-    {
-        $ret = null;
-        $request = "{$this->siteApi}v0/orgs/$orgId";
-        $ret = $this->client->call(null, $request, Common\Enums\HttpMethodEnum::DELETE);
-        return $ret;
-    }
 }

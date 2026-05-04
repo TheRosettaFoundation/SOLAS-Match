@@ -44,11 +44,6 @@ class Orgs
             '\SolasMatch\API\V0\Orgs:updateOrg')
             ->add('\SolasMatch\API\Lib\Middleware:authenticateOrgAdmin');
 
-        $app->delete(
-            '/api/v0/orgs/{orgId}/',
-            '\SolasMatch\API\V0\Orgs:deleteOrg')
-            ->add('\SolasMatch\API\Lib\Middleware:authenticateOrgAdmin');
-
         $app->get(
             '/api/v0/orgs/',
             '\SolasMatch\API\V0\Orgs:getOrgs')
@@ -107,12 +102,6 @@ class Orgs
             return API\Dispatcher::sendResponse($response, null, Common\Enums\HttpStatusEnum::CONFLICT);
         }
         return API\Dispatcher::sendResponse($response, DAO\OrganisationDao::insertAndUpdate($data), null);
-    }
-
-    public static function deleteOrg(Request $request, Response $response, $args)
-    {
-        $orgId = $args['orgId'];
-        return API\Dispatcher::sendResponse($response, DAO\OrganisationDao::delete($orgId), null);
     }
 
     public static function getOrgs(Request $request, Response $response)
