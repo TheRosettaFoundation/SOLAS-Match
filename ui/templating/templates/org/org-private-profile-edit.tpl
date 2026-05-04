@@ -47,7 +47,7 @@
 
                     <label for='facebook'><strong>{Localisation::getTranslation('org_private_profile_organisation_facebook')}</strong></label>
                     <input type='text' name='facebook' id='facebook' style="width: 80%"
-                    {if $org->getAddress() != NULL && $org->getAddress() != ''}
+                    {if isset($org) && $org->getAddress() != NULL && $org->getAddress() != ''}
                         value="{$org->getAddress()}"
                     {else}
                         placeholder="https://"
@@ -56,7 +56,7 @@
 
                     <label for='linkedin'><strong>{Localisation::getTranslation('org_private_profile_organisation_linkedin')}</strong></label>
                     <input type='text' name='linkedin' id='linkedin' style="width: 80%"
-                    {if $org->getCity() != NULL && $org->getCity() != ''}
+                    {if isset($org) && $org->getCity() != NULL && $org->getCity() != ''}
                         value="{$org->getCity()}"
                     {else}
                         placeholder="https://"
@@ -65,7 +65,7 @@
 
                     <label for='twitter'><strong>{Localisation::getTranslation('org_private_profile_organisation_twitter')}</strong></label>
                     <input type='text' name='twitter' id='twitter' style="width: 80%"
-                    {if $org->getRegionalFocus() != NULL && $org->getRegionalFocus() != ''}
+                    {if isset($org) && $org->getRegionalFocus() != NULL && $org->getRegionalFocus() != ''}
                         value="{$org->getRegionalFocus()}"
                     {else}
                         placeholder="https://"
