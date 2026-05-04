@@ -21,7 +21,7 @@
 
     <div class="container">
 
-        <div class="row align-items-center mb-4 g-3">
+        <div class="row align-items-center mt-4 mb-4 g-3">
             <div class="col">
                 <h1 class="h3 fw-bold mb-0" style="color: var(--twb-blue);">{TemplateHelper::uiCleanseHTML($org->getName())}</h1>
                 <p class="text-muted mb-0 small">Organization Profile</p>
