@@ -144,14 +144,14 @@
                             <div class="col-md-6 col-lg-4 col-xl-3">
                                 <div class="twb-card member-card shadow-sm border-0">
                                     <div>
-                                        <div class="member-role">Administrator
+                                        <div class="member-role">
                                             {if $member['roles']&$NGO_ADMIN}ADMINISTRATOR
                                             {elseif $member['roles']&$NGO_PROJECT_OFFICER}PROJECT OFFICER
                                             {else}LINGUIST{if !($member['roles'] & $LINGUIST)} (exclusive){/if} {$member['language_pairs']}
                                             {/if}
                                         </div>
                                         <div class="member-name">{TemplateHelper::uiCleanseHTML($member['first_name'])|capitalize} {TemplateHelper::uiCleanseHTML($member['last_name'])|capitalize}</div>
-                                        <div class="member-email text-truncate">{$member['email']}/div>
+                                        <div class="member-email text-truncate">{$member['email']}</div>
                                     </div>
 
                                     {if $roles&($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER + $NGO_ADMIN)}
