@@ -135,12 +135,52 @@
 
                 {if !empty($orgMembers)}
                     <div class="row g-4">
+                <div class="col-md-6 col-lg-4 col-xl-3">
+                    <div class="twb-card member-card shadow-sm border-0">
+                        <div>
+                            <div class="member-role">Administrator</div>
+                            <div class="member-name">John Doe</div>
+                            <div class="member-email text-truncate">j.doe@clearglobal.org</div>
+                        </div>
+                        <button class="btn btn-twb-outline btn-sm w-100 rounded-pill py-2 fw-bold">Manage Member</button>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-4 col-xl-3">
+                    <div class="twb-card member-card shadow-sm border-0">
+                        <div>
+                            <div class="member-role">Linguist</div>
+                            <div class="member-name">Sarah Jenkins</div>
+                            <div class="member-email text-truncate">s.jenkins@clearglobal.org</div>
+                        </div>
+                        <button class="btn btn-twb-outline btn-sm w-100 rounded-pill py-2 fw-bold">Manage Member</button>
+                    </div>
+                </div>
                         <form method="post" action="{urlFor name="org-public-profile" options="org_id.$org_id"}">
 
                         {foreach [1, 0] as $display_admins}
                         {foreach $orgMembers as $member}
                         {if $display_admins && $member['roles']&($NGO_ADMIN + $NGO_PROJECT_OFFICER) || !$display_admins && !($member['roles']&($NGO_ADMIN + $NGO_PROJECT_OFFICER))}
                             {if $roles&($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER) || $org_id != 707 || $member['source_of_user']}
+                <div class="col-md-6 col-lg-4 col-xl-3">
+                    <div class="twb-card member-card shadow-sm border-0">
+                        <div>
+                            <div class="member-role">Administrator</div>
+                            <div class="member-name">John Doe</div>
+                            <div class="member-email text-truncate">j.doe@clearglobal.org</div>
+                        </div>
+                        <button class="btn btn-twb-outline btn-sm w-100 rounded-pill py-2 fw-bold">Manage Member</button>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-4 col-xl-3">
+                    <div class="twb-card member-card shadow-sm border-0">
+                        <div>
+                            <div class="member-role">Linguist</div>
+                            <div class="member-name">Sarah Jenkins</div>
+                            <div class="member-email text-truncate">s.jenkins@clearglobal.org</div>
+                        </div>
+                        <button class="btn btn-twb-outline btn-sm w-100 rounded-pill py-2 fw-bold">Manage Member</button>
+                    </div>
+                </div>
                             <div class="col-md-6 col-lg-4 col-xl-3">
                                 <div class="twb-card member-card shadow-sm border-0">
                                     <div>
