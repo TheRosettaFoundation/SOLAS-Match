@@ -65,19 +65,19 @@
                             <div class="fs-5">
 
                                 {if $org->getHomepage() != NULL && $org->getHomepage() != 'https://' && $org->getHomepage() != ''}
-                                    <a href="{$org->getHomepage()}"      class="me-3 text-decoration-none" style="color: var(--twb-blue);"><i class="fas fa-globe"></i></a>
+                                    <a href="{$org->getHomepage()}"      target="_blank" class="me-3 text-decoration-none" style="color: var(--twb-blue);"><i class="fas fa-globe"></i></a>
                                 {/if}
 
                                 {if $org->getCity() != NULL && $org->getCity() != 'https://' && $org->getCity() != ''}
-                                    <a href="{$org->getCity()}"          class="me-3 text-decoration-none" style="color: var(--twb-blue);"><i class="fab fa-linkedin"></i></a>
+                                    <a href="{$org->getCity()}"          target="_blank" class="me-3 text-decoration-none" style="color: var(--twb-blue);"><i class="fab fa-linkedin"></i></a>
                                 {/if}
 
                                 {if $org->getAddress() != NULL && $org->getAddress() != 'https://' && $org->getAddress() != ''}
-                                    <a href="{$org->getAddress()}"       class="me-3 text-decoration-none" style="color: var(--twb-blue);"><i class="fab fa-facebook"></i></a>
+                                    <a href="{$org->getAddress()}"       target="_blank" class="me-3 text-decoration-none" style="color: var(--twb-blue);"><i class="fab fa-facebook"></i></a>
                                 {/if}
 
                                 {if $org->getRegionalFocus() != NULL && $org->getRegionalFocus() != 'https://' && $org->getRegionalFocus() != ''}
-                                    <a href="{$org->getRegionalFocus()}" class="text-decoration-none"      style="color: var(--twb-blue);"><i class="fab fa-twitter"></i></a>
+                                    <a href="{$org->getRegionalFocus()}" target="_blank" class="text-decoration-none"      style="color: var(--twb-blue);"><i class="fab fa-twitter"></i></a>
                                 {/if}
                             </div>
                         </div>
