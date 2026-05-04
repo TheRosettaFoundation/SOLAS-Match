@@ -135,52 +135,11 @@
 
                 {if !empty($orgMembers)}
                     <div class="row g-4">
-                <div class="col-md-6 col-lg-4 col-xl-3">
-                    <div class="twb-card member-card shadow-sm border-0">
-                        <div>
-                            <div class="member-role">Administrator</div>
-                            <div class="member-name">John Doe</div>
-                            <div class="member-email text-truncate">j.doe@clearglobal.org</div>
-                        </div>
-                        <button class="btn btn-twb-outline btn-sm w-100 rounded-pill py-2 fw-bold">Manage Member</button>
-                    </div>
-                </div>
-                <div class="col-md-6 col-lg-4 col-xl-3">
-                    <div class="twb-card member-card shadow-sm border-0">
-                        <div>
-                            <div class="member-role">Linguist</div>
-                            <div class="member-name">Sarah Jenkins</div>
-                            <div class="member-email text-truncate">s.jenkins@clearglobal.org</div>
-                        </div>
-                        <button class="btn btn-twb-outline btn-sm w-100 rounded-pill py-2 fw-bold">Manage Member</button>
-                    </div>
-                </div>
-<!--                        <form method="post" action="{urlFor name="org-public-profile" options="org_id.$org_id"}"> -->
 
                         {foreach [1, 0] as $display_admins}
                         {foreach $orgMembers as $member}
                         {if $display_admins && $member['roles']&($NGO_ADMIN + $NGO_PROJECT_OFFICER) || !$display_admins && !($member['roles']&($NGO_ADMIN + $NGO_PROJECT_OFFICER))}
                             {if $roles&($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER) || $org_id != 707 || $member['source_of_user']}
-                <div class="col-md-6 col-lg-4 col-xl-3">
-                    <div class="twb-card member-card shadow-sm border-0">
-                        <div>
-                            <div class="member-role">Administrator</div>
-                            <div class="member-name">John Doe</div>
-                            <div class="member-email text-truncate">j.doe@clearglobal.org</div>
-                        </div>
-                        <button class="btn btn-twb-outline btn-sm w-100 rounded-pill py-2 fw-bold">Manage Member</button>
-                    </div>
-                </div>
-                <div class="col-md-6 col-lg-4 col-xl-3">
-                    <div class="twb-card member-card shadow-sm border-0">
-                        <div>
-                            <div class="member-role">Linguist</div>
-                            <div class="member-name">Sarah Jenkins</div>
-                            <div class="member-email text-truncate">s.jenkins@clearglobal.org</div>
-                        </div>
-                        <button class="btn btn-twb-outline btn-sm w-100 rounded-pill py-2 fw-bold">Manage Member</button>
-                    </div>
-                </div>
                             <div class="col-md-6 col-lg-4 col-xl-3">
                                 <div class="twb-card member-card shadow-sm border-0">
                                     <div>
@@ -202,35 +161,61 @@
                                         <ul class="dropdown-menu" aria-labelledby="hover_drop_down">
 
                                             {if $member['roles'] & $NGO_ADMIN}
-                                            <li><button type="submit" name="revokeOrgAdmin" value="{$member['id']}" class="btn btn-inverse"
-                                                    onclick="return confirm('Are you sure you want to revoke ADMIN role from this user?')">
-                                                <i class="icon-fire icon-white"></i> Remove ADMIN Role and Make PROJECT OFFICER
-                                            </button></li>
+                                            <li>
+                                                <form method="post" action="{urlFor name="org-public-profile" options="org_id.$org_id"}">
+                                                    <button type="submit" name="revokeOrgAdmin" value="{$member['id']}" class="btn btn-inverse"
+                                                        onclick="return confirm('Are you sure you want to revoke ADMIN role from this user?')">
+                                                        <i class="icon-fire icon-white"></i> Remove ADMIN Role and Make PROJECT OFFICER
+                                                    </button>
+                                                    {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
+                                                </form>
+                                            </li>
 
                                             {elseif $member['roles'] & $NGO_PROJECT_OFFICER}
-                                            <li><button type="submit" name="revokeOrgPO" value="{$member['id']}" class="btn btn-inverse"
-                                                    onclick="return confirm('Are you sure you want to revoke PROJECT OFFICER role from this user?')">
-                                                <i class="icon-fire icon-white"></i> Remove PROJECT OFFICER Role and Make LINGUIST
-                                             </button></li>
+                                            <li>
+                                                <form method="post" action="{urlFor name="org-public-profile" options="org_id.$org_id"}">
+                                                    <button type="submit" name="revokeOrgPO" value="{$member['id']}" class="btn btn-inverse"
+                                                        onclick="return confirm('Are you sure you want to revoke PROJECT OFFICER role from this user?')">
+                                                        <i class="icon-fire icon-white"></i> Remove PROJECT OFFICER Role and Make LINGUIST
+                                                    </button>
+                                                    {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
+                                                </form>
+                                            </li>
                                             {/if}
 
-                                            <li><button type="submit" name="revokeUser" value="{$member['id']}" class="btn btn-inverse"
-                                                    onclick="return confirm('Are you sure you want to permanently remove this user from Organization?')">
-                                                <i class="icon-fire icon-white"></i> Remove user Permanently from this Organization
-                                            </button></li>
+                                            <li>
+                                                <form method="post" action="{urlFor name="org-public-profile" options="org_id.$org_id"}">
+                                                    <button type="submit" name="revokeUser" value="{$member['id']}" class="btn btn-inverse"
+                                                        onclick="return confirm('Are you sure you want to permanently remove this user from Organization?')">
+                                                        <i class="icon-fire icon-white"></i> Remove user Permanently from this Organization
+                                                    </button>
+                                                    {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
+                                                </form>
+                                            </li>
 
                                             {if $member['roles'] & $NGO_ADMIN}
+
                                             {elseif $member['roles'] & $NGO_PROJECT_OFFICER}
-                                            <li><button type="submit" name="makeOrgAdmin" value="{$member['id']}" class="btn btn-success"
-                                                    onclick="return confirm('Are you sure you want to make this user an ADMIN of this organization?')">
-                                                <i class="icon-star icon-white"></i> Create ADMIN
-                                            </button></li>
+                                            <li>
+                                                <form method="post" action="{urlFor name="org-public-profile" options="org_id.$org_id"}">
+                                                    <button type="submit" name="makeOrgAdmin" value="{$member['id']}" class="btn btn-success"
+                                                        onclick="return confirm('Are you sure you want to make this user an ADMIN of this organization?')">
+                                                        <i class="icon-star icon-white"></i> Create ADMIN
+                                                    </button>
+                                                    {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
+                                                </form>
+                                            </li>
 
                                             {else}
-                                            <li><button type="submit" name="makeOrgPO" value="{$member['id']}" class="btn btn-success"
-                                                    onclick="return confirm('Are you sure you want to make this user a PROJECT OFFICER of this organization?')">
-                                                <i class="icon-star icon-white"></i> Create PROJECT OFFICER
-                                            </button></li>
+                                            <li>
+                                                <form method="post" action="{urlFor name="org-public-profile" options="org_id.$org_id"}">
+                                                    <button type="submit" name="makeOrgPO" value="{$member['id']}" class="btn btn-success"
+                                                        onclick="return confirm('Are you sure you want to make this user a PROJECT OFFICER of this organization?')">
+                                                        <i class="icon-star icon-white"></i> Create PROJECT OFFICER
+                                                    </button>
+                                                    {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
+                                                </form>
+                                            </li>
                                             {/if}
 
                                         </ul>
@@ -244,8 +229,6 @@
                         {/foreach}
                         {/foreach}
 
-                        {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
-<!--                        </form>  -->
                     </div>
                     <a href="{urlFor name="org_members" options="org_id.$org_id"}">Download Organization Members</a>
                 {/if}
