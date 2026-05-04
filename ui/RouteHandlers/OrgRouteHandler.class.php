@@ -182,7 +182,7 @@ class OrgRouteHandler
             if (isset($post['facebook'])) {
                 if (trim($post['facebook']) != '') {
                     if (Lib\Validator::validateURL($post['facebook'])) {
-                        $org->setAddress(Lib\Validator::addhttp($post['facebook']))
+                        $org->setAddress(Lib\Validator::addhttp($post['facebook']));
                     } else {
                         $errorOccured = true;
                         $errorList[] = Lib\Localisation::getTranslation('common_invalid_url');
