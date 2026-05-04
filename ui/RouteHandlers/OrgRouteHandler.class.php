@@ -260,12 +260,12 @@ class OrgRouteHandler
             }
         }
 
-        $template_data = array_merge($template_data, array(
+        $template_data = array_merge($template_data, [
             'org'  => $org,
             'errorOccured' => $errorOccured,
             'errorList'    => $errorList,
             'sesskey'      => $sesskey,
-        ));
+        ]);
 
         return UserRouteHandler::render("org/create-org.tpl", $response);
     }
@@ -350,23 +350,23 @@ class OrgRouteHandler
                 $templateData[$org->getId()] = $taskData;
             }
 
-            $template_data = array_merge($template_data, array(
+            $template_data = array_merge($template_data, [
                 "orgs" => $orgs,
                 "templateData" => $templateData
-            ));
+            ]);
         }
 
         $extra_scripts = file_get_contents(__DIR__."/../js/TaskView.js");
         // Load Twitter JS asynch, see https://dev.twitter.com/web/javascript/loading
         $extra_scripts .= '<script>window.twttr = (function(d, s, id) { var js, fjs = d.getElementsByTagName(s)[0], t = window.twttr || {}; if (d.getElementById(id)) return t; js = d.createElement(s); js.id = id; js.src = "https://platform.twitter.com/widgets.js"; fjs.parentNode.insertBefore(js, fjs); t._e = []; t.ready = function(f) { t._e.push(f); }; return t; }(document, "script", "twitter-wjs"));</script>';
 
-        $template_data = array_merge($template_data, array(
+        $template_data = array_merge($template_data, [
             'sesskey'       => $sesskey,
             'roles'         => $adminDao->get_roles($current_user_id),
             'create_non_phrase' => $create_non_phrase,
             "extra_scripts" => $extra_scripts,
             "current_page"  => "org-dashboard"
-        ));
+        ]);
         return UserRouteHandler::render("org/org.dashboard.tpl", $response);
     }
 
@@ -413,23 +413,23 @@ class OrgRouteHandler
                 $templateData[$org->getId()] = $taskData;
             }
 
-            $template_data = array_merge($template_data, array(
+            $template_data = array_merge($template_data, [
                 'orgs'         => $orgs,
                 'templateData' => $templateData
-            ));
+            ]);
         }
 
         $extra_scripts = file_get_contents(__DIR__ . '/../js/TaskView.js');
         $extra_scripts .= '<script>window.twttr = (function(d, s, id) { var js, fjs = d.getElementsByTagName(s)[0], t = window.twttr || {}; if (d.getElementById(id)) return t; js = d.createElement(s); js.id = id; js.src = "https://platform.twitter.com/widgets.js"; fjs.parentNode.insertBefore(js, fjs); t._e = []; t.ready = function(f) { t._e.push(f); }; return t; }(document, "script", "twitter-wjs"));</script>';
 
-        $template_data = array_merge($template_data, array(
+        $template_data = array_merge($template_data, [
             'sesskey'         => $sesskey,
             'roles'           => $adminDao->get_roles($current_user_id),
             'create_non_phrase' => $create_non_phrase,
             'extra_scripts'   => $extra_scripts,
             'beyond_3_months' => 1,
             'current_page'    => 'org-dashboard'
-        ));
+        ]);
         return UserRouteHandler::render('org/org.dashboard.tpl', $response);
     }
 
@@ -552,10 +552,10 @@ class OrgRouteHandler
                 }
 
                 if (!is_null($errorOccured)) {
-                    $template_data = array_merge($template_data, array(
+                    $template_data = array_merge($template_data, [
                     "errorOccured" => $errorOccured,
                     "errorList" => $errorList
-                    ));
+                    ]);
                 } else {
                     $orgDao = new DAO\OrganisationDao();
                     try {
@@ -594,13 +594,13 @@ class OrgRouteHandler
         }
 
         if ($adminDao->get_roles($userId) & SITE_ADMIN) {
-            $template_data = array_merge($template_data, array('orgAdmin' => true));
+            $template_data = array_merge($template_data, ['orgAdmin' => true]);
         }
         
-        $template_data = array_merge($template_data, array(
+        $template_data = array_merge($template_data, [
             'org'  => $org,
             'sesskey' => $sesskey,
-        ));
+        ]);
 
         return UserRouteHandler::render("org/org-private-profile.tpl", $response);
     }
@@ -680,17 +680,18 @@ class OrgRouteHandler
         }
         $orgMemberList = $adminDao->getOrgMembers($org_id);
 
-        $template_data = array_merge($template_data, array(
-                'current_page' => 'org-public-profile',
-                'sesskey' => $sesskey,
-                "org" => $org,
-                'orgMembers' => $orgMemberList,
-                'asana_board_for_org' => $userDao->get_asana_board_for_org($org_id),
-                'mt_for_org' => $userDao->get_mt_for_org($org_id),
-                'entitlements' => $projectDao->get_entitlements($org_id),
-                'org_image' => $userDao->get_org_image($org_id),
-                'extra_styles' => file_get_contents(__DIR__ . '/../../resources/css/task_page.css'),
-        ));
+        $template_data = array_merge($template_data, [
+            'roles' => $roles,
+            'current_page' => 'org-public-profile',
+            'sesskey' => $sesskey,
+            'org' => $org,
+            'orgMembers' => $orgMemberList,
+            'asana_board_for_org' => $userDao->get_asana_board_for_org($org_id),
+            'mt_for_org' => $userDao->get_mt_for_org($org_id),
+            'entitlements' => $projectDao->get_entitlements($org_id),
+            'org_image' => $userDao->get_org_image($org_id),
+            'extra_styles' => file_get_contents(__DIR__ . '/../../resources/css/task_page.css'),
+        ]);
 
         return UserRouteHandler::render("org/org-public-profile.tpl", $response);
     }
@@ -718,11 +719,11 @@ class OrgRouteHandler
         $badge = $badgeDao->getBadge($badge_id);
         $extra_scripts = "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}";
         $extra_scripts .= "resources/bootstrap/js/confirm-remove-badge.js\"></script>";
-        $template_data = array_merge($template_data, array(
+        $template_data = array_merge($template_data, [
                     'badge'         => $badge,
                     "org_id"        => $org_id,
                     "extra_scripts" =>$extra_scripts
-        ));
+        ]);
 
         if ($request->getMethod() === 'POST') {
             $post = $request->getParsedBody();
@@ -768,10 +769,10 @@ class OrgRouteHandler
     
         $user_list = $badgeDao->getUserWithBadge($badge_id);
 
-        $template_data = array_merge($template_data, array(
+        $template_data = array_merge($template_data, [
             'sesskey' => $sesskey,
             "user_list" => $user_list
-        ));
+        ]);
         
         return UserRouteHandler::render("org/org.manage-badge.tpl", $response);
     }
@@ -803,10 +804,10 @@ class OrgRouteHandler
             }
         }
         
-        $template_data = array_merge($template_data, array(
+        $template_data = array_merge($template_data, [
             'org_id'  => $org_id,
             'sesskey' => $sesskey,
-        ));
+        ]);
         return UserRouteHandler::render("org/org.create-badge.tpl", $response);
     }
 
@@ -832,9 +833,9 @@ class OrgRouteHandler
             }
         }
 
-        $template_data = array_merge($template_data, array(
+        $template_data = array_merge($template_data, [
                     'foundOrgs'     => $foundOrgs
-        ));
+        ]);
 
         return UserRouteHandler::render("org/org-search.tpl", $response);
     }
@@ -998,14 +999,14 @@ class OrgRouteHandler
         // Load Twitter JS asynch, see https://dev.twitter.com/web/javascript/loading
         $extra_scripts .= '<script>window.twttr = (function(d, s, id) { var js, fjs = d.getElementsByTagName(s)[0], t = window.twttr || {}; if (d.getElementById(id)) return t; js = d.createElement(s); js.id = id; js.src = "https://platform.twitter.com/widgets.js"; fjs.parentNode.insertBefore(js, fjs); t._e = []; t.ready = function(f) { t._e.push(f); }; return t; }(document, "script", "twitter-wjs"));</script>';
 
-        $template_data = array_merge($template_data, array(
+        $template_data = array_merge($template_data, [
                     'sesskey' => $sesskey,
                     'extra_scripts' => $extra_scripts,
                     'task'      => $task,
                     'review'    => $taskReview,
                     'translator'=> $translator,
                     'formAction'=> $formAction
-        ));
+        ]);
 
         return UserRouteHandler::render("org/org.task-review.tpl", $response);
     }
