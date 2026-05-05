@@ -165,8 +165,8 @@
                                             <li>
                                                 <form method="post" action="{urlFor name="org-public-profile" options="org_id.$org_id"}">
                                                     <button type="submit" name="revokeOrgAdmin" value="{$member['id']}" class="btn btn-inverse"
-                                                        onclick="return confirm('Are you sure you want to revoke ADMIN role from this user?')">
-                                                        <i class="icon-fire icon-white"></i> Remove ADMIN Role and Make PROJECT OFFICER
+                                                        onclick="return confirm('Are you sure you want to change this role?')">
+                                                        <i class="icon-fire icon-white"></i> Change role to Project Officer
                                                     </button>
                                                     {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
                                                 </form>
@@ -176,8 +176,8 @@
                                             <li>
                                                 <form method="post" action="{urlFor name="org-public-profile" options="org_id.$org_id"}">
                                                     <button type="submit" name="revokeOrgPO" value="{$member['id']}" class="btn btn-inverse"
-                                                        onclick="return confirm('Are you sure you want to revoke PROJECT OFFICER role from this user?')">
-                                                        <i class="icon-fire icon-white"></i> Remove PROJECT OFFICER Role and Make LINGUIST
+                                                        onclick="return confirm('Are you sure you want to change this role?')">
+                                                        <i class="icon-fire icon-white"></i> Change role to Linguist
                                                     </button>
                                                     {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
                                                 </form>
@@ -187,8 +187,8 @@
                                             <li>
                                                 <form method="post" action="{urlFor name="org-public-profile" options="org_id.$org_id"}">
                                                     <button type="submit" name="revokeUser" value="{$member['id']}" class="btn btn-inverse"
-                                                        onclick="return confirm('Are you sure you want to permanently remove this user from Organization?')">
-                                                        <i class="icon-fire icon-white"></i> Remove user Permanently from this Organization
+                                                        onclick="return confirm('Are you sure you want to permanently remove this user from the organisation?')">
+                                                        <i class="icon-fire icon-white"></i> Remove user from the organization
                                                     </button>
                                                     {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
                                                 </form>
@@ -200,8 +200,8 @@
                                             <li>
                                                 <form method="post" action="{urlFor name="org-public-profile" options="org_id.$org_id"}">
                                                     <button type="submit" name="makeOrgAdmin" value="{$member['id']}" class="btn btn-success"
-                                                        onclick="return confirm('Are you sure you want to make this user an ADMIN of this organization?')">
-                                                        <i class="icon-star icon-white"></i> Create ADMIN
+                                                        onclick="return confirm('Are you sure you want to make this user an Admin? This will give them full control over the organisation profile.')">
+                                                        <i class="icon-star icon-white"></i> Make Admin
                                                     </button>
                                                     {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
                                                 </form>
@@ -211,8 +211,8 @@
                                             <li>
                                                 <form method="post" action="{urlFor name="org-public-profile" options="org_id.$org_id"}">
                                                     <button type="submit" name="makeOrgPO" value="{$member['id']}" class="btn btn-success"
-                                                        onclick="return confirm('Are you sure you want to make this user a PROJECT OFFICER of this organization?')">
-                                                        <i class="icon-star icon-white"></i> Create PROJECT OFFICER
+                                                        onclick="return confirm('Are you sure you want to change this role?')">
+                                                        <i class="icon-star icon-white"></i> Make Project Officer
                                                     </button>
                                                     {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
                                                 </form>
