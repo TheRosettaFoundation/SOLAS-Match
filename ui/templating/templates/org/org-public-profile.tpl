@@ -61,7 +61,7 @@
                             <span class="fw-semibold">{if $org->getCountry() != NULL}{TemplateHelper::uiCleanseHTML($org->getCountry())}{/if}</span>
                         </div>
                         <div class="col-sm-6 text-sm-end mt-3 mt-sm-0">
-                            <label class="small text-uppercase fw-bold text-muted d-block mb-1">Social Links</label>
+                            <label class="small text-uppercase fw-bold text-muted d-block mb-1"></label>
                             <div class="fs-5">
 
                                 {if $org->getHomepage() != NULL && $org->getHomepage() != 'https://' && $org->getHomepage() != ''}
