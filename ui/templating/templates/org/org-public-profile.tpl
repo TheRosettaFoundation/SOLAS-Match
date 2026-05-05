@@ -139,7 +139,7 @@
                         {foreach [1, 0] as $display_admins}
                         {foreach $orgMembers as $member}
                         {if $display_admins && $member['roles']&($NGO_ADMIN + $NGO_PROJECT_OFFICER) || !$display_admins && !($member['roles']&($NGO_ADMIN + $NGO_PROJECT_OFFICER))}
-                            {if $roles&($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER) || $org_id != 707 || $member['source_of_user']}
+                            {if $roles&($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER) || $member['source_of_user']}
                             <div class="col-md-6 col-lg-4 col-xl-3">
                                 <div class="twb-card member-card shadow-sm border-0">
                                     <div>
