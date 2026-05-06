@@ -672,6 +672,7 @@ class OrgRouteHandler
             'mt_for_org' => $userDao->get_mt_for_org($org_id),
             'entitlements' => $projectDao->get_entitlements($org_id),
             'org_image' => $userDao->get_org_image($org_id),
+            'extra_scripts' => "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/org_page.js\" defer></script>",
             'extra_styles' => file_get_contents(__DIR__ . '/../../resources/css/org_page.css'),
         ]);
 
