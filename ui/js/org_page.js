@@ -1,17 +1,9 @@
-    $(".convert_utc_to_local_deadline_day_mon_year").each(function () {
-        $(this).removeClass("convert_utc_to_local_deadline_day_mon_year");
-        var dUTC = $(this).text();
-        var year    = dUTC.substring(0, 4);
-        var month   = dUTC.substring(5, 7) -1;
-        var day     = dUTC.substring(8, 10);
-        var hour    = dUTC.substring(11, 13);
-        var minutes = dUTC.substring(14, 16);
-        var seconds = dUTC.substring(17, 19);
-        var d = new Date(Date.UTC(year, month, day, hour, minutes, seconds));
+    $(".convert_utc_to_local_deadline_day_mon_year_stupid").each(function () {
+        $(this).removeClass("convert_utc_to_local_deadline_day_mon_year_stupid");
 
-        const formatter = new Intl.DateTimeFormat("UTC", {month: 'short', day: 'numeric', year: 'numeric'});
+        const formatter = new Intl.DateTimeFormat((new Intl.DateTimeFormat()).resolvedOptions().locale, {month: 'short', day: 'numeric', year: 'numeric'});
 
-        $(this).html(formatter.format(d));
+        $(this).html(formatter.format(new Date($(this).text().substring(0, 10))));
 
         $(this).css("visibility", "visible");
     });
