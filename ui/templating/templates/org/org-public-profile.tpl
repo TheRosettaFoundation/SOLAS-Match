@@ -89,7 +89,7 @@
 
         {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER + $NGO_ADMIN + $NGO_PROJECT_OFFICER)}
         <div class="mb-5">
-            <h4 class="fw-bold mb-3">Packages and subscriptions</h4>
+            <h3 class="fw-bold mb-3">Packages and subscriptions</h3>
             <div class="twb-card overflow-hidden">
                 {if !empty($entitlements)}
 
@@ -127,7 +127,7 @@
         {if $roles&($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER + $NGO_ADMIN + $NGO_PROJECT_OFFICER)}
             <div class="mb-5">
                 <div class="d-flex justify-content-between align-items-center mb-4">
-                    <h4 class="fw-bold m-0 text-dark">Team</h4>
+                    <h3 class="fw-bold m-0 text-dark">Team</h3>
                     <a href="{urlFor name="invite_admins" options="org_id.$org_id"}" class='btn btn-outline-secondary btn-sm rounded-pill px-4'>
                         <i class="fas fa-user-plus me-1"></i> Add member
                     </a>
@@ -236,7 +236,7 @@
 
                 {if count($orgMembers) > $count_admins}
                 <div class="d-flex justify-content-between align-items-center mt-3 mb-3">
-                    <h4 class="fw-bold m-0 text-dark">Community</h4>
+                    <h3 class="fw-bold m-0 text-dark">Community</h3>
                 </div>
 
                     <div class="row g-4">
@@ -346,7 +346,7 @@
 
         {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
             <div class="bg-body-tertiary border border-2 rounded-4 p-4 p-md-5 mb-5 shadow-inner">
-                <h4 class="fw-bold mb-4" style="color: var(--twb-blue);"><i class="fas fa-user-shield me-2"></i>CLEAR Global Admin Section</h4>
+                <h3 class="fw-bold mb-4" style="color: var(--twb-blue);"><i class="fas fa-user-shield me-2"></i>CLEAR Global Admin Section</h3>
                 <div class="row g-4">
 
                     <div class="col-md-4">
