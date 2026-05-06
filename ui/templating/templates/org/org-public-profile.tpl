@@ -316,7 +316,7 @@
                                             {else}
                                             <li>
                                                 <form method="post" action="{urlFor name="org-public-profile" options="org_id.$org_id"}">
-                                                    <button type="submit" name="makeOrgPO" value="{$member['id']}" class="btn btn-inverse"
+                                                    <button type="submit" name="makeOrgPO" value="{$member['id']}"
                                                         onclick="return confirm('Are you sure you want to change this role?')">
                                                         Make Project Officer
                                                     </button>
