@@ -339,7 +339,7 @@
                     </div>
                 {/if}
 
-                    <a href="{urlFor name="org_members" options="org_id.$org_id"}" class="mt-2">Download Organization Members</a>
+                    <a href="{urlFor name="org_members" options="org_id.$org_id"}" class="mt-3">Download Organization Members</a>
                 {/if}
             </div>
         {/if}
