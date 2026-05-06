@@ -135,9 +135,9 @@
 
                 {if !empty($orgMembers)}
                     {assign var="count_admins" value=0}
-                    {assign var="display_admins" value=1}
                     <div class="row g-4">
 
+                        {assign var="display_admins" value=1}
                         {foreach $orgMembers as $member}
                         {if $display_admins && $member['roles']&($NGO_ADMIN + $NGO_PROJECT_OFFICER) || !$display_admins && !($member['roles']&($NGO_ADMIN + $NGO_PROJECT_OFFICER))}
                             {assign var="count_admins" value=$count_admins+1}
@@ -238,11 +238,11 @@
                 <div class="d-flex justify-content-between align-items-center mb-4">
                     <h4 class="fw-bold m-0 text-dark">Community</h4>
                 </div>
+
+                    <div class="row g-4">
                 {/if}
 
-                    {assign var="display_admins" value=0}
-                    <div class="row g-4">
-
+                        {assign var="display_admins" value=0}
                         {foreach $orgMembers as $member}
                         {if $display_admins && $member['roles']&($NGO_ADMIN + $NGO_PROJECT_OFFICER) || !$display_admins && !($member['roles']&($NGO_ADMIN + $NGO_PROJECT_OFFICER))}
                             {if $roles&($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER) || $member['source_of_user']}
@@ -335,7 +335,9 @@
                         {/if}
                         {/foreach}
 
+                {if count($orgMembers) > $count_admins}
                     </div>
+                {/if}
 
                     <a href="{urlFor name="org_members" options="org_id.$org_id"}" class="mt-2">Download Organization Members</a>
                 {/if}
