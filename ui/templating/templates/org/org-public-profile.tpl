@@ -305,7 +305,7 @@
                                             {elseif $member['roles'] & $NGO_PROJECT_OFFICER}
                                             <li>
                                                 <form method="post" action="{urlFor name="org-public-profile" options="org_id.$org_id"}">
-                                                    <button type="submit" name="makeOrgAdmin" value="{$member['id']}" class="btn btn-success"
+                                                    <button type="submit" name="makeOrgAdmin" value="{$member['id']}" class="btn btn-inverse"
                                                         onclick="return confirm('Are you sure you want to make this user an Admin? This will give them full control over the organisation profile.')">
                                                         <i class="icon-star icon-white"></i> Make Admin
                                                     </button>
@@ -316,7 +316,7 @@
                                             {else}
                                             <li>
                                                 <form method="post" action="{urlFor name="org-public-profile" options="org_id.$org_id"}">
-                                                    <button type="submit" name="makeOrgPO" value="{$member['id']}" class="btn btn-success"
+                                                    <button type="submit" name="makeOrgPO" value="{$member['id']}" class="btn btn-inverse"
                                                         onclick="return confirm('Are you sure you want to change this role?')">
                                                         <i class="icon-star icon-white"></i> Make Project Officer
                                                     </button>
