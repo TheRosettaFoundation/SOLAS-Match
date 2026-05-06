@@ -235,7 +235,7 @@
                     </div>
 
                 {if count($orgMembers) > $count_admins}
-                <div class="d-flex justify-content-between align-items-center mt-2 mb-2">
+                <div class="d-flex justify-content-between align-items-center mt-3 mb-3">
                     <h4 class="fw-bold m-0 text-dark">Community</h4>
                 </div>
 
