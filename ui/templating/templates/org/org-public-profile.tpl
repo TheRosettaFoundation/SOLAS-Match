@@ -102,7 +102,7 @@
                 {foreach $entitlements as $entitlement}
                 <div class="row g-0 p-3 align-items-center border-bottom">
                     <div class="col-md-4 fw-bold text-dark">{if $entitlement['service'] == 0}Translation{else}Other{/if}{if $entitlement['inactive']} (Inactive){/if}</div>
-                    <div class="col-md-4 text-muted small"><span class="convert_utc_to_local_deadline_day_mon_year" style="visibility: hidden">{$entitlement['validity_start']}</span> → <span class="convert_utc_to_local_deadline_day_mon_year" style="visibility: hidden">{$entitlement['validity_end']}</span></div>
+                    <div class="col-md-4 text-muted small"><span class="convert_utc_to_local_deadline_day_mon_year_stupid" style="visibility: hidden">{$entitlement['validity_start']}</span> → <span class="convert_utc_to_local_deadline_day_mon_year_stupid" style="visibility: hidden">{$entitlement['validity_end']}</span></div>
                     <div class="col-md-4">
                         {if $entitlement['limit_type']}
                             <span class="small text-muted">Unlimited</span>
