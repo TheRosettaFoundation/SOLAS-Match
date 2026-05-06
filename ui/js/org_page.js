@@ -9,7 +9,7 @@
         var seconds = dUTC.substring(17, 19);
         var d = new Date(Date.UTC(year, month, day, hour, minutes, seconds));
 
-        const formatter = new Intl.DateTimeFormat((new Intl.DateTimeFormat()).resolvedOptions().locale, {month: 'short', day: 'numeric', year: 'numeric'});
+        const formatter = new Intl.DateTimeFormat("UTC", {month: 'short', day: 'numeric', year: 'numeric'});
 
         $(this).html(formatter.format(d));
 
