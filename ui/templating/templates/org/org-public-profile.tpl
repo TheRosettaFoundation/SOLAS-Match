@@ -127,16 +127,122 @@
         {if $roles&($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER + $NGO_ADMIN + $NGO_PROJECT_OFFICER)}
             <div class="mb-5">
                 <div class="d-flex justify-content-between align-items-center mb-4">
-                    <h4 class="fw-bold m-0 text-dark">Organization Members</h4>
+                    <h4 class="fw-bold m-0 text-dark">Team</h4>
                     <a href="{urlFor name="invite_admins" options="org_id.$org_id"}" class='btn btn-outline-secondary btn-sm rounded-pill px-4'>
                         <i class="fas fa-user-plus me-1"></i> Add member
                     </a>
                 </div>
 
                 {if !empty($orgMembers)}
+                    {assign var="count_admins" value=0}
+                    {assign var="display_admins" value=1}
                     <div class="row g-4">
 
-                        {foreach [1, 0] as $display_admins}
+                        {foreach $orgMembers as $member}
+                        {if $display_admins && $member['roles']&($NGO_ADMIN + $NGO_PROJECT_OFFICER) || !$display_admins && !($member['roles']&($NGO_ADMIN + $NGO_PROJECT_OFFICER))}
+                            {assign var="count_admins" value=$count_admins+1}
+
+                            {if $roles&($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER) || $member['source_of_user']}
+                            <div class="col-md-6 col-lg-4 col-xl-3">
+                                <div class="twb-card member-card shadow-sm border-0">
+                                    <div>
+                                        <div class="member-role">
+                                            {if $member['roles']&$NGO_ADMIN}ADMINISTRATOR
+                                            {elseif $member['roles']&$NGO_PROJECT_OFFICER}PROJECT OFFICER
+                                            {else}LINGUIST{if !($member['roles'] & $LINGUIST)} (exclusive){/if}
+                                                </div><div class="member-role">{str_replace(['---', '|'], ['', ' to '], $member['language_pairs'])}
+                                            {/if}
+                                        </div>
+                                        <div class="member-name">{TemplateHelper::uiCleanseHTML($member['first_name'])|capitalize} {TemplateHelper::uiCleanseHTML($member['last_name'])|capitalize}</div>
+                                        <div class="member-email text-truncate">{$member['email']}</div>
+                                    </div>
+
+                                    {if $roles&($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER + $NGO_ADMIN)}
+                                    <div class="dropdown">
+                                        <a class="btn btn-twb-outline btn-sm w-100 rounded-pill py-2 fw-bold dropdown-toggle no-caret" href="#" id="hover_drop_down" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                            Manage Member
+                                        </a>
+                                        <ul class="dropdown-menu" aria-labelledby="hover_drop_down">
+
+                                            {if $member['roles'] & $NGO_ADMIN}
+                                            <li>
+                                                <form method="post" action="{urlFor name="org-public-profile" options="org_id.$org_id"}">
+                                                    <button type="submit" name="revokeOrgAdmin" value="{$member['id']}" class="btn btn-inverse"
+                                                        onclick="return confirm('Are you sure you want to change this role?')">
+                                                        <i class="icon-fire icon-white"></i> Change role to Project Officer
+                                                    </button>
+                                                    {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
+                                                </form>
+                                            </li>
+
+                                            {elseif $member['roles'] & $NGO_PROJECT_OFFICER}
+                                            <li>
+                                                <form method="post" action="{urlFor name="org-public-profile" options="org_id.$org_id"}">
+                                                    <button type="submit" name="revokeOrgPO" value="{$member['id']}" class="btn btn-inverse"
+                                                        onclick="return confirm('Are you sure you want to change this role?')">
+                                                        <i class="icon-fire icon-white"></i> Change role to Linguist
+                                                    </button>
+                                                    {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
+                                                </form>
+                                            </li>
+                                            {/if}
+
+                                            <li>
+                                                <form method="post" action="{urlFor name="org-public-profile" options="org_id.$org_id"}">
+                                                    <button type="submit" name="revokeUser" value="{$member['id']}" class="btn btn-inverse"
+                                                        onclick="return confirm('Are you sure you want to permanently remove this user from the organisation?')">
+                                                        <i class="icon-fire icon-white"></i> Remove user from the organization
+                                                    </button>
+                                                    {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
+                                                </form>
+                                            </li>
+
+                                            {if $member['roles'] & $NGO_ADMIN}
+
+                                            {elseif $member['roles'] & $NGO_PROJECT_OFFICER}
+                                            <li>
+                                                <form method="post" action="{urlFor name="org-public-profile" options="org_id.$org_id"}">
+                                                    <button type="submit" name="makeOrgAdmin" value="{$member['id']}" class="btn btn-success"
+                                                        onclick="return confirm('Are you sure you want to make this user an Admin? This will give them full control over the organisation profile.')">
+                                                        <i class="icon-star icon-white"></i> Make Admin
+                                                    </button>
+                                                    {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
+                                                </form>
+                                            </li>
+
+                                            {else}
+                                            <li>
+                                                <form method="post" action="{urlFor name="org-public-profile" options="org_id.$org_id"}">
+                                                    <button type="submit" name="makeOrgPO" value="{$member['id']}" class="btn btn-success"
+                                                        onclick="return confirm('Are you sure you want to change this role?')">
+                                                        <i class="icon-star icon-white"></i> Make Project Officer
+                                                    </button>
+                                                    {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
+                                                </form>
+                                            </li>
+                                            {/if}
+
+                                        </ul>
+                                    </div>
+                                    {/if}
+
+                                </div>
+                            </div>
+                            {/if}
+                        {/if}
+                        {/foreach}
+
+                    </div>
+
+                {if count($orgMembers) > $count_admins}
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h4 class="fw-bold m-0 text-dark">Community</h4>
+                </div>
+                {/if}
+
+                    {assign var="display_admins" value=0}
+                    <div class="row g-4">
+
                         {foreach $orgMembers as $member}
                         {if $display_admins && $member['roles']&($NGO_ADMIN + $NGO_PROJECT_OFFICER) || !$display_admins && !($member['roles']&($NGO_ADMIN + $NGO_PROJECT_OFFICER))}
                             {if $roles&($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER) || $member['source_of_user']}
@@ -228,10 +334,10 @@
                             {/if}
                         {/if}
                         {/foreach}
-                        {/foreach}
 
                     </div>
-                    <a href="{urlFor name="org_members" options="org_id.$org_id"}">Download Organization Members</a>
+
+                    <a href="{urlFor name="org_members" options="org_id.$org_id"}" class="mt-2">Download Organization Members</a>
                 {/if}
             </div>
         {/if}
