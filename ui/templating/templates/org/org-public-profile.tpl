@@ -89,7 +89,7 @@
 
         {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER + $NGO_ADMIN + $NGO_PROJECT_OFFICER)}
         <div class="mb-5">
-            <h3 class="fw-bold mb-3">Packages and subscriptions</h3>
+            <h3 class="fw-bold mb-4">Packages and subscriptions</h3>
             <div class="twb-card overflow-hidden">
                 {if !empty($entitlements)}
 
