@@ -346,7 +346,7 @@
 
         {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
             <div class="bg-body-tertiary border border-2 rounded-4 p-4 p-md-5 mb-5 shadow-inner">
-                <h4 class="fw-bold mb-4" style="color: var(--twb-blue);"><i class="fas fa-user-shield me-2"></i>Admin Section</h4>
+                <h4 class="fw-bold mb-4" style="color: var(--twb-blue);"><i class="fas fa-user-shield me-2"></i>CLEAR Global Admin Section</h4>
                 <div class="row g-4">
 
                     <div class="col-md-4">
