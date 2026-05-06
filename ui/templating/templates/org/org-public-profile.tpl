@@ -167,7 +167,7 @@
                                             {if $member['roles'] & $NGO_ADMIN}
                                             <li>
                                                 <form method="post" action="{urlFor name="org-public-profile" options="org_id.$org_id"}">
-                                                    <button type="submit" name="revokeOrgAdmin" value="{$member['id']}" class="btn btn-inverse"
+                                                    <button type="submit" name="revokeOrgAdmin" value="{$member['id']}" class="btn btn-inverse" style="text-align: left"
                                                         onclick="return confirm('Are you sure you want to change this role?')">
                                                         Change role to Project Officer
                                                     </button>
@@ -178,7 +178,7 @@
                                             {elseif $member['roles'] & $NGO_PROJECT_OFFICER}
                                             <li>
                                                 <form method="post" action="{urlFor name="org-public-profile" options="org_id.$org_id"}">
-                                                    <button type="submit" name="revokeOrgPO" value="{$member['id']}" class="btn btn-inverse"
+                                                    <button type="submit" name="revokeOrgPO" value="{$member['id']}" class="btn btn-inverse" style="text-align: left"
                                                         onclick="return confirm('Are you sure you want to change this role?')">
                                                         Change role to Linguist
                                                     </button>
@@ -189,7 +189,7 @@
 
                                             <li>
                                                 <form method="post" action="{urlFor name="org-public-profile" options="org_id.$org_id"}">
-                                                    <button type="submit" name="revokeUser" value="{$member['id']}" class="btn btn-inverse"
+                                                    <button type="submit" name="revokeUser" value="{$member['id']}" class="btn btn-inverse" style="text-align: left"
                                                         onclick="return confirm('Are you sure you want to permanently remove this user from the organisation?')">
                                                         Remove user from the organization
                                                     </button>
@@ -202,7 +202,7 @@
                                             {elseif $member['roles'] & $NGO_PROJECT_OFFICER}
                                             <li>
                                                 <form method="post" action="{urlFor name="org-public-profile" options="org_id.$org_id"}">
-                                                    <button type="submit" name="makeOrgAdmin" value="{$member['id']}" class="btn btn-inverse"
+                                                    <button type="submit" name="makeOrgAdmin" value="{$member['id']}" class="btn btn-inverse" style="text-align: left"
                                                         onclick="return confirm('Are you sure you want to make this user an Admin? This will give them full control over the organisation profile.')">
                                                         Make Admin
                                                     </button>
@@ -213,7 +213,7 @@
                                             {else}
                                             <li>
                                                 <form method="post" action="{urlFor name="org-public-profile" options="org_id.$org_id"}">
-                                                    <button type="submit" name="makeOrgPO" value="{$member['id']}" class="btn btn-inverse"
+                                                    <button type="submit" name="makeOrgPO" value="{$member['id']}" class="btn btn-inverse" style="text-align: left"
                                                         onclick="return confirm('Are you sure you want to change this role?')">
                                                         Make Project Officer
                                                     </button>
@@ -270,7 +270,7 @@
                                             {if $member['roles'] & $NGO_ADMIN}
                                             <li>
                                                 <form method="post" action="{urlFor name="org-public-profile" options="org_id.$org_id"}">
-                                                    <button type="submit" name="revokeOrgAdmin" value="{$member['id']}" class="btn btn-inverse"
+                                                    <button type="submit" name="revokeOrgAdmin" value="{$member['id']}" class="btn btn-inverse" style="text-align: left"
                                                         onclick="return confirm('Are you sure you want to change this role?')">
                                                         Change role to Project Officer
                                                     </button>
@@ -281,7 +281,7 @@
                                             {elseif $member['roles'] & $NGO_PROJECT_OFFICER}
                                             <li>
                                                 <form method="post" action="{urlFor name="org-public-profile" options="org_id.$org_id"}">
-                                                    <button type="submit" name="revokeOrgPO" value="{$member['id']}" class="btn btn-inverse"
+                                                    <button type="submit" name="revokeOrgPO" value="{$member['id']}" class="btn btn-inverse" style="text-align: left"
                                                         onclick="return confirm('Are you sure you want to change this role?')">
                                                         Change role to Linguist
                                                     </button>
@@ -292,7 +292,7 @@
 
                                             <li>
                                                 <form method="post" action="{urlFor name="org-public-profile" options="org_id.$org_id"}">
-                                                    <button type="submit" name="revokeUser" value="{$member['id']}" class="btn btn-inverse"
+                                                    <button type="submit" name="revokeUser" value="{$member['id']}" class="btn btn-inverse" style="text-align: left"
                                                         onclick="return confirm('Are you sure you want to permanently remove this user from the organisation?')">
                                                         Remove user from the organization
                                                     </button>
@@ -305,7 +305,7 @@
                                             {elseif $member['roles'] & $NGO_PROJECT_OFFICER}
                                             <li>
                                                 <form method="post" action="{urlFor name="org-public-profile" options="org_id.$org_id"}">
-                                                    <button type="submit" name="makeOrgAdmin" value="{$member['id']}" class="btn btn-inverse"
+                                                    <button type="submit" name="makeOrgAdmin" value="{$member['id']}" class="btn btn-inverse" style="text-align: left"
                                                         onclick="return confirm('Are you sure you want to make this user an Admin? This will give them full control over the organisation profile.')">
                                                         Make Admin
                                                     </button>
@@ -316,7 +316,7 @@
                                             {else}
                                             <li>
                                                 <form method="post" action="{urlFor name="org-public-profile" options="org_id.$org_id"}">
-                                                    <button type="submit" name="makeOrgPO" value="{$member['id']}" class="btn btn-inverse"
+                                                    <button type="submit" name="makeOrgPO" value="{$member['id']}" class="btn btn-inverse" style="text-align: left"
                                                         onclick="return confirm('Are you sure you want to change this role?')">
                                                         Make Project Officer
                                                     </button>
