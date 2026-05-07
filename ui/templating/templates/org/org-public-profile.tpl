@@ -146,7 +146,6 @@
                         {if $display_admins && $member['roles']&($NGO_ADMIN + $NGO_PROJECT_OFFICER) || !$display_admins && !($member['roles']&($NGO_ADMIN + $NGO_PROJECT_OFFICER))}
                             {assign var="count_admins" value=$count_admins+1}
 
-                            {if $roles&($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER) || $member['source_of_user']}
                             <div class="col-md-6 col-lg-4 col-xl-3">
                                 <div class="twb-card member-card shadow-sm border-0">
                                     <div>
@@ -157,14 +156,18 @@
                                                 </div><div class="member-role">{str_replace(['---', '|'], ['', ' to '], $member['language_pairs'])}
                                             {/if}
                                         </div>
-HEERE display_name x2... {TemplateHelper::uiCleanseHTML($member['display_name'])}, no capitalise
+                                        {if $roles&($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER) || $member['source_of_user']}
                                         <div class="member-name">{TemplateHelper::uiCleanseHTML($member['first_name'])|capitalize} {TemplateHelper::uiCleanseHTML($member['last_name'])|capitalize}</div>
-HERE NO email x2
+                                        {else}
+                                        <div class="member-name">{TemplateHelper::uiCleanseHTML($member['display_name'])}</div>
+                                        {/if}
+                                        {if $roles&($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER) || $member['source_of_user']}
                                         <div class="member-email text-truncate">{$member['email']}</div>
+                                        {/if}
                                     </div>
 
-HERE no MANAGE x2
                                     {if $roles&($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER + $NGO_ADMIN)}
+                                    {if $roles&($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER) || $member['source_of_user']}
                                     <div class="dropdown">
                                         <a class="btn btn-twb-outline btn-sm w-100 rounded-pill py-2 fw-bold dropdown-toggle no-caret" href="#" id="hover_drop_down" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                             Manage Member
@@ -232,10 +235,10 @@ HERE no MANAGE x2
                                         </ul>
                                     </div>
                                     {/if}
+                                    {/if}
 
                                 </div>
                             </div>
-                            {/if}
                         {/if}
                         {/foreach}
 
@@ -252,7 +255,6 @@ HERE no MANAGE x2
                         {assign var="display_admins" value=0}
                         {foreach $orgMembers as $member}
                         {if $display_admins && $member['roles']&($NGO_ADMIN + $NGO_PROJECT_OFFICER) || !$display_admins && !($member['roles']&($NGO_ADMIN + $NGO_PROJECT_OFFICER))}
-                            {if $roles&($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER) || $member['source_of_user']}
                             <div class="col-md-6 col-lg-4 col-xl-3">
                                 <div class="twb-card member-card shadow-sm border-0">
                                     <div>
@@ -263,11 +265,18 @@ HERE no MANAGE x2
                                                 </div><div class="member-role">{str_replace(['---', '|'], ['', ' to '], $member['language_pairs'])}
                                             {/if}
                                         </div>
+                                        {if $roles&($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER) || $member['source_of_user']}
                                         <div class="member-name">{TemplateHelper::uiCleanseHTML($member['first_name'])|capitalize} {TemplateHelper::uiCleanseHTML($member['last_name'])|capitalize}</div>
+                                        {else}
+                                        <div class="member-name">{TemplateHelper::uiCleanseHTML($member['display_name'])}</div>
+                                        {/if}
+                                        {if $roles&($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER) || $member['source_of_user']}
                                         <div class="member-email text-truncate">{$member['email']}</div>
+                                        {/if}
                                     </div>
 
                                     {if $roles&($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER + $NGO_ADMIN)}
+                                    {if $roles&($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER) || $member['source_of_user']}
                                     <div class="dropdown">
                                         <a class="btn btn-twb-outline btn-sm w-100 rounded-pill py-2 fw-bold dropdown-toggle no-caret" href="#" id="hover_drop_down" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                             Manage Member
@@ -335,10 +344,10 @@ HERE no MANAGE x2
                                         </ul>
                                     </div>
                                     {/if}
+                                    {/if}
 
                                 </div>
                             </div>
-                            {/if}
                         {/if}
                         {/foreach}
 
