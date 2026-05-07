@@ -102,7 +102,11 @@
                 {foreach $entitlements as $entitlement}
                 <div class="row g-0 p-3 align-items-center border-bottom">
                     <div class="col-md-4 fw-bold text-dark">{if $entitlement['service'] == 0}Translation{else}Other{/if}{if $entitlement['inactive']} (Inactive){/if}</div>
-                    <div class="col-md-4 text-muted small"><span class="convert_utc_to_local_deadline_day_mon_year_stupid" style="visibility: hidden">{$entitlement['validity_start']}</span> → <span class="convert_utc_to_local_deadline_day_mon_year_stupid" style="visibility: hidden">{$entitlement['validity_end']}</span></div>
+                    <div class="col-md-4 text-muted small">
+                        {if $entitlement['validity_start'] != NULL && $entitlement['validity_start'] > '2010-01-01 00:00:00' && $entitlement['validity_start'] < '2050-01-01 00:00:00' && $entitlement['validity_end'] != NULL && $entitlement['validity_end'] > '2010-01-01 00:00:00' && $entitlement['validity_end'] < '2050-01-01 00:00:00'}
+                        <span class="convert_utc_to_local_deadline_day_mon_year_stupid" style="visibility: hidden">{$entitlement['validity_start']}</span> → <span class="convert_utc_to_local_deadline_day_mon_year_stupid" style="visibility: hidden">{$entitlement['validity_end']}</span>
+                        {/if}
+                    </div>
                     <div class="col-md-4">
                         {if $entitlement['limit_type']}
                             <span class="small text-muted">Unlimited</span>
@@ -153,10 +157,13 @@
                                                 </div><div class="member-role">{str_replace(['---', '|'], ['', ' to '], $member['language_pairs'])}
                                             {/if}
                                         </div>
+HEERE display_name x2... {TemplateHelper::uiCleanseHTML($member['display_name'])}, no capitalise
                                         <div class="member-name">{TemplateHelper::uiCleanseHTML($member['first_name'])|capitalize} {TemplateHelper::uiCleanseHTML($member['last_name'])|capitalize}</div>
+HERE NO email x2
                                         <div class="member-email text-truncate">{$member['email']}</div>
                                     </div>
 
+HERE no MANAGE x2
                                     {if $roles&($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER + $NGO_ADMIN)}
                                     <div class="dropdown">
                                         <a class="btn btn-twb-outline btn-sm w-100 rounded-pill py-2 fw-bold dropdown-toggle no-caret" href="#" id="hover_drop_down" role="button" data-bs-toggle="dropdown" aria-expanded="false">
