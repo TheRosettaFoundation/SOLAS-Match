@@ -660,14 +660,13 @@ class OrgRouteHandler
                 }
             }
         }
-        $orgMemberList = $adminDao->getOrgMembers($org_id);
 
         $template_data = array_merge($template_data, [
             'roles' => $roles,
             'current_page' => 'org-public-profile',
             'sesskey' => $sesskey,
             'org' => $org,
-            'orgMembers' => $orgMemberList,
+            'orgMembers' => $adminDao->getOrgMembers($org_id),
             'asana_board_for_org' => $userDao->get_asana_board_for_org($org_id),
             'mt_for_org' => $userDao->get_mt_for_org($org_id),
             'entitlements' => $projectDao->get_entitlements($org_id),
