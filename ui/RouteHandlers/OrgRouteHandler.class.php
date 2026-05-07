@@ -1102,6 +1102,8 @@ class OrgRouteHandler
         foreach ($org_members as $om) {
           if ($roles || $om['source_of_user'])
             $data .= '"' . $om['id'] . '","' . $om['first_name'] . '","' . $om['last_name'] . '","' . $om['email'] . '","' . $om['roles_text'] . '","' . $om['language_pairs'] . '"' . "\n";
+          else
+            $data .= '"' . $om['id'] . '","' . $om['display_name'] . '","","","' . $om['roles_text'] . '","' . $om['language_pairs'] . '"' . "\n";
         }
         header('Content-type: text/csv');
         header('Content-Disposition: attachment; filename="org_members.csv"');
