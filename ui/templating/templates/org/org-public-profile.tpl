@@ -93,7 +93,7 @@
             <div class="twb-card overflow-hidden">
                 {if !empty($entitlements)}
 
-                <div class="row g-0 p-3 bg-light border-bottom fw-bold small text-muted d-none d-md-flex">
+                <div class="row g-0 p-3 bg-light-mariam border-bottom fw-bold small text-muted d-none d-md-flex">
                     <div class="col-md-4">PACKAGE NAME</div>
                     <div class="col-md-4">VALIDITY PERIOD</div>
                     <div class="col-md-4">ALLOCATION & USAGE</div>
@@ -101,7 +101,7 @@
 
                 {foreach $entitlements as $entitlement}
                 <div class="row g-0 p-3 align-items-center border-bottom">
-                    <div class="col-md-4 fw-bold text-dark">{if $entitlement['service'] == 0}Translation{else}Other{/if}{if $entitlement['inactive']} (Inactive){/if}</div>
+                    <div class="col-md-4 fw-bold text-dark-mariam">{if $entitlement['service'] == 0}Translation{else}Other{/if}{if $entitlement['inactive']} (Inactive){/if}</div>
                     <div class="col-md-4 text-muted small">
                         {if $entitlement['validity_start'] != NULL && $entitlement['validity_start'] > '2010-01-01 00:00:00' && $entitlement['validity_start'] < '2050-01-01 00:00:00' && $entitlement['validity_end'] != NULL && $entitlement['validity_end'] > '2010-01-01 00:00:00' && $entitlement['validity_end'] < '2050-01-01 00:00:00'}
                         <span class="convert_utc_to_local_deadline_day_mon_year_stupid" style="visibility: hidden">{$entitlement['validity_start']}</span> → <span class="convert_utc_to_local_deadline_day_mon_year_stupid" style="visibility: hidden">{$entitlement['validity_end']}</span>
@@ -121,7 +121,7 @@
                 {/foreach}
 
                 {else}
-                <div fw-bold text-dark>There are no subscriptions for this organization.</div>
+                <div fw-bold text-dark-mariam>There are no subscriptions for this organization.</div>
                 {/if}
 
             </div>
@@ -131,7 +131,7 @@
         {if $roles&($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER + $NGO_ADMIN + $NGO_PROJECT_OFFICER)}
             <div class="mb-5">
                 <div class="d-flex justify-content-between align-items-center mb-4">
-                    <h3 class="fw-bold m-0 text-dark">Team</h3>
+                    <h3 class="fw-bold m-0 text-dark-mariam">Team</h3>
                     <a href="{urlFor name="invite_admins" options="org_id.$org_id"}" class='btn btn-outline-secondary btn-sm rounded-pill px-4'>
                         <i class="fas fa-user-plus me-1"></i> Add member
                     </a>
@@ -246,7 +246,7 @@
 
                 {if count($orgMembers) > $count_admins}
                 <div class="d-flex justify-content-between align-items-center mt-4 mb-4">
-                    <h3 class="fw-bold m-0 text-dark">Community</h3>
+                    <h3 class="fw-bold m-0 text-dark-mariam">Community</h3>
                 </div>
 
                     <div class="row g-4">
