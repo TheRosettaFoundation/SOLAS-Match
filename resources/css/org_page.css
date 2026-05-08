@@ -4,9 +4,8 @@
             --twb-orange: #e8991c;
             --card-radius: 1rem;
         }
-
-        body { background-color: --twb-bg); }
-
+        body { background-color: #f8f9fa; }
+        
         /* Nav/Menu Placeholder */
         .twb-nav { background: white; border-bottom: 1px solid #dee2e6; min-height: 60px; }
 
@@ -54,12 +53,5 @@
 [data-bs-theme=dark] .text-dark-mariam {
   --bs-text-opacity: 1;
   color: rgba(var(--bs-light-rgb), var(--bs-text-opacity)) !important;
-}
-
-[data-bs-theme=light] {
-  --twb-bg:#f7f8fa;
-}
-[data-bs-theme=dark] {
-  --twb-bg:#212529;
 }
     </style>
