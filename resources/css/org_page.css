@@ -34,7 +34,7 @@
             width: 100%;
             max-height: 120px;
             object-fit: contain;
-            background: #fff;
+            background: var(--twb-logo-bg);
             border-radius: 0.5rem;
         }
 
@@ -68,5 +68,12 @@
 }
 [data-bs-theme=dark] {
   --twb-card-bg: #212529;
+}
+
+[data-bs-theme=light] {
+  --twb-logo-bg: #fff;
+}
+[data-bs-theme=dark] {
+  --twb-logo-bg: #000;
 }
     </style>
