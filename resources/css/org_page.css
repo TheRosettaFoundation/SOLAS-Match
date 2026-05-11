@@ -74,6 +74,6 @@
   --twb-logo-bg: #fff;
 }
 [data-bs-theme=dark] {
-  --twb-logo-bg: #000;
+  --twb-logo-bg: #212529;
 }
     </style>
