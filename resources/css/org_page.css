@@ -18,7 +18,7 @@
         
         .member-card { padding: 1.5rem; height: 100%; display: flex; flex-direction: column; justify-content: space-between; }
         .member-role { font-size: 0.75rem; font-weight: 700; color: var(--twb-blue); margin-bottom: 0.5rem; }
-        .member-name { font-size: 1.1rem; font-weight: 700; color: #1f2937; margin-bottom: 0.25rem; }
+        .member-name { font-size: 1.1rem; font-weight: 700; color: var(--twb-blue); margin-bottom: 0.25rem; }
         .member-email { font-size: 0.875rem; color: #6b7280; margin-bottom: 1.5rem; }
         
         .accent-border-top { border-top: 4px solid var(--twb-orange) !important; }
