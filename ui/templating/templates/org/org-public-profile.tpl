@@ -33,7 +33,7 @@
                     </a>
                 {/if}
                 {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER + $NGO_ADMIN)}
-                    <a href="{urlFor name="org-private-profile" options="org_id.$org_id"}" class='btn btn-outline-secondary btn-sm px-3'>
+                    <a href="{urlFor name="org-private-profile" options="org_id.$org_id"}" class='btn btn-twb-primary btn-sm px-3'>
                         <i class="fas fa-cog"></i>
                     </a>
                 {/if}
