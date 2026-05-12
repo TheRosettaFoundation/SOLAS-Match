@@ -1,6 +1,5 @@
     <style>
         :root {
-/*            --twb-blue: #143878; */
             --twb-orange: #e8991c;
             --card-radius: 1rem;
         }
@@ -25,7 +24,7 @@
         .accent-border-top { border-top: 4px solid var(--twb-orange) !important; }
         .blue-border-top { border-top: 4px solid var(--twb-blue) !important; }
         
-        .btn-twb-primary { background-color: var(--twb-blue); color: white; border: none; }
+        .btn-twb-primary { background-color: #143878; color: white; border: none; }
         .btn-twb-outline { border: 1px solid var(--twb-blue); color: var(--twb-blue); transition: 0.2s; }
         .btn-twb-outline:hover { background-color: var(--twb-blue); color: white; }
 
