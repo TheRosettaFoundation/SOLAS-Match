@@ -1,6 +1,6 @@
     <style>
         :root {
-            --twb-blue: #143878;
+/*            --twb-blue: #143878; */
             --twb-orange: #e8991c;
             --card-radius: 1rem;
         }
@@ -75,5 +75,12 @@
 }
 [data-bs-theme=dark] {
   --twb-logo-bg: #212529;
+}
+
+[data-bs-theme=light] {
+  --twb-blue: #143878;
+}
+[data-bs-theme=dark] {
+  --twb-blue: #DFEEFD;
 }
     </style>
