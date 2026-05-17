@@ -198,6 +198,7 @@ error_log("copy_roles_from_special_registration($user_id, $email)");
             if ($org_id = $this->decode_ngo_reg_link(substr($_SESSION['track_code'], 8))) {
                 $this->adjust_org_admin($user_id, $org_id, 0, NGO_LINGUIST);
                 $this->adjust_org_admin($user_id,       0, 0, LINGUIST);
+                $this->adjust_org_admin_source_of_user($user_id, $org_id, 1, 999999999);
             }
             unset($_SESSION['track_code']);
             return 0;
