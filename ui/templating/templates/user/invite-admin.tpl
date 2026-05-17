@@ -54,8 +54,8 @@
     </div>
     <div class="span2">
         Alternatively share this link with your community so they can sign up as part of your organisation (only for users not already on TWB platform):<br />
-        <a id="ngo_reg_link" href="$ngo_reg_link" target="_blank">$ngo_reg_link</a>
-        <button id="ngo_reg_link_copy" class="btn btn-primary"><img src="{urlFor name='home'}ui/img/copy_url" /> Copy link</button>
+        <a id="ngo_reg_link" href="$ngo_reg_link" target="_blank">{$ngo_reg_link}</a>
+        <button id="ngo_reg_link_copy" class="btn btn-primary">Copy link</button>
     </div>
 </div>
 
