@@ -1129,6 +1129,7 @@ CREATE TABLE IF NOT EXISTS `adjust_points_strategic` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
+# Not currently used...
 CREATE TABLE IF NOT EXISTS `TrackCodes` (
   id INT(10) UNSIGNED NOT NULL,
   track_code VARCHAR(255) NOT NULL,
@@ -10421,6 +10422,7 @@ BEGIN
 END//
 DELIMITER ;
 
+# Not currently used...
 DROP PROCEDURE IF EXISTS `record_track_code`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `record_track_code`(IN trackCode VARCHAR(255))
@@ -13455,6 +13457,25 @@ BEGIN
     WHERE
         sr.email=mail AND
         (a.roles & (@NGO_ADMIN | @NGO_PROJECT_OFFICER))!=0;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `get_ngo_reg_link`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_ngo_reg_link`(IN oID VARCHAR(30), IN reg_key BINARY(32))
+BEGIN
+    SELECT CONCAT('https://twbplatform.org/register_track/org_ling', HEX(AES_ENCRYPT(oID, UNHEX(reg_key))), '/') AS url;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `decode_ngo_reg_link`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `decode_ngo_reg_link`(IN track_code BINARY(32), IN reg_key BINARY(32))
+BEGIN
+    SELECT UNHEX(track_code) INTO @binary_track_code;
+    IF @binary_track_code IS NOT NULL THEN
+        SELECT AES_DECRYPT(@binary_track_code, UNHEX(reg_key)) AS org_id;
+    END IF;
 END//
 DELIMITER ;
 

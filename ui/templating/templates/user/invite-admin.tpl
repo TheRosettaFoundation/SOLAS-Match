@@ -52,8 +52,25 @@
         Existing users will be given the new role, new users will be invited to join the platform.
         <a href="https://communitylibrary.translatorswb.org/books/12-self-managed-partners/page/twb-platform" target="_blank">Read more here</a>
     </div>
+    <div class="span2">
+        Alternatively share this link with your community so they can sign up as part of your organisation (only for users not already on TWB platform):<br />
+        <a id="ngo_reg_link" href="$ngo_reg_link" target="_blank">$ngo_reg_link</a>
+        <button id="ngo_reg_link_copy" class="btn btn-primary"><img src="{urlFor name='home'}ui/img/copy_url" /> Copy link</button>
+    </div>
 </div>
 
 {include file="invitations.tpl"}        
-     
+
+<script>
+    const ngo_reg_link_copy = document.querySelector("#ngo_reg_link_copy");
+    if (ngo_reg_link_copy) {
+        ngo_reg_link_copy.addEventListener("click", async () => {
+            let linkText = document.querySelector("#ngo_reg_link").href;
+            await navigator.clipboard.writeText(linkText).then( () => {
+                ngo_reg_link_copy.textContent = "Copied";
+            });
+        });
+    }
+</script>
+
 {include file="footer.tpl"}

@@ -1798,11 +1798,6 @@ error_log("claimTask_shell($userId, $taskId)");
         LibAPI\PDOWrapper::call('delete_adjust_points_strategic', LibAPI\PDOWrapper::cleanse($id));
     }
 
-    public function record_track_code($track_code)
-    {
-        LibAPI\PDOWrapper::call('record_track_code', LibAPI\PDOWrapper::cleanseWrapStr($track_code));
-    }
-
     public function insert_tracked_registration($user_id, $track_code)
     {
         if (in_array($track_code, ['AABBCC'])) return; // Allow old codes to be disabled
@@ -2301,6 +2296,12 @@ error_log(print_r($result, true));//(**)
     public function get_referer_link($referer)
     {
         $results = LibAPI\PDOWrapper::call('get_referer_link', LibAPI\PDOWrapper::cleanseWrapStr($referer));
+        return $results[0]['url'];
+    }
+
+    public function get_ngo_reg_link($org_id)
+    {
+        $results = LibAPI\PDOWrapper::call('get_ngo_reg_link', LibAPI\PDOWrapper::cleanseWrapStr($org_id) . ',' . LibAPI\PDOWrapper::cleanseWrapStr(Common\Lib\Settings::get('site.reg_key')));
         return $results[0]['url'];
     }
 

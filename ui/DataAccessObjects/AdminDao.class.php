@@ -194,6 +194,14 @@ error_log("adjust_org_admin($user_id, $org_id, $remove, $add)");
     public function copy_roles_from_special_registration($user_id, $email)
     {
 error_log("copy_roles_from_special_registration($user_id, $email)");
+        if (!empty($_SESSION['track_code']) && substr($_SESSION['track_code'], 0, 8) === 'org_ling') {
+            if ($org_id = $this->decode_ngo_reg_link(substr($_SESSION['track_code'], 8))) {
+                $this->adjust_org_admin($user_id, $org_id, 0, NGO_LINGUIST);
+                $this->adjust_org_admin($user_id,       0, 0, LINGUIST);
+            }
+            unset($_SESSION['track_code']);
+            return 0;
+        }
         if (empty($_SESSION['reg_data'])) {
             $this->adjust_org_admin($user_id, 0, 0, LINGUIST);
             return 0;
@@ -220,5 +228,12 @@ error_log("copy_roles_from_special_registration($user_id, $email)");
         }
         $this->adjust_org_admin_source_of_user($user_id, $special_registration['org_id'], 1, $special_registration['admin_id']);
         return 0;
+    }
+
+    public function decode_ngo_reg_link($track_code)
+    {
+        $results = LibAPI\PDOWrapper::call('decode_ngo_reg_link', LibAPI\PDOWrapper::cleanseWrapStr($track_code) . ',' . LibAPI\PDOWrapper::cleanseWrapStr(Common\Lib\Settings::get('site.reg_key')));
+        if (empty($results) || empty($results[0]['org_id'])) return 0;
+        return $results[0]['org_id'];
     }
 }

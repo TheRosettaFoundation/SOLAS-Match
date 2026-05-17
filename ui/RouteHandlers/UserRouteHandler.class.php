@@ -894,6 +894,7 @@ class UserRouteHandler
             'orgName' => $org->name,
             'org_id' => $org_id,
             'roles' => $roles,
+            'ngo_reg_link' => $userDao->get_ngo_reg_link("$org_id"),
             ]);
         return UserRouteHandler::render('user/invite-admin.tpl', $response);
     }
