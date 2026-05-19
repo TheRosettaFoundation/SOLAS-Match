@@ -247,6 +247,9 @@
                 {if count($orgMembers) > $count_admins}
                 <div class="d-flex justify-content-between align-items-center mt-4 mb-4">
                     <h3 class="fw-bold m-0 text-dark-mariam">Community</h3>
+                    <a href="{urlFor name="invite_admins" options="org_id.$org_id"}" class='btn btn-twb-primary btn-sm rounded-pill px-4'>
+                        <i class="fas fa-user-plus me-1"></i> Add member
+                    </a>
                 </div>
 
                     <div class="row g-4">
