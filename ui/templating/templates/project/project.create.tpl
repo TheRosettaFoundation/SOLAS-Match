@@ -280,7 +280,7 @@
                     {* Project-specific Instructions *}
                     <div class="mb-4">
                         <label for="project_description" class="form-label fw-semibold text-dark-mariam">
-                            Any specific instructions to the translators. <span class="text-danger">*</span>
+                            Any specific instructions to the translators <span class="text-danger">*</span>
                         </label>
                         <textarea class="form-control" id="project_description" name="project_description"
                                   rows="5"
@@ -315,7 +315,7 @@
 
                     <div class="mb-0">
                         <label for="word_count_note" class="form-label fw-semibold text-dark-mariam">
-                            Word Count:
+                            Word Count
                         </label>
                         <div id="word_count_note" class="form-text">
                             {Localisation::getTranslation('project_create_word_count')}
@@ -526,7 +526,6 @@
                             Incremental Matching
                         </label>
                         <div class="form-text">
-                            Incremental Matching
                             <a href="https://communitylibrary.translatorswb.org/books/12-self-managed-partners/page/who-can-work-on-your-project"
                                target="_blank" class="text-decoration-none twb-core-blue">
                                 Learn more
