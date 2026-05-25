@@ -314,7 +314,10 @@
                     </div>
 
                     <div class="mb-0">
-                        <div class="form-text">
+                        <label for="word_count_note" class="form-label fw-semibold text-dark-mariam">
+                            Word Count:
+                        </label>
+                        <div id="word_count_note" class="form-text">
                             {Localisation::getTranslation('project_create_word_count')}
                         </div>
                     </div>
@@ -327,7 +330,7 @@
                     <div class="d-flex justify-content-between align-items-center mb-4 border-bottom pb-3">
                         <h2 class="fs-3 fw-bold text-dark-mariam mb-0">
                             <i class="fa-solid fa-file-arrow-up me-2" style="color: var(--core-blue);"></i>
-                            {Localisation::getTranslation('project_create_files')}
+                            Files
                         </h2>
                     </div>
 
@@ -501,9 +504,6 @@
                             How to launch a translation project
                         </h3>
                     </div>
-                    <p class="small text-muted mb-3">
-                        How to launch a translation project
-                    </p>
                     <a href="https://communitylibrary.translatorswb.org/books/12-self-managed-partners/page/launching-your-translation-project-on-the-twb-platform"
                        target="_blank"
                        class="btn btn-outline-primary w-100 fw-semibold"
