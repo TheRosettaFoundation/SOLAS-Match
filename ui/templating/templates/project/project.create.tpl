@@ -203,7 +203,7 @@
                     <i class="fa-solid fa-chevron-right mx-1 text-muted" style="font-size:.65rem;"></i>
                 </li>
                 <li class="breadcrumb-item">
-                    <a href="{urlFor name="ngo_projects" options="org_id.{$org_id}"}" class="text-decoration-none twb-core-blue">{Localisation::getTranslation('common_projects')}</a>
+                    <a href="{urlFor name="ngo_projects" options="org_id.{$org_id}"}" class="text-decoration-none twb-core-blue">Projects</a>
                     <i class="fa-solid fa-chevron-right mx-1 text-muted" style="font-size:.65rem;"></i>
                 </li>
                 <li class="breadcrumb-item active text-muted" aria-current="page">{Localisation::getTranslation('project_create_create_a_project')}</li>
@@ -211,7 +211,7 @@
         </nav>
         <h1 class="fs-2 fw-bold text-dark-mariam mb-0">{Localisation::getTranslation('project_create_create_a_project')}</h1>
         <p class="text-muted small mt-1">
-            <span class="text-danger">*</span> {Localisation::getTranslation('common_denotes_a_required_field')}
+            {Localisation::getTranslation('common_denotes_a_required_field')}
         </p>
     </div>
 
@@ -222,7 +222,7 @@
             <i class="fa-solid fa-circle-exclamation fs-3 text-danger"></i>
             <div>
                 <h2 class="fs-3 fw-bold text-dark-mariam mb-1">{Localisation::getTranslation('common_warning')}</h2>
-                <p class="mb-0 text-muted small">{Localisation::getTranslation('common_not_allowed_to_perform_this_action')}</p>
+                <p class="mb-0 text-muted small">This organization does not have an active package or has used all available quota for new requests. We’d be happy to help you continue! Please get in touch at <a href="mailto:projects@clearglobal.org?subject=Packages" target="_blank">projects@clearglobal.org</a> to discuss your options.</p>
             </div>
         </div>
     </div>
@@ -260,7 +260,6 @@
                         </label>
                         <input type="text" class="form-control" id="project_title" name="project_title"
                                maxlength="128"
-                               placeholder="{Localisation::getTranslation('project_create_1')}"
                                onblur="checkTitleNotUsed();">
                         <div class="form-text">{Localisation::getTranslation('project_create_1')}</div>
                     </div>
@@ -268,11 +267,11 @@
                     {* Summary / Description (impact) *}
                     <div class="mb-4">
                         <label for="project_impact" class="form-label fw-semibold text-dark-mariam">
-                            {Localisation::getTranslation('project_create_project_summary_description')} <span class="text-danger">*</span>
+                            Project Summary/Description <span class="text-danger">*</span>
                         </label>
                         <textarea class="form-control" id="project_impact" name="project_impact"
                                   rows="3"
-                                  placeholder="{Localisation::getTranslation('project_create_3')}"></textarea>
+                                  ></textarea>
                         <div class="form-text">
                             {Localisation::getTranslation('project_create_3')} {Localisation::getTranslation('project_create_4')}
                         </div>
@@ -281,12 +280,12 @@
                     {* Project-specific Instructions *}
                     <div class="mb-4">
                         <label for="project_description" class="form-label fw-semibold text-dark-mariam">
-                            {Localisation::getTranslation('project_create_project_specific_instructions')} <span class="text-danger">*</span>
+                            Any specific instructions to the translators. <span class="text-danger">*</span>
                         </label>
                         <textarea class="form-control" id="project_description" name="project_description"
                                   rows="5"
-                                  placeholder="{Localisation::getTranslation('project_create_project_specific_instructions_placeholder')}"></textarea>
-                        <div class="form-text">{Localisation::getTranslation('project_create_project_specific_instructions_desc')}</div>
+                                  ></textarea>
+                        <div class="form-text">Any specific instructions to the translators.</div>
                     </div>
 
                     {* Reference *}
@@ -296,7 +295,7 @@
                         </label>
                         <input type="text" class="form-control" id="project_reference"
                                name="project_reference" maxlength="128"
-                               placeholder="{Localisation::getTranslation('project_create_5')}">
+                               >
                         <div class="form-text">{Localisation::getTranslation('project_create_5')}</div>
                     </div>
 
@@ -306,7 +305,7 @@
                             {Localisation::getTranslation('common_tags')}
                         </label>
                         <input type="text" class="form-control" id="tagList" name="tagList"
-                               placeholder="{Localisation::getTranslation('project_create_tags_placeholder')}">
+                               >
                         <div class="form-text">
                             {Localisation::getTranslation('project_create_8')}
                             {Localisation::getTranslation('project_create_separated_by')} {Localisation::getTranslation('project_create_seperator')}.
@@ -335,7 +334,7 @@
                                 <i class="fa-solid fa-cloud-arrow-up fs-2 mb-2"
                                    style="color: var(--twb-accent);"></i>
                                 <div class="fw-semibold text-dark-mariam small">
-                                    {Localisation::getTranslation('project_create_click_to_upload')}
+                                    Click to select or drag & drop
                                 </div>
                                 <div id="source_text_desc" class="text-muted" style="font-size:.75rem;">
                                     {Localisation::getTranslation('common_loading')}
@@ -346,6 +345,47 @@
                         </div>
 
                         {* Project image upload *}
+[[[these are not in res file
+                                        {Localisation::getTranslation('project_create_image_reuse_note')}
+ 
+ {Localisation::getTranslation('project_create_languages')}
+
+                                <span class="text-muted">{Localisation::getTranslation('project_create_suggested_default')}:</span>
+
+                                    {Localisation::getTranslation('project_create_deadline_tips_heading')}
+                                    <li>{Localisation::getTranslation('project_create_deadline_tip_1')}</li>
+                                    <li>{Localisation::getTranslation('project_create_deadline_tip_2')}</li>
+                                    <li>{Localisation::getTranslation('project_create_deadline_tip_3')}</li>
+
+
+                            {Localisation::getTranslation('project_create_how_to_guide_heading')}
+                        {Localisation::getTranslation('project_create_how_to_guide_desc')}
+                        {Localisation::getTranslation('project_create_launch_guide')}
+                            {Localisation::getTranslation('project_create_project_settings')}
+
+
+
+                            {Localisation::getTranslation('project_create_incremental_matching')}
+                            {Localisation::getTranslation('project_create_incremental_matching_desc')}
+
+
+                                {Localisation::getTranslation('common_learn_more')}
+
+                            {Localisation::getTranslation('project_create_admin_settings')}
+                            <span class="badge-admin ms-2">{Localisation::getTranslation('common_admin')}</span>
+
+                            {Localisation::getTranslation('project_create_additional_private_tm_keys')}
+                               placeholder="{Localisation::getTranslation('project_create_tm_keys_placeholder')}">
+                            {Localisation::getTranslation('project_create_tm_keys_desc')}
+                            {Localisation::getTranslation('project_create_use_mt_engine')}
+                            {Localisation::getTranslation('project_create_pretranslate_100')}
+                            {Localisation::getTranslation('project_create_verification_system_project')}
+                            {Localisation::getTranslation('project_create_verification_system_project_desc')}
+                            {Localisation::getTranslation('project_create_selected_deadline')}
+
+                        {Localisation::getTranslation('project_create_deadline_local_time')}:
+                        {Localisation::getTranslation('project_create_deadline_updates_note')}
+]]]
                         <div class="col-md-6">
                             <label class="form-label fw-semibold text-dark-mariam d-block">
                                 {Localisation::getTranslation('common_project_image')}
