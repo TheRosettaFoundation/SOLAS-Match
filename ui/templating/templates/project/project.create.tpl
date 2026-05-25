@@ -300,7 +300,7 @@
                     </div>
 
                     {* Tags *}
-                    <div class="mb-0">
+                    <div class="mb-4">
                         <label for="tagList" class="form-label fw-semibold text-dark-mariam">
                             {Localisation::getTranslation('common_tags')}
                         </label>
@@ -312,6 +312,13 @@
                             {Localisation::getTranslation('project_create_for_multiword_tags_joinwithhyphens')}
                         </div>
                     </div>
+
+                    <div class="mb-0">
+                        <div class="form-text">
+                            {Localisation::getTranslation('project_create_word_count')}
+                        </div>
+                    </div>
+
                 </div>
                 {* /Card 1 *}
 
@@ -345,54 +352,13 @@
                         </div>
 
                         {* Project image upload *}
-[[[these are not in res file
-                                        {Localisation::getTranslation('project_create_image_reuse_note')}
- 
- {Localisation::getTranslation('project_create_languages')}
-
-                                <span class="text-muted">{Localisation::getTranslation('project_create_suggested_default')}:</span>
-
-                                    {Localisation::getTranslation('project_create_deadline_tips_heading')}
-                                    <li>{Localisation::getTranslation('project_create_deadline_tip_1')}</li>
-                                    <li>{Localisation::getTranslation('project_create_deadline_tip_2')}</li>
-                                    <li>{Localisation::getTranslation('project_create_deadline_tip_3')}</li>
-
-
-                            {Localisation::getTranslation('project_create_how_to_guide_heading')}
-                        {Localisation::getTranslation('project_create_how_to_guide_desc')}
-                        {Localisation::getTranslation('project_create_launch_guide')}
-                            {Localisation::getTranslation('project_create_project_settings')}
-
-
-
-                            {Localisation::getTranslation('project_create_incremental_matching')}
-                            {Localisation::getTranslation('project_create_incremental_matching_desc')}
-
-
-                                {Localisation::getTranslation('common_learn_more')}
-
-                            {Localisation::getTranslation('project_create_admin_settings')}
-                            <span class="badge-admin ms-2">{Localisation::getTranslation('common_admin')}</span>
-
-                            {Localisation::getTranslation('project_create_additional_private_tm_keys')}
-                               placeholder="{Localisation::getTranslation('project_create_tm_keys_placeholder')}">
-                            {Localisation::getTranslation('project_create_tm_keys_desc')}
-                            {Localisation::getTranslation('project_create_use_mt_engine')}
-                            {Localisation::getTranslation('project_create_pretranslate_100')}
-                            {Localisation::getTranslation('project_create_verification_system_project')}
-                            {Localisation::getTranslation('project_create_verification_system_project_desc')}
-                            {Localisation::getTranslation('project_create_selected_deadline')}
-
-                        {Localisation::getTranslation('project_create_deadline_local_time')}:
-                        {Localisation::getTranslation('project_create_deadline_updates_note')}
-]]]
                         <div class="col-md-6">
                             <label class="form-label fw-semibold text-dark-mariam d-block">
                                 {Localisation::getTranslation('common_project_image')}
                                 <span class="home_tooltip ms-1">
                                     <i class="fa-solid fa-circle-info text-muted"></i>
                                     <span class="home_tooltiptext">
-                                        {Localisation::getTranslation('project_create_image_reuse_note')}
+                                        Optional. If omitted, the most recent image will be reused.
                                     </span>
                                 </span>
                             </label>
@@ -400,7 +366,7 @@
                                 <i class="fa-solid fa-image fs-2 mb-2"
                                    style="color: var(--core-blue);"></i>
                                 <div class="fw-semibold text-dark-mariam small">
-                                    {Localisation::getTranslation('project_create_click_to_upload')}
+                                    Click to select or drag & drop
                                 </div>
                                 <div id="image_file_desc" class="text-muted" style="font-size:.75rem;">
                                     {Localisation::getTranslation('common_loading')}
@@ -419,7 +385,7 @@
                     <div class="d-flex justify-content-between align-items-center mb-4 border-bottom pb-3">
                         <h2 class="fs-3 fw-bold text-dark-mariam mb-0">
                             <i class="fa-solid fa-language me-2" style="color: var(--twb-accent);"></i>
-                            {Localisation::getTranslation('project_create_languages')}
+                            Language Pairs
                         </h2>
                     </div>
 
@@ -494,34 +460,6 @@
                             <div class="form-text mt-1">
                                 {Localisation::getTranslation('project_create_7')}
                             </div>
-
-                            {*
-                                Deadline preview — process_deadline_utc_new_home_if_possible converts
-                                the raw UTC Unix timestamp to the user's local timezone at render time.
-                                Matches the Home5.js conversion pattern used across the platform.
-                            *}
-                            <div class="mt-3 d-flex align-items-center gap-2 small">
-                                <span class="text-muted">{Localisation::getTranslation('project_create_suggested_default')}:</span>
-                                <span class="process_deadline_utc_new_home_if_possible fw-semibold text-dark-mariam">
-                                    {$deadline_timestamp}
-                                </span>
-                            </div>
-                        </div>
-
-                        <div class="col-md-5">
-                            <div class="card border-0 p-3 rounded-3"
-                                 style="background-color: rgba(var(--bs-info-rgb),.08);">
-                                <p class="small text-muted mb-2 fw-semibold">
-                                    <i class="fa-solid fa-circle-info me-1"
-                                       style="color: var(--core-blue);"></i>
-                                    {Localisation::getTranslation('project_create_deadline_tips_heading')}
-                                </p>
-                                <ul class="small text-muted mb-0 ps-3">
-                                    <li>{Localisation::getTranslation('project_create_deadline_tip_1')}</li>
-                                    <li>{Localisation::getTranslation('project_create_deadline_tip_2')}</li>
-                                    <li>{Localisation::getTranslation('project_create_deadline_tip_3')}</li>
-                                </ul>
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -560,53 +498,22 @@
                     <div class="d-flex align-items-center mb-3 border-bottom pb-3">
                         <i class="fa-solid fa-book-open me-2 fs-5" style="color: var(--core-blue);"></i>
                         <h3 class="fs-3 fw-bold text-dark-mariam mb-0">
-                            {Localisation::getTranslation('project_create_how_to_guide_heading')}
+                            How to launch a translation project
                         </h3>
                     </div>
                     <p class="small text-muted mb-3">
-                        {Localisation::getTranslation('project_create_how_to_guide_desc')}
+                        How to launch a translation project
                     </p>
                     <a href="https://communitylibrary.translatorswb.org/books/12-self-managed-partners/page/launching-your-translation-project-on-the-twb-platform"
                        target="_blank"
                        class="btn btn-outline-primary w-100 fw-semibold"
                        style="color: var(--core-blue);">
                         <i class="fa-solid fa-arrow-up-right-from-square me-1"></i>
-                        {Localisation::getTranslation('project_create_launch_guide')}
+                        How to launch a translation project
                     </a>
                 </div>
 
                 {* ── Project Settings card ──────────────────────────────────── *}
-                {if !$create_memsource}
-                <div class="card bg-light-mariam custom-card p-4 card-border-top-accent">
-                    <div class="d-flex align-items-center mb-3 border-bottom pb-3">
-                        <i class="fa-solid fa-sliders me-2 fs-5" style="color: var(--twb-accent);"></i>
-                        <h3 class="fs-3 fw-bold text-dark-mariam mb-0">
-                            {Localisation::getTranslation('project_create_project_settings')}
-                        </h3>
-                    </div>
-
-                    {* Publish tasks *}
-                    <div class="form-check form-switch mb-3">
-                        <input class="form-check-input" type="checkbox" role="switch"
-                               name="publish" id="publish" value="1" checked="checked">
-                        <label class="form-check-label fw-semibold text-dark-mariam" for="publish">
-                            {Localisation::getTranslation('project_create_publish_tasks')}
-                        </label>
-                        <div class="form-text">
-                            {Localisation::getTranslation('common_if_checked_tasks_will_appear_in_the_tasks_stream')}
-                        </div>
-                    </div>
-
-                    {* Track project *}
-                    <div class="form-check form-switch mb-3">
-                        <input class="form-check-input" type="checkbox" role="switch"
-                               name="trackProject" id="trackProject" value="1" checked="checked">
-                        <label class="form-check-label fw-semibold text-dark-mariam" for="trackProject">
-                            {Localisation::getTranslation('common_track_project')}
-                        </label>
-                        <div class="form-text">{Localisation::getTranslation('project_create_12')}</div>
-                    </div>
-                {/if}
 
                     {* Incremental Matching — only when org has NGO linguists *}
                     {if !empty($ngo_linguists_by_language_pair)}
@@ -616,113 +523,19 @@
                                value="1" checked="checked">
                         <label class="form-check-label fw-semibold text-dark-mariam"
                                for="incremental_sourcing">
-                            {Localisation::getTranslation('project_create_incremental_matching')}
+                            Incremental Matching
                         </label>
                         <div class="form-text">
-                            {Localisation::getTranslation('project_create_incremental_matching_desc')}
+                            Incremental Matching
                             <a href="https://communitylibrary.translatorswb.org/books/12-self-managed-partners/page/who-can-work-on-your-project"
                                target="_blank" class="text-decoration-none twb-core-blue">
-                                {Localisation::getTranslation('common_learn_more')}
+                                Learn more
                                 <i class="fa-solid fa-arrow-up-right-from-square"
                                    style="font-size:.7rem;"></i>
                             </a>
                         </div>
                     </div>
                     {/if}
-
-                {if !$create_memsource}
-                </div>
-                {/if}
-                {* /Project Settings card *}
-
-                {* ── Admin-only Settings card ───────────────────────────────── *}
-                {if ($roles & ($SITE_ADMIN + $PROJECT_OFFICER)) && !$create_memsource}
-                <div class="card bg-light-mariam custom-card p-4 card-border-top-blue">
-                    <div class="d-flex align-items-center mb-3 border-bottom pb-3">
-                        <i class="fa-solid fa-shield-halved me-2 fs-5"
-                           style="color: #133978;"></i>
-                        <h3 class="fs-3 fw-bold text-dark-mariam mb-0">
-                            {Localisation::getTranslation('project_create_admin_settings')}
-                            <span class="badge-admin ms-2">{Localisation::getTranslation('common_admin')}</span>
-                        </h3>
-                    </div>
-
-                    {* Private TM Keys *}
-                    <div class="mb-3">
-                        <label for="private_tm_key" class="form-label fw-semibold text-dark-mariam">
-                            {Localisation::getTranslation('project_create_additional_private_tm_keys')}
-                        </label>
-                        <input type="text" class="form-control form-control-sm"
-                               id="private_tm_key" name="private_tm_key"
-                               placeholder="{Localisation::getTranslation('project_create_tm_keys_placeholder')}">
-                        <div class="form-text">
-                            {Localisation::getTranslation('project_create_tm_keys_desc')}
-                        </div>
-                    </div>
-
-                    {* MT Engine *}
-                    <div class="form-check form-switch mb-3">
-                        <input class="form-check-input" type="checkbox" role="switch"
-                               name="mt_engine" id="mt_engine" value="1" checked="checked">
-                        <label class="form-check-label fw-semibold text-dark-mariam" for="mt_engine">
-                            {Localisation::getTranslation('project_create_use_mt_engine')}
-                        </label>
-                    </div>
-
-                    {* Pre-translate 100% *}
-                    <div class="form-check form-switch mb-3">
-                        <input class="form-check-input" type="checkbox" role="switch"
-                               name="pretranslate_100" id="pretranslate_100"
-                               value="1" checked="checked">
-                        <label class="form-check-label fw-semibold text-dark-mariam"
-                               for="pretranslate_100">
-                            {Localisation::getTranslation('project_create_pretranslate_100')}
-                        </label>
-                    </div>
-
-                    {* Verification System Project *}
-                    <div class="form-check form-switch mb-0">
-                        <input class="form-check-input" type="checkbox" role="switch"
-                               name="testing_center" id="testing_center" value="1">
-                        <label class="form-check-label fw-semibold text-dark-mariam"
-                               for="testing_center">
-                            {Localisation::getTranslation('project_create_verification_system_project')}
-                        </label>
-                        <div class="form-text">
-                            {Localisation::getTranslation('project_create_verification_system_project_desc')}
-                        </div>
-                    </div>
-                </div>
-                {/if}
-                {* /Admin Settings card *}
-
-                {* ── Deadline preview card ──────────────────────────────────── *}
-                <div class="card bg-light-mariam custom-card p-4">
-                    <div class="d-flex align-items-center mb-3 border-bottom pb-3">
-                        <i class="fa-regular fa-clock me-2 fs-5"
-                           style="color: var(--twb-green);"></i>
-                        <h3 class="fs-3 fw-bold text-dark-mariam mb-0">
-                            {Localisation::getTranslation('project_create_selected_deadline')}
-                        </h3>
-                    </div>
-                    <p class="small text-muted mb-1">
-                        {Localisation::getTranslation('project_create_deadline_local_time')}:
-                    </p>
-                    {*
-                        process_deadline_utc_new_home_if_possible converts a raw UTC Unix timestamp
-                        (integer seconds) in the element text to local YYYY-MM-DD HH:MM:SS TZ.
-                        Matches the pattern used in home_mariam.tpl / Home5.js.
-                        visibility:hidden until JS runs prevents raw timestamp flash.
-                    *}
-                    <p class="fw-semibold text-danger small mb-0">
-                        <span class="process_deadline_utc_new_home_if_possible">
-                            {$deadline_timestamp}
-                        </span>
-                    </p>
-                    <p class="small text-muted mt-2 mb-0">
-                        {Localisation::getTranslation('project_create_deadline_updates_note')}
-                    </p>
-                </div>
 
             </div>
             {* /RIGHT COLUMN *}
