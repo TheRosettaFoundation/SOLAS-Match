@@ -419,6 +419,8 @@ class UserRouteHandler
 
         $template_data = array_merge($template_data, [
             'siteLocation'  => Common\Lib\Settings::get('site.location'),
+            'org_id'        => $org_id,
+            'roles'         => $adminDao->get_roles($user_id, $org_id),
             'extra_scripts' => $extra_scripts,
             'extra_styles'  => $extra_styles,
             'current_projects' => $projectDao->get_org_current_projects($org_id, 1),
