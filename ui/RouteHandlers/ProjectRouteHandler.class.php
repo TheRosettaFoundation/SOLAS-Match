@@ -1820,6 +1820,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
             "org_id"         => $org_id,
             "user_id"        => $user_id,
             "extra_scripts"  => $extraScripts,
+            'extra_styles'   => "<link rel=\"stylesheet\" href=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}resources/css/project_create_styles.css\" />",
             'deadline_timestamp' => $deadline_timestamp,
             'selected_day'   => $selected_day,
             'month_list'     => $month_list,

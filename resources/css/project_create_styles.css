@@ -1,0 +1,118 @@
+/* ── Project-create page styles ────────────────────────────────────────────── */
+:root {
+    --core-blue:  #1064C4;
+    --twb-accent: #f59e0b;
+    --twb-green:  #16a34a;
+}
+.custom-card {
+    border-radius: 0.75rem !important;
+    box-shadow: 0 10px 15px -3px rgba(0,0,0,.1), 0 4px 6px -2px rgba(0,0,0,.05) !important;
+}
+.card-border-top-accent { border-top: 4px solid var(--twb-accent); }
+.card-border-top-blue   { border-top: 4px solid var(--core-blue);  }
+.space-y-4 > * + * { margin-top: 1.5rem !important; }
+.space-y-8 > * + * { margin-top: 2rem   !important; }
+
+/* ── bg-light-mariam / text-dark-mariam — light/dark adaptive ──────────────── */
+[data-bs-theme=light] .bg-light-mariam {
+    --bs-bg-opacity: 1;
+    background-color: rgba(var(--bs-light-rgb), var(--bs-bg-opacity)) !important;
+}
+[data-bs-theme=dark] .bg-light-mariam {
+    --bs-bg-opacity: 1;
+    background-color: rgba(var(--bs-dark-rgb), var(--bs-bg-opacity)) !important;
+}
+[data-bs-theme=light] .text-dark-mariam {
+    color: rgba(var(--bs-dark-rgb), 1) !important;
+}
+[data-bs-theme=dark] .text-dark-mariam {
+    color: rgba(var(--bs-light-rgb), 1) !important;
+}
+.twb-core-blue { color: var(--core-blue) !important; }
+
+/* ── Upload zone ────────────────────────────────────────────────────────────── */
+.upload-zone {
+    border: 2px dashed #ced4da;
+    border-radius: 0.5rem;
+    padding: 1.25rem;
+    text-align: center;
+    cursor: pointer;
+    transition: border-color .2s;
+    display: block;
+}
+.upload-zone:hover { border-color: var(--twb-accent); }
+[data-bs-theme=dark] .upload-zone { border-color: #495057; }
+[data-bs-theme=dark] .upload-zone:hover { border-color: var(--twb-accent); }
+
+/* ── JS-injected target language rows (.target-row added by ProjectCreate14.js) */
+.target-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    align-items: center;
+    padding: 0.75rem 1rem;
+    background-color: rgba(var(--bs-light-rgb), 0.6);
+    border: 1px solid rgba(0,0,0,.1);
+    border-radius: 0.5rem;
+    margin-top: 0.75rem;
+}
+[data-bs-theme=dark] .target-row {
+    background-color: rgba(var(--bs-dark-rgb), 0.4);
+    border-color: rgba(255,255,255,.15);
+}
+.target-row select {
+    flex: 1;
+    min-width: 200px;
+    border-radius: 0.375rem;
+    border: 1px solid #ced4da;
+    padding: 0.375rem 0.75rem;
+    font-size: 0.875rem;
+    background-color: var(--bs-body-bg);
+    color: var(--bs-body-color);
+}
+[data-bs-theme=dark] .target-row select {
+    background-color: #2b3035;
+    border-color: #495057;
+    color: #dee2e6;
+}
+
+/* ── proj-task-type-checkbox: sourcing selects injected by JS ──────────────── */
+.proj-task-type-checkbox {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.875rem;
+}
+.proj-task-type-checkbox select {
+    min-width: 0;
+    flex: unset;
+    font-size: 0.8rem;
+    padding: 0.2rem 0.4rem;
+}
+/* Legacy pull-left/width-50 — used by JS for the task-type checkbox sub-divs */
+#projFormBottom .pull-left { float: left; }
+.bottom-line-border { /* spacing handled by .target-row + .target-row sibling rule */ }
+
+/* ── Admin badge ────────────────────────────────────────────────────────────── */
+.badge-admin {
+    font-size: 0.65rem;
+    background-color: #133978;
+    color: #fff;
+    border-radius: 4px;
+    padding: 2px 6px;
+    vertical-align: middle;
+}
+
+/* ── Home tooltip (matches home_styles3.css) ────────────────────────────────── */
+.home_tooltip { position: relative; display: inline-block; cursor: pointer; }
+.home_tooltiptext {
+    visibility: hidden; width: 220px; background-color: #000; color: #fff;
+    text-align: center; border-radius: 6px; padding: 5px 0;
+    position: absolute; z-index: 1; bottom: 150%; left: 50%; margin-left: -110px;
+    font-size: 0.8rem; font-weight: 400;
+}
+.home_tooltip:hover .home_tooltiptext { visibility: visible; }
+
+/* ── Date-conversion classes: hidden until JS processes ─────────────────────── */
+.process_deadline_utc_new_home_if_possible,
+.convert_utc_to_local_deadline_day_mon_year { visibility: hidden; }
