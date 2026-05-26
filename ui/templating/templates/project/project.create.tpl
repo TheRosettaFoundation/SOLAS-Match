@@ -280,7 +280,7 @@
                     {* Project-specific Instructions *}
                     <div class="mb-4">
                         <label for="project_description" class="form-label fw-semibold text-dark-mariam">
-                            Any specific instructions to the translators <span class="text-danger">*</span>
+                            Project-specific Instructions <span class="text-danger">*</span>
                         </label>
                         <textarea class="form-control" id="project_description" name="project_description"
                                   rows="5"
@@ -512,7 +512,7 @@
                        class="btn btn-outline-primary w-100 fw-semibold"
                        style="color: var(--core-blue);">
                         <i class="fa-solid fa-arrow-up-right-from-square me-1"></i>
-                        How to launch a translation project
+                        Guidelines
                     </a>
                 </div>
 
