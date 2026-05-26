@@ -374,6 +374,9 @@
                                 <div id="image_file_desc" class="text-muted" style="font-size:.75rem;">
                                     {Localisation::getTranslation('common_loading')}
                                 </div>
+                                <div class="text-muted" style="font-size:.75rem;">
+                                    If you do not upload an image, the most recent will be reused.
+                                </div>
                                 <input type="file" id="projectImageFile" name="projectImageFile"
                                        accept="image/*" class="d-none">
                             </label>
@@ -388,7 +391,7 @@
                     <div class="d-flex justify-content-between align-items-center mb-4 border-bottom pb-3">
                         <h2 class="fs-3 fw-bold text-dark-mariam mb-0">
                             <i class="fa-solid fa-language me-2" style="color: var(--twb-accent);"></i>
-                            Language Pairs
+                            Languages
                         </h2>
                     </div>
 
