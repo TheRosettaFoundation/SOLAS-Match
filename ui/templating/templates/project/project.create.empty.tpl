@@ -17,8 +17,6 @@
             <option value="{TemplateHelper::uiCleanseHTML($codes)}">{TemplateHelper::uiCleanseHTML($language)}</option>
         {/foreach}
     </div>
-    <div id="template1">{$template1}</div>
-    <div id="template2">{$template2}</div>
 
     {* Deadline selects — read/written by project_create_empty.js validateForm(); not submitted *}
     <select id="selectedDay"   name="selectedDay"></select>
