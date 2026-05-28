@@ -1,182 +1,410 @@
-{include file="header.tpl"}
+{include file="new_header.tpl"}
+{* Editor Hint: ¿áéíóú *}
 
-    <span class="hidden">
+{* ── Hidden parameters consumed by project_create_empty.js ───────────────────────── *}
+<span class="d-none">
+    <div id="siteLocation">{$siteLocation}</div>
+    <div id="siteAPI">{$siteAPI}</div>
+    <div id="imageMaxFileSize">{$imageMaxFileSize}</div>
+    <div id="supportedImageFormats">{$supportedImageFormats}</div>
+    <div id="org_id">{$org_id}</div>
+    <div id="user_id">{$user_id}</div>
+    <div id="deadline_timestamp">{$deadline_timestamp}</div>
+    <div id="userIsAdmin">{if $roles & ($SITE_ADMIN + $PROJECT_OFFICER)}1{else}0{/if}</div>
+    <div id="template_language_options">
+        <option value="0"></option>
+        {foreach from=$languages key=codes item=language}
+            <option value="{TemplateHelper::uiCleanseHTML($codes)}">{TemplateHelper::uiCleanseHTML($language)}</option>
+        {/foreach}
+    </div>
+    <div id="template1">{$template1}</div>
+    <div id="template2">{$template2}</div>
 
-        <!-- Parameters... -->
-        <div id="siteLocation">{$siteLocation}</div>
-        <div id="siteAPI">{$siteAPI}</div>
-        <div id="imageMaxFileSize">{$imageMaxFileSize}</div>
-        <div id="supportedImageFormats">{$supportedImageFormats}</div>
-        <div id="org_id">{$org_id}</div>
-        <div id="user_id">{$user_id}</div>
-        <div id="deadline_timestamp">{$deadline_timestamp}</div>
-        <div id="userIsAdmin">{if $roles & ($SITE_ADMIN + $PROJECT_OFFICER)}1{else}0{/if}</div>
+    {* Deadline selects — read/written by project_create_empty.js validateForm(); not submitted *}
+    <select id="selectedDay"   name="selectedDay"></select>
+    <select id="selectedMonth" name="selectedMonth" onchange="selectedMonthChanged()">
+        {html_options options=$month_list selected=$selected_month}
+    </select>
+    <select id="selectedYear"  name="selectedYear"  onchange="selectedYearChanged()">
+        {html_options options=$year_list selected=$selected_year}
+    </select>
+    <select id="selectedHour"  name="selectedHour">
+        {html_options options=$hour_list selected=$selected_hour}
+    </select>
+    <select id="selectedMinute" name="selectedMinute">
+        {html_options options=$minute_list selected=$selected_minute}
+    </select>
 
-        <!-- Templates... -->
-        <div id="template_language_options">
-            <option value="0"></option>
-            {foreach from=$languages key=codes item=language}
-                <option value="{$codes}" >{$language}</option>
-            {/foreach}
-        </div>
+    {* earthquake tag — feature currently disabled; hidden input keeps JS references intact *}
+    <input type="hidden" id="earthquake" />
+</span>
 
-    </span>
+{* ── Flash messages ─────────────────────────────────────────────────────────── *}
+<div class="container">
+    {if isset($flash['error'])}
+    <div class="alert alert-danger alert-dismissible fade show mt-4">
+        <p><strong>{Localisation::getTranslation('common_warning')}! </strong>{TemplateHelper::uiCleanseHTMLKeepMarkup($flash['error'])}</p>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    {/if}
+    {if isset($flash['info'])}
+    <div class="alert alert-info alert-dismissible fade show mt-4">
+        <p><strong>{Localisation::getTranslation('common_note')} </strong>{TemplateHelper::uiCleanseHTMLKeepMarkup($flash['info'])}</p>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    {/if}
+    {if isset($flash['success'])}
+    <div class="alert alert-success alert-dismissible fade show mt-4">
+        <img src="{urlFor name='home'}ui/img/success.svg" alt="" class="mx-1" />
+        <strong>{Localisation::getTranslation('common_success')}! </strong>{TemplateHelper::uiCleanseHTMLKeepMarkup($flash['success'])}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    {/if}
+    {if isset($flash['warning'])}
+    <div class="alert alert-warning alert-dismissible fade show mt-4">
+        <p><strong>{TemplateHelper::uiCleanseHTMLKeepMarkup($flash['warning'])}</strong></p>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    {/if}
+</div>
 
-    <div class="grid_8">
-        <div class="page-header">
-            <h1>
-                Create An Empty Project For Shell Tasks <small>{Localisation::getTranslation('project_create_0')}</small><br>   
-                <small>
-                    {Localisation::getTranslation('common_denotes_a_required_field')}
-                </small>
-            </h1>
-        </div>           
-    </div>  
+<div class="container-xxl px-4 px-sm-5 px-lg-5 pb-5 pt-4">
 
-    <div class="well pull-left" style="margin-bottom: 50px">
+    {* ── Breadcrumb + page header ───────────────────────────────────────────── *}
+    <div class="mb-4">
+        <nav aria-label="breadcrumb" class="mb-2">
+            <ol class="breadcrumb mb-0 small">
+                <li class="breadcrumb-item">
+                    <a href="{urlFor name="home"}" class="text-decoration-none twb-core-blue">{Localisation::getTranslation('header_home')}</a>
+                    <i class="fa-solid fa-chevron-right mx-1 text-muted" style="font-size:.65rem;"></i>
+                </li>
+                <li class="breadcrumb-item">
+                    <a href="{urlFor name="ngo_projects" options="org_id.{$org_id}"}" class="text-decoration-none twb-core-blue">Projects</a>
+                    <i class="fa-solid fa-chevron-right mx-1 text-muted" style="font-size:.65rem;"></i>
+                </li>
+                <li class="breadcrumb-item active text-muted" aria-current="page">Create An Empty Project For Shell Tasks</li>
+            </ol>
+        </nav>
+        <h1 class="fs-2 fw-bold text-dark-mariam mb-0">Create An Empty Project For Shell Tasks</h1>
+        <p class="text-muted small mt-1">
+            {Localisation::getTranslation('common_denotes_a_required_field')}
+        </p>
+    </div>
 
-        {if isset($flash['error'])}
-            <p class="alert alert-error">
-                {$flash['error']}
-            </p>
-        {/if}
+    {* ══════════════════════════════════════════════════════════════════════════
+       FORM
+       ══════════════════════════════════════════════════════════════════════════ *}
+    <form method="post" action="{urlFor name="project-create-empty" options="org_id.$org_id"}"
+          enctype="multipart/form-data" accept-charset="utf-8" id="projectCreateForm"
+          onsubmit="create_project_button.disabled = true;">
 
         <div id="placeholder_for_errors_1"></div>
 
-        <form method="post" action="{urlFor name="project-create-empty" options="org_id.$org_id"}" enctype="multipart/form-data" accept-charset="utf-8" onsubmit="create_project_button.disabled = true;">
+        <div class="row g-4">
 
-            <div id ="projFormTop" class="pull-left">
-            <div class="projFormTopBlock">
-                <div class="projFormInput">
-                    <h2>{Localisation::getTranslation('common_title')}: <span style="color: red">*</span></h2>
-                    <p class="desc">{Localisation::getTranslation('project_create_1')}</p>
-                    <textarea wrap="soft" cols="1" rows="3" style="width: 400px" name="project_title" id="project_title" onblur="checkTitleNotUsed();"></textarea>
-                    <p style="margin-bottom:40px;"></p>
-                </div>
-                <div class="projFormInput">
-                    <h2>Project Summary/Description: <span style="color: red">*</span></h2>
-                    <p class="desc">
-                        {Localisation::getTranslation('project_create_3')}<br/> {Localisation::getTranslation('project_create_4')}
-                    </p>
-                    <textarea wrap="soft" cols="1" rows="3" style="width: 400px" name="project_impact" id="project_impact"></textarea>
-                    <p style="margin-bottom:37.5px;"></p>
-                </div>
-                <div class="projFormInput">
-                    <h2>Project-specific Instructions: <span style="color: red">*</span></h2>
-                    <p class="desc">Any specific instructions to the translators.</p>
-                    <textarea wrap="soft" cols="1" rows="8" style="width: 400px" name="project_description" id="project_description"></textarea>
-                    <p style="margin-bottom:37.5px;"></p>
-                </div>
-                <div class="projFormInput">
-                <h2>{Localisation::getTranslation('common_reference')}:</h2>
-                <p class="desc">{Localisation::getTranslation('project_create_5')}</p>
-                <input type="text" style="width: 400px" name="project_reference" id="project_reference" />
-                </div>
-            </div>
+            {* ══════════════════════════════════════════════════════════════════
+               LEFT COLUMN — main form fields
+               ══════════════════════════════════════════════════════════════════ *}
+            <div class="col-lg-8 order-1 space-y-8">
 
-            <div class="projFormTopBlock">
-                <div class="projFormInput">
-                    <div style="margin-bottom:25px;">
-                        <h2>{Localisation::getTranslation('common_project_image')}</h2>
-                        <p id="image_file_desc" class="desc"></p>
-                        <p>If you do not upload an image, the most recent will be reused.</p>
-                        <input type="file" name="projectImageFile" id="projectImageFile" />
+                {* ── Card 1: Project Details ─────────────────────────────────── *}
+                <div class="card bg-light-mariam custom-card p-4 card-border-top-accent">
+                    <div class="d-flex justify-content-between align-items-center mb-4 border-bottom pb-3">
+                        <h2 class="fs-3 fw-bold text-dark-mariam mb-0">
+                            <i class="fa-solid fa-folder-open me-2" style="color: var(--twb-accent);"></i>
+                            Create An Empty Project For Shell Tasks
+                        </h2>
                     </div>
-                </div>
-                {if false}
-                <div class="projFormInput">
-                    <div style="margin-bottom:25px;">
-                        <h2>This project is part of the emergency response to the Türkiye/Syria earthquake:</h2>
-                        <p class="desc">Check if that is the case.</p>
-                        <input type="checkbox" name="earthquake" id="earthquake" value="1" />
+
+                    {* Title *}
+                    <div class="mb-4">
+                        <label for="project_title" class="form-label fw-semibold text-dark-mariam">
+                            {Localisation::getTranslation('common_title')} <span class="text-danger">*</span>
+                        </label>
+                        <input type="text" class="form-control" id="project_title" name="project_title"
+                               maxlength="128"
+                               onblur="checkTitleNotUsed();">
+                        <div class="form-text">{Localisation::getTranslation('project_create_1')}</div>
                     </div>
-                </div>
-                {else}
-                    <input type="hidden" id="earthquake" />
-                 {/if}
-                <div class="projFormInput">
-                    <div style="margin-bottom:25px;">
-                        <h2>{Localisation::getTranslation('common_deadline')}: <span style="color: red">*</span></h2>
-                        <p class="desc">{Localisation::getTranslation('project_create_7')}</p>
-                        <p>
-                            {Localisation::getTranslation('common_day')}:
-                            <select name="selectedDay" id="selectedDay" style="width: 4.0em">
-                            </select>
-                            {Localisation::getTranslation('common_month')}:
-                            <select onchange="selectedMonthChanged()" name="selectedMonth" id="selectedMonth" style="width: 8.0em">
-                                {html_options options=$month_list selected=$selected_month}
-                            </select>
-                            {Localisation::getTranslation('common_year')}:
-                            <select onchange="selectedYearChanged()" name="selectedYear" id="selectedYear" style="width: 5.0em">
-                                {html_options options=$year_list selected=$selected_year}
-                            </select>
-                            <input type="hidden" name="project_deadline" id="project_deadline" />
-                        </p>
-                        <p>
-                            {Localisation::getTranslation('common_hour')}:
-                            <select name="selectedHour" id="selectedHour" style="width: 4.0em">
-                                {html_options options=$hour_list selected=$selected_hour}
-                            </select>
-                            {Localisation::getTranslation('common_minute')}:
-                            <select name="selectedMinute" id="selectedMinute" style="width: 4.0em">
-                                {html_options options=$minute_list selected=$selected_minute}
-                            </select>
-                        </p>
+
+                    {* Summary / Description (impact) *}
+                    <div class="mb-4">
+                        <label for="project_impact" class="form-label fw-semibold text-dark-mariam">
+                            Project Summary/Description <span class="text-danger">*</span>
+                        </label>
+                        <textarea class="form-control" id="project_impact" name="project_impact"
+                                  rows="3"
+                                  ></textarea>
+                        <div class="form-text">
+                            {Localisation::getTranslation('project_create_3')} {Localisation::getTranslation('project_create_4')}
+                        </div>
                     </div>
-                </div>
-                <div class="projFormInput">
-                    <div style="margin-bottom:25px;">
-                        <h2>{Localisation::getTranslation('common_tags')}:</h2>
-                        <p class="desc">
+
+                    {* Project-specific Instructions *}
+                    <div class="mb-4">
+                        <label for="project_description" class="form-label fw-semibold text-dark-mariam">
+                            Project-specific Instructions <span class="text-danger">*</span>
+                        </label>
+                        <textarea class="form-control" id="project_description" name="project_description"
+                                  rows="5"
+                                  ></textarea>
+                        <div class="form-text">Any specific instructions to the translators.</div>
+                    </div>
+
+                    {* Reference *}
+                    <div class="mb-4">
+                        <label for="project_reference" class="form-label fw-semibold text-dark-mariam">
+                            {Localisation::getTranslation('common_reference')}
+                        </label>
+                        <input type="text" class="form-control" id="project_reference"
+                               name="project_reference" maxlength="128"
+                               >
+                        <div class="form-text">{Localisation::getTranslation('project_create_5')}</div>
+                    </div>
+
+                    {* Tags *}
+                    <div class="mb-0">
+                        <label for="tagList" class="form-label fw-semibold text-dark-mariam">
+                            {Localisation::getTranslation('common_tags')}
+                        </label>
+                        <input type="text" class="form-control" id="tagList" name="tagList"
+                               >
+                        <div class="form-text">
                             {Localisation::getTranslation('project_create_8')}
-                            <br />
-                            {Localisation::getTranslation('project_create_separated_by')} {Localisation::getTranslation('project_create_seperator')}. 
+                            {Localisation::getTranslation('project_create_separated_by')} {Localisation::getTranslation('project_create_seperator')}.
                             {Localisation::getTranslation('project_create_for_multiword_tags_joinwithhyphens')}
-                        </p>
-                        <input type="text" name="tagList" id="tagList" style="width: 400px" />
+                        </div>
+                    </div>
+
+                </div>
+                {* /Card 1 *}
+
+                {* ── Card 2: Files ──────────────────────────────────────────── *}
+                <div class="card bg-light-mariam custom-card p-4 card-border-top-blue">
+                    <div class="d-flex justify-content-between align-items-center mb-4 border-bottom pb-3">
+                        <h2 class="fs-3 fw-bold text-dark-mariam mb-0">
+                            <i class="fa-solid fa-file-arrow-up me-2" style="color: var(--core-blue);"></i>
+                            Files
+                        </h2>
+                    </div>
+
+                    <div class="row g-4">
+                        {* Project image upload *}
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold text-dark-mariam d-block">
+                                {Localisation::getTranslation('common_project_image')}
+                                <span class="home_tooltip ms-1">
+                                    <i class="fa-solid fa-circle-info text-muted"></i>
+                                    <span class="home_tooltiptext">
+                                        Optional. If omitted, the most recent image will be reused.
+                                    </span>
+                                </span>
+                            </label>
+                            <label for="projectImageFile" class="upload-zone w-100">
+                                <i class="fa-solid fa-image fs-2 mb-2"
+                                   style="color: var(--core-blue);"></i>
+                                <div class="fw-semibold text-dark-mariam small">
+                                    Click to select or drag & drop
+                                </div>
+                                <div id="image_file_desc" class="text-muted" style="font-size:.75rem;">
+                                    {Localisation::getTranslation('common_loading')}
+                                </div>
+                                <div class="text-muted" style="font-size:.75rem;">
+                                    If you do not upload an image, the most recent will be reused.
+                                </div>
+                                <input type="file" id="projectImageFile" name="projectImageFile"
+                                       accept="image/*" class="d-none">
+                            </label>
+                            <div id="projectImageFile_name" class="small text-muted mt-1"></div>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </div>
-        <div id ="projFormBottom">
-            <div id="loading_warning">
-                <p>{Localisation::getTranslation('common_loading')}</p>
-            </div>
-            <div id="projFormBottomBlockLeft">
-                <div id="sourceLanguageDiv">
-                    <h2>{Localisation::getTranslation('common_source_language')}: <span style="color: red">*</span></h2>
-                    <select name="sourceLanguageSelect" id="sourceLanguageSelect" style="width: 400px">
-                        <option value="0"></option>
-                        {foreach from=$languages key=codes item=language}
-                            <option value="{$codes}" >{$language}</option>
-                        {/foreach}
-                    </select>
+                {* /Card 2 *}
+
+                {* ── Card 3: Languages ──────────────────────────────────────── *}
+                <div class="card bg-light-mariam custom-card p-4 card-border-top-accent">
+                    <div class="d-flex justify-content-between align-items-center mb-4 border-bottom pb-3">
+                        <h2 class="fs-3 fw-bold text-dark-mariam mb-0">
+                            <i class="fa-solid fa-language me-2" style="color: var(--twb-accent);"></i>
+                            Language
+                        </h2>
+                    </div>
+
+                    {* Source language *}
+                    <div id="sourceLanguageDiv" class="mb-4">
+                        <label for="sourceLanguageSelect" class="form-label fw-semibold text-dark-mariam">
+                            {Localisation::getTranslation('common_source_language')} <span class="text-danger">*</span>
+                        </label>
+                        <select class="form-select" id="sourceLanguageSelect" name="sourceLanguageSelect">
+                            <option value="0"></option>
+                            {foreach from=$languages key=codes item=language}
+                                <option value="{TemplateHelper::uiCleanseHTML($codes)}">{TemplateHelper::uiCleanseHTML($language)}</option>
+                            {/foreach}
+                        </select>
+                    </div>
+
+                    <div id="loading_warning" class="text-muted small py-2">
+                        <span class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>
+                        {Localisation::getTranslation('common_loading')}
+                    </div>
                 </div>
-            </div>
-        </div>
+                {* /Card 3 *}
 
-            <div id="placeholder_for_errors_2"></div>
+                {* ── Card 4: Deadline ───────────────────────────────────────── *}
+                <div class="card bg-light-mariam custom-card p-4 card-border-top-blue">
+                    <div class="d-flex justify-content-between align-items-center mb-4 border-bottom pb-3">
+                        <h2 class="fs-3 fw-bold text-dark-mariam mb-0">
+                            <i class="fa-regular fa-calendar me-2" style="color: var(--core-blue);"></i>
+                            {Localisation::getTranslation('common_deadline')}
+                        </h2>
+                    </div>
 
-            <div class="" style="text-align:center; width:100%">
-                <div class="pull-left width-50">
-                    <p style="margin-bottom:20px;"></p>
-                    <a href="{$siteLocation}org/dashboard" class="btn btn-danger">
-                        <i class="icon-ban-circle icon-white"></i>
+                    <div class="row g-4 align-items-start">
+                        <div class="col-md-7">
+                            <label for="tdDeadlineInput" class="form-label fw-semibold text-dark-mariam">
+                                {Localisation::getTranslation('common_deadline')} <span class="text-danger">*</span>
+                            </label>
+                            {* Tempus Dominus 6 picker — syncs with hidden selects via inline script below *}
+                            <div class="input-group" id="tdDeadlineContainer">
+                                <input type="text" class="form-control" id="tdDeadlineInput"
+                                       placeholder="DD/MM/YYYY HH:MM" autocomplete="off">
+                                <span class="input-group-text" id="tdDeadlineToggle" style="cursor:pointer;">
+                                    <i class="fa-regular fa-calendar"></i>
+                                </span>
+                            </div>
+                            <div class="form-text mt-1">
+                                {Localisation::getTranslation('project_create_7')}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {* /Card 4 *}
+
+                {* Second error placeholder (for language/task-type errors) *}
+                <div id="placeholder_for_errors_2"></div>
+
+                {* ── Submit / Cancel ────────────────────────────────────────── *}
+                <div class="d-flex gap-3 pt-2">
+                    <a href="{urlFor name="ngo_projects" options="org_id.{$org_id}"}"
+                       class="btn btn-outline-secondary px-4">
+                        <i class="fa-solid fa-ban me-1"></i>
                         {Localisation::getTranslation('common_cancel')}
                     </a>
-                    <p style="margin-bottom:20px;"></p>
-                </div>
-                <div class="pull-left width-50">
-                    <p style="margin-bottom:20px;"></p>
-                    <button type="submit" onclick="return validateForm();" class="btn btn-success" name="create_project_button" id="create_project_button">
-                        <i class="icon-upload icon-white"></i> {Localisation::getTranslation('common_create_project')}
+                    <button type="submit" class="btn text-white fw-bold px-4"
+                            style="background-color: var(--twb-accent); border: none;"
+                            name="create_project_button" id="create_project_button"
+                            onclick="return validateForm();">
+                        <i class="fa-solid fa-cloud-arrow-up me-1"></i>
+                        {Localisation::getTranslation('common_create_project')}
                     </button>
-                    <p style="margin-bottom:20px;"></p>
                 </div>
+
             </div>
-            <input type="hidden" name="sesskey" value="{$sesskey}" />
-        </form>
+            {* /LEFT COLUMN *}
 
-    </div>
 
-{include file="footer.tpl"}
+            {* ══════════════════════════════════════════════════════════════════
+               RIGHT COLUMN — sidebar
+               ══════════════════════════════════════════════════════════════════ *}
+            <div class="col-lg-4 order-2 space-y-8">
+
+                {* ── Help card ──────────────────────────────────────────────── *}
+                <div class="card bg-light-mariam custom-card p-4 card-border-top-blue">
+                    <div class="d-flex align-items-center mb-3 border-bottom pb-3">
+                        <i class="fa-solid fa-book-open me-2 fs-5" style="color: var(--core-blue);"></i>
+                        <h3 class="fs-3 fw-bold text-dark-mariam mb-0">
+                            How to launch a translation project
+                        </h3>
+                    </div>
+                    <a href="https://communitylibrary.translatorswb.org/books/12-self-managed-partners/page/launching-your-translation-project-on-the-twb-platform"
+                       target="_blank"
+                       class="btn btn-outline-primary w-100 fw-semibold"
+                       style="color: var(--core-blue);">
+                        <i class="fa-solid fa-arrow-up-right-from-square me-1"></i>
+                        Guidelines
+                    </a>
+                </div>
+
+            </div>
+            {* /RIGHT COLUMN *}
+
+        </div>
+        {* /row *}
+
+        <input type="hidden" name="sesskey" value="{$sesskey}" />
+        <input type="hidden" name="project_deadline" id="project_deadline" />
+
+    </form>
+
+</div>
+{* /container-xxl *}
+
+
+{* ── Tempus Dominus 6 deadline picker ────────────────────────────────────────── *}
+{*
+    Bridge between Tempus Dominus and the hidden <select> elements that
+    ProjectCreate14.js reads in validateForm() to compute project_deadline.
+
+    On init   : read deadline_timestamp → pre-fill picker.
+    On change : update hidden selects + call selectedMonthChanged()
+                so validateForm() sees consistent values.
+*}
+<script>
+$(document).ready(function () {
+    if (typeof tempusDominus === 'undefined') return;
+
+    var tsRaw = parseInt(document.getElementById('deadline_timestamp').innerHTML, 10);
+    var localDate = new Date(tsRaw * 1000);
+
+    var tdPicker = new tempusDominus.TempusDominus(
+        document.getElementById('tdDeadlineContainer'),
+        {
+            display: {
+                icons: {
+                    time:     'fa-regular fa-clock',
+                    date:     'fa-regular fa-calendar',
+                    up:       'fa-solid fa-arrow-up',
+                    down:     'fa-solid fa-arrow-down',
+                    previous: 'fa-solid fa-chevron-left',
+                    next:     'fa-solid fa-chevron-right',
+                    today:    'fa-solid fa-calendar-check',
+                    clear:    'fa-solid fa-trash',
+                    close:    'fa-solid fa-xmark',
+                },
+                components: { seconds: false },
+            },
+            localization: { format: 'dd/MM/yyyy HH:mm' },
+        }
+    );
+
+    tdPicker.dates.setValue(tempusDominus.DateTime.convert(localDate));
+
+    document.getElementById('tdDeadlineContainer').addEventListener(
+        tempusDominus.Namespace.events.change,
+        function (e) {
+            if (!e.detail.date) return;
+            var d = e.detail.date;
+            document.getElementById('selectedYear').value   = d.year;
+            document.getElementById('selectedMonth').value  = d.month + 1;
+            selectedMonthChanged();                          // regenerate day options
+            document.getElementById('selectedDay').value    = d.date;
+            document.getElementById('selectedHour').value   = d.hours;
+            document.getElementById('selectedMinute').value = d.minutes;
+        }
+    );
+});
+</script>
+
+{* ── File input: show selected filename below upload zone ─────────────────────── *}
+<script>
+$(document).ready(function () {
+    ['projectImageFile'].forEach(function (id) {
+        document.getElementById(id).addEventListener('change', function () {
+            var nameEl = document.getElementById(id + '_name');
+            if (nameEl) nameEl.textContent = this.files.length ? this.files[0].name : '';
+        });
+    });
+});
+</script>
+
+{include file="footer2.tpl"}
