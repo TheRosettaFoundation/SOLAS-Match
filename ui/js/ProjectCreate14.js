@@ -247,6 +247,7 @@ function target_language_selected(event) {
     let translation_sourcing = document.createElement("select");
     translation_sourcing.name = "translation_sourcing_" + snapshot_target_count;
     translation_sourcing.id   = "translation_sourcing_" + snapshot_target_count;
+translation_sourcing.className = "COL????????????";
     if (ngo_linguists_by_language_pair[language_pair])
         translation_sourcing.innerHTML = '<option value="0">Full TWB Community</option><option value="1">Organization Members (Total: ' + ngo_linguists_by_language_pair[language_pair] + ')</option>';
     else {
@@ -258,6 +259,7 @@ function target_language_selected(event) {
     let revision_sourcing = document.createElement("select");
     revision_sourcing.name = "revision_sourcing_" + snapshot_target_count;
     revision_sourcing.id   = "revision_sourcing_" + snapshot_target_count;
+revision_sourcing.className = "COL????????????";
     if (ngo_linguists_by_language_pair[language_pair])
         revision_sourcing.innerHTML = '<option value="0">Full TWB Community</option><option value="1">Organization Members (Total: ' + ngo_linguists_by_language_pair[language_pair] + ')</option>';
     else {
@@ -274,14 +276,15 @@ function target_language_selected(event) {
     // Prepare the div elements that will make up the new target language section.
     var targetLanguageRow = document.createElement("div"); // The main div, subdivided into the language/country
     targetLanguageRow.id = "target_row_" + targetCount;    // selects and task type checkboxes
-    targetLanguageRow.className = "target-row bottom-line-border";
+    targetLanguageRow.className = "row target-row bottom-line-border";
 
     var targetLanguageCell = document.createElement("div"); // Sub-div for select elements
-    targetLanguageCell.className = "pull-left width-50";
+    targetLanguageCell.className = "COLLXXX pull-left width-50";
 
     // Create the select elements
     var targetLanguageSelect = document.createElement("select");
     targetLanguageSelect.style.width = "400px";
+targetLanguageSelect.className = "row target-row bottom-line-border";XXXXXX
     targetLanguageSelect.name = "target_language_" + targetCount;
     targetLanguageSelect.id   = "target_language_" + targetCount;
     targetLanguageSelect.innerHTML = document.getElementById("template_language_options").innerHTML;
@@ -303,7 +306,7 @@ function target_language_selected(event) {
     segmentationCheckbox.setAttribute("onclick", "segmentationClicked(this);");
 
     var translationRequiredDiv = document.createElement("div");
-    translationRequiredDiv.className = "pull-left proj-task-type-checkbox";
+    //translationRequiredDiv.className = "pull-left proj-task-type-checkbox";
     translationRequiredDiv.id   = "translationRequiredDiv_" + targetCount;
 
     var translationCheckbox = document.createElement("input");
@@ -316,7 +319,7 @@ function target_language_selected(event) {
     if (create_memsource == 1 && (true || index != 0)) translationCheckbox.disabled = true;
 
     var proofreadingRequiredDiv = document.createElement("div");
-    proofreadingRequiredDiv.className = "pull-left proj-task-type-checkbox";
+    //proofreadingRequiredDiv.className = "pull-left proj-task-type-checkbox";
     proofreadingRequiredDiv.id   = "proofreadingRequiredDiv_" + targetCount;
 
     var proofreadingCheckbox = document.createElement("input");
