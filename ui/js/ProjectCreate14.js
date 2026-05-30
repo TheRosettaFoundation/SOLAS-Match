@@ -290,6 +290,7 @@ function target_language_selected(event) {
     targetLanguageSelect.addEventListener("input", target_language_selected);
 
     var taskTypesRow = document.createElement("div"); // Sub-div for task type checkboxes, holds individual divs for each checkox
+NEE SUB ROW OF THIS
     taskTypesRow.id = "task-type-checkboxes";
     taskTypesRow.className = "col-md-8";
 
@@ -304,7 +305,9 @@ function target_language_selected(event) {
     segmentationCheckbox.value = "1";
     segmentationCheckbox.setAttribute("onclick", "segmentationClicked(this);");
 
+NEED TO BE NEW DIV WITH CLASS ROW
     var translationRequiredDiv = document.createElement("div");
+NEEDS TO BE 6
     //translationRequiredDiv.className = "pull-left proj-task-type-checkbox";
     translationRequiredDiv.id   = "translationRequiredDiv_" + targetCount;
 
@@ -318,6 +321,7 @@ function target_language_selected(event) {
     if (create_memsource == 1 && (true || index != 0)) translationCheckbox.disabled = true;
 
     var proofreadingRequiredDiv = document.createElement("div");
+NEEDS TO BE 6
     //proofreadingRequiredDiv.className = "pull-left proj-task-type-checkbox";
     proofreadingRequiredDiv.id   = "proofreadingRequiredDiv_" + targetCount;
 
