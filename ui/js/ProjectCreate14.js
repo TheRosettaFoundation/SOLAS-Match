@@ -247,7 +247,7 @@ function target_language_selected(event) {
     let translation_sourcing = document.createElement("select");
     translation_sourcing.name = "translation_sourcing_" + snapshot_target_count;
     translation_sourcing.id   = "translation_sourcing_" + snapshot_target_count;
-    translation_sourcing.className = "col-md-4";
+//translation_sourcing.className = "col-md-4";
     if (ngo_linguists_by_language_pair[language_pair])
         translation_sourcing.innerHTML = '<option value="0">Full TWB Community</option><option value="1">Organization Members (Total: ' + ngo_linguists_by_language_pair[language_pair] + ')</option>';
     else {
@@ -259,7 +259,7 @@ function target_language_selected(event) {
     let revision_sourcing = document.createElement("select");
     revision_sourcing.name = "revision_sourcing_" + snapshot_target_count;
     revision_sourcing.id   = "revision_sourcing_" + snapshot_target_count;
-    revision_sourcing.className = "col-md-4";
+//revision_sourcing.className = "col-md-4";
     if (ngo_linguists_by_language_pair[language_pair])
         revision_sourcing.innerHTML = '<option value="0">Full TWB Community</option><option value="1">Organization Members (Total: ' + ngo_linguists_by_language_pair[language_pair] + ')</option>';
     else {
@@ -279,7 +279,6 @@ function target_language_selected(event) {
     targetLanguageRow.className = "row target-row bottom-line-border";
 
     var targetLanguageCell = document.createElement("div"); // Sub-div for select elements
-    targetLanguageCell.className = "col-md-4";
 
     // Create the select elements
     var targetLanguageSelect = document.createElement("select");
@@ -292,7 +291,7 @@ function target_language_selected(event) {
 
     var taskTypesRow = document.createElement("div"); // Sub-div for task type checkboxes, holds individual divs for each checkox
     taskTypesRow.id = "task-type-checkboxes";
-    taskTypesRow.className = "pull-left width-50";
+    taskTypesRow.className = "col-md-8";
 
     var segmentationRequiredDiv = document.createElement("div");
     segmentationRequiredDiv.className = "pull-left proj-task-type-checkbox";
