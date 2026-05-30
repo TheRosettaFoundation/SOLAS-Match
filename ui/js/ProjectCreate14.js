@@ -247,7 +247,7 @@ function target_language_selected(event) {
     let translation_sourcing = document.createElement("select");
     translation_sourcing.name = "translation_sourcing_" + snapshot_target_count;
     translation_sourcing.id   = "translation_sourcing_" + snapshot_target_count;
-translation_sourcing.className = "COL????????????";
+    translation_sourcing.className = "col-md-4";
     if (ngo_linguists_by_language_pair[language_pair])
         translation_sourcing.innerHTML = '<option value="0">Full TWB Community</option><option value="1">Organization Members (Total: ' + ngo_linguists_by_language_pair[language_pair] + ')</option>';
     else {
@@ -259,7 +259,7 @@ translation_sourcing.className = "COL????????????";
     let revision_sourcing = document.createElement("select");
     revision_sourcing.name = "revision_sourcing_" + snapshot_target_count;
     revision_sourcing.id   = "revision_sourcing_" + snapshot_target_count;
-revision_sourcing.className = "COL????????????";
+    revision_sourcing.className = "col-md-4";
     if (ngo_linguists_by_language_pair[language_pair])
         revision_sourcing.innerHTML = '<option value="0">Full TWB Community</option><option value="1">Organization Members (Total: ' + ngo_linguists_by_language_pair[language_pair] + ')</option>';
     else {
@@ -279,12 +279,12 @@ revision_sourcing.className = "COL????????????";
     targetLanguageRow.className = "row target-row bottom-line-border";
 
     var targetLanguageCell = document.createElement("div"); // Sub-div for select elements
-    targetLanguageCell.className = "COLLXXX pull-left width-50";
+    targetLanguageCell.className = "col-md-4";
 
     // Create the select elements
     var targetLanguageSelect = document.createElement("select");
-    targetLanguageSelect.style.width = "400px";
-targetLanguageSelect.className = "row target-row bottom-line-border";XXXXXX
+    //targetLanguageSelect.style.width = "400px";
+    targetLanguageSelect.className = "col-md-4";
     targetLanguageSelect.name = "target_language_" + targetCount;
     targetLanguageSelect.id   = "target_language_" + targetCount;
     targetLanguageSelect.innerHTML = document.getElementById("template_language_options").innerHTML;
