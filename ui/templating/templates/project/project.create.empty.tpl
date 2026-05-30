@@ -202,7 +202,7 @@
                                 <i class="fa-solid fa-image fs-2 mb-2"
                                    style="color: var(--core-blue);"></i>
                                 <div class="fw-semibold text-dark-mariam small">
-                                    Click to select or drag & drop
+                                    Click to select
                                 </div>
                                 <div id="image_file_desc" class="text-muted" style="font-size:.75rem;">
                                     {Localisation::getTranslation('common_loading')}
