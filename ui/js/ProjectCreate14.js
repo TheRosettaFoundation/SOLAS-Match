@@ -290,9 +290,12 @@ function target_language_selected(event) {
     targetLanguageSelect.addEventListener("input", target_language_selected);
 
     var taskTypesRow = document.createElement("div"); // Sub-div for task type checkboxes, holds individual divs for each checkox
-NEE SUB ROW OF THIS
     taskTypesRow.id = "task-type-checkboxes";
     taskTypesRow.className = "col-md-8";
+
+    // Nested so we can have a Bootstrap row
+    var taskTypesRow_nested = document.createElement("div");
+    taskTypesRow_nested.className = "row";
 
     var segmentationRequiredDiv = document.createElement("div");
     segmentationRequiredDiv.className = "pull-left proj-task-type-checkbox";
@@ -305,11 +308,10 @@ NEE SUB ROW OF THIS
     segmentationCheckbox.value = "1";
     segmentationCheckbox.setAttribute("onclick", "segmentationClicked(this);");
 
-NEED TO BE NEW DIV WITH CLASS ROW
     var translationRequiredDiv = document.createElement("div");
-NEEDS TO BE 6
     //translationRequiredDiv.className = "pull-left proj-task-type-checkbox";
     translationRequiredDiv.id   = "translationRequiredDiv_" + targetCount;
+    translationRequiredDiv.className = "col-md-6";
 
     var translationCheckbox = document.createElement("input");
     translationCheckbox.setAttribute("type", "checkbox");
@@ -321,9 +323,9 @@ NEEDS TO BE 6
     if (create_memsource == 1 && (true || index != 0)) translationCheckbox.disabled = true;
 
     var proofreadingRequiredDiv = document.createElement("div");
-NEEDS TO BE 6
     //proofreadingRequiredDiv.className = "pull-left proj-task-type-checkbox";
     proofreadingRequiredDiv.id   = "proofreadingRequiredDiv_" + targetCount;
+    proofreadingRequiredDiv.className = "col-md-6";
 
     var proofreadingCheckbox = document.createElement("input");
     proofreadingCheckbox.setAttribute("type", "checkbox");
@@ -369,8 +371,10 @@ NEEDS TO BE 6
 
     // Put each checkbox div into the div that is to contain them all
     // taskTypesRow.appendChild(segmentationRequiredDiv);
-    taskTypesRow.appendChild(translationRequiredDiv);
-    taskTypesRow.appendChild(proofreadingRequiredDiv);
+    taskTypesRow_nested.appendChild(translationRequiredDiv);
+    taskTypesRow_nested.appendChild(proofreadingRequiredDiv);
+
+    taskTypesRow.appendChild(taskTypesRow_nested);
 
     // Put the div encompassing the three checkboxes into the main div
     targetLanguageRow.appendChild(taskTypesRow);
