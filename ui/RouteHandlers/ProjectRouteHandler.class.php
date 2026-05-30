@@ -1516,10 +1516,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
         $userDao = new DAO\UserDao();
 
         $allowed = 1;
-        if (!($adminDao->get_roles($user_id, $org_id)&(SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER)) && !$projectDao->get_entitlement_remaining($org_id, 0)) {
-            $allowed = 0;
-            UserRouteHandler::flashNow('error', 'This organization does not have an active package or has used all available quota for new requests. We’d be happy to help you continue! Please get in touch at <a href="mailto:projects@clearglobal.org?subject=Packages" target="_blank">projects@clearglobal.org</a> to discuss your options.');
-        }
+        if (!($adminDao->get_roles($user_id, $org_id)&(SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER)) && !$projectDao->get_entitlement_remaining($org_id, 0)) $allowed = 0;
 
         if (empty($_SESSION['SESSION_CSRF_KEY'])) {
             $_SESSION['SESSION_CSRF_KEY'] = $this->random_string(10);
