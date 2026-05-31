@@ -1738,6 +1738,9 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                                             $targetCount++;
                                         }
 
+error_log('incremental...');//(**)
+error_log(print_r($ngo_list, 1));//(**)
+error_log(print_r($post, 1));//(**)
                                         if (!empty($ngo_list)) $projectDao->update_project_restriction_JSON($project->getId(), !empty($post['incremental_sourcing']) ? 1 : 0, '[' . implode(',', $ngo_list) . ']');
 
                                         // Create a topic in the Community forum (Discourse)
