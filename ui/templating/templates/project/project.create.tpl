@@ -275,7 +275,7 @@
                     </div>
 
                     {* Source language *}
-                    <div id="sourceLanguageDiv" class="mb-4">
+                    <div id="sourceLanguageDiv" class="col-md-4 mb-4">
                         <label for="sourceLanguageSelect" class="form-label fw-semibold text-dark-mariam">
                             {Localisation::getTranslation('common_source_language')} <span class="text-danger">*</span>
                         </label>
