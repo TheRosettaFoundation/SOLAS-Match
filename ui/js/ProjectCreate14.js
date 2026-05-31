@@ -264,7 +264,7 @@ function target_language_selected(event) {
     // Prepare the div elements that will make up the new target language section.
     var targetLanguageRow = document.createElement("div"); // The main div, subdivided into the language/country
     targetLanguageRow.id = "target_row_" + targetCount;    // selects and task type checkboxes
-    targetLanguageRow.className = "row target-row";
+    targetLanguageRow.className = "row"; // target-row
 
     // Create the select elements
     var targetLanguageSelect = document.createElement("select");
@@ -279,7 +279,7 @@ function target_language_selected(event) {
     translation_sourcing.name = "translation_sourcing_" + targetCount;
     translation_sourcing.id   = "translation_sourcing_" + targetCount;
     translation_sourcing.className = "col-md-4";
-    translation_sourcing.innerHTML = '<option value="0">Full TWB Community</option>';
+    translation_sourcing.innerHTML = '<option value="0">Translation: Full TWB Community</option>';
     translation_sourcing.disabled = true;
     targetLanguageRow.appendChild(translation_sourcing);
 
@@ -287,7 +287,7 @@ function target_language_selected(event) {
     revision_sourcing.name = "revision_sourcing_" + targetCount;
     revision_sourcing.id   = "revision_sourcing_" + targetCount;
     revision_sourcing.className = "col-md-4";
-    revision_sourcing.innerHTML = '<option value="0">Full TWB Community</option>';
+    revision_sourcing.innerHTML = '<option value="0">Revision: Full TWB Community</option>';
     revision_sourcing.disabled = true;
     targetLanguageRow.appendChild(revision_sourcing);
 
