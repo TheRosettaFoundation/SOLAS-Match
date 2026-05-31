@@ -63,7 +63,6 @@ var projectImageFile;
 var projectImageFileName;
 var projectImageFileData;
 
-var segmentationRequired;
 var translationRequired;
 var proofreadingRequired;
 
@@ -239,34 +238,23 @@ function target_language_selected(event) {
     let language_pair = source_code + "|" + event.target.value;
 
     let old_t = document.getElementById("translation_sourcing_" + snapshot_target_count);
-    if (old_t != null) old_t.parentNode.removeChild(old_t);
-
     let old_r = document.getElementById("revision_sourcing_" + snapshot_target_count);
-    if (old_r != null) old_r.parentNode.removeChild(old_r);
 
-    let translation_sourcing = document.createElement("select");
-    translation_sourcing.name = "translation_sourcing_" + snapshot_target_count;
-    translation_sourcing.id   = "translation_sourcing_" + snapshot_target_count;
-//translation_sourcing.className = "col-md-4";
     if (ngo_linguists_by_language_pair[language_pair])
-        translation_sourcing.innerHTML = '<option value="0">Full TWB Community</option><option value="1">Organization Members (Total: ' + ngo_linguists_by_language_pair[language_pair] + ')</option>';
+        old_t.innerHTML = '<option value="0">Full TWB Community</option><option value="1">Organization Members (Total: ' + ngo_linguists_by_language_pair[language_pair] + ')</option>';
+        old_t.disabled = false;
     else {
-        translation_sourcing.innerHTML = '<option value="0">Full TWB Community</option>';
-        translation_sourcing.disabled = true;
+        old_t.innerHTML = '<option value="0">Full TWB Community</option>';
+        old_t.disabled = true;
     }
-    document.getElementById("translationRequiredDiv_" + snapshot_target_count).appendChild(translation_sourcing);
 
-    let revision_sourcing = document.createElement("select");
-    revision_sourcing.name = "revision_sourcing_" + snapshot_target_count;
-    revision_sourcing.id   = "revision_sourcing_" + snapshot_target_count;
-//revision_sourcing.className = "col-md-4";
     if (ngo_linguists_by_language_pair[language_pair])
-        revision_sourcing.innerHTML = '<option value="0">Full TWB Community</option><option value="1">Organization Members (Total: ' + ngo_linguists_by_language_pair[language_pair] + ')</option>';
+        old_r.innerHTML = '<option value="0">Full TWB Community</option><option value="1">Organization Members (Total: ' + ngo_linguists_by_language_pair[language_pair] + ')</option>';
+        old_r.disabled = false;
     else {
-        revision_sourcing.innerHTML = '<option value="0">Full TWB Community</option>';
-        revision_sourcing.disabled = true;
+        old_r.innerHTML = '<option value="0">Full TWB Community</option>';
+        old_r.disabled = true;
     }
-    document.getElementById("proofreadingRequiredDiv_" + snapshot_target_count).appendChild(revision_sourcing);
 }
 
   // Unless the targetCount is less than the maxTargetLanguages, don't do anything.
@@ -276,108 +264,32 @@ function target_language_selected(event) {
     // Prepare the div elements that will make up the new target language section.
     var targetLanguageRow = document.createElement("div"); // The main div, subdivided into the language/country
     targetLanguageRow.id = "target_row_" + targetCount;    // selects and task type checkboxes
-    targetLanguageRow.className = "row target-row bottom-line-border";
-
-    var targetLanguageCell = document.createElement("div"); // Sub-div for select elements
+    targetLanguageRow.className = "row target-row";
 
     // Create the select elements
     var targetLanguageSelect = document.createElement("select");
-    //targetLanguageSelect.style.width = "400px";
-    targetLanguageSelect.className = "col-md-4";
     targetLanguageSelect.name = "target_language_" + targetCount;
     targetLanguageSelect.id   = "target_language_" + targetCount;
+    targetLanguageSelect.className = "col-md-4";
     targetLanguageSelect.innerHTML = document.getElementById("template_language_options").innerHTML;
     targetLanguageSelect.addEventListener("input", target_language_selected);
+    targetLanguageRow.appendChild(targetLanguageSelect);
 
-    var taskTypesRow = document.createElement("div"); // Sub-div for task type checkboxes, holds individual divs for each checkox
-    taskTypesRow.id = "task-type-checkboxes";
-    taskTypesRow.className = "col-md-8";
+    let translation_sourcing = document.createElement("select");
+    translation_sourcing.name = "translation_sourcing_" + targetCount;
+    translation_sourcing.id   = "translation_sourcing_" + targetCount;
+    translation_sourcing.className = "col-md-4";
+    translation_sourcing.innerHTML = '<option value="0">Full TWB Community</option>';
+    translation_sourcing.disabled = true;
+    targetLanguageRow.appendChild(translation_sourcing);
 
-    // Nested so we can have a Bootstrap row
-    var taskTypesRow_nested = document.createElement("div");
-    taskTypesRow_nested.className = "row";
-
-    var segmentationRequiredDiv = document.createElement("div");
-    segmentationRequiredDiv.className = "pull-left proj-task-type-checkbox";
-
-    var segmentationCheckbox = document.createElement("input");
-    segmentationCheckbox.setAttribute("type", "checkbox");
-    segmentationCheckbox.title = parameters.getTranslation("project_create_10");
-    segmentationCheckbox.name = "segmentation_" + targetCount;
-    segmentationCheckbox.id   = "segmentation_" + targetCount;
-    segmentationCheckbox.value = "1";
-    segmentationCheckbox.setAttribute("onclick", "segmentationClicked(this);");
-
-    var translationRequiredDiv = document.createElement("div");
-    //translationRequiredDiv.className = "pull-left proj-task-type-checkbox";
-    translationRequiredDiv.id   = "translationRequiredDiv_" + targetCount;
-    translationRequiredDiv.className = "col-md-6";
-
-    var translationCheckbox = document.createElement("input");
-    translationCheckbox.setAttribute("type", "checkbox");
-    translationCheckbox.title = parameters.getTranslation("common_create_a_translation_task_for_volunteer_translators_to_pick_up");
-    translationCheckbox.name = "translation_" + targetCount;
-    translationCheckbox.id   = "translation_" + targetCount;
-    translationCheckbox.value = "1";
-    translationCheckbox.checked = true;
-    if (create_memsource == 1 && (true || index != 0)) translationCheckbox.disabled = true;
-
-    var proofreadingRequiredDiv = document.createElement("div");
-    //proofreadingRequiredDiv.className = "pull-left proj-task-type-checkbox";
-    proofreadingRequiredDiv.id   = "proofreadingRequiredDiv_" + targetCount;
-    proofreadingRequiredDiv.className = "col-md-6";
-
-    var proofreadingCheckbox = document.createElement("input");
-    proofreadingCheckbox.setAttribute("type", "checkbox");
-    proofreadingCheckbox.title = parameters.getTranslation("common_create_a_proofreading_task_for_evaluating_the_translation_provided_by_a_volunteer");
-    proofreadingCheckbox.name = "proofreading_" + targetCount;
-    proofreadingCheckbox.id = "proofreading_" + targetCount;
-    proofreadingCheckbox.value = "1";
-    proofreadingCheckbox.checked = true;
-    if (create_memsource == 1 && (true || index != 0)) proofreadingCheckbox.disabled = true;
-
-    if (true || !userIsAdmin) {
-      translationCheckbox.name = "disabled_translation_" + targetCount;
-      translationCheckbox.disabled = true;
-
-      proofreadingCheckbox.name = "disabled_proofreading_" + targetCount;
-      proofreadingCheckbox.disabled = true;
-
-      var forced_translationCheckbox = document.createElement("input");
-      forced_translationCheckbox.setAttribute("type", "hidden");
-      forced_translationCheckbox.name = "translation_" + targetCount;
-      forced_translationCheckbox.value = "1";
-      translationRequiredDiv.appendChild(forced_translationCheckbox);
-
-      var forced_proofreadingCheckbox = document.createElement("input");
-      forced_proofreadingCheckbox.setAttribute("type", "hidden");
-      forced_proofreadingCheckbox.name = "proofreading_" + targetCount;
-      forced_proofreadingCheckbox.value = "1";
-      proofreadingRequiredDiv.appendChild(forced_proofreadingCheckbox);
-    }
-
-    // Put the Select Elements into their div
-    targetLanguageCell.appendChild(targetLanguageSelect);
-
-    // Put the Select Elements' div into the main div
-    targetLanguageRow.appendChild(targetLanguageCell);
-
-    // Put the checkbox Input Elements into their own divs
-    segmentationRequiredDiv.appendChild(segmentationCheckbox);
-    if (create_memsource != 1 || (false && index == 0)) {
-    translationRequiredDiv.appendChild(translationCheckbox);
-    proofreadingRequiredDiv.appendChild(proofreadingCheckbox);
-    }
-
-    // Put each checkbox div into the div that is to contain them all
-    // taskTypesRow.appendChild(segmentationRequiredDiv);
-    taskTypesRow_nested.appendChild(translationRequiredDiv);
-    taskTypesRow_nested.appendChild(proofreadingRequiredDiv);
-
-    taskTypesRow.appendChild(taskTypesRow_nested);
-
-    // Put the div encompassing the three checkboxes into the main div
-    targetLanguageRow.appendChild(taskTypesRow);
+    let revision_sourcing = document.createElement("select");
+    revision_sourcing.name = "revision_sourcing_" + targetCount;
+    revision_sourcing.id   = "revision_sourcing_" + targetCount;
+    revision_sourcing.className = "col-md-4";
+    revision_sourcing.innerHTML = '<option value="0">Full TWB Community</option>';
+    revision_sourcing.disabled = true;
+    targetLanguageRow.appendChild(revision_sourcing);
 
     // Add the completed target language "row" to the div containing all previously added target language "rows."
     document.getElementById("targetLangSelectDiv").appendChild(targetLanguageRow);
@@ -580,22 +492,6 @@ function validateLocalValues()
       success = false;
     }
     project.wordCount = q;
-
-    // If word count is greater than 5000, and segmentation is not selected, display warning message to user.
-    if (project.wordCount > 5000) {
-      var i = 0;
-      var segmentationMissing = false;
-      while (false && i < targetCount && !segmentationMissing) {
-        var segmentationCheckbox = document.getElementById("segmentation_" + i);
-        if (!segmentationCheckbox.checked) {
-          segmentationMissing = true;
-        }
-        i++;
-      }
-      if (segmentationMissing && !window.confirm(parameters.getTranslation("project_create_22"))) {
-        success = false;
-      }
-    }
   } else {
     // Word count is not set
     // wordCountError = parameters.getTranslation("project_create_27");
@@ -663,7 +559,6 @@ function validateLocalValues()
 
   var encounteredSourceLocale = project.sourceLocale.languageCode.replace("#", "");
   var encounteredLocales = [];
-  segmentationRequired   = [];
   translationRequired    = [];
   proofreadingRequired   = [];
   targetLanguageCode     = [];
@@ -671,8 +566,6 @@ function validateLocalValues()
   targetCountryCode      = [];
   targetCountryCountry   = [];
   for (var i = 0; i < targetCount; i++) {
-    // segmentationRequired[i] = document.getElementById("segmentation_" + i).checked;
-    segmentationRequired[i] = false;
     if (create_memsource != 1 || (false && i == 0)) {
     translationRequired [i] = document.getElementById("translation_" + i).checked;
     proofreadingRequired[i] = document.getElementById("proofreading_" + i).checked;
@@ -682,7 +575,7 @@ function validateLocalValues()
     }
 
     // If no task type is set, display error message
-    if (!segmentationRequired[i] && !translationRequired[i] && !proofreadingRequired[i]) {
+    if (!translationRequired[i] && !proofreadingRequired[i]) {
       taskError = parameters.getTranslation("project_create_29");
       success = false;
     }
@@ -824,27 +717,6 @@ function validateImageFileInput()
   } else {
     // No file provided
     return true;
-  }
-}
-
-/**
- * Called when the segmentation checkbox is clicked for a target language, disabling the
- * translation and proofreading checkboxes.
- */
-function segmentationClicked(target)
-{
-  var index = parseInt(target.id.substring(target.id.indexOf("_") + 1));
-
-  var transCheckbox = document.getElementById("translation_" + index);
-  var proofCheckbox = document.getElementById("proofreading_" + index);
-  if (target.checked) {
-    transCheckbox.checked = false;
-    transCheckbox.disabled = true;
-    proofCheckbox.checked = false;
-    proofCheckbox.disabled = true;
-  } else {
-    transCheckbox.disabled = false;
-    proofCheckbox.disabled = false;
   }
 }
 

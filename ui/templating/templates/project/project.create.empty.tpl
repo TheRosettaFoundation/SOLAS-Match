@@ -341,7 +341,7 @@
 {* ── Tempus Dominus 6 deadline picker ────────────────────────────────────────── *}
 {*
     Bridge between Tempus Dominus and the hidden <select> elements that
-    ProjectCreate14.js reads in validateForm() to compute project_deadline.
+    project_create_empty.js reads in validateForm() to compute project_deadline.
 
     On init   : read deadline_timestamp → pre-fill picker.
     On change : update hidden selects + call selectedMonthChanged()

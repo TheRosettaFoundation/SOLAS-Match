@@ -1,7 +1,7 @@
 {include file="new_header.tpl"}
 {* Editor Hint: ¿áéíóú *}
 
-{* ── Hidden parameters consumed by ProjectCreate14.js ───────────────────────── *}
+{* ── Hidden parameters consumed by ProjectCreate15.js ───────────────────────── *}
 <span class="d-none">
     <div id="siteLocation">{$siteLocation}</div>
     <div id="siteAPI">{$siteAPI}</div>
@@ -23,7 +23,7 @@
     <div id="template1">{$template1}</div>
     <div id="template2">{$template2}</div>
 
-    {* Deadline selects — read/written by ProjectCreate14.js validateForm(); not submitted *}
+    {* Deadline selects — read/written by ProjectCreate15.js validateForm(); not submitted *}
     <select id="selectedDay"   name="selectedDay"></select>
     <select id="selectedMonth" name="selectedMonth" onchange="selectedMonthChanged()">
         {html_options options=$month_list selected=$selected_month}
@@ -287,7 +287,7 @@
                         </select>
                     </div>
 
-                    {* Target languages — rows injected here by ProjectCreate14.js *}
+                    {* Target languages — rows injected here by ProjectCreate15.js *}
                     <div class="d-flex justify-content-between align-items-center mb-2">
                         <label class="form-label fw-semibold text-dark-mariam mb-0">
                             {Localisation::getTranslation('project_create_target_languages')} <span class="text-danger">*</span>
@@ -313,7 +313,7 @@
                         {Localisation::getTranslation('common_loading')}
                     </div>
 
-                    {* ProjectCreate14.js appends .target-row divs here *}
+                    {* ProjectCreate15.js appends .target-row divs here *}
                     <div id="targetLangSelectDiv"></div>
 
                     <div id="placeholder_for_maxTargetsReached" class="mt-2"></div>
@@ -436,7 +436,7 @@
 {* /container-xxl *}
 
 
-{* ── ngo_linguists_by_language_pair — consumed by ProjectCreate14.js ─────────── *}
+{* ── ngo_linguists_by_language_pair — consumed by ProjectCreate15.js ─────────── *}
 <script>
     var ngo_linguists_by_language_pair = [];
     {foreach from=$ngo_linguists_by_language_pair key=language_pair item=ngo_linguists}
@@ -447,7 +447,7 @@
 {* ── Tempus Dominus 6 deadline picker ────────────────────────────────────────── *}
 {*
     Bridge between Tempus Dominus and the hidden <select> elements that
-    ProjectCreate14.js reads in validateForm() to compute project_deadline.
+    ProjectCreate15.js reads in validateForm() to compute project_deadline.
 
     On init   : read deadline_timestamp → pre-fill picker.
     On change : update hidden selects + call selectedMonthChanged()

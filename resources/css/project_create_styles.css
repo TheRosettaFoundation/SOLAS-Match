@@ -44,7 +44,7 @@
 [data-bs-theme=dark] .upload-zone { border-color: #495057; }
 [data-bs-theme=dark] .upload-zone:hover { border-color: var(--twb-accent); }
 
-/* ── JS-injected target language rows (.target-row added by ProjectCreate14.js) */
+/* ── JS-injected target language rows (.target-row added by ProjectCreate15.js) */
 .target-row {
     display: flex;
     flex-wrap: wrap;
@@ -89,9 +89,6 @@
     font-size: 0.8rem;
     padding: 0.2rem 0.4rem;
 }
-/* Legacy pull-left/width-50 — used by JS for the task-type checkbox sub-divs */
-#projFormBottom .pull-left { float: left; }
-.bottom-line-border { /* spacing handled by .target-row + .target-row sibling rule */ }
 
 /* ── Admin badge ────────────────────────────────────────────────────────────── */
 .badge-admin {
