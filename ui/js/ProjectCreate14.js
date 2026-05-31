@@ -264,7 +264,7 @@ function target_language_selected(event) {
     // Prepare the div elements that will make up the new target language section.
     var targetLanguageRow = document.createElement("div"); // The main div, subdivided into the language/country
     targetLanguageRow.id = "target_row_" + targetCount;    // selects and task type checkboxes
-    targetLanguageRow.className = "row g-4"; // target-row
+    targetLanguageRow.className = "row target-row";
 
     // Create the select elements
     var targetLanguageSelect = document.createElement("select");
