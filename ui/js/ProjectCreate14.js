@@ -240,18 +240,18 @@ function target_language_selected(event) {
     let old_t = document.getElementById("translation_sourcing_" + snapshot_target_count);
     let old_r = document.getElementById("revision_sourcing_" + snapshot_target_count);
 
-    if (ngo_linguists_by_language_pair[language_pair])
+    if (ngo_linguists_by_language_pair[language_pair]) {
         old_t.innerHTML = '<option value="0">Full TWB Community</option><option value="1">Organization Members (Total: ' + ngo_linguists_by_language_pair[language_pair] + ')</option>';
         old_t.disabled = false;
-    else {
+    } else {
         old_t.innerHTML = '<option value="0">Full TWB Community</option>';
         old_t.disabled = true;
     }
 
-    if (ngo_linguists_by_language_pair[language_pair])
+    if (ngo_linguists_by_language_pair[language_pair]) {
         old_r.innerHTML = '<option value="0">Full TWB Community</option><option value="1">Organization Members (Total: ' + ngo_linguists_by_language_pair[language_pair] + ')</option>';
         old_r.disabled = false;
-    else {
+    } else {
         old_r.innerHTML = '<option value="0">Full TWB Community</option>';
         old_r.disabled = true;
     }
