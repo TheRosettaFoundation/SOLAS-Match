@@ -768,8 +768,14 @@ class UserRouteHandler
 (**)call [GET User data from Tarjimly using email]
 if Tarjimly email exists {
     if not verified yet on Tarjimly... $error = 'User is not verified on Tarjimly'; ... bypass
+DO DIRECTLY...
+DO full code (if overlap with next mereg later)
     if Tarjimly has returned names, these override user entered data
     create user without verification
+    CALL [UPDATE external ID on Tarjimly]
+
+    Login User in TWB [Password verification directly logs in]
+    [check existing code path for previous step]
 }
 
 create User etc. 
