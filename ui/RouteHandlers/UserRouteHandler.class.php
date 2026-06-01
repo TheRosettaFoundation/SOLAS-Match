@@ -772,9 +772,48 @@ DO DIRECTLY...
 DO full code (if overlap with next mereg later)
     if Tarjimly has returned names, these override user entered data
     create user without verification
+[[[
+if ($userDao->register($post['email'], $post['password'], $post['first_name'], $post['last_name'], $communications_consent)) {
+
+        error_log("apiRegister() in register() " . $data->getEmail());
+
+
+        $userId = null;
+        $nativeLanguageCode = null;
+        $nativeCountryCode = null;
+
++-------+-----------------+--------------------------------------+----------------------------------------------------------------------------------------------------------------------------------+-----------+-------------+------------+------------+---------------------+
+| id    | display-name    | email                                | password                                                                                                                         | biography | language_id | country_id | nonce      | created-time        |
++-------+-----------------+--------------------------------------+----------------------------------------------------------------------------------------------------------------------------------+-----------+-------------+------------+------------+---------------------+
+| 26287 | jkkdd           | jkkdd@kkjky.com                      | 4c99188bbe021fc14a3cdf1ce5bff43be91e1f2dfe907623089c9e53e2c0f822ac38c4b6a756542c07330777a20de48dfdd83afcc5b047f5ef2f994c70713ccd | NULL      |        NULL |       NULL | 1840629206 | 2026-05-28 10:01:17 |
+
+
+        $args = Lib\PDOWrapper::cleanseNullOrWrapStr($user->getEmail()).",".
+            Lib\PDOWrapper::cleanseNullOrWrapStr($user->getNonce()).",".
+            Lib\PDOWrapper::cleanseNullOrWrapStr($user->getPassword()).",".
+            Lib\PDOWrapper::cleanseNullOrWrapStr($user->getBiography()).",".
+WORRY LAYETER I CANNOT SEE WHERE dispaly name is set as first part of email after @
+            Lib\PDOWrapper::cleanseNullOrWrapStr($user->getDisplayName()).",".
+            Lib\PDOWrapper::cleanseNullOrWrapStr($nativeLanguageCode).",".
+            Lib\PDOWrapper::cleanseNullOrWrapStr($nativeCountryCode).",".
+            Lib\PDOWrapper::cleanseNull($userId);
+        $result = Lib\PDOWrapper::call('userInsertAndUpdate', $args);
+$user_id = $result[0]['id'];
+
+        Lib\PDOWrapper::call('create_empty_role', Lib\PDOWrapper::cleanse($user->getId()));
+
+        $userInfo = new Common\Protobufs\Models\UserPersonalInformation();
+        $english = DAO\LanguageDao::getLanguage(null, "en");
+        $userInfo->setUserId($newUser->getId());
+        $userInfo->setLanguagePreference($english->getId());
+        $userInfo->setFirstName($data->getFirstName());
+        $userInfo->setLastName($data->getLastName());
+        DAO\UserDao::insert_communications_consent($newUser->getId(), $data->getCommunicationsConsent());
+        $personal_info = DAO\UserDao::savePersonalInfo($userInfo);
+]]]
     CALL [UPDATE external ID on Tarjimly]
 
-    Login User in TWB [Password verification directly logs in]
+    Login User in TWB [Password verification directly logs in]???
     [check existing code path for previous step]
 }
 
