@@ -764,6 +764,22 @@ class UserRouteHandler
 
             if (is_null($error)) {
                 array_key_exists('newsletter_consent', $post) ? $communications_consent = 1 : $communications_consent = 0;
+[[WIP
+(**)call [GET User data from Tarjimly using email]
+if Tarjimly email exists {
+    if not verified yet on Tarjimly... $error = 'User is not verified on Tarjimly'; ... bypass
+    if Tarjimly has returned names, these override user entered data
+    create user without verification
+}
+
+create User etc. 
+NOTE: this has to do full email verification using existing TWB Platform code
+call [GET User data from Tarjimly using email] again
+if already on Tarjimly call [UPDATE external ID on Tarjimly]
+else call [CREATE User on Tarjimly]
+Login User in TWB [Password verification directly logs in]
+[check existing code path for previous step]
+]]
                 if ($userDao->register($post['email'], $post['password'], $post['first_name'], $post['last_name'], $communications_consent)) {
                     UserRouteHandler::flashNow(
                         "success",
