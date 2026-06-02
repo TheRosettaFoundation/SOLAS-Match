@@ -766,16 +766,16 @@ class UserRouteHandler
                 array_key_exists('newsletter_consent', $post) ? $communications_consent = 1 : $communications_consent = 0;
 [[WIP
 (**)call [GET User data from Tarjimly using email]
-if Tarjimly email exists {
-    if not verified yet on Tarjimly... $error = 'User is not verified on Tarjimly'; ... bypass
-DO DIRECTLY...
-DO full code (if overlap with next mereg later)
-    if Tarjimly has returned names, these override user entered data
-    create user without verification
+(**)COMPARE LOGIC NESTING WITH twb.txt
+                if Tarjimly email exists {
+                    if not verified yet on Tarjimly {
+                        $error = 'User is not verified on Tarjimly';
+                    } else {
+                        if Tarjimly has returned names, these override user entered data
+                        create user without verification
 [[[
-if ($userDao->register($post['email'], $post['password'], $post['first_name'], $post['last_name'], $communications_consent)) {
-
-        error_log("apiRegister() in register() " . $data->getEmail());
+//$userDao->register($post['email'], $post['password'], $post['first_name'], $post['last_name'], $communications_consent)
+//error_log("apiRegister() in register() " . $data->getEmail());
 
         $result = LibAPI\PDOWrapper::call('userInsertAndUpdate', LibAPI\PDOWrapper::cleanseNullOrWrapStr($email) . ",0,'',null,null,null,null,null");
         $user_id = $result[0]['id'];
@@ -789,6 +789,7 @@ if ($userDao->register($post['email'], $post['password'], $post['first_name'], $
     Login User in TWB [Password verification directly logs in]???
     [check existing code path for previous step]
 }
+} else {
 
 create User etc. 
 NOTE: this has to do full email verification using existing TWB Platform code
@@ -797,6 +798,8 @@ if already on Tarjimly call [UPDATE external ID on Tarjimly]
 else call [CREATE User on Tarjimly]
 Login User in TWB [Password verification directly logs in]
 [check existing code path for previous step]
+}
+}
 ]]
                 if ($userDao->register($post['email'], $post['password'], $post['first_name'], $post['last_name'], $communications_consent)) {
                     UserRouteHandler::flashNow(
