@@ -22,7 +22,6 @@ var descriptionError;
 var wordCountError;
 var deadlineError;
 var impactError;
-var tagsError;
 var referenceError;
 var taskError;
 var project_create_set_source_language;
@@ -43,7 +42,6 @@ var title;
 var description;
 var impact;
 var reference;
-var tagList;
 var selectedMonth;
 var selectedYear;
 var selectedDay;
@@ -96,7 +94,7 @@ function set_errors_for_submission(id, id_for_div)
     project_create_set_source_country != null ||
     project_create_set_target_language != null ||
     project_create_set_target_country != null ||
-    tagsError != null || referenceError != null || taskError != null || duplicateLocale != null || fileError != null || imageError != null) {
+    referenceError != null || taskError != null || duplicateLocale != null || fileError != null || imageError != null) {
     html += '<div id="' + id_for_div + '" class="alert alert-error pull-left">';
       html += '<h3>' + parameters.getTranslation('common_please_correct_errors') + ':</h3>';
       html += '<ol>';
@@ -114,9 +112,6 @@ function set_errors_for_submission(id, id_for_div)
         }
         if (deadlineError != null) {
           html += '<li>' + deadlineError + '</li>';
-        }
-        if (tagsError != null) {
-          html += '<li>' + tagsError + '</li>';
         }
         if (impactError != null) {
           html += '<li>' + impactError + '</li>';
@@ -241,18 +236,18 @@ function target_language_selected(event) {
     let old_r = document.getElementById("revision_sourcing_" + snapshot_target_count);
 
     if (ngo_linguists_by_language_pair[language_pair]) {
-        old_t.innerHTML = '<option value="0">Trans: Full TWB Community</option><option value="1">Organization Members (Total: ' + ngo_linguists_by_language_pair[language_pair] + ')</option>';
+        old_t.innerHTML = '<option value="0">TRA: Full TWB Community</option><option value="1">Organization Members (Total: ' + ngo_linguists_by_language_pair[language_pair] + ')</option>';
         old_t.disabled = false;
     } else {
-        old_t.innerHTML = '<option value="0">Trans: Full TWB Community</option>';
+        old_t.innerHTML = '<option value="0">TRA: Full TWB Community</option>';
         old_t.disabled = true;
     }
 
     if (ngo_linguists_by_language_pair[language_pair]) {
-        old_r.innerHTML = '<option value="0">Rev: Full TWB Community</option><option value="1">Organization Members (Total: ' + ngo_linguists_by_language_pair[language_pair] + ')</option>';
+        old_r.innerHTML = '<option value="0">REV: Full TWB Community</option><option value="1">Organization Members (Total: ' + ngo_linguists_by_language_pair[language_pair] + ')</option>';
         old_r.disabled = false;
     } else {
-        old_r.innerHTML = '<option value="0">Rev: Full TWB Community</option>';
+        old_r.innerHTML = '<option value="0">REV: Full TWB Community</option>';
         old_r.disabled = true;
     }
 }
@@ -279,7 +274,7 @@ function target_language_selected(event) {
     translation_sourcing.name = "translation_sourcing_" + targetCount;
     translation_sourcing.id   = "translation_sourcing_" + targetCount;
     translation_sourcing.className = "col-md-4";
-    translation_sourcing.innerHTML = '<option value="0">Trans: Full TWB Community</option>';
+    translation_sourcing.innerHTML = '<option value="0">TRA: Full TWB Community</option>';
     translation_sourcing.disabled = true;
     targetLanguageRow.appendChild(translation_sourcing);
 
@@ -287,7 +282,7 @@ function target_language_selected(event) {
     revision_sourcing.name = "revision_sourcing_" + targetCount;
     revision_sourcing.id   = "revision_sourcing_" + targetCount;
     revision_sourcing.className = "col-md-4";
-    revision_sourcing.innerHTML = '<option value="0">Rev: Full TWB Community</option>';
+    revision_sourcing.innerHTML = '<option value="0">REV: Full TWB Community</option>';
     revision_sourcing.disabled = true;
     targetLanguageRow.appendChild(revision_sourcing);
 
@@ -374,7 +369,6 @@ function validateForm()
   wordCountError = null;
   deadlineError = null;
   impactError = null;
-  tagsError = null;
   referenceError = null;
   taskError = null;
   project_create_set_source_language = null;
@@ -391,7 +385,6 @@ function validateForm()
   description    = document.getElementById("project_description").value
   impact         = document.getElementById("project_impact").value
   reference      = document.getElementById("project_reference").value;
-  tagList        = document.getElementById("tagList").value;
   selectedMonth  = document.getElementById("selectedMonth").value;
   selectedYear   = document.getElementById("selectedYear").value;
   selectedDay    = document.getElementById("selectedDay").value;
@@ -416,14 +409,6 @@ function validateForm()
   sourceLocale.languageName = $("#sourceLanguageSelect option:selected").text();
   sourceLocale.languageCode = document.getElementById("sourceLanguageSelect").value;
   project.sourceLocale = sourceLocale;
-
-  project.tag = [];
-  if (tagList.length > 0) {
-    var tagListParsed = parseTagsInput(tagList);
-    if (tagListParsed.length > 0) {
-      project.tag = tagListParsed;
-    }
-  }
 
   projectImageFile = null;
   projectImageFileData = null;
@@ -496,22 +481,6 @@ function validateLocalValues()
     // Word count is not set
     // wordCountError = parameters.getTranslation("project_create_27");
     // success = false;
-  }
-
-  if (!validateTagList(tagList)) {
-    // Invalid tags detected, set error message
-    tagsError = parameters.getTranslation('project_create_invalid_tags');
-    success = false;
-  } else {
-    var list = tagList.split(" ");
-    for (var i = 0; i < list.length; i++) {
-      if (list[i].length > 50) {
-        // One of the tags is too long, set error message
-        tagsError = parameters.getTranslation("project_create_error_tags_too_long");
-        success = false;
-        break;
-      }
-    }
   }
 
   // Parse project deadline info
@@ -766,31 +735,6 @@ function set_options_for_days_in_month(month, year)
   }
 
   document.getElementById("selectedDay").innerHTML = options_list;
-}
-
-/**
- * Validates user input of text for [Tag]s to catch disallowed characters.
- */
-function validateTagList(tagList)
-{
-  var r = new RegExp('[^a-z0-9\\-\\s]');
-  return !tagList.match(r);
-}
-
-/**
- * Parse the project tags from the text input.
- */
-function parseTagsInput(tags)
-{
-  var labels = tags.trim().split(" ");
-  var tagArray = [];
-  var j = 0;
-  for (var i = 0; i < labels.length; i++) {
-    if (labels[i].length > 0) {
-      tagArray[j++] = {id : null, label: labels[i]};
-    }
-  }
-  return tagArray;
 }
 
 /**

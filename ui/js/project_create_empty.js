@@ -18,7 +18,6 @@ var titleError;
 var descriptionError;
 var deadlineError;
 var impactError;
-var tagsError;
 var referenceError;
 var project_create_set_source_language;
 var project_create_set_source_country;
@@ -29,7 +28,6 @@ var title;
 var description;
 var impact;
 var reference;
-var tagList;
 var selectedMonth;
 var selectedYear;
 var selectedDay;
@@ -71,7 +69,7 @@ function set_errors_for_submission(id, id_for_div)
     deadlineError != null || impactError != null ||
     project_create_set_source_language != null ||
     project_create_set_source_country != null ||
-    tagsError != null || referenceError != null || imageError != null) {
+    referenceError != null || imageError != null) {
     html += '<div id="' + id_for_div + '" class="alert alert-error pull-left">';
       html += '<h3>' + parameters.getTranslation('common_please_correct_errors') + ':</h3>';
       html += '<ol>';
@@ -83,9 +81,6 @@ function set_errors_for_submission(id, id_for_div)
         }
         if (deadlineError != null) {
           html += '<li>' + deadlineError + '</li>';
-        }
-        if (tagsError != null) {
-          html += '<li>' + tagsError + '</li>';
         }
         if (impactError != null) {
           html += '<li>' + impactError + '</li>';
@@ -159,7 +154,6 @@ function validateForm()
   descriptionError = null;
   deadlineError = null;
   impactError = null;
-  tagsError = null;
   referenceError = null;
   project_create_set_source_language = null;
   project_create_set_source_country = null;
@@ -170,7 +164,6 @@ function validateForm()
   description    = document.getElementById("project_description").value
   impact         = document.getElementById("project_impact").value
   reference      = document.getElementById("project_reference").value;
-  tagList        = document.getElementById("tagList").value;
   selectedMonth  = document.getElementById("selectedMonth").value;
   selectedYear   = document.getElementById("selectedYear").value;
   selectedDay    = document.getElementById("selectedDay").value;
@@ -193,14 +186,6 @@ function validateForm()
   sourceLocale.languageName = $("#sourceLanguageSelect option:selected").text();
   sourceLocale.languageCode = document.getElementById("sourceLanguageSelect").value;
   project.sourceLocale = sourceLocale;
-
-  project.tag = [];
-  if (tagList.length > 0) {
-    var tagListParsed = parseTagsInput(tagList);
-    if (tagListParsed.length > 0) {
-      project.tag = tagListParsed;
-    }
-  }
 
   projectImageFile = null;
   projectImageFileData = null;
@@ -258,22 +243,6 @@ function validateLocalValues()
       // String did not match pattern, it is not a URL
       referenceError = parameters.getTranslation("project_create_error_reference_invalid");
       success = false;
-    }
-  }
-
-  if (!validateTagList(tagList)) {
-    // Invalid tags detected, set error message
-    tagsError = parameters.getTranslation('project_create_invalid_tags');
-    success = false;
-  } else {
-    var list = tagList.split(" ");
-    for (var i = 0; i < list.length; i++) {
-      if (list[i].length > 50) {
-        // One of the tags is too long, set error message
-        tagsError = parameters.getTranslation("project_create_error_tags_too_long");
-        success = false;
-        break;
-      }
     }
   }
 
@@ -422,31 +391,6 @@ function set_options_for_days_in_month(month, year)
   }
 
   document.getElementById("selectedDay").innerHTML = options_list;
-}
-
-/**
- * Validates user input of text for [Tag]s to catch disallowed characters.
- */
-function validateTagList(tagList)
-{
-  var r = new RegExp('[^a-z0-9\\-\\s]');
-  return !tagList.match(r);
-}
-
-/**
- * Parse the project tags from the text input.
- */
-function parseTagsInput(tags)
-{
-  var labels = tags.trim().split(" ");
-  var tagArray = [];
-  var j = 0;
-  for (var i = 0; i < labels.length; i++) {
-    if (labels[i].length > 0) {
-      tagArray[j++] = {id : null, label: labels[i]};
-    }
-  }
-  return tagArray;
 }
 
 /**

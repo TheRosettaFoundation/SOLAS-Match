@@ -1552,18 +1552,6 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                 $project->setOrganisationId($org_id);
                 $project->setCreatedTime(gmdate('Y-m-d H:i:s'));
 
-                $project->clearTag();
-                if (!empty($post['tagList'])) {
-                    $tagLabels = explode(' ', $post['tagList']);
-                    foreach ($tagLabels as $tagLabel) {
-                        $tagLabel = trim($tagLabel);
-                        if (!empty($tagLabel)) {
-                            $tag = new Common\Protobufs\Models\Tag();
-                            $tag->setLabel($tagLabel);
-                            $project->addTag($tag);
-                        }
-                    }
-                }
                 if (!empty($post['earthquake'])) {
                     $tag = new Common\Protobufs\Models\Tag();
                     $tag->setLabel('2023-turkeysyria');
@@ -1880,18 +1868,6 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                 $project->setOrganisationId($org_id);
                 $project->setCreatedTime(gmdate('Y-m-d H:i:s'));
 
-                $project->clearTag();
-                if (!empty($post['tagList'])) {
-                    $tagLabels = explode(' ', $post['tagList']);
-                    foreach ($tagLabels as $tagLabel) {
-                        $tagLabel = trim($tagLabel);
-                        if (!empty($tagLabel)) {
-                            $tag = new Common\Protobufs\Models\Tag();
-                            $tag->setLabel($tagLabel);
-                            $project->addTag($tag);
-                        }
-                    }
-                }
                 if (!empty($post['earthquake'])) {
                     $tag = new Common\Protobufs\Models\Tag();
                     $tag->setLabel('2023-turkeysyria');
