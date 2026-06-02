@@ -265,7 +265,7 @@
 
                     {* Incremental Matching — only when org has NGO linguists *}
                     {if !empty($ngo_linguists_by_language_pair)}
-                    <div class="form-check form-switch mb-0">
+                    <div class="form-check form-switch mb-4">
                         <input class="form-check-input" type="checkbox" role="switch"
                                name="incremental_sourcing" id="incremental_sourcing"
                                value="1" checked="checked">
