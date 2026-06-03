@@ -1552,18 +1552,6 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                 $project->setOrganisationId($org_id);
                 $project->setCreatedTime(gmdate('Y-m-d H:i:s'));
 
-                $project->clearTag();
-                if (!empty($post['tagList'])) {
-                    $tagLabels = explode(' ', $post['tagList']);
-                    foreach ($tagLabels as $tagLabel) {
-                        $tagLabel = trim($tagLabel);
-                        if (!empty($tagLabel)) {
-                            $tag = new Common\Protobufs\Models\Tag();
-                            $tag->setLabel($tagLabel);
-                            $project->addTag($tag);
-                        }
-                    }
-                }
                 if (!empty($post['earthquake'])) {
                     $tag = new Common\Protobufs\Models\Tag();
                     $tag->setLabel('2023-turkeysyria');
@@ -1806,7 +1794,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
         $deadline_timestamp = gmmktime($selected_hour, $selected_minute, 0, $selected_month, $selected_day, $selected_year);
 
         $extraScripts  = "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/Parameters.js\"></script>";
-        $extraScripts .= "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/ProjectCreate14.js\"></script>";
+        $extraScripts .= "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/ProjectCreate15.js\"></script>";
 
         $template_data = array_merge($template_data, array(
             "siteLocation"          => Common\Lib\Settings::get('site.location'),
@@ -1880,18 +1868,6 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                 $project->setOrganisationId($org_id);
                 $project->setCreatedTime(gmdate('Y-m-d H:i:s'));
 
-                $project->clearTag();
-                if (!empty($post['tagList'])) {
-                    $tagLabels = explode(' ', $post['tagList']);
-                    foreach ($tagLabels as $tagLabel) {
-                        $tagLabel = trim($tagLabel);
-                        if (!empty($tagLabel)) {
-                            $tag = new Common\Protobufs\Models\Tag();
-                            $tag->setLabel($tagLabel);
-                            $project->addTag($tag);
-                        }
-                    }
-                }
                 if (!empty($post['earthquake'])) {
                     $tag = new Common\Protobufs\Models\Tag();
                     $tag->setLabel('2023-turkeysyria');
@@ -2074,7 +2050,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
         $deadline_timestamp = gmmktime($selected_hour, $selected_minute, 0, $selected_month, $selected_day, $selected_year);
 
         $extraScripts  = "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/Parameters.js\"></script>";
-        $extraScripts .= "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/project_create_empty.js\"></script>";
+        $extraScripts .= "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/project_create_empty1.js\"></script>";
 
         $template_data = array_merge($template_data, [
             "siteLocation"          => Common\Lib\Settings::get('site.location'),

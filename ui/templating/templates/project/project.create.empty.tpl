@@ -1,7 +1,7 @@
 {include file="new_header.tpl"}
 {* Editor Hint: ¿áéíóú *}
 
-{* ── Hidden parameters consumed by project_create_empty.js ───────────────────────── *}
+{* ── Hidden parameters consumed by project_create_empty1.js ───────────────────────── *}
 <span class="d-none">
     <div id="siteLocation">{$siteLocation}</div>
     <div id="siteAPI">{$siteAPI}</div>
@@ -18,7 +18,7 @@
         {/foreach}
     </div>
 
-    {* Deadline selects — read/written by project_create_empty.js validateForm(); not submitted *}
+    {* Deadline selects — read/written by project_create_empty1.js validateForm(); not submitted *}
     <select id="selectedDay"   name="selectedDay"></select>
     <select id="selectedMonth" name="selectedMonth" onchange="selectedMonthChanged()">
         {html_options options=$month_list selected=$selected_month}
@@ -80,10 +80,10 @@
                     <a href="{urlFor name="ngo_projects" options="org_id.{$org_id}"}" class="text-decoration-none twb-core-blue">Projects</a>
                     <i class="fa-solid fa-chevron-right mx-1 text-muted" style="font-size:.65rem;"></i>
                 </li>
-                <li class="breadcrumb-item active text-muted" aria-current="page">Create An Empty Project For Shell Tasks</li>
+                <li class="breadcrumb-item active text-muted" aria-current="page">Create an Empty Project For Shell Tasks</li>
             </ol>
         </nav>
-        <h1 class="fs-2 fw-bold text-dark-mariam mb-0">Create An Empty Project For Shell Tasks</h1>
+        <h1 class="fs-2 fw-bold text-dark-mariam mb-0">Create an Empty Project For Shell Tasks</h1>
         <p class="text-muted small mt-1">
             {Localisation::getTranslation('common_denotes_a_required_field')}
         </p>
@@ -100,18 +100,21 @@
 
         <div class="row g-4">
 
-            {* ══════════════════════════════════════════════════════════════════
-               LEFT COLUMN — main form fields
-               ══════════════════════════════════════════════════════════════════ *}
-            <div class="col-lg-8 order-1 space-y-8">
+            <div class="col-lg-12 order-1 space-y-8">
 
                 {* ── Card 1: Project Details ─────────────────────────────────── *}
                 <div class="card bg-light-mariam custom-card p-4 card-border-top-accent">
                     <div class="d-flex justify-content-between align-items-center mb-4 border-bottom pb-3">
                         <h2 class="fs-3 fw-bold text-dark-mariam mb-0">
                             <i class="fa-solid fa-folder-open me-2" style="color: var(--twb-accent);"></i>
-                            Create An Empty Project For Shell Tasks
+                            Create an Empty Project For Shell Tasks
                         </h2>
+                        <div class="d-flex gap-2">
+                            <a href="https://communitylibrary.translatorswb.org/books/12-self-managed-partners/page/launching-your-translation-project-on-the-twb-platform" target="_blank" class="btn btn-outline-primary w-100 fw-semibold" style="color: var(--core-blue);">
+                                <i class="fa-solid fa-arrow-up-right-from-square me-1"></i>
+                                Guidelines
+                            </a>
+                        </div>
                     </div>
 
                     {* Title *}
@@ -158,20 +161,6 @@
                                name="project_reference" maxlength="128"
                                >
                         <div class="form-text">{Localisation::getTranslation('project_create_5')}</div>
-                    </div>
-
-                    {* Tags *}
-                    <div class="mb-0">
-                        <label for="tagList" class="form-label fw-semibold text-dark-mariam">
-                            {Localisation::getTranslation('common_tags')}
-                        </label>
-                        <input type="text" class="form-control" id="tagList" name="tagList"
-                               >
-                        <div class="form-text">
-                            {Localisation::getTranslation('project_create_8')}
-                            {Localisation::getTranslation('project_create_separated_by')} {Localisation::getTranslation('project_create_seperator')}.
-                            {Localisation::getTranslation('project_create_for_multiword_tags_joinwithhyphens')}
-                        </div>
                     </div>
 
                 </div>
@@ -300,32 +289,6 @@
             </div>
             {* /LEFT COLUMN *}
 
-
-            {* ══════════════════════════════════════════════════════════════════
-               RIGHT COLUMN — sidebar
-               ══════════════════════════════════════════════════════════════════ *}
-            <div class="col-lg-4 order-2 space-y-8">
-
-                {* ── Help card ──────────────────────────────────────────────── *}
-                <div class="card bg-light-mariam custom-card p-4 card-border-top-blue">
-                    <div class="d-flex align-items-center mb-3 border-bottom pb-3">
-                        <i class="fa-solid fa-book-open me-2 fs-5" style="color: var(--core-blue);"></i>
-                        <h3 class="fs-3 fw-bold text-dark-mariam mb-0">
-                            How to launch a translation project
-                        </h3>
-                    </div>
-                    <a href="https://communitylibrary.translatorswb.org/books/12-self-managed-partners/page/launching-your-translation-project-on-the-twb-platform"
-                       target="_blank"
-                       class="btn btn-outline-primary w-100 fw-semibold"
-                       style="color: var(--core-blue);">
-                        <i class="fa-solid fa-arrow-up-right-from-square me-1"></i>
-                        Guidelines
-                    </a>
-                </div>
-
-            </div>
-            {* /RIGHT COLUMN *}
-
         </div>
         {* /row *}
 
@@ -341,7 +304,7 @@
 {* ── Tempus Dominus 6 deadline picker ────────────────────────────────────────── *}
 {*
     Bridge between Tempus Dominus and the hidden <select> elements that
-    project_create_empty.js reads in validateForm() to compute project_deadline.
+    project_create_empty1.js reads in validateForm() to compute project_deadline.
 
     On init   : read deadline_timestamp → pre-fill picker.
     On change : update hidden selects + call selectedMonthChanged()
