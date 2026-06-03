@@ -763,34 +763,40 @@ class UserRouteHandler
             }
 
             if (is_null($error)) {
+                $email = $post['email'];
+                $first_name = $post['first_name'];
+                $last_name = $post['last_name'];
                 array_key_exists('newsletter_consent', $post) ? $communications_consent = 1 : $communications_consent = 0;
 [[WIP
 (**)call [GET User data from Tarjimly using email]
-(**)COMPARE LOGIC NESTING WITH twb.txt
                 if Tarjimly email exists {
                     if not verified yet on Tarjimly {
                         $error = 'User is not verified on Tarjimly';
                     } else {
                         if Tarjimly has returned names, these override user entered data
-                        create user without verification
-[[[
 //$userDao->register($post['email'], $post['password'], $post['first_name'], $post['last_name'], $communications_consent)
 //error_log("apiRegister() in register() " . $data->getEmail());
+                        $result = LibAPI\PDOWrapper::call('userInsertAndUpdate', LibAPI\PDOWrapper::cleanseNullOrWrapStr($email) . ",0,'',null,null,null,null,null");
+                        $user_id = $result[0]['id'];
+                        LibAPI\PDOWrapper::call('create_empty_role', LibAPI\PDOWrapper::cleanse($user_id));
+                        LibAPI\PDOWrapper::call('insert_communications_consent', LibAPI\PDOWrapper::cleanse($user_id) . ',' . LibAPI\PDOWrapper::cleanse($communications_consent));
+                        LibAPI\PDOWrapper::call('userPersonalInfoInsertAndUpdate', 'null,' . LibAPI\PDOWrapper::cleanse($user_id) . ',' . LibAPI\PDOWrapper::cleanseNullOrWrapStr($first_name) . ',' . LibAPI\PDOWrapper::cleanseNullOrWrapStr($last_name) . ',null,null,1786,null,null,null,null,0');
+ CALL [UPDATE external ID on Tarjimly]
 
-        $result = LibAPI\PDOWrapper::call('userInsertAndUpdate', LibAPI\PDOWrapper::cleanseNullOrWrapStr($email) . ",0,'',null,null,null,null,null");
-        $user_id = $result[0]['id'];
-
-        LibAPI\PDOWrapper::call('create_empty_role', LibAPI\PDOWrapper::cleanse($user_id));
-        LibAPI\PDOWrapper::call('insert_communications_consent', LibAPI\PDOWrapper::cleanse($user_id) . ',' . LibAPI\PDOWrapper::cleanse($communications_consent));
-        LibAPI\PDOWrapper::call('userPersonalInfoInsertAndUpdate', 'null,' . LibAPI\PDOWrapper::cleanse($user_id) . ',' . LibAPI\PDOWrapper::cleanseNullOrWrapStr($first_name) . ',' . LibAPI\PDOWrapper::cleanseNullOrWrapStr($last_name) . ',null,null,1786,null,null,null,null,0');
-]]]
-    CALL [UPDATE external ID on Tarjimly]
-
-    Login User in TWB [Password verification directly logs in]???
+    Login User in TWB [not Password verification directly logs in]???
     [check existing code path for previous step]
-}
-} else {
-
+                        if ($userDao->register($post['email'], $post['password'], $post['first_name'], $post['last_name'], $communications_consent)) {
+                                UserRouteHandler::flashNow(
+                                    "success",
+                                    sprintf(Lib\Localisation::getTranslation('register_4'), $app->getRouteCollector()->getRouteParser()->urlFor("login"))
+                                );
+                        } else {
+                            UserRouteHandler::flashNow(
+                                'error',
+                                'Failed to register'
+                            );
+                        }
+                } else {
 create User etc. 
 NOTE: this has to do full email verification using existing TWB Platform code
 call [GET User data from Tarjimly using email] again
@@ -798,20 +804,20 @@ if already on Tarjimly call [UPDATE external ID on Tarjimly]
 else call [CREATE User on Tarjimly]
 Login User in TWB [Password verification directly logs in]
 [check existing code path for previous step]
-}
-}
-]]
-                if ($userDao->register($post['email'], $post['password'], $post['first_name'], $post['last_name'], $communications_consent)) {
-                    UserRouteHandler::flashNow(
-                        "success",
-                        sprintf(Lib\Localisation::getTranslation('register_4'), $app->getRouteCollector()->getRouteParser()->urlFor("login"))
-                    );
-                } else {
-                    UserRouteHandler::flashNow(
-                        'error',
-                        'Failed to register'
-                    );
-                }
+                    if ($userDao->register($post['email'], $post['password'], $post['first_name'], $post['last_name'], $communications_consent)) {
+                            UserRouteHandler::flashNow(
+                                "success",
+                                sprintf(Lib\Localisation::getTranslation('register_4'), $app->getRouteCollector()->getRouteParser()->urlFor("login"))
+                            );
+                    } else {
+                        UserRouteHandler::flashNow(
+                            'error',
+                            'Failed to register'
+                        );
+                    }
+
+                    }
+
             } else {
                 if ($error === 'Oops! something went wrong, please try again.') {
                     $template_data = array_merge($template_data, ['first_name' => $post['first_name'], 'last_name' => $post['last_name'], 'email' => $post['email']]);
