@@ -767,7 +767,7 @@ class UserRouteHandler
                 $first_name = $post['first_name'];
                 $last_name = $post['last_name'];
                 array_key_exists('newsletter_consent', $post) ? $communications_consent = 1 : $communications_consent = 0;
-[[WIP
+
 (**)call [GET User data from Tarjimly using email]
                 if Tarjimly email exists {
                     if not verified yet on Tarjimly {
@@ -796,8 +796,9 @@ class UserRouteHandler
                                 'Failed to register'
                             );
                         }
+                    }
                 } else {
-create User etc. 
+//(**)FULL create User etc. 
 NOTE: this has to do full email verification using existing TWB Platform code
 call [GET User data from Tarjimly using email] again
 if already on Tarjimly call [UPDATE external ID on Tarjimly]
@@ -815,9 +816,8 @@ Login User in TWB [Password verification directly logs in]
                             'Failed to register'
                         );
                     }
-
-                    }
-
+//(**)THIS IS END OF FULL CREAT
+                }
             } else {
                 if ($error === 'Oops! something went wrong, please try again.') {
                     $template_data = array_merge($template_data, ['first_name' => $post['first_name'], 'last_name' => $post['last_name'], 'email' => $post['email']]);
