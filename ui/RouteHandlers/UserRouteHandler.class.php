@@ -783,18 +783,44 @@ class UserRouteHandler
                         LibAPI\PDOWrapper::call('userPersonalInfoInsertAndUpdate', 'null,' . LibAPI\PDOWrapper::cleanse($user_id) . ',' . LibAPI\PDOWrapper::cleanseNullOrWrapStr($first_name) . ',' . LibAPI\PDOWrapper::cleanseNullOrWrapStr($last_name) . ',null,null,1786,null,null,null,null,0');
  CALL [UPDATE external ID on Tarjimly]
 
-    Login User in TWB [not Password verification directly logs in]???
-    [check existing code path for previous step]
-                        if ($userDao->register($post['email'], $post['password'], $post['first_name'], $post['last_name'], $communications_consent)) {
-                                UserRouteHandler::flashNow(
-                                    "success",
-                                    sprintf(Lib\Localisation::getTranslation('register_4'), $app->getRouteCollector()->getRouteParser()->urlFor("login"))
-                                );
+                        UserRouteHandler::flashNow('success', sprintf(Lib\Localisation::getTranslation('register_4'), $app->getRouteCollector()->getRouteParser()->urlFor('login')));
+
+                        LibAPI\PDOWrapper::call('userTaskStreamNotificationInsertAndUpdate', LibAPI\PDOWrapper::cleanse($user_id) . ',2,1');
+
+error_log('OAuth, Login: ' . $user->getEmail());
+(**)removed varios saml and otehr redirecdts, if using this for login, add back
+(**)neverthe less this is overskill for 1st registration
+                        Common\Lib\UserSession::setSession($user_id);
+                        Common\Lib\UserSession::setUserLanguage('en');
+                        $userDao->setRequiredProfileCompletedinSESSION($user_id);
+
+                        $terms_accepted = $userDao->terms_accepted($user_id);
+                        if ($terms_accepted < 2) {
+                            $message = $adminDao->copy_roles_from_special_registration($user_id, $user->getEmail());
+                            if ($message) UserRouteHandler::flash('error', $message);
+                        }
+                        if ($adminDao->isSiteAdmin_any_or_org_admin_any_for_any_org($user_id)) {
+                            if ($terms_accepted == 1) return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('googleregister', ['user_id' => $user_id]));
+                            if ($terms_accepted  < 3) $userDao->update_terms_accepted($user_id, 3);
+                            $orgs = $adminDao->get_orgs_if_ngo($user_id);
+                            if (!empty($orgs)) return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('home_ngo', ['org_id' => $orgs[0]['organisation_id']]));
+                            return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('home'));
                         } else {
-                            UserRouteHandler::flashNow(
-                                'error',
-                                'Failed to register'
-                            );
+                            $nativeLocale = $user->getNativeLocale();
+                            if ($nativeLocale && $nativeLocale->getLanguageCode()) {
+                                if ($message = $userDao->get_post_login_message($user_id)) {
+                                    UserRouteHandler::flash('error', $message);
+                                    return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('user-private-profile', ['user_id' => $user_id]));
+                                }
+                                if (!$userDao->seen_tutorial($user_id)) return $response->withStatus(302)->withHeader('Location', Common\Lib\Settings::get('site.location') . 'virtual-tour.html');
+                                return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor("home"));
+                            } else {
+                                if ($terms_accepted == 1) {
+                                    // Since they are logged in (via Google)...
+                                    return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('googleregister', ['user_id' => $user_id]));
+                                }
+                                return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('user-private-profile', ['user_id' => $user_id]));
+                            }
                         }
                     }
                 } else {
