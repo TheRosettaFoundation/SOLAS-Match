@@ -825,23 +825,34 @@ error_log('OAuth, Login: ' . $user->getEmail());
                     }
                 } else {
 //(**)FULL create User etc. 
+
+[[[
+        $user = self::create($email, $clear_password);
+        Lib\PDOWrapper::call("registerUser", Lib\PDOWrapper::cleanseNull($userId).",".Lib\PDOWrapper::cleanseNullOrWrapStr(md5(uniqid(rand()))));
+
+
+        Lib\Notify::sendEmailVerification($user->getId());
+
+
+        //Set new user's personal info to show their preferred language as English.
+        $newUser = DAO\UserDao::getUser(null, $data->getEmail());
+        $userInfo = new Common\Protobufs\Models\UserPersonalInformation();
+        $english = DAO\LanguageDao::getLanguage(null, "en");
+        $userInfo->setUserId($newUser->getId());
+        $userInfo->setLanguagePreference($english->getId());
+        $userInfo->setFirstName($data->getFirstName());
+        $userInfo->setLastName($data->getLastName());
+        DAO\UserDao::insert_communications_consent($newUser->getId(), $data->getCommunicationsConsent());
+        $personal_info = DAO\UserDao::savePersonalInfo($userInfo);
+]]]
+
 NOTE: this has to do full email verification using existing TWB Platform code
 call [GET User data from Tarjimly using email] again
 if already on Tarjimly call [UPDATE external ID on Tarjimly]
 else call [CREATE User on Tarjimly]
 Login User in TWB [Password verification directly logs in]
 [check existing code path for previous step]
-                    if ($userDao->register($post['email'], $post['password'], $post['first_name'], $post['last_name'], $communications_consent)) {
-                            UserRouteHandler::flashNow(
-                                "success",
-                                sprintf(Lib\Localisation::getTranslation('register_4'), $app->getRouteCollector()->getRouteParser()->urlFor("login"))
-                            );
-                    } else {
-                        UserRouteHandler::flashNow(
-                            'error',
-                            'Failed to register'
-                        );
-                    }
+                    UserRouteHandler::flashNow('success', sprintf(Lib\Localisation::getTranslation('register_4'), $app->getRouteCollector()->getRouteParser()->urlFor('login')));
 //(**)THIS IS END OF FULL CREAT
                 }
             } else {
