@@ -840,6 +840,7 @@ if already on Tarjimly call [UPDATE external ID on Tarjimly]
 else call [CREATE User on Tarjimly]
 Login User in TWB [Password verification directly logs in]
 [check existing code path for previous step]
+(**)is there normally any flash notification???
 //(**)THIS IS END OF FULL CREAT
                 }
             } else {
