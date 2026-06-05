@@ -773,7 +773,7 @@ class UserRouteHandler
                     $error = 'you already have an account (BTW Tarijmly & TWB are now one account system), and log in here';//(**)Wording
                     OR REDIRECT TO LOGIN(**)
                 } else {
-//(**)FULL create User etc. 
+                    // Create a new User
                     $result = LibAPI\PDOWrapper::call('userInsertAndUpdate', LibAPI\PDOWrapper::cleanseNullOrWrapStr($email) . ",0,'',null,null,null,null,null");
                     $user_id = $result[0]['id'];
                     LibAPI\PDOWrapper::call('create_empty_role', LibAPI\PDOWrapper::cleanse($user_id));
@@ -782,15 +782,6 @@ class UserRouteHandler
                     LibAPI\PDOWrapper::call('registerUser', LibAPI\PDOWrapper::cleanseNull($userId) . ',' . LibAPI\PDOWrapper::cleanseWrapStr(md5(uniqid(rand()))));
                     LibAPI\PDOWrapper::call('insert_queue_request', '3,13,' . LibAPI\PDOWrapper::cleanse($user_id) . ",0,0,0,0,0,''");
                     UserRouteHandler::flashNow('success', sprintf(Lib\Localisation::getTranslation('register_4'), $app->getRouteCollector()->getRouteParser()->urlFor('login')));
-
-(**)LATER ON VERIFICATION COMPLETENOTE: this has to do full email verification using existing TWB Platform code
-call [GET User data from Tarjimly using email] again
-if already on Tarjimly call [UPDATE external ID on Tarjimly]
-else call [CREATE User on Tarjimly]
-Login User in TWB [Password verification directly logs in]
-[check existing code path for previous step]
-(**)is there normally any flash notification???
-//(**)THIS IS END OF FULL CREAT
                 }
             } else {
                 if ($error === 'Oops! something went wrong, please try again.') {
