@@ -768,9 +768,9 @@ class UserRouteHandler
                 $last_name = $post['last_name'];
                 array_key_exists('newsletter_consent', $post) ? $communications_consent = 1 : $communications_consent = 0;
 
-(**)call [GET User data from Tarjimly using email]
-                if Tarjimly email exists {
-                    if not verified yet on Tarjimly {
+(**)call [GET User data from Tarjimly using email] and $post['password']
+                if Tarjimly email and $post['password'] matches {
+                    if not verified yet on Tarjimly {//(**)or make this higher level elseif
                         $error = 'User is not verified on Tarjimly';
                     } else {
                         if Tarjimly has returned names, these override user entered data
@@ -823,6 +823,8 @@ error_log('OAuth, Login: ' . $user->getEmail());
                             }
                         }
                     }
+                } elseif email exists but password missmatch (or unverified?) {
+                    $error = 'Login details incorrect please go to login page with link';
                 } else {
 //(**)FULL create User etc. 
                     $result = LibAPI\PDOWrapper::call('userInsertAndUpdate', LibAPI\PDOWrapper::cleanseNullOrWrapStr($email) . ",0,'',null,null,null,null,null");
