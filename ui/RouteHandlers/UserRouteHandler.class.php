@@ -886,7 +886,7 @@ call [CREATE User on Tarjimly] WITH $user->getPassword()
         $adminDao = new DAO\AdminDao();
         $userDao = new DAO\UserDao();
 
-        $user_id = $user->getId();
+        $user_id = $user['id'];
         Common\Lib\UserSession::setSession($user_id);
         $request_url = null;
         if ($login) {
@@ -909,7 +909,7 @@ call [CREATE User on Tarjimly] WITH $user->getPassword()
         } else {
             $terms_accepted = $userDao->terms_accepted($user_id);
             if ($terms_accepted < 2) {
-                $message = $adminDao->copy_roles_from_special_registration($user_id, $user->getEmail());
+                $message = $adminDao->copy_roles_from_special_registration($user_id, $user['email']);
                 if ($message) UserRouteHandler::flash('error', $message);
             }
             if ($adminDao->isSiteAdmin_any_or_org_admin_any_for_any_org($user_id)) {
@@ -919,8 +919,7 @@ call [CREATE User on Tarjimly] WITH $user->getPassword()
                 if (!empty($orgs)) return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('home_ngo', ['org_id' => $orgs[0]['organisation_id']]));
                 return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('home'));
             } else {
-                $nativeLocale = $user->getNativeLocale();
-                if ($nativeLocale && $nativeLocale->getLanguageCode()) {
+                if ($user['language_id']) {
                     if ($message = $userDao->get_post_login_message($user_id)) {
                         UserRouteHandler::flash('error', $message);
                         return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('user-private-profile', ['user_id' => $user_id]));
