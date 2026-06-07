@@ -1101,78 +1101,40 @@ call [CREATE User on Tarjimly] WITH $user->getPassword()
             $post = $request->getParsedBody();
 
             if (isset($post['login'])) {
-                $user = null;
-                try {
-                    $user = $userDao->login($post['email'], $post['password']);
-                } catch (Common\Exceptions\SolasMatchException $e) {
-                    $error = sprintf(
-                        Lib\Localisation::getTranslation('login_1'),
-                        $app->getRouteCollector()->getRouteParser()->urlFor("login"),
-                        $app->getRouteCollector()->getRouteParser()->urlFor("register"),
-                        $e->getMessage()
-                    );
+                $user = 0;
+call [GET User data from Tarjimly using email] $post['email'] and $post['password']
+                if not match (or banned) {
+                    $error = sprintf(Lib\Localisation::getTranslation('login_1'), $app->getRouteCollector()->getRouteParser()->urlFor('login'), $app->getRouteCollector()->getRouteParser()->urlFor('register'), $e->getMessage());
                     UserRouteHandler::flashNow('error', $error);
+                } elseif match but not verified {
+                    $error = 'User is not verified on Tarjimly AND LINK';
+                    UserRouteHandler::flashNow('error', $error);
+                } else {
+                    $result = LibAPI\PDOWrapper::call('getUser', 'null,null,' . LibAPI\PDOWrapper::cleanseWrapStr($email) . ',null,null,null,null,null,null');
+                    if (empty($result)) {
+                        $result = LibAPI\PDOWrapper::call('userInsertAndUpdate', LibAPI\PDOWrapper::cleanseNullOrWrapStr($email) . ",0,'',null,null,null,null,null");
+                        $user_id = $result[0]['id'];
+                        $result = LibAPI\PDOWrapper::call('getUser', "$user_id,null,null,null,null,null,null,null,null");
+                        $user = $result[0];
+                        LibAPI\PDOWrapper::call('create_empty_role', LibAPI\PDOWrapper::cleanse($user_id));
+                        LibAPI\PDOWrapper::call('userPersonalInfoInsertAndUpdate', 'null,' . LibAPI\PDOWrapper::cleanse($user_id) . ',' . LibAPI\PDOWrapper::cleanseNullOrWrapStr($first_name) . ',' . LibAPI\PDOWrapper::cleanseNullOrWrapStr($last_name) . ',null,null,1786,null,null,null,null,0');
+                        LibAPI\PDOWrapper::call('userTaskStreamNotificationInsertAndUpdate', LibAPI\PDOWrapper::cleanse($user_id) . ',2,1');
+(**)Roles from Tarjimly?
+
+call [UPDATE external ID on Tarjimly]
+
+                        $userDao->update_terms_accepted($user_id, 1); // Will be redirected to googleregister
+                    } else {
+                        $user = $result[0];
+                        $user_id = $user['id'];
+                        LibAPI\PDOWrapper::call('finishRegistration', "$user_id");
+                        $userinfo = $userDao->getUserPersonalInformation($user_id);
+                        if ($userinfo->firstName != Tarjimly || $userinfo->lastName != Tarjimly) $userDao->updatePersonalInfo($user_id, $userinfo);
+                    }
                 }
-                if (!is_null($user)) {
+                if ($user) {
                     error_log("Password, Login: {$post['email']}");
-                    Common\Lib\UserSession::setSession($user->getId());
-                    $request_url = Common\Lib\UserSession::getReferer();
-                    Common\Lib\UserSession::clearReferer();
-
-                    // Check have we previously been redirected from SAML to do login, if so get return address so we can redirect to it below
-                    if (!$request_url) {
-                        if (!empty($_SESSION['return_to_SAML_url'])) {
-                            $request_url = $_SESSION['return_to_SAML_url'];
-                        }
-                    }
-                    unset($_SESSION['return_to_SAML_url']);
-
-                    $userInfo = $userDao->getUserPersonalInformation($user->getId());
-                    $langPrefId = $userInfo->getLanguagePreference();
-                    $preferredLang = $langDao->getLanguage($langPrefId);
-                    // Set site language to user's preferred language if it is not already
-                    $user_language = Common\Lib\UserSession::getUserLanguage();
-                    if (empty($user_language)) {
-                        Common\Lib\UserSession::setUserLanguage($preferredLang->getCode());
-                    } else {
-                        $currentSiteLang = $langDao->getLanguageByCode($user_language);
-                        if ($currentSiteLang != $preferredLang) {
-                            Common\Lib\UserSession::setUserLanguage($preferredLang->getCode());
-                        }
-                    }
-
-                    $userDao->setRequiredProfileCompletedinSESSION($user->getId());
-
-                    // Redirect to homepage, or the page the page user was previously on e.g. if their session timed out and they are logging in again.
-                    if ($request_url) {
-                        return $response->withStatus(302)->withHeader('Location', $request_url);
-                    } else {
-                        $terms_accepted = $userDao->terms_accepted($user->getId());
-                        if ($terms_accepted < 2) {
-                            $message = $adminDao->copy_roles_from_special_registration($user->getId(), $user->getEmail());
-                            if ($message) UserRouteHandler::flash('error', $message);
-                        }
-                        if ($adminDao->isSiteAdmin_any_or_org_admin_any_for_any_org($user->getId())) {
-                            // Next line should not happen in this path?
-                            if ($terms_accepted == 1) return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('googleregister', array('user_id' => $user->getId())));
-                            if ($terms_accepted  < 3) $userDao->update_terms_accepted($user->getId(), 3);
-                            $orgs = $adminDao->get_orgs_if_ngo($user->getId());
-                            if (!empty($orgs)) return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('home_ngo', ['org_id' => $orgs[0]['organisation_id']]));
-                            return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('home'));
-                        } else {
-                            $nativeLocale = $user->getNativeLocale();
-                            if ($nativeLocale && $nativeLocale->getLanguageCode()) {
-                                if ($message = $userDao->get_post_login_message($user->getId())) {
-                                    UserRouteHandler::flash('error', $message);
-                                    return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('user-private-profile', array('user_id' => $user->getId())));
-                                }
-                                if (!$userDao->seen_tutorial($user->getId())) return $response->withStatus(302)->withHeader('Location', Common\Lib\Settings::get('site.location') . 'virtual-tour.html');
-                                return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor("home"));
-                            } else {
-                                return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('user-private-profile', array('user_id' => $user->getId())));
-                            }
-                        }
-                    }
+                    $this->set_session_redirect($response, 1, $user);
                 }
             } elseif (isset($post['password_reset'])) {
                 return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor("password-reset-request"));
