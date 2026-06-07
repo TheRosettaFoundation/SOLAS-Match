@@ -865,40 +865,7 @@ if already on Tarjimly {
 }
 call [CREATE User on Tarjimly] WITH $user->getPassword()
 
-(**)removed varios saml and otehr redirecdts, if using this for login, add back
-(**)nevertheless this is overskill for 1st registration
-                    Common\Lib\UserSession::setSession($user_id);
-                    Common\Lib\UserSession::setUserLanguage('en');
-                    $userDao->setRequiredProfileCompletedinSESSION($user_id);
-
-                    $terms_accepted = $userDao->terms_accepted($user_id);
-                    if ($terms_accepted < 2) {
-                        $message = $adminDao->copy_roles_from_special_registration($user_id, $user->getEmail());
-                        if ($message) UserRouteHandler::flash('error', $message);
-                    }
-                    if ($adminDao->isSiteAdmin_any_or_org_admin_any_for_any_org($user_id)) {
-                        if ($terms_accepted == 1) return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('googleregister', ['user_id' => $user_id]));
-                        if ($terms_accepted  < 3) $userDao->update_terms_accepted($user_id, 3);
-                        $orgs = $adminDao->get_orgs_if_ngo($user_id);
-                        if (!empty($orgs)) return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('home_ngo', ['org_id' => $orgs[0]['organisation_id']]));
-                        return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('home'));
-                    } else {
-                        $nativeLocale = $user->getNativeLocale();
-                        if ($nativeLocale && $nativeLocale->getLanguageCode()) {
-                            if ($message = $userDao->get_post_login_message($user_id)) {
-                                UserRouteHandler::flash('error', $message);
-                                return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('user-private-profile', ['user_id' => $user_id]));
-                            }
-                            if (!$userDao->seen_tutorial($user_id)) return $response->withStatus(302)->withHeader('Location', Common\Lib\Settings::get('site.location') . 'virtual-tour.html');
-                            return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor("home"));
-                        } else {
-                            if ($terms_accepted == 1) {
-                                // Since they are logged in (via Google)...
-                                return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('googleregister', ['user_id' => $user_id]));
-                            }
-                            return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('user-private-profile', ['user_id' => $user_id]));
-                        }
-                    }
+                    $this->set_session_redirect($response, 0, $user);
 
 (**)is there normally any flash notification???
                 } else {
@@ -912,7 +879,65 @@ call [CREATE User on Tarjimly] WITH $user->getPassword()
 
         return UserRouteHandler::render("user/email.verification.tpl", $response);
     }
-    
+
+    public function set_session_redirect(Response $response, $login, $user) {
+        global $app;
+
+        $adminDao = new DAO\AdminDao();
+        $userDao = new DAO\UserDao();
+
+        $user_id = $user->getId();
+        Common\Lib\UserSession::setSession($user_id);
+        $request_url = null;
+        if ($login) {
+            $request_url = Common\Lib\UserSession::getReferer();
+            Common\Lib\UserSession::clearReferer();
+
+            // Check have we previously been redirected from SAML to do login, if so get return address so we can redirect to it below
+            if (!$request_url) {
+                if (!empty($_SESSION['return_to_SAML_url'])) {
+                    $request_url = $_SESSION['return_to_SAML_url'];
+                }
+            }
+            unset($_SESSION['return_to_SAML_url']);
+        }
+        Common\Lib\UserSession::setUserLanguage('en');
+        $userDao->setRequiredProfileCompletedinSESSION($user_id);
+
+        if ($request_url) {
+            return $response->withStatus(302)->withHeader('Location', $request_url); // Redirect to homepage, or the page the page user was previously on e.g. if their session timed out and they are logging in again.
+        } else {
+            $terms_accepted = $userDao->terms_accepted($user_id);
+            if ($terms_accepted < 2) {
+                $message = $adminDao->copy_roles_from_special_registration($user_id, $user->getEmail());
+                if ($message) UserRouteHandler::flash('error', $message);
+            }
+            if ($adminDao->isSiteAdmin_any_or_org_admin_any_for_any_org($user_id)) {
+                if ($terms_accepted == 1) return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('googleregister', ['user_id' => $user_id]));
+                if ($terms_accepted  < 3) $userDao->update_terms_accepted($user_id, 3);
+                $orgs = $adminDao->get_orgs_if_ngo($user_id);
+                if (!empty($orgs)) return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('home_ngo', ['org_id' => $orgs[0]['organisation_id']]));
+                return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('home'));
+            } else {
+                $nativeLocale = $user->getNativeLocale();
+                if ($nativeLocale && $nativeLocale->getLanguageCode()) {
+                    if ($message = $userDao->get_post_login_message($user_id)) {
+                        UserRouteHandler::flash('error', $message);
+                        return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('user-private-profile', ['user_id' => $user_id]));
+                    }
+                    if (!$userDao->seen_tutorial($user_id)) return $response->withStatus(302)->withHeader('Location', Common\Lib\Settings::get('site.location') . 'virtual-tour.html');
+                    return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('home'));
+                } else {
+                    if ($terms_accepted == 1) {
+                        // Since they are logged in (via Google)...
+                        return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('googleregister', ['user_id' => $user_id]));
+                    }
+                    return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('user-private-profile', ['user_id' => $user_id]));
+                }
+            }
+        }
+    }
+
     public function invite_admins(Request $request, Response $response, $args)
     {
         global $app, $template_data;
