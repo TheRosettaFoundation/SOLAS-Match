@@ -83,32 +83,6 @@ class UserDao
         return $hashed_input_password == $user->getPassword();
     }
 
-    public static function login($email, $clear_password)
-    {
-        $user = self::getUsers(null, $email);
-
-        if (!is_object($user)) {
-            throw new \InvalidArgumentException(
-                'Sorry, the password or username entered is incorrect. Please check the credentials used and try again.'
-            );
-        }
-
-        if (!self::clearPasswordMatchesUsersPassword($user, $clear_password)) {
-            throw new \InvalidArgumentException(
-                'Sorry, the password or username entered is incorrect. Please check the credentials used and try again.'
-            );
-        }
-
-        if ($clear_password === '') {
-            throw new \InvalidArgumentException(
-                'Sorry, an empty password is not allowed. Please contact the site administrator for details'
-            );
-        }
-
-        Common\Lib\UserSession::setSession($user->getId());
-        return true;
-    }
-
     public static function apiLogin($email, $clear_password)
     {
         $user = self::getUsers(null, $email);

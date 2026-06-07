@@ -242,22 +242,6 @@ class Users
             '/api/v0/users/getCurrentUser/',
             '\SolasMatch\API\V0\Users:getCurrentUser');
 
-        $app->get(
-            '/api/v0/users/login/',
-            '\SolasMatch\API\V0\Users:getLoginTemplate');
-
-        $app->post(
-            '/api/v0/users/login/',
-            '\SolasMatch\API\V0\Users:login');
-
-        $app->get(
-            '/api/v0/users/register/',
-            '\SolasMatch\API\V0\Users:getRegisterTemplate');
-
-        $app->post(
-            '/api/v0/users/register/',
-            '\SolasMatch\API\V0\Users:register');
-
         $app->put(
             '/api/v0/users/{userId}/',
             '\SolasMatch\API\V0\Users:updateUser')
@@ -727,73 +711,6 @@ error_log("userClaimTask($userId, $taskId)");
     {
         $user = DAO\UserDao::getLoggedInUser();
         return API\Dispatcher::sendResponse($response, $user, null);
-    }
-
-    public static function getLoginTemplate(Request $request, Response $response)
-    {
-        $data = new Common\Protobufs\Models\Login();
-        $data->setEmail("sample@example.com");
-        $data->setPassword("sample_password");
-        return API\Dispatcher::sendResponse($response, $data, null);
-    }
-
-    public static function login(Request $request, Response $response)
-    {
-        $body = (string)$request->getBody();
-        $client = new Common\Lib\APIHelper('.json');
-        $loginData = $client->deserialize($body, "\SolasMatch\Common\Protobufs\Models\Login");
-        $params = array();
-        $params['client_id'] = API\Dispatcher::clenseArgs($request, 'client_id', null);
-        $params['client_secret'] = API\Dispatcher::clenseArgs($request, 'client_secret', null);
-        $params['username'] = $loginData->getEmail();
-        $params['password'] = $loginData->getPassword();
-        try {
-            $server = API\Dispatcher::getOauthServer();
-            $response_oauth = $server->getGrantType('password')->completeFlow($params);
-            $oAuthResponse = new Common\Protobufs\Models\OAuthResponse();
-            $oAuthResponse->setToken($response_oauth['access_token']);
-            $oAuthResponse->setTokenType($response_oauth['token_type']);
-            $oAuthResponse->setExpires($response_oauth['expires']);
-            $oAuthResponse->setExpiresIn($response_oauth['expires_in']);
-
-            $user = DAO\UserDao::getLoggedInUser($response_oauth['access_token']);
-            $user->setPassword("");
-            $user->setNonce("");
-            return API\Dispatcher::sendResponse($response, $user, null, $oAuthResponse);
-        } catch (Common\Exceptions\SolasMatchException $e) {
-            return API\Dispatcher::sendResponse($response, $e->getMessage(), $e->getCode());
-        } catch (\Exception $e) {
-            return API\Dispatcher::sendResponse($response, $e->getMessage(), Common\Enums\HttpStatusEnum::UNAUTHORIZED);
-        }
-    }
-
-    public static function getRegisterTemplate(Request $request, Response $response)
-    {
-        $data = new Common\Protobufs\Models\Register();
-        $data->setPassword("test");
-        $data->setEmail("test@test.rog");
-        return API\Dispatcher::sendResponse($response, $data, null);
-    }
-
-    public static function register(Request $request, Response $response)
-    {
-        $data = (string)$request->getBody();
-        $client = new Common\Lib\APIHelper('.json');
-        $data = $client->deserialize($data, "\SolasMatch\Common\Protobufs\Models\Register");
-        error_log("apiRegister() in register() " . $data->getEmail());
-        $registered = DAO\UserDao::apiRegister($data->getEmail(), $data->getPassword());
-        //Set new user's personal info to show their preferred language as English.
-        $newUser = DAO\UserDao::getUser(null, $data->getEmail());
-        $userInfo = new Common\Protobufs\Models\UserPersonalInformation();
-        $english = DAO\LanguageDao::getLanguage(null, "en");
-        $userInfo->setUserId($newUser->getId());
-        $userInfo->setLanguagePreference($english->getId());
-        $userInfo->setFirstName($data->getFirstName());
-        $userInfo->setLastName($data->getLastName());
-        DAO\UserDao::insert_communications_consent($newUser->getId(), $data->getCommunicationsConsent());
-        $personal_info = DAO\UserDao::savePersonalInfo($userInfo);
-        
-        return API\Dispatcher::sendResponse($response, $registered, null);
     }
 
     public static function getUser(Request $request, Response $response, $args)

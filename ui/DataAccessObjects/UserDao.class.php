@@ -884,65 +884,6 @@ error_log("claimTask_shell($userId, $taskId)");
         return $ret;
     }
     
-    public function login($email, $password)
-    {
-        $ret = null;
-        $login = new Common\Protobufs\Models\Login();
-        $login->setEmail($email);
-        $login->setPassword($password);
-        $request = "{$this->siteApi}v0/users/login";
-        $queryArgs = array(
-            'client_id' => Common\Lib\Settings::get('oauth.client_id'),
-            'client_secret' => Common\Lib\Settings::get('oauth.client_secret')
-        );
-        try {
-            $ret = $this->client->call(
-                "\SolasMatch\Common\Protobufs\Models\User",
-                $request,
-                Common\Enums\HttpMethodEnum::POST,
-                $login,
-                $queryArgs
-            );
-        } catch (Common\Exceptions\SolasMatchException $e) {
-            switch($e->getCode()) {
-                case Common\Enums\HttpStatusEnum::NOT_FOUND:
-                    throw new Common\Exceptions\SolasMatchException(
-                        Lib\Localisation::getTranslation('common_error_login_incorrect')
-                    );
-                    break;
-                case Common\Enums\HttpStatusEnum::UNAUTHORIZED:
-                    // TODO: Resend verification email
-                    throw new Common\Exceptions\SolasMatchException(
-                        Lib\Localisation::getTranslation('common_error_login_unverified')
-                    );
-                    break;
-                case Common\Enums\HttpStatusEnum::FORBIDDEN:
-                    $userDao = new UserDao();
-                    $banComment = $userDao->getBannedComment($email);
-                    throw new Common\Exceptions\SolasMatchException(
-                        sprintf(
-                            Lib\Localisation::getTranslation("common_this_user_account_has_been_banned"),
-                            $banComment
-                        )
-                    );
-                    break;
-                default:
-                    throw $e;
-            }
-        }
-        
-        $headers = $this->client->getHeaders();
-        if (isset($headers["X-Custom-Token"])) {
-            Common\Lib\UserSession::setAccessToken(
-                $this->client->deserialize(
-                    base64_decode($headers["X-Custom-Token"]),
-                    '\SolasMatch\Common\Protobufs\Models\OAuthResponse'
-                )
-            );
-        }
-        return $ret;
-    }
-
     public function requestAuthCode($email)
     {
         global $app;
@@ -1048,24 +989,6 @@ error_log("claimTask_shell($userId, $taskId)");
         $results = LibAPI\PDOWrapper::call('get_password_reset_request', LibAPI\PDOWrapper::cleanse($user_id));
         if (empty($results)) return 0;
         return $results[0]['uuid'];
-    }
-
-    public function register($email, $password, $first_name = '', $last_name = '', $communications_consent = 0)
-    {
-        $ret = null;
-        $registerData = new Common\Protobufs\Models\Register();
-        $registerData->setEmail($email);
-        $registerData->setPassword($password);
-        $registerData->setFirstName($first_name);
-        $registerData->setLastName($last_name);
-        $registerData->setCommunicationsConsent($communications_consent);
-        $request = "{$this->siteApi}v0/users/register";
-        $registered = $this->client->call(null, $request, Common\Enums\HttpMethodEnum::POST, $registerData);
-        if ($registered) {
-            return true;
-        } else {
-            return false;
-        }
     }
 
     public function verifyUserByEmail($email)

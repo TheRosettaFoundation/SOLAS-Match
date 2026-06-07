@@ -10,8 +10,6 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 use \SolasMatch\API\Lib as LibAPI;
 
 require_once __DIR__ . "/../DataAccessObjects/UserDao.class.php";
-require_once __DIR__ . "/../../Common/protobufs/models/Register.php";
-require_once __DIR__ . "/../../Common/protobufs/models/Login.php";
 require_once __DIR__ . "/../../Common/protobufs/models/Locale.php";
 require_once __DIR__ . '/../../api/lib/PDOWrapper.class.php';
 
@@ -1258,7 +1256,7 @@ call [UPDATE external ID on Tarjimly]
             'extra_scripts' => self::createGooglePlusJavaScript(),
         ));
 
-        return UserRouteHandler::render("user/login.tpl", $response);
+        return UserRouteHandler::render('user/login.tpl', $response);
     }
 
     private static function createGooglePlusJavaScript()

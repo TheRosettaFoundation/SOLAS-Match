@@ -6,10 +6,8 @@ use \SolasMatch\Common\Protobufs\Models as Models;
 use \SolasMatch\Common\Protobufs\Emails as Emails;
 
 require_once __DIR__."/../protobufs/models/ArchivedTask.php";
-require_once __DIR__."/../protobufs/models/Register.php";
 require_once __DIR__."/../protobufs/models/Country.php";
 require_once __DIR__."/../protobufs/models/Language.php";
-require_once __DIR__."/../protobufs/models/Login.php";
 require_once __DIR__."/../protobufs/models/Badge.php";
 require_once __DIR__."/../protobufs/models/Tag.php";
 require_once __DIR__."/../protobufs/models/Organisation.php";
@@ -42,17 +40,11 @@ class ModelFactory
             case "ArchivedTask":
                 $ret = self::generateArchivedTask($modelData);
                 break;
-            case "Register":
-                $ret = self::generateRegister($modelData);
-                break;
             case "Country":
                 $ret = self::generateCountry($modelData);
                 break;
             case "Language":
                 $ret = self::generateLanguage($modelData);
-                break;
-            case "Login":
-                $ret = self::generateLogin($modelData);
                 break;
             case "Badge":
                 $ret = self::generateBadge($modelData);
@@ -222,29 +214,6 @@ class ModelFactory
         return $ret;
     }
 
-    private static function generateRegister($modelData)
-    {
-        $ret = new Models\Register();
-
-        if (isset($modelData['email'])) {
-            $ret->setEmail($modelData['email']);
-        }
-        if (isset($modelData['password'])) {
-            $ret->setPassword($modelData['password']);
-        }
-        if (isset($modelData['firstName'])) {
-            $ret->setFirstName($modelData['firstName']);
-        }
-        if (isset($modelData['lastName'])) {
-            $ret->setLastName($modelData['lastName']);
-        }
-        if (isset($modelData['communicationsConsent'])) {
-            $ret->setCommunicationsConsent($modelData['communicationsConsent']);
-        }
-
-        return $ret;
-    }
-
     private static function generateCountry($modelData)
     {
         $ret = new Models\Country();
@@ -274,20 +243,6 @@ class ModelFactory
         }
         if (isset($modelData['name'])) {
             $ret->setName($modelData['name']);
-        }
-
-        return $ret;
-    }
-
-    private static function generateLogin($modelData)
-    {
-        $ret = new Models\Login();
-
-        if (isset($modelData['email'])) {
-            $ret->setEmail($modelData['email']);
-        }
-        if (isset($modelData['password'])) {
-            $ret->setPassword($modelData['password']);
         }
 
         return $ret;
