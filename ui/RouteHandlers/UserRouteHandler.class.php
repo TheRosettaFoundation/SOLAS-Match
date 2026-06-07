@@ -753,10 +753,9 @@ class UserRouteHandler
                 $error = Lib\Localisation::getTranslation('register_2');
             } elseif ($user = $userDao->getUserByEmail($post['email'], $temp)) {
                 if ($userDao->isUserVerified($user->getId())) {
-                    $error = sprintf(Lib\Localisation::getTranslation('register_3'), $app->getRouteCollector()->getRouteParser()->urlFor("login"));
+                    $error = sprintf(Lib\Localisation::getTranslation('register_3'), $app->getRouteCollector()->getRouteParser()->urlFor('login'));
                 } else {
-                    $error = "User is not verified";
-                    // notify user that they are not yet verified an resent verification email
+                    $error = 'User is not verified, check your email and click on the verification link.';
                 }
             } elseif (empty($post['first_name'])) {
                 $error = 'You did not enter First name';
@@ -772,8 +771,7 @@ class UserRouteHandler
 
 (**)call [GET User data from Tarjimly using email]
                 if Tarjimly email exists {
-                    $error = 'you already have an account (BTW Tarijmly & TWB are now one account system), and log in here';//(**)Wording
-                    OR REDIRECT TO LOGIN(**)
+                    $error = 'You already have an account (BTW Tarijmly & TWB are now one account system), and log in <a href="' . $app->getRouteCollector()->getRouteParser()->urlFor('login') . '">here</a>';//(**)Wording
                 } else {
                     // Create a new User
                     $result = LibAPI\PDOWrapper::call('userInsertAndUpdate', LibAPI\PDOWrapper::cleanseNullOrWrapStr($email) . ",0,'',null,null,null,null,null");
@@ -795,9 +793,9 @@ class UserRouteHandler
             if ($email) $template_data = array_merge($template_data, ['email' => $email]);
         }
         if ($error) {
-            $template_data = array_merge($template_data, array("error" => $error));
+            $template_data = array_merge($template_data, ['error' => $error]);
         }
-        return UserRouteHandler::render("user/register.tpl", $response);
+        return UserRouteHandler::render('user/register.tpl', $response);
     }
 
     public function changeEmail(Request $request, Response $response, $args)
@@ -843,41 +841,39 @@ class UserRouteHandler
 
         $userDao = new DAO\UserDao();
 
-        $user = $userDao->getRegisteredUser($uuid);
-
-        if (is_null($user)) {
-            UserRouteHandler::flash("error", Lib\Localisation::getTranslation('email_verification_7'));
-            return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor("home"));
+        $result = LibAPI\PDOWrapper::call('getRegisteredUser', LibAPI\PDOWrapper::cleanseWrapStr($uuid));
+        if (empty($result)) {
+            UserRouteHandler::flash('error', Lib\Localisation::getTranslation('email_verification_7'));
+            return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('home'));
         }
+        $user = $result[0];
 
         if ($request->getMethod() === 'POST') {
             $post = $request->getParsedBody();
             if (isset($post['verify'])) {
                 if ($userDao->finishRegistration($uuid)) {
-                    $email = $user->getEmail();
+                    $email = $user['email'];
                     error_log("email verification, Login: $email");
 
 call [GET User data from Tarjimly using email] again
 
 if already on Tarjimly {
-                    $error = 'you already have an account (BTW Tarijmly & TWB are now one account system), and log in here';//(**)Wording
-                    AND REDIRECT TO LOGIN(**)
+                        UserRouteHandler::flash('error', 'You already have an account (BTW Tarijmly & TWB are now one account system), please log in.);//(**)Wording
+                        return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('login'));
 }
-call [CREATE User on Tarjimly] WITH $user->getPassword()
+call [CREATE User on Tarjimly] WITH $user['password']
 
                     $this->set_session_redirect($response, 0, $user);
-
-(**)is there normally any flash notification???
                 } else {
-                    UserRouteHandler::flash('error', 'Failed to finish registration');  // TODO: remove inline text
+                    UserRouteHandler::flash('error', 'Failed to finish registration.');
                 }
                 return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('login'));
             }
         }
 
-        $template_data = array_merge($template_data, array('uuid' => $uuid));
+        $template_data = array_merge($template_data, ['uuid' => $uuid]);
 
-        return UserRouteHandler::render("user/email.verification.tpl", $response);
+        return UserRouteHandler::render('user/email.verification.tpl', $response);
     }
 
     public function set_session_redirect(Response $response, $login, $user) {
