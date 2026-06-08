@@ -467,13 +467,6 @@ class UserDao
         return $ret;
     }
 
-    public static function insert_communications_consent($user_id, $accepted)
-    {
-        Lib\PDOWrapper::call('insert_communications_consent',
-            Lib\PDOWrapper::cleanse($user_id) . ',' .
-            Lib\PDOWrapper::cleanse($accepted));
-    }
-    
     public static function deleteUser($user_id)
     {
         $user = self::getUser($user_id);
