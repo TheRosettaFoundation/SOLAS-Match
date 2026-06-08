@@ -196,10 +196,6 @@ class Users
             '\SolasMatch\API\V0\Users:send_password_reset_verification');
 
         $app->get(
-            '/api/v0/users/{email}/auth/code/',
-            '\SolasMatch\API\V0\Users:getAuthCode');
-
-        $app->get(
             '/api/v0/users/subscribedToTask/{userId}/{taskId}/',
             '\SolasMatch\API\V0\Users:userSubscribedToTask')
             ->add('\SolasMatch\API\Lib\Middleware:authUserOwnsResource');
@@ -589,51 +585,6 @@ error_log("userClaimTask($userId, $taskId)");
     {
         Lib\Notify::sendPasswordResetEmail($args['user_id']);
         return API\Dispatcher::sendResponse($response, null, null);
-    }
-
-    public static function getAuthCode(Request $request, Response $response, $args)
-    {
-        $email = $args['email'];
-        $user = DAO\UserDao::getUser(null, $email);
-        if (!$user) {
-            error_log("apiRegister($email) in getAuthCode()");
-            DAO\UserDao::apiRegister($email, md5($email), false);
-            $user = DAO\UserDao::getUser(null, $email);
-            DAO\UserDao::finishRegistration($user->getId());
-            //Set new user's personal info to show their preferred language as English.
-            $newUser = DAO\UserDao::getUser(null, $user->getEmail());
-            $userInfo = new Common\Protobufs\Models\UserPersonalInformation();
-            $english = DAO\LanguageDao::getLanguage(null, "en");
-            $userInfo->setUserId($newUser->getId());
-            $userInfo->setLanguagePreference($english->getId());
-
-            if ($google = DAO\UserDao::get_google_user_details($email)) {
-                $userInfo->setFirstName($google['first_name']);
-                $userInfo->setLastName($google['last_name']);
-                DAO\UserDao::update_terms_accepted($user->getId(), 1);
-            }
-
-            $personal_info = DAO\UserDao::savePersonalInfo($userInfo);
-        }
-        $params = array();
-        try {
-            if (DAO\AdminDao::isUserBanned($user->getId())) {
-                throw new \Exception("User is banned");
-            }
-            $server = API\Dispatcher::getOauthServer();
-            $authCodeGrant = $server->getGrantType('authorization_code');
-            $params = $authCodeGrant->checkAuthoriseParams();
-            $authCode = $authCodeGrant->newAuthoriseRequest('user', $user->getId(), $params);
-        } catch (\Exception $e) {
-            DAO\UserDao::logLoginAttempt($user->getId(), $email, 0);
-            error_log("Exception $email");
-            if (!isset($params['redirect_uri'])) {
-                return $response->withStatus(302)->withHeader('Location', $request->getHeaderLine('REFERER') . "?error=auth_failed&error_message={$e->getMessage()}");
-            } else {
-                return $response->withStatus(302)->withHeader('Location', $params['redirect_uri'] . "?error=auth_failed&error_message={$e->getMessage()}");
-            }
-        }
-        return $response->withStatus(302)->withHeader('Location', $params['redirect_uri'] . "?code=$authCode");
     }
 
     public static function userSubscribedToTask(Request $request, Response $response, $args)

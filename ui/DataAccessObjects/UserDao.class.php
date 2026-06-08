@@ -884,26 +884,6 @@ error_log("claimTask_shell($userId, $taskId)");
         return $ret;
     }
     
-    public function requestAuthCode($email)
-    {
-        global $app;
-
-        $redirectUri = '';
-        if (isset($_SERVER['HTTPS']) && !is_null($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off') {
-            $redirectUri = 'https://';
-        } else {
-            $redirectUri = 'http://';
-        }
-        $redirectUri .= $_SERVER['SERVER_NAME'] . $app->getRouteCollector()->getRouteParser()->urlFor('login');
-
-        $request = "{$this->siteApi}v0/users/$email/auth/code/?".
-            'client_id='.Common\Lib\Settings::get('oauth.client_id').'&'.
-            "redirect_uri=$redirectUri&".
-            'response_type=code';
-
-        return $request;
-    }
-    
     public function loginWithAuthCode($authCode)
     {
         global $app;
