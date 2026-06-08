@@ -12,21 +12,22 @@ require_once __DIR__ . '/../../Common/lib/MoodleRest.php';
 
 class UserDao
 {
-    public static function getLoggedInUser($token = null)
+    public static function getLoggedInUser()
     {
-        if (is_null($token)) {
-            try {
-                $resource = new \League\OAuth2\Server\Resource(new \League\OAuth2\Server\Storage\PDO\Session());
-                // Test for token existance and validity
-                $resource->isValid(true);
-                $parts = explode(" ", $_SERVER['HTTP_AUTHORIZATION']);
-                $token = $parts[1];
-            } catch (\League\OAuth2\Server\Exception\InvalidAccessTokenException $e) {
-                //The access token is missing or invalid...
-                return null;
-            }
-        }
-        return self::getByOAuthToken($token);
+        $token = UserSession::getAccessToken();
+        if (empty($token)) return null;
+        $parts = explode(' ', $_SERVER['HTTP_AUTHORIZATION']);
+        if (empty($parts[1])) return null;
+        $token = $parts[1];
+        $key = hex2bin($token);
+        $iv = substr($key, -16);
+        $encrypted = substr($key, 0, -18);
+        $user_id_time = openssl_decrypt($encrypted, 'aes-256-cbc', base64_decode(Common\Lib\Settings::get('badge.key')), 0, $iv);
+        $user_id_time = explode(';', $user_id_time);
+        if (empty($user_id_time[1])) return null;
+        $user_id = $user_id_time[0];
+        if (time() > $user_id_time[1] + 24*60*60) return null;
+        return self::getUser($user_id);
     }
     
     public static function save($user)
@@ -550,17 +551,6 @@ class UserDao
         return $ret;
     }
     
-    public static function getByOAuthToken($token)
-    {
-        $ret = null;
-        $args = Lib\PDOWrapper::cleanseNullOrWrapStr($token);
-        $result = Lib\PDOWrapper::call('getUserByOAuthToken', $args);
-        if ($result) {
-            $ret = Common\Lib\ModelFactory::buildModel("User", $result[0]);
-        }
-        return $ret;
-    }
-
     public static function get_google_user_details($email)
     {
         $result = Lib\PDOWrapper::call('get_google_user_details', Lib\PDOWrapper::cleanseNullOrWrapStr($email));
