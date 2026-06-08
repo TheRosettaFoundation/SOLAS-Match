@@ -64,57 +64,6 @@ class UserDao
         }
     }
 
-    private static function clearPasswordMatchesUsersPassword($user, $clear_password)
-    {
-        $hashed_input_password = Common\Lib\Authentication::hashPassword($clear_password, $user->getNonce());
-        return $hashed_input_password == $user->getPassword();
-    }
-
-    public static function apiLogin($email, $clear_password)
-    {
-        $user = self::getUsers(null, $email);
-        
-        if (is_array($user)) {
-            $user = $user[0];
-        }
-        
-        if (!is_object($user)) {
-            self::logLoginAttempt(null, $email, 0);
-            throw new Common\Exceptions\SolasMatchException(
-                "Unable to find user",
-                Common\Enums\HttpStatusEnum::NOT_FOUND
-            );
-        }
-                
-        if (!self::isUserVerified($user->getId())) {
-            self::logLoginAttempt($user->getId(), $email, 0);
-            throw new Common\Exceptions\SolasMatchException(
-                "Account is unverified",
-                Common\Enums\HttpStatusEnum::UNAUTHORIZED
-            );
-        }
-
-        if (AdminDao::isUserBanned($user->getId())) {
-            self::logLoginAttempt($user->getId(), $email, 0);
-            throw new Common\Exceptions\SolasMatchException(
-                'user is banned',
-                Common\Enums\HttpStatusEnum::FORBIDDEN
-            );
-        }
-
-        if (!self::clearPasswordMatchesUsersPassword($user, $clear_password)) {
-            self::logLoginAttempt($user->getId(), $email, 0);
-            throw new Common\Exceptions\SolasMatchException(
-                'Unable to find user',
-                Common\Enums\HttpStatusEnum::NOT_FOUND
-            );
-        }
-        
-        self::logLoginAttempt($user->getId(), $email, 1);
-
-        return $user->getId();
-    }
-
     public static function finishRegistration($userId)
     {
         $args = Lib\PDOWrapper::cleanseNull($userId);
