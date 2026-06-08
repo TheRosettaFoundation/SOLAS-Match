@@ -22,29 +22,6 @@ define("NGO_LINGUIST",        2);
 define("LINGUIST",            1);
 
 require_once __DIR__ . '/lib/Middleware.php';
-require_once '/repo/SOLAS-Match/api/vendor/league/oauth2-server/src/League/OAuth2/Server/Exception/OAuth2Exception.php';
-require_once '/repo/SOLAS-Match/api/vendor/league/oauth2-server/src/League/OAuth2/Server/Exception/ClientException.php';
-require_once '/repo/SOLAS-Match/api/vendor/league/oauth2-server/src/League/OAuth2/Server/Exception/InvalidGrantTypeException.php';
-require_once '/repo/SOLAS-Match/api/vendor/league/oauth2-server/src/League/OAuth2/Server/Exception/InvalidAccessTokenException.php';
-require_once '/repo/SOLAS-Match/api/vendor/league/oauth2-server/src/League/OAuth2/Server/Grant/GrantTrait.php';
-require_once '/repo/SOLAS-Match/api/vendor/league/oauth2-server/src/League/OAuth2/Server/Storage/ClientInterface.php';
-require_once '/repo/SOLAS-Match/api/vendor/league/oauth2-server/src/League/OAuth2/Server/Storage/SessionInterface.php';
-require_once '/repo/SOLAS-Match/api/vendor/league/oauth2-server/src/League/OAuth2/Server/Storage/ScopeInterface.php';
-require_once '/repo/SOLAS-Match/api/vendor/league/oauth2-server/src/League/OAuth2/Server/Grant/GrantTypeInterface.php';
-require_once '/repo/SOLAS-Match/api/vendor/league/oauth2-server/src/League/OAuth2/Server/Grant/Implicit.php';
-require_once '/repo/SOLAS-Match/api/vendor/league/oauth2-server/src/League/OAuth2/Server/Grant/RefreshToken.php';
-require_once '/repo/SOLAS-Match/api/vendor/league/oauth2-server/src/League/OAuth2/Server/Grant/Password.php';
-require_once '/repo/SOLAS-Match/api/vendor/league/oauth2-server/src/League/OAuth2/Server/Grant/ClientCredentials.php';
-require_once '/repo/SOLAS-Match/api/vendor/league/oauth2-server/src/League/OAuth2/Server/Grant/AuthCode.php';
-require_once '/repo/SOLAS-Match/api/vendor/league/oauth2-server/src/League/OAuth2/Server/Authorization.php';
-require_once '/repo/SOLAS-Match/api/vendor/league/oauth2-server/src/League/OAuth2/Server/Resource.php';
-require_once '/repo/SOLAS-Match/api/vendor/league/oauth2-server/src/League/OAuth2/Server/Util/RequestInterface.php';
-require_once '/repo/SOLAS-Match/api/vendor/league/oauth2-server/src/League/OAuth2/Server/Util/SecureKey.php';
-require_once '/repo/SOLAS-Match/api/vendor/league/oauth2-server/src/League/OAuth2/Server/Util/RedirectUri.php';
-require_once '/repo/SOLAS-Match/api/vendor/league/oauth2-server/src/League/OAuth2/Server/Util/Request.php';
-require_once __DIR__ . '/OAuth2/Client.php';
-require_once __DIR__ . '/OAuth2/Scope.php';
-require_once __DIR__ . '/OAuth2/Session.php';
 require_once __DIR__ . '/../Common/lib/Settings.class.php';
 require_once __DIR__ . '/../Common/lib/ModelFactory.class.php';
 require_once __DIR__ . '/../Common/Enums/BadgeTypes.class.php';
@@ -93,34 +70,9 @@ require_once 'v0/Tags.php';
 require_once 'v0/Tasks.php';
 require_once 'v0/Users.php';
 
-Dispatcher::initOAuth();
-
 class Dispatcher
 {
-    private static $oauthServer = null;
-    private static $oauthRequest = null;
-            
-    public static function initOAuth()
-    {
-        self::$oauthRequest = new \League\OAuth2\Server\Util\Request();
-        self::$oauthServer = new \League\OAuth2\Server\Authorization(
-            new \League\OAuth2\Server\Storage\PDO\Client(),
-            new \League\OAuth2\Server\Storage\PDO\Session(),
-            new \League\OAuth2\Server\Storage\PDO\Scope()
-        );
-        self::$oauthServer->setAccessTokenTTL(Common\Lib\Settings::get('site.oauth_timeout'));
-        $passwordGrant = new \League\OAuth2\Server\Grant\Password();
-        $passwordGrant->setVerifyCredentialsCallback("\SolasMatch\API\DAO\UserDao::apiLogin");
-        self::$oauthServer->addGrantType($passwordGrant);
-        self::$oauthServer->addGrantType(new \League\OAuth2\Server\Grant\AuthCode());
-    }
-    
-    public static function getOauthServer()
-    {
-        return self::$oauthServer;
-    }
-    
-    public static function sendResponse(Response $response, $body, $code = 200, $oauthToken = null)
+    public static function sendResponse(Response $response, $body, $code = 200)
     {
         $response = $response->withHeader('Access-Control-Allow-Origin',  '*');
         $response = $response->withHeader('Access-Control-Allow-Headers', 'Content-Type');
@@ -130,9 +82,6 @@ class Dispatcher
         $apiHelper = new Common\Lib\APIHelper('.json');
         $body = $apiHelper->serialize($body);
 
-        $token = $apiHelper->serialize($oauthToken);
-        $response = $response->withHeader('X-Custom-Token', base64_encode($token));
-        
         if ($code != null) $response = $response->withStatus($code);
         
         if ($body != null) $response->getBody()->write((string)$body);
