@@ -5109,6 +5109,7 @@ END//
 DELIMITER ;
 
 
+# Not currently used...
 DROP PROCEDURE IF EXISTS `oauthAssociateAccessToken`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `oauthAssociateAccessToken`(IN `sessionId` INT, IN `accessToken` CHAR(40), IN `expireTime` INT)
@@ -5120,7 +5121,7 @@ BEGIN
 END//
 DELIMITER ;
 
-
+# Not currently used...
 DROP PROCEDURE IF EXISTS `oauthAssociateAuthCode`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `oauthAssociateAuthCode`(IN `sessionId` INT, IN `authCode` CHAR(40), IN `expireTime` INT)
@@ -5132,7 +5133,7 @@ BEGIN
 END//
 DELIMITER ;
 
-
+# Not currently used...
 DROP PROCEDURE IF EXISTS `oauthAssociateAuthCodeScope`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `oauthAssociateAuthCodeScope`(IN `authCodeId` INT, IN `scopeId` INT)
@@ -5143,7 +5144,7 @@ BEGIN
 END//
 DELIMITER ;
 
-
+# Not currently used...
 DROP PROCEDURE IF EXISTS `oauthAssociateRedirectUri`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `oauthAssociateRedirectUri`(IN `sessionId` INT, IN `redirectUri` VARCHAR(255))
@@ -5154,7 +5155,7 @@ BEGIN
 END//
 DELIMITER ;
 
-
+# Not currently used...
 DROP PROCEDURE IF EXISTS `oauthAssociateRefreshToken`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `oauthAssociateRefreshToken`(IN `accessTokenId` INT, IN `refreshToken` CHAR(40), IN `expireTime` INT, IN `clientId` CHAR(40))
@@ -5165,7 +5166,7 @@ BEGIN
 END//
 DELIMITER ;
 
-
+# Not currently used...
 DROP PROCEDURE IF EXISTS `oauthAssociateScope`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `oauthAssociateScope`(IN `accessTokenId` INT, IN `scopeId` INT)
@@ -5176,7 +5177,7 @@ BEGIN
 END//
 DELIMITER ;
 
-
+# Not currently used...
 DROP PROCEDURE IF EXISTS `oauthCreateSession`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `oauthCreateSession`(IN `clientId` CHAR(40), IN `ownerType` ENUM('user', 'client'), IN `ownerId` VARCHAR(255))
@@ -5188,7 +5189,7 @@ BEGIN
 END//
 DELIMITER ;
 
-
+# Not currently used...
 DROP PROCEDURE IF EXISTS `oauthDeleteSession`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `oauthDeleteSession`(IN `clientId` CHAR(40), IN `ownerType` ENUM('user', 'client'), IN `ownerId` VARCHAR(255))
@@ -5201,7 +5202,7 @@ BEGIN
 END//
 DELIMITER ;
 
-
+# Not currently used...
 DROP PROCEDURE IF EXISTS `oauthGetAccessToken`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `oauthGetAccessToken`(IN `accessTokenId` INT)
@@ -5213,7 +5214,7 @@ BEGIN
 END//
 DELIMITER ;
 
-
+# Not currently used...
 DROP PROCEDURE IF EXISTS `oauthGetAuthCodeScopes`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `oauthGetAuthCodeScopes`(IN `authCodeId` INT)
@@ -5225,7 +5226,7 @@ BEGIN
 END//
 DELIMITER ;
 
-
+# Not currently used...
 DROP PROCEDURE IF EXISTS `oauthGetClient`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `oauthGetClient`(IN `clientId` CHAR(40), IN `clientSecret` CHAR(42), IN `redirectUri` VARCHAR(255))
@@ -5248,7 +5249,7 @@ BEGIN
 END//
 DELIMITER ;
 
-
+# Not currently used...
 DROP PROCEDURE IF EXISTS `oauthGetScope`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `oauthGetScope`(IN `requestedScope` VARCHAR(255))
@@ -5260,7 +5261,7 @@ BEGIN
 END//
 DELIMITER ;
 
-
+# Not currently used...
 DROP PROCEDURE IF EXISTS `oauthGetScopes`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `oauthGetScopes`(IN `accessToken` VARCHAR(40))
@@ -5276,7 +5277,7 @@ BEGIN
 END//
 DELIMITER ;
 
-
+# Not currently used...
 DROP PROCEDURE IF EXISTS `oauthRemoveAuthCode`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `oauthRemoveAuthCode`(IN `sessionId` INT)
@@ -5287,7 +5288,7 @@ BEGIN
 END//
 DELIMITER ;
 
-
+# Not currently used...
 DROP PROCEDURE IF EXISTS `oauthRemoveRefreshToken`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `oauthRemoveRefreshToken`(IN `refreshToken` CHAR(40))
@@ -5298,7 +5299,7 @@ BEGIN
 END//
 DELIMITER ;
 
-
+# Not currently used...
 DROP PROCEDURE IF EXISTS `oauthValidateAccessToken`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `oauthValidateAccessToken`(IN `accessToken` CHAR(40))
@@ -5313,7 +5314,7 @@ BEGIN
 END//
 DELIMITER ;
 
-
+# Not currently used...
 DROP PROCEDURE IF EXISTS `oauthValidateAuthCode`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `oauthValidateAuthCode`(IN `clientId` CHAR(40), IN `redirectUri` VARCHAR(255), IN `authCode` CHAR(40))
@@ -5332,7 +5333,7 @@ BEGIN
 END//
 DELIMITER ;
 
-
+# Not currently used...
 DROP PROCEDURE IF EXISTS `oauthValidateRefreshToken`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `oauthValidateRefreshToken`(IN `refreshToken` CHAR(40), IN `clientId` CHAR(40))
