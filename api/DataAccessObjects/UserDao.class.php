@@ -29,19 +29,6 @@ class UserDao
         return self::getByOAuthToken($token);
     }
     
-    public static function create($email, $clear_password)
-    {
-        $nonce = Common\Lib\Authentication::generateNonce();
-        $password = Common\Lib\Authentication::hashPassword($clear_password, $nonce);
-        $user = new Common\Protobufs\Models\User();
-        $user->setEmail($email);
-        $user->setNonce($nonce);
-        $user->setPassword($password);
-        $user = self::save($user);
-        if ($user) Lib\PDOWrapper::call('create_empty_role', Lib\PDOWrapper::cleanse($user->getId()));
-        return $user;
-    }
-
     public static function save($user)
     {
         $userId = $user->getId();
@@ -126,40 +113,6 @@ class UserDao
         self::logLoginAttempt($user->getId(), $email, 1);
 
         return $user->getId();
-    }
-
-    public static function apiRegister($email, $clear_password, $verificationRequired = true)
-    {
-        $ret = null;
-        $user = self::getUser(null, $email);
-        if (is_array($user)) {
-            $user = $user[0];
-        }
-
-        if (!is_object($user) && $clear_password != "") {
-            $user = self::create($email, $clear_password);
-            if ($verificationRequired) {
-                self::registerUser($user->getId());
-                Lib\Notify::sendEmailVerification($user->getId());
-            }
-            if ($user) {
-                $ret = '1';
-            }
-        }
-        return $ret;
-    }
-
-    private static function registerUser($userId)
-    {
-        $ret = null;
-        $uid = md5(uniqid(rand()));
-        $args = Lib\PDOWrapper::cleanseNull($userId).",".
-            Lib\PDOWrapper::cleanseNullOrWrapStr($uid);
-        $result = Lib\PDOWrapper::call("registerUser", $args);
-        if ($result) {
-            $ret = $result[0]['result'];
-        }
-        return $ret;
     }
 
     public static function finishRegistration($userId)
