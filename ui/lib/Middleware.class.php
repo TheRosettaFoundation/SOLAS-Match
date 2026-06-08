@@ -94,9 +94,7 @@ class Middleware
     {
        global $template_data;
 
-        if (!is_null($token = Common\Lib\UserSession::getAccessToken()) && $token->getExpires() <  time()) {
-            Common\Lib\UserSession::clearCurrentUserID();
-        }
+        if ($this->token_expired()) Common\Lib\UserSession::clearCurrentUserID();
 
         $userDao = new DAO\UserDao();
         if (!is_null($current_user_id = Common\Lib\UserSession::getCurrentUserID())) {
@@ -123,6 +121,20 @@ class Middleware
             }
         }
         return $handler->handle($request);
+    }
+
+    public function token_expired()
+    {
+        $token = Common\Lib\UserSession::getAccessToken();
+        if (empty($token)) return 1;
+        $key = hex2bin($token);
+        $iv = substr($key, -16);
+        $encrypted = substr($key, 0, -18);
+        $user_id_time = openssl_decrypt($encrypted, 'aes-256-cbc', base64_decode(Common\Lib\Settings::get('badge.key')), 0, $iv);
+        $user_id_time = explode(';', $user_id_time);
+        if (empty($user_id_time[1])) return 1;
+        if (time() > $user_id_time[1] + 24*60*60) return 1;
+        return 0;
     }
 
     public function Flash(Request $request, RequestHandler $handler)

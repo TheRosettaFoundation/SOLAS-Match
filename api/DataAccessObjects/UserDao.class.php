@@ -14,8 +14,7 @@ class UserDao
 {
     public static function getLoggedInUser()
     {
-        $token = UserSession::getAccessToken();
-        if (empty($token)) return null;
+        if (empty($_SERVER['HTTP_AUTHORIZATION'])) return null;
         $parts = explode(' ', $_SERVER['HTTP_AUTHORIZATION']);
         if (empty($parts[1])) return null;
         $token = $parts[1];
