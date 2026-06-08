@@ -538,14 +538,6 @@ class UserDao
         } else error_log("deleteUser($user_id) /admin/users/list/all.json?email=$old_email: $result");
     }
     
-    public static function logLoginAttempt($userId, $email, $loginSuccess)
-    {
-        $args = Lib\PDOWrapper::cleanseNull($userId).",".
-            Lib\PDOWrapper::cleanseNullOrWrapStr($email).",".
-            Lib\PDOWrapper::cleanseNull($loginSuccess);
-        Lib\PDOWrapper::call("userLoginInsert", $args);
-    }
-    
     public static function isBlacklistedForTask($userId, $taskId)
     {
         $ret = null;
