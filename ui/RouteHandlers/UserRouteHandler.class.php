@@ -772,7 +772,7 @@ class UserRouteHandler
                     $error = 'You already have an account (BTW Tarijmly & TWB are now one account system), and log in <a href="' . $app->getRouteCollector()->getRouteParser()->urlFor('login') . '">here</a>';//(**)Wording
                 } else {
                     // Create a new User
-                    $result = LibAPI\PDOWrapper::call('userInsertAndUpdate', LibAPI\PDOWrapper::cleanseNullOrWrapStr($email) . ",0,'',null,null,null,null,null");
+                    $result = LibAPI\PDOWrapper::call('userInsertAndUpdate', LibAPI\PDOWrapper::cleanseWrapStr($email) . ",0,'',null,null,null,null,null");
                     $user_id = $result[0]['id'];
                     LibAPI\PDOWrapper::call('create_empty_role', LibAPI\PDOWrapper::cleanse($user_id));
                     LibAPI\PDOWrapper::call('insert_communications_consent', LibAPI\PDOWrapper::cleanse($user_id) . ',' . LibAPI\PDOWrapper::cleanse($communications_consent));
@@ -861,7 +861,7 @@ if already on Tarjimly {
 }
 call [CREATE User on Tarjimly] WITH $user['password']
 
-                    $this->set_session_redirect($response, 0, $user);
+                    return $this->set_session_redirect($response, 0, $user);
                 } else {
                     UserRouteHandler::flash('error', 'Failed to finish registration.');
                 }
@@ -1099,9 +1099,10 @@ call [CREATE User on Tarjimly] WITH $user['password']
         if ($request->getMethod() === 'POST') {
             $post = $request->getParsedBody();
 
-            if (isset($post['login'])) {
+            if (isset($post['login']) && !empty($post['email'] && !empty($post['password']))) {
                 $user = 0;
-call [GET User data from Tarjimly using email] $post['email'] and $post['password']
+                $email = $post['email'];
+call [GET User data from Tarjimly using email] $email and $post['password']
                 if not match (or banned) {
                     $error = sprintf(Lib\Localisation::getTranslation('login_1'), $app->getRouteCollector()->getRouteParser()->urlFor('login'), $app->getRouteCollector()->getRouteParser()->urlFor('register'), $e->getMessage());
                     UserRouteHandler::flashNow('error', $error);
@@ -1111,7 +1112,7 @@ call [GET User data from Tarjimly using email] $post['email'] and $post['passwor
                 } else {
                     $result = LibAPI\PDOWrapper::call('getUser', 'null,null,' . LibAPI\PDOWrapper::cleanseWrapStr($email) . ',null,null,null,null,null,null');
                     if (empty($result)) {
-                        $result = LibAPI\PDOWrapper::call('userInsertAndUpdate', LibAPI\PDOWrapper::cleanseNullOrWrapStr($email) . ",0,'',null,null,null,null,null");
+                        $result = LibAPI\PDOWrapper::call('userInsertAndUpdate', LibAPI\PDOWrapper::cleanseWrapStr($email) . ",0,'',null,null,null,null,null");
                         $user_id = $result[0]['id'];
                         $result = LibAPI\PDOWrapper::call('getUser', "$user_id,null,null,null,null,null,null,null,null");
                         $user = $result[0];
@@ -1133,8 +1134,10 @@ call [UPDATE external ID on Tarjimly]
                 }
                 if ($user) {
                     error_log("Password, Login: {$post['email']}");
-                    $this->set_session_redirect($response, 1, $user);
+                    LibAPI\PDOWrapper::call('userLoginInsert', LibAPI\PDOWrapper::cleanse($user_id) . ',' . LibAPI\PDOWrapper::cleanseWrapStr($email) . ',1');
+                    return $this->set_session_redirect($response, 1, $user);
                 }
+                LibAPI\PDOWrapper::call('userLoginInsert', 'null,' . LibAPI\PDOWrapper::cleanseWrapStr($email) . ',0');
             } elseif (isset($post['password_reset'])) {
                 return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor("password-reset-request"));
             } elseif (isset($post['credential'])) { // Google Sign-In
