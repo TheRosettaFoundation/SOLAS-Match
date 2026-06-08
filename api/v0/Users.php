@@ -11,7 +11,6 @@ use \SolasMatch\Common\Exceptions as Exceptions;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 
-require_once __DIR__.'/../../Common/protobufs/models/OAuthResponse.php';
 require_once __DIR__."/../../Common/lib/Settings.class.php";
 require_once __DIR__."/../DataAccessObjects/UserDao.class.php";
 require_once __DIR__."/../DataAccessObjects/TaskDao.class.php";
@@ -224,10 +223,6 @@ class Users
             '/api/v0/users/getClaimedTasksCount/{userId}/',
             '\SolasMatch\API\V0\Users:getUserClaimedTasksCount')
             ->add('\SolasMatch\API\Lib\Middleware:authUserOwnsResource');
-
-        $app->post(
-            '/api/v0/users/authCode/login/',
-            '\SolasMatch\API\V0\Users:getAccessToken');
 
         $app->get(
             '/api/v0/users/getByEmail/{email}/email/',
@@ -623,32 +618,6 @@ error_log("userClaimTask($userId, $taskId)");
         $userId = $args['userId'];
         $data = DAO\TaskDao::getUserTasksCount($userId);
         return API\Dispatcher::sendResponse($response, $data, null);
-    }
-
-    public static function getAccessToken(Request $request, Response $response)
-    {
-        try {
-            $server = API\Dispatcher::getOauthserver();
-            $authCodeGrant = $server->getGrantType('authorization_code');
-            $accessToken = $authCodeGrant->completeFlow();
-
-            $oAuthToken = new Common\Protobufs\Models\OAuthResponse();
-            $oAuthToken->setToken($accessToken['access_token']);
-            $oAuthToken->setTokenType($accessToken['token_type']);
-            $oAuthToken->setExpires($accessToken['expires']);
-            $oAuthToken->setExpiresIn($accessToken['expires_in']);
-
-            $user = DAO\UserDao::getLoggedInUser($accessToken['access_token']);
-            $user->setPassword("");
-            $user->setNonce("");
-
-            DAO\UserDao::logLoginAttempt($user->getId(), $user->getEmail(), 1);
-
-            return API\Dispatcher::sendResponse($response, $user, null, $oAuthToken);
-        } catch (\Exception $e) {
-            error_log("Exception getAccessToken");
-            return API\Dispatcher::sendResponse($response, $e->getMessage(), Common\Enums\HttpStatusEnum::BAD_REQUEST);
-        }
     }
 
     public static function getUserByEmail(Request $request, Response $response, $args)

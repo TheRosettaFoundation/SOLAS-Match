@@ -91,9 +91,6 @@ class ModelFactory
             case "BannedOrganisation":
                 $ret = self::generateBannedOrganisation($modelData);
                 break;
-            case "OAuthResponse":
-                $ret = self::generateOAuthResponse($modelData);
-                break;
             case "OrgFeedback" :
                 $ret = self::generateOrgFeedback($modelData);
                 break;
@@ -757,29 +754,6 @@ class ModelFactory
         }
         if (isset($modelData['bannedDate'])) {
             $ret->setBannedDate($modelData['bannedDate']);
-        }
-        
-        return $ret;
-    }
-    
-    private static function generateOAuthResponse($modelData)
-    {
-        $ret = new Models\OAuthResponse();
-        
-        if (isset($modelData['token'])) {
-            $ret->setToken($modelData['token']);
-        }
-        
-        if (isset($modelData['token_type'])) {
-            $ret->setTokenType($modelData['token_type']);
-        }
-        
-        if (isset($modelData['expires'])) {
-            $ret->setExpires($modelData['expires']);
-        }
-        
-        if (isset($modelData['expires_in'])) {
-            $ret->setExpiresIn($modelData['expires_in']);
         }
         
         return $ret;

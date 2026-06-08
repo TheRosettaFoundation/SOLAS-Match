@@ -11,7 +11,6 @@ define("UserTaskCancelled", "36");
 
 require_once __DIR__."/../../Common/Enums/HttpStatusEnum.class.php";
 require_once __DIR__."/../../Common/lib/APIHelper.class.php";
-require_once __DIR__."/../../Common/protobufs/models/OAuthResponse.php";
 require_once __DIR__."/BaseDao.php";
 require_once __DIR__."/../../api/lib/PDOWrapper.class.php";
 require_once __DIR__."/../../Common/Enums/MemsourceRoleEnum.class.php";

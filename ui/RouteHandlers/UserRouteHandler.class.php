@@ -882,6 +882,11 @@ call [CREATE User on Tarjimly] WITH $user['password']
 
         $user_id = $user['id'];
         Common\Lib\UserSession::setSession($user_id);
+
+        $iv = openssl_random_pseudo_bytes(openssl_cipher_iv_length('aes-256-cbc'));
+        $encrypted = openssl_encrypt("$user_id;" . time(), 'aes-256-cbc', base64_decode(Common\Lib\Settings::get('badge.key')), 0, $iv);
+        Common\Lib\UserSession::setAccessToken(bin2hex("$encrypted::$iv"));
+
         $request_url = null;
         if ($login) {
             $request_url = Common\Lib\UserSession::getReferer();
