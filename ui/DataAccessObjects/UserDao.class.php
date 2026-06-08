@@ -884,44 +884,6 @@ error_log("claimTask_shell($userId, $taskId)");
         return $ret;
     }
     
-    public function loginWithAuthCode($authCode)
-    {
-        global $app;
-
-        $request = "{$this->siteApi}v0/users/authCode/login";
-
-        $redirectUri = '';
-        if (isset($_SERVER['HTTPS']) && !is_null($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off') {
-            $redirectUri = 'https://';
-        } else {
-            $redirectUri = 'http://';
-        }
-        $redirectUri .= $_SERVER['SERVER_NAME'] . $app->getRouteCollector()->getRouteParser()->urlFor('login');
-
-        $postArgs = 'client_id='.Common\Lib\Settings::get('oauth.client_id').'&'.
-            'client_secret='.Common\Lib\Settings::get('oauth.client_secret').'&'.
-            "redirect_uri=$redirectUri&".
-            "code=$authCode";
-
-        $user = $this->client->call(
-            '\SolasMatch\Common\Protobufs\Models\User',
-            $request,
-            Common\Enums\HttpMethodEnum::POST,
-            $postArgs
-        );
-        $headers = $this->client->getHeaders();
-        if (isset($headers["X-Custom-Token"])) {
-            Common\Lib\UserSession::setAccessToken(
-                $this->client->deserialize(
-                    base64_decode($headers["X-Custom-Token"]),
-                    '\SolasMatch\Common\Protobufs\Models\OAuthResponse'
-                )
-            );
-        }
-
-        return $user;
-    }
-
     public function get_password_reset_request_by_uuid($uuid)
     {
         return LibAPI\PDOWrapper::call('get_password_reset_request_by_uuid', LibAPI\PDOWrapper::cleanseNullOrWrapStr($uuid));

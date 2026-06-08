@@ -1161,94 +1161,9 @@ call [UPDATE external ID on Tarjimly]
             }
         } else {
             $parms = $request->getQueryParams();
-            $authCode = !empty($parms['code']) ? $parms['code'] : null;
-            if (!is_null($authCode)) {
-                // Exchange auth code for access token
-                $user = null;
-                try {
-                    $user = $userDao->loginWithAuthCode($authCode);
-                } catch (\Exception $e) {
-                    $error = sprintf(
-                        Lib\Localisation::getTranslation('login_1'),
-                        $app->getRouteCollector()->getRouteParser()->urlFor("login"),
-                        $app->getRouteCollector()->getRouteParser()->urlFor("register"),
-                        $e->getMessage()
-                    );
-                    UserRouteHandler::flash('error', $error);
-                    return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('login'));
-                }
-                error_log('OAuth, Login: ' . $user->getEmail());
-                Common\Lib\UserSession::setSession($user->getId());
-                $request_url = Common\Lib\UserSession::getReferer();
-                Common\Lib\UserSession::clearReferer();
-
-                // Check have we previously been redirected from SAML to do login, if so get return address so we can redirect to it below
-                if (!$request_url) {
-                    if (!empty($_SESSION['return_to_SAML_url'])) {
-                        $request_url = $_SESSION['return_to_SAML_url'];
-                    }
-                }
-                unset($_SESSION['return_to_SAML_url']);
-
-                $userInfo = $userDao->getUserPersonalInformation($user->getId());
-                $langPrefId = $userInfo->getLanguagePreference();
-                $preferredLang = $langDao->getLanguage($langPrefId);
-                // Set site language to user's preferred language if it is not already
-                $user_language = Common\Lib\UserSession::getUserLanguage();
-                if (empty($user_language)) {
-                    Common\Lib\UserSession::setUserLanguage($preferredLang->getCode());
-                } else {
-                    $currentSiteLang = $langDao->getLanguageByCode($user_language);
-                    if ($currentSiteLang != $preferredLang) {
-                        Common\Lib\UserSession::setUserLanguage($preferredLang->getCode());
-                    }
-                }
-
-                $userDao->setRequiredProfileCompletedinSESSION($user->getId());
-
-                if ($request_url) {
-                    return $response->withStatus(302)->withHeader('Location', $request_url);
-                } else {
-                    $terms_accepted = $userDao->terms_accepted($user->getId());
-                    if ($terms_accepted < 2) {
-                        $message = $adminDao->copy_roles_from_special_registration($user->getId(), $user->getEmail());
-                        if ($message) UserRouteHandler::flash('error', $message);
-                    }
-                    if ($adminDao->isSiteAdmin_any_or_org_admin_any_for_any_org($user->getId())) {
-                        if ($terms_accepted == 1) return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('googleregister', array('user_id' => $user->getId())));
-                        if ($terms_accepted  < 3) $userDao->update_terms_accepted($user->getId(), 3);
-                        $orgs = $adminDao->get_orgs_if_ngo($user->getId());
-                        if (!empty($orgs)) return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('home_ngo', ['org_id' => $orgs[0]['organisation_id']]));
-                        return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('home'));
-                    } else {
-                        $nativeLocale = $user->getNativeLocale();
-                        if ($nativeLocale && $nativeLocale->getLanguageCode()) {
-                            if ($message = $userDao->get_post_login_message($user->getId())) {
-                                UserRouteHandler::flash('error', $message);
-                                return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('user-private-profile', array('user_id' => $user->getId())));
-                            }
-                            if (!$userDao->seen_tutorial($user->getId())) return $response->withStatus(302)->withHeader('Location', Common\Lib\Settings::get('site.location') . 'virtual-tour.html');
-                            return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor("home"));
-                        } else {
-                            if ($terms_accepted == 1) {
-                                // Since they are logged in (via Google)...
-                                return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('googleregister', array('user_id' => $user->getId())));
-                            }
-                            return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('user-private-profile', array('user_id' => $user->getId())));
-                        }
-                    }
-                }
-            }
-
-            $parms = $request->getQueryParams();
             $return_to_SAML_url = !empty($parms['ReturnTo']) ? $parms['ReturnTo'] : null;
             if (!empty($return_to_SAML_url)) {
                 $_SESSION['return_to_SAML_url'] = $return_to_SAML_url;
-            }
-
-            $error = !empty($parms['error']) ? $parms['error'] : null;
-            if (!is_null($error)) {
-                UserRouteHandler::flashNow('error', !empty($parms['error_message']) ? $parms['error_message'] : '');
             }
         }
 
