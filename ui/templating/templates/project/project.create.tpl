@@ -364,7 +364,7 @@
                 <div id="placeholder_for_errors_2"></div>
 
                 {* ── Submit / Cancel ────────────────────────────────────────── *}
-                <div class="d-flex gap-3 pt-2">
+                <div class="d-flex justify-content-end gap-3 pt-2">
                     <a href="{urlFor name="ngo_projects" options="org_id.{$org_id}"}"
                        class="btn btn-outline-secondary px-4">
                         <i class="fa-solid fa-ban me-1"></i>
