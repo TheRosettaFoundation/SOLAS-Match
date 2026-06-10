@@ -122,10 +122,10 @@
                         <label for="project_title" class="form-label fw-semibold text-dark-mariam">
                             {Localisation::getTranslation('common_title')} <span class="text-danger">*</span>
                         </label>
+                        <div class="form-text mt-0 mb-2">{Localisation::getTranslation('project_create_1')}</div>
                         <input type="text" class="form-control" id="project_title" name="project_title"
                                maxlength="128"
                                onblur="checkTitleNotUsed();">
-                        <div class="form-text">{Localisation::getTranslation('project_create_1')}</div>
                     </div>
 
                     {* Summary / Description (impact) *}
