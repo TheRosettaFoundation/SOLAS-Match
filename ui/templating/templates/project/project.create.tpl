@@ -140,10 +140,10 @@
                         <label for="project_title" class="form-label fw-semibold text-dark-mariam">
                             {Localisation::getTranslation('common_title')} <span class="text-danger">*</span>
                         </label>
+                        <div class="form-text mt-0 mb-2">{Localisation::getTranslation('project_create_1')}</div>
                         <input type="text" class="form-control" id="project_title" name="project_title"
                                maxlength="128"
                                onblur="checkTitleNotUsed();">
-                        <div class="form-text">{Localisation::getTranslation('project_create_1')}</div>
                     </div>
 
                     {* Summary / Description (impact) *}
@@ -151,12 +151,10 @@
                         <label for="project_impact" class="form-label fw-semibold text-dark-mariam">
                             Project Summary/Description <span class="text-danger">*</span>
                         </label>
+                        <div class="form-text mt-0 mb-2">{Localisation::getTranslation('project_create_3')} {Localisation::getTranslation('project_create_4')}</div>
                         <textarea class="form-control" id="project_impact" name="project_impact"
                                   rows="3"
                                   ></textarea>
-                        <div class="form-text">
-                            {Localisation::getTranslation('project_create_3')} {Localisation::getTranslation('project_create_4')}
-                        </div>
                     </div>
 
                     {* Project-specific Instructions *}
@@ -164,10 +162,10 @@
                         <label for="project_description" class="form-label fw-semibold text-dark-mariam">
                             Project-specific Instructions <span class="text-danger">*</span>
                         </label>
+                        <div class="form-text mt-0 mb-2">Any specific instructions to the translators.</div>
                         <textarea class="form-control" id="project_description" name="project_description"
                                   rows="5"
                                   ></textarea>
-                        <div class="form-text">Any specific instructions to the translators.</div>
                     </div>
 
                     {* Reference *}
@@ -175,10 +173,10 @@
                         <label for="project_reference" class="form-label fw-semibold text-dark-mariam">
                             {Localisation::getTranslation('common_reference')}
                         </label>
+                        <div class="form-text mt-0 mb-2">{Localisation::getTranslation('project_create_5')}</div>
                         <input type="text" class="form-control" id="project_reference"
                                name="project_reference" maxlength="128"
                                >
-                        <div class="form-text">{Localisation::getTranslation('project_create_5')}</div>
                     </div>
 
                     <div class="mb-0">
@@ -344,6 +342,7 @@
                             <label for="tdDeadlineInput" class="form-label fw-semibold text-dark-mariam">
                                 {Localisation::getTranslation('common_deadline')} <span class="text-danger">*</span>
                             </label>
+                            <div class="form-text mt-0 mb-2">{Localisation::getTranslation('project_create_7')}</div>
                             {* Tempus Dominus 6 picker — syncs with hidden selects via inline script below *}
                             <div class="input-group" id="tdDeadlineContainer">
                                 <input type="text" class="form-control" id="tdDeadlineInput"
@@ -351,9 +350,6 @@
                                 <span class="input-group-text" id="tdDeadlineToggle" style="cursor:pointer;">
                                     <i class="fa-regular fa-calendar"></i>
                                 </span>
-                            </div>
-                            <div class="form-text mt-1">
-                                {Localisation::getTranslation('project_create_7')}
                             </div>
                         </div>
                     </div>
