@@ -16,7 +16,7 @@
 <string name="ff_your_email">Your email</string>
 <string name="ff_confirm_pw">Confirm Password</string>
 <string name="ff_please_confirm">Please confirm your password</string>
-<string name="ff_I_confirm">I confirm I am over the age of 18</string>
+<string name="ff_i_confirm">I confirm I am over the age of 18</string>
 <string name="ff_if_18">If you are under 18 years of age, you can't volunteer with us. Our child protection policy prevents it</string>
 <string name="ff_i_agree">I agree to the <a href="https://twbplatform.org/user%202026%20Code%20of%20Conduct%20for%20Translators%20and%20Interpreters.pdf" class="custom-link" target="_blank">TWB Code of Conduct for Translators</a> and the <a href="https://translatorswithoutborders.org/privacy-policy/?__hstc=6552685.50947dd5d22eb95562a1c48227dc4cde.1624948951679.1624948951679.1624948951679.1%26__hssc=6552685.1.1624948951679%26__hsfp=1528584403" class="custom-link" target="_blank">TWB Privacy Policy</a></string>
 <string name="ff_subscribe">Subscribe to the TWB email newsletter.</string>
@@ -25,8 +25,6 @@
 <string name="ff_language_and">2. Language and Professional Information</string>
 <string name="ff_optional_certs">3. Optional certificates</string>
 <string name="ff_username">Username</string>
-<string name="ff_first">First name</string>
-<string name="ff_last">Last name</string>
 <string name="ff_city">City</string>
 <string name="ff_your_city">Your city</string>
 <string name="ff_country">Country</string>
@@ -58,6 +56,9 @@
 <string name="ff_certs_or_other">Certificates or other relevant documents about your translation qualifications. Please provide a short title for your qualification and upload the corresponding file. Project Officers will also upload here any certificates you obtain while volunteering with TWB. If you have any questions or can’t upload the certificate, please email <a href="mailto:translators@translatorswithoutborders.org?subject=Translation%20Certification" target="_blank">translators@translatorswithoutborders.org</a></string>
 <string name="ff_upload_file">Upload file</string>
 <string name="ff_complete">Complete</string>
+<string name="ff_welcome_word">Welcome</string>
+<string name="ff_welcome">Welcome to the TWB Community. Once you click "Finish Registration" below you will have access to the TWB Platform.</string>
+<string name="ff_create_acc">Create Account</string>
 
     <string name="common_faq">Domande frequenti</string>
     <string name="common_forum">Kató Community</string>

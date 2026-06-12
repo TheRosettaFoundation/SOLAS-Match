@@ -50,9 +50,9 @@
 
     <form method="post" id="userprofile" action="{urlFor name="user-private-profile" options="user_id.$user_id"}" enctype="multipart/form-data" accept-charset="utf-8">
         <ul id="myTab" class="nav nav-tabs">
-            <li class="active"><a href="#home" data-toggle="tab" id="btnTrigger"><span class="clear_brand"><strong>1. Personal Information</strong></span></a></li>
-            <li class="not-active" id="prof"><a href="#profile" data-toggle="tab" id="btnTrigger"><span class="clear_brand"><strong>2. Language and Professional Information</strong></span></a></li>
-            <li class="not-active"><a href="#verifications" data-toggle="tab" id="btnTrigger"><span class="clear_brand"><strong>3. Optional certificates</strong></span></a></li>
+            <li class="active"><a href="#home" data-toggle="tab" id="btnTrigger"><span class="clear_brand"><strong>{Localisation::getTranslation('ff_personal')}</strong></span></a></li>
+            <li class="not-active" id="prof"><a href="#profile" data-toggle="tab" id="btnTrigger"><span class="clear_brand"><strong>{Localisation::getTranslation('ff_language_and')}</strong></span></a></li>
+            <li class="not-active"><a href="#verifications" data-toggle="tab" id="btnTrigger"><span class="clear_brand"><strong>{Localisation::getTranslation('ff_optional_certs')}</strong></span></a></li>
         </ul>
         <div id="myTabContent" class="tab-content">
             <div class="tab-pane fade active in" id="home">
@@ -60,35 +60,35 @@
                 <div class="row-fluid">
                     <div class="span6">
                         <div>
-                            <label for='displayName' class="clear_brand required">Username</label>
-                            <input type="text" name="displayName" value="{$user->getDisplayName()|escape:'html':'UTF-8'}" id="displayName" placeholder="username" />
+                            <label for='displayName' class="clear_brand required">{Localisation::getTranslation('ff_username')}</label>
+                            <input type="text" name="displayName" value="{$user->getDisplayName()|escape:'html':'UTF-8'}" id="displayName" placeholder="{Localisation::getTranslation('ff_username')}" />
                         </div>
                         <div>
-                            <label for='firstName' class="clear_brand required">First name</label>
+                            <label for='firstName' class="clear_brand required">{Localisation::getTranslation('ff_first')}</label>
                             {if !empty($userPersonalInfo)}
-                            <input type="text" name="firstName" value="{$userPersonalInfo->getFirstName()|escape:'html':'UTF-8'}" id="firstName" placeholder="First name" />
+                            <input type="text" name="firstName" value="{$userPersonalInfo->getFirstName()|escape:'html':'UTF-8'}" id="firstName" placeholder="{Localisation::getTranslation('ff_first')}" />
                             {else}
-                            <input type="text" name="firstName" value="" id="firstName" placeholder="First name" />
+                            <input type="text" name="firstName" value="" id="firstName" placeholder="{Localisation::getTranslation('ff_first')}" />
                             {/if}
                         </div>
                         <div>
-                            <label for='lastName' class="clear_brand required">Last name</label>
+                            <label for='lastName' class="clear_brand required">{Localisation::getTranslation('ff_last')}</label>
                             {if !empty($userPersonalInfo)}
-                            <input type="text" name="lastName" value="{$userPersonalInfo->getLastName()|escape:'html':'UTF-8'}" id="lastName" placeholder="Last name" />
+                            <input type="text" name="lastName" value="{$userPersonalInfo->getLastName()|escape:'html':'UTF-8'}" id="lastName" placeholder="{Localisation::getTranslation('ff_last')}" />
                             {else}
-                            <input type="text" name="lastName" value="" id="lastName" placeholder="Last name" />
+                            <input type="text" name="lastName" value="" id="lastName" placeholder="{Localisation::getTranslation('ff_last')}" />
                             {/if}
                         </div>
                         <div>
-                            <label for='city' class="clear_brand">City</label>
+                            <label for='city' class="clear_brand">{Localisation::getTranslation('ff_city')}</label>
                             {if !empty($userPersonalInfo)}
-                            <input type="text" name="city" id="city" value="{$userPersonalInfo->getCity()|escape:'html':'UTF-8'}" placeholder="Your city" />
+                            <input type="text" name="city" id="city" value="{$userPersonalInfo->getCity()|escape:'html':'UTF-8'}" placeholder="{Localisation::getTranslation('ff_your_city')}" />
                             {else}
-                            <input type="text" name="city" id="city" value="" placeholder="Your city" />
+                            <input type="text" name="city" id="city" value="" placeholder="{Localisation::getTranslation('ff_your_city')}" />
                             {/if}
                         </div>
                         <div>
-                            <label class="clear_brand">Country</label>
+                            <label class="clear_brand">{Localisation::getTranslation('ff_country')}</label>
                             <select name="country" id="country" class="country">
                                 {if !empty($userPersonalInfo)}
                                 <option value="{$userPersonalInfo->getCountry()|escape:'html':'UTF-8'}" selected="selected">{$userPersonalInfo->getCountry()|escape:'html':'UTF-8'}</option>
@@ -105,9 +105,9 @@
                         <div>
                             <label class="checkbox clear_brand">
                             {if !empty($userPersonalInfo)}
-                            <input type="checkbox" name="receiveCredit" value="1" {if $userPersonalInfo->getReceiveCredit()}checked="checked"{/if} /> Make my information including which nonprofits I contribute to visible to the TWB Community
+                            <input type="checkbox" name="receiveCredit" value="1" {if $userPersonalInfo->getReceiveCredit()}checked="checked"{/if} /> {Localisation::getTranslation('ff_make_my_info')}
                             {else}
-                            <input type="checkbox" name="receiveCredit" value="1" /> Make my information including which nonprofits I contribute to visible to the TWB Community
+                            <input type="checkbox" name="receiveCredit" value="1" /> {Localisation::getTranslation('ff_make_my_info')}
                             {/if}
                             </label>
                         </div>
@@ -125,14 +125,14 @@
                         {/foreach}
                         <div>
                             <label class="checkbox clear_brand">
-                            <input type="checkbox" name="communications_consent" id="communications_consent" value="1" {if $communications_consent}checked="checked"{/if} /> Subscribe to the TWB Email newsletter
-                            <br /><small><i>You can unsubscribe at any time </i></small>
+                            <input type="checkbox" name="communications_consent" id="communications_consent" value="1" {if $communications_consent}checked="checked"{/if} /> {Localisation::getTranslation('ff_subscribe_news')}
+                            <br /><small><i>{Localisation::getTranslation('ff_you_can_un')} </i></small>
                             </label>
                         </div>
                     </div>
                 </div>
                 <button onclick="deleteUser(); return false;" class="btn btn-inverse" id="deleteBtn">
-                    <i class="icon-fire icon-white"></i> Delete User Account
+                    <i class="icon-fire icon-white"></i> {Localisation::getTranslation('ff_delete_user')}
                 </button>
 
                 <a style="cursor:pointer;color:#FFFFFF;" href="#profile1" class="pull-right nexttab nnext1 nnext111 pull-right btn btn-primary" id="btnTrigger1">Next</a>
@@ -146,7 +146,7 @@
                 {else}
                 <div class="row-fluid" >
                     <div class="span5">
-                        <label class="clear_brand required label_space"><strong>Native language</strong> <i class="icon-question-sign" id="tool5" data-toggle="tooltip" title="Please choose your native language."></i></label>
+                        <label class="clear_brand required label_space"><strong>{Localisation::getTranslation('ff_native_lang')}</strong> <i class="icon-question-sign" id="tool5" data-toggle="tooltip" title="{Localisation::getTranslation('ff_please_coose_native')}"></i></label>
                         <select name="nativeLanguageSelect" class="nativeLanguageSelect" id="nativeLanguageSelect">
                             {if $nativeLanguageSelectCode != '999999999'}
                                 <option value="{$nativeLanguageSelectCode}" selected="selected">{$nativeLanguageSelectName}</option>
@@ -154,9 +154,9 @@
                         </select>
                     </div>
                     <div class="span4">
-                        <label class="clear_brand required label_space"><strong>Variant</strong> <i class="icon-question-sign" id="tool4" data-toggle="tooltip" title="Please choose the country of your native language dialect/variant."></i></label>
+                        <label class="clear_brand required label_space"><strong>{Localisation::getTranslation('ff_variant')}</strong> <i class="icon-question-sign" id="tool4" data-toggle="tooltip" title="{Localisation::getTranslation('ff_please_choose_variant')}"></i></label>
                         <select name="nativeCountrySelect" id="nativeCountrySelect" class="variant">
-                            <option value="">--Select--</option>
+                            <option value="">{Localisation::getTranslation('ff_select_dash')}</option>
                             {foreach $countries as $country}
                                 {if $country->getCode() != 'LATN' && $country->getCode() != 'CYRL' && $country->getCode() != '419' && $country->getCode() != 'HANS' && $country->getCode() != 'HANT' && $country->getCode() != 'ARAB' && $country->getCode() != 'BENG' && $country->getCode() != 'ROHG'}
                                 <option value="{$country->getCode()}" {if $country->getCode() == $nativeCountrySelectCode}selected="selected"{/if}>{$country->getName()}</option>
@@ -172,10 +172,10 @@
                 <div id="buildyourform">
                     <div class="row-fluid" >
                         <div class="span5">
-                            <label class="clear_brand required"><strong>I can translate from</strong> <i class="icon-question-sign" id="tool3" data-toggle="tooltip" title="Please choose languages you are proficient but not native in."></i></label>
+                            <label class="clear_brand required"><strong>{Localisation::getTranslation('ff_I_can_trans')}</strong> <i class="icon-question-sign" id="tool3" data-toggle="tooltip" title="{Localisation::getTranslation('ff_please_choose_lang')}"></i></label>
                         </div>
                         <div class="span4">
-                            <label class="clear_brand required"><strong>To</strong> <i class="icon-question-sign" id="tool2" data-toggle="tooltip" title="We encourage translators to translate into their native language."></i></label>
+                            <label class="clear_brand required"><strong>{Localisation::getTranslation('ff_to_lang')}</strong> <i class="icon-question-sign" id="tool2" data-toggle="tooltip" title="{Localisation::getTranslation('ff_we_emcourage')}"></i></label>
                         </div>
                         {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
                         <div class="span2">
@@ -195,35 +195,35 @@
                                 {assign var="intervalId" value={NotificationIntervalEnum::DAILY}}
                             {/if}
                         {/if}
-                        <strong> How often do you want to receive tasks availability email <i class="icon-question-sign" id="tool1" data-toggle="tooltip" title="Let us know how often you want to receive email notifications about tasks available in your language pairs."></i></strong><br />
+                        <strong> {Localisation::getTranslation('ff_how_often_tasks')} <i class="icon-question-sign" id="tool1" data-toggle="tooltip" title="{Localisation::getTranslation('ff_let_us_how_often_tasks')}"></i></strong><br />
                         <select name="interval" class="interval">
                             <option value="0"
                                 {if !isset($intervalId)}
                                     selected="true"
                                 {/if}
                             >
-                               {Localisation::getTranslation('user_task_stream_notification_edit_never')}
+                               {Localisation::getTranslation('ff_never')}
                             </option>
                             <option value="{NotificationIntervalEnum::DAILY}"
                                 {if isset($intervalId) && $intervalId == NotificationIntervalEnum::DAILY}
                                     selected="true"
                                 {/if}
                             >
-                                {Localisation::getTranslation('user_task_stream_notification_edit_daily')}
+                                {Localisation::getTranslation('ff_daily')}
                             </option>
                             <option value="{NotificationIntervalEnum::WEEKLY}"
                                 {if isset($intervalId) && $intervalId == NotificationIntervalEnum::WEEKLY}
                                     selected="true"
                                 {/if}
                             >
-                                {Localisation::getTranslation('user_task_stream_notification_edit_weekly')}
+                                {Localisation::getTranslation('ff_weekly')}
                             </option>
                             <option value="{NotificationIntervalEnum::MONTHLY}"
                                 {if isset($intervalId) && $intervalId == NotificationIntervalEnum::MONTHLY}
                                     selected="true"
                                 {/if}
                             >
-                                {Localisation::getTranslation('user_task_stream_notification_edit_monthly')}
+                                {Localisation::getTranslation('ff_monthly')}
                             </option>
                             {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
                             <option value="10">
@@ -238,7 +238,7 @@
 
                 <div class="row-fluid">
                     <div class="span4 clear_brand">
-                        <label class="clear_brand required"><strong>Services I can provide</strong></label>
+                        <label class="clear_brand required"><strong>{Localisation::getTranslation('ff_services_i')}</strong></label>
                         <div class="ch1" id="ch1" style="color:#F00;"></div>
                         {assign var="i" value=0}
                         {foreach from=$capability_list key=name item=capability}
@@ -248,7 +248,7 @@
                     </div>
                     <div class="span8 clear_brand">
                         <div class="span6">
-                            <label class="clear_brand required"><strong>Fields of expertise</strong></label>
+                            <label class="clear_brand required"><strong>{Localisation::getTranslation('ff_fields_exp')}</strong></label>
                             <div class="ch" id="ch" style="color:#F00;"></div>
                             {assign var="i" value=0}
                             {foreach from=$expertise_list key=name item=expertise}
@@ -260,30 +260,30 @@
                 </div>
                 <br />
         
-                <a style="cursor:pointer;color:#FFFFFF;margin-right:18%;" href="#verifications" class="pull-right nexttab1 next111 btn btn-primary" id="btnTrigger1">Next</a> <a style="cursor:pointer;color:#FFFFFF;" href="#home" class="pull-right next111 btn btn-primary" id="btnTrigger11">Prev</a>
+                <a style="cursor:pointer;color:#FFFFFF;margin-right:18%;" href="#verifications" class="pull-right nexttab1 next111 btn btn-primary" id="btnTrigger1">{Localisation::getTranslation('ff_next_page')}</a> <a style="cursor:pointer;color:#FFFFFF;" href="#home" class="pull-right next111 btn btn-primary" id="btnTrigger11">{Localisation::getTranslation('ff_prev_page')}</a>
             
             </div>
             <div class="tab-pane fade" id="verifications">
                 <br />
-                <p class="desc">This step in the profile creation process is optional.<br /><br />
-If you have a certificate or are a member of any of the organizations below, please select the organization and submit your proof of certification/membership.<br /><br />
-If you don't have a certificate or proof of membership, you are still welcome to work on tasks in your language combinations.<br /><br />
-After completing this step, please click "Complete" to save your information.<br /><br />
-If you have any questions or can't upload the certificate, please email <a href="mailto:translators@translatorswithoutborders.org?subject=Translation%20Certification" target="_blank">translators@translatorswithoutborders.org</a></p>
+                <p class="desc">{Localisation::getTranslation('ff_this_step')}<br /><br />
+{Localisation::getTranslation('ff_if_you_have_cert')}<br /><br />
+{Localisation::getTranslation('ff_if_you_dont_have_cert')}<br /><br />
+{Localisation::getTranslation('ff_after_coml')}<br /><br />
+{Localisation::getTranslation('ff_any_quest')}</p>
                 <ul>
                     {foreach from=$certification_list key=name item=certification}
                         <li>{if $certification['state']}Already submitted{if $certification['reviewed'] == 1} and reviewed{/if}: {/if}<a href="{urlFor name="user-uploads" options="user_id.$user_id|cert_id.$name"}" target="_blank">{$certification['desc']|escape:'html':'UTF-8'}</a></li>
                     {/foreach}
                 </ul>
                 <br />
-                <h4 style="font-weight: bold"><br />Other Certificates and Documentation</h4>
-                <p class="desc">Certificates or other relevant documents about your translation qualifications. Please provide a short title for your qualification and upload the corresponding file. Project Officers will also upload here any certificates you obtain while volunteering with TWB. If you have any questions or can’t upload the certificate, please email <a href="mailto:translators@translatorswithoutborders.org?subject=Translation%20Certification" target="_blank">translators@translatorswithoutborders.org</a></p>
-                <a href="{urlFor name="user-uploads" options="user_id.$user_id|cert_id.TRANSLATOR"}" target="_blank">Upload file</a>
+                <h4 style="font-weight: bold"><br />{Localisation::getTranslation('ff_other_certs')}</h4>
+                <p class="desc">{Localisation::getTranslation('ff_certs_or_other')}</p>
+                <a href="{urlFor name="user-uploads" options="user_id.$user_id|cert_id.TRANSLATOR"}" target="_blank">{Localisation::getTranslation('ff_upload_file')}</a>
                 <br />
                 <button type="submit"  class='pull-right btn btn-primary' id="updateBtn">
-                    <i class="icon-refresh icon-white"></i> Complete
+                    <i class="icon-refresh icon-white"></i> {Localisation::getTranslation('ff_complete')}
                 </button>
-                <a style="cursor:pointer;color:#FFFFFF;" href="#profile1" class="pull-right next111 btn btn-primary" id="btnTrigger11">Prev</a>
+                <a style="cursor:pointer;color:#FFFFFF;" href="#profile1" class="pull-right next111 btn btn-primary" id="btnTrigger11">{Localisation::getTranslation('ff_prev_page')}</a>
                 <br />
                 <br />
                 
