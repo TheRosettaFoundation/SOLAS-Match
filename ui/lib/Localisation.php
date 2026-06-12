@@ -19,6 +19,7 @@ class Localisation
     {
         self::$ready = true;
         $userLang = Common\Lib\UserSession::getUserLanguage();
+error_log("userLang: $userLang; strings_$userLang.xml");
         $defaultLang = Common\Lib\Settings::get('site.default_site_language_code');
 
         self::$defaultLanguageDoc = new \DOMDocument();
