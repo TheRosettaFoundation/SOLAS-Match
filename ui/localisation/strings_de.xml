@@ -17,7 +17,7 @@
 <string name="ff_please_confirm">Please confirm your password</string>
 <string name="ff_I_confirm">I confirm I am over the age of 18</string>
 <string name="ff_if_18">If you are under 18 years of age, you can't volunteer with us. Our child protection policy prevents it</string>
-<string name="ff_i_agree">I agree to the <a href="https://twbplatform.org/user%202026%20Code%20of%20Conduct%20for%20Translators%20and%20Interpreters.pdf" class="custom-link" target="_blank">TWB Code of Conduct for Translators</a> and the <a href="https://translatorswithoutborders.org/privacy-policy/?__hstc=6552685.50947dd5d22eb95562a1c48227dc4cde.1624948951679.1624948951679.1624948951679.1&__hssc=6552685.1.1624948951679&__hsfp=1528584403" class="custom-link" target="_blank">TWB Privacy Policy</a></string>
+<string name="ff_i_agree">I agree to the <a href="https://twbplatform.org/user%202026%20Code%20of%20Conduct%20for%20Translators%20and%20Interpreters.pdf" class="custom-link" target="_blank">TWB Code of Conduct for Translators</a> and the <a href="https://translatorswithoutborders.org/privacy-policy/?__hstc=6552685.50947dd5d22eb95562a1c48227dc4cde.1624948951679.1624948951679.1624948951679.1%26__hssc=6552685.1.1624948951679%26__hsfp=1528584403" class="custom-link" target="_blank">TWB Privacy Policy</a></string>
 <string name="ff_subscribe">Subscribe to the TWB email newsletter.</string>
 <string name="ff_i_already">I already have an account</string>
 <string name="ff_personal">1. Personal Information</string>
