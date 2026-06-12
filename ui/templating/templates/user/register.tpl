@@ -180,7 +180,7 @@
              </div>
               <div class="mb-1">
               <label class="checkbox required check form-check-label mt-2">
-              <input name="age_consent" id="age_consent" class="form-check-input " type="checkbox"> {Localisation::getTranslation('ff_I_confirm')}
+              <input name="age_consent" id="age_consent" class="form-check-input " type="checkbox"> {Localisation::getTranslation('ff_i_confirm')}
               </label>
               <i class="fa-solid fa-circle-question" id="tool" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="{Localisation::getTranslation('ff_if_18')}"></i>
               </div>
@@ -193,7 +193,7 @@
               <div class="mb-1">
               <label class="checkbox check form-check-label d-flex ">
               <input name="newsletter_consent" id="newsletter_consent" class="form-check-input " type="checkbox"> <span class="ms-1"> {Localisation::getTranslation('ff_subscribe')}
-              <small >You can unsubscribe at any time</small></span>
+              <small >{Localisation::getTranslation('ff_you_can_un')}</small></span>
               </label>
               </div>
               <input type="hidden" name="g-recaptcha-response" id="g_response">
