@@ -1,5 +1,64 @@
 <resources>
     <!-- Smarty Template Strings -->
+<string name="ff_warning">Warning</string>
+<string name="ff_register">Register</string>
+<string name="ff_password">Password</string>
+<string name="ff_error">Error</string>
+<string name="ff_your_pw">Your password</string>
+<string name="ff_never">Never</string>
+<string name="ff_daily">Daily</string>
+<string name="ff_weekly">Weekly</string>
+<string name="ff_monthly">Monthly</string>
+<string name="ff_creat_ac">Create an account with TWB</string>
+<string name="ff_or_continue">OR CONTINUE WITH</string>
+<string name="ff_first">First name</string>
+<string name="ff_last">Last name</string>
+<string name="ff_your_email">Your email</string>
+<string name="ff_confirm_pw">Confirm Password</string>
+<string name="ff_please_confirm">Please confirm your password</string>
+<string name="ff_I_confirm">I confirm I am over the age of 18</string>
+<string name="ff_if_18">If you are under 18 years of age, you can't volunteer with us. Our child protection policy prevents it</string>
+<string name="ff_i_agree">I agree to the <a href="https://twbplatform.org/user%202026%20Code%20of%20Conduct%20for%20Translators%20and%20Interpreters.pdf" class="custom-link" target="_blank">TWB Code of Conduct for Translators</a> and the <a href="https://translatorswithoutborders.org/privacy-policy/?__hstc=6552685.50947dd5d22eb95562a1c48227dc4cde.1624948951679.1624948951679.1624948951679.1&__hssc=6552685.1.1624948951679&__hsfp=1528584403" class="custom-link" target="_blank">TWB Privacy Policy</a></string>
+<string name="ff_subscribe">Subscribe to the TWB email newsletter.</string>
+<string name="ff_i_already">I already have an account</string>
+<string name="ff_personal">1. Personal Information</string>
+<string name="ff_language_and">2. Language and Professional Information</string>
+<string name="ff_optional_certs">3. Optional certificates</string>
+<string name="ff_username">Username</string>
+<string name="ff_first">First name</string>
+<string name="ff_last">Last name</string>
+<string name="ff_city">City</string>
+<string name="ff_your_city">Your city</string>
+<string name="ff_country">Country</string>
+<string name="ff_make_my_info">Make my information including which nonprofits I contribute to visible to the TWB Community</string>
+<string name="ff_subscribe_news">Subscribe to the TWB Email newsletter</string>
+<string name="ff_you_can_un">You can unsubscribe at any time</string>
+<string name="ff_delete_user">Delete User Account</string>
+<string name="ff_native_lang">Native language</string>
+<string name="ff_please_coose_native">Please choose your native language.</string>
+<string name="ff_variant">Variant</string>
+<string name="ff_please_choose_variant">Please choose the country of your native language dialect/variant.</string>
+<string name="ff_select_dash">--Select--</string>
+<string name="ff_I_can_trans">I can translate from</string>
+<string name="ff_please_choose_lang">Please choose languages you are proficient but not native in.</string>
+<string name="ff_to_lang">To</string>
+<string name="ff_we_emcourage">We encourage translators to translate into their native language.</string>
+<string name="ff_how_often_tasks">How often do you want to receive tasks availability email</string>
+<string name="ff_let_us_how_often_tasks">Let us know how often you want to receive email notifications about tasks available in your language pairs.</string>
+<string name="ff_services_i">Services I can provide</string>
+<string name="ff_fields_exp">Fields of expertise</string>
+<string name="ff_next_page">Next</string>
+<string name="ff_prev_page">Prev</string>
+<string name="ff_this_step">This step in the profile creation process is optional.</string>
+<string name="ff_if_you_have_cert">If you have a certificate or are a member of any of the organizations below, please select the organization and submit your proof of certification/membership.</string>
+<string name="ff_if_you_dont_have_cert">If you don't have a certificate or proof of membership, you are still welcome to work on tasks in your language combinations.</string>
+<string name="ff_after_coml">After completing this step, please click "Complete" to save your information.</string>
+<string name="ff_any_quest">If you have any questions or can't upload the certificate, please email <a href="mailto:translators@translatorswithoutborders.org?subject=Translation%20Certification" target="_blank">translators@translatorswithoutborders.org</a></string>
+<string name="ff_other_certs">Other Certificates and Documentation</string>
+<string name="ff_certs_or_other">Certificates or other relevant documents about your translation qualifications. Please provide a short title for your qualification and upload the corresponding file. Project Officers will also upload here any certificates you obtain while volunteering with TWB. If you have any questions or can’t upload the certificate, please email <a href="mailto:translators@translatorswithoutborders.org?subject=Translation%20Certification" target="_blank">translators@translatorswithoutborders.org</a></string>
+<string name="ff_upload_file">Upload file</string>
+<string name="ff_complete">Complete</string>
+
     <string name="common_faq">Domande frequenti</string>
     <string name="common_forum">Kató Community</string>
     <string name="common_discuss_on_community">Parlane alla Kató Community</string>
