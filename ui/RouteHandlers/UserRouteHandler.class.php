@@ -648,6 +648,8 @@ class UserRouteHandler
         $adminDao = new DAO\AdminDao();
 
         if (!empty($args['language'])) $_SESSION['siteLanguage'] = $args['language'];
+$userLang = Common\Lib\UserSession::getUserLanguage();
+error_log("register userLang: $userLang");
         if (!empty($args['track_code'])) $_SESSION['track_code'] = $args['track_code'];
         $email = '';
         $error = null;
