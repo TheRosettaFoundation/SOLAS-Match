@@ -767,8 +767,11 @@ class UserRouteHandler
                 $last_name = $post['last_name'];
                 array_key_exists('newsletter_consent', $post) ? $communications_consent = 1 : $communications_consent = 0;
 
-(**)call [GET User data from Tarjimly using email]
-                if Tarjimly email exists {
+                $ch = curl_init(Common\Lib\Settings::get('tarjimly.url') . '/api/v3/auth/login');
+                curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode(['email' => $email]));
+                curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json', 'Authorization: Bearer ' . Common\Lib\Settings::get('tarjimly.api_key')]);
+                curl_exec($ch);
+                if (curl_getinfo($ch, CURLINFO_HTTP_CODE) == 200) {
                     $error = 'You already have an account (BTW Tarijmly & TWB are now one account system), and log in <a href="' . $app->getRouteCollector()->getRouteParser()->urlFor('login') . '">here</a>';//(**)Wording
                 } else {
                     // Create a new User
@@ -864,7 +867,7 @@ if already on Tarjimly {
                 $user_id = $user['id'];
                 $result = LibAPI\PDOWrapper::call('getUserPersonalInfo', 'null,' . LibAPI\PDOWrapper::cleanse($user_id) . ',null,null,null,null,null,null,null,null,null,null');
                 $info = $result[0];
-                $data = json_encode([[
+                $data = [[
                     'firstName' => $info['firstName'],
                     'lastName' => $info['lastName'],
 (**)                   'role' => 'translator',
@@ -873,7 +876,7 @@ if already on Tarjimly {
                     'consentToEmail' => $userDao->get_communications_consent($user_id) ? true : false,
                     'password' => $user['password'],
                     'nonce' => $user['nonce'],
-                    'twbId' => $user_id]]);
+                    'twbId' => $user_id]];
                 $ch = curl_init(Common\Lib\Settings::get('tarjimly.url') . '/api/v3/admins/users/bulk-create');
                 curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
                 curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json', 'Authorization: Bearer ' . Common\Lib\Settings::get('tarjimly.api_key')]);
