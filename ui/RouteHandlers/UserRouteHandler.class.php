@@ -772,7 +772,13 @@ class UserRouteHandler
                     $error = 'You already have an account (BTW Tarijmly & TWB are now one account system), and log in <a href="' . $app->getRouteCollector()->getRouteParser()->urlFor('login') . '">here</a>';//(**)Wording
                 } else {
                     // Create a new User
-                    $result = LibAPI\PDOWrapper::call('userInsertAndUpdate', LibAPI\PDOWrapper::cleanseWrapStr($email) . ",0,'',null,null,null,null,null");
+
+        $nonce = Common\Lib\Authentication::generateNonce();
+        $password = Common\Lib\Authentication::hashPassword($post['password'], $nonce);
+??? creat here no????????????
+
+
+                    $result = LibAPI\PDOWrapper::call('userInsertAndUpdate', LibAPI\PDOWrapper::cleanseWrapStr($email) . ",$nonce," . LibAPI\PDOWrapper::cleanseNullOrWrapStr($password) . ',null,null,null,null,null');
                     $user = $result[0];
                     $user_id = $user['id'];
 $user['']
