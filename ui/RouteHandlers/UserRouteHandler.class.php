@@ -773,18 +773,20 @@ class UserRouteHandler
                 } else {
                     // Create a new User
                     $result = LibAPI\PDOWrapper::call('userInsertAndUpdate', LibAPI\PDOWrapper::cleanseWrapStr($email) . ",0,'',null,null,null,null,null");
-                    $user_id = $result[0]['id'];
+                    $user = $result[0];
+                    $user_id = $user['id'];
+$user['']
 
                     $data = json_encode([[
-                        'firstName' => 'Tarjimly',
-                        'lastName' => 'Tarjimly',
+                        'firstName' => $first_name,
+                        'lastName' => $last_name,
                         'role' => 'translator',
-                        'email' => 'email@tarjim.ly',
+                        'email' => $email,
                         'organizationId' => 9, // optional
-                        'consentToEmail' => true, // optional
+                        'consentToEmail' => $communications_consent ? true : false,
                         'password' => '12345678', // optional
                         'nonce' => 'erto355959je', // optional
-                        'twbId' => '1234']]);
+                        'twbId' => $user_id]]);
                     $ch = curl_init(Common\Lib\Settings::get('tarjimly.url') . '/api/v3/admins/users/bulk-create');
                     curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
                     curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json', 'Authorization: Bearer ' . Common\Lib\Settings::get('tarjimly.api_key')]);
