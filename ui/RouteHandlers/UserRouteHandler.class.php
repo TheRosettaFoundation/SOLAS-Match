@@ -855,15 +855,14 @@ class UserRouteHandler
         if ($request->getMethod() === 'POST') {
             $post = $request->getParsedBody();
             if (isset($post['verify'])) {
-
-call [GET User data from Tarjimly using email] again
-
-if already on Tarjimly {
-                        UserRouteHandler::flash('error', 'You already have an account (BTW Tarijmly & TWB are now one account system), please log in.);//(**)Wording
-                        return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('login'));
-}
-
-
+                $ch = curl_init(Common\Lib\Settings::get('tarjimly.url') . '/api/v3/auth/login');
+                curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode(['email' => $email]));
+                curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json', 'Authorization: Bearer ' . Common\Lib\Settings::get('tarjimly.api_key')]);
+                curl_exec($ch);
+                if (curl_getinfo($ch, CURLINFO_HTTP_CODE) == 200) {
+                    UserRouteHandler::flash('error', 'You already have an account (BTW Tarijmly & TWB are now one account system), please log in.);//(**)Wording
+                    return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('login'));
+                }
                 $user_id = $user['id'];
                 $result = LibAPI\PDOWrapper::call('getUserPersonalInfo', 'null,' . LibAPI\PDOWrapper::cleanse($user_id) . ',null,null,null,null,null,null,null,null,null,null');
                 $info = $result[0];
