@@ -772,42 +772,16 @@ class UserRouteHandler
                     $error = 'You already have an account (BTW Tarijmly & TWB are now one account system), and log in <a href="' . $app->getRouteCollector()->getRouteParser()->urlFor('login') . '">here</a>';//(**)Wording
                 } else {
                     // Create a new User
-
-        $nonce = Common\Lib\Authentication::generateNonce();
-        $password = Common\Lib\Authentication::hashPassword($post['password'], $nonce);
-??? creat here no????????????
-
-
+                    $nonce = Common\Lib\Authentication::generateNonce();
+                    $password = Common\Lib\Authentication::hashPassword($post['password'], $nonce);
                     $result = LibAPI\PDOWrapper::call('userInsertAndUpdate', LibAPI\PDOWrapper::cleanseWrapStr($email) . ",$nonce," . LibAPI\PDOWrapper::cleanseNullOrWrapStr($password) . ',null,null,null,null,null');
-                    $user = $result[0];
-                    $user_id = $user['id'];
-$user['']
-
-                    $data = json_encode([[
-                        'firstName' => $first_name,
-                        'lastName' => $last_name,
-                        'role' => 'translator',
-                        'email' => $email,
-                        'organizationId' => 9, // optional
-                        'consentToEmail' => $communications_consent ? true : false,
-                        'password' => '12345678', // optional
-                        'nonce' => 'erto355959je', // optional
-                        'twbId' => $user_id]]);
-                    $ch = curl_init(Common\Lib\Settings::get('tarjimly.url') . '/api/v3/admins/users/bulk-create');
-                    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
-                    curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json', 'Authorization: Bearer ' . Common\Lib\Settings::get('tarjimly.api_key')]);
-                    curl_exec($ch);
-                    if (curl_getinfo($ch, CURLINFO_HTTP_CODE) == 200) {
-                        LibAPI\PDOWrapper::call('create_empty_role', LibAPI\PDOWrapper::cleanse($user_id));
-                        LibAPI\PDOWrapper::call('insert_communications_consent', LibAPI\PDOWrapper::cleanse($user_id) . ',' . LibAPI\PDOWrapper::cleanse($communications_consent));
-                        LibAPI\PDOWrapper::call('userPersonalInfoInsertAndUpdate', 'null,' . LibAPI\PDOWrapper::cleanse($user_id) . ',' . LibAPI\PDOWrapper::cleanseNullOrWrapStr($first_name) . ',' . LibAPI\PDOWrapper::cleanseNullOrWrapStr($last_name) . ',null,null,1786,null,null,null,null,0');
-                        LibAPI\PDOWrapper::call('registerUser', LibAPI\PDOWrapper::cleanseNull($userId) . ',' . LibAPI\PDOWrapper::cleanseWrapStr(md5(uniqid(rand()))));
-                        LibAPI\PDOWrapper::call('insert_queue_request', '3,13,' . LibAPI\PDOWrapper::cleanse($user_id) . ",0,0,0,0,0,''");
-                        UserRouteHandler::flashNow('success', sprintf(Lib\Localisation::getTranslation('register_4'), $app->getRouteCollector()->getRouteParser()->urlFor('login')));
-                   } else {
-                        $error = 'Connection to Tarjimly failed, please try again';//(**)Wording
-                        LibAPI\PDOWrapper::call('delete_for_failed_create_on_tarjimly', LibAPI\PDOWrapper::cleanse($user_id));
-                    }
+                    $user_id = $result[0]['id'];
+                    LibAPI\PDOWrapper::call('create_empty_role', LibAPI\PDOWrapper::cleanse($user_id));
+                    LibAPI\PDOWrapper::call('insert_communications_consent', LibAPI\PDOWrapper::cleanse($user_id) . ',' . LibAPI\PDOWrapper::cleanse($communications_consent));
+                    LibAPI\PDOWrapper::call('userPersonalInfoInsertAndUpdate', 'null,' . LibAPI\PDOWrapper::cleanse($user_id) . ',' . LibAPI\PDOWrapper::cleanseNullOrWrapStr($first_name) . ',' . LibAPI\PDOWrapper::cleanseNullOrWrapStr($last_name) . ',null,null,1786,null,null,null,null,0');
+                    LibAPI\PDOWrapper::call('registerUser', LibAPI\PDOWrapper::cleanseNull($userId) . ',' . LibAPI\PDOWrapper::cleanseWrapStr(md5(uniqid(rand()))));
+                    LibAPI\PDOWrapper::call('insert_queue_request', '3,13,' . LibAPI\PDOWrapper::cleanse($user_id) . ",0,0,0,0,0,''");
+                    UserRouteHandler::flashNow('success', sprintf(Lib\Localisation::getTranslation('register_4'), $app->getRouteCollector()->getRouteParser()->urlFor('login')));
                 }
             } else {
                 if ($error === 'Oops! something went wrong, please try again.') {
@@ -887,7 +861,29 @@ if already on Tarjimly {
                         UserRouteHandler::flash('error', 'You already have an account (BTW Tarijmly & TWB are now one account system), please log in.);//(**)Wording
                         return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('login'));
 }
-call [CREATE User on Tarjimly] WITH $user['password']
+                    $user_id = $user['id'];
+
+                    $data = json_encode([[
+                        'firstName' => $first_name,
+                        'lastName' => $last_name,
+                        'role' => 'translator',
+                        'email' => $email,
+                        'organizationId' => 9, // optional
+                        'consentToEmail' => $communications_consent ? true : false,
+                        'password' => $user['password'],
+                        'nonce' => $user['nonce'],
+                        'twbId' => $user_id]]);
+                    $ch = curl_init(Common\Lib\Settings::get('tarjimly.url') . '/api/v3/admins/users/bulk-create');
+                    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+                    curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json', 'Authorization: Bearer ' . Common\Lib\Settings::get('tarjimly.api_key')]);
+                    curl_exec($ch);
+                    if (curl_getinfo($ch, CURLINFO_HTTP_CODE) == 200) {
+
+                   } else {
+                        $error = 'Connection to Tarjimly failed, please try again';//(**)Wording
+                        LibAPI\PDOWrapper::call('delete_for_failed_create_on_tarjimly', LibAPI\PDOWrapper::cleanse($user_id));
+                    }
+
 
                     return $this->set_session_redirect($response, 0, $user);
                 } else {
