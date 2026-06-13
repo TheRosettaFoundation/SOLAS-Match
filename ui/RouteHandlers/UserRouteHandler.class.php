@@ -774,12 +774,32 @@ class UserRouteHandler
                     // Create a new User
                     $result = LibAPI\PDOWrapper::call('userInsertAndUpdate', LibAPI\PDOWrapper::cleanseWrapStr($email) . ",0,'',null,null,null,null,null");
                     $user_id = $result[0]['id'];
-                    LibAPI\PDOWrapper::call('create_empty_role', LibAPI\PDOWrapper::cleanse($user_id));
-                    LibAPI\PDOWrapper::call('insert_communications_consent', LibAPI\PDOWrapper::cleanse($user_id) . ',' . LibAPI\PDOWrapper::cleanse($communications_consent));
-                    LibAPI\PDOWrapper::call('userPersonalInfoInsertAndUpdate', 'null,' . LibAPI\PDOWrapper::cleanse($user_id) . ',' . LibAPI\PDOWrapper::cleanseNullOrWrapStr($first_name) . ',' . LibAPI\PDOWrapper::cleanseNullOrWrapStr($last_name) . ',null,null,1786,null,null,null,null,0');
-                    LibAPI\PDOWrapper::call('registerUser', LibAPI\PDOWrapper::cleanseNull($userId) . ',' . LibAPI\PDOWrapper::cleanseWrapStr(md5(uniqid(rand()))));
-                    LibAPI\PDOWrapper::call('insert_queue_request', '3,13,' . LibAPI\PDOWrapper::cleanse($user_id) . ",0,0,0,0,0,''");
-                    UserRouteHandler::flashNow('success', sprintf(Lib\Localisation::getTranslation('register_4'), $app->getRouteCollector()->getRouteParser()->urlFor('login')));
+
+                    $data = json_encode([[
+                        'firstName' => 'Tarjimly',
+                        'lastName' => 'Tarjimly',
+                        'role' => 'translator',
+                        'email' => 'email@tarjim.ly',
+                        'organizationId' => 9, // optional
+                        'consentToEmail' => true, // optional
+                        'password' => '12345678', // optional
+                        'nonce' => 'erto355959je', // optional
+                        'twbId' => '1234']]);
+                    $ch = curl_init(Common\Lib\Settings::get('tarjimly.url') . '/api/v3/admins/users/bulk-create');
+                    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+                    curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json', 'Authorization: Bearer ' . Common\Lib\Settings::get('tarjimly.api_key')]);
+                    curl_exec($ch);
+                    if (curl_getinfo($ch, CURLINFO_HTTP_CODE) == 200) {
+                        LibAPI\PDOWrapper::call('create_empty_role', LibAPI\PDOWrapper::cleanse($user_id));
+                        LibAPI\PDOWrapper::call('insert_communications_consent', LibAPI\PDOWrapper::cleanse($user_id) . ',' . LibAPI\PDOWrapper::cleanse($communications_consent));
+                        LibAPI\PDOWrapper::call('userPersonalInfoInsertAndUpdate', 'null,' . LibAPI\PDOWrapper::cleanse($user_id) . ',' . LibAPI\PDOWrapper::cleanseNullOrWrapStr($first_name) . ',' . LibAPI\PDOWrapper::cleanseNullOrWrapStr($last_name) . ',null,null,1786,null,null,null,null,0');
+                        LibAPI\PDOWrapper::call('registerUser', LibAPI\PDOWrapper::cleanseNull($userId) . ',' . LibAPI\PDOWrapper::cleanseWrapStr(md5(uniqid(rand()))));
+                        LibAPI\PDOWrapper::call('insert_queue_request', '3,13,' . LibAPI\PDOWrapper::cleanse($user_id) . ",0,0,0,0,0,''");
+                        UserRouteHandler::flashNow('success', sprintf(Lib\Localisation::getTranslation('register_4'), $app->getRouteCollector()->getRouteParser()->urlFor('login')));
+                   } else {
+                        $error = 'Connection to Tarjimly failed, please try again';//(**)Wording
+                        LibAPI\PDOWrapper::call('delete_for_failed_create_on_tarjimly', LibAPI\PDOWrapper::cleanse($user_id));
+                    }
                 }
             } else {
                 if ($error === 'Oops! something went wrong, please try again.') {
