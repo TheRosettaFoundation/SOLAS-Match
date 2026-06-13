@@ -847,13 +847,11 @@ class UserRouteHandler
             return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('home'));
         }
         $user = $result[0];
+        $email = $user['email'];
 
         if ($request->getMethod() === 'POST') {
             $post = $request->getParsedBody();
             if (isset($post['verify'])) {
-                if ($userDao->finishRegistration($uuid)) {
-                    $email = $user['email'];
-                    error_log("email verification, Login: $email");
 
 call [GET User data from Tarjimly using email] again
 
@@ -861,36 +859,36 @@ if already on Tarjimly {
                         UserRouteHandler::flash('error', 'You already have an account (BTW Tarijmly & TWB are now one account system), please log in.);//(**)Wording
                         return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('login'));
 }
-                    $user_id = $user['id'];
-                    $result = LibAPI\PDOWrapper::call('getUserPersonalInfo', 'null,' . LibAPI\PDOWrapper::cleanse($user_id) . ',null,null,null,null,null,null,null,null,null,null');
-                    $info = $result[0];
-                    $data = json_encode([[
-                        'firstName' => $info['firstName'],
-                        'lastName' => $info['lastName'],
-(**)                        'role' => 'translator',
-                        'email' => $email,
-(**)                        'organizationId' => 9, // optional
-                        'consentToEmail' => $userDao->get_communications_consent($user_id) ? true : false,
-                        'password' => $user['password'],
-                        'nonce' => $user['nonce'],
-                        'twbId' => $user_id]]);
-                    $ch = curl_init(Common\Lib\Settings::get('tarjimly.url') . '/api/v3/admins/users/bulk-create');
-                    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
-                    curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json', 'Authorization: Bearer ' . Common\Lib\Settings::get('tarjimly.api_key')]);
-                    curl_exec($ch);
-                    if (curl_getinfo($ch, CURLINFO_HTTP_CODE) == 200) {
 
-                   } else {
-                        $error = 'Connection to Tarjimly failed, please try again';//(**)Wording
-                        LibAPI\PDOWrapper::call('delete_for_failed_create_on_tarjimly', LibAPI\PDOWrapper::cleanse($user_id));
+
+                $user_id = $user['id'];
+                $result = LibAPI\PDOWrapper::call('getUserPersonalInfo', 'null,' . LibAPI\PDOWrapper::cleanse($user_id) . ',null,null,null,null,null,null,null,null,null,null');
+                $info = $result[0];
+                $data = json_encode([[
+                    'firstName' => $info['firstName'],
+                    'lastName' => $info['lastName'],
+(**)                   'role' => 'translator',
+                    'email' => $email,
+(**)                    'organizationId' => 9, // optional
+                    'consentToEmail' => $userDao->get_communications_consent($user_id) ? true : false,
+                    'password' => $user['password'],
+                    'nonce' => $user['nonce'],
+                    'twbId' => $user_id]]);
+                $ch = curl_init(Common\Lib\Settings::get('tarjimly.url') . '/api/v3/admins/users/bulk-create');
+                curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+                curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json', 'Authorization: Bearer ' . Common\Lib\Settings::get('tarjimly.api_key')]);
+                curl_exec($ch);
+                if (curl_getinfo($ch, CURLINFO_HTTP_CODE) == 200) {
+                    if ($userDao->finishRegistration($uuid)) {
+                        error_log("email verification, Login: $email");
+                        return $this->set_session_redirect($response, 0, $user);
+                    } else {
+                        UserRouteHandler::flash('error', 'Failed to finish registration.');
                     }
-
-
-                    return $this->set_session_redirect($response, 0, $user);
+                    return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('login'));
                 } else {
-                    UserRouteHandler::flash('error', 'Failed to finish registration.');
+                    UserRouteHandler::flashNow('error', 'Connection to Tarjimly failed, please try again.');//(**)Wording
                 }
-                return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('login'));
             }
         }
 
