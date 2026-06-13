@@ -1146,6 +1146,7 @@ class UserRouteHandler
                     $json = json_decode($result_json, true);
                     $first_name = $json['firstName'];
                     $last_name = $json['lastName'];
+                    $uid = $json['uid'];
 
                     $result = LibAPI\PDOWrapper::call('getUser', 'null,null,' . LibAPI\PDOWrapper::cleanseWrapStr($email) . ',null,null,null,null,null,null');
                     if (empty($result)) {
@@ -1158,7 +1159,11 @@ class UserRouteHandler
                         LibAPI\PDOWrapper::call('userTaskStreamNotificationInsertAndUpdate', LibAPI\PDOWrapper::cleanse($user_id) . ',2,1');
 (**)Roles from Tarjimly?
 
-(**)call [UPDATE external ID on Tarjimly]
+                        $ch = curl_init(Common\Lib\Settings::get('tarjimly.url') . "/api/v3/admins/users/$uid");
+                        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode(['twbId' => $user_id]]));
+                        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PUT');
+                        curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json', 'Authorization: Bearer ' . Common\Lib\Settings::get('tarjimly.api_key')]);
+                        curl_exec($ch);
 
                         $userDao->update_terms_accepted($user_id, 1); // Will be redirected to googleregister
                     } else {
