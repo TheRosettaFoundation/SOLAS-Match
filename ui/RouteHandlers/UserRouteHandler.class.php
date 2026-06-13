@@ -862,14 +862,15 @@ if already on Tarjimly {
                         return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('login'));
 }
                     $user_id = $user['id'];
-
+                    $result = LibAPI\PDOWrapper::call('getUserPersonalInfo', 'null,' . LibAPI\PDOWrapper::cleanse($user_id) . ',null,null,null,null,null,null,null,null,null,null');
+                    $info = $result[0];
                     $data = json_encode([[
-                        'firstName' => $first_name,
-                        'lastName' => $last_name,
-                        'role' => 'translator',
+                        'firstName' => $info['firstName'],
+                        'lastName' => $info['lastName'],
+(**)                        'role' => 'translator',
                         'email' => $email,
-                        'organizationId' => 9, // optional
-                        'consentToEmail' => $communications_consent ? true : false,
+(**)                        'organizationId' => 9, // optional
+                        'consentToEmail' => $userDao->get_communications_consent($user_id) ? true : false,
                         'password' => $user['password'],
                         'nonce' => $user['nonce'],
                         'twbId' => $user_id]]);
