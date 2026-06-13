@@ -1,5 +1,6 @@
 <resources>
   <!-- Smarty Template Strings -->
+<string name="ff_language">Language</string>
 <string name="ff_warning">Warning</string>
 <string name="ff_register">Register</string>
 <string name="ff_password">Password</string>
