@@ -863,6 +863,7 @@ class UserRouteHandler
                     UserRouteHandler::flash('error', 'You already have an account (BTW Tarijmly & TWB are now one account system), please log in.);//(**)Wording
                     return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('login'));
                 }
+
                 $user_id = $user['id'];
                 $result = LibAPI\PDOWrapper::call('getUserPersonalInfo', 'null,' . LibAPI\PDOWrapper::cleanse($user_id) . ',null,null,null,null,null,null,null,null,null,null');
                 $info = $result[0];
@@ -1127,14 +1128,25 @@ class UserRouteHandler
             if (isset($post['login']) && !empty($post['email'] && !empty($post['password']))) {
                 $user = 0;
                 $email = $post['email'];
-call [GET User data from Tarjimly using email] $email and $post['password']
-                if not match (or banned) {
+
+                $ch = curl_init(Common\Lib\Settings::get('tarjimly.url') . '/api/v3/auth/login');
+                curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode(['email' => $email, 'password' => $post['password']]));
+                curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json', 'Authorization: Bearer ' . Common\Lib\Settings::get('tarjimly.api_key')]);
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                $result_json = curl_exec($ch);
+                $responseCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+                if ($responseCode != 200 || $responseCode != 202) {
                     $error = sprintf(Lib\Localisation::getTranslation('login_1'), $app->getRouteCollector()->getRouteParser()->urlFor('login'), $app->getRouteCollector()->getRouteParser()->urlFor('register'), $e->getMessage());
+//(**)maybe mention try again words as comms failure??
                     UserRouteHandler::flashNow('error', $error);
-                } elseif match but not verified {
+                } elseif ($responseCode == 202) {
                     $error = 'User is not verified on Tarjimly AND LINK';
                     UserRouteHandler::flashNow('error', $error);
                 } else {
+                    $json = json_decode($result_json, true);
+                    $first_name = $json['firstName'];
+                    $last_name = $json['lastName'];
+
                     $result = LibAPI\PDOWrapper::call('getUser', 'null,null,' . LibAPI\PDOWrapper::cleanseWrapStr($email) . ',null,null,null,null,null,null');
                     if (empty($result)) {
                         $result = LibAPI\PDOWrapper::call('userInsertAndUpdate', LibAPI\PDOWrapper::cleanseWrapStr($email) . ",0,'',null,null,null,null,null");
@@ -1146,7 +1158,7 @@ call [GET User data from Tarjimly using email] $email and $post['password']
                         LibAPI\PDOWrapper::call('userTaskStreamNotificationInsertAndUpdate', LibAPI\PDOWrapper::cleanse($user_id) . ',2,1');
 (**)Roles from Tarjimly?
 
-call [UPDATE external ID on Tarjimly]
+(**)call [UPDATE external ID on Tarjimly]
 
                         $userDao->update_terms_accepted($user_id, 1); // Will be redirected to googleregister
                     } else {
@@ -1154,7 +1166,11 @@ call [UPDATE external ID on Tarjimly]
                         $user_id = $user['id'];
                         LibAPI\PDOWrapper::call('finishRegistration', "$user_id");
                         $userinfo = $userDao->getUserPersonalInformation($user_id);
-                        if ($userinfo->firstName != Tarjimly || $userinfo->lastName != Tarjimly) $userDao->updatePersonalInfo($user_id, $userinfo);
+                        if ($userinfo->firstName != $first_name || $userinfo->lastName != $last_name) {
+                            $userinfo->setFirstName($first_name);
+                            $userinfo->setLastName($last_name);
+                            $userDao->updatePersonalInfo($user_id, $userinfo);
+                        }
                     }
                 }
                 if ($user) {
