@@ -1202,37 +1202,11 @@ class UserRouteHandler
                     $first_name = $json['firstName'];
                     $last_name = $json['lastName'];
                     $uid = $json['uid'];
-[[[[(**)crosscheck
->>Tarjimly (after return from Google) if new email
-Create Tarjimly user
-Redirect to TWB /login with a temporary token (JWT?)
-call [GET User data from Tarjimly using temporary token]
-Register User in TWB
-User lands on the google register page: https://twbplatform.org/283590/googleregister/, prefilled with info from Tarjimly
-call [UPDATE external ID on Tarjimly]
-Login User in TWB
-
->>Tarjimly (after return from Google) if old email but no External ID
-Redirect to TWB /login with a temporary token
-call [GET User data from Tarjimly using temporary token]
-Register User in TWB
-User lands on the google register page: https://twbplatform.org/283590/googleregister/, prefilled with info from Tarjimly
-call [UPDATE external ID on Tarjimly]
-Login User in TWB
-
->>Tarjimly (after return from Google) if old email with External ID
-Redirect to TWB /login with a temporary token
-call [GET User data from Tarjimly using temporary token]
-[Every time a TWB Platform logs in, their name is updated from the Tarjimly info]
-Login User in TWB
-]]]]
 //(**)                $user = 0;
 //                if banned {//(**)?
 //(**)                    $error = sprintf(Lib\Localisation::getTranslation('login_1'), $app->getRouteCollector()->getRouteParser()->urlFor('login'), $app->getRouteCollector()->getRouteParser()->urlFor('register'), $e->getMessage());
 //(**)                    UserRouteHandler::flashNow('error', $error);
 //(**)                } else {
-
-//(**) or possibly twbId, prob not
                     $result = LibAPI\PDOWrapper::call('getUser', 'null,null,' . LibAPI\PDOWrapper::cleanseWrapStr($email) . ',null,null,null,null,null,null');
                     if (empty($result)) {
                         $result = LibAPI\PDOWrapper::call('userInsertAndUpdate', LibAPI\PDOWrapper::cleanseWrapStr($email) . ",0,'',null,null,null,null,null");
