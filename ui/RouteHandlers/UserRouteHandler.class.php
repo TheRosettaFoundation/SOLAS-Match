@@ -1243,7 +1243,7 @@ class UserRouteHandler
 
                 }
             }
-//(**)HAVE TO FIGURE OUT WHERE THE BELOW GOES ABOVE PROBBALY?POSSIBLY
+
             $return_to_SAML_url = !empty($parms['ReturnTo']) ? $parms['ReturnTo'] : null;
             if (!empty($return_to_SAML_url)) {
                 $_SESSION['return_to_SAML_url'] = $return_to_SAML_url;
