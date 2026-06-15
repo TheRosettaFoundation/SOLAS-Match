@@ -767,9 +767,8 @@ class UserRouteHandler
                 $last_name = $post['last_name'];
                 array_key_exists('newsletter_consent', $post) ? $communications_consent = 1 : $communications_consent = 0;
 
-                $ch = curl_init(Common\Lib\Settings::get('tarjimly.url') . '/api/v3/auth/login');
-                curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode(['email' => $email]));
-                curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json', 'Authorization: Bearer ' . Common\Lib\Settings::get('tarjimly.api_key')]);
+                $ch = curl_init(Common\Lib\Settings::get('tarjimly.url') . "/api/v3/admins/users?email=$email");
+                curl_setopt($ch, CURLOPT_HTTPHEADER, ['Authorization: Bearer ' . Common\Lib\Settings::get('tarjimly.api_key')]);
                 curl_exec($ch);
                 if (curl_getinfo($ch, CURLINFO_HTTP_CODE) == 200) {
                     $error = 'You already have an account (BTW Tarijmly & TWB are now one account system), and log in <a href="' . $app->getRouteCollector()->getRouteParser()->urlFor('login') . '">here</a>';//(**)Wording
@@ -855,9 +854,8 @@ class UserRouteHandler
         if ($request->getMethod() === 'POST') {
             $post = $request->getParsedBody();
             if (isset($post['verify'])) {
-                $ch = curl_init(Common\Lib\Settings::get('tarjimly.url') . '/api/v3/auth/login');
-                curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode(['email' => $email]));
-                curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json', 'Authorization: Bearer ' . Common\Lib\Settings::get('tarjimly.api_key')]);
+                $ch = curl_init(Common\Lib\Settings::get('tarjimly.url') . "/api/v3/admins/users?email=$email");
+                curl_setopt($ch, CURLOPT_HTTPHEADER, ['Authorization: Bearer ' . Common\Lib\Settings::get('tarjimly.api_key')]);
                 curl_exec($ch);
                 if (curl_getinfo($ch, CURLINFO_HTTP_CODE) == 200) {
                     UserRouteHandler::flash('error', 'You already have an account (BTW Tarijmly & TWB are now one account system), please log in.);//(**)Wording
