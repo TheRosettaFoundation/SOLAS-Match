@@ -1226,11 +1226,13 @@ call [GET User data from Tarjimly using temporary token]
 [Every time a TWB Platform logs in, their name is updated from the Tarjimly info]
 Login User in TWB
 ]]]]
-                $user = 0;
-                if banned {//(**)?
-                    $error = sprintf(Lib\Localisation::getTranslation('login_1'), $app->getRouteCollector()->getRouteParser()->urlFor('login'), $app->getRouteCollector()->getRouteParser()->urlFor('register'), $e->getMessage());
-                    UserRouteHandler::flashNow('error', $error);
-                } else {
+//(**)                $user = 0;
+//                if banned {//(**)?
+//(**)                    $error = sprintf(Lib\Localisation::getTranslation('login_1'), $app->getRouteCollector()->getRouteParser()->urlFor('login'), $app->getRouteCollector()->getRouteParser()->urlFor('register'), $e->getMessage());
+//(**)                    UserRouteHandler::flashNow('error', $error);
+//(**)                } else {
+
+//(**) or possibly twbId, prob not
                     $result = LibAPI\PDOWrapper::call('getUser', 'null,null,' . LibAPI\PDOWrapper::cleanseWrapStr($email) . ',null,null,null,null,null,null');
                     if (empty($result)) {
                         $result = LibAPI\PDOWrapper::call('userInsertAndUpdate', LibAPI\PDOWrapper::cleanseWrapStr($email) . ",0,'',null,null,null,null,null");
@@ -1260,27 +1262,14 @@ Login User in TWB
                             $userDao->updatePersonalInfo($user_id, $userinfo);
                         }
                     }
-                }
-                if ($user) {
+//(**)                }
                     error_log("Google Sign-In, Login: $email");
                     LibAPI\PDOWrapper::call('userLoginInsert', LibAPI\PDOWrapper::cleanse($user_id) . ',' . LibAPI\PDOWrapper::cleanseWrapStr($email) . ',1');
                     return $this->set_session_redirect($response, 1, $user);
+
                 }
-          }
-]]]
-
-
-                        if (empty($payload['email'])) $error = 'email empty.';
-                        if (!$error) {
-                            $email = $payload['email'];
-                            if (!empty($payload['given_name']) && !empty($payload['family_name'])) $userDao->set_google_user_details($email, $payload['given_name'], $payload['family_name']);
-                            error_log("Google Sign-In, Login: $email");
-                            return $response->withStatus(302)->withHeader('Location', $userDao->requestAuthCode($email));
-                        }
-
-
-
             }
+//(**)HAVE TO FIGURE OUT WHERE THE BELOW GOES ABOVE PROBBALY?POSSIBLY
             $return_to_SAML_url = !empty($parms['ReturnTo']) ? $parms['ReturnTo'] : null;
             if (!empty($return_to_SAML_url)) {
                 $_SESSION['return_to_SAML_url'] = $return_to_SAML_url;
