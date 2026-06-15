@@ -1190,6 +1190,84 @@ class UserRouteHandler
             $parms = $request->getQueryParams();
             if (isset($parms['credential'])) { // (**) or code;Return from Google sign in on Tarjimly
 
+
+[[[
+            } elseif (isset($post['credential'])) { // Google Sign-In
+
+$code
+
+LIKE/...
+                $ch = curl_init(Common\Lib\Settings::get('tarjimly.url') . 'api/v3/admins/auth/profile?code=' . urlencode($code));
+                curl_setopt($ch, CURLOPT_HTTPHEADER, ['Authorization: Bearer ' . Common\Lib\Settings::get('tarjimly.api_key')]);
+                curl_exec($ch);
+                if (curl_getinfo($ch, CURLINFO_HTTP_CODE) == 200) {
+                    $error = 'You already have an account (BTW Tarijmly & TWB are now one account system), and log in <a href="' . $app->getRouteCollector()->getRouteParser()->urlFor('login') . '">here</a>';//(**)Wording
+                } else ...
+
+[[[[
+>>Tarjimly (after return from Google) if new email
+Create Tarjimly user
+Redirect to TWB /login with a temporary token (JWT?)
+call [GET User data from Tarjimly using temporary token]
+Register User in TWB
+User lands on the google register page: https://twbplatform.org/283590/googleregister/, prefilled with info from Tarjimly
+call [UPDATE external ID on Tarjimly]
+Login User in TWB
+
+>>Tarjimly (after return from Google) if old email but no External ID
+Redirect to TWB /login with a temporary token
+call [GET User data from Tarjimly using temporary token]
+Register User in TWB
+User lands on the google register page: https://twbplatform.org/283590/googleregister/, prefilled with info from Tarjimly
+call [UPDATE external ID on Tarjimly]
+Login User in TWB
+
+>>Tarjimly (after return from Google) if old email with External ID
+Redirect to TWB /login with a temporary token
+call [GET User data from Tarjimly using temporary token]
+[Every time a TWB Platform logs in, their name is updated from the Tarjimly info]
+Login User in TWB
+]]]]
+
+
+                $user = 0;
+                $email
+
+                if banned {//(**)?
+                    $error = sprintf(Lib\Localisation::getTranslation('login_1'), $app->getRouteCollector()->getRouteParser()->urlFor('login'), $app->getRouteCollector()->getRouteParser()->urlFor('register'), $e->getMessage());
+                    UserRouteHandler::flashNow('error', $error);
+                } else {
+                    $result = LibAPI\PDOWrapper::call('getUser', 'null,null,' . LibAPI\PDOWrapper::cleanseWrapStr($email) . ',null,null,null,null,null,null');
+                    if (empty($result)) {
+                        $result = LibAPI\PDOWrapper::call('userInsertAndUpdate', LibAPI\PDOWrapper::cleanseWrapStr($email) . ",0,'',null,null,null,null,null");
+                        $user_id = $result[0]['id'];
+                        $result = LibAPI\PDOWrapper::call('getUser', "$user_id,null,null,null,null,null,null,null,null");
+                        $user = $result[0];
+                        LibAPI\PDOWrapper::call('create_empty_role', LibAPI\PDOWrapper::cleanse($user_id));
+                        LibAPI\PDOWrapper::call('userPersonalInfoInsertAndUpdate', 'null,' . LibAPI\PDOWrapper::cleanse($user_id) . ',' . LibAPI\PDOWrapper::cleanseNullOrWrapStr($first_name) . ',' . LibAPI\PDOWrapper::cleanseNullOrWrapStr($last_name) . ',null,null,1786,null,null,null,null,0');
+                        LibAPI\PDOWrapper::call('userTaskStreamNotificationInsertAndUpdate', LibAPI\PDOWrapper::cleanse($user_id) . ',2,1');
+(**)Roles from Tarjimly?
+
+call [UPDATE external ID on Tarjimly]
+
+                        $userDao->update_terms_accepted($user_id, 1); // Will be redirected to googleregister
+                    } else {
+                        $user = $result[0];
+                        $user_id = $user['id'];
+                        LibAPI\PDOWrapper::call('finishRegistration', "$user_id");
+                        $userinfo = $userDao->getUserPersonalInformation($user_id);
+                        if ($userinfo->firstName != Tarjimly || $userinfo->lastName != Tarjimly) $userDao->updatePersonalInfo($user_id, $userinfo);
+                    }
+                }
+                if ($user) {
+                    error_log("Google Sign-In, Login: $email");
+                    LibAPI\PDOWrapper::call('userLoginInsert', LibAPI\PDOWrapper::cleanse($user_id) . ',' . LibAPI\PDOWrapper::cleanseWrapStr($email) . ',1');
+                    return $this->set_session_redirect($response, 1, $user);
+                }
+            }
+]]]
+
+
                         if (empty($payload['email'])) $error = 'email empty.';
                         if (!$error) {
                             $email = $payload['email'];
