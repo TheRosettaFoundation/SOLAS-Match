@@ -1184,17 +1184,12 @@ class UserRouteHandler
                 LibAPI\PDOWrapper::call('userLoginInsert', 'null,' . LibAPI\PDOWrapper::cleanseWrapStr($email) . ',0');
             } elseif (isset($post['password_reset'])) {
                 return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor("password-reset-request"));
-            } elseif (isset($post['credential'])) { // Google Sign-In
-                if (empty($post['g_csrf_token']))    $error = 'No CSRF token in post body.';
-                if (empty($_COOKIE['g_csrf_token'])) $error = 'No CSRF token in Cookie.';
-                if (!$error && $_COOKIE['g_csrf_token'] != $post['g_csrf_token']) {
-                    $error = 'Failed to verify double submit cookie.';
-                } else {
-                    // https://github.com/googleapis/google-api-php-client
-                    require_once 'ui/google-api-php-client/vendor/autoload.php';
-                    $client = new \Google_Client(['client_id' => Common\Lib\Settings::get('googlePlus.client_id')]);
-                    $payload = $client->verifyIdToken($post['credential']);
-                    if ($payload) {
+//(**)reset remove
+           }
+        } else {
+            $parms = $request->getQueryParams();
+            if (isset($parms['credential'])) { // (**) or code;Return from Google sign in on Tarjimly
+
                         if (empty($payload['email'])) $error = 'email empty.';
                         if (!$error) {
                             $email = $payload['email'];
@@ -1202,17 +1197,13 @@ class UserRouteHandler
                             error_log("Google Sign-In, Login: $email");
                             return $response->withStatus(302)->withHeader('Location', $userDao->requestAuthCode($email));
                         }
-                    } else {
-                        $error = 'Invalid ID token';
-                    }
-                }
 
                 $error = sprintf(Lib\Localisation::getTranslation('gplus_error'), $app->getRouteCollector()->getRouteParser()->urlFor('login'), $app->getRouteCollector()->getRouteParser()->urlFor('register'), "[$error]");
                 UserRouteHandler::flash('error', $error);
                 return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('home'));
+
+
             }
-        } else {
-            $parms = $request->getQueryParams();
             $return_to_SAML_url = !empty($parms['ReturnTo']) ? $parms['ReturnTo'] : null;
             if (!empty($return_to_SAML_url)) {
                 $_SESSION['return_to_SAML_url'] = $return_to_SAML_url;
