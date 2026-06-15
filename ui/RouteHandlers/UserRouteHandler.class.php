@@ -1189,22 +1189,20 @@ class UserRouteHandler
         } else {
             $parms = $request->getQueryParams();
             if (isset($parms['credential'])) { // (**) or code;Return from Google sign in on Tarjimly
-
-
-[[[
-            } elseif (isset($post['credential'])) { // Google Sign-In
-
-$code
-
-LIKE/...
-                $ch = curl_init(Common\Lib\Settings::get('tarjimly.url') . 'api/v3/admins/auth/profile?code=' . urlencode($code));
+                $ch = curl_init(Common\Lib\Settings::get('tarjimly.url') . 'api/v3/admins/auth/profile?code=' . urlencode($parms['code']));
                 curl_setopt($ch, CURLOPT_HTTPHEADER, ['Authorization: Bearer ' . Common\Lib\Settings::get('tarjimly.api_key')]);
-                curl_exec($ch);
-                if (curl_getinfo($ch, CURLINFO_HTTP_CODE) == 200) {
-                    $error = 'You already have an account (BTW Tarijmly & TWB are now one account system), and log in <a href="' . $app->getRouteCollector()->getRouteParser()->urlFor('login') . '">here</a>';//(**)Wording
-                } else ...
-
-[[[[
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                $result_json = curl_exec($ch);
+                if (curl_getinfo($ch, CURLINFO_HTTP_CODE) != 200) {
+                    UserRouteHandler::flash('error', '<p>An error occurred while trying to sign in with Google. <a href="' . $app->getRouteCollector()->getRouteParser()->urlFor('login') . '">Try logging in again</a> or <a href="' . $app->getRouteCollector()->getRouteParser()->urlFor('register') . '">register</a> for an account.</p>'); //(**)Wording
+                    return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('home'));
+                } else {
+                    $json = json_decode($result_json, true);
+                    $email = $json['email'];
+                    $first_name = $json['firstName'];
+                    $last_name = $json['lastName'];
+                    $uid = $json['uid'];
+[[[[(**)crosscheck
 >>Tarjimly (after return from Google) if new email
 Create Tarjimly user
 Redirect to TWB /login with a temporary token (JWT?)
@@ -1228,11 +1226,7 @@ call [GET User data from Tarjimly using temporary token]
 [Every time a TWB Platform logs in, their name is updated from the Tarjimly info]
 Login User in TWB
 ]]]]
-
-
                 $user = 0;
-                $email
-
                 if banned {//(**)?
                     $error = sprintf(Lib\Localisation::getTranslation('login_1'), $app->getRouteCollector()->getRouteParser()->urlFor('login'), $app->getRouteCollector()->getRouteParser()->urlFor('register'), $e->getMessage());
                     UserRouteHandler::flashNow('error', $error);
@@ -1248,7 +1242,11 @@ Login User in TWB
                         LibAPI\PDOWrapper::call('userTaskStreamNotificationInsertAndUpdate', LibAPI\PDOWrapper::cleanse($user_id) . ',2,1');
 (**)Roles from Tarjimly?
 
-call [UPDATE external ID on Tarjimly]
+                        $ch = curl_init(Common\Lib\Settings::get('tarjimly.url') . "/api/v3/admins/users/$uid");
+                        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode(['twbId' => $user_id]]));
+                        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PUT');
+                        curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json', 'Authorization: Bearer ' . Common\Lib\Settings::get('tarjimly.api_key')]);
+                        curl_exec($ch);
 
                         $userDao->update_terms_accepted($user_id, 1); // Will be redirected to googleregister
                     } else {
@@ -1256,7 +1254,11 @@ call [UPDATE external ID on Tarjimly]
                         $user_id = $user['id'];
                         LibAPI\PDOWrapper::call('finishRegistration', "$user_id");
                         $userinfo = $userDao->getUserPersonalInformation($user_id);
-                        if ($userinfo->firstName != Tarjimly || $userinfo->lastName != Tarjimly) $userDao->updatePersonalInfo($user_id, $userinfo);
+                        if ($userinfo->firstName != $first_name || $userinfo->lastName != $last_name) {
+                            $userinfo->setFirstName($first_name);
+                            $userinfo->setLastName($last_name);
+                            $userDao->updatePersonalInfo($user_id, $userinfo);
+                        }
                     }
                 }
                 if ($user) {
@@ -1264,7 +1266,7 @@ call [UPDATE external ID on Tarjimly]
                     LibAPI\PDOWrapper::call('userLoginInsert', LibAPI\PDOWrapper::cleanse($user_id) . ',' . LibAPI\PDOWrapper::cleanseWrapStr($email) . ',1');
                     return $this->set_session_redirect($response, 1, $user);
                 }
-            }
+          }
 ]]]
 
 
@@ -1276,9 +1278,6 @@ call [UPDATE external ID on Tarjimly]
                             return $response->withStatus(302)->withHeader('Location', $userDao->requestAuthCode($email));
                         }
 
-                $error = sprintf(Lib\Localisation::getTranslation('gplus_error'), $app->getRouteCollector()->getRouteParser()->urlFor('login'), $app->getRouteCollector()->getRouteParser()->urlFor('register'), "[$error]");
-                UserRouteHandler::flash('error', $error);
-                return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('home'));
 
 
             }
