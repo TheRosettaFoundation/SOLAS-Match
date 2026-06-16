@@ -181,10 +181,6 @@ class Users
             '/api/v0/users/{uuid}/finishRegistration/',
             '\SolasMatch\API\V0\Users:finishRegistration');
 
-        $app->post(
-            '/api/v0/users/{uuid}/manuallyFinishRegistration/',
-            '\SolasMatch\API\V0\Users:finishRegistrationManually');
-
         $app->get(
             '/api/v0/users/email/{email}/getBannedComment/',
             '\SolasMatch\API\V0\Users:getBannedComment')
@@ -566,14 +562,6 @@ error_log("userClaimTask($userId, $taskId)");
         } else {
             return API\Dispatcher::sendResponse($response, "Invalid UUID", Common\Enums\HttpStatusEnum::UNAUTHORIZED);
         }
-    }
-
-    public static function finishRegistrationManually(Request $request, Response $response, $args)
-    {
-        $email = $args['uuid'];
-        error_log("finishRegistrationManually($email)");
-        $ret = DAO\UserDao::finishRegistrationManually($email);
-        return API\Dispatcher::sendResponse($response, $ret, null);
     }
 
     public static function send_password_reset_verification(Request $request, Response $response, $args)

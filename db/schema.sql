@@ -2639,7 +2639,7 @@ BEGIN
 END//
 DELIMITER ;
 
-
+# Not currently used...
 DROP PROCEDURE IF EXISTS `finishRegistrationManually`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `finishRegistrationManually`(IN `emailToVerify` VARCHAR(128))

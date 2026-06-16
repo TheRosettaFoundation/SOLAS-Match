@@ -72,16 +72,6 @@ class UserDao
         return $response[0]['result'];
     }
 
-    public static function finishRegistrationManually($email)
-    {
-        $args = Lib\PDOWrapper::cleanseNullOrWrapStr($email);
-        $response = Lib\PDOWrapper::call('finishRegistrationManually', $args);
-        if ($response[0]['result']) {
-            Lib\PDOWrapper::call('userTaskStreamNotificationInsertAndUpdate', Lib\PDOWrapper::cleanse($response[0]['result']) . ',2,1');
-        }
-        return $response[0]['result'];
-    }
-
     public static function getRegisteredUser($uuid)
     {
         $ret = null;
