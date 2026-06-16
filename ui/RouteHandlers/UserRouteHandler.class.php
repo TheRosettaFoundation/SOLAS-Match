@@ -771,7 +771,7 @@ class UserRouteHandler
                 curl_setopt($ch, CURLOPT_HTTPHEADER, ['Authorization: Bearer ' . Common\Lib\Settings::get('tarjimly.api_key')]);
                 curl_exec($ch);
                 if (curl_getinfo($ch, CURLINFO_HTTP_CODE) == 200) {
-                    $error = 'You already have an account (BTW Tarijmly & TWB are now one account system), and log in <a href="' . $app->getRouteCollector()->getRouteParser()->urlFor('login') . '">here</a>';//(**)Wording
+                    $error = 'You already have an account (BTW Tarjimly & TWB are now one account system), and log in <a href="' . $app->getRouteCollector()->getRouteParser()->urlFor('login') . '">here</a>';//(**)Wording
                 } else {
                     // Create a new User
                     $nonce = Common\Lib\Authentication::generateNonce();
@@ -858,7 +858,7 @@ class UserRouteHandler
                 curl_setopt($ch, CURLOPT_HTTPHEADER, ['Authorization: Bearer ' . Common\Lib\Settings::get('tarjimly.api_key')]);
                 curl_exec($ch);
                 if (curl_getinfo($ch, CURLINFO_HTTP_CODE) == 200) {
-                    UserRouteHandler::flash('error', 'You already have an account (BTW Tarijmly & TWB are now one account system), please log in.);//(**)Wording
+                    UserRouteHandler::flash('error', 'You already have an account (BTW Tarjimly & TWB are now one account system), please log in.);//(**)Wording
                     return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('login'));
                 }
 

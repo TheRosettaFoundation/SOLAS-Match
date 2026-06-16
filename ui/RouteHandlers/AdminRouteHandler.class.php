@@ -7,6 +7,9 @@ use \SolasMatch\UI\Lib as Lib;
 use \SolasMatch\Common as Common;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
+use \SolasMatch\API\Lib as LibAPI;
+
+require_once __DIR__ . '/../../api/lib/PDOWrapper.class.php';
 
 class AdminRouteHandler
 {
@@ -171,11 +174,41 @@ class AdminRouteHandler
             }
 
             if (isset($post['verify']) && (($roles & (SITE_ADMIN | COMMUNITY_OFFICER)) || (($roles & (NGO_ADMIN)) && $adminDao->current_user_is_NGO_admin_or_PO_for_special_registration_email($userId, trim($post['userEmail']))))) {
-                if ($userDao->finishRegistrationManually(trim($post['userEmail']))) {
-                    UserRouteHandler::flashNow('verifySuccess', 'Email verified, the user can now login with email and password.');
-                } else {
-                    UserRouteHandler::flashNow('verifyError', 'Not found, either the user never registered with email and password or they have already been verified.');
-                }
+                $email = trim($post['userEmail'];
+                $result = LibAPI\PDOWrapper::call('getUser', 'null,null,' . LibAPI\PDOWrapper::cleanseWrapStr($email) . ',null,null,null,null,null,null');
+                if (!empty($result)) {
+                    $user = $result[0];
+                    $user_id = $user['id'];
+                    $result = LibAPI\PDOWrapper::call('getRegistrationId', "$user_id");
+                    if (!empty($result)) {
+                        $uuid = $result[0]['unique_id'];
+
+                        $ch = curl_init(Common\Lib\Settings::get('tarjimly.url') . "/api/v3/admins/users?email=$email");
+                        curl_setopt($ch, CURLOPT_HTTPHEADER, ['Authorization: Bearer ' . Common\Lib\Settings::get('tarjimly.api_key')]);
+                        curl_exec($ch);
+                        if (curl_getinfo($ch, CURLINFO_HTTP_CODE) != 200) {
+                            $result = LibAPI\PDOWrapper::call('getUserPersonalInfo', 'null,' . LibAPI\PDOWrapper::cleanse($user_id) . ',null,null,null,null,null,null,null,null,null,null');
+                            $info = $result[0];
+                            $data = [[
+                                'firstName' => $info['firstName'],
+                                'lastName' => $info['lastName'],
+                                'role' => 'translator',
+                                'email' => $email,
+                                'consentToEmail' => $userDao->get_communications_consent($user_id) ? true : false,
+                                'password' => $user['password'],
+                                'nonce' => $user['nonce'],
+                                'twbId' => $user_id]];
+                            $ch = curl_init(Common\Lib\Settings::get('tarjimly.url') . '/api/v3/admins/users/bulk-create');
+                            curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+                            curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json', 'Authorization: Bearer ' . Common\Lib\Settings::get('tarjimly.api_key')]);
+                            curl_exec($ch);
+                            if (curl_getinfo($ch, CURLINFO_HTTP_CODE) == 200) {
+                                $userDao->finishRegistration($uuid);
+                                UserRouteHandler::flashNow('verifySuccess', 'Email verified, the user can now login with email and password.');
+                            } else UserRouteHandler::flashNow('verifyError', 'Connection to Tarjimly failed, please try again.');//(**)Wording
+                        } else UserRouteHandler::flashNow('verifyError', 'The user already has a Tarjimly account they should login.');
+                    } else UserRouteHandler::flashNow('verifyError', 'Not found, either the user never registered with email and password or they have already been verified.');
+                } else UserRouteHandler::flashNow('verifyError', 'Not found, the user never registered with email and password.');
             }
 
             if (($roles & (SITE_ADMIN | PROJECT_OFFICER)) && isset($post['sync_hubspot'])) {
