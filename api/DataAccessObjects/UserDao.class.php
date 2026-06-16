@@ -550,19 +550,6 @@ class UserDao
         return $ret;
     }
     
-    public static function get_google_user_details($email)
-    {
-        $result = Lib\PDOWrapper::call('get_google_user_details', Lib\PDOWrapper::cleanseNullOrWrapStr($email));
-        if (empty($result)) return 0;
-
-        return $result[0];
-    }
-
-    public static function update_terms_accepted($user_id, $accepted_level)
-    {
-        Lib\PDOWrapper::call('update_terms_accepted', Lib\PDOWrapper::cleanse($user_id) . ",$accepted_level");
-    }
-
     public static function insert_queue_request(
         $queue,
         $type,

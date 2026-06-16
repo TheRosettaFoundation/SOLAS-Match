@@ -11026,6 +11026,7 @@ BEGIN
 END//
 DELIMITER ;
 
+# Not currently used...
 DROP PROCEDURE IF EXISTS `set_google_user_details`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `set_google_user_details`(IN mail VARCHAR(128), IN firstName VARCHAR(128), IN lastName VARCHAR(128))
@@ -11034,6 +11035,7 @@ BEGIN
 END//
 DELIMITER ;
 
+# Not currently used...
 DROP PROCEDURE IF EXISTS `get_google_user_details`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `get_google_user_details`(IN mail VARCHAR(128))
