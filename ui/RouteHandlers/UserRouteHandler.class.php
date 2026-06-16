@@ -1617,7 +1617,7 @@ class UserRouteHandler
             $qualification_level .= "<option value=$key>$qualification</option>";
         }
 
-        $extra_scripts  = '<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.2/js/bootstrap.min.js" type="text/javascript"></script> ';
+        $extra_scripts  = '<link href="' . $app->getRouteCollector()->getRouteParser()->urlFor('home') . 'resources/css/home_styles3.css" rel="stylesheet" />';
         $extra_scripts .= '<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.2/jquery.validate.min.js" type="text/javascript"></script> ';
         $extra_scripts .= '<script src="' . $app->getRouteCollector()->getRouteParser()->urlFor('home') . 'ui/js/additional-methods.min.js"></script>';
         $extra_scripts .= "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/Parameters.js\"></script>";
@@ -1625,9 +1625,11 @@ class UserRouteHandler
         $extra_scripts .= '<script src="' . $app->getRouteCollector()->getRouteParser()->urlFor('home') . 'ui/js/select2.min.js"></script>';
         $extra_scripts .= "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/UserPrivateProfile6.js\"></script>";
         $extra_scripts .= '<script type="text/javascript">
-        $(document).ready(function() {
-            $(".countclick").hide();
+        function showTab(tabId) {
+            bootstrap.Tab.getOrCreateInstance(document.getElementById(tabId)).show();
+        }
 
+        $(document).ready(function() {
             //Admin
             var admin = "' . (($roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER)) ? 1 : 0) . '";
             $.validator.addMethod( "notEqualTo", function( value, element, param ) {
@@ -1643,13 +1645,11 @@ class UserRouteHandler
                         required: true,
                         minlength: 2
                     },
-                    nativeLanguageSelect: "required",
                     nativeCountrySelect: "required",
                 },
                 success: function(label,element) {
                     label.parent().removeClass("error");
-                    label.remove(); 
-                	
+                    label.remove();
                 },
                 messages: {
                     firstName: "Please enter your First name",
@@ -1662,114 +1662,55 @@ class UserRouteHandler
                     },
                 }
             });
-           
+
+            // Update tab counter via BS5 shown.bs.tab events
+            document.getElementById("home-tab").addEventListener("shown.bs.tab", function() {
+                $(".tabcounter").text("1/3");
+            });
+            document.getElementById("profile-tab").addEventListener("shown.bs.tab", function() {
+                $(".tabcounter").text("2/3");
+            });
+            document.getElementById("verifications-tab").addEventListener("shown.bs.tab", function() {
+                $(".tabcounter").text("3/3");
+            });
+            $(".tabcounter").text("1/3");
 
             $(".nexttab").click(function() {
                 var valid = true;
-                var i = 0;
-                var $inputs = $(this).closest("div").find("input");
-                var $select = $(this).closest("div").find("select");
-
-                $inputs.each(function() {
-                    if (!validator.element(this) && valid) {
-                        valid = false;
-                    }
+                $("#home input").each(function() {
+                    if (!validator.element(this) && valid) valid = false;
                 });
-
-                $select.each(function() {
-                    if (!validator.element(this) && valid) {
-                        valid = false;
-                    }
+                $("#home select").each(function() {
+                    if (!validator.element(this) && valid) valid = false;
                 });
-
                 if (valid) {
-                    if ($(this).attr("href") == "#profile1") {
-                        $(".tabcounter").text("2/3");
-                        jQuery("#myTab li:eq(1) a").tab("show");
-
-                        localStorage.setItem("selected_native_lang", $("#nativeLanguageSelect").val());
-                    } else if ($(this).attr("href") == "#verifications") {
-                        $(".tabcounter").text("3/3");
-                        jQuery("#myTab li:eq(2) a").tab("show");
-                    }
-                } else {
-                    if ($(this).attr("href") == "#profile") {
-                        $(".tabcounter").text("1/3");
-                        jQuery("#myTab li:eq(0) a").tab("show");
-                        //$("#myTab li#prof").addClass("not-active");
-                    } else if ($(this).attr("href") == "#verifications") {
-                        $(".tabcounter").text("2/3");
-                        jQuery("#myTab li:eq(1) a").tab("show");
-                    }
+                    localStorage.setItem("selected_native_lang", $("#nativeLanguageSelect").val());
+                    showTab("profile-tab");
                 }
             });
 
             $(".nexttab1").click(function() {
                 var valid = true;
-                var i = 0;
-                var $inputs = $(this).closest("div").find("input");
-                var $select = $(this).closest("div").find("select");
-
-                if ($(".capabilities:checked").length > 0) {
-                    // at least one checkbox was checked
-                } else {
-                    // no checkbox was checked
+                if ($(".capabilities:checked").length === 0) {
                     $("#ch1").text("Please check at least one");
                     valid = false;
                 }
-                if ($(".expertise:checked").length > 0) {
-                    // at least one checkbox was checked
-                } else {
-                    // no checkbox was checked
+                if ($(".expertise:checked").length === 0) {
                     $("#ch").text("Please check at least one");
                     valid = false;
                 }
-
-                $select.each(function() {
-                    if (!validator.element(this) && valid) {
-                        valid = false;
-                    }
-                });
-
                 if (valid) {
-                    if ($(this).attr("href") == "#verifications") {
-                        $(".tabcounter").text("3/3");
-                        jQuery("#myTab li:eq(2) a").tab("show");
-
-                        if (localStorage.getItem("selected_native_lang") != null) {
-                            $("#deleteBtn").show();
-                        } else {
-                            $("#deleteBtn").hide();
-                        }
+                    if (localStorage.getItem("selected_native_lang") != null) {
+                        $("#deleteBtn").show();
+                    } else {
+                        $("#deleteBtn").hide();
                     }
-                } else {
-                    if ($(this).attr("href") == "#verifications") {
-                        $(".tabcounter").text("2/3");
-                        jQuery("#myTab li:eq(1) a").tab("show");
-                    }
+                    showTab("verifications-tab");
                 }
             });
 
-            $("#tool").tooltip();
-            $("#tool1").tooltip();
-            $("#tool2").tooltip();
-            $("#tool3").tooltip();
-            $("#tool4").tooltip();
-            $("#tool5").tooltip();
-            $("#tool6").tooltip();
-
-            function formatCountry (country) {
-                if (!country.id) { return country.text; }
-                var $country = $(
-                "<span class=\"flag-icon flag-icon-"+ country.id.toLowerCase() +" flag-icon-squared\"></span>" +
-                "<span class=\"flag-text\">"+ country.text+"</span>"
-                );
-                return $country;
-            };
-
             $(".country").select2({
-                placeholder: "Select a country",
-                templateResult: formatCountry
+                placeholder: "Select a country"
             });
             $(".nativeLanguageSelect").select2({
                 ajax: {
@@ -1785,36 +1726,9 @@ class UserRouteHandler
                 placeholder: "Select a variant",
             });
 
-            if (jQuery("#myTab li:eq(0) a").tab("show")) {
-                $(".tabcounter").text("1/3");
-            }
-            else if (jQuery("#myTab li:eq(1) a").tab("show")) {
-                $(".tabcounter").text("2/3");
-            } else {
-                $(".tabcounter").text("3/3");
-            }
-
-            $(document).on("click", ".next11", function(e) {
-                e.preventDefault();
-                $(".tabcounter").text("2/3");
-                jQuery("#myTab li:eq(1) a").tab("show");
-            });
-
-            $(document).on("click", ".next111a", function(e) {
-                e.preventDefault();
-                if ($(this).attr("href") == "#home"){
-                    $(".tabcounter").text("2/3");
-                    jQuery("#myTab li:eq(1) a").tab("show");
-                }
-                else if ($(this).attr("href") == "#profile") {
-                    $(".tabcounter").text("3/3");
-                    jQuery("#myTab li:eq(2) a").tab("show");
-                }
-            });
-
             if (!' . $user_task_limitation_current_user['limit_profile_changes'] . ') {
             var userQualifiedPairsCount = parseInt(getSetting("userQualifiedPairsCount"));
-            for (select_count = 0; select_count < userQualifiedPairsCount; select_count++) {
+            for (var select_count = 0; select_count < userQualifiedPairsCount; select_count++) {
                 Count();
 
                 if($("#btnclick").text() >= parseInt(getSetting("userQualifiedPairsLimit"))) {
@@ -1823,25 +1737,24 @@ class UserRouteHandler
                   $("#add").show();
                 }
 
-                var fieldWrapper = $("<div class=\"row-fluid\" id=\"field" + select_count + "\"/>");
+                var fieldWrapper = $("<div class=\"row g-2 align-items-center mb-2\" id=\"field" + select_count + "\"/>");
                 fieldWrapper.data("idx", select_count);
-                var fName = $("<div class=\"span5\"><select name=\"language_code_source_" + select_count + "\" id=\"language_code_source_" + select_count + "\" class=\"fieldtype\"><option value>--Select a language--</option>' . $source_lang . '</select></div>");
-                var fType = $("<div class=\"span4\"><select name=\"language_code_target_" + select_count + "\" id=\"language_code_target_" + select_count + "\" class=\"fieldtype\"><option value>--Select a language--</option>' . $target_lang . '</select></div>");
-                var fTypee = $("<div class=\"span2\"><select name=\"qualification_level_" + select_count + "\" id=\"qualification_level_" + select_count + "\" style=\"width: 75%\" class=\"fieldtype1\"><option value>--Select--</option>' . $qualification_level . '</select></div>");
+                var fName = $("<div class=\"col-md-5\"><select name=\"language_code_source_" + select_count + "\" id=\"language_code_source_" + select_count + "\" class=\"form-select fieldtype\"><option value>--Select a language--</option>' . $source_lang . '</select></div>");
+                var fType = $("<div class=\"col-md-4\"><select name=\"language_code_target_" + select_count + "\" id=\"language_code_target_" + select_count + "\" class=\"form-select fieldtype\"><option value>--Select a language--</option>' . $target_lang . '</select></div>");
+                var fTypee = $("<div class=\"col-md-2\"><select name=\"qualification_level_" + select_count + "\" id=\"qualification_level_" + select_count + "\" class=\"form-select fieldtype1\"><option value>--Select--</option>' . $qualification_level . '</select></div>");
 
                 fieldWrapper.append(fName);
                 fieldWrapper.append(fType);
 
                 if (admin == "1") {
                     fieldWrapper.append(fTypee);
-                }             
+                }
 
                 if (select_count == 0) {
-                    var tool6tip = "<i class=\"icon-question-sign\" id=\"tool6\" data-toggle=\"tooltip\" title=\"Please choose your native language.\"></i>";
-                    var addButton = $("<div class=\"span1\" style=\"\"><input type=\"button\" class=\"add\" id=\"add\" value=\"+\" title=\"Add another translation pair.\" /><div>");
+                    var addButton = $("<div class=\"col-md-1\"><input type=\"button\" class=\"add btn btn-sm btn-outline-primary\" id=\"add\" value=\"+\" title=\"Add another translation pair.\" /></div>");
                     fieldWrapper.append(addButton);
                 } else {
-                    var removeButton = $("<div class=\"span1\" style=\"\"><input type=\"button\" class=\"remove\" value=\"-\"  /><div>");
+                    var removeButton = $("<div class=\"col-md-1\"><input type=\"button\" class=\"remove btn btn-sm btn-outline-danger\" value=\"-\" /></div>");
                     removeButton.click(function() {
                         Count1();
                         if ($("#btnclick").text() <= parseInt(getSetting("userQualifiedPairsLimit"))) {
@@ -1866,71 +1779,6 @@ class UserRouteHandler
             $("#language_code_source_0").rules("add", { required: true, notEqualTo:"#language_code_target_0"});
             $("#language_code_target_0").rules("add", { required: true, notEqualTo:"#language_code_source_0" });
             }
-        });
-
-        $(document).on("click", "#btnTrigger", function(e) {
-            e.preventDefault();
-            if ($(this).attr("href") == "#home") {
-                $(".tabcounter").text("1/3");
-                jQuery("#myTab li:eq(0) a").tab("show");
-            }
-            else if ($(this).attr("href") == "#profile") {
-            }  else if ($(this).attr("href") == "#verifications") {
-                $(".tabcounter").text("3/3");
-                jQuery("#myTab li:eq(2) a").tab("show");
-            }
-        });
-
-        $(document).on("click", "#btnTrigger1999", function(e) {
-            e.preventDefault();
-            if ($(this).attr("href") == "#home") {
-                $(".tabcounter").text("1/3");
-                jQuery("#myTab li:eq(0) a").tab("show");
-            }
-            else if ($(this).attr("href") == "#profile1") {
-                var valid = true;
-                var i = 0;
-                var $inputs = $(this).closest("div").find("input");
-
-                $inputs.each(function() {
-                    if (!validator.element(this) && valid) {
-                        valid = false;
-                    }
-                });
-
-                if (valid) {
-                  $(".tabcounter").text("2/3");
-                  jQuery("#myTab li:eq(1) a").tab("show");
-                } else {
-                  $(".tabcounter").text("1/3");
-                  jQuery("#myTab li:eq(0) a").tab("show");
-                }
-            } else if ($(this).attr("href") == "#verifications") {
-                $(".tabcounter").text("3/3");
-                jQuery("#myTab li:eq(2) a").tab("show");
-            }
-        });
-
-        $(document).on("click", "#btnTrigger11", function(e) {
-            e.preventDefault();
-            if ($(this).attr("href") == "#home") {
-                $(".tabcounter1").text("1/3");
-                jQuery("#myTab li:eq(0) a").tab("show");
-            }
-            else if ($(this).attr("href") == "#profile1") {
-                $(".tabcounter1").text("2/3");
-                jQuery("#myTab li:eq(1) a").tab("show");
-            } else if ($(this).attr("href") == "#verifications") {
-                $(".tabcounter1").text("3/3");
-                jQuery("#myTab li:eq(2) a").tab("show");
-            }
-        });
-
-        $(".btn").click(function(e) {
-            e.preventDefault();
-            e.stopPropagation();
-            e.stopImmediatePropagation();
-            return false;
         });
 
         var count = 0;
@@ -1961,13 +1809,13 @@ class UserRouteHandler
 
             var intId = (lastField && lastField.length && lastField.data("idx") + 1) || 1;
 
-            var fieldWrapper = $("<div class=\"row-fluid\" id=\"field" + intId + "\"/>");
+            var fieldWrapper = $("<div class=\"row g-2 align-items-center mb-2\" id=\"field" + intId + "\"/>");
             fieldWrapper.data("idx", intId);
 
-            var fName = $("<div class=\"span5\"><select name=\"language_code_source_" + select_count + "\" id=\"language_code_source_" + select_count + "\" class=\"fieldtype\" required=\"required\"><option value>--Select a language--</option>' . $source_lang . '</select></div>");
-            var fType = $("<div class=\"span4\"><select name=\"language_code_target_" + select_count + "\" id=\"language_code_target_" + select_count + "\" class=\"fieldtype\" required=\"required\"><option value>--Select a language--</option>' . $target_lang . '</select></div>");
-            var fTypee = $("<div class=\"span2\"><select name=\"qualification_level_" + select_count + "\" id=\"qualification_level_" + select_count + "\" style=\"width: 75%\" class=\"fieldtype1\"><option value>--Select--</option>' . $qualification_level . '</select></div>");
-            var removeButton = $("<div class=\"span1\" style=\"\"><input type=\"button\" class=\"remove\" value=\"-\"  /><div>");
+            var fName = $("<div class=\"col-md-5\"><select name=\"language_code_source_" + select_count + "\" id=\"language_code_source_" + select_count + "\" class=\"form-select fieldtype\" required=\"required\"><option value>--Select a language--</option>' . $source_lang . '</select></div>");
+            var fType = $("<div class=\"col-md-4\"><select name=\"language_code_target_" + select_count + "\" id=\"language_code_target_" + select_count + "\" class=\"form-select fieldtype\" required=\"required\"><option value>--Select a language--</option>' . $target_lang . '</select></div>");
+            var fTypee = $("<div class=\"col-md-2\"><select name=\"qualification_level_" + select_count + "\" id=\"qualification_level_" + select_count + "\" class=\"form-select fieldtype1\"><option value>--Select--</option>' . $qualification_level . '</select></div>");
+            var removeButton = $("<div class=\"col-md-1\"><input type=\"button\" class=\"remove btn btn-sm btn-outline-danger\" value=\"-\" /></div>");
 
             removeButton.click(function() {
                 Count1();
