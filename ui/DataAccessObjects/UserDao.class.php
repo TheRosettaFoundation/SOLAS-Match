@@ -932,16 +932,6 @@ error_log("claimTask_shell($userId, $taskId)");
         return $results[0]['uuid'];
     }
 
-    public function verifyUserByEmail($email)
-    {
-        $user = null;
-        $result = LibAPI\PDOWrapper::call('getUser', 'null,null,' . LibAPI\PDOWrapper::cleanseNullOrWrapStr($email) . ',null,null,null,null,null,null');
-        if (!empty($result)) {
-            $user = Common\Lib\ModelFactory::buildModel('User', $result[0]);
-        }
-        return $user;
-    }
-
     public function terms_accepted($user_id)
     {
         $terms_accepted = 0;
