@@ -1142,8 +1142,8 @@ class UserRouteHandler
                     UserRouteHandler::flashNow('error', $error);
                 } else {
                     $json = json_decode($result_json, true);
-                    $first_name = $json['firstName'];
-                    $last_name = $json['lastName'];
+                    $first_name = empty($json['firstName']) ? '' : $json['firstName'];
+                    $last_name  = empty($json['lastName']) ? '' : $json['lastName'];
                     $uid = $json['uid'];
 
                     $result = LibAPI\PDOWrapper::call('getUser', 'null,null,' . LibAPI\PDOWrapper::cleanseWrapStr($email) . ',null,null,null,null,null,null');
@@ -1170,8 +1170,8 @@ class UserRouteHandler
                         LibAPI\PDOWrapper::call('finishRegistration', "$user_id");
                         $userinfo = $userDao->getUserPersonalInformation($user_id);
                         if ($userinfo->firstName != $first_name || $userinfo->lastName != $last_name) {
-                            $userinfo->setFirstName($first_name);
-                            $userinfo->setLastName($last_name);
+                            if (!empty($first_name)) $userinfo->setFirstName($first_name);
+                            if (!empty($last_name))  $userinfo->setLastName($last_name);
                             $userDao->updatePersonalInfo($user_id, $userinfo);
                         }
                     }
@@ -1199,8 +1199,8 @@ class UserRouteHandler
                 } else {
                     $json = json_decode($result_json, true);
                     $email = $json['email'];
-                    $first_name = $json['firstName'];
-                    $last_name = $json['lastName'];
+                    $first_name = empty($json['firstName']) ? '' : $json['firstName'];
+                    $last_name  = empty($json['lastName']) ? '' : $json['lastName'];
                     $uid = $json['uid'];
 //(**)                $user = 0;
 //                if banned {//(**)?
@@ -1231,8 +1231,8 @@ class UserRouteHandler
                         LibAPI\PDOWrapper::call('finishRegistration', "$user_id");
                         $userinfo = $userDao->getUserPersonalInformation($user_id);
                         if ($userinfo->firstName != $first_name || $userinfo->lastName != $last_name) {
-                            $userinfo->setFirstName($first_name);
-                            $userinfo->setLastName($last_name);
+                            if (!empty($first_name)) $userinfo->setFirstName($first_name);
+                            if (!empty($last_name))  $userinfo->setLastName($last_name);
                             $userDao->updatePersonalInfo($user_id, $userinfo);
                         }
                     }
