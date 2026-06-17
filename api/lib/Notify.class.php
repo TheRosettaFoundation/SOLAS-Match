@@ -12,20 +12,6 @@ require_once __DIR__."/../../Common/protobufs/emails/OrgFeedback.php";
 
 class Notify
 {
-    public static function sendPasswordResetEmail($user_id)
-    {
-        DAO\UserDao::insert_queue_request(
-            PROJECTQUEUE,
-            PasswordResetEmail,
-            $user_id,
-            0,
-            0,
-            0,
-            0,
-            0,
-            '');
-    }
-
     public static function sendUserAssignedBadgeEmail($user_id, $badge_id)
     {
         DAO\UserDao::insert_queue_request(

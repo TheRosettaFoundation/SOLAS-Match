@@ -186,10 +186,6 @@ class Users
             '\SolasMatch\API\V0\Users:getBannedComment')
             ->add('\SolasMatch\API\Lib\Middleware:authenticateIsUserBanned');
 
-        $app->post(
-            '/api/v0/users/email/{user_id}/send_password_reset_verification/',
-            '\SolasMatch\API\V0\Users:send_password_reset_verification');
-
         $app->get(
             '/api/v0/users/subscribedToTask/{userId}/{taskId}/',
             '\SolasMatch\API\V0\Users:userSubscribedToTask')
@@ -562,12 +558,6 @@ error_log("userClaimTask($userId, $taskId)");
         } else {
             return API\Dispatcher::sendResponse($response, "Invalid UUID", Common\Enums\HttpStatusEnum::UNAUTHORIZED);
         }
-    }
-
-    public static function send_password_reset_verification(Request $request, Response $response, $args)
-    {
-        Lib\Notify::sendPasswordResetEmail($args['user_id']);
-        return API\Dispatcher::sendResponse($response, null, null);
     }
 
     public static function userSubscribedToTask(Request $request, Response $response, $args)

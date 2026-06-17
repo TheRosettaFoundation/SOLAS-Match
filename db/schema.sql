@@ -3398,6 +3398,7 @@ END//
 DELIMITER ;
 
 
+# Not currently used...
 DROP PROCEDURE IF EXISTS `add_password_reset_request`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `add_password_reset_request`(IN uID INT UNSIGNED, IN ID BINARY(32))
@@ -3406,7 +3407,7 @@ BEGIN
 END//
 DELIMITER ;
 
-
+# Not currently used...
 DROP PROCEDURE IF EXISTS `update_password_reset_request_count`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `update_password_reset_request_count`(IN uID INT UNSIGNED)
@@ -3431,7 +3432,7 @@ BEGIN
 END//
 DELIMITER ;
 
-
+# Not currently used...
 DROP PROCEDURE IF EXISTS `get_password_reset_request`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `get_password_reset_request`(IN uID INT UNSIGNED)
@@ -3442,7 +3443,7 @@ BEGIN
 END//
 DELIMITER ;
 
-
+# Not currently used...
 DROP PROCEDURE IF EXISTS `get_password_reset_request_by_uuid`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `get_password_reset_request_by_uuid`(IN ID BINARY(32))

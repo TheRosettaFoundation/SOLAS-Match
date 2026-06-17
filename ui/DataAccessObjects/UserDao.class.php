@@ -883,55 +883,6 @@ error_log("claimTask_shell($userId, $taskId)");
         return $ret;
     }
     
-    public function get_password_reset_request_by_uuid($uuid)
-    {
-        return LibAPI\PDOWrapper::call('get_password_reset_request_by_uuid', LibAPI\PDOWrapper::cleanseNullOrWrapStr($uuid));
-    }
-
-    public function request_password_reset($email)
-    {
-        $results = LibAPI\PDOWrapper::call('getUser', 'null,null,' . LibAPI\PDOWrapper::cleanseWrapStr($email) . ',null,null,null,null,null,null');
-        if (empty($results)) return 0;
-        $user_id = $results[0]['id'];
-
-        $results = LibAPI\PDOWrapper::call('get_password_reset_request', LibAPI\PDOWrapper::cleanse($user_id));
-        if (empty($results)) {
-            LibAPI\PDOWrapper::call('add_password_reset_request', LibAPI\PDOWrapper::cleanse($user_id) . ',' . LibAPI\PDOWrapper::cleanseWrapStr(md5(uniqid(rand()))));
-        }
-
-        $results = LibAPI\PDOWrapper::call('update_password_reset_request_count', LibAPI\PDOWrapper::cleanse($user_id));
-        if (!$results[0]['result']) return -1; // Too many requests, DOS?
-
-        $request = "{$this->siteApi}v0/users/email/$user_id/send_password_reset_verification";
-        $this->client->call(null, $request, Common\Enums\HttpMethodEnum::POST);
-        return 1;
-    }
-
-    public function resetPassword($password, $uuid)
-    {
-        $results = LibAPI\PDOWrapper::call('get_password_reset_request_by_uuid', LibAPI\PDOWrapper::cleanseNullOrWrapStr($uuid));
-        if (empty($results)) return 0;
-        $user_id = $results[0]['user_id'];
-        $results = LibAPI\PDOWrapper::call('getUser', LibAPI\PDOWrapper::cleanse($user_id) . ',null,null,null,null,null,null,null,null');
-        if (empty($results)) return 0;
-
-        $user = Common\Lib\ModelFactory::buildModel('User', $results[0]);
-        $nonce = Common\Lib\Authentication::generateNonce();
-        $user->setNonce($nonce);
-        $user->setPassword(Common\Lib\Authentication::hashPassword($password, $nonce));
-        $this->saveUser($user);
-
-        LibAPI\PDOWrapper::call('finishRegistration', LibAPI\PDOWrapper::cleanse($user_id)); // Just in case user is trying to do registration and also password reset... they have proved ownership of email
-        return 1;
-    }
-
-    public function get_password_reset_request_uuid($user_id)
-    {
-        $results = LibAPI\PDOWrapper::call('get_password_reset_request', LibAPI\PDOWrapper::cleanse($user_id));
-        if (empty($results)) return 0;
-        return $results[0]['uuid'];
-    }
-
     public function terms_accepted($user_id)
     {
         $terms_accepted = 0;

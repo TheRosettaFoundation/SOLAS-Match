@@ -73,16 +73,6 @@ class UserRouteHandler
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:emailVerification')
             ->setName('email-verification');
 
-        $app->map(['GET', 'POST'],
-            '/{uuid}/password/reset[/]',
-            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:passwordReset')
-            ->setName('password-reset');
-
-        $app->map(['GET', 'POST'],
-            '/password/reset[/]',
-            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:request_password_reset')
-            ->setName('password-reset-request');
-
         $app->get(
             '/logout[/]',
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:logout')
@@ -1035,74 +1025,6 @@ class UserRouteHandler
         return UserRouteHandler::render('user/invite-site-admin.tpl', $response);
     }
 
-    public function passwordReset(Request $request, Response $response, $args)
-    {
-        global $app, $template_data;
-        $uuid = $args['uuid'];
-
-        $userDao = new DAO\UserDao();
-
-        if (!$userDao->get_password_reset_request_by_uuid($uuid)) {
-            UserRouteHandler::flash("error", Lib\Localisation::getTranslation('password_reset_1'));
-            return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor("home"));
-        }
-
-        $template_data = array_merge($template_data, ['uuid' => $uuid]);
-        if ($request->getMethod() === 'POST') {
-            $post = $request->getParsedBody();
-
-            if (isset($post['new_password']) && Lib\TemplateHelper::isValidPassword($post['new_password'])) {
-                if (
-                    isset($post['confirmation_password']) &&
-                    $post['confirmation_password'] == $post['new_password']
-                ) {
-                    $response_dao = $userDao->resetPassword($post['new_password'], $uuid);
-                    if ($response_dao) {
-                        UserRouteHandler::flash("success", Lib\Localisation::getTranslation('password_reset_2'));
-                        return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor("home"));
-                    } else {
-                        UserRouteHandler::flashNow("error", Lib\Localisation::getTranslation('password_reset_1'));
-                    }
-                } else {
-                    UserRouteHandler::flashNow("error", Lib\Localisation::getTranslation('password_reset_1'));
-                }
-            } else {
-                UserRouteHandler::flashNow("error", Lib\Localisation::getTranslation('password_reset_1'));
-            }
-        }
-        return UserRouteHandler::render("user/password-reset.tpl", $response);
-    }
-
-    public function request_password_reset(Request $request, Response $response)
-    {
-        global $app, $template_data;
-        $userDao = new DAO\UserDao();
-
-        if ($request->getMethod() === 'POST') {
-            $post = $request->getParsedBody();
-            if (isset($post['password_reset'])) {
-                if (isset($post['email_address']) && $post['email_address'] != '') {
-                        $success = $userDao->request_password_reset($post['email_address']);
-                        if ($success == 1) {
-                            UserRouteHandler::flash("success", Lib\Localisation::getTranslation('user_reset_password_2'));
-                            return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor("home"));
-                        } elseif ($success == -1) {
-                            UserRouteHandler::flashNow('error', 'This email has requested too many password resets in 24 hours, please check the emails that were previously sent to you.');
-                        } else {
-                            UserRouteHandler::flashNow(
-                                "error",
-                                "Failed to request password reset, are you sure you entered your email " .
-                                    "address correctly?"
-                            );
-                        }
-                } else {
-                    UserRouteHandler::flashNow("error", Lib\Localisation::getTranslation('user_reset_password_4'));
-                }
-            }
-        }
-        return UserRouteHandler::render("user/user.reset-password.tpl", $response);
-    }
-
     public function logout(Request $request, Response $response)
     {
         global $app;
@@ -1182,10 +1104,6 @@ class UserRouteHandler
                     return $this->set_session_redirect($response, 1, $user);
                 }
                 LibAPI\PDOWrapper::call('userLoginInsert', 'null,' . LibAPI\PDOWrapper::cleanseWrapStr($email) . ',0');
-            } elseif (isset($post['password_reset'])) {
-                return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor("password-reset-request"));
-//(**)reset remove
-           }
         } else {
             $parms = $request->getQueryParams();
             if (isset($parms['credential'])) { // (**) or code;Return from Google sign in on Tarjimly
@@ -2934,9 +2852,6 @@ error_log("result: $result");//(**)
             $howheard = $howheard[0];
         }
 
-        $uuid = 0;
-        if (($roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER))) $uuid = $userDao->get_password_reset_request_uuid($user_id);
-
         $valid_key_certificate = $userDao->get_print_request_valid_key_for_user($user_id, 0);
         $valid_key_reference_letter = $userDao->get_print_request_valid_key_for_user($user_id, 1);
 
@@ -2965,7 +2880,6 @@ error_log("result: $result");//(**)
             'tracked_registration'   => $userDao->get_tracked_registration($user_id),
             'testing_center_projects_by_code' => $testing_center_projects_by_code,
             'show_create_memsource_user'      => $show_create_memsource_user,
-            'uuid' => $uuid,
             'valid_key_certificate' => $valid_key_certificate,
             'valid_key_reference_letter' => $valid_key_reference_letter,
             'admin_role' => $adminDao->isSiteAdmin_any_or_org_admin_any_or_linguist_for_any_org($user_id),
