@@ -1106,7 +1106,7 @@ class UserRouteHandler
                 LibAPI\PDOWrapper::call('userLoginInsert', 'null,' . LibAPI\PDOWrapper::cleanseWrapStr($email) . ',0');
         } else {
             $parms = $request->getQueryParams();
-            if (isset($parms['credential'])) { // (**) or code;Return from Google sign in on Tarjimly
+            if (isset($parms['code'])) { // Return from Google sign in on Tarjimly
                 $ch = curl_init(Common\Lib\Settings::get('tarjimly.url') . 'api/v3/admins/auth/profile?code=' . urlencode($parms['code']));
                 curl_setopt($ch, CURLOPT_HTTPHEADER, ['Authorization: Bearer ' . Common\Lib\Settings::get('tarjimly.api_key')]);
                 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -1120,11 +1120,6 @@ class UserRouteHandler
                     $first_name = empty($json['firstName']) ? '' : $json['firstName'];
                     $last_name  = empty($json['lastName']) ? '' : $json['lastName'];
                     $uid = $json['uid'];
-//(**)                $user = 0;
-//                if banned {//(**)?
-//(**)                    $error = sprintf(Lib\Localisation::getTranslation('login_1'), $app->getRouteCollector()->getRouteParser()->urlFor('login'), $app->getRouteCollector()->getRouteParser()->urlFor('register'), $e->getMessage());
-//(**)                    UserRouteHandler::flashNow('error', $error);
-//(**)                } else {
                     $result = LibAPI\PDOWrapper::call('getUser', 'null,null,' . LibAPI\PDOWrapper::cleanseWrapStr($email) . ',null,null,null,null,null,null');
                     if (empty($result)) {
                         $result = LibAPI\PDOWrapper::call('userInsertAndUpdate', LibAPI\PDOWrapper::cleanseWrapStr($email) . ",0,'',null,null,null,null,null");
@@ -1154,7 +1149,6 @@ class UserRouteHandler
                             $userDao->updatePersonalInfo($user_id, $userinfo);
                         }
                     }
-//(**)                }
                     error_log("Google Sign-In, Login: $email");
                     LibAPI\PDOWrapper::call('userLoginInsert', LibAPI\PDOWrapper::cleanse($user_id) . ',' . LibAPI\PDOWrapper::cleanseWrapStr($email) . ',1');
                     return $this->set_session_redirect($response, 1, $user);
