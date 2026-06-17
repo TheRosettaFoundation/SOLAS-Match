@@ -1120,6 +1120,7 @@ class UserRouteHandler
                     $first_name = empty($json['firstName']) ? '' : $json['firstName'];
                     $last_name  = empty($json['lastName']) ? '' : $json['lastName'];
                     $uid = $json['uid'];
+
                     $result = LibAPI\PDOWrapper::call('getUser', 'null,null,' . LibAPI\PDOWrapper::cleanseWrapStr($email) . ',null,null,null,null,null,null');
                     if (empty($result)) {
                         $result = LibAPI\PDOWrapper::call('userInsertAndUpdate', LibAPI\PDOWrapper::cleanseWrapStr($email) . ",0,'',null,null,null,null,null");
