@@ -1055,15 +1055,15 @@ class UserRouteHandler
                 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
                 $result_json = curl_exec($ch);
                 $responseCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-                if ($responseCode != 200 || $responseCode != 202) {
+                if ($responseCode == 200) $json = json_decode($result_json, true);
+                if ($responseCode != 200) {
                     $error = sprintf(Lib\Localisation::getTranslation('login_1'), $app->getRouteCollector()->getRouteParser()->urlFor('login'), $app->getRouteCollector()->getRouteParser()->urlFor('register'), $e->getMessage());
 //(**)maybe mention try again words as comms failure??
                     UserRouteHandler::flashNow('error', $error);
-                } elseif ($responseCode == 202) {
+                } elseif (!$json['emailVerified']) {
                     $error = 'User is not verified on Tarjimly AND LINK';
                     UserRouteHandler::flashNow('error', $error);
                 } else {
-                    $json = json_decode($result_json, true);
                     $first_name = empty($json['firstName']) ? '' : $json['firstName'];
                     $last_name  = empty($json['lastName']) ? '' : $json['lastName'];
                     $uid = $json['uid'];
