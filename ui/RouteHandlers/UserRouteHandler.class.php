@@ -855,16 +855,21 @@ class UserRouteHandler
                 $user_id = $user['id'];
                 $result = LibAPI\PDOWrapper::call('getUserPersonalInfo', 'null,' . LibAPI\PDOWrapper::cleanse($user_id) . ',null,null,null,null,null,null,null,null,null,null');
                 $info = $result[0];
+
+                [$t_role, $org_id] = $this->get_requested_t_role($email);
                 $data = [[
                     'firstName' => $info['firstName'],
                     'lastName' => $info['lastName'],
-(**)                   'role' => 'translator',
+                    'role' => $t_role,
                     'email' => $email,
-(**)                    'organizationId' => 9, // optional
                     'consentToEmail' => $userDao->get_communications_consent($user_id) ? true : false,
                     'password' => $user['password'],
                     'nonce' => $user['nonce'],
                     'twbId' => $user_id]];
+                if ($org_id) {
+                    $result = LibAPI\PDOWrapper::call('get_t_org_id', LibAPI\PDOWrapper::cleanse($org_id));
+                    if (!empty($result)) $data[0]['organizationId'] = $result[0]['t_org_id'];
+                }
                 $ch = curl_init(Common\Lib\Settings::get('tarjimly.url') . '/api/v3/admins/users/bulk-create');
                 curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
                 curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json', 'Authorization: Bearer ' . Common\Lib\Settings::get('tarjimly.api_key')]);
