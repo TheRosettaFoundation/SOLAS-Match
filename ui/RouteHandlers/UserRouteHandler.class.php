@@ -950,6 +950,27 @@ class UserRouteHandler
         }
     }
 
+    public function get_requested_t_role($email) {
+        $adminDao = new DAO\AdminDao();
+
+        if (!empty($_SESSION['track_code']) && substr($_SESSION['track_code'], 0, 8) === 'org_ling') {
+            if ($org_id = $adminDao->decode_ngo_reg_link(substr($_SESSION['track_code'], 8))) return ['translator', $org_id];
+            return ['translator', 0];
+        }
+        if (empty($_SESSION['reg_data'])) return ['translator', 0];
+        $result = LibAPI\PDOWrapper::call('get_special_registration', LibAPI\PDOWrapper::cleanseWrapStr($_SESSION['reg_data']) . ',' . LibAPI\PDOWrapper::cleanseWrapStr(Common\Lib\Settings::get('site.reg_key')) . ',' . LibAPI\PDOWrapper::cleanse($user_id) . ',' . LibAPI\PDOWrapper::cleanseWrapStr($email));
+        if (empty($result)) return ['translator', 0];
+        $special_registration = $result[0];
+        $roles = $special_registration['roles'];
+        $org_id = $special_registration['org_id'];
+        if ($special_registration['mismatch']) return ['translator', 0];
+
+        if ($roles == NGO_LINGUIST || $roles == (NGO_LINGUIST | LINGUIST)) return ['translator', $org_id];
+        if ($roles == LINGUIST) return ['translator', 0];
+        if ($roles&(SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER | FINANCE | AIDWORKER)) return ['aidworker', 0];
+        return ['aidworker', $org_id];
+    }
+
     public function invite_admins(Request $request, Response $response, $args)
     {
         global $app, $template_data;
