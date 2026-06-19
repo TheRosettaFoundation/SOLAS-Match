@@ -1114,14 +1114,38 @@ class UserRouteHandler
                                 if (!empty($result)) {
                                     $org_id = $result[0]['org_id'];
                                 } else {
-(**)CREATE ORG WIP
-$org_id =
+                                    $org_id = 0;
+
+                                    $org_name = "Tarjimly Org $t_org_id";
+                                    $org = new Common\Protobufs\Models\Organisation();
+                                    $org->setName($org_name);
+                                    try {
+                                        $org = $orgDao->createOrg($org);
+                                        if ($org) {
+                                            $org_id = $org->getId();
+                                            $ch = curl_init(Common\Lib\Settings::get('memsource.api_url_v1') . 'clients');
+                                            curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode(['name' => $org_name]));
+                                            curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type:application/json', 'Authorization: Bearer ' . Common\Lib\Settings::get('memsource.memsource_api_token')));
+                                            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                                            $result = curl_exec($ch);
+                                            $res = json_decode($result, true);
+                                            $projectDao->set_memsource_client($org_id, $res['id'], $res['uid']);
+
+                                            $ch = curl_init(Common\Lib\Settings::get('tarjimly.url') . "/api/v3/admins/organizations/$t_org_id");
+                                            curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode(['twbOrgId' => "$org_id"]));
+                                            curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PATCH');
+                                            curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json', 'Authorization: Bearer ' . Common\Lib\Settings::get('tarjimly.api_key')]);
+                                            curl_exec($ch);
+                                        }
+                                    } catch (Common\Exceptions\SolasMatchException $ex) error_log("Tarjimly name in use: $org_name");
                                 }
-                                if ($json['role'] == 'translator') {
-                                    $adminDao->adjust_org_admin($user_id, 0, 0, LINGUIST);
-                                    $adminDao->adjust_org_admin($user_id, $org_id, 0, NGO_LINGUIST);
-                                } elseif ($json['role'] == 'aidworker')  {
-                                    $adminDao->adjust_org_admin($user_id, $org_id, 0, PROJECT_OFFICER);
+                                if ($org_id) {
+                                    if ($json['role'] == 'translator') {
+                                        $adminDao->adjust_org_admin($user_id, 0, 0, LINGUIST);
+                                        $adminDao->adjust_org_admin($user_id, $org_id, 0, NGO_LINGUIST);
+                                    } elseif ($json['role'] == 'aidworker')  {
+                                        $adminDao->adjust_org_admin($user_id, $org_id, 0, PROJECT_OFFICER);
+                                    }
                                 }
                             }
                         }
@@ -1195,7 +1219,6 @@ $org_id =
                                 if (!empty($result)) {
                                     $org_id = $result[0]['org_id'];
                                 } else {
-(**)CREATE ORG WIP DEL
                                     $org_name = "Tarjimly Org $t_org_id";
                                     $org = new Common\Protobufs\Models\Organisation();
                                     $org->setName($org_name);
@@ -1223,9 +1246,6 @@ $org_id =
                                             } elseif ($json['role'] == 'aidworker')  {
                                                 $adminDao->adjust_org_admin($user_id, $org_id, 0, PROJECT_OFFICER);
                                             }
-ORG INID IN PUT BAD???
-
-
                                         }
                                     } catch (Common\Exceptions\SolasMatchException $ex) error_log("Tarjimly name in use: $org_name");
                                 }
