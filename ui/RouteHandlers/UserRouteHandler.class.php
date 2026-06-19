@@ -1166,19 +1166,24 @@ class UserRouteHandler
                                 if (!empty($result)) $data['organizationId'] = $result[0]['t_org_id'];
                             }
                         } else {
-if     ($json['role'] == 'translator' && empty($json['organizationId'])) $adminDao->adjust_org_admin($user_id, 0, 0, LINGUIST);
-elseif ($json['role'] == 'aidworker'  && empty($json['organizationId'])) $adminDao->adjust_org_admin($user_id, 0, 0, AIDWORKER);
-
-elseif ($json['role'] == 'translator') {
-$org_id =????? ABOVE AND BELOW
-  $adminDao->adjust_org_admin($user_id, 0, 0, LINGUIST);
-  $adminDao->adjust_org_admin($user_id, $org_id, NGO_LINGUIST, 0);
-}
-elseif ($json['role'] == 'aidworker') {
-  create org
-  $adminDao->adjust_org_admin($user_id, $org_id, 0, AIDWORKER);
-}
- 
+                            if (empty($json['organizationId'])) {
+                                if     ($json['role'] == 'translator') $adminDao->adjust_org_admin($user_id, 0, 0, LINGUIST);
+                                elseif ($json['role'] == 'aidworker')  $adminDao->adjust_org_admin($user_id, 0, 0, AIDWORKER);
+                            } else {
+                                $result = LibAPI\PDOWrapper::call('get_twb_org_id', LibAPI\PDOWrapper::cleanse($json['organizationId']));
+                                if (!empty($result)) {
+                                    $org_id = $result[0]['org_id'];
+                                } else {
+(**)CREATE ORG WIP
+$org_id =
+                                }
+                                if ($json['role'] == 'translator') {
+                                    $adminDao->adjust_org_admin($user_id, 0, 0, LINGUIST);
+                                    $adminDao->adjust_org_admin($user_id, $org_id, 0, NGO_LINGUIST);
+                                } elseif ($json['role'] == 'aidworker')  {
+                                    $adminDao->adjust_org_admin($user_id, $org_id, 0, PROJECT_OFFICER);
+                                }
+                            }
                         }
                         $ch = curl_init(Common\Lib\Settings::get('tarjimly.url') . "/api/v3/admins/users/$uid");
                         curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
