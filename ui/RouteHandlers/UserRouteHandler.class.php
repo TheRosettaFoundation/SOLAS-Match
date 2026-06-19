@@ -1066,6 +1066,8 @@ class UserRouteHandler
         $userDao = new DAO\UserDao();
         $langDao = new DAO\LanguageDao();
         $adminDao = new DAO\AdminDao();
+        $orgDao = new DAO\OrganisationDao();
+        $projectDao = new DAO\ProjectDao();
 
         $error = null;
         if ($request->getMethod() === 'POST') {
@@ -1193,17 +1195,12 @@ $org_id =
                                 if (!empty($result)) {
                                     $org_id = $result[0]['org_id'];
                                 } else {
-(**)CREATE ORG WIP
-$org_id =
-
-$org_name
-include number
-        $orgDao = new DAO\OrganisationDao();
-        $projectDao = new DAO\ProjectDao();
+(**)CREATE ORG WIP DEL
+                                    $org_name = "Tarjimly Org $t_org_id";
 
         $org = new Common\Protobufs\Models\Organisation();
+        $org->setName($org_name);
         try {
-            $org->setName($org_name);
             $org = $orgDao->createOrg($org);
             if ($org) {
                 $org_id = $org->getId();
@@ -1220,6 +1217,17 @@ include number
                         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PATCH');
                         curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json', 'Authorization: Bearer ' . Common\Lib\Settings::get('tarjimly.api_key')]);
                         curl_exec($ch);
+
+
+                                if ($json['role'] == 'translator') {
+                                    $adminDao->adjust_org_admin($user_id, 0, 0, LINGUIST);
+                                    $adminDao->adjust_org_admin($user_id, $org_id, 0, NGO_LINGUIST);
+                                } elseif ($json['role'] == 'aidworker')  {
+                                    $adminDao->adjust_org_admin($user_id, $org_id, 0, PROJECT_OFFICER);
+                                }
+ORG INID IN PUT BAD???
+
+
 }
 
             } catch (Common\Exceptions\SolasMatchException $ex) error_log("Tarjimly name in use: $org_name");
@@ -1228,12 +1236,6 @@ include number
 
 
 
-                                }
-                                if ($json['role'] == 'translator') {
-                                    $adminDao->adjust_org_admin($user_id, 0, 0, LINGUIST);
-                                    $adminDao->adjust_org_admin($user_id, $org_id, 0, NGO_LINGUIST);
-                                } elseif ($json['role'] == 'aidworker')  {
-                                    $adminDao->adjust_org_admin($user_id, $org_id, 0, PROJECT_OFFICER);
                                 }
                             }
                         }
