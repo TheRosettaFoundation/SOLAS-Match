@@ -865,10 +865,10 @@ class UserRouteHandler
                     'consentToEmail' => $userDao->get_communications_consent($user_id) ? true : false,
                     'password' => $user['password'],
                     'nonce' => $user['nonce'],
-                    'twbId' => $user_id]];
+                    'twbId' => "$user_id"]];
                 if ($org_id) {
                     $result = LibAPI\PDOWrapper::call('get_t_org_id', LibAPI\PDOWrapper::cleanse($org_id));
-                    if (!empty($result)) $data[0]['organizationId'] = $result[0]['t_org_id'];
+                    if (!empty($result)) $data[0]['organizationId'] = (int)$result[0]['t_org_id'];
                 }
                 $ch = curl_init(Common\Lib\Settings::get('tarjimly.url') . '/api/v3/admins/users/bulk-create');
                 curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
@@ -1126,7 +1126,7 @@ $org_id =
                             }
                         }
                         $ch = curl_init(Common\Lib\Settings::get('tarjimly.url') . "/api/v3/admins/users/$uid");
-                        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode(['twbId' => $user_id]));
+                        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode(['twbId' => "$user_id"]));
                         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PUT');
                         curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json', 'Authorization: Bearer ' . Common\Lib\Settings::get('tarjimly.api_key')]);
                         curl_exec($ch);
@@ -1177,13 +1177,13 @@ $org_id =
                         LibAPI\PDOWrapper::call('userPersonalInfoInsertAndUpdate', 'null,' . LibAPI\PDOWrapper::cleanse($user_id) . ',' . LibAPI\PDOWrapper::cleanseNullOrWrapStr($first_name) . ',' . LibAPI\PDOWrapper::cleanseNullOrWrapStr($last_name) . ',null,null,1786,null,null,null,null,0');
                         LibAPI\PDOWrapper::call('userTaskStreamNotificationInsertAndUpdate', LibAPI\PDOWrapper::cleanse($user_id) . ',2,1');
 
-                        $data = ['twbId' => $user_id];
+                        $data = ['twbId' => "$user_id"];
                         if (empty($json['role'])) {
                             [$t_role, $org_id] = $this->get_requested_t_role($email);
                             $data['role'] = $t_role;
                             if ($org_id) {
                                 $result = LibAPI\PDOWrapper::call('get_t_org_id', LibAPI\PDOWrapper::cleanse($org_id));
-                                if (!empty($result)) $data['organizationId'] = $result[0]['t_org_id'];
+                                if (!empty($result)) $data['organizationId'] = (int)$result[0]['t_org_id'];
                             }
                         } else {
                             if (empty($json['organizationId'])) {
@@ -1197,26 +1197,25 @@ $org_id =
                                 } else {
 (**)CREATE ORG WIP DEL
                                     $org_name = "Tarjimly Org $t_org_id";
+                                    $org = new Common\Protobufs\Models\Organisation();
+                                    $org->setName($org_name);
+                                    try {
+                                        $org = $orgDao->createOrg($org);
+                                        if ($org) {
+                                            $org_id = $org->getId();
+                                            $ch = curl_init(Common\Lib\Settings::get('memsource.api_url_v1') . 'clients');
+                                            curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode(['name' => $org_name]));
+                                            curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type:application/json', 'Authorization: Bearer ' . Common\Lib\Settings::get('memsource.memsource_api_token')));
+                                            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                                            $result = curl_exec($ch);
+                                            $res = json_decode($result, true);
+                                            $projectDao->set_memsource_client($org_id, $res['id'], $res['uid']);
 
-        $org = new Common\Protobufs\Models\Organisation();
-        $org->setName($org_name);
-        try {
-            $org = $orgDao->createOrg($org);
-            if ($org) {
-                $org_id = $org->getId();
-                $ch = curl_init(Common\Lib\Settings::get('memsource.api_url_v1') . 'clients');
-                curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode(['name' => $org_name]));
-                curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type:application/json', 'Authorization: Bearer ' . Common\Lib\Settings::get('memsource.memsource_api_token')));
-                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-                $result = curl_exec($ch);
-                $result = json_decode($result, true);
-                $projectDao->set_memsource_client($org_id, $result['id'], $result['uid']);
-
-                        $ch = curl_init(Common\Lib\Settings::get('tarjimly.url') . "/api/v3/admins/organizations/$t_org_id");
-                        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode(['twbOrgId' => "???1234"]));
-                        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PATCH');
-                        curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json', 'Authorization: Bearer ' . Common\Lib\Settings::get('tarjimly.api_key')]);
-                        curl_exec($ch);
+                                            $ch = curl_init(Common\Lib\Settings::get('tarjimly.url') . "/api/v3/admins/organizations/$t_org_id");
+                                            curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode(['twbOrgId' => "$org_id"]));
+                                            curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PATCH');
+                                            curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json', 'Authorization: Bearer ' . Common\Lib\Settings::get('tarjimly.api_key')]);
+                                            curl_exec($ch);
 
 
                                 if ($json['role'] == 'translator') {
