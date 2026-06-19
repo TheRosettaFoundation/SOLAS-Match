@@ -1103,10 +1103,38 @@ class UserRouteHandler
                         LibAPI\PDOWrapper::call('create_empty_role', LibAPI\PDOWrapper::cleanse($user_id));
                         LibAPI\PDOWrapper::call('userPersonalInfoInsertAndUpdate', 'null,' . LibAPI\PDOWrapper::cleanse($user_id) . ',' . LibAPI\PDOWrapper::cleanseNullOrWrapStr($first_name) . ',' . LibAPI\PDOWrapper::cleanseNullOrWrapStr($last_name) . ',null,null,1786,null,null,null,null,0');
                         LibAPI\PDOWrapper::call('userTaskStreamNotificationInsertAndUpdate', LibAPI\PDOWrapper::cleanse($user_id) . ',2,1');
-(**)Roles from Tarjimly?
-
+                        $data = ['twbId' => $user_id];
+                        if (empty($json['role'])) {
+???????????????(**) this bit to Targjimly WILL THERE BE SESSION AND IS THIS NEW?????????????
+[[[ COULD PUT BACK BELOW curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode(['twbId' => $user_id]])); ]]](**)
+                            [$t_role, $org_id] = $this->get_requested_t_role($email);
+                            $data['role'] = $t_role;
+                            if ($org_id) {
+                                $result = LibAPI\PDOWrapper::call('get_t_org_id', LibAPI\PDOWrapper::cleanse($org_id));
+                                if (!empty($result)) $data['organizationId'] = $result[0]['t_org_id'];
+                            }
+                        } else {
+                            if (empty($json['organizationId'])) {
+                                if     ($json['role'] == 'translator') $adminDao->adjust_org_admin($user_id, 0, 0, LINGUIST);
+                                elseif ($json['role'] == 'aidworker')  $adminDao->adjust_org_admin($user_id, 0, 0, AIDWORKER);
+                            } else {
+                                $result = LibAPI\PDOWrapper::call('get_twb_org_id', LibAPI\PDOWrapper::cleanse($json['organizationId']));
+                                if (!empty($result)) {
+                                    $org_id = $result[0]['org_id'];
+                                } else {
+(**)CREATE ORG WIP
+$org_id =
+                                }
+                                if ($json['role'] == 'translator') {
+                                    $adminDao->adjust_org_admin($user_id, 0, 0, LINGUIST);
+                                    $adminDao->adjust_org_admin($user_id, $org_id, 0, NGO_LINGUIST);
+                                } elseif ($json['role'] == 'aidworker')  {
+                                    $adminDao->adjust_org_admin($user_id, $org_id, 0, PROJECT_OFFICER);
+                                }
+                            }
+                        }
                         $ch = curl_init(Common\Lib\Settings::get('tarjimly.url') . "/api/v3/admins/users/$uid");
-                        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode(['twbId' => $user_id]]));
+                        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
                         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PUT');
                         curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json', 'Authorization: Bearer ' . Common\Lib\Settings::get('tarjimly.api_key')]);
                         curl_exec($ch);
