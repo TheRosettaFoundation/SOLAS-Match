@@ -1106,8 +1106,15 @@ class UserRouteHandler
                         LibAPI\PDOWrapper::call('userPersonalInfoInsertAndUpdate', 'null,' . LibAPI\PDOWrapper::cleanse($user_id) . ',' . LibAPI\PDOWrapper::cleanseNullOrWrapStr($first_name) . ',' . LibAPI\PDOWrapper::cleanseNullOrWrapStr($last_name) . ',null,null,1786,null,null,null,null,0');
                         LibAPI\PDOWrapper::call('userTaskStreamNotificationInsertAndUpdate', LibAPI\PDOWrapper::cleanse($user_id) . ',2,1');
 
-                        $data = ['twbId' => "$user_id"]
-                        if (!empty($json['role'])) {
+                        $data = ['twbId' => "$user_id"];
+                        if (empty($json['role'])) {
+
+
+
+
+
+
+                        } else {
                             if (empty($json['organizationId'])) {
                                 if     ($json['role'] == 'translator') $adminDao->adjust_org_admin($user_id, 0, 0, LINGUIST);
                                 elseif ($json['role'] == 'aidworker')  $adminDao->adjust_org_admin($user_id, 0, 0, AIDWORKER);
