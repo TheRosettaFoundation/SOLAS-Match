@@ -1094,99 +1094,9 @@ class UserRouteHandler
                     UserRouteHandler::flashNow('error', $error);
                 } else {
                     $user = $this->create_user_or_login($json, $email, 0); // un/pw Login
-$user_id = $user['id'];
-
-                    $first_name = empty($json['firstName']) ? '' : $json['firstName'];
-                    $last_name  = empty($json['lastName']) ? '' : $json['lastName'];
-                    $uid = $json['uid'];
-
-                    $result = LibAPI\PDOWrapper::call('getUser', 'null,null,' . LibAPI\PDOWrapper::cleanseWrapStr($email) . ',null,null,null,null,null,null');
-                    if (empty($result)) {
-                        $result = LibAPI\PDOWrapper::call('userInsertAndUpdate', LibAPI\PDOWrapper::cleanseWrapStr($email) . ",0,'',null,null,null,null,null");
-                        $user_id = $result[0]['id'];
-                        $result = LibAPI\PDOWrapper::call('getUser', "$user_id,null,null,null,null,null,null,null,null");
-                        $user = $result[0];
-                        LibAPI\PDOWrapper::call('create_empty_role', LibAPI\PDOWrapper::cleanse($user_id));
-                        LibAPI\PDOWrapper::call('userPersonalInfoInsertAndUpdate', 'null,' . LibAPI\PDOWrapper::cleanse($user_id) . ',' . LibAPI\PDOWrapper::cleanseNullOrWrapStr($first_name) . ',' . LibAPI\PDOWrapper::cleanseNullOrWrapStr($last_name) . ',null,null,1786,null,null,null,null,0');
-                        LibAPI\PDOWrapper::call('userTaskStreamNotificationInsertAndUpdate', LibAPI\PDOWrapper::cleanse($user_id) . ',2,1');
-
-                        $data = ['twbId' => "$user_id"];
-                        if (empty($json['role'])) {
-                            if ($google_login) {
-                                [$t_role, $org_id] = $this->get_requested_t_role($email);
-                                $data['role'] = $t_role;
-                                if ($org_id) {
-                                    $result = LibAPI\PDOWrapper::call('get_t_org_id', LibAPI\PDOWrapper::cleanse($org_id));
-                                    if (!empty($result)) $data['organizationId'] = (int)$result[0]['t_org_id'];
-                                }
-                            }
-                        } else {
-                            if (empty($json['organizationId'])) {
-                                if     ($json['role'] == 'translator') $adminDao->adjust_org_admin($user_id, 0, 0, LINGUIST);
-                                elseif ($json['role'] == 'aidworker')  $adminDao->adjust_org_admin($user_id, 0, 0, AIDWORKER);
-                            } else {
-                                $t_org_id = $json['organizationId'];
-                                $result = LibAPI\PDOWrapper::call('get_twb_org_id', LibAPI\PDOWrapper::cleanse($t_org_id));
-                                if (!empty($result)) {
-                                    $org_id = $result[0]['org_id'];
-                                    $update_twb_roles = !$google_login;
-                                } else {
-                                    $org_id = 0;
-                                    $update_twb_roles = 1;
-
-                                    $org_name = "Tarjimly Org $t_org_id";
-                                    $org = new Common\Protobufs\Models\Organisation();
-                                    $org->setName($org_name);
-                                    try {
-                                        $org = $orgDao->createOrg($org);
-                                        if ($org) {
-                                            $org_id = $org->getId();
-                                            $ch = curl_init(Common\Lib\Settings::get('memsource.api_url_v1') . 'clients');
-                                            curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode(['name' => $org_name]));
-                                            curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type:application/json', 'Authorization: Bearer ' . Common\Lib\Settings::get('memsource.memsource_api_token')));
-                                            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-                                            $result = curl_exec($ch);
-                                            $res = json_decode($result, true);
-                                            $projectDao->set_memsource_client($org_id, $res['id'], $res['uid']);
-
-                                            $ch = curl_init(Common\Lib\Settings::get('tarjimly.url') . "/api/v3/admins/organizations/$t_org_id");
-                                            curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode(['twbOrgId' => "$org_id"]));
-                                            curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PATCH');
-                                            curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json', 'Authorization: Bearer ' . Common\Lib\Settings::get('tarjimly.api_key')]);
-                                            curl_exec($ch);
-                                        }
-                                    } catch (Common\Exceptions\SolasMatchException $ex) error_log("Tarjimly name in use: $org_name");
-                                }
-                                if ($org_id && $update_twb_roles) {
-                                    if ($json['role'] == 'translator') {
-                                        $adminDao->adjust_org_admin($user_id, 0, 0, LINGUIST);
-                                        $adminDao->adjust_org_admin($user_id, $org_id, 0, NGO_LINGUIST);
-                                    } elseif ($json['role'] == 'aidworker')  {
-                                        $adminDao->adjust_org_admin($user_id, $org_id, 0, PROJECT_OFFICER);
-                                    }
-                                }
-                            }
-                        }
-                        $ch = curl_init(Common\Lib\Settings::get('tarjimly.url') . "/api/v3/admins/users/$uid");
-                        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
-                        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PUT');
-                        curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json', 'Authorization: Bearer ' . Common\Lib\Settings::get('tarjimly.api_key')]);
-                        curl_exec($ch);
-
-                        $userDao->update_terms_accepted($user_id, 1); // Will be redirected to googleregister
-                    } else {
-                        $user = $result[0];
-                        $user_id = $user['id'];
-                        LibAPI\PDOWrapper::call('finishRegistration', "$user_id");
-                        $userinfo = $userDao->getUserPersonalInformation($user_id);
-                        if ($userinfo->firstName != $first_name || $userinfo->lastName != $last_name) {
-                            if (!empty($first_name)) $userinfo->setFirstName($first_name);
-                            if (!empty($last_name))  $userinfo->setLastName($last_name);
-                            $userDao->updatePersonalInfo($user_id, $userinfo);
-                        }
-                    }
                 }
                 if ($user) {
+                    $user_id = $user['id'];
                     error_log("Password, Login: {$post['email']}");
                     LibAPI\PDOWrapper::call('userLoginInsert', LibAPI\PDOWrapper::cleanse($user_id) . ',' . LibAPI\PDOWrapper::cleanseWrapStr($email) . ',1');
                     return $this->set_session_redirect($response, 1, $user);
@@ -1205,100 +1115,10 @@ $user_id = $user['id'];
                 } else {
                     $json = json_decode($result_json, true);
                     $email = $json['email'];
-                    $google_login = 1;
-                    $first_name = empty($json['firstName']) ? '' : $json['firstName'];
-                    $last_name  = empty($json['lastName']) ? '' : $json['lastName'];
-                    $uid = $json['uid'];
-
-                    $result = LibAPI\PDOWrapper::call('getUser', 'null,null,' . LibAPI\PDOWrapper::cleanseWrapStr($email) . ',null,null,null,null,null,null');
-                    if (empty($result)) {
-                        $result = LibAPI\PDOWrapper::call('userInsertAndUpdate', LibAPI\PDOWrapper::cleanseWrapStr($email) . ",0,'',null,null,null,null,null");
-                        $user_id = $result[0]['id'];
-                        $result = LibAPI\PDOWrapper::call('getUser', "$user_id,null,null,null,null,null,null,null,null");
-                        $user = $result[0];
-                        LibAPI\PDOWrapper::call('create_empty_role', LibAPI\PDOWrapper::cleanse($user_id));
-                        LibAPI\PDOWrapper::call('userPersonalInfoInsertAndUpdate', 'null,' . LibAPI\PDOWrapper::cleanse($user_id) . ',' . LibAPI\PDOWrapper::cleanseNullOrWrapStr($first_name) . ',' . LibAPI\PDOWrapper::cleanseNullOrWrapStr($last_name) . ',null,null,1786,null,null,null,null,0');
-                        LibAPI\PDOWrapper::call('userTaskStreamNotificationInsertAndUpdate', LibAPI\PDOWrapper::cleanse($user_id) . ',2,1');
-
-                        $data = ['twbId' => "$user_id"];
-                        if (empty($json['role'])) {
-                            if ($google_login) {
-                                [$t_role, $org_id] = $this->get_requested_t_role($email);
-                                $data['role'] = $t_role;
-                                if ($org_id) {
-                                    $result = LibAPI\PDOWrapper::call('get_t_org_id', LibAPI\PDOWrapper::cleanse($org_id));
-                                    if (!empty($result)) $data['organizationId'] = (int)$result[0]['t_org_id'];
-                                }
-                            }
-                        } else {
-                            if (empty($json['organizationId'])) {
-                                if     ($json['role'] == 'translator') $adminDao->adjust_org_admin($user_id, 0, 0, LINGUIST);
-                                elseif ($json['role'] == 'aidworker')  $adminDao->adjust_org_admin($user_id, 0, 0, AIDWORKER);
-                            } else {
-                                $t_org_id = $json['organizationId'];
-                                $result = LibAPI\PDOWrapper::call('get_twb_org_id', LibAPI\PDOWrapper::cleanse($t_org_id));
-                                if (!empty($result)) {
-                                    $org_id = $result[0]['org_id'];
-                                    $update_twb_roles = !$google_login;
-                                } else {
-                                    $org_id = 0;
-                                    $update_twb_roles = 1;
-
-                                    $org_name = "Tarjimly Org $t_org_id";
-                                    $org = new Common\Protobufs\Models\Organisation();
-                                    $org->setName($org_name);
-                                    try {
-                                        $org = $orgDao->createOrg($org);
-                                        if ($org) {
-                                            $org_id = $org->getId();
-                                            $ch = curl_init(Common\Lib\Settings::get('memsource.api_url_v1') . 'clients');
-                                            curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode(['name' => $org_name]));
-                                            curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type:application/json', 'Authorization: Bearer ' . Common\Lib\Settings::get('memsource.memsource_api_token')));
-                                            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-                                            $result = curl_exec($ch);
-                                            $res = json_decode($result, true);
-                                            $projectDao->set_memsource_client($org_id, $res['id'], $res['uid']);
-
-                                            $ch = curl_init(Common\Lib\Settings::get('tarjimly.url') . "/api/v3/admins/organizations/$t_org_id");
-                                            curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode(['twbOrgId' => "$org_id"]));
-                                            curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PATCH');
-                                            curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json', 'Authorization: Bearer ' . Common\Lib\Settings::get('tarjimly.api_key')]);
-                                            curl_exec($ch);
-                                        }
-                                    } catch (Common\Exceptions\SolasMatchException $ex) error_log("Tarjimly name in use: $org_name");
-                                }
-                                if ($org_id && $update_twb_roles) {
-                                    if ($json['role'] == 'translator') {
-                                        $adminDao->adjust_org_admin($user_id, 0, 0, LINGUIST);
-                                        $adminDao->adjust_org_admin($user_id, $org_id, 0, NGO_LINGUIST);
-                                    } elseif ($json['role'] == 'aidworker')  {
-                                        $adminDao->adjust_org_admin($user_id, $org_id, 0, PROJECT_OFFICER);
-                                    }
-                                }
-                            }
-                        }
-                        $ch = curl_init(Common\Lib\Settings::get('tarjimly.url') . "/api/v3/admins/users/$uid");
-                        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
-                        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PUT');
-                        curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json', 'Authorization: Bearer ' . Common\Lib\Settings::get('tarjimly.api_key')]);
-                        curl_exec($ch);
-
-                        $userDao->update_terms_accepted($user_id, 1); // Will be redirected to googleregister
-                    } else {
-                        $user = $result[0];
-                        $user_id = $user['id'];
-                        LibAPI\PDOWrapper::call('finishRegistration', "$user_id");
-                        $userinfo = $userDao->getUserPersonalInformation($user_id);
-                        if ($userinfo->firstName != $first_name || $userinfo->lastName != $last_name) {
-                            if (!empty($first_name)) $userinfo->setFirstName($first_name);
-                            if (!empty($last_name))  $userinfo->setLastName($last_name);
-                            $userDao->updatePersonalInfo($user_id, $userinfo);
-                        }
-                    }
+                    $user = $this->create_user_or_login($json, $email, 1); // Google Login
                     error_log("Google Sign-In, Login: $email");
-                    LibAPI\PDOWrapper::call('userLoginInsert', LibAPI\PDOWrapper::cleanse($user_id) . ',' . LibAPI\PDOWrapper::cleanseWrapStr($email) . ',1');
+                    LibAPI\PDOWrapper::call('userLoginInsert', LibAPI\PDOWrapper::cleanse($user['id']) . ',' . LibAPI\PDOWrapper::cleanseWrapStr($email) . ',1');
                     return $this->set_session_redirect($response, 1, $user);
-
                 }
             }
 
