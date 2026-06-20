@@ -16083,6 +16083,31 @@ END//
 DELIMITER ;
 
 
+CREATE TABLE IF NOT EXISTS `organisation_map` (
+  org_id   INT UNSIGNED NOT NULL,
+  t_org_id INT UNSIGNED NOT NULL,
+  PRIMARY KEY (org_id),
+  UNIQUE KEY (t_org_id),
+  CONSTRAINT FK_organisation_map_org_id FOREIGN KEY (org_id)  REFERENCES Organisations (id) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+DROP PROCEDURE IF EXISTS `get_t_org_id`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_t_org_id`(IN p_org_id INT UNSIGNED)
+BEGIN
+    SELECT t_org_id FROM organisation_map WHERE org_id=p_org_id;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `get_twb_org_id`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_twb_org_id`(IN p_t_org_id INT UNSIGNED)
+BEGIN
+    SELECT org_id FROM organisation_map WHERE t_org_id=p_t_org_id;
+END//
+DELIMITER ;
+
+
 /*---------------------------------------end of procs----------------------------------------------*/
 
 
