@@ -1242,15 +1242,16 @@ class UserRouteHandler
                                             curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PATCH');
                                             curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json', 'Authorization: Bearer ' . Common\Lib\Settings::get('tarjimly.api_key')]);
                                             curl_exec($ch);
-
-                                            if ($json['role'] == 'translator') {
-                                                $adminDao->adjust_org_admin($user_id, 0, 0, LINGUIST);
-                                                $adminDao->adjust_org_admin($user_id, $org_id, 0, NGO_LINGUIST);
-                                            } elseif ($json['role'] == 'aidworker')  {
-                                                $adminDao->adjust_org_admin($user_id, $org_id, 0, PROJECT_OFFICER);
-                                            }
                                         }
                                     } catch (Common\Exceptions\SolasMatchException $ex) error_log("Tarjimly name in use: $org_name");
+                                    if ($org_id) {
+                                        if ($json['role'] == 'translator') {
+                                            $adminDao->adjust_org_admin($user_id, 0, 0, LINGUIST);
+                                            $adminDao->adjust_org_admin($user_id, $org_id, 0, NGO_LINGUIST);
+                                        } elseif ($json['role'] == 'aidworker')  {
+                                            $adminDao->adjust_org_admin($user_id, $org_id, 0, PROJECT_OFFICER);
+                                        }
+                                    }
                                 }
                             }
                         }
