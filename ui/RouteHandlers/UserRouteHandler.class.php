@@ -1064,12 +1064,6 @@ class UserRouteHandler
     {
         global $app, $template_data;
 
-        $userDao = new DAO\UserDao();
-        $langDao = new DAO\LanguageDao();
-        $adminDao = new DAO\AdminDao();
-        $orgDao = new DAO\OrganisationDao();
-        $projectDao = new DAO\ProjectDao();
-
         $error = null;
         if ($request->getMethod() === 'POST') {
             $post = $request->getParsedBody();
@@ -1096,9 +1090,8 @@ class UserRouteHandler
                     $user = $this->create_user_or_login($json, $email, 0); // un/pw Login
                 }
                 if ($user) {
-                    $user_id = $user['id'];
                     error_log("Password, Login: {$post['email']}");
-                    LibAPI\PDOWrapper::call('userLoginInsert', LibAPI\PDOWrapper::cleanse($user_id) . ',' . LibAPI\PDOWrapper::cleanseWrapStr($email) . ',1');
+                    LibAPI\PDOWrapper::call('userLoginInsert', LibAPI\PDOWrapper::cleanse($user['id']) . ',' . LibAPI\PDOWrapper::cleanseWrapStr($email) . ',1');
                     return $this->set_session_redirect($response, 1, $user);
                 }
                 LibAPI\PDOWrapper::call('userLoginInsert', 'null,' . LibAPI\PDOWrapper::cleanseWrapStr($email) . ',0');
