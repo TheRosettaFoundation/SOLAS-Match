@@ -2,6 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en" data-bs-theme="light">
     <head>
         <meta charset="utf-8" content="application/xhtml+xml" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <!--        <meta name="google-translate-customization" content="d0b5975e5905d60f-4e4c167261d2937a-g4574d0ff41a34d5b-10" />-->
 
@@ -106,7 +107,65 @@
        
 
      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>  
-     
+
+  <!-- Import Roboto font required by Google branding guidelines -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://gstatic.com" crossorigin>
+  <link href="https://googleapis.com" rel="stylesheet">
+
+  <style>
+    /* The main link container styled as a button */
+    .google-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background-color: #ffffff;
+      color: #1f1f1f;
+      font-family: 'Roboto', sans-serif;
+      font-weight: 500;
+      font-size: 14px;
+      line-height: 20px;
+      letter-spacing: 0.25px;
+      text-decoration: none;
+      padding: 0 12px 0 12px;
+      height: 40px;
+      border: 1px solid #747775;
+      border-radius: 4px;
+      transition: background-color 0.218s, border-color 0.218s, box-shadow 0.218s;
+      cursor: pointer;
+      box-sizing: border-box;
+    }
+
+    /* Target the SVG icon wrapper */
+    .google-btn .google-icon-wrapper {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 20px;
+      height: 20px;
+      margin-right: 12px;
+    }
+
+    /* Hover effect */
+    .google-btn:hover {
+      background-color: #f8fafc;
+      border-color: #747775;
+      box-shadow: 0 1px 2px 0 rgba(60,64,67,0.30), 0 1px 3px 1px rgba(60,64,67,0.15);
+    }
+
+    /* Focus/Keyboard accessibility states */
+    .google-btn:focus {
+      outline: none;
+      background-color: #f1f3f4;
+      border-color: #0b57d0;
+    }
+
+    /* Active/Pressed state */
+    .google-btn:active {
+      background-color: #e8eaed;
+      box-shadow: none;
+    }
+  </style>
 
 </head>
 
@@ -142,24 +201,20 @@
               <h2 class="fw-bold">Create an account with TWB</h2>
       </div>
 
-      
-        <div id="gSignInWrapper"  class="mt-4 mb-4">
-        <div id="g_id_onload"
-            data-client_id="{Settings::get('googlePlus.client_id')}"
-            data-context="signin"
-            data-ux_mode="popup"
-            data-login_uri="{Settings::get('site.location')}login/"
-            data-auto_prompt="false">
-        </div>
-        <div class="g_id_signin"
-            data-type="standard"
-            data-shape="rectangular"
-            data-theme="outline"
-            data-text="signin_with"
-            data-size="large"
-            data-width=219
-            data-logo_alignment="left">
-        </div>
+  <!-- The Button Link -->
+  <a href="{$tarjimly}/api/mobile/v2/auth/sso/google?redirectTo={urlencode({$siteLocation}login)}" class="google-btn">
+    <div class="google-icon-wrapper">
+      <!-- Official Google 'G' SVG Logo -->
+      <svg xmlns="http://w3.org" viewBox="0 0 48 48" width="20px" height="20px">
+        <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
+        <path fill="#4285F4" d="M46.5 24c0-1.65-.15-3.22-.42-4.75H24v9.03h12.75c-.55 2.97-2.22 5.5-4.75 7.2l7.37 5.72C43.68 36.56 46.5 30.73 46.5 24z"/>
+        <path fill="#FBBC05" d="M10.54 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.98-6.19z"/>
+        <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.37-5.72c-2.11 1.41-4.81 2.3-8.52 2.3-6.26 0-11.57-4.22-13.46-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
+      </svg>
+    </div>
+    <span>Sign in with Google</span>
+  </a>
+
   </div>
   <div class="d-flex align-items-center mt-4 mb-4"><div class="flex-fill border-top border-1 border-dark-subtle " ></div><div class=" text-center mx-4 text-muted">OR CONTINUE WITH </div><div class=" flex-fill border-top border-1 border-dark-subtle" ></div> </div>
       {if (empty($disabled))}

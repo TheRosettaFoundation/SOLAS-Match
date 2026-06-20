@@ -651,8 +651,7 @@ class UserRouteHandler
         $google_site_key = Common\Lib\Settings::get('google.captcha_site_key');
         $google_secret_key = Common\Lib\Settings::get('google.captcha_secret_key');
 
-        $extra_scripts  = self::createGooglePlusJavaScript();
-        $extra_scripts .= '<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.2/js/bootstrap.min.js" type="text/javascript"></script>';
+        $extra_scripts  = '<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.2/js/bootstrap.min.js" type="text/javascript"></script>';
         $extra_scripts .= '<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.2/jquery.validate.min.js" type="text/javascript"></script>';
         $extra_scripts .= '<script src="https://www.google.com/recaptcha/api.js?render=' . $google_site_key . '" type="text/javascript"></script>';
         $extra_scripts .= '<script type="text/javascript">
@@ -784,9 +783,11 @@ class UserRouteHandler
         } else {
             if ($email) $template_data = array_merge($template_data, ['email' => $email]);
         }
-        if ($error) {
-            $template_data = array_merge($template_data, ['error' => $error]);
-        }
+        if ($error) $template_data = array_merge($template_data, ['error' => $error]);
+        $template_data = array_merge($template_data, [
+            'siteLocation' => Common\Lib\Settings::get('site.location'),
+            'tarjimly' => Common\Lib\Settings::get('tarjimly.url'),
+        ]);
         return UserRouteHandler::render('user/register.tpl', $response);
     }
 
@@ -1121,10 +1122,10 @@ class UserRouteHandler
             }
         }
 
-        $template_data = array_merge($template_data, array(
-            'extra_scripts' => self::createGooglePlusJavaScript(),
-        ));
-
+        $template_data = array_merge($template_data, [
+            'siteLocation' => Common\Lib\Settings::get('site.location'),
+            'tarjimly' => Common\Lib\Settings::get('tarjimly.url'),
+        ]);
         return UserRouteHandler::render('user/login.tpl', $response);
     }
 
@@ -1225,11 +1226,6 @@ class UserRouteHandler
             }
         }
         return $user;
-    }
-
-    private static function createGooglePlusJavaScript()
-    {
-        return '<script src="https://accounts.google.com/gsi/client" async defer></script>';
     }
 
     public function googleregister(Request $request, Response $response, $args)
