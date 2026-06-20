@@ -1110,7 +1110,8 @@ class UserRouteHandler
                                 if     ($json['role'] == 'translator') $adminDao->adjust_org_admin($user_id, 0, 0, LINGUIST);
                                 elseif ($json['role'] == 'aidworker')  $adminDao->adjust_org_admin($user_id, 0, 0, AIDWORKER);
                             } else {
-                                $result = LibAPI\PDOWrapper::call('get_twb_org_id', LibAPI\PDOWrapper::cleanse($json['organizationId']));
+                                $t_org_id = $json['organizationId'];
+                                $result = LibAPI\PDOWrapper::call('get_twb_org_id', LibAPI\PDOWrapper::cleanse($t_org_id));
                                 if (!empty($result)) {
                                     $org_id = $result[0]['org_id'];
                                 } else {
