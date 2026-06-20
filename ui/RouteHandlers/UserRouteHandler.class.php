@@ -1220,6 +1220,8 @@ class UserRouteHandler
                                 if (!empty($result)) {
                                     $org_id = $result[0]['org_id'];
                                 } else {
+                                    $org_id = 0;
+
                                     $org_name = "Tarjimly Org $t_org_id";
                                     $org = new Common\Protobufs\Models\Organisation();
                                     $org->setName($org_name);
