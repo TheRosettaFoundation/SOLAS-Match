@@ -893,7 +893,8 @@ class UserRouteHandler
         return UserRouteHandler::render('user/email.verification.tpl', $response);
     }
 
-    public function set_session_redirect(Response $response, $login, $user) {
+    public function set_session_redirect(Response $response, $login, $user)
+    {
         global $app;
 
         $adminDao = new DAO\AdminDao();
@@ -1092,6 +1093,9 @@ class UserRouteHandler
                     $error = 'User is not verified on Tarjimly AND LINK';
                     UserRouteHandler::flashNow('error', $error);
                 } else {
+                    $user = $this->create_user_or_login($json, $email, 0); // un/pw Login
+$user_id = $user['id'];
+
                     $first_name = empty($json['firstName']) ? '' : $json['firstName'];
                     $last_name  = empty($json['lastName']) ? '' : $json['lastName'];
                     $uid = $json['uid'];
@@ -1108,12 +1112,14 @@ class UserRouteHandler
 
                         $data = ['twbId' => "$user_id"];
                         if (empty($json['role'])) {
-
-
-
-
-
-
+                            if ($google_login) {
+                                [$t_role, $org_id] = $this->get_requested_t_role($email);
+                                $data['role'] = $t_role;
+                                if ($org_id) {
+                                    $result = LibAPI\PDOWrapper::call('get_t_org_id', LibAPI\PDOWrapper::cleanse($org_id));
+                                    if (!empty($result)) $data['organizationId'] = (int)$result[0]['t_org_id'];
+                                }
+                            }
                         } else {
                             if (empty($json['organizationId'])) {
                                 if     ($json['role'] == 'translator') $adminDao->adjust_org_admin($user_id, 0, 0, LINGUIST);
@@ -1123,10 +1129,10 @@ class UserRouteHandler
                                 $result = LibAPI\PDOWrapper::call('get_twb_org_id', LibAPI\PDOWrapper::cleanse($t_org_id));
                                 if (!empty($result)) {
                                     $org_id = $result[0]['org_id'];
-                                    $update_roles = 1;
+                                    $update_twb_roles = !$google_login;
                                 } else {
                                     $org_id = 0;
-                                    $update_roles = 1;
+                                    $update_twb_roles = 1;
 
                                     $org_name = "Tarjimly Org $t_org_id";
                                     $org = new Common\Protobufs\Models\Organisation();
@@ -1151,7 +1157,7 @@ class UserRouteHandler
                                         }
                                     } catch (Common\Exceptions\SolasMatchException $ex) error_log("Tarjimly name in use: $org_name");
                                 }
-                                if ($org_id && $update_roles) {
+                                if ($org_id && $update_twb_roles) {
                                     if ($json['role'] == 'translator') {
                                         $adminDao->adjust_org_admin($user_id, 0, 0, LINGUIST);
                                         $adminDao->adjust_org_admin($user_id, $org_id, 0, NGO_LINGUIST);
@@ -1199,6 +1205,7 @@ class UserRouteHandler
                 } else {
                     $json = json_decode($result_json, true);
                     $email = $json['email'];
+                    $google_login = 1;
                     $first_name = empty($json['firstName']) ? '' : $json['firstName'];
                     $last_name  = empty($json['lastName']) ? '' : $json['lastName'];
                     $uid = $json['uid'];
@@ -1215,11 +1222,13 @@ class UserRouteHandler
 
                         $data = ['twbId' => "$user_id"];
                         if (empty($json['role'])) {
-                            [$t_role, $org_id] = $this->get_requested_t_role($email);
-                            $data['role'] = $t_role;
-                            if ($org_id) {
-                                $result = LibAPI\PDOWrapper::call('get_t_org_id', LibAPI\PDOWrapper::cleanse($org_id));
-                                if (!empty($result)) $data['organizationId'] = (int)$result[0]['t_org_id'];
+                            if ($google_login) {
+                                [$t_role, $org_id] = $this->get_requested_t_role($email);
+                                $data['role'] = $t_role;
+                                if ($org_id) {
+                                    $result = LibAPI\PDOWrapper::call('get_t_org_id', LibAPI\PDOWrapper::cleanse($org_id));
+                                    if (!empty($result)) $data['organizationId'] = (int)$result[0]['t_org_id'];
+                                }
                             }
                         } else {
                             if (empty($json['organizationId'])) {
@@ -1230,10 +1239,10 @@ class UserRouteHandler
                                 $result = LibAPI\PDOWrapper::call('get_twb_org_id', LibAPI\PDOWrapper::cleanse($t_org_id));
                                 if (!empty($result)) {
                                     $org_id = $result[0]['org_id'];
-                                    $update_roles = 0;
+                                    $update_twb_roles = !$google_login;
                                 } else {
                                     $org_id = 0;
-                                    $update_roles = 1;
+                                    $update_twb_roles = 1;
 
                                     $org_name = "Tarjimly Org $t_org_id";
                                     $org = new Common\Protobufs\Models\Organisation();
@@ -1258,7 +1267,7 @@ class UserRouteHandler
                                         }
                                     } catch (Common\Exceptions\SolasMatchException $ex) error_log("Tarjimly name in use: $org_name");
                                 }
-                                if ($org_id && $update_roles) {
+                                if ($org_id && $update_twb_roles) {
                                     if ($json['role'] == 'translator') {
                                         $adminDao->adjust_org_admin($user_id, 0, 0, LINGUIST);
                                         $adminDao->adjust_org_admin($user_id, $org_id, 0, NGO_LINGUIST);
