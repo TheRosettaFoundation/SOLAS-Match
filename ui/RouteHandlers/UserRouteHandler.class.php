@@ -1205,7 +1205,9 @@ error_log('Google login JSON:' . print_r($json, 1));//(**)
                                 curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json', 'Authorization: Bearer ' . Common\Lib\Settings::get('tarjimly.api_key')]);
                                 curl_exec($ch);
                             }
-                        } catch (Common\Exceptions\SolasMatchException $ex) error_log("Tarjimly name in use: $org_name");
+                        } catch (Common\Exceptions\SolasMatchException $ex) {
+                            error_log("Tarjimly name in use: $org_name");
+                        }
                     }
                     if ($org_id && $update_twb_roles) {
                         if ($json['role'] == 'translator') {
