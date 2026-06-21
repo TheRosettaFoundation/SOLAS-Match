@@ -202,7 +202,7 @@
       </div>
 
   <!-- The Button Link -->
-  <a href="{$tarjimly}/api/mobile/v2/auth/sso/google?redirectTo={urlencode({$siteLocation}login)}" class="google-btn">
+  <a href="{$tarjimly}/api/mobile/v2/auth/sso/google?redirectTo={urlencode("{$siteLocation}login")}" class="google-btn">
     <div class="google-icon-wrapper">
       <!-- Official Google 'G' SVG Logo -->
       <svg xmlns="http://w3.org" viewBox="0 0 48 48" width="20px" height="20px">
