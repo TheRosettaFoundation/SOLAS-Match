@@ -174,7 +174,7 @@ class AdminRouteHandler
             }
 
             if (isset($post['verify']) && (($roles & (SITE_ADMIN | COMMUNITY_OFFICER)) || (($roles & (NGO_ADMIN)) && $adminDao->current_user_is_NGO_admin_or_PO_for_special_registration_email($userId, trim($post['userEmail']))))) {
-                $email = trim($post['userEmail'];
+                $email = trim($post['userEmail']);
                 $result = LibAPI\PDOWrapper::call('getUser', 'null,null,' . LibAPI\PDOWrapper::cleanseWrapStr($email) . ',null,null,null,null,null,null');
                 if (!empty($result)) {
                     $user = $result[0];
