@@ -1,5 +1,9 @@
 {include file="header.tpl"}
 
+<h1 class="page-header">
+    {Localisation::getTranslation('email_verification_email_verification')} <small>{Localisation::getTranslation('email_verification_0')}</small>
+</h1>
+
 <div class="container">
     {if isset($flash['error'])}
         <div class="alert alert-error">
@@ -7,10 +11,6 @@
         </div>
     {/if}
 </div>
-
-<h1 class="page-header">
-    {Localisation::getTranslation('email_verification_email_verification')} <small>{Localisation::getTranslation('email_verification_0')}</small>
-</h1>
 
 <p>
     Welcome to the TWB Community. Once you click "Finish Registration" below you will have access to the TWB Platform.
