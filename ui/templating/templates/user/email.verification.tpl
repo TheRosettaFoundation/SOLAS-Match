@@ -1,12 +1,11 @@
 {include file="header.tpl"}
 
 <div class="container">
-{if isset($flash['error'])}
-    <div class="alert alert-danger alert-dismissible fade show mt-4">
-        <p><strong>{Localisation::getTranslation('common_warning')}! </strong>{TemplateHelper::uiCleanseHTMLKeepMarkup($flash['error'])}</p>
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
-{/if}
+    {if isset($flash['error'])}
+        <div class="alert alert-error">
+            <p><strong>{Localisation::getTranslation('common_warning')} </strong>{TemplateHelper::uiCleanseHTMLKeepMarkup($flash['error'])}</p>
+        </div>
+    {/if}
 </div>
 
 <h1 class="page-header">
