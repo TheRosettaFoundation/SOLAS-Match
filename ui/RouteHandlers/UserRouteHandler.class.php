@@ -1104,6 +1104,7 @@ error_log('un/pw login JSON:' . print_r($json, 1));//(**)
                     return $this->set_session_redirect($response, 1, $user);
                 }
                 LibAPI\PDOWrapper::call('userLoginInsert', 'null,' . LibAPI\PDOWrapper::cleanseWrapStr($email) . ',0');
+            }
         } else {
             $parms = $request->getQueryParams();
             if (isset($parms['code'])) { // Return from Google sign in on Tarjimly
