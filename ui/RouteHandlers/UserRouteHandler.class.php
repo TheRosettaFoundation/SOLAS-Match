@@ -759,6 +759,7 @@ class UserRouteHandler
                 $ch = curl_init(Common\Lib\Settings::get('tarjimly.url') . "/api/v3/admins/users?email=$email");
                 curl_setopt($ch, CURLOPT_HTTPHEADER, ['Authorization: Bearer ' . Common\Lib\Settings::get('tarjimly.api_key')]);
                 curl_exec($ch);
+ERRNO
                 if (curl_getinfo($ch, CURLINFO_HTTP_CODE) == 200) {
                     $error = 'You already have an account (BTW Tarjimly & TWB are now one account system), and log in <a href="' . $app->getRouteCollector()->getRouteParser()->urlFor('login') . '">here</a>';//(**)Wording
                 } else {
@@ -848,6 +849,7 @@ class UserRouteHandler
                 $ch = curl_init(Common\Lib\Settings::get('tarjimly.url') . "/api/v3/admins/users?email=$email");
                 curl_setopt($ch, CURLOPT_HTTPHEADER, ['Authorization: Bearer ' . Common\Lib\Settings::get('tarjimly.api_key')]);
                 curl_exec($ch);
+ERRNO
                 if (curl_getinfo($ch, CURLINFO_HTTP_CODE) == 200) {
                     UserRouteHandler::flash('error', 'You already have an account (BTW Tarjimly & TWB are now one account system), please log in.);//(**)Wording
                     return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('login'));
@@ -872,9 +874,11 @@ class UserRouteHandler
                     if (!empty($result)) $data[0]['organizationId'] = (int)$result[0]['t_org_id'];
                 }
                 $ch = curl_init(Common\Lib\Settings::get('tarjimly.url') . '/api/v3/admins/users/bulk-create');
+error_log('un/pw verification POST JSON:' . print_r($data, 1));//(**)
                 curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
                 curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json', 'Authorization: Bearer ' . Common\Lib\Settings::get('tarjimly.api_key')]);
                 curl_exec($ch);
+ERRNO
                 if (curl_getinfo($ch, CURLINFO_HTTP_CODE) == 200) {
                     if ($userDao->finishRegistration($uuid)) {
                         error_log("email verification, Login: $email");
@@ -1078,7 +1082,9 @@ class UserRouteHandler
                 curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json', 'Authorization: Bearer ' . Common\Lib\Settings::get('tarjimly.api_key')]);
                 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
                 $result_json = curl_exec($ch);
+ERRNO
                 $responseCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+error_log("un/pw login responseCode: $responseCode");//(**)
                 if ($responseCode == 200) $json = json_decode($result_json, true);
                 if ($responseCode != 200) {
                     $error = sprintf(Lib\Localisation::getTranslation('login_1'), $app->getRouteCollector()->getRouteParser()->urlFor('login'), $app->getRouteCollector()->getRouteParser()->urlFor('register'), $e->getMessage());
@@ -1088,6 +1094,7 @@ class UserRouteHandler
                     $error = 'User is not verified on Tarjimly AND LINK';
                     UserRouteHandler::flashNow('error', $error);
                 } else {
+error_log('un/pw login JSON:' . print_r($json, 1));//(**)
                     $user = $this->create_user_or_login($json, $email, 0); // un/pw Login
                 }
                 if ($user) {
@@ -1103,11 +1110,13 @@ class UserRouteHandler
                 curl_setopt($ch, CURLOPT_HTTPHEADER, ['Authorization: Bearer ' . Common\Lib\Settings::get('tarjimly.api_key')]);
                 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
                 $result_json = curl_exec($ch);
+ERRNO
                 if (curl_getinfo($ch, CURLINFO_HTTP_CODE) != 200) {
                     UserRouteHandler::flash('error', '<p>An error occurred while trying to sign in with Google. <a href="' . $app->getRouteCollector()->getRouteParser()->urlFor('login') . '">Try logging in again</a> or <a href="' . $app->getRouteCollector()->getRouteParser()->urlFor('register') . '">register</a> for an account.</p>'); //(**)Wording
                     return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('home'));
                 } else {
                     $json = json_decode($result_json, true);
+error_log('Google login JSON:' . print_r($json, 1));//(**)
                     $email = $json['email'];
                     $user = $this->create_user_or_login($json, $email, 1); // Google Login
                     error_log("Google Sign-In, Login: $email");
@@ -1208,6 +1217,7 @@ class UserRouteHandler
                 }
             }
             $ch = curl_init(Common\Lib\Settings::get('tarjimly.url') . "/api/v3/admins/users/$uid");
+error_log('login PUT JSON:' . print_r($data, 1));//(**)
             curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
             curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PUT');
             curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json', 'Authorization: Bearer ' . Common\Lib\Settings::get('tarjimly.api_key')]);
