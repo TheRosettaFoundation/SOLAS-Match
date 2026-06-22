@@ -192,35 +192,35 @@ class AdminRouteHandler
 error_log("un/pw verify manually errno: $errno, responseCode: $responseCode");//(**)
                         $json = 0;
                         if ($responseCode == 200) $json = json_decode($result_json, true);
-if (!$errno && $responseCode == 200) {
-                        if (!empty($json) {
-                            $result = LibAPI\PDOWrapper::call('getUserPersonalInfo', 'null,' . LibAPI\PDOWrapper::cleanse($user_id) . ',null,null,null,null,null,null,null,null,null,null');
-                            $info = $result[0];
-                            $data = [[
-                                'firstName' => $info['firstName'],
-                                'lastName' => $info['lastName'],
-                                'role' => 'translator',
-                                'email' => $email,
-                                'consentToEmail' => $userDao->get_communications_consent($user_id) ? true : false,
-                                'password' => $user['password'],
-                                'nonce' => $user['nonce'],
-                                'twbId' => $user_id]];
-                            $ch = curl_init(Common\Lib\Settings::get('tarjimly.url') . '/api/v3/admins/users/bulk-create');
-                            curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
-                            curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json', 'Authorization: Bearer ' . Common\Lib\Settings::get('tarjimly.api_key')]);
-                            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-                            $result_json = curl_exec($ch);
-                            $errno = curl_errno($ch);
-                            $responseCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+                        if (!$errno && $responseCode == 200) {
+                            if (empty($json)) {
+                                $result = LibAPI\PDOWrapper::call('getUserPersonalInfo', 'null,' . LibAPI\PDOWrapper::cleanse($user_id) . ',null,null,null,null,null,null,null,null,null,null');
+                                $info = $result[0];
+                                $data = [[
+                                    'firstName' => $info['firstName'],
+                                    'lastName' => $info['lastName'],
+                                    'role' => 'translator',
+                                    'email' => $email,
+                                    'consentToEmail' => $userDao->get_communications_consent($user_id) ? true : false,
+                                    'password' => $user['password'],
+                                    'nonce' => $user['nonce'],
+                                    'twbId' => $user_id]];
+                                $ch = curl_init(Common\Lib\Settings::get('tarjimly.url') . '/api/v3/admins/users/bulk-create');
+                                curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+                                curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json', 'Authorization: Bearer ' . Common\Lib\Settings::get('tarjimly.api_key')]);
+                                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                                $result_json = curl_exec($ch);
+                                $errno = curl_errno($ch);
+                                $responseCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 error_log("un/pw verify manually bulk-create errno: $errno, responseCode: $responseCode");//(**)
-                            $json = 0;
-                            if ($responseCode == 200) $json = json_decode($result_json, true);
-                            if (!$errno && !empty($json)) {
-                                $userDao->finishRegistration($uuid);
-                                UserRouteHandler::flashNow('verifySuccess', 'Email verified, the user can now login with email and password.');
-                            } else UserRouteHandler::flashNow('verifyError', 'Connection to Tarjimly failed, please try again.');//(**)Wording
-                        } else UserRouteHandler::flashNow('verifyError', 'The user already has a Tarjimly account they should login.');
-} else UserRouteHandler::flashNow('verifyError', 'Connection to Tarjimly failed, please try again.');//(**)Wording
+                                $json = 0;
+                                if ($responseCode == 200) $json = json_decode($result_json, true);
+                                if (!$errno && !empty($json)) {
+                                    $userDao->finishRegistration($uuid);
+                                    UserRouteHandler::flashNow('verifySuccess', 'Email verified, the user can now login with email and password.');
+                                } else UserRouteHandler::flashNow('verifyError', 'Connection to Tarjimly failed, please try again.');//(**)Wording
+                            } else UserRouteHandler::flashNow('verifyError', 'The user already has a Tarjimly account they should login.');
+                        } else UserRouteHandler::flashNow('verifyError', 'Connection to Tarjimly failed, please try again.');//(**)Wording
                     } else UserRouteHandler::flashNow('verifyError', 'Not found, either the user never registered with email and password or they have already been verified.');
                 } else UserRouteHandler::flashNow('verifyError', 'Not found, the user never registered with email and password.');
             }
