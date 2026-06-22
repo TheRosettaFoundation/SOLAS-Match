@@ -185,7 +185,15 @@ class AdminRouteHandler
 
                         $ch = curl_init(Common\Lib\Settings::get('tarjimly.url') . "/api/v3/admins/users?email=$email");
                         curl_setopt($ch, CURLOPT_HTTPHEADER, ['Authorization: Bearer ' . Common\Lib\Settings::get('tarjimly.api_key')]);
-                        curl_exec($ch);
+                        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                        $dummy = curl_exec($ch);
+[[HERE
+$result_json = curl_exec($ch);
+$errno = curl_errno($ch);
+$responseCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+$json = json_decode($result_json, true);
+if (empty($json)) no user
+]]
                         if (curl_getinfo($ch, CURLINFO_HTTP_CODE) != 200) {
                             $result = LibAPI\PDOWrapper::call('getUserPersonalInfo', 'null,' . LibAPI\PDOWrapper::cleanse($user_id) . ',null,null,null,null,null,null,null,null,null,null');
                             $info = $result[0];
@@ -201,7 +209,15 @@ class AdminRouteHandler
                             $ch = curl_init(Common\Lib\Settings::get('tarjimly.url') . '/api/v3/admins/users/bulk-create');
                             curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
                             curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json', 'Authorization: Bearer ' . Common\Lib\Settings::get('tarjimly.api_key')]);
-                            curl_exec($ch);
+                            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                            $dummy = curl_exec($ch);
+[[HERE
+$result_json = curl_exec($ch);
+$errno = curl_errno($ch);
+$responseCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+$json = json_decode($result_json, true);
+if (empty($json)) no user
+]]
                             if (curl_getinfo($ch, CURLINFO_HTTP_CODE) == 200) {
                                 $userDao->finishRegistration($uuid);
                                 UserRouteHandler::flashNow('verifySuccess', 'Email verified, the user can now login with email and password.');
