@@ -756,7 +756,7 @@ class UserRouteHandler
                 $last_name = $post['last_name'];
                 array_key_exists('newsletter_consent', $post) ? $communications_consent = 1 : $communications_consent = 0;
 
-                $ch = curl_init(Common\Lib\Settings::get('tarjimly.url') . "/api/v3/admins/users?email=$email");
+                $ch = curl_init(Common\Lib\Settings::get('tarjimly.url') . '/api/v3/admins/users?email=' . urlencode($email));
                 curl_setopt($ch, CURLOPT_HTTPHEADER, ['Authorization: Bearer ' . Common\Lib\Settings::get('tarjimly.api_key')]);
                 curl_exec($ch);
                 if (curl_errno($ch)) $error = 'Connection to Tarjimly failed, please try again.';//(**)Wording
@@ -846,7 +846,7 @@ class UserRouteHandler
         if ($request->getMethod() === 'POST') {
             $post = $request->getParsedBody();
             if (isset($post['verify'])) {
-                $ch = curl_init(Common\Lib\Settings::get('tarjimly.url') . "/api/v3/admins/users?email=$email");
+                $ch = curl_init(Common\Lib\Settings::get('tarjimly.url') . '/api/v3/admins/users?email=' . urlencode($email));
                 curl_setopt($ch, CURLOPT_HTTPHEADER, ['Authorization: Bearer ' . Common\Lib\Settings::get('tarjimly.api_key')]);
                 curl_exec($ch);
                 if (!curl_errno($ch)) {
