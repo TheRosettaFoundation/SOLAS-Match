@@ -1111,15 +1111,8 @@ error_log('un/pw verification errno: ' . curl_errno($ch) . ', responseCode: ' . 
                 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
                 $result_json = curl_exec($ch);
                 $errno = curl_errno($ch);
-                $responseCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+                $responseCode = curl_getinfo($ch, CURLINFO_HTTP_CODE); // 401 would be fail
 error_log("un/pw login errno: $errno, responseCode: $responseCode");//(**)
-[[HERE
-$result_json = curl_exec($ch);
-$errno = curl_errno($ch);
-$responseCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-$json = json_decode($result_json, true);
-if (empty($json)) no user
-]]
                 if (!$errno && $responseCode == 200) $json = json_decode($result_json, true);
                 if ($errno) UserRouteHandler::flashNow('error', 'Connection to Tarjimly failed, please try again.');//(**)
                 elseif ($responseCode != 200) {
