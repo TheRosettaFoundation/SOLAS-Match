@@ -629,7 +629,7 @@ class UserRouteHandler
         return $response->withHeader('Content-Type', 'application/json');
     }
 
-    public function registerKEEP(Request $request, Response $response, $args)
+    public function register(Request $request, Response $response, $args)
     {
         global $app, $template_data;
 
@@ -758,7 +758,8 @@ class UserRouteHandler
 
                 $ch = curl_init(Common\Lib\Settings::get('tarjimly.url') . '/api/v3/admins/users?email=' . urlencode($email));
                 curl_setopt($ch, CURLOPT_HTTPHEADER, ['Authorization: Bearer ' . Common\Lib\Settings::get('tarjimly.api_key')]);
-                curl_exec($ch);
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                $dummy = curl_exec($ch);
                 if (curl_errno($ch)) UserRouteHandler::flashNow('error', 'Connection to Tarjimly failed, please try again.');//(**)Wording
                 elseif (curl_getinfo($ch, CURLINFO_HTTP_CODE) == 200) {
                     UserRouteHandler::flashNow('error', 'You already have an account (BTW Tarjimly & TWB are now one account system), and log in <a href="' . $app->getRouteCollector()->getRouteParser()->urlFor('login') . '">here</a>');//(**)Wording
@@ -848,7 +849,8 @@ class UserRouteHandler
             if (isset($post['verify'])) {
                 $ch = curl_init(Common\Lib\Settings::get('tarjimly.url') . '/api/v3/admins/users?email=' . urlencode($email));
                 curl_setopt($ch, CURLOPT_HTTPHEADER, ['Authorization: Bearer ' . Common\Lib\Settings::get('tarjimly.api_key')]);
-                curl_exec($ch);
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                $dummy = curl_exec($ch);
                 if (!curl_errno($ch)) {
                     if (curl_getinfo($ch, CURLINFO_HTTP_CODE) == 200) {
                         UserRouteHandler::flash('error', 'You already have an account (BTW Tarjimly & TWB are now one account system), please log in.');//(**)Wording
@@ -878,7 +880,8 @@ error_log('un/pw verification bulk-create POST JSON:' . print_r($data, 1));//(**
 error_log(json_encode($data));//(**)
                     curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
                     curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json', 'Authorization: Bearer ' . Common\Lib\Settings::get('tarjimly.api_key')]);
-                    curl_exec($ch);
+                    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                    $dummy = curl_exec($ch);
 error_log('un/pw verification errno: ' . curl_errno($ch) . ', responseCode: ' . curl_getinfo($ch, CURLINFO_HTTP_CODE));//(**)
                     if (!curl_errno($ch) && curl_getinfo($ch, CURLINFO_HTTP_CODE) == 200) {
                         if ($userDao->finishRegistration($uuid)) {
@@ -1205,7 +1208,8 @@ error_log('Google login JSON:' . print_r($json, 1));//(**)
                                 curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode(['twbOrgId' => "$org_id"]));
                                 curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PATCH');
                                 curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json', 'Authorization: Bearer ' . Common\Lib\Settings::get('tarjimly.api_key')]);
-                                curl_exec($ch);
+                                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                                $dummy = curl_exec($ch);
                             }
                         } catch (Common\Exceptions\SolasMatchException $ex) {
                             error_log("Tarjimly name in use: $org_name");
@@ -1226,7 +1230,8 @@ error_log('login PUT JSON:' . print_r($data, 1));//(**)
             curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
             curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PUT');
             curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json', 'Authorization: Bearer ' . Common\Lib\Settings::get('tarjimly.api_key')]);
-            curl_exec($ch);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            $dummy = curl_exec($ch);
 
             $userDao->update_terms_accepted($user_id, 1); // Will be redirected to googleregister
         } else {
@@ -3940,119 +3945,6 @@ foreach ($rows as $index => $row) {
         $response->getBody()->write($smarty->fetch($template));
         return $response->withHeader('Content-Type', 'text/html;charset=UTF-8');
     }
-
-
-
-
-    public function register(Request $request, Response $response, $args)
-    {
-        global $app, $template_data;
-
-        $userDao = new DAO\UserDao();
-        $langDao = new DAO\LanguageDao();
-        $adminDao = new DAO\AdminDao();
-
-        if (!empty($args['track_code'])) $_SESSION['track_code'] = $args['track_code'];
-        $email = '';
-        $error = null;
-        if (!empty($args['reg_data'])) {
-            $_SESSION['reg_data'] = $args['reg_data'];
-            [$email, $error] = $adminDao->get_special_registration();
-            if ($error) {
-                UserRouteHandler::flashNow('error', $error);
-                $template_data = array_merge($template_data, ['disabled' => 1]);
-            }
-        }
-        $google_site_key = Common\Lib\Settings::get('google.captcha_site_key');
-        $google_secret_key = Common\Lib\Settings::get('google.captcha_secret_key');
-
-        $extra_scripts  = '<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.2/js/bootstrap.min.js" type="text/javascript"></script>';
-        $extra_scripts .= '<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.2/jquery.validate.min.js" type="text/javascript"></script>';
-        $extra_scripts .= '<script src="https://www.google.com/recaptcha/api.js?render=' . $google_site_key . '" type="text/javascript"></script>';
-        $extra_scripts .= '<script type="text/javascript">
-        $().ready(function() {
-            $("#registerform").validate({
-                rules: {
-                    first_name: "required",
-                    last_name: "required",
-                    password: {
-                        required: true,
-                        minlength: 5
-                    },
-                    confirm_password: {
-                        required: true,
-                        minlength: 5,
-                        equalTo: "#password"
-                    },
-                    email: {
-                        required: true,
-                        email: true
-                    },
-                    age_consent: "required",
-                    conduct_consent: "required",
-                   
-                },
-                messages: {
-                    first_name: "Please enter your First name",
-                    last_name: "Please enter your Last name",
-                    password: {
-                        required: "Please provide a password",
-                        minlength: "Your password must be at least 5 characters long"
-                    },
-                    confirm_password: {
-                        required: "Please provide a password",
-                        minlength: "Your password must be at least 5 characters long",
-                        equalTo: "Please enter the same password as above"
-                    },
-                    email: "Please enter a valid email address",
-                    age_consent: "Please ensure you are above 18 years of age",
-                    conduct_consent: "You need to agree to this to proceed",
-                }
-            });
-            $("#tool").tooltip();
-        });
-        </script>';
-        $extra_scripts .= '<script type="text/javascript">
-        grecaptcha.ready(function () {
-            grecaptcha.execute("' . $google_site_key . '", { action: "kp_registration"}).then(function (token) {
-                document.getElementById("g_response").value = token;
-            });
-        });
-        </script>';
-        $template_data = array_merge($template_data, array('extra_scripts' => $extra_scripts));
-
-        if (true || ($request->getMethod() === 'POST' && sizeof($request->getParsedBody()) > 2 && !$error)) {
-            if (true) {
-                $email = 'xxx@xxx.xxx';
-                $first_name = 'a';
-                $last_name = 'b';
-                $communications_consent = 0;
-
-                $ch = curl_init(Common\Lib\Settings::get('tarjimly.url') . '/api/v3/admins/users?email=' . urlencode($email));
-                curl_setopt($ch, CURLOPT_HTTPHEADER, ['Authorization: Bearer ' . Common\Lib\Settings::get('tarjimly.api_key')]);
-curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-                $qqq = curl_exec($ch);
-                if (curl_errno($ch)) UserRouteHandler::flashNow('error', 'Connection to Tarjimly failed, please try again.');//(**)Wording
-                elseif (curl_getinfo($ch, CURLINFO_HTTP_CODE) == 200) {
-                } else {
-                }
-            } else {
-                if ($error === 'Oops! something went wrong, please try again.') {
-                    $template_data = array_merge($template_data, ['first_name' => $post['first_name'], 'last_name' => $post['last_name'], 'email' => $post['email']]);
-                    UserRouteHandler::flashNow('error', $error);
-                }
-            }
-        } else {
-            if ($email) $template_data = array_merge($template_data, ['email' => $email]);
-        }
-        if ($error) $template_data = array_merge($template_data, ['error' => $error]);
-        $template_data = array_merge($template_data, [
-            'siteLocation' => Common\Lib\Settings::get('site.location'),
-            'tarjimly' => Common\Lib\Settings::get('tarjimly.url'),
-        ]);
-        return UserRouteHandler::render('user/register.tpl', $response);
-    }
-
 }
 
 $route_handler = new UserRouteHandler();
