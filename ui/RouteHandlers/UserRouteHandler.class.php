@@ -762,7 +762,7 @@ class UserRouteHandler
                 $dummy = curl_exec($ch);
                 if (curl_errno($ch)) UserRouteHandler::flashNow('error', 'Connection to Tarjimly failed, please try again.');//(**)Wording
                 elseif (curl_getinfo($ch, CURLINFO_HTTP_CODE) == 200) {
-                    UserRouteHandler::flashNow('error', 'You already have an account (BTW Tarjimly & TWB are now one account system), and log in <a href="' . $app->getRouteCollector()->getRouteParser()->urlFor('login') . '">here</a>');//(**)Wording
+                    UserRouteHandler::flashNow('error', 'You already have an account (BTW Tarjimly & TWB are now one account system), please log in <a href="' . $app->getRouteCollector()->getRouteParser()->urlFor('login') . '">here</a>');//(**)Wording
                 } else {
                     // Create a new User
                     $nonce = Common\Lib\Authentication::generateNonce();
