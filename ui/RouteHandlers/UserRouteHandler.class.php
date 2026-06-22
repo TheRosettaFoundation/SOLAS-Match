@@ -629,7 +629,7 @@ class UserRouteHandler
         return $response->withHeader('Content-Type', 'application/json');
     }
 
-    public function register(Request $request, Response $response, $args)
+    public function registerKEEP(Request $request, Response $response, $args)
     {
         global $app, $template_data;
 
@@ -3940,6 +3940,173 @@ foreach ($rows as $index => $row) {
         $response->getBody()->write($smarty->fetch($template));
         return $response->withHeader('Content-Type', 'text/html;charset=UTF-8');
     }
+
+
+
+
+    public function register(Request $request, Response $response, $args)
+    {
+        global $app, $template_data;
+
+        $userDao = new DAO\UserDao();
+        $langDao = new DAO\LanguageDao();
+        $adminDao = new DAO\AdminDao();
+
+        if (!empty($args['track_code'])) $_SESSION['track_code'] = $args['track_code'];
+        $email = '';
+        $error = null;
+        if (!empty($args['reg_data'])) {
+            $_SESSION['reg_data'] = $args['reg_data'];
+            [$email, $error] = $adminDao->get_special_registration();
+            if ($error) {
+                UserRouteHandler::flashNow('error', $error);
+                $template_data = array_merge($template_data, ['disabled' => 1]);
+            }
+        }
+        $google_site_key = Common\Lib\Settings::get('google.captcha_site_key');
+        $google_secret_key = Common\Lib\Settings::get('google.captcha_secret_key');
+
+        $extra_scripts  = '<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.2/js/bootstrap.min.js" type="text/javascript"></script>';
+        $extra_scripts .= '<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.2/jquery.validate.min.js" type="text/javascript"></script>';
+        $extra_scripts .= '<script src="https://www.google.com/recaptcha/api.js?render=' . $google_site_key . '" type="text/javascript"></script>';
+        $extra_scripts .= '<script type="text/javascript">
+        $().ready(function() {
+            $("#registerform").validate({
+                rules: {
+                    first_name: "required",
+                    last_name: "required",
+                    password: {
+                        required: true,
+                        minlength: 5
+                    },
+                    confirm_password: {
+                        required: true,
+                        minlength: 5,
+                        equalTo: "#password"
+                    },
+                    email: {
+                        required: true,
+                        email: true
+                    },
+                    age_consent: "required",
+                    conduct_consent: "required",
+                   
+                },
+                messages: {
+                    first_name: "Please enter your First name",
+                    last_name: "Please enter your Last name",
+                    password: {
+                        required: "Please provide a password",
+                        minlength: "Your password must be at least 5 characters long"
+                    },
+                    confirm_password: {
+                        required: "Please provide a password",
+                        minlength: "Your password must be at least 5 characters long",
+                        equalTo: "Please enter the same password as above"
+                    },
+                    email: "Please enter a valid email address",
+                    age_consent: "Please ensure you are above 18 years of age",
+                    conduct_consent: "You need to agree to this to proceed",
+                }
+            });
+            $("#tool").tooltip();
+        });
+        </script>';
+        $extra_scripts .= '<script type="text/javascript">
+        grecaptcha.ready(function () {
+            grecaptcha.execute("' . $google_site_key . '", { action: "kp_registration"}).then(function (token) {
+                document.getElementById("g_response").value = token;
+            });
+        });
+        </script>';
+        $template_data = array_merge($template_data, array('extra_scripts' => $extra_scripts));
+
+        if (true || ($request->getMethod() === 'POST' && sizeof($request->getParsedBody()) > 2 && !$error)) {
+/*            $post = $request->getParsedBody();
+            $ip = $_SERVER['REMOTE_ADDR'];
+            // post request to Google recaptcha server
+            $data = array('secret' => $google_secret_key, 'response' => $post['g-recaptcha-response']);
+            $options = array(
+                'http' => array(
+                    'header'  => "Content-type: application/x-www-form-urlencoded\r\n",
+                    'method'  => 'POST',
+                    'content' => http_build_query($data)
+                )
+            );
+            $context = stream_context_create($options);
+            $google_response = file_get_contents('https://www.google.com/recaptcha/api/siteverify', false, $context);
+            if (!empty($google_response)) {
+                $response_keys = json_decode($google_response, true);
+                if($response_keys['success'] != 1) {
+                    $error = 'Oops! something went wrong, please try again.';
+                    // Get exact response message why it has been flagged as spam
+                    $g_response = $response_keys['error-codes'][0];
+                    error_log("$error: $ip Google_response: $g_response");
+                }
+            } else {
+                error_log("Spam response from Google empty ip: $ip");
+            }
+
+            $temp = md5($post['email'] . substr(Common\Lib\Settings::get("session.site_key"), 0, 20));
+            Common\Lib\UserSession::clearCurrentUserID();
+            if (!Lib\Validator::validateEmail($post['email']) || ($email && $post['email'] != $email)) {
+                $error = Lib\Localisation::getTranslation('register_1');
+            } elseif (!Lib\TemplateHelper::isValidPassword($post['password'])) {
+                $error = Lib\Localisation::getTranslation('register_2');
+            } elseif ($user = $userDao->getUserByEmail($post['email'], $temp)) {
+                if ($userDao->isUserVerified($user->getId())) {
+                    $error = sprintf(Lib\Localisation::getTranslation('register_3'), $app->getRouteCollector()->getRouteParser()->urlFor('login'));
+                } else {
+                    $error = 'User is not verified, check your email and click on the verification link.';
+                }
+            } elseif (empty($post['first_name'])) {
+                $error = 'You did not enter First name';
+            } elseif (empty($post['last_name'])) {
+                $error = 'You did not enter Last name';
+            }
+*/
+            if (true)) {
+                $email = 'xxx@xxx.xxx';
+                $first_name = 'a';
+                $last_name = 'b;
+                $communications_consent = 0;
+
+                $ch = curl_init(Common\Lib\Settings::get('tarjimly.url') . '/api/v3/admins/users?email=' . urlencode($email));
+                curl_setopt($ch, CURLOPT_HTTPHEADER, ['Authorization: Bearer ' . Common\Lib\Settings::get('tarjimly.api_key')]);
+                curl_exec($ch);
+                if (curl_errno($ch)) UserRouteHandler::flashNow('error', 'Connection to Tarjimly failed, please try again.');//(**)Wording
+                elseif (curl_getinfo($ch, CURLINFO_HTTP_CODE) == 200) {
+                    UserRouteHandler::flashNow('error', 'You already have an account (BTW Tarjimly & TWB are now one account system), and log in <a href="' . $app->getRouteCollector()->getRouteParser()->urlFor('login') . '">here</a>');//(**)Wording
+                } else {
+                    // Create a new User
+                    $nonce = Common\Lib\Authentication::generateNonce();
+                    $password = Common\Lib\Authentication::hashPassword($post['password'], $nonce);
+                    $result = LibAPI\PDOWrapper::call('userInsertAndUpdate', LibAPI\PDOWrapper::cleanseWrapStr($email) . ",$nonce," . LibAPI\PDOWrapper::cleanseNullOrWrapStr($password) . ',null,null,null,null,null');
+                    $user_id = $result[0]['id'];
+                    LibAPI\PDOWrapper::call('create_empty_role', LibAPI\PDOWrapper::cleanse($user_id));
+                    LibAPI\PDOWrapper::call('insert_communications_consent', LibAPI\PDOWrapper::cleanse($user_id) . ',' . LibAPI\PDOWrapper::cleanse($communications_consent));
+                    LibAPI\PDOWrapper::call('userPersonalInfoInsertAndUpdate', 'null,' . LibAPI\PDOWrapper::cleanse($user_id) . ',' . LibAPI\PDOWrapper::cleanseNullOrWrapStr($first_name) . ',' . LibAPI\PDOWrapper::cleanseNullOrWrapStr($last_name) . ',null,null,1786,null,null,null,null,0');
+                    LibAPI\PDOWrapper::call('registerUser', LibAPI\PDOWrapper::cleanseNull($user_id) . ',' . LibAPI\PDOWrapper::cleanseWrapStr(md5(uniqid(rand()))));
+                    LibAPI\PDOWrapper::call('insert_queue_request', '3,13,' . LibAPI\PDOWrapper::cleanse($user_id) . ",0,0,0,0,0,''");
+                    UserRouteHandler::flashNow('success', sprintf(Lib\Localisation::getTranslation('register_4'), $app->getRouteCollector()->getRouteParser()->urlFor('login')));
+                }
+            } else {
+                if ($error === 'Oops! something went wrong, please try again.') {
+                    $template_data = array_merge($template_data, ['first_name' => $post['first_name'], 'last_name' => $post['last_name'], 'email' => $post['email']]);
+                    UserRouteHandler::flashNow('error', $error);
+                }
+            }
+        } else {
+            if ($email) $template_data = array_merge($template_data, ['email' => $email]);
+        }
+        if ($error) $template_data = array_merge($template_data, ['error' => $error]);
+        $template_data = array_merge($template_data, [
+            'siteLocation' => Common\Lib\Settings::get('site.location'),
+            'tarjimly' => Common\Lib\Settings::get('tarjimly.url'),
+        ]);
+        return UserRouteHandler::render('user/register.tpl', $response);
+    }
+
 }
 
 $route_handler = new UserRouteHandler();
