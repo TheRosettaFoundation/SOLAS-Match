@@ -4022,49 +4022,6 @@ foreach ($rows as $index => $row) {
         $template_data = array_merge($template_data, array('extra_scripts' => $extra_scripts));
 
         if (true || ($request->getMethod() === 'POST' && sizeof($request->getParsedBody()) > 2 && !$error)) {
-/*            $post = $request->getParsedBody();
-            $ip = $_SERVER['REMOTE_ADDR'];
-            // post request to Google recaptcha server
-            $data = array('secret' => $google_secret_key, 'response' => $post['g-recaptcha-response']);
-            $options = array(
-                'http' => array(
-                    'header'  => "Content-type: application/x-www-form-urlencoded\r\n",
-                    'method'  => 'POST',
-                    'content' => http_build_query($data)
-                )
-            );
-            $context = stream_context_create($options);
-            $google_response = file_get_contents('https://www.google.com/recaptcha/api/siteverify', false, $context);
-            if (!empty($google_response)) {
-                $response_keys = json_decode($google_response, true);
-                if($response_keys['success'] != 1) {
-                    $error = 'Oops! something went wrong, please try again.';
-                    // Get exact response message why it has been flagged as spam
-                    $g_response = $response_keys['error-codes'][0];
-                    error_log("$error: $ip Google_response: $g_response");
-                }
-            } else {
-                error_log("Spam response from Google empty ip: $ip");
-            }
-
-            $temp = md5($post['email'] . substr(Common\Lib\Settings::get("session.site_key"), 0, 20));
-            Common\Lib\UserSession::clearCurrentUserID();
-            if (!Lib\Validator::validateEmail($post['email']) || ($email && $post['email'] != $email)) {
-                $error = Lib\Localisation::getTranslation('register_1');
-            } elseif (!Lib\TemplateHelper::isValidPassword($post['password'])) {
-                $error = Lib\Localisation::getTranslation('register_2');
-            } elseif ($user = $userDao->getUserByEmail($post['email'], $temp)) {
-                if ($userDao->isUserVerified($user->getId())) {
-                    $error = sprintf(Lib\Localisation::getTranslation('register_3'), $app->getRouteCollector()->getRouteParser()->urlFor('login'));
-                } else {
-                    $error = 'User is not verified, check your email and click on the verification link.';
-                }
-            } elseif (empty($post['first_name'])) {
-                $error = 'You did not enter First name';
-            } elseif (empty($post['last_name'])) {
-                $error = 'You did not enter Last name';
-            }
-*/
             if (true) {
                 $email = 'xxx@xxx.xxx';
                 $first_name = 'a';
@@ -4076,19 +4033,7 @@ foreach ($rows as $index => $row) {
                 curl_exec($ch);
                 if (curl_errno($ch)) UserRouteHandler::flashNow('error', 'Connection to Tarjimly failed, please try again.');//(**)Wording
                 elseif (curl_getinfo($ch, CURLINFO_HTTP_CODE) == 200) {
-//                    UserRouteHandler::flashNow('error', 'You already have an account (BTW Tarjimly & TWB are now one account system), and log in <a href="' . $app->getRouteCollector()->getRouteParser()->urlFor('login') . '">here</a>');//(**)Wording
                 } else {
-                    // Create a new User
-                    $nonce = Common\Lib\Authentication::generateNonce();
-                    $password = Common\Lib\Authentication::hashPassword($post['password'], $nonce);
-                    $result = LibAPI\PDOWrapper::call('userInsertAndUpdate', LibAPI\PDOWrapper::cleanseWrapStr($email) . ",$nonce," . LibAPI\PDOWrapper::cleanseNullOrWrapStr($password) . ',null,null,null,null,null');
-                    $user_id = $result[0]['id'];
-                    LibAPI\PDOWrapper::call('create_empty_role', LibAPI\PDOWrapper::cleanse($user_id));
-                    LibAPI\PDOWrapper::call('insert_communications_consent', LibAPI\PDOWrapper::cleanse($user_id) . ',' . LibAPI\PDOWrapper::cleanse($communications_consent));
-                    LibAPI\PDOWrapper::call('userPersonalInfoInsertAndUpdate', 'null,' . LibAPI\PDOWrapper::cleanse($user_id) . ',' . LibAPI\PDOWrapper::cleanseNullOrWrapStr($first_name) . ',' . LibAPI\PDOWrapper::cleanseNullOrWrapStr($last_name) . ',null,null,1786,null,null,null,null,0');
-                    LibAPI\PDOWrapper::call('registerUser', LibAPI\PDOWrapper::cleanseNull($user_id) . ',' . LibAPI\PDOWrapper::cleanseWrapStr(md5(uniqid(rand()))));
-                    LibAPI\PDOWrapper::call('insert_queue_request', '3,13,' . LibAPI\PDOWrapper::cleanse($user_id) . ",0,0,0,0,0,''");
-                    UserRouteHandler::flashNow('success', sprintf(Lib\Localisation::getTranslation('register_4'), $app->getRouteCollector()->getRouteParser()->urlFor('login')));
                 }
             } else {
                 if ($error === 'Oops! something went wrong, please try again.') {
