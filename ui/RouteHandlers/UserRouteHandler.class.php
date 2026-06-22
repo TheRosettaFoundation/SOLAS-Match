@@ -4028,13 +4028,6 @@ foreach ($rows as $index => $row) {
                 $last_name = 'b';
                 $communications_consent = 0;
 
-                $ch = curl_init(Common\Lib\Settings::get('tarjimly.url') . '/api/v3/admins/users?email=' . urlencode($email));
-                curl_setopt($ch, CURLOPT_HTTPHEADER, ['Authorization: Bearer ' . Common\Lib\Settings::get('tarjimly.api_key')]);
-                curl_exec($ch);
-                if (curl_errno($ch)) UserRouteHandler::flashNow('error', 'Connection to Tarjimly failed, please try again.');//(**)Wording
-                elseif (curl_getinfo($ch, CURLINFO_HTTP_CODE) == 200) {
-                } else {
-                }
             } else {
                 if ($error === 'Oops! something went wrong, please try again.') {
                     $template_data = array_merge($template_data, ['first_name' => $post['first_name'], 'last_name' => $post['last_name'], 'email' => $post['email']]);
