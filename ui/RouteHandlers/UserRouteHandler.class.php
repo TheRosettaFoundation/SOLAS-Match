@@ -759,9 +759,9 @@ class UserRouteHandler
                 $ch = curl_init(Common\Lib\Settings::get('tarjimly.url') . '/api/v3/admins/users?email=' . urlencode($email));
                 curl_setopt($ch, CURLOPT_HTTPHEADER, ['Authorization: Bearer ' . Common\Lib\Settings::get('tarjimly.api_key')]);
                 curl_exec($ch);
-                if (curl_errno($ch)) $error = 'Connection to Tarjimly failed, please try again.';//(**)Wording
+                if (curl_errno($ch)) UserRouteHandler::flashNow('error', 'Connection to Tarjimly failed, please try again.');//(**)Wording
                 elseif (curl_getinfo($ch, CURLINFO_HTTP_CODE) == 200) {
-                    $error = 'You already have an account (BTW Tarjimly & TWB are now one account system), and log in <a href="' . $app->getRouteCollector()->getRouteParser()->urlFor('login') . '">here</a>';//(**)Wording
+                    UserRouteHandler::flashNow('error', 'You already have an account (BTW Tarjimly & TWB are now one account system), and log in <a href="' . $app->getRouteCollector()->getRouteParser()->urlFor('login') . '">here</a>');//(**)Wording
                 } else {
                     // Create a new User
                     $nonce = Common\Lib\Authentication::generateNonce();
