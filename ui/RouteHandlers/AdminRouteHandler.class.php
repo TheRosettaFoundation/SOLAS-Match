@@ -186,22 +186,14 @@ class AdminRouteHandler
                         $ch = curl_init(Common\Lib\Settings::get('tarjimly.url') . "/api/v3/admins/users?email=$email");
                         curl_setopt($ch, CURLOPT_HTTPHEADER, ['Authorization: Bearer ' . Common\Lib\Settings::get('tarjimly.api_key')]);
                         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-                        $dummy = curl_exec($ch);
-[[HERE
-                $result_json = curl_exec($ch);
-                $errno = curl_errno($ch);
-                $responseCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-error_log("un/pw register errno: $errno, responseCode: $responseCode");//(**)
-                $json = 0;
-                if ($responseCode == 200) $json = json_decode($result_json, true);
-]]
-                if ($errno || $responseCode != 200) UserRouteHandler::flashNow('error', 'Connection to Tarjimly failed, please try again.');//(**)Wording
-                elseif (!empty($json)) {
-                    UserRouteHandler::flashNow('error', 'You already have an account (BTW Tarjimly & TWB are now one account system), please log in <a href="' . $app->getRouteCollector()->getRouteParser()->urlFor('login') . '">here</a>');//(**)Wording
-                } else {
-=============================================================
-                        if (curl_getinfo($ch, CURLINFO_HTTP_CODE) != 200) {
-===========================================
+                        $result_json = curl_exec($ch);
+                        $errno = curl_errno($ch);
+                        $responseCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+error_log("un/pw verify manually errno: $errno, responseCode: $responseCode");//(**)
+                        $json = 0;
+                        if ($responseCode == 200) $json = json_decode($result_json, true);
+if (!$errno && $responseCode == 200) {
+                        if (!empty($json) {
                             $result = LibAPI\PDOWrapper::call('getUserPersonalInfo', 'null,' . LibAPI\PDOWrapper::cleanse($user_id) . ',null,null,null,null,null,null,null,null,null,null');
                             $info = $result[0];
                             $data = [[
@@ -217,26 +209,18 @@ error_log("un/pw register errno: $errno, responseCode: $responseCode");//(**)
                             curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
                             curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json', 'Authorization: Bearer ' . Common\Lib\Settings::get('tarjimly.api_key')]);
                             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-                            $dummy = curl_exec($ch);
-[[HERE
-                $result_json = curl_exec($ch);
-                $errno = curl_errno($ch);
-                $responseCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-error_log("un/pw register errno: $errno, responseCode: $responseCode");//(**)
-                $json = 0;
-                if ($responseCode == 200) $json = json_decode($result_json, true);
-]]
-                if ($errno || $responseCode != 200) UserRouteHandler::flashNow('error', 'Connection to Tarjimly failed, please try again.');//(**)Wording
-                elseif (!empty($json)) {
-                    UserRouteHandler::flashNow('error', 'You already have an account (BTW Tarjimly & TWB are now one account system), please log in <a href="' . $app->getRouteCollector()->getRouteParser()->urlFor('login') . '">here</a>');//(**)Wording
-                } else {
-================================================
-                            if (curl_getinfo($ch, CURLINFO_HTTP_CODE) == 200) {
-================================================
+                            $result_json = curl_exec($ch);
+                            $errno = curl_errno($ch);
+                            $responseCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+error_log("un/pw verify manually bulk-create errno: $errno, responseCode: $responseCode");//(**)
+                            $json = 0;
+                            if ($responseCode == 200) $json = json_decode($result_json, true);
+                            if (!$errno && !empty($json)) {
                                 $userDao->finishRegistration($uuid);
                                 UserRouteHandler::flashNow('verifySuccess', 'Email verified, the user can now login with email and password.');
                             } else UserRouteHandler::flashNow('verifyError', 'Connection to Tarjimly failed, please try again.');//(**)Wording
                         } else UserRouteHandler::flashNow('verifyError', 'The user already has a Tarjimly account they should login.');
+} else UserRouteHandler::flashNow('verifyError', 'Connection to Tarjimly failed, please try again.');//(**)Wording
                     } else UserRouteHandler::flashNow('verifyError', 'Not found, either the user never registered with email and password or they have already been verified.');
                 } else UserRouteHandler::flashNow('verifyError', 'Not found, the user never registered with email and password.');
             }
