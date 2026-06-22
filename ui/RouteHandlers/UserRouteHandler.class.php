@@ -4068,7 +4068,7 @@ foreach ($rows as $index => $row) {
             if (true) {
                 $email = 'xxx@xxx.xxx';
                 $first_name = 'a';
-                $last_name = 'b;
+                $last_name = 'b';
                 $communications_consent = 0;
 
                 $ch = curl_init(Common\Lib\Settings::get('tarjimly.url') . '/api/v3/admins/users?email=' . urlencode($email));
