@@ -4030,7 +4030,8 @@ foreach ($rows as $index => $row) {
 
                 $ch = curl_init(Common\Lib\Settings::get('tarjimly.url') . '/api/v3/admins/users?email=' . urlencode($email));
                 curl_setopt($ch, CURLOPT_HTTPHEADER, ['Authorization: Bearer ' . Common\Lib\Settings::get('tarjimly.api_key')]);
-                curl_exec($ch);
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                $qqq = curl_exec($ch);
                 if (curl_errno($ch)) UserRouteHandler::flashNow('error', 'Connection to Tarjimly failed, please try again.');//(**)Wording
                 elseif (curl_getinfo($ch, CURLINFO_HTTP_CODE) == 200) {
                 } else {
