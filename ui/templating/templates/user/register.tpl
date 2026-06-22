@@ -184,6 +184,16 @@
       <a class="navbar-brand" href={urlFor name='home'}> <img src="{urlFor name='home'}ui/img/TWB_Logo.svg" class="mb-4" /> </a>
 
       {include file="handle-flash-messages.tpl"}
+      {if isset($error)}
+          <div class="alert alert-danger">
+              <strong>{Localisation::getTranslation('common_error')}:</strong> {$error}
+          </div>
+      {/if}
+      {if isset($warning)}
+          <div class="alert">
+              <strong>{Localisation::getTranslation("common_warning")}:</strong> {$warning}
+          </div>
+      {/if}
   
       <div class="mb-4 mt-4">
               <h2 class="fw-bold">Create an account with TWB</h2>
