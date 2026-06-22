@@ -4065,7 +4065,7 @@ foreach ($rows as $index => $row) {
                 $error = 'You did not enter Last name';
             }
 */
-            if (true)) {
+            if (true) {
                 $email = 'xxx@xxx.xxx';
                 $first_name = 'a';
                 $last_name = 'b;
