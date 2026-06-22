@@ -183,7 +183,7 @@ class AdminRouteHandler
                     if (!empty($result)) {
                         $uuid = $result[0]['unique_id'];
 
-                        $ch = curl_init(Common\Lib\Settings::get('tarjimly.url') . "/api/v3/admins/users?email=$email");
+                        $ch = curl_init(Common\Lib\Settings::get('tarjimly.url') . '/api/v3/admins/users?email=' . urlencode($email));
                         curl_setopt($ch, CURLOPT_HTTPHEADER, ['Authorization: Bearer ' . Common\Lib\Settings::get('tarjimly.api_key')]);
                         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
                         $result_json = curl_exec($ch);
