@@ -1237,13 +1237,6 @@ error_log('Google login JSON:' . print_r($json, 1));//(**)
                                 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
                                 $result = curl_exec($ch);
                                 $res = json_decode($result, true);
-[[HERE
-$result_json = curl_exec($ch);
-$errno = curl_errno($ch);
-$responseCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-$json = json_decode($result_json, true);
-if (empty($json)) no user
-]]
                                 $projectDao->set_memsource_client($org_id, $res['id'], $res['uid']);
 
                                 $ch = curl_init(Common\Lib\Settings::get('tarjimly.url') . "/api/v3/admins/organizations/$t_org_id");
