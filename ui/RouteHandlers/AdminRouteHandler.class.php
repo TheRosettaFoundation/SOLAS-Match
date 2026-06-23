@@ -204,6 +204,7 @@ error_log("un/pw verify manually errno: $errno, responseCode: $responseCode");//
                                     'consentToEmail' => $userDao->get_communications_consent($user_id) ? true : false,
                                     'password' => $user['password'],
                                     'nonce' => "{$user['nonce']}",
+                                    'emailVerified' => true,
                                     'twbId' => $user_id]];
                                 $ch = curl_init(Common\Lib\Settings::get('tarjimly.url') . '/api/v3/admins/users/bulk-create');
                                 curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
