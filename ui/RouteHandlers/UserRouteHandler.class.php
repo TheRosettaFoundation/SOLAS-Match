@@ -1106,7 +1106,7 @@ error_log("un/pw verification bulk-create errno: $errno, responseCode: $response
                 $result_json = curl_exec($ch);
                 $errno = curl_errno($ch);
                 $responseCode = curl_getinfo($ch, CURLINFO_HTTP_CODE); // 401 would be fail
-error_log("un/pw login errno: $errno, responseCode: $responseCode");//(**)
+error_log("un/pw login errno: $errno, responseCode: $responseCode, $result_json");//(**)
                 if (!$errno && $responseCode == 200) $json = json_decode($result_json, true);
                 if ($errno) UserRouteHandler::flashNow('error', 'Connection to Tarjimly failed, please try again.');//(**)
                 elseif ($responseCode != 200) {
