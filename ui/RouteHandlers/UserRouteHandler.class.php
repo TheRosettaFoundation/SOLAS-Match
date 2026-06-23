@@ -1112,7 +1112,7 @@ error_log("un/pw login errno: $errno, responseCode: $responseCode, $result_json"
                 elseif ($responseCode != 200) {
                     $error = sprintf(Lib\Localisation::getTranslation('login_1'), $app->getRouteCollector()->getRouteParser()->urlFor('login'), $app->getRouteCollector()->getRouteParser()->urlFor('register'), '');
                     UserRouteHandler::flashNow('error', $error);
-                } elseif (!$json['emailVerified']) {
+                } elseif (empty($json['emailVerified'])) {
                     UserRouteHandler::flashNow('error', 'User is not verified on Tarjimly AND LINK');//(**)
                 } else {
 error_log('un/pw login JSON:' . print_r($json, 1));//(**)
