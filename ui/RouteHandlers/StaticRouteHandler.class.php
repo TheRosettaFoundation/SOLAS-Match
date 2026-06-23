@@ -76,7 +76,7 @@ class StaticRouteHandler
     public function getUserHash(Request $request, Response $response)
     {
         if (!is_null(Common\Lib\UserSession::getAccessToken())) {
-            $response->getBody()->write(Common\Lib\UserSession::getAccessToken()->getToken());
+            $response->getBody()->write(Common\Lib\UserSession::getAccessToken());
         }
         return $response->withHeader('Content-Type', 'text/html;charset=UTF-8');
     }

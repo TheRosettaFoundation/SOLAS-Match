@@ -67,7 +67,7 @@ class APIHelper
             'Content-Length:'.$length
         );
         if (!is_null($token = UserSession::getAccessToken())) {
-            $httpHeaders[] = 'Authorization: Bearer '.$token->getToken();
+            $httpHeaders[] = "Authorization: Bearer $token";
         }
         if (!is_null($headers)) {
             $httpHeaders = array_merge($httpHeaders, $headers);
