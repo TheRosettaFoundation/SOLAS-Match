@@ -1116,7 +1116,7 @@ error_log("un/pw login errno: $errno, responseCode: $responseCode, $result_json"
                     UserRouteHandler::flashNow('error', 'User is not verified on Tarjimly AND LINK');//(**)
                 } else {
 error_log('un/pw login JSON:' . print_r($json, 1));//(**)
-                    $user = $this->create_user_or_login($json, $email, 0); // un/pw Login
+                    $user = $this->create_user_or_login($json['user'], $email, 0); // un/pw Login
                 }
                 if ($user) {
                     error_log("Password, Login: {$post['email']}");
