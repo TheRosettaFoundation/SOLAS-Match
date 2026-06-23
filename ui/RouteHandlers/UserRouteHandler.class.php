@@ -964,7 +964,7 @@ error_log("un/pw verification bulk-create errno: $errno, responseCode: $response
                 if (!empty($orgs)) return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('home_ngo', ['org_id' => $orgs[0]['organisation_id']]));
                 return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('home'));
             } else {
-                if ($user['language_id']) {
+                if ($user['languageCode']) {
                     if ($message = $userDao->get_post_login_message($user_id)) {
                         UserRouteHandler::flash('error', $message);
                         return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('user-private-profile', ['user_id' => $user_id]));
