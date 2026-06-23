@@ -879,7 +879,7 @@ error_log("un/pw verification errno: $errno, responseCode: $responseCode");//(**
                         'email' => $email,
                         'consentToEmail' => $userDao->get_communications_consent($user_id) ? true : false,
                         'password' => $user['password'],
-                        'nonce' => $user['nonce'],
+                        'nonce' => "{$user['nonce']}",
                         'twbId' => "$user_id"]];
                     if ($org_id) {
                         $result = LibAPI\PDOWrapper::call('get_t_org_id', LibAPI\PDOWrapper::cleanse($org_id));
