@@ -410,7 +410,7 @@ function validateReferenceURL(reference)
 
 function checkTitleNotUsed()
 {
-alert("checkTitleNotUsed()" + userHash);//(**)
+alert("checkTitleNotUsed()" + " hash: " + userHash + " title: " + document.getElementById("project_title").value + " len: " + userHash.length);//(**)
   if (userHash != null && document.getElementById("project_title").value != "") { // Make sure API call will succeed and the field is not empty
     DAOcheckProjectByNameAndOrganisationNotExist(document.getElementById("project_title").value, org_id, noTitleConflict, titleConflict, errorFromServer);
   }
