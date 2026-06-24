@@ -410,6 +410,7 @@ function validateReferenceURL(reference)
 
 function checkTitleNotUsed()
 {
+alert("checkTitleNotUsed()");//(**)
   if (userHash != null && document.getElementById("project_title").value != "") { // Make sure API call will succeed and the field is not empty
     DAOcheckProjectByNameAndOrganisationNotExist(document.getElementById("project_title").value, org_id, noTitleConflict, titleConflict, errorFromServer);
   }
@@ -417,10 +418,12 @@ function checkTitleNotUsed()
 
 function noTitleConflict()
 {
+alert("noTitleConflict()");//(**)
 }
 
 function titleConflict()
 {
+alert("titleConflict()");//(**)
   duplicateProjectTitle = document.getElementById("project_title").value;
   alert(parameters.getTranslation("project_create_title_conflict"));
 }
