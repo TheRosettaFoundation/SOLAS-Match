@@ -1128,7 +1128,7 @@ error_log('un/pw login JSON:' . print_r($json, 1));//(**)
         } else {
             $parms = $request->getQueryParams();
             if (isset($parms['code'])) { // Return from Google sign in on Tarjimly
-                $ch = curl_init(Common\Lib\Settings::get('tarjimly.url') . 'api/v3/admins/auth/profile?code=' . urlencode($parms['code']));
+                $ch = curl_init(Common\Lib\Settings::get('tarjimly.url') . '/api/v3/admins/auth/profile?code=' . urlencode($parms['code']));
                 curl_setopt($ch, CURLOPT_HTTPHEADER, ['Authorization: Bearer ' . Common\Lib\Settings::get('tarjimly.api_key')]);
                 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
                 $result_json = curl_exec($ch);
