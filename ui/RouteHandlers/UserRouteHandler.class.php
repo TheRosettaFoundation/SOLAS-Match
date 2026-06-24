@@ -1259,12 +1259,12 @@ error_log('login PUT JSON:' . print_r($data, 1));//(**)
             $user_id = $user['id'];
             LibAPI\PDOWrapper::call('finishRegistration', "$user_id");
             $userinfo = $userDao->getUserPersonalInformation($user_id);
-            if ($userinfo->firstName != $first_name || $userinfo->lastName != $last_name) {
+//            if ($userinfo->firstName != $first_name || $userinfo->lastName != $last_name) {
 error_log("from Tarjimly: $first_name, $last_name, from TWB: {$userinfo->firstName}, {$userinfo->lastName}");//(**)
                 if (!empty($first_name)) $userinfo->setFirstName($first_name);
                 if (!empty($last_name))  $userinfo->setLastName($last_name);
                 $userDao->saveUserPersonalInformation($userInfo);
-            }
+//            }
         }
         return $user;
     }
