@@ -219,9 +219,9 @@ error_log("un/pw verify manually bulk-create errno: $errno, responseCode: $respo
                                 if (!$errno && !empty($json)) {
                                     $userDao->finishRegistration($uuid);
                                     UserRouteHandler::flashNow('verifySuccess', 'Email verified, the user can now login with email and password.');
-                                } else UserRouteHandler::flashNow('verifyError', 'Connection to Tarjimly failed, please try again.');//(**)Wording
+                                } else UserRouteHandler::flashNow('verifyError', 'Connection to Tarjimly failed, please try again.');
                             } else UserRouteHandler::flashNow('verifyError', 'The user already has a Tarjimly account they should login.');
-                        } else UserRouteHandler::flashNow('verifyError', 'Connection to Tarjimly failed, please try again.');//(**)Wording
+                        } else UserRouteHandler::flashNow('verifyError', 'Connection to Tarjimly failed, please try again.');
                     } else UserRouteHandler::flashNow('verifyError', 'Not found, either the user never registered with email and password or they have already been verified.');
                 } else UserRouteHandler::flashNow('verifyError', 'Not found, the user never registered with email and password.');
             }

@@ -765,9 +765,9 @@ class UserRouteHandler
 error_log("un/pw register errno: $errno, responseCode: $responseCode");//(**)
                 $json = 0;
                 if ($responseCode == 200) $json = json_decode($result_json, true);
-                if ($errno || $responseCode != 200) UserRouteHandler::flashNow('error', 'Connection to Tarjimly failed, please try again.');//(**)Wording
+                if ($errno || $responseCode != 200) UserRouteHandler::flashNow('error', 'Connection to Tarjimly failed, please try again.');
                 elseif (!empty($json)) {
-                    UserRouteHandler::flashNow('error', 'You already have an account (BTW Tarjimly & TWB are now one account system), please log in <a href="' . $app->getRouteCollector()->getRouteParser()->urlFor('login') . '">here</a>');//(**)Wording
+                    UserRouteHandler::flashNow('error', 'TWB and Tarjimly recently merged. You already have an account, please log in <a href="' . $app->getRouteCollector()->getRouteParser()->urlFor('login') . '">here</a>');
                 } else {
                     // Create a new User
                     $nonce = Common\Lib\Authentication::generateNonce();
@@ -863,7 +863,7 @@ error_log("un/pw verification errno: $errno, responseCode: $responseCode");//(**
                 if ($responseCode == 200) $json = json_decode($result_json, true);
                 if (!$errno && $responseCode == 200) {
                     if (!empty($json)) {
-                        UserRouteHandler::flash('error', 'You already have an account (BTW Tarjimly & TWB are now one account system), please log in.');//(**)Wording
+                        UserRouteHandler::flash('error', 'TWB and Tarjimly recently merged. You already have an account, please log in.');
                         return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('login'));
                     }
 
@@ -907,10 +907,10 @@ error_log("un/pw verification bulk-create errno: $errno, responseCode: $response
                         }
                         return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('login'));
                     } else {
-                        UserRouteHandler::flashNow('error', 'Connection to Tarjimly failed, please try again.');//(**)Wording
+                        UserRouteHandler::flashNow('error', 'Connection to Tarjimly failed, please try again.');
                     }
                 } else {
-                    UserRouteHandler::flashNow('error', 'Connection to Tarjimly failed, please try again.');//(**)Wording
+                    UserRouteHandler::flashNow('error', 'Connection to Tarjimly failed, please try again.');
                 }
             }
         }
@@ -1108,7 +1108,7 @@ error_log("un/pw verification bulk-create errno: $errno, responseCode: $response
                 $responseCode = curl_getinfo($ch, CURLINFO_HTTP_CODE); // 401 would be fail
 error_log("un/pw login errno: $errno, responseCode: $responseCode, $result_json");//(**)
                 if (!$errno && $responseCode == 200) $json = json_decode($result_json, true);
-                if ($errno) UserRouteHandler::flashNow('error', 'Connection to Tarjimly failed, please try again.');//(**)
+                if ($errno) UserRouteHandler::flashNow('error', 'Connection to Tarjimly failed, please try again.');
                 elseif ($responseCode != 200) {
                     $error = sprintf(Lib\Localisation::getTranslation('login_1'), $app->getRouteCollector()->getRouteParser()->urlFor('login'), $app->getRouteCollector()->getRouteParser()->urlFor('register'), '');
                     UserRouteHandler::flashNow('error', $error);
