@@ -1113,7 +1113,7 @@ error_log("un/pw login errno: $errno, responseCode: $responseCode, $result_json"
                     $error = sprintf(Lib\Localisation::getTranslation('login_1'), $app->getRouteCollector()->getRouteParser()->urlFor('login'), $app->getRouteCollector()->getRouteParser()->urlFor('register'), '');
                     UserRouteHandler::flashNow('error', $error);
                 } elseif (empty($json['user']['emailVerified'])) {
-                    UserRouteHandler::flashNow('error', 'User is not verified on Tarjimly AND LINK');//(**)
+                    UserRouteHandler::flashNow('error', 'TWB and Tarjimly recently merged. You already have an unverified account on Tarjimly. Verify it [HERE] and then come back to TWB to login.');//(**)
                 } else {
 error_log('un/pw login JSON:' . print_r($json, 1));//(**)
                     $user = $this->create_user_or_login($json['user'], $email, 0); // un/pw Login
