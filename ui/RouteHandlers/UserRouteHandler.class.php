@@ -1230,6 +1230,8 @@ error_log('Google login JSON:' . print_r($json, 1));//(**)
                                 curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json', 'Authorization: Bearer ' . Common\Lib\Settings::get('tarjimly.api_key')]);
                                 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
                                 $dummy = curl_exec($ch);
+
+                                LibAPI\PDOWrapper::call('set_organisation_map', LibAPI\PDOWrapper::cleanse($org_id) . ',' . LibAPI\PDOWrapper::cleanse($t_org_id));
                             }
                         } catch (Common\Exceptions\SolasMatchException $ex) {
                             error_log("Tarjimly name in use: $org_name");
