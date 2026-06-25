@@ -453,7 +453,9 @@ function DAOcheckProjectByNameAndOrganisationNotExist(title, orgId, functionNotE
   )
   .done(function (data, textStatus, jqXHR)
       {
+console.log("DONE HANDLER");//(**)
         if (jqXHR.status < 400) {
+console.log("DONE HANDLER BEFORE COMPARE");//(**)
           if (jqXHR.responseText == "") {
 console.log("NOT FOUND");//(**)
             functionNotExist(); // Expected Response (project not expected to exist)
