@@ -417,20 +417,17 @@ function checkTitleNotUsed()
 
 function noTitleConflict()
 {
-alert("noTitleConflict()");//(**)
 }
 
 function titleConflict()
 {
-alert("titleConflict()");//(**)
   duplicateProjectTitle = document.getElementById("project_title").value;
   alert(parameters.getTranslation("project_create_title_conflict"));
 }
 
 function errorFromServer(jqXHR, textStatus, errorThrown)
 {
-alert("errorFromServer()");//(**)
-console.log("Error: getProjectByName Failed, returned " + jqXHR.status + " " + jqXHR.statusText);//(**)
+console.log(".fail HANDLER; Error: getProjectByName Failed, returned " + jqXHR.status + " " + jqXHR.statusText);//(**)
   // If the project is not found, we get to here, which is OK
   // (we do not seem to get a normal error response functionExist/noTitleConflict although the response to the POST is 200 OK!)
   // console.log("Error: getProjectByName Failed, returned " + jqXHR.status + " " + jqXHR.statusText);
@@ -458,11 +455,14 @@ function DAOcheckProjectByNameAndOrganisationNotExist(title, orgId, functionNotE
       {
         if (jqXHR.status < 400) {
           if (jqXHR.responseText == "") {
+console.log("NOT FOUND");//(**)
             functionNotExist(); // Expected Response (project not expected to exist)
           } else {
+console.log("FOUND... BAD");//(**)
             functionExist(); // Unexpected Response
           }
         } else {
+console.log("status >= 400");//(**)
           functionOnFail();
           console.log("Error: getProjectByName returned " + jqXHR.status + " " + jqXHR.statusText);
         }
