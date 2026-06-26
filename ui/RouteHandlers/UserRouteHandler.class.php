@@ -1177,7 +1177,9 @@ error_log('Google login JSON:' . print_r($json, 1));//(**)
 
         $result = LibAPI\PDOWrapper::call('getUser', 'null,null,' . LibAPI\PDOWrapper::cleanseWrapStr($email) . ',null,null,null,null,null,null');
         if (empty($result)) {
-            $result = LibAPI\PDOWrapper::call('userInsertAndUpdate', LibAPI\PDOWrapper::cleanseWrapStr($email) . ",0,'',null,null,null,null,null");
+            $nonce = Common\Lib\Authentication::generateNonce();
+            $password = Common\Lib\Authentication::hashPassword(bin2hex(random_bytes(10)), $nonce);
+            $result = LibAPI\PDOWrapper::call('userInsertAndUpdate', LibAPI\PDOWrapper::cleanseWrapStr($email) . ",$nonce," . LibAPI\PDOWrapper::cleanseNullOrWrapStr($password) . ',null,null,null,null,null');
             $user_id = $result[0]['id'];
             $result = LibAPI\PDOWrapper::call('getUser', "$user_id,null,null,null,null,null,null,null,null");
             $user = $result[0];
