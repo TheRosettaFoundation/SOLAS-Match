@@ -871,7 +871,7 @@ error_log("un/pw verification errno: $errno, responseCode: $responseCode");//(**
                     $result = LibAPI\PDOWrapper::call('getUserPersonalInfo', 'null,' . LibAPI\PDOWrapper::cleanse($user_id) . ',null,null,null,null,null,null,null,null,null,null');
                     $info = $result[0];
 
-                    [$t_role, $org_id] = $this->get_requested_t_role($email);
+                    [$t_role, $org_id] = $this->get_requested_t_role($user_id, $email);
                     $data = [[
                         'firstName' => $info['firstName'],
                         'lastName' => $info['lastName'],
@@ -983,7 +983,7 @@ error_log("un/pw verification bulk-create errno: $errno, responseCode: $response
         }
     }
 
-    public function get_requested_t_role($email) {
+    public function get_requested_t_role($user_id, $email) {
         $adminDao = new DAO\AdminDao();
 
         if (!empty($_SESSION['track_code']) && substr($_SESSION['track_code'], 0, 8) === 'org_ling') {
@@ -1190,7 +1190,7 @@ error_log('Google login JSON:' . print_r($json, 1));//(**)
             $data = ['twbId' => "$user_id"];
             if (empty($json['role'])) {
                 if ($google_login) {
-                    [$t_role, $org_id] = $this->get_requested_t_role($email);
+                    [$t_role, $org_id] = $this->get_requested_t_role($user_id, $email);
                     $data['role'] = $t_role;
                     if ($org_id) {
                         $result = LibAPI\PDOWrapper::call('get_t_org_id', LibAPI\PDOWrapper::cleanse($org_id));
