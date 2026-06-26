@@ -16091,6 +16091,14 @@ CREATE TABLE IF NOT EXISTS `organisation_map` (
   CONSTRAINT FK_organisation_map_org_id FOREIGN KEY (org_id)  REFERENCES Organisations (id) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+DROP PROCEDURE IF EXISTS `set_organisation_map`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `set_organisation_map`(IN p_org_id INT UNSIGNED, IN p_t_org_id INT UNSIGNED)
+BEGIN
+    INSERT INTO organisation_map VALUES (p_org_id, p_t_org_id);
+END//
+DELIMITER ;
+
 DROP PROCEDURE IF EXISTS `get_t_org_id`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `get_t_org_id`(IN p_org_id INT UNSIGNED)
