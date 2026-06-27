@@ -207,7 +207,6 @@ error_log("un/pw verify manually errno: $errno, responseCode: $responseCode");//
                                     'emailVerified' => true,
                                     'twbId' => "$user_id"]];
                                 $ch = curl_init(Common\Lib\Settings::get('tarjimly.url') . '/api/v3/admins/users/bulk-create');
-error_log('data for verification: ' . json_encode($data));//(**)
                                 curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
                                 curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json', 'Authorization: Bearer ' . Common\Lib\Settings::get('tarjimly.api_key')]);
                                 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
