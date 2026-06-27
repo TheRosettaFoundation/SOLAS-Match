@@ -1117,7 +1117,7 @@ $json = [];//(**)DEL
 $json['user'] = [];//(**)DEL
 $json['user']['role'] = 'translator';//(**)DEL
 $json['user']['emailVerified'] = 1;//(**)DEL
-//$json['user']['organizationId'] = 24;//(**)DEL
+$json['user']['organizationId'] = 24;//(**)DEL
                 if ($errno) UserRouteHandler::flashNow('error', 'Connection to Tarjimly failed, please try again.');
                 elseif ($responseCode != 200) {
                     $error = sprintf(Lib\Localisation::getTranslation('login_1'), $app->getRouteCollector()->getRouteParser()->urlFor('login'), $app->getRouteCollector()->getRouteParser()->urlFor('register'), '');
