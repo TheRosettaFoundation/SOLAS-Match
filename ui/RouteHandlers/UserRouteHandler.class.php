@@ -1255,7 +1255,7 @@ error_log('Google login JSON:' . print_r($json, 1));//(**)
                             $adminDao->adjust_org_admin($user_id, 0, 0, LINGUIST);
                             $adminDao->adjust_org_admin($user_id, $org_id, 0, NGO_LINGUIST);
                         } elseif ($json['role'] == 'aidworker')  {
-                            $adminDao->adjust_org_admin($user_id, $org_id, 0, PROJECT_OFFICER);
+                            $adminDao->adjust_org_admin($user_id, $org_id, 0, NGO_PROJECT_OFFICER);
                         }
                     }
                 }
