@@ -986,8 +986,11 @@ error_log("un/pw verification bulk-create errno: $errno, responseCode: $response
     public function get_requested_t_role($user_id, $email) {
         $adminDao = new DAO\AdminDao();
 
+error_log("_SESSION['track_code']:" . $_SESSION['track_code']);//(**)
         if (!empty($_SESSION['track_code']) && substr($_SESSION['track_code'], 0, 8) === 'org_ling') {
-            if ($org_id = $adminDao->decode_ngo_reg_link(substr($_SESSION['track_code'], 8))) return ['translator', $org_id];
+error_log("org_ling");//(**)
+//(**)PUTBACK            if ($org_id = $adminDao->decode_ngo_reg_link(substr($_SESSION['track_code'], 8))) return ['translator', $org_id];
+if ($org_id = $adminDao->decode_ngo_reg_link(substr($_SESSION['track_code'], 8))) { error_log("return org_id: $org_id"); return ['translator', $org_id]; }//(**)
             return ['translator', 0];
         }
         if (empty($_SESSION['reg_data'])) return ['translator', 0];
