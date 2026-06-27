@@ -1116,6 +1116,7 @@ error_log("un/pw login errno: $errno, responseCode: $responseCode, $result_json"
 $json = [];//(**)DEL
 $json['user'] = [];//(**)DEL
 $json['user']['role'] = 'translator';//(**)DEL
+$json['user']['role'] = 'aidworker';//(**)DEL
 $json['user']['emailVerified'] = 1;//(**)DEL
 $json['user']['organizationId'] = 24;//(**)DEL
                 if ($errno) UserRouteHandler::flashNow('error', 'Connection to Tarjimly failed, please try again.');
