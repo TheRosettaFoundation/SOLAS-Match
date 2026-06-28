@@ -1370,7 +1370,7 @@ error_log("delete_not_accepted_user email errno: $errno, responseCode: $response
                 if (!empty($json[0]['uid'])) {
                     $uid = $json[0]['uid'];
                     $ch = curl_init(Common\Lib\Settings::get('tarjimly.url') . '/api/v3/admins/users/' . urlencode($uid));
-                    curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'DELETE);
+                    curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'DELETE');
                     curl_setopt($ch, CURLOPT_HTTPHEADER, ['Authorization: Bearer ' . Common\Lib\Settings::get('tarjimly.api_key')]);
                     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
                     $result_json = curl_exec($ch);
