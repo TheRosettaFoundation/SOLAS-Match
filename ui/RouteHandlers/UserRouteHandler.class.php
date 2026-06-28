@@ -1099,7 +1099,6 @@ error_log("un/pw verification bulk-create errno: $errno, responseCode: $response
                 $user = 0;
                 $email = $post['email'];
 
-/* DELDEL(**)
                 $ch = curl_init(Common\Lib\Settings::get('tarjimly.url') . '/api/v3/auth/login');
                 curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode(['email' => $email, 'password' => $post['password']]));
                 curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json', 'Authorization: Bearer ' . Common\Lib\Settings::get('tarjimly.api_key')]);
@@ -1107,18 +1106,8 @@ error_log("un/pw verification bulk-create errno: $errno, responseCode: $response
                 $result_json = curl_exec($ch);
                 $errno = curl_errno($ch);
                 $responseCode = curl_getinfo($ch, CURLINFO_HTTP_CODE); // 401 would be fail
-DELDEL(**) */
-$errno = 0;//(**)DEL
-$responseCode = 200;//(**)DEL
-$result_json = '';//(**)DEL
 error_log("un/pw login errno: $errno, responseCode: $responseCode, $result_json");//(**)
                 if (!$errno && $responseCode == 200) $json = json_decode($result_json, true);
-$json = [];//(**)DEL
-$json['user'] = [];//(**)DEL
-$json['user']['role'] = 'aidworker';//(**)DEL
-$json['user']['role'] = 'translator';//(**)DEL
-$json['user']['emailVerified'] = 1;//(**)DEL
-$json['user']['organizationId'] = 999;//(**)DEL
                 if ($errno) UserRouteHandler::flashNow('error', 'Connection to Tarjimly failed, please try again.');
                 elseif ($responseCode != 200) {
                     $error = sprintf(Lib\Localisation::getTranslation('login_1'), $app->getRouteCollector()->getRouteParser()->urlFor('login'), $app->getRouteCollector()->getRouteParser()->urlFor('register'), '');
