@@ -920,7 +920,7 @@ error_log("un/pw verification bulk-create errno: $errno, responseCode: $response
         return UserRouteHandler::render('user/email.verification.tpl', $response);
     }
 
-    public function set_session_redirect(Response $response, $login, $user)
+    public function set_session_redirect(Response $response, $login, $user, $aidworker = 0)
     {
         global $app;
 
@@ -955,7 +955,7 @@ error_log("un/pw verification bulk-create errno: $errno, responseCode: $response
         } else {
             $terms_accepted = $userDao->terms_accepted($user_id);
             if ($terms_accepted < 2) {
-                $message = $adminDao->copy_roles_from_special_registration($user_id, $user['email']);
+                $message = $adminDao->copy_roles_from_special_registration($user_id, $user['email'], $aidworker);
                 if ($message) UserRouteHandler::flash('error', $message);
             }
             if ($adminDao->isSiteAdmin_any_or_org_admin_any_for_any_org($user_id)) {
@@ -1132,7 +1132,7 @@ error_log('un/pw login JSON:' . print_r($json, 1));//(**)
                 if ($user) {
                     error_log("Password, Login: {$post['email']}");
                     LibAPI\PDOWrapper::call('userLoginInsert', LibAPI\PDOWrapper::cleanse($user['id']) . ',' . LibAPI\PDOWrapper::cleanseWrapStr($email) . ',1');
-                    return $this->set_session_redirect($response, 1, $user);
+                    return $this->set_session_redirect($response, 1, $user, !empty($json['user']['role']) && $json['user']['role'] == 'aidworker');
                 }
                 LibAPI\PDOWrapper::call('userLoginInsert', 'null,' . LibAPI\PDOWrapper::cleanseWrapStr($email) . ',0');
             }
@@ -1158,7 +1158,7 @@ error_log('Google login JSON:' . print_r($json, 1));//(**)
                     $user = $this->create_user_or_login($json, $email, 1); // Google Login
                     error_log("Google Sign-In, Login: $email");
                     LibAPI\PDOWrapper::call('userLoginInsert', LibAPI\PDOWrapper::cleanse($user['id']) . ',' . LibAPI\PDOWrapper::cleanseWrapStr($email) . ',1');
-                    return $this->set_session_redirect($response, 1, $user);
+                    return $this->set_session_redirect($response, 1, $user, !empty($json['role']) && $json['role'] == 'aidworker');
                 }
             }
 

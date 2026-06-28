@@ -191,7 +191,7 @@ error_log("adjust_org_admin($user_id, $org_id, $remove, $add)");
         return $result;
     }
 
-    public function copy_roles_from_special_registration($user_id, $email)
+    public function copy_roles_from_special_registration($user_id, $email, $aidworker)
     {
 error_log("copy_roles_from_special_registration($user_id, $email)");
         if (!empty($_SESSION['track_code']) && substr($_SESSION['track_code'], 0, 8) === 'org_ling') {
@@ -204,7 +204,7 @@ error_log("copy_roles_from_special_registration($user_id, $email)");
             return 0;
         }
         if (empty($_SESSION['reg_data'])) {
-            $this->adjust_org_admin($user_id, 0, 0, LINGUIST);
+            if (!$aidworker) $this->adjust_org_admin($user_id, 0, 0, LINGUIST);
             return 0;
         }
         $result = LibAPI\PDOWrapper::call('get_special_registration', LibAPI\PDOWrapper::cleanseWrapStr($_SESSION['reg_data']) . ',' . LibAPI\PDOWrapper::cleanseWrapStr(Common\Lib\Settings::get('site.reg_key')) . ',' . LibAPI\PDOWrapper::cleanse($user_id) . ',' . LibAPI\PDOWrapper::cleanseWrapStr($email));
