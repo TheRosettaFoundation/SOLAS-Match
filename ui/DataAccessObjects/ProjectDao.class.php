@@ -1363,7 +1363,7 @@ error_log("Sync update_task_from_job() task_id: $task_id, status: $status, job: 
             $result_json = curl_exec($ch);
             $errno = curl_errno($ch);
             $responseCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-error_log("delete_not_accepted_user email errno: $errno, responseCode: $responseCode");//(**)
+error_log("delete_not_accepted_user email: $email, errno: $errno, responseCode: $responseCode");//(**)
             $json = [];
             if ($responseCode == 200) $json = json_decode($result_json, true);
             if (!$errno && $responseCode == 200) {
