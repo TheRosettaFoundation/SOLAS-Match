@@ -16115,6 +16115,28 @@ BEGIN
 END//
 DELIMITER ;
 
+CREATE TABLE IF NOT EXISTS `notify_tarjimly` (
+  user_id            INT UNSIGNED NOT NULL,
+  type               INT NOT NULL,
+  KEY FK_notify_tarjimly_user (user_id),
+  CONSTRAINT FK_notify_tarjimly_user FOREIGN KEY (user_id) REFERENCES Users (id) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+DROP PROCEDURE IF EXISTS `get_notify_tarjimly`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_notify_tarjimly`()
+BEGIN
+    SET @uID=NULL;
+    SELECT user_id, type INTO @uID, @t FROM notify_tarjimly LIMIT 1;
+    IF @uID IS NOT NULL THEN
+        DELETE FROM notify_tarjimly WHERE user_id=@uID AND type=@t;
+        SELECT @uID AS user_id, @t AS type;
+    ELSE
+        SELECT 0 AS user_id, 0 AS type;
+    END IF;
+END//
+DELIMITER ;
+
 
 /*---------------------------------------end of procs----------------------------------------------*/
 
