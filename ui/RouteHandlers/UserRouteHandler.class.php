@@ -1115,10 +1115,10 @@ error_log("un/pw login errno: $errno, responseCode: $responseCode, $result_json"
                 if (!$errno && $responseCode == 200) $json = json_decode($result_json, true);
 $json = [];//(**)DEL
 $json['user'] = [];//(**)DEL
-$json['user']['role'] = 'translator';//(**)DEL
 $json['user']['role'] = 'aidworker';//(**)DEL
+$json['user']['role'] = 'translator';//(**)DEL
 $json['user']['emailVerified'] = 1;//(**)DEL
-//$json['user']['organizationId'] = 999;//(**)DEL
+$json['user']['organizationId'] = 999;//(**)DEL
                 if ($errno) UserRouteHandler::flashNow('error', 'Connection to Tarjimly failed, please try again.');
                 elseif ($responseCode != 200) {
                     $error = sprintf(Lib\Localisation::getTranslation('login_1'), $app->getRouteCollector()->getRouteParser()->urlFor('login'), $app->getRouteCollector()->getRouteParser()->urlFor('register'), '');
