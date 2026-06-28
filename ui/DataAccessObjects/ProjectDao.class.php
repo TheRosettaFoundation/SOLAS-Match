@@ -1350,6 +1350,36 @@ error_log("Sync update_task_from_job() task_id: $task_id, status: $status, job: 
     public function delete_not_accepted_user()
     {
         LibAPI\PDOWrapper::call('delete_not_accepted_user', '');
+
+        $result = LibAPI\PDOWrapper::call('get_notify_tarjimly', '');
+        if (!empty($result[0]['user_id'])) {
+            $user_id = $result[0]['user_id'];
+            $result = LibAPI\PDOWrapper::call('getUser', "$user_id,null,null,null,null,null,null,null,null");
+            $email = $result[0]['email'];
+
+            $ch = curl_init(Common\Lib\Settings::get('tarjimly.url') . '/api/v3/admins/users?email=' . urlencode($email));
+            curl_setopt($ch, CURLOPT_HTTPHEADER, ['Authorization: Bearer ' . Common\Lib\Settings::get('tarjimly.api_key')]);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            $result_json = curl_exec($ch);
+            $errno = curl_errno($ch);
+            $responseCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+error_log("delete_not_accepted_user email errno: $errno, responseCode: $responseCode");//(**)
+            $json = [];
+            if ($responseCode == 200) $json = json_decode($result_json, true);
+            if (!$errno && $responseCode == 200) {
+                if (!empty($json[0]['uid'])) {
+                    $uid = $json[0]['uid'];
+                    $ch = curl_init(Common\Lib\Settings::get('tarjimly.url') . '/api/v3/admins/users/' . urlencode($uid));
+                    curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'DELETE);
+                    curl_setopt($ch, CURLOPT_HTTPHEADER, ['Authorization: Bearer ' . Common\Lib\Settings::get('tarjimly.api_key')]);
+                    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                    $result_json = curl_exec($ch);
+                    $errno = curl_errno($ch);
+                    $responseCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+error_log("delete_not_accepted_user DELETE uid: $uid, errno: $errno, responseCode: $responseCode");//(**)
+                }
+            }
+        }
     }
 
     public function get_selections()
