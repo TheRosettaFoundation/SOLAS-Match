@@ -2535,6 +2535,8 @@ BEGIN
         DELETE FROM special_registrations
         WHERE user_id=userId;
 
+        INSERT INTO notify_tarjimly VALUES (userId, 0);
+
         select 1 as result;
     else
         select 0 as result;
@@ -11081,6 +11083,7 @@ BEGIN
     IF uID IS NOT NULL THEN
         DELETE FROM GoogleUserDetails WHERE email=mail;
         DELETE FROM Users WHERE id=uID;
+        INSERT INTO notify_tarjimly VALUES (uID, 0);
     END IF;
 END//
 DELIMITER ;
@@ -16116,10 +16119,9 @@ END//
 DELIMITER ;
 
 CREATE TABLE IF NOT EXISTS `notify_tarjimly` (
-  user_id            INT UNSIGNED NOT NULL,
-  type               INT NOT NULL,
-  KEY FK_notify_tarjimly_user (user_id),
-  CONSTRAINT FK_notify_tarjimly_user FOREIGN KEY (user_id) REFERENCES Users (id) ON DELETE CASCADE ON UPDATE CASCADE
+  user_id INT UNSIGNED NOT NULL,
+  type    INT NOT NULL,
+  KEY (user_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 DROP PROCEDURE IF EXISTS `get_notify_tarjimly`;
