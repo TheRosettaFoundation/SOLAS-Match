@@ -1219,36 +1219,28 @@ error_log('Google login JSON:' . print_r($json, 1));//(**)
                         $org_id = $result[0]['org_id'];
                         $update_twb_roles = !$google_login;
                     } else {
-                        $org_id = 0;
                         $update_twb_roles = 1;
 
-                        $org_name = "Tarjimly Org $t_org_id";
-                        $org = new Common\Protobufs\Models\Organisation();
-                        $org->setName($org_name);
-                        try {
-                            $org = $orgDao->createOrg($org);
-                            if ($org) {
-                                $org_id = $org->getId();
-                                $ch = curl_init(Common\Lib\Settings::get('memsource.api_url_v1') . 'clients');
-                                curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode(['name' => $org_name]));
-                                curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type:application/json', 'Authorization: Bearer ' . Common\Lib\Settings::get('memsource.memsource_api_token')));
-                                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-                                $result = curl_exec($ch);
-                                $res = json_decode($result, true);
-                                $projectDao->set_memsource_client($org_id, $res['id'], $res['uid']);
+                        $org_name = "Tarjimly Org $t_org_id " . time();
+                        $result = LibAPI\PDOWrapper::call('organisationInsertAndUpdate', 'NULL,NULL,' . LibAPI\PDOWrapper::cleanseWrapStr($org_name) .  ',NULL,NULL,NULL,NULL,NULL,NULL');
+                        $org_id = $result[0]['id'];
 
-                                $ch = curl_init(Common\Lib\Settings::get('tarjimly.url') . "/api/v3/admins/organizations/$t_org_id");
-                                curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode(['twbOrgId' => "$org_id"]));
-                                curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PATCH');
-                                curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json', 'Authorization: Bearer ' . Common\Lib\Settings::get('tarjimly.api_key')]);
-                                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-                                $dummy = curl_exec($ch);
+                        $ch = curl_init(Common\Lib\Settings::get('memsource.api_url_v1') . 'clients');
+                        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode(['name' => $org_name]));
+                        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type:application/json', 'Authorization: Bearer ' . Common\Lib\Settings::get('memsource.memsource_api_token')));
+                        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                        $result = curl_exec($ch);
+                        $res = json_decode($result, true);
+                        $projectDao->set_memsource_client($org_id, $res['id'], $res['uid']);
 
-                                LibAPI\PDOWrapper::call('set_organisation_map', LibAPI\PDOWrapper::cleanse($org_id) . ',' . LibAPI\PDOWrapper::cleanse($t_org_id));
-                            }
-                        } catch (Common\Exceptions\SolasMatchException $ex) {
-                            error_log("Tarjimly name in use: $org_name");
-                        }
+                        $ch = curl_init(Common\Lib\Settings::get('tarjimly.url') . "/api/v3/admins/organizations/$t_org_id");
+                        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode(['twbOrgId' => "$org_id"]));
+                        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PATCH');
+                        curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json', 'Authorization: Bearer ' . Common\Lib\Settings::get('tarjimly.api_key')]);
+                        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                        $dummy = curl_exec($ch);
+
+                        LibAPI\PDOWrapper::call('set_organisation_map', LibAPI\PDOWrapper::cleanse($org_id) . ',' . LibAPI\PDOWrapper::cleanse($t_org_id));
                     }
                     if ($org_id && $update_twb_roles) {
                         if ($json['role'] == 'translator') {
