@@ -1352,9 +1352,7 @@ error_log("Sync update_task_from_job() task_id: $task_id, status: $status, job: 
         LibAPI\PDOWrapper::call('delete_not_accepted_user', '');
 
         $result = LibAPI\PDOWrapper::call('get_notify_tarjimly', '');
-        if (!empty($result[0]['user_id'])) {
-            $user_id = $result[0]['user_id'];
-            $result = LibAPI\PDOWrapper::call('getUser', "$user_id,null,null,null,null,null,null,null,null");
+        if (!empty($result[0]['email'])) {
             $email = $result[0]['email'];
 
             $ch = curl_init(Common\Lib\Settings::get('tarjimly.url') . '/api/v3/admins/users?email=' . urlencode($email));

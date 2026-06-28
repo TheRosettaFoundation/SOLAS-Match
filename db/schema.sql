@@ -2535,7 +2535,7 @@ BEGIN
         DELETE FROM special_registrations
         WHERE user_id=userId;
 
-        INSERT INTO notify_tarjimly VALUES (userId, 0);
+        INSERT INTO notify_tarjimly VALUES (@email, 0);
 
         select 1 as result;
     else
@@ -11083,7 +11083,7 @@ BEGIN
     IF uID IS NOT NULL THEN
         DELETE FROM GoogleUserDetails WHERE email=mail;
         DELETE FROM Users WHERE id=uID;
-        INSERT INTO notify_tarjimly VALUES (uID, 0);
+        INSERT INTO notify_tarjimly VALUES (mail, 0);
     END IF;
 END//
 DELIMITER ;
@@ -16119,22 +16119,22 @@ END//
 DELIMITER ;
 
 CREATE TABLE IF NOT EXISTS `notify_tarjimly` (
-  user_id INT UNSIGNED NOT NULL,
-  type    INT NOT NULL,
-  KEY (user_id)
+  email VARCHAR(128) COLLATE utf8mb4_unicode_ci NOT NULL,
+  type  INT NOT NULL,
+  KEY (email)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 DROP PROCEDURE IF EXISTS `get_notify_tarjimly`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `get_notify_tarjimly`()
 BEGIN
-    SET @uID=NULL;
-    SELECT user_id, type INTO @uID, @t FROM notify_tarjimly LIMIT 1;
-    IF @uID IS NOT NULL THEN
-        DELETE FROM notify_tarjimly WHERE user_id=@uID AND type=@t;
-        SELECT @uID AS user_id, @t AS type;
+    SET @email=NULL;
+    SELECT email, type INTO @email, @t FROM notify_tarjimly LIMIT 1;
+    IF @email IS NOT NULL THEN
+        DELETE FROM notify_tarjimly WHERE email=@email AND type=@t;
+        SELECT @email AS email, @t AS type;
     ELSE
-        SELECT 0 AS user_id, 0 AS type;
+        SELECT '' AS email, 0 AS type;
     END IF;
 END//
 DELIMITER ;
