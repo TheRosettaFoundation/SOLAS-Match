@@ -899,6 +899,7 @@ error_log("un/pw verification bulk-create errno: $errno, responseCode: $response
                     $json = 0;
                     if ($responseCode == 200) $json = json_decode($result_json, true);
                     if (!$errno && !empty($json)) {
+error_log("result_json: $result_json");//(**)
                         if ($userDao->finishRegistration($uuid)) {
                             error_log("email verification, Login: $email");
                             return $this->set_session_redirect($response, 0, $user);
