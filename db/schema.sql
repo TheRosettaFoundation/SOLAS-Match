@@ -11083,7 +11083,6 @@ BEGIN
     IF uID IS NOT NULL THEN
         DELETE FROM GoogleUserDetails WHERE email=mail;
         DELETE FROM Users WHERE id=uID;
-        INSERT INTO notify_tarjimly VALUES (mail, 0);
     END IF;
 END//
 DELIMITER ;
