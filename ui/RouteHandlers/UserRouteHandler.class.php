@@ -1199,11 +1199,22 @@ error_log('Google login JSON:' . print_r($json, 1));//(**)
                     }
                 }
             } else {
-                if (empty($json['organizationId'])) {
+                $ch = curl_init($url . "/api/v3/admins/users/$uid");
+                curl_setopt($ch, CURLOPT_HTTPHEADER, ['Authorization: Bearer ' . Common\Lib\Settings::get('tarjimly.api_key')]);
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                $result_json_full = curl_exec($ch);
+                $errno = curl_errno($ch);
+                $responseCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+error_log("Get full user errno: $errno, responseCode: $responseCode");//(**)
+                $json_full = 0;
+                if ($responseCode == 200) $json_full = json_decode($result_json_full, true);
+                if ($errno || $responseCode != 200 || empty($json_full['organizations'])) {
                     if     ($json['role'] == 'translator') $adminDao->adjust_org_admin($user_id, 0, 0, LINGUIST);
                     elseif ($json['role'] == 'aidworker')  $adminDao->adjust_org_admin($user_id, 0, 0, AIDWORKER);
                 } else {
-                    $t_org_id = $json['organizationId'];
+                  foreach ($json_full['organizations'] as $organization) {
+                    $t_org_id = $organization['id'];
+error_log("t_org_id: $t_org_id");//(**)
                     $result = LibAPI\PDOWrapper::call('get_twb_org_id', LibAPI\PDOWrapper::cleanse($t_org_id));
                     if (!empty($result)) {
                         $org_id = $result[0]['org_id'];
@@ -1240,6 +1251,7 @@ error_log('Google login JSON:' . print_r($json, 1));//(**)
                             $adminDao->adjust_org_admin($user_id, $org_id, 0, NGO_PROJECT_OFFICER);
                         }
                     }
+                  }
                 }
             }
             $ch = curl_init(Common\Lib\Settings::get('tarjimly.url') . "/api/v3/admins/users/$uid");
