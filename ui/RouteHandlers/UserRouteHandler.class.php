@@ -1206,6 +1206,7 @@ error_log('Google login JSON:' . print_r($json, 1));//(**)
                 $errno = curl_errno($ch);
                 $responseCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 error_log("Get full user errno: $errno, responseCode: $responseCode");//(**)
+error_log("result_json_full: $result_json_full");//(**)
                 $json_full = 0;
                 if ($responseCode == 200) $json_full = json_decode($result_json_full, true);
                 if ($errno || $responseCode != 200 || empty($json_full['organizations'])) {
