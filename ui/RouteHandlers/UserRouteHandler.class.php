@@ -1199,7 +1199,7 @@ error_log('Google login JSON:' . print_r($json, 1));//(**)
                     }
                 }
             } else {
-                $ch = curl_init($url . "/api/v3/admins/users/$uid");
+                $ch = curl_init(Common\Lib\Settings::get('tarjimly.url') . "/api/v3/admins/users/$uid");
                 curl_setopt($ch, CURLOPT_HTTPHEADER, ['Authorization: Bearer ' . Common\Lib\Settings::get('tarjimly.api_key')]);
                 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
                 $result_json_full = curl_exec($ch);
