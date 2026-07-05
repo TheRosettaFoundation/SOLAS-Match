@@ -1241,6 +1241,7 @@ error_log("t_org_id: $t_org_id");//(**)
                         curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json', 'Authorization: Bearer ' . Common\Lib\Settings::get('tarjimly.api_key')]);
                         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
                         $dummy = curl_exec($ch);
+error_log("dummy: $dummy");//(**)
 
                         LibAPI\PDOWrapper::call('set_organisation_map', LibAPI\PDOWrapper::cleanse($org_id) . ',' . LibAPI\PDOWrapper::cleanse($t_org_id));
                     }
