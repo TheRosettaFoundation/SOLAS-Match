@@ -57,11 +57,8 @@
 <string name="ff_certs_or_other">Certificats ou autres documents attestant de vos qualifications en traduction. Décrivez brièvement votre diplôme dans le titre et chargez le fichier correspondant. Les chargé(e)s de projet chargeront ici les certificats que vous obtiendrez dans le cadre de votre bénévolat au sein de TWB. Si vous avez des questions ou si vous ne parvenez pas à charger le certificat, contactez-nous par e-mail à l’adresse <a href="mailto:translators@translatorswithoutborders.org?subject=Translation%20Certification" target="_blank">translators@translatorswithoutborders.org</a></string>
 <string name="ff_upload_file">Charger un fichier</string>
 <string name="ff_complete">Terminer</string>
-<string name="email_verification_email_verification">Vérification de l’adresse e-mail</string>
 <string name="ff_welcome_word">Bienvenue</string>
 <string name="ff_welcome">Bienvenue dans la communauté TWB. Une fois que vous aurez cliqué sur Terminer l’inscription ci-dessous, vous aurez accès à la plateforme TWB.</string>
-<string name="email_verification_2">Vous pouvez vous connecter à tout moment en vous rendant sur la page de connexion (lien situé à droite de la barre d’état).</string>
-<string name="email_verification_finish_registration">Terminer l’inscription</string>
 <string name="ff_create_acc">Créer un compte</string>
 
     <string name="common_faq">FAQ</string>
@@ -1057,16 +1054,16 @@ Should you have any questions please contact <a href="mailto:info@translatorswit
     <string name="task_view_assign_button">Assign Task</string>
     <string name="task_view_assign_confirmation">Is the User ID or Email address correct?</string>
 
-	<string name="email_verification_email_verification">Email Verification</string>
+  <string name="email_verification_email_verification">Vérification de l’adresse e-mail</string>
 	<string name="email_verification_0">You can complete registration here</string>
 	<string name="email_verification_welcome_to">Welcome to</string>
 	<string name="email_verification_1">Once you click the button below you will have access to the site.</string>
-	<string name="email_verification_2">You can log in any time by going to the login page (link on the right of the status bar).</string>
+  <string name="email_verification_2">Vous pouvez vous connecter à tout moment en vous rendant sur la page de connexion (lien situé à droite de la barre d’état).</string>
 	<string name="email_verification_3">Once logged in you can view tasks on the task stream.</string>
 	<string name="email_verification_4">If there is a task you are interested in you can claim it to start working on it.</string>
 	<string name="email_verification_5">If you are an organization representative then you can request membership of your organization by visiting the organization's public profile.</string>
 	<string name="email_verification_6">If your organization does not yet exist on the system you can create it on you public profile.</string>
-	<string name="email_verification_finish_registration">Finish Registration</string>
+  <string name="email_verification_finish_registration">Terminer l’inscription</string>
     <string name="email_verification_7">Invalid registration id. You may have already verified your email and can login. If not, please try to register again.</string>
     <string name="email_verification_8">Registration complete, please sign in using your email and password below.</string>
 
