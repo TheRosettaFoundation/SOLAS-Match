@@ -42,7 +42,7 @@
     <div class="span4">
     </div>
     <div class="span">
-<h1><span class="register_header2">Welcome {$firstname|escape:'html':'UTF-8'}</span></h1>
+<h1><span class="register_header2">{Localisation::getTranslation('ff_welcome_word')} {$firstname|escape:'html':'UTF-8'}</span></h1>
     </div>
   </div>
 </div>
@@ -50,13 +50,13 @@
 {include file="handle-flash-messages.tpl"}
 {if isset($error)}
     <div class="alert alert-error">
-        <strong>{Localisation::getTranslation('common_error')}:</strong> {$error}
+        <strong>{Localisation::getTranslation('ff_error')}:</strong> {$error}
     </div>
 {/if}
 
 {if isset($warning)}
     <div class="alert">
-        <strong>{Localisation::getTranslation("common_warning")}:</strong> {$warning}
+        <strong>{Localisation::getTranslation("ff_warning")}:</strong> {$warning}
     </div>
 {/if}
 
@@ -67,28 +67,28 @@
     <div class="span4">
     
     <form method="post" id="gregisterform" action="{urlFor name="googleregister" options="user_id.$user_id"}" class="well" accept-charset="utf-8">
-            <label for="first_name" class="required "><strong>First name</strong></label>
-            <input type="text" name="first_name" id="first_name" placeholder="First name" value="{$firstname|escape:'html':'UTF-8'}" required/>
+            <label for="first_name" class="required "><strong>{Localisation::getTranslation('ff_first')}</strong></label>
+            <input type="text" name="first_name" id="first_name" placeholder="{Localisation::getTranslation('ff_first')}" value="{$firstname|escape:'html':'UTF-8'}" required/>
 
-            <label for="last_name" class="required"><strong>Last name</strong></label>
-            <input type="text" name="last_name" id="last_name" placeholder="Last name" value="{$lastname|escape:'html':'UTF-8'}" required/>
+            <label for="last_name" class="required"><strong>{Localisation::getTranslation('ff_last')}</strong></label>
+            <input type="text" name="last_name" id="last_name" placeholder="{Localisation::getTranslation('ff_last')}" value="{$lastname|escape:'html':'UTF-8'}" required/>
 
             <label class="checkbox required check">
-            <input name="age_consent" id="age_consent" type="checkbox"> I confirm I am over the age of 18 <i class="icon-question-sign" id="tool" data-toggle="tooltip" title="If you are under 18 years of age, you can't volunteer with us. Our child protection policy prevents it"></i>
+            <input name="age_consent" id="age_consent" type="checkbox"> {Localisation::getTranslation('ff_i_confirm')} <i class="icon-question-sign" id="tool" data-toggle="tooltip" title="{Localisation::getTranslation('ff_if_18')}"></i>
             </label>
            
             <label class="checkbox required check">
-            <input name="conduct_consent" id="conduct_consent" type="checkbox"> I agree to the <a href="https://twbplatform.org/user%202026%20Code%20of%20Conduct%20for%20Translators%20and%20Interpreters.pdf" target="_blank">TWB Code of Conduct for translators</a> and the <a href="https://translatorswithoutborders.org/privacy-policy/?__hstc=6552685.50947dd5d22eb95562a1c48227dc4cde.1624948951679.1624948951679.1624948951679.1&__hssc=6552685.1.1624948951679&__hsfp=1528584403" target="_blank">TWB Privacy policy</a>
+            <input name="conduct_consent" id="conduct_consent" type="checkbox"> {Localisation::getTranslation('ff_i_agree')}
             </label>
 
             <label class="checkbox check">
-            <input name="newsletter_consent" id="newsletter_consent" type="checkbox"> Subscribe to the TWB email newsletter.
-            <small>You can unsubscribe at any time</small>
+            <input name="newsletter_consent" id="newsletter_consent" type="checkbox"> {Localisation::getTranslation('ff_subscribe')}
+            <small>{Localisation::getTranslation('ff_you_can_un')}</small>
             </label>
 
             <p class="reg_btn ">
                 <button type="submit" class="btn btn-primary " name="submit">
-                     Create Account
+                     {Localisation::getTranslation('ff_create_acc')}
                 </button>
             </p>
             <input type="hidden" name="sesskey" value="{$sesskey}" />
