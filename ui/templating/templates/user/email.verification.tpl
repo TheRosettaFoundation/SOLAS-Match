@@ -13,7 +13,7 @@
 </div>
 
 <p>
-    Welcome to the TWB Community. Once you click "Finish Registration" below you will have access to the TWB Platform.
+    {Localisation::getTranslation('ff_welcome')}
     {Localisation::getTranslation('email_verification_2')}
 </p>
 
