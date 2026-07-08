@@ -1791,9 +1791,9 @@ error_log('login PUT JSON:' . print_r($data, 1));//(**)
 
                 var fieldWrapper = $("<div class=\"row g-2 align-items-center mb-2\" id=\"field" + select_count + "\"/>");
                 fieldWrapper.data("idx", select_count);
-                var fName = $("<div class=\"col-md-5\"><select name=\"language_code_source_" + select_count + "\" id=\"language_code_source_" + select_count + "\" class=\"form-select fieldtype\"><option value>--' . Lib\Localisation::getTranslation('ff_I_can_trans') . '--</option>' . $source_lang . '</select></div>");
-                var fType = $("<div class=\"col-md-4\"><select name=\"language_code_target_" + select_count + "\" id=\"language_code_target_" + select_count + "\" class=\"form-select fieldtype\"><option value>--' . Lib\Localisation::getTranslation('ff_to_lang') . '--</option>' . $target_lang . '</select></div>");
-                var fTypee = $("<div class=\"col-md-2\"><select name=\"qualification_level_" + select_count + "\" id=\"qualification_level_" + select_count + "\" class=\"form-select fieldtype1\"><option value>--Select--</option>' . $qualification_level . '</select></div>");
+                var fName = $("<div class=\"col-md-5\"><select name=\"language_code_source_" + select_count + "\" id=\"language_code_source_" + select_count + "\" class=\"form-select fieldtype_from\"><option value>--' . Lib\Localisation::getTranslation('ff_I_can_trans') . '--</option>' . $source_lang . '</select></div>");
+                var fType = $("<div class=\"col-md-4\"><select name=\"language_code_target_" + select_count + "\" id=\"language_code_target_" + select_count + "\" class=\"form-select fieldtype_to\"><option value>--' . Lib\Localisation::getTranslation('ff_to_lang') . '--</option>' . $target_lang . '</select></div>");
+                var fTypee = $("<div class=\"col-md-2\"><select name=\"qualification_level_" + select_count + "\" id=\"qualification_level_" + select_count + "\" class=\"form-select fieldtype_level\"><option value>--Select--</option>' . $qualification_level . '</select></div>");
 
                 fieldWrapper.append(fName);
                 fieldWrapper.append(fType);
@@ -1819,8 +1819,12 @@ error_log('login PUT JSON:' . print_r($data, 1));//(**)
                     fieldWrapper.append(removeButton);
                 }
                 $("#buildyourform").append(fieldWrapper);
-                $(".fieldtype").select2({
-                    placeholder: "--Select a language--",
+                $(".fieldtype_from").select2({
+                    placeholder: "--' . Lib\Localisation::getTranslation('ff_I_can_trans') . '--",
+                    width: "100%",
+                });
+                $(".fieldtype_to").select2({
+                    placeholder: "--' . Lib\Localisation::getTranslation('ff_to_lang') . '--",
                     width: "100%",
                 });
                 if (getSetting("userQualifiedPairLanguageCodeSource_" + select_count) != "") {
@@ -1865,9 +1869,9 @@ error_log('login PUT JSON:' . print_r($data, 1));//(**)
             var fieldWrapper = $("<div class=\"row g-2 align-items-center mb-2\" id=\"field" + intId + "\"/>");
             fieldWrapper.data("idx", intId);
 
-            var fName = $("<div class=\"col-md-5\"><select name=\"language_code_source_" + select_count + "\" id=\"language_code_source_" + select_count + "\" class=\"form-select fieldtype\" required=\"required\"><option value>--' . Lib\Localisation::getTranslation('ff_I_can_trans') . '--</option>' . $source_lang . '</select></div>");
-            var fType = $("<div class=\"col-md-4\"><select name=\"language_code_target_" + select_count + "\" id=\"language_code_target_" + select_count + "\" class=\"form-select fieldtype\" required=\"required\"><option value>--' . Lib\Localisation::getTranslation('ff_to_lang') . '--</option>' . $target_lang . '</select></div>");
-            var fTypee = $("<div class=\"col-md-2\"><select name=\"qualification_level_" + select_count + "\" id=\"qualification_level_" + select_count + "\" class=\"form-select fieldtype1\"><option value>--Select--</option>' . $qualification_level . '</select></div>");
+            var fName = $("<div class=\"col-md-5\"><select name=\"language_code_source_" + select_count + "\" id=\"language_code_source_" + select_count + "\" class=\"form-select fieldtype_from\" required=\"required\"><option value>--' . Lib\Localisation::getTranslation('ff_I_can_trans') . '--</option>' . $source_lang . '</select></div>");
+            var fType = $("<div class=\"col-md-4\"><select name=\"language_code_target_" + select_count + "\" id=\"language_code_target_" + select_count + "\" class=\"form-select fieldtype_to\" required=\"required\"><option value>--' . Lib\Localisation::getTranslation('ff_to_lang') . '--</option>' . $target_lang . '</select></div>");
+            var fTypee = $("<div class=\"col-md-2\"><select name=\"qualification_level_" + select_count + "\" id=\"qualification_level_" + select_count + "\" class=\"form-select fieldtype_level\"><option value>--Select--</option>' . $qualification_level . '</select></div>");
             var removeButton = $("<div class=\"col-md-1\"><input type=\"button\" class=\"remove btn btn-sm btn-outline-danger\" value=\"-\" /></div>");
 
             removeButton.click(function() {
@@ -1894,12 +1898,15 @@ error_log('login PUT JSON:' . print_r($data, 1));//(**)
             $("#language_code_target_"+ select_count).rules("add", { required: true, notEqualTo: "#language_code_source_"+ select_count  });
 
             $("#buildyourform").append(fieldWrapper);
-            $(".fieldtype").select2({
-                placeholder: "--Select a language--",
+            $(".fieldtype_from").select2({
+                placeholder: "--' . Lib\Localisation::getTranslation('ff_I_can_trans') . '--",
                 width: "100%",
             });
-
-            $(".fieldtype1").select2({
+            $(".fieldtype_to").select2({
+                placeholder: "--' . Lib\Localisation::getTranslation('ff_to_lang') . '--",
+                width: "100%",
+            });
+            $(".fieldtype_level").select2({
                 placeholder: "--Select--",
                 width: "100%"
             });
