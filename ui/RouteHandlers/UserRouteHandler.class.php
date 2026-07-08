@@ -1771,9 +1771,11 @@ error_log('login PUT JSON:' . print_r($data, 1));//(**)
                 },
                 placeholder: "Select a native language",
                 minimumInputLength: 2,
+                width: "100%",
             });
             $(".variant").select2({
                 placeholder: "Select a variant",
+                width: "100%",
             });
 
             if (!' . $user_task_limitation_current_user['limit_profile_changes'] . ') {
@@ -1819,6 +1821,7 @@ error_log('login PUT JSON:' . print_r($data, 1));//(**)
                 $("#buildyourform").append(fieldWrapper);
                 $(".fieldtype").select2({
                     placeholder: "--Select a language--",
+                    width: "100%",
                 });
                 if (getSetting("userQualifiedPairLanguageCodeSource_" + select_count) != "") {
                     $("#language_code_source_" + select_count).select2().val(getSetting("userQualifiedPairLanguageCodeSource_" + select_count)).trigger("change");
@@ -1893,11 +1896,12 @@ error_log('login PUT JSON:' . print_r($data, 1));//(**)
             $("#buildyourform").append(fieldWrapper);
             $(".fieldtype").select2({
                 placeholder: "--Select a language--",
+                width: "100%",
             });
 
             $(".fieldtype1").select2({
                 placeholder: "--Select--",
-                width: "resolve"
+                width: "100%"
             });
         });
 
@@ -3145,7 +3149,7 @@ EOF;
         $pdf->lastPage();
         $file_name = 'Reference_' . $firstName . '_' .$lastName . '_'. date('Y-m-d') . '.pdf';
         $pdf->Output($file_name, 'I');
-        exit;	
+        exit;
     }
 
     public static function join_with_and($array, $sub, $with) {
