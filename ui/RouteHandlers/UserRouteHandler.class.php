@@ -949,7 +949,8 @@ error_log("result_json: $result_json");//(**)
             }
             unset($_SESSION['return_to_SAML_url']);
         }
-        Common\Lib\UserSession::setUserLanguage('en');
+        if (!empty($_SESSION['siteLanguage'])) Common\Lib\UserSession::setUserLanguage($_SESSION['siteLanguage']);
+        else Common\Lib\UserSession::setUserLanguage('en');
         $userDao->setRequiredProfileCompletedinSESSION($user_id);
 
         if ($request_url) {
