@@ -185,16 +185,16 @@
             </fieldset>
         </form>
 
-        <div class="d-flex align-items-center mt-4 mb-4"><div class="flex-fill border-top border-1 border-dark-subtle " ></div><div class=" text-center mx-4 text-muted">OR CONTINUE WITH </div><div class=" flex-fill border-top border-1 border-dark-subtle" ></div> </div>
+        <div class="d-flex align-items-center mt-4 mb-4"><div class="flex-fill border-top border-1 border-dark-subtle " ></div><div class=" text-center mx-4 text-muted">{Localisation::getTranslation('ff_or_continue')} </div><div class=" flex-fill border-top border-1 border-dark-subtle" ></div> </div>
 
         <form method="post" action="{urlFor name='login'}" accept-charset="utf-8" class="mt-4">
             <div class="mb-2">
-                <label for="email" class="form-label text-grayish "><strong>{Localisation::getTranslation('common_email')}</strong></label>
+                <label for="email" class="form-label text-grayish "><strong>{Localisation::getTranslation('ff_your_email')}</strong></label>
                 <input type="text" name="email" id="email" class="form-control"/>
             </div>
 
             <div class="mb-3">
-                <label for="password" class="form-label text-grayish " ><strong>{Localisation::getTranslation('common_password')}</strong></label>
+                <label for="password" class="form-label text-grayish " ><strong>{Localisation::getTranslation('ff_password')}</strong></label>
                 <input type="password" name="password" id="password" class="form-control"/>
             </div>
 
