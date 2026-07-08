@@ -1827,10 +1827,14 @@ error_log('login PUT JSON:' . print_r($data, 1));//(**)
                     placeholder: "--' . Lib\Localisation::getTranslation('ff_to_lang') . '--",
                     width: "100%",
                 });
+                $(".fieldtype_level").select2({
+                    placeholder: "--Select--",
+                    width: "100%",
+                });
                 if (getSetting("userQualifiedPairLanguageCodeSource_" + select_count) != "") {
-                    $("#language_code_source_" + select_count).select2().val(getSetting("userQualifiedPairLanguageCodeSource_" + select_count)).trigger("change");
-                    $("#language_code_target_" + select_count).select2().val(getSetting("userQualifiedPairLanguageCodeTarget_" + select_count)).trigger("change");
-                    $("#qualification_level_"  + select_count).select2().val(getSetting("userQualifiedPairQualificationLevel_" + select_count)).trigger("change");
+                    $("#language_code_source_" + select_count).val(getSetting("userQualifiedPairLanguageCodeSource_" + select_count)).trigger("change");
+                    $("#language_code_target_" + select_count).val(getSetting("userQualifiedPairLanguageCodeTarget_" + select_count)).trigger("change");
+                    $("#qualification_level_"  + select_count).val(getSetting("userQualifiedPairQualificationLevel_" + select_count)).trigger("change");
                 }
             }
             $("#language_code_source_0").rules("add", { required: true, notEqualTo:"#language_code_target_0"});
