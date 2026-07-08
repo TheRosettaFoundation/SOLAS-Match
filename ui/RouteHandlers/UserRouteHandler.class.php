@@ -1791,8 +1791,8 @@ error_log('login PUT JSON:' . print_r($data, 1));//(**)
 
                 var fieldWrapper = $("<div class=\"row g-2 align-items-center mb-2\" id=\"field" + select_count + "\"/>");
                 fieldWrapper.data("idx", select_count);
-                var fName = $("<div class=\"col-md-5\"><select name=\"language_code_source_" + select_count + "\" id=\"language_code_source_" + select_count + "\" class=\"form-select fieldtype\"><option value>--Select a language--</option>' . $source_lang . '</select></div>");
-                var fType = $("<div class=\"col-md-4\"><select name=\"language_code_target_" + select_count + "\" id=\"language_code_target_" + select_count + "\" class=\"form-select fieldtype\"><option value>--Select a language--</option>' . $target_lang . '</select></div>");
+                var fName = $("<div class=\"col-md-5\"><select name=\"language_code_source_" + select_count + "\" id=\"language_code_source_" + select_count + "\" class=\"form-select fieldtype\"><option value>--' . Lib\Localisation::getTranslation('ff_I_can_trans') . '--</option>' . $source_lang . '</select></div>");
+                var fType = $("<div class=\"col-md-4\"><select name=\"language_code_target_" + select_count + "\" id=\"language_code_target_" + select_count + "\" class=\"form-select fieldtype\"><option value>--' . Lib\Localisation::getTranslation('ff_to_lang') . '--</option>' . $target_lang . '</select></div>");
                 var fTypee = $("<div class=\"col-md-2\"><select name=\"qualification_level_" + select_count + "\" id=\"qualification_level_" + select_count + "\" class=\"form-select fieldtype1\"><option value>--Select--</option>' . $qualification_level . '</select></div>");
 
                 fieldWrapper.append(fName);
