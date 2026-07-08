@@ -131,21 +131,15 @@
 
 <body {if isset($body_class)}class="{$body_class}"{/if} {if isset($body_id)}id="{$body_id}"{/if} class="d-flex align-items-center min-vh-100" >
      
-
 <div class="container-fluid px-4  flex-grow-1">
-
- 
 
 <div class=" row py-2 d-flex justify-content-between  ">
 
-
     <div class=" col-12 col-md-6 py-4 d-flex flex-column align-items-center justify-content-center"> 
 
-
     <div class="w-75" >
-
    
-    <a class="navbar-brand" href={urlFor name='home'}> <img src="{urlFor name='home'}ui/img/TWB_Logo.svg" class="mb-4" /> </a>
+        <a class="navbar-brand" href={urlFor name='home'}> <img src="{urlFor name='home'}ui/img/TWB_Logo.svg" class="mb-4" /> </a>
 
     {if isset($flash['error'])}
         <div class="alert alert-danger alert-dismissible fade show" role="alert">
@@ -168,12 +162,12 @@
         </div>
     {/if}
 
-      <h2 class="fw-bold mt-4 mb-4"> Login to TWB Platform</h2>
+        <h2 class="fw-bold mt-4 mb-4"> Login to TWB Platform</h2>
 
         <form action="{urlFor name='login'}" method="post" class="mt-4 mb-4" >
             <input type="hidden" name="action" value="verify" />
             <fieldset class="w-100">
-                
+
   <!-- The Button Link -->
   <a href="{$tarjimly}/api/mobile/v2/auth/sso/google?redirectTo={urlencode("{$siteLocation}login")}" class="google-btn">
     <div class="google-icon-wrapper">
@@ -191,63 +185,44 @@
             </fieldset>
         </form>
 
-         <div class="d-flex align-items-center mt-4 mb-4"><div class="flex-fill border-top border-1 border-dark-subtle " ></div><div class=" text-center mx-4 text-muted">OR CONTINUE WITH </div><div class=" flex-fill border-top border-1 border-dark-subtle" ></div> </div>
+        <div class="d-flex align-items-center mt-4 mb-4"><div class="flex-fill border-top border-1 border-dark-subtle " ></div><div class=" text-center mx-4 text-muted">OR CONTINUE WITH </div><div class=" flex-fill border-top border-1 border-dark-subtle" ></div> </div>
 
-          <form method="post" action="{urlFor name='login'}" accept-charset="utf-8" class="mt-4">
-           <div class="mb-2"> 
-            <label for="email" class="form-label text-grayish "><strong>{Localisation::getTranslation('common_email')}</strong></label>
-            <input type="text" name="email" id="email" class="form-control"/>
-           
-           </div>
-             <div class="mb-3"> 
-            <label for="password" class="form-label text-grayish " ><strong>{Localisation::getTranslation('common_password')}</strong></label>
-            <input type="password" name="password" id="password" class="form-control"/>
+        <form method="post" action="{urlFor name='login'}" accept-charset="utf-8" class="mt-4">
+            <div class="mb-2">
+                <label for="email" class="form-label text-grayish "><strong>{Localisation::getTranslation('common_email')}</strong></label>
+                <input type="text" name="email" id="email" class="form-control"/>
             </div>
+
+            <div class="mb-3">
+                <label for="password" class="form-label text-grayish " ><strong>{Localisation::getTranslation('common_password')}</strong></label>
+                <input type="password" name="password" id="password" class="form-control"/>
+            </div>
+
             <div class="text-end">
-          
-            <a class="text-grayish border-0 cursor-pointer mb-2 bg-transparent text-decoration-underline" href="/password/reset"> Forgot password ? </a>
-          
-
+                <a class="text-grayish border-0 cursor-pointer mb-2 bg-transparent text-decoration-underline" href="/password/reset"> Forgot password ? </a>
             </div>
-              <div class="d-grid gap-2">
+
+            <div class="d-grid gap-2">
                 <button type="submit" name="login" class="btngray-lg w-full text-center cursor-pointer">
-  				     {Localisation::getTranslation('common_log_in')}
-				</button>
-                
-                </div>
-                <div class="fs-5 text-muted text-center mt-2 "> <a href='{urlFor name="register"}' class="link-grayish link-offset-2 link-offset-3-hover link-underline-grayish link-underline-opacity-0 link-underline-opacity-75-hover"> I don't have an account</a> </div>
-           
-				
-			
+                    {Localisation::getTranslation('common_log_in')}
+                </button>
+            </div>
+
+            <div class="fs-5 text-muted text-center mt-2 "> <a href='{urlFor name="register"}' class="link-grayish link-offset-2 link-offset-3-hover link-underline-grayish link-underline-opacity-0 link-underline-opacity-75-hover"> I don't have an account</a> </div>
+
         </form>
 
-        </div>
-
-
-        
-
+    </div>
     </div>
 
-
-    <div class="col-12 col-md-6 py-4 flex-grow-1 "> 
-
-
-    <img src="{urlFor name='home'}ui/img/login_register.svg" alt="login screen image"  class="img-fluid" />
-         
-        
-
+    <!-- Decorative image — hidden on mobile to avoid awkward stacking -->
+    <div class="col-md-6 py-4 d-none d-md-flex align-items-center justify-content-center">
+        <img src="{urlFor name='home'}ui/img/login_register.svg" alt="login screen image" class="img-fluid" />
     </div>
-    
-
-
 
 </div>
 
-
 </div>
-
-
 
 </body>
 </html>
-
