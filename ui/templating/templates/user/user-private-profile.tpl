@@ -68,7 +68,7 @@
             <div class="card bg-light-mariam custom-card p-4 card-border-top-accent">
                 <div class="d-flex justify-content-between align-items-center mb-4 border-bottom pb-3">
                     <h2 class="fs-3 fw-bold text-dark-mariam mb-0">
-                        Please complete your profile
+                        {Localisation::getTranslation('ff_complete_profile')}
                         <span class="badge bg-secondary ms-2 tabcounter tabcounter1"></span>
                     </h2>
                 </div>

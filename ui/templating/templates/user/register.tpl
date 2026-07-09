@@ -170,7 +170,7 @@
         <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.37-5.72c-2.11 1.41-4.81 2.3-8.52 2.3-6.26 0-11.57-4.22-13.46-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
       </svg>
     </div>
-    <span>Sign in with Google</span>
+    <span>{Localisation::getTranslation('ff_signin_google')}</span>
   </a>
 
                         <div class="d-flex align-items-center mt-4 mb-4">

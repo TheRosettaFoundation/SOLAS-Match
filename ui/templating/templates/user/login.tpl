@@ -162,7 +162,7 @@
         </div>
     {/if}
 
-        <h2 class="fw-bold mt-4 mb-4"> Login to TWB Platform</h2>
+        <h2 class="fw-bold mt-4 mb-4"> {Localisation::getTranslation('ff_login_twb')}</h2>
 
         <form action="{urlFor name='login'}" method="post" class="mt-4 mb-4" >
             <input type="hidden" name="action" value="verify" />
@@ -179,7 +179,7 @@
         <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.37-5.72c-2.11 1.41-4.81 2.3-8.52 2.3-6.26 0-11.57-4.22-13.46-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
       </svg>
     </div>
-    <span>Sign in with Google</span>
+    <span>{Localisation::getTranslation('ff_signin_google')}</span>
   </a>
 
             </fieldset>
@@ -199,7 +199,7 @@
             </div>
 
             <div class="text-end">
-                <a class="text-grayish border-0 cursor-pointer mb-2 bg-transparent text-decoration-underline" href="/password/reset"> Forgot password ? </a>
+                <a class="text-grayish border-0 cursor-pointer mb-2 bg-transparent text-decoration-underline" href="/password/reset"> {Localisation::getTranslation('ff_forgot_pw')} </a>
             </div>
 
             <div class="d-grid gap-2">
@@ -208,7 +208,7 @@
                 </button>
             </div>
 
-            <div class="fs-5 text-muted text-center mt-2 "> <a href='{urlFor name="register"}' class="link-grayish link-offset-2 link-offset-3-hover link-underline-grayish link-underline-opacity-0 link-underline-opacity-75-hover"> I don't have an account</a> </div>
+            <div class="fs-5 text-muted text-center mt-2 "> <a href='{urlFor name="register"}' class="link-grayish link-offset-2 link-offset-3-hover link-underline-grayish link-underline-opacity-0 link-underline-opacity-75-hover"> {Localisation::getTranslation('ff_dont_acc')}</a> </div>
 
         </form>
 
