@@ -59,6 +59,11 @@
 <string name="ff_welcome_word">Welcome</string>
 <string name="ff_welcome">Welcome to the TWB Community. Once you click "Finish Registration" below you will have access to the TWB Platform.</string>
 <string name="ff_create_acc">Create Account</string>
+<string name="ff_signin_google">Sign in with Google</string>
+<string name="ff_login_twb">Login to TWB Platform</string>
+<string name="ff_forgot_pw">Forgot password ?</string>
+<string name="ff_dont_acc">I don't have an account</string>
+<string name="ff_complete_profile">Please complete your profile</string>
 
 <string name="common_faq">FAQ</string>
     <string name="common_forum">Kató Community</string>
