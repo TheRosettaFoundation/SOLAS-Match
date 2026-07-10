@@ -925,28 +925,6 @@ error_log("claimTask_shell($userId, $taskId)");
          return 0;
     }
 
-    public function saveUser($user)
-    {
-        $userId = $user->getId();
-        $nativeLanguageCode = null;
-        $nativeCountryCode = null;
-        if (!is_null($userId) && !is_null($user->getNativeLocale())) {
-            $nativeLocale = $user->getNativeLocale();
-            $nativeLanguageCode = $nativeLocale->getLanguageCode();
-            $nativeCountryCode = $nativeLocale->getCountryCode();
-        }
-
-        $args = LibAPI\PDOWrapper::cleanseNullOrWrapStr($user->getEmail()) . ',' .
-            LibAPI\PDOWrapper::cleanseNullOrWrapStr($user->getNonce()) . ',' .
-            LibAPI\PDOWrapper::cleanseNullOrWrapStr($user->getPassword()) . ',' .
-            LibAPI\PDOWrapper::cleanseNullOrWrapStr($user->getBiography()) . ',' .
-            LibAPI\PDOWrapper::cleanseNullOrWrapStr($user->getDisplayName()) . ',' .
-            LibAPI\PDOWrapper::cleanseNullOrWrapStr($nativeLanguageCode) . ',' .
-            LibAPI\PDOWrapper::cleanseNullOrWrapStr($nativeCountryCode) . ',' .
-            LibAPI\PDOWrapper::cleanseNull($userId);
-        LibAPI\PDOWrapper::call('userInsertAndUpdate', $args);
-    }
-
     public function getUserPersonalInformation($user_id)
     {
         $userPersonalInfo = null;
