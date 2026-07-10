@@ -1687,6 +1687,10 @@ error_log('login PUT JSON:' . print_r($data, 1));//(**)
             }, "Please enter a different value, values must not be the same." );
 
             var validator = $("#userprofile").validate({
+                // Do not skip Select2-backed / inactive-tab fields, otherwise
+                // required rules (e.g. nativeLanguageSelect, which lives on a
+                // non-active tab at submit time) are silently ignored.
+                ignore: ":hidden:not(select)",
                 rules: {
                     firstName: "required",
                     lastName: "required",
@@ -1696,6 +1700,16 @@ error_log('login PUT JSON:' . print_r($data, 1));//(**)
                         minlength: 2
                     },
                     nativeCountrySelect: "required",
+                },
+                // When validation fails on submit, reveal the tab holding the
+                // first invalid field so the user can see and fix it.
+                invalidHandler: function(event, validator) {
+                    if (validator.errorList.length) {
+                        var tabPane = $(validator.errorList[0].element).closest(".tab-pane");
+                        if (tabPane.length && !tabPane.hasClass("active")) {
+                            showTab(tabPane.attr("aria-labelledby"));
+                        }
+                    }
                 },
                 success: function(label,element) {
                     label.parent().removeClass("error");
