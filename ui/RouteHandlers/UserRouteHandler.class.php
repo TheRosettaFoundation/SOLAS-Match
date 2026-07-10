@@ -1580,6 +1580,7 @@ error_log('login PUT JSON:' . print_r($data, 1));//(**)
                     $userDao->updatePersonalInfo($user_id, $userPersonalInfo);
 
                     if (isset($post['interval'])) {
+error_log("post['interval']: " . $post['interval']);//(**)
                         if ($post['interval'] == 0 || $post['interval'] == 10) {
                             $userDao->removeTaskStreamNotification($user_id);
                             if ($post['interval'] == 10 && ($roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER))) $userDao->set_special_translator($user_id, 1);
