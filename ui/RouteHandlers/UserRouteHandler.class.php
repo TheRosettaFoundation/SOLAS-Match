@@ -404,9 +404,7 @@ class UserRouteHandler
         $adminDao = new DAO\AdminDao();
 
         $data = [];
-error_log(print_r($_SERVER, 1));//(**)
-        $parts = explode(' ', $_SERVER['HTTP_AUTHORIZATION']);
-        if ($parts[1] == Common\Lib\Settings::get('tarjimly.twb_key')) {
+        if ($_SERVER['HTTP_TWBKEY'] == Common\Lib\Settings::get('tarjimly.twb_key')) {
             $user_id = $_SERVER['HTTP_TWBID'];
             $roles = $adminDao->get_roles($user_id, $org_id);
             if ($roles&(SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER | NGO_ADMIN | NGO_PROJECT_OFFICER)) {
