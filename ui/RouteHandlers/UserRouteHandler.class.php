@@ -251,6 +251,11 @@ class UserRouteHandler
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:content_item_increment_views')
             ->setName('content_item_increment_views');
 
+        $app->map(['GET', 'POST'],
+            '/content_item_increment_views_t/{id}[/]',
+            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:content_item_increment_views_t')
+            ->setName('content_item_increment_views_t');
+
         $app->get(
             '/download_attachment/{content_id}/is_image/{is_image}/sorting_order/{sorting_order}/org/{org_id}[/]',
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:download_attachment')
@@ -3844,6 +3849,15 @@ foreach ($rows as $index => $row) {
         if ($result) $userDao->increment_content_item_views($args['id']);
         $results = json_encode(['result'=> $result]);
         $response->getBody()->write($results);
+        return $response->withHeader('Content-Type', 'application/json');
+    }
+
+    public function content_item_increment_views_t(Request $request, Response $response, $args)
+    {
+        $userDao = new DAO\UserDao();
+
+        $userDao->increment_content_item_views($args['id']);
+        $response->getBody()->write(json_encode(['result' => 1]));
         return $response->withHeader('Content-Type', 'application/json');
     }
 
