@@ -3856,7 +3856,7 @@ foreach ($rows as $index => $row) {
     {
         $userDao = new DAO\UserDao();
 
-        $userDao->increment_content_item_views($args['id']);
+        if ($_SERVER['HTTP_TWBKEY'] == Common\Lib\Settings::get('tarjimly.twb_key')) $userDao->increment_content_item_views($args['id']);
         $response->getBody()->write(json_encode(['result' => 1]));
         return $response->withHeader('Content-Type', 'application/json');
     }
