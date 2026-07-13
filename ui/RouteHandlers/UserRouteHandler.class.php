@@ -404,6 +404,7 @@ class UserRouteHandler
         $adminDao = new DAO\AdminDao();
 
         $data = [];
+error_log($_SERVER);//(**)
         $parts = explode(' ', $_SERVER['HTTP_AUTHORIZATION']);
         if ($parts[1] == Common\Lib\Settings::get('tarjimly.twb_key')) {
             $user_id = $_SERVER['HTTP_TWBID'];
