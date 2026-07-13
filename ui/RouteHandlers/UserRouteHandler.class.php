@@ -411,7 +411,7 @@ class UserRouteHandler
             if ($roles&(SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER | NGO_ADMIN | NGO_PROJECT_OFFICER)) {
                 $result = LibAPI\PDOWrapper::call('getUser', "$user_id,null,null,null,null,null,null,null,null");
                 $user = $result[0];
-                $ngo_orgs = ($orgs = $adminDao->get_orgs_if_ngo($user_id) ? $orgs : [];
+                $ngo_orgs = ($orgs = $adminDao->get_orgs_if_ngo($user_id)) ? $orgs : [];
                 if (!empty($ngo_orgs)) {
                     if ($ngo_orgs[0]['organisation_id'] != $org_id) {
                         $projectDao->set_org_default_for_user($user_id, $org_id);
