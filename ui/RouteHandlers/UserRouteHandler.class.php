@@ -31,6 +31,11 @@ class UserRouteHandler
             ->setName('home_ngo');
 
         $app->get(
+            '/org/{org_id}/t_home_ngo[/]',
+            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:t_home_ngo')
+            ->setName('t_home_ngo');
+
+        $app->get(
             '/org/{org_id}/ngo_projects[/]',
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:ngo_projects')
             ->add('\SolasMatch\UI\Lib\Middleware:authUserForOrg_incl_community_officer')
@@ -388,6 +393,46 @@ class UserRouteHandler
     public function home_ngo(Request $request, Response $response, $args)
     {
         return $this->home($request, $response, $args);
+    }
+
+    public function t_home_ngo(Request $request, Response $response, $args)
+    {
+        $org_id = $args['org_id'];
+
+        $userDao = new DAO\UserDao();
+        $projectDao = new DAO\ProjectDao();
+        $adminDao = new DAO\AdminDao();
+
+        $data = [];
+        $parts = explode(' ', $_SERVER['HTTP_AUTHORIZATION']);
+        if ($parts[1] == Common\Lib\Settings::get('tarjimly.twb_key')) {
+            $user_id = $_SERVER['HTTP_TWBID'];
+            $roles = $adminDao->get_roles($user_id, $org_id);
+            if ($roles&(SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER | NGO_ADMIN | NGO_PROJECT_OFFICER)) {
+                $result = LibAPI\PDOWrapper::call('getUser', "$user_id,null,null,null,null,null,null,null,null");
+                $user = $result[0];
+                $ngo_orgs = ($orgs = $adminDao->get_orgs_if_ngo($user_id) ? $orgs : [];
+                if (!empty($ngo_orgs)) {
+                    if ($ngo_orgs[0]['organisation_id'] != $org_id) {
+                        $projectDao->set_org_default_for_user($user_id, $org_id);
+                        $ngo_orgs = $adminDao->get_orgs_if_ngo($user_id);
+                    }
+                }
+                $data = [
+                    'user' => $user,
+                    'site_admin' => $roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER | FINANCE),
+                    'ngo_orgs' => $ngo_orgs,
+                    'org_id'  => $org_id,
+                    'roles'   => $roles,
+                    'current_projects' => $projectDao->get_org_current_projects($org_id),
+                    'completed_files'  => $projectDao->get_org_completed_files($org_id, 6),
+                    'news'      => $userDao->get_content_items(null, 1, null, 1, 1, null, null, null, 0, 0),
+                    'resources' => $userDao->get_content_items(null, 7, null, 1, 1, null, null, null, 0, 0),
+                ];
+            }
+        }
+        $response->getBody()->write(json_encode($data));
+        return $response->withHeader('Content-Type', 'application/json');
     }
 
     public function ngo_projects(Request $request, Response $response, $args)
