@@ -424,7 +424,7 @@ class UserRouteHandler
                 }
                 $data = [
                     'user' => $user,
-                    'site_admin' => $roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER | FINANCE),
+                    'user_has_active_tasks' => !empty($all_claimed_tasks),
                     'ngo_orgs' => $ngo_orgs,
                     'org_id'  => $org_id,
                     'roles'   => $roles,
