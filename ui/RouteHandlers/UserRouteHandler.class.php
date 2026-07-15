@@ -446,7 +446,7 @@ class UserRouteHandler
                     $task_model = new Common\Protobufs\Models\Task();
                     $task_model->setProjectId($task['projectId']);
                     $task_model->setTaskType($task['taskType']);
-                    if (!$projectDao->are_translations_not_all_complete($task, $projectDao->get_memsource_task($task_id))) $matecat_urls[$task_id] = 1;
+                    if (!$projectDao->are_translations_not_all_complete($task_model, $projectDao->get_memsource_task($task_id))) $matecat_urls[$task_id] = 1;
 
                     $result = LibAPI\PDOWrapper::call('getProject', $task['projectId'] . ',null,null,null,null,null,null,null,null,null,null,null,null');
                     $project = $result[0];
