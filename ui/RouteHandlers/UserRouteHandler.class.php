@@ -406,6 +406,7 @@ class UserRouteHandler
 
         $userDao = new DAO\UserDao();
         $projectDao = new DAO\ProjectDao();
+        $orgDao = new DAO\OrganisationDao();
         $adminDao = new DAO\AdminDao();
 
         $data = [];
@@ -422,14 +423,79 @@ class UserRouteHandler
                         $ngo_orgs = $adminDao->get_orgs_if_ngo($user_id);
                     }
                 }
+
+                $all_claimed_tasks = LibAPI\PDOWrapper::call('getFilteredUserClaimedTasks', "$user_id,4,0,0,0,2");
+                if (!empty($all_claimed_tasks)) $claimed_tasks = LibAPI\PDOWrapper::call('getFilteredUserClaimedTasks', "$user_id,4,0,0,3,2");
+                if (empty($claimed_tasks)) $claimed_tasks = [];
+
+                $deadline_timestamps = [];
+                $matecat_urls = [];
+                $orgs = [];
+                $org_names = [];
+                $org_images = [];
+                foreach ($claimed_tasks as $task) {
+                    $task_id = $task['id'];
+                    $deadline = $task['deadline'];
+                    $selected_year   = (int)substr($deadline,  0, 4);
+                    $selected_month  = (int)substr($deadline,  5, 2);
+                    $selected_day    = (int)substr($deadline,  8, 2);
+                    $selected_hour   = (int)substr($deadline, 11, 2); // These are UTC, they will be recalculated to local time by JavaScript (we do not what the local time zone is)
+                    $selected_minute = (int)substr($deadline, 14, 2);
+                    $deadline_timestamps[$task_id] = gmmktime($selected_hour, $selected_minute, 0, $selected_month, $selected_day, $selected_year);
+
+                    $task_model = new Common\Protobufs\Models\Task();
+                    $task_model->setProjectId($task['projectId']);
+                    $task_model->setTaskType($task['taskType']);
+                    if (!$projectDao->are_translations_not_all_complete($task, $projectDao->get_memsource_task($task_id))) $matecat_urls[$task_id] = 1;
+
+                    $result = LibAPI\PDOWrapper::call('getProject', $task['projectId'] . ',null,null,null,null,null,null,null,null,null,null,null,null');
+                    $project = $result[0];
+                    $orgs[$task_id] = $project['organisationId'];
+                    $result = LibAPI\PDOWrapper::call('getOrg', $orgs[$task_id] . ',null,null,null,null,null,null,null,null');
+                    $org_names[$task_id] = $result[0]['name'];
+                    $org_images[$task_id] = $userDao->get_org_image($orgs[$task_id]);
+                }
+
+                $tasks = LibAPI\PDOWrapper::call('getUserTopTasks', "$user_id,0,4,0,null,null,null");
+                if (empty($tasks)) $tasks = [];
+                $task_ids = [];
+                foreach ($tasks as $task) {
+                    $task_id = $task['id'];
+                    array_push($task_ids, $task_id);
+                    $deadline = $task['deadline'];
+                    $selected_year   = (int)substr($deadline,  0, 4);
+                    $selected_month  = (int)substr($deadline,  5, 2);
+                    $selected_day    = (int)substr($deadline,  8, 2);
+                    $selected_hour   = (int)substr($deadline, 11, 2); // These are UTC, they will be recalculated to local time by JavaScript (we do not what the local time zone is)
+                    $selected_minute = (int)substr($deadline, 14, 2);
+                    $deadline_timestamps[$task_id] = gmmktime($selected_hour, $selected_minute, 0, $selected_month, $selected_day, $selected_year);
+
+                    $result = LibAPI\PDOWrapper::call('getProject', $task['projectId'] . ',null,null,null,null,null,null,null,null,null,null,null,null');
+                    $project = $result[0];
+                    $orgs[$task_id] = $project['organisationId'];
+                    $result = LibAPI\PDOWrapper::call('getOrg', $orgs[$task_id] . ',null,null,null,null,null,null,null,null');
+                    $org_names[$task_id] = $result[0]['name'];
+                    $org_images[$task_id] = $userDao->get_org_image($orgs[$task_id]);
+                }
+                $chunks = $userDao->getUserTaskChunks(...$task_ids);
+
                 $data = [
                     'user' => $user,
                     'user_has_active_tasks' => !empty($all_claimed_tasks),
                     'ngo_orgs' => $ngo_orgs,
+                    'roles' => $roles,
                     'org_id'  => $org_id,
                     'roles'   => $roles,
                     'current_projects' => $projectDao->get_org_current_projects($org_id),
                     'completed_files'  => $projectDao->get_org_completed_files($org_id, 6),
+                    'claimed_tasks' => $claimed_tasks,
+                    'matecat_urls'  => $matecat_urls,
+                    'deadline_timestamps' => $deadline_timestamps,
+                    'tasks' => $tasks,
+                    'chunks' => $chunks,
+                    'org_images' => $org_images,
+                    'orgs' => $orgs,
+                    'org_names' => $org_names,
                     'news'      => $userDao->get_content_items(null, 1, null, 1, 1, null, null, null, 0, 0),
                     'resources' => $userDao->get_content_items(null, 7, null, 1, 1, null, null, null, 0, 0),
                 ];
