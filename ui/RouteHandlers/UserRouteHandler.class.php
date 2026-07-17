@@ -41,6 +41,11 @@ class UserRouteHandler
             ->add('\SolasMatch\UI\Lib\Middleware:authUserForOrg_incl_community_officer')
             ->setName('ngo_projects');
 
+        $app->get(
+            '/org/{org_id}/t_ngo_projects[/]',
+            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:t_ngo_projects')
+            ->setName('t_ngo_projects');
+
         $app->map(['GET', 'POST'],
             '/task_stream[/]',
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:task_stream')
@@ -534,6 +539,45 @@ class UserRouteHandler
             ]);
 
         return UserRouteHandler::render('ngo_projects.tpl', $response);
+    }
+
+    public function t_ngo_projects(Request $request, Response $response, $args)
+    {
+        $org_id = $args['org_id'];
+
+        $projectDao = new DAO\ProjectDao();
+        $adminDao = new DAO\AdminDao();
+
+        $data = [];
+        if ($_SERVER['HTTP_TWBKEY'] == Common\Lib\Settings::get('tarjimly.twb_key')) {
+            $user_id = $_SERVER['HTTP_TWBID'];
+            $roles = $adminDao->get_roles($user_id, $org_id);
+            if ($roles&(SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER | NGO_ADMIN | NGO_PROJECT_OFFICER)) {
+                $result = LibAPI\PDOWrapper::call('getUser', "$user_id,null,null,null,null,null,null,null,null");
+                $user = $result[0];
+                $ngo_orgs = ($orgs = $adminDao->get_orgs_if_ngo($user_id)) ? $orgs : [];
+                if (!empty($ngo_orgs)) {
+                    if ($ngo_orgs[0]['organisation_id'] != $org_id) {
+                        $projectDao->set_org_default_for_user($user_id, $org_id);
+                        $ngo_orgs = $adminDao->get_orgs_if_ngo($user_id);
+                    }
+                }
+
+                $data = [
+                    'current_page' => 'ngo_projects',//(**)remove if new menu behaves differently
+                    'user' => $user,
+                    'user_has_active_tasks' => !empty($all_claimed_tasks),
+                    'ngo_orgs' => $ngo_orgs,
+                    'roles' => $roles,
+                    'org_id'  => $org_id,
+                    'roles'   => $roles,
+                    'current_projects' => $projectDao->get_org_current_projects($org_id, 1),
+                    'completed_files'  => $projectDao->get_org_completed_files($org_id, 500),
+                ];
+            }
+        }
+        $response->getBody()->write(json_encode($data));
+        return $response->withHeader('Content-Type', 'application/json');
     }
 
     public function task_stream(Request $request, Response $response)
