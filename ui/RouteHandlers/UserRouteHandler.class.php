@@ -489,8 +489,7 @@ class UserRouteHandler
                     'user_has_active_tasks' => !empty($all_claimed_tasks),
                     'ngo_orgs' => $ngo_orgs,
                     'roles' => $roles,
-                    'org_id'  => $org_id,
-                    'roles'   => $roles,
+                    'org_id' => $org_id,
                     'current_projects' => $projectDao->get_org_current_projects($org_id),
                     'completed_files'  => $projectDao->get_org_completed_files($org_id, 6),
                     'claimed_tasks' => $claimed_tasks,
@@ -562,6 +561,7 @@ class UserRouteHandler
                         $ngo_orgs = $adminDao->get_orgs_if_ngo($user_id);
                     }
                 }
+                $all_claimed_tasks = LibAPI\PDOWrapper::call('getFilteredUserClaimedTasks', "$user_id,4,0,0,0,2");
 
                 $data = [
                     'current_page' => 'ngo_projects',//(**)remove if new menu behaves differently
@@ -569,8 +569,7 @@ class UserRouteHandler
                     'user_has_active_tasks' => !empty($all_claimed_tasks),
                     'ngo_orgs' => $ngo_orgs,
                     'roles' => $roles,
-                    'org_id'  => $org_id,
-                    'roles'   => $roles,
+                    'org_id' => $org_id,
                     'current_projects' => $projectDao->get_org_current_projects($org_id, 1),
                     'completed_files'  => $projectDao->get_org_completed_files($org_id, 500),
                 ];
