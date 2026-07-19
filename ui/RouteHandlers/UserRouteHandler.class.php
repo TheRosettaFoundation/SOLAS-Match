@@ -412,7 +412,7 @@ class UserRouteHandler
         $userDao = new DAO\UserDao();
         $projectDao = new DAO\ProjectDao();
 
-        if ($data = $this->t_validate($org_id)) {
+        if ($data = self::t_validate($org_id)) {
             if (!empty($data['user_has_active_tasks'])) $claimed_tasks = LibAPI\PDOWrapper::call('getFilteredUserClaimedTasks', "$user_id,4,0,0,3,2");
             if (empty($claimed_tasks)) $claimed_tasks = [];
 
@@ -521,7 +521,7 @@ class UserRouteHandler
 
         $projectDao = new DAO\ProjectDao();
 
-        if ($data = $this->t_validate($org_id)) {
+        if ($data = self::t_validate($org_id)) {
             $data['current_page'] = 'ngo_projects';//(**)remove if new menu behaves differently
             $data['current_projects'] = $projectDao->get_org_current_projects($org_id, 1);
             $data['completed_files'] = $projectDao->get_org_completed_files($org_id, 500);
@@ -530,7 +530,7 @@ class UserRouteHandler
         return $response->withHeader('Content-Type', 'application/json');
     }
 
-    public function t_validate($org_id)
+    public static function t_validate($org_id)
     {
         $projectDao = new DAO\ProjectDao();
         $adminDao = new DAO\AdminDao();
