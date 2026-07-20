@@ -1222,7 +1222,6 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
             if ($data = UserRouteHandler::t_validate($org_id)) {
                 $user_id = $data['user']['id'];
                 if (!$taskDao->isUserRestrictedFromProject($project_id, $user_id) && !in_array($project_id, [36065, 36066, 36067, 36068, 36068, 36072, 36070, 36069, 36071, 36073, 36074, 36075, 36076, 36958, 36963])) {
-                    $project_tags = $projectDao->getProjectTags($project_id);//(**)??
                     $memsource_project = $projectDao->get_memsource_project($project_id);
 
                     $get_payment_status_for_project = [];
