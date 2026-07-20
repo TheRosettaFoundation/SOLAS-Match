@@ -26,6 +26,11 @@ class ProjectRouteHandler
             ->add('\SolasMatch\UI\Lib\Middleware:authUserIsLoggedIn')
             ->setName('project-view');
 
+        $app->get(
+            '/project/{project_id}/t_project_view[/]',
+            '\SolasMatch\UI\RouteHandlers\ProjectRouteHandler:t_project_view')
+            ->setName('t_project_view');
+
         $app->map(['GET', 'POST'],
             '/{project_id}/change_owner[/]',
             '\SolasMatch\UI\RouteHandlers\ProjectRouteHandler:change_owner')
@@ -1200,6 +1205,77 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
         ));
 
         return UserRouteHandler::render("project/project.view.tpl", $response);
+    }
+
+    public function t_project_view(Request $request, Response $response, $args)
+    {
+        $project_id = $args['project_id'];
+
+        $projectDao = new DAO\ProjectDao();
+        $taskDao = new DAO\TaskDao();
+
+        $result = LibAPI\PDOWrapper::call('getProject', "$project_id,null,null,null,null,null,null,null,null,null,null,null,null");
+        if (!empty($result)) {
+            $project = $result[0];
+            $org_id = $project['organisationId'];
+
+            if ($data = UserRouteHandler::t_validate($org_id)) {
+                $user_id = $data['user']['id'];
+                if (!$taskDao->isUserRestrictedFromProject($project_id, $user_id) && !in_array($project_id, [36065, 36066, 36067, 36068, 36068, 36072, 36070, 36069, 36071, 36073, 36074, 36075, 36076, 36958, 36963])) {
+                    $project_tags = $projectDao->getProjectTags($project_id);//(**)??
+                    $memsource_project = $projectDao->get_memsource_project($project_id);
+
+                    $get_payment_status_for_project = [];
+
+                    $result = LibAPI\PDOWrapper::call('userSubscribedToProject', "$user_id,$project_id");
+                    $userSubscribedToProject = $result[0]['result'];
+                    $taskMetaData = [];
+                    $project_tasks = LibAPI\PDOWrapper::call('getTask', "null,$project_id,null,null,null,null,null,null,null,null,null,null,null,null");
+                    $translations_not_all_complete = $projectDao->identify_claimed_but_not_yet_in_progress($project_id);
+                    $taskLanguageMap = [];
+                    if (!empty($project_tasks)) {
+                        $get_payment_status_for_project = $taskDao->get_payment_status_for_project($project_id);
+                        foreach ($project_tasks as $task) {
+                            $task_id = $task['id'];
+                            if (!empty($translations_not_all_complete[$task_id])) $task['taskStatus'] = Common\Enums\TaskStatusEnum::CLAIMED;
+                            $taskLanguageMap[$task['targetLanguageCode'] . ',' . $task['targetCountryCode']][] = $task;
+                            $metaData = [];
+                            $result = LibAPI\PDOWrapper::call('userSubscribedToTask', "$user_id,$task_id");
+                            if ($result[0]['result']) {
+                                $metaData['tracking'] = true;
+                                $userSubscribedToProject = 1; // For self service projects, $userSubscribedToProject will not have been set (other projects are not initially tracked for creator)
+                            } else {
+                                $metaData['tracking'] = false;
+                            }
+                            $taskMetaData[$task_id] = $metaData;
+                        }
+                    } else $project_tasks = [];
+
+                    $creator = $taskDao->get_creator($project_id, $memsource_project);
+                    $pm = $creator['email'];
+                    if (strpos($pm, '@translatorswithoutborders.org') === false && strpos($pm, '@clearglobal.org') === false) $pm = 'projects@translatorswithoutborders.org';
+
+                    $data['org_name'] = $projectDao->get_project_org_name($project_id);
+                    $data['projectTasks'] = $project_tasks;
+                    $data['taskMetaData'] = $taskMetaData;
+                    $data['userSubscribedToProject'] = (int)$userSubscribedToProject;
+                    $data['project_tags'] = $project_tags;
+                    $data['taskLanguageMap'] = $taskLanguageMap;
+                    $data['imgCacheToken'] = time();
+                    $p = new Common\Protobufs\Models\Project();
+                    $p->setId($project['id']);
+                    $p->setTitle($project['title']);
+                    $data['discourse_slug'] = $projectDao->discourse_parameterize($p);
+                    $data['pm'] = $pm;
+                    $data['project'] = $project;
+                    $data['get_payment_status_for_project'] = $get_payment_status_for_project;
+                    $data['users_who_claimed'] = $projectDao->get_users_who_claimed($project_id);
+                    $data['ngo_linguists_by_language_pair'] = $projectDao->get_language_pairs_with_ngo_linguists($project_id);
+                } else $data = [];
+            }
+        } else $data = [];
+        $response->getBody()->write(json_encode($data));
+        return $response->withHeader('Content-Type', 'application/json');
     }
 
     public function change_owner(Request $request, Response $response, $args)
