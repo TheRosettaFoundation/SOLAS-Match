@@ -1258,7 +1258,6 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                     $data['projectTasks'] = $project_tasks;
                     $data['taskMetaData'] = $taskMetaData;
                     $data['userSubscribedToProject'] = (int)$userSubscribedToProject;
-                    $data['project_tags'] = $project_tags;
                     $data['taskLanguageMap'] = $taskLanguageMap;
                     $data['imgCacheToken'] = time();
                     $p = new Common\Protobufs\Models\Project();
