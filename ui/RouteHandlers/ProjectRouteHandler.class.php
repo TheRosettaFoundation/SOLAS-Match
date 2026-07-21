@@ -1222,6 +1222,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
             if ($data = UserRouteHandler::t_validate($org_id)) {
                 $user_id = $data['user']['id'];
                 if (!$taskDao->isUserRestrictedFromProject($project_id, $user_id) && !in_array($project_id, [36065, 36066, 36067, 36068, 36068, 36072, 36070, 36069, 36071, 36073, 36074, 36075, 36076, 36958, 36963])) {
+                    $post = $request->getParsedBody();
                     if (isset($post['translators_count'])) {
                         $response->getBody()->write(json_encode($taskDao->count_users_who_can_claim($post['translators_count'])));
                         return $response->withHeader('Content-Type', 'application/json');
