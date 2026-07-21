@@ -26,7 +26,7 @@ class ProjectRouteHandler
             ->add('\SolasMatch\UI\Lib\Middleware:authUserIsLoggedIn')
             ->setName('project-view');
 
-        $app->get(
+        $app->map(['GET', 'POST'],
             '/project/{project_id}/t_project_view[/]',
             '\SolasMatch\UI\RouteHandlers\ProjectRouteHandler:t_project_view')
             ->setName('t_project_view');
