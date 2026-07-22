@@ -407,7 +407,7 @@ class UserRouteHandler
 
     public function t_home_ngo(Request $request, Response $response, $args)
     {
-        $org_id = $args['org_id'];
+        $org_id = (int)$args['org_id'];
 
         $userDao = new DAO\UserDao();
         $projectDao = new DAO\ProjectDao();
@@ -517,7 +517,7 @@ class UserRouteHandler
 
     public function t_ngo_projects(Request $request, Response $response, $args)
     {
-        $org_id = $args['org_id'];
+        $org_id = (int)$args['org_id'];
 
         $projectDao = new DAO\ProjectDao();
 

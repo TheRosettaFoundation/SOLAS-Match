@@ -1209,7 +1209,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
 
     public function t_project_view(Request $request, Response $response, $args)
     {
-        $project_id = $args['project_id'];
+        $project_id = (int)$args['project_id'];
 
         $projectDao = new DAO\ProjectDao();
         $taskDao = new DAO\TaskDao();
