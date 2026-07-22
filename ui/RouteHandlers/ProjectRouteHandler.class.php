@@ -1227,6 +1227,11 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                         $response->getBody()->write(json_encode($taskDao->count_users_who_can_claim($post['translators_count'])));
                         return $response->withHeader('Content-Type', 'application/json');
                     }
+                    if (isset($post['matching'])) {
+                        error_log('updateRequiredTaskNativeMatching(' . $post['task_id'] . ', ' . $post['matching'] . "): $user_id");
+                        $response->getBody()->write(json_encode($taskDao->updateRequiredTaskNativeMatching($post['task_id'], $post['matching'])));
+                        return $response->withHeader('Content-Type', 'application/json');
+                    }
                     $memsource_project = $projectDao->get_memsource_project($project_id);
 
                     $get_payment_status_for_project = [];
