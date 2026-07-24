@@ -1113,10 +1113,10 @@ error_log("un/pw login errno: $errno, responseCode: $responseCode, $result_json"
                 if (!$errno && $responseCode == 200) $json = json_decode($result_json, true);
                 if ($errno) UserRouteHandler::flashNow('error', 'Connection to Tarjimly failed, please try again.');
                 elseif ($responseCode != 200) {
-                    $error = sprintf(Lib\Localisation::getTranslation('login_1'), $app->getRouteCollector()->getRouteParser()->urlFor('login'), $app->getRouteCollector()->getRouteParser()->urlFor('register'), '');
+                    $error = sprintf(Lib\Localisation::getTranslation('login_1'), $app->getRouteCollector()->getRouteParser()->urlFor('login'), $app->getRouteCollector()->getRouteParser()->urlFor('register'), '(If you have an account on Tarjimly, please use that password.)');
                     UserRouteHandler::flashNow('error', $error);
                 } elseif (empty($json['user']['emailVerified'])) {
-                    UserRouteHandler::flashNow('error', 'TWB and Tarjimly recently merged. You already have an unverified account on Tarjimly. Verify it [HERE] and then come back to TWB to login.');//(**)
+                    UserRouteHandler::flashNow('error', 'TWB and Tarjimly recently merged. You already have an unverified account on Tarjimly. Please try to login <a href="https://app.tarjimly.org/login">here</a> and you will be guided to verify your email. Then come back to TWB to log in.');
                 } else {
 error_log('un/pw login JSON:' . print_r($json, 1));//(**)
                     $user = $this->create_user_or_login($json['user'], $email, 0); // un/pw Login
