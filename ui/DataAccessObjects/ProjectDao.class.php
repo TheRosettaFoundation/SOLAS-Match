@@ -2294,6 +2294,7 @@ error_log("Create PO ref: $result");
         if ($json['validity_end'])   $json['validity_end']   = substr($json['validity_end'],   0, 10) . ' 23:59:59';
         if (empty($json['admin_id'])) $json['admin_id'] = null;
         if (empty($json['comment']))  $json['comment']  = null;
+        if (empty($json['idempotency_key'])) $json['idempotency_key'] = null;
         $args =
         LibAPI\PDOWrapper::cleanse($json['id']) . ',' .
         LibAPI\PDOWrapper::cleanse($json['org_id']) . ',' .
@@ -2308,9 +2309,11 @@ error_log("Create PO ref: $result");
         LibAPI\PDOWrapper::cleanse($json['priority']) . ',' .
         LibAPI\PDOWrapper::cleanse($json['status']) . ',' .
         LibAPI\PDOWrapper::cleanseNull($json['admin_id']) . ',' .
-        LibAPI\PDOWrapper::cleanseNullOrWrapStr($json['comment']);
+        LibAPI\PDOWrapper::cleanseNullOrWrapStr($json['comment'] . ',' .
+        LibAPI\PDOWrapper::cleanseNullOrWrapStr($json['idempotency_key']);
 
-        LibAPI\PDOWrapper::call('set_entitlement', $args);
+        $result = LibAPI\PDOWrapper::call('set_entitlement', $args);
+        return $result[0]['result'];
     }
 
     public function get_entitlement_remaining($org_id, $metric)

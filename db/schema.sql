@@ -15890,7 +15890,9 @@ CREATE TABLE IF NOT EXISTS `entitlements` (
   status         INT DEFAULT 0,                # 0 => active, 1 => cancelled
   admin_id       INT UNSIGNED,                 # Optional User id of the Admin who created or edited the record
   comment        TEXT,                         # Optional comment on the background to the entitlement
+  idempotency_key VARCHAR(128),                # Stripe unique identifier
   PRIMARY KEY (id),
+  UNIQUE  KEY (idempotency_key),
   CONSTRAINT FK_entitlements_org_id FOREIGN KEY (org_id)  REFERENCES Organisations (id) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -15920,9 +15922,16 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `set_entitlement`(
     IN p_priority       INT,
     IN p_status         INT,
     IN p_admin_id       INT UNSIGNED,
-    IN p_comment        TEXT)
+    IN p_comment        TEXT,
+    IN p_idempotency_key VARCHAR(128))
 BEGIN
+    DECLARE CONTINUE HANDLER FOR 1062 BEGIN END;
+
     IF p_id=0 THEN
+        IF p_idempotency_key IS NULL THEN
+            SET p_idempotency_key=UUID();
+        END IF;
+
         INSERT INTO entitlements (
             id,
             org_id,
@@ -15937,7 +15946,8 @@ BEGIN
             priority,
             status,
             admin_id,
-            comment)
+            comment,
+            idempotency_key)
         VALUES (
             p_id,
             p_org_id,
@@ -15952,7 +15962,13 @@ BEGIN
             p_priority,
             p_status,
             p_admin_id,
-            p_comment);
+            p_comment,
+            p_idempotency_key);
+        IF ROW_COUNT()=1 THEN
+            SELECT LAST_INSERT_ID() AS result;
+        ELSE
+            SELECT 0 AS result;
+        END IF;
     ELSE
         UPDATE entitlements SET
             org_id=p_org_id,
@@ -15969,6 +15985,7 @@ BEGIN
             admin_id=p_admin_id,
             comment=p_comment
         WHERE id=p_id;
+        SELECT p_id AS result;
     END IF;
 END//
 DELIMITER ;
