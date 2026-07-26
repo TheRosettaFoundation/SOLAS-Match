@@ -2309,7 +2309,7 @@ error_log("Create PO ref: $result");
         LibAPI\PDOWrapper::cleanse($json['priority']) . ',' .
         LibAPI\PDOWrapper::cleanse($json['status']) . ',' .
         LibAPI\PDOWrapper::cleanseNull($json['admin_id']) . ',' .
-        LibAPI\PDOWrapper::cleanseNullOrWrapStr($json['comment'] . ',' .
+        LibAPI\PDOWrapper::cleanseNullOrWrapStr($json['comment']) . ',' .
         LibAPI\PDOWrapper::cleanseNullOrWrapStr($json['idempotency_key']);
 
         $result = LibAPI\PDOWrapper::call('set_entitlement', $args);
