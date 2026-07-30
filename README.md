@@ -40,6 +40,12 @@ For full terms see License.txt or https://www.gnu.org/licenses/lgpl-3.0.txt
 
 # Release Notes
 
+## Version 21
+
+- Remote registration and login using Tarjimly for user credential storage.
+- Registration and login is now available in French.
+- New designs for more key pages.
+
 ## Version 20.3
 
 - Added new scheme of entitlements for NGO organizations.
