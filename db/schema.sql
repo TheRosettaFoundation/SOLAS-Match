@@ -16157,6 +16157,51 @@ END//
 DELIMITER ;
 
 
+DROP PROCEDURE IF EXISTS `is_task_in_project`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `is_task_in_project`(IN pID INT UNSIGNED, IN tID BIGINT UNSIGNED)
+BEGIN
+    IF EXISTS (SELECT 1 FROM Tasks WHERE id=tID AND project_id=pID) THEN
+        SELECT 1 AS result;
+    ELSE
+        SELECT 0 AS result;
+    END IF;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `set_task_published`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `set_task_published`(IN pID INT UNSIGNED, IN tID BIGINT UNSIGNED, IN pub INT)
+BEGIN
+  update Tasks set published=pub WHERE id=tID AND project_id=pID;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `track_task`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `track_task`(IN uID INT UNSIGNED, IN pID INT UNSIGNED, IN tID BIGINT UNSIGNED)
+BEGIN
+    IF NOT EXISTS (SELECT 1 FROM UserTrackedTasks WHERE user_id=uID AND task_id=tID) THEN
+        IF EXISTS (SELECT 1 FROM Tasks WHERE id=tID AND project_id=pID) THEN
+            INSERT INTO UserTrackedTasks (user_id, task_id) VALUES (uID, tID);
+        END IF;
+    END IF;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `untrack_task`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `untrack_task`(IN uID INT UNSIGNED, IN pID INT UNSIGNED, IN tID BIGINT UNSIGNED)
+BEGIN
+    IF EXISTS (SELECT 1 FROM UserTrackedTasks WHERE user_id=uID AND task_id=tID) THEN
+        IF EXISTS (SELECT 1 FROM Tasks WHERE id=tID AND project_id=pID) THEN
+            DELETE FROM UserTrackedTasks WHERE user_id=uID AND task_id=tID;
+        END IF;
+    END IF;
+END//
+DELIMITER ;
+
+
 /*---------------------------------------end of procs----------------------------------------------*/
 
 
