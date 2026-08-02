@@ -1255,6 +1255,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                             $task_id = (int)$post['task_id'];
                             $result = LibAPI\PDOWrapper::call('is_task_in_project', "$project_id,$task_id");
                             if ($result[0]['result']) LibAPI\PDOWrapper::call('deleteTask', "$task_id");
+                            error_log("deleteTask(): $task_id BY $user_id");
                             return $response;
                         }
                         if (isset($post['cancelled'])) {
