@@ -1266,7 +1266,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                             $cancelled = $post['cancelled'] ? 1 : 0;
                             $result = LibAPI\PDOWrapper::call('is_task_in_project', "$project_id,$task_id");
                             $number = 0;
-                            if ($result[0]['result']) $number = $userDao->propagate_cancelled($cancelled, $memsource_project, $id, $comment, empty($post['cancel_selected_only']) ? 1 : 0);
+                            if ($result[0]['result']) $number = $userDao->propagate_cancelled($cancelled, $memsource_project, $task_id, $comment, empty($post['cancel_selected_only']) ? 1 : 0);
                             error_log("$number Tasks Marked Cancelled($cancelled) by $user_id, ID: $task_id");
                             $response->getBody()->write(json_encode(['number'=> $number]));
                             return $response->withHeader('Content-Type', 'application/json');
