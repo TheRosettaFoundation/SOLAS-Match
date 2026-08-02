@@ -1232,6 +1232,43 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                         $response->getBody()->write(json_encode($taskDao->updateRequiredTaskNativeMatching($post['task_id'], $post['matching'])));
                         return $response->withHeader('Content-Type', 'application/json');
                     }
+                    if (isset($post['publishedTask'])) {
+                        $task_id = (int)$post['task_id'];
+                        $pub = (int)$post['publishedTask'];
+                        LibAPI\PDOWrapper::call('set_task_published', "$project_id,$task_id,$pub");
+                        error_log("projectView set_task_published($project_id,$task_id,$pub) by $user_id");
+                        return $response;
+                    }
+                    if (isset($post['trackProject'])) {
+                        if ($post['trackProject']) LibAPI\PDOWrapper::call('userTrackProject', "$project_id,$user_id");
+                        else LibAPI\PDOWrapper::call('userUnTrackProject', "$project_id,$user_id");
+                        return $response;
+                    }
+                    if (isset($post['trackTask'])) {
+                        $task_id = (int)$post['task_id'];
+                        if ($post['trackTask']) LibAPI\PDOWrapper::call('track_task', "$user_id,$project_id,$task_id");
+                        else                  LibAPI\PDOWrapper::call('untrack_task', "$user_id,$project_id,$task_id");
+                        return $response;
+                    }
+                    if ($roles&(SITE_ADMIN | PROJECT_OFFICER | NGO_ADMIN | NGO_PROJECT_OFFICER)) {
+                        if (isset($post['deleteTask'])) {
+                            $task_id = (int)$post['task_id'];
+                            $result = LibAPI\PDOWrapper::call('is_task_in_project', "$project_id,$task_id");
+                            if ($result[0]['result']) LibAPI\PDOWrapper::call('deleteTask', "$task_id");
+                            return $response;
+                        }
+                        if (isset($post['cancelled'])) {
+                            $task_id = (int)$post['task_id'];
+                            $comment = ($post['cancelled'] == 1) ? $post['cancel_task'] . ' - ' . $post['reason'] : 'Uncancelled';
+                            $cancelled = $post['cancelled'] ? 1 : 0;
+                            $result = LibAPI\PDOWrapper::call('is_task_in_project', "$project_id,$task_id");
+                            $number = 0;
+                            if ($result[0]['result']) $number = $userDao->propagate_cancelled($cancelled, $memsource_project, $id, $comment, empty($post['cancel_selected_only']) ? 1 : 0);
+                            error_log("$number Tasks Marked Cancelled($cancelled) by $user_id, ID: $task_id");
+                            $response->getBody()->write(json_encode(['number'=> $number]));
+                            return $response->withHeader('Content-Type', 'application/json');
+                        }
+                    }
                     $memsource_project = $projectDao->get_memsource_project($project_id);
 
                     $get_payment_status_for_project = [];
