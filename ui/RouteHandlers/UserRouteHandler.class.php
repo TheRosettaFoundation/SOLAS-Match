@@ -36,6 +36,11 @@ class UserRouteHandler
             ->setName('t_home_ngo');
 
         $app->get(
+            '/org/t_home_options[/]',
+            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:t_home_options')
+            ->setName('t_home_options');
+
+        $app->get(
             '/org/{org_id}/ngo_projects[/]',
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:ngo_projects')
             ->add('\SolasMatch\UI\Lib\Middleware:authUserForOrg_incl_community_officer')
@@ -553,6 +558,16 @@ class UserRouteHandler
             }
         }
         return [];
+    }
+
+    public function t_home_options(Request $request, Response $response)
+    {
+        $adminDao = new DAO\AdminDao();
+
+        $data = [];
+        if ($ngo_orgs = $adminDao->get_orgs_if_ngo($_SERVER['HTTP_TWBID'])) $data = ['ngo_orgs' => $ngo_orgs];
+        $response->getBody()->write(json_encode($data));
+        return $response->withHeader('Content-Type', 'application/json');
     }
 
     public function task_stream(Request $request, Response $response)
