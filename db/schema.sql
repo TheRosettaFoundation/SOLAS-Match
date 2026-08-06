@@ -15009,6 +15009,7 @@ BEGIN
         IF(ttd.divide_rate_by_60, t.`word-count`*tp.unit_rate/60, t.`word-count`*tp.unit_rate) AS total_expected_cost,
         ttd.pricing_and_recognition_unit_text_hours,
         ps.po_number,
+        spr.budget_line,
         tp.po_create_failed
     FROM TaskPaids                      tp
     JOIN Tasks                           t ON tp.task_id=t.id
