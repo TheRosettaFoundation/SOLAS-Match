@@ -2110,7 +2110,7 @@ error_log("Create PO fail delete: $result");
                 ];
                 $linguist_t_code      = str_replace(['&', '<', '>'], ['&amp;', '&lt;', '&gt;'], $po['linguist_t_code']);
                 $purchase_requisition = str_replace(['&', '<', '>'], ['&amp;', '&lt;', '&gt;'], $po['purchase_requisition']);
-                $budget_line = $po['purchase_requisition'];
+                $budget_line = $po['budget_line'];
                 $project_t_code       = str_replace(['&', '<', '>'], ['&amp;', '&lt;', '&gt;'], $po['project_t_code']);
                 $date = date("dmY");
 
