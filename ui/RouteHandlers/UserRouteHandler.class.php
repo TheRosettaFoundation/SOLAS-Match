@@ -1141,7 +1141,7 @@ error_log("Google login errno: $errno, responseCode: $responseCode");//(**)
                 $json = 0;
                 if ($responseCode == 200) $json = json_decode($result_json, true);
                 if ($errno || $responseCode != 200 || empty($json)) {
-                    UserRouteHandler::flash('error', '<p>An error occurred while trying to sign in with Google. <a href="' . $app->getRouteCollector()->getRouteParser()->urlFor('login') . '">Try logging in again</a> or <a href="' . $app->getRouteCollector()->getRouteParser()->urlFor('register') . '">register</a> for an account.</p>'); //(**)Wording
+                    UserRouteHandler::flash('error', '<p>An error occurred while trying to sign in with Google. <a href="' . $app->getRouteCollector()->getRouteParser()->urlFor('login') . '">Try logging in again</a> or <a href="' . $app->getRouteCollector()->getRouteParser()->urlFor('register') . '">register</a> for an account.</p>');
                     return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('home'));
                 } else {
                     $json = json_decode($result_json, true);
