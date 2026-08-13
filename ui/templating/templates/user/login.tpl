@@ -199,7 +199,7 @@
             </div>
 
             <div class="text-end">
-                <a class="text-grayish border-0 cursor-pointer mb-2 bg-transparent text-decoration-underline" href="https://app.tarjimly.org/forgot-password"> {Localisation::getTranslation('ff_forgot_pw')} </a>
+                <a class="text-grayish border-0 cursor-pointer mb-2 bg-transparent text-decoration-underline" href="https://app.tarjimly.org/forgot-password" onclick="alert('You are being redirected to our new password reset page for both TWB Platform and Tarjimly.'); return true;"> {Localisation::getTranslation('ff_forgot_pw')} </a>
             </div>
 
             <div class="d-grid gap-2">
