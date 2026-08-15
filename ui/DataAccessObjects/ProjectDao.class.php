@@ -206,6 +206,24 @@ else error_log("call projectInsertAndUpdate($args): Fail");//(**)
         return $response;
     }
 
+    public function save_image($project_id, $filename, $data)
+    {
+        $destination = Common\Lib\Settings::get('files.upload_path') . "proj-$project_id/image";
+        if (!file_exists($destination)) mkdir($destination, 0755);
+        $this->set_uploaded_approved($project_id);
+
+        $images = glob(Common\Lib\Settings::get('files.upload_path') . "proj-$project_id/image/image.*");
+        if (!empty($images)) {
+            $name = pathinfo($images[0], PATHINFO_FILENAME);
+            $ext  = pathinfo($images[0], PATHINFO_EXTENSION);
+            $path = pathinfo($images[0], PATHINFO_DIRNAME);
+            $date = date('-d-m-Y-h-i-s-a', time());
+            rename($images[0], "$path/$name$date.$ext");
+        }
+        $ext = pathinfo($filename, PATHINFO_EXTENSION);
+        file_put_contents("$destination/image.$ext", $file);
+    }
+
     public function archiveProject($projectId, $userId)
     {
         $memsource_project = $this->get_memsource_project($projectId);
