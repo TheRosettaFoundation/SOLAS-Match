@@ -2125,8 +2125,8 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                 $response->getBody()->write(json_encode(['project_id' => $project_id]));
                 return $response->withHeader('Content-Type', 'application/json');
             }
-            $data['languages'] = $projectDao->generate_language_selection();
-            $data['ngo_linguists_by_language_pair'] = $projectDao->ngo_linguists_by_language_pair($org_id);
+            $data['languages'] = $projectDao->t_generate_language_selection();
+            $data['ngo_linguists_by_language_pair'] = $projectDao->t_ngo_linguists_by_language_pair($org_id);
             $data['allowed'] = $projectDao->get_entitlement_remaining($org_id, 0) ? 1 : 0;
         }
         $response->getBody()->write(json_encode($data));

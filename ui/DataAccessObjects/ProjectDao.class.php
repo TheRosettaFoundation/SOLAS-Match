@@ -509,6 +509,20 @@ $replace = array(
         return $language_options;
     }
 
+    public function t_generate_language_selection($create_memsource = 0)
+    {
+        $selections = $this->get_selections();
+        $language_options = [];
+        foreach ($selections as $selection) {
+            if ($selection['enabled']) $language_options[$selection['language_code'] . '-' . $selection['country_code']] = $selection['selection'];
+        }
+        asort($language_options);
+
+        $json = [];
+        foreach ($language_options as $code => $lang) $json[] = ['code' => $code, 'lang' => $lang];
+        return $json;
+    }
+
     public function convert_selection_to_language_country($selection)
     {
         $trommons_language_code = substr($selection, 0, strpos($selection, '-'));
@@ -2060,6 +2074,17 @@ GROUP BY c.id, u.id';
             $ngo_linguists_by_language_pair[$row['language_pair']] = $row['number'];
         }
         return $ngo_linguists_by_language_pair;
+    }
+
+    public function t_ngo_linguists_by_language_pair($org_id)
+    {
+        $result = LibAPI\PDOWrapper::call('ngo_linguists_by_language_pair', LibAPI\PDOWrapper::cleanse($org_id));
+        if (empty($result)) return [];
+        $json = [];
+        foreach ($result as $row) {
+            $json[] = ['pair' => $row['language_pair'], 'num' => (int)$row['number']];
+        }
+        return $json;
     }
 
     public function get_language_pairs_with_ngo_linguists($project_id)
