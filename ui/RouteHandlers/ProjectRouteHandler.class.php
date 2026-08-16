@@ -1984,12 +1984,14 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                 $project->setWordCount(1); // Code in taskInsertAndUpdate() does not support 0, so use 1 as placeholder
 
                 list($trommons_source_language_code, $trommons_source_country_code) = $projectDao->convert_selection_to_language_country($post['sourceLanguageSelect']);
+error_log("trommons_source_language_code, trommons_source_country_code: $trommons_source_language_code, $trommons_source_country_code;" . $post['sourceLanguageSelect']);//(**)DEL
                 $sourceLocale->setCountryCode($trommons_source_country_code);
                 $sourceLocale->setLanguageCode($trommons_source_language_code);
                 $project->setSourceLocale($sourceLocale);
 
                 $project->setOrganisationId($org_id);
                 $project->setCreatedTime(gmdate('Y-m-d H:i:s'));
+error_log(print_r($project, 1));//(**)DEL
 
                 $project = $projectDao->createProjectDirectly($project);
                 $project_id = $project->getId();
