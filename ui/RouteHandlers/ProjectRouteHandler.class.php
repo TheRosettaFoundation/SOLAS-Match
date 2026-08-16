@@ -1988,6 +1988,7 @@ error_log("trommons_source_language_code, trommons_source_country_code: $trommon
                 $sourceLocale->setCountryCode($trommons_source_country_code);
                 $sourceLocale->setLanguageCode($trommons_source_language_code);
                 $project->setSourceLocale($sourceLocale);
+error_log(print_r($sourceLocale, 1));//(**)DEL
 
                 $project->setOrganisationId($org_id);
                 $project->setCreatedTime(gmdate('Y-m-d H:i:s'));
