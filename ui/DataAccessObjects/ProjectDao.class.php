@@ -206,7 +206,7 @@ else error_log("call projectInsertAndUpdate($args): Fail");//(**)
         return $response;
     }
 
-    public function save_image($project_id, $filename, $data)
+    public function save_image($project_id, $filename, $image)
     {
         $destination = Common\Lib\Settings::get('files.upload_path') . "proj-$project_id/image";
         if (!file_exists($destination)) mkdir($destination, 0755);
@@ -221,7 +221,7 @@ else error_log("call projectInsertAndUpdate($args): Fail");//(**)
             rename($images[0], "$path/$name$date.$ext");
         }
         $ext = pathinfo($filename, PATHINFO_EXTENSION);
-        file_put_contents("$destination/image.$ext", $file);
+        file_put_contents("$destination/image.$ext", $image);
     }
 
     public function archiveProject($projectId, $userId)
