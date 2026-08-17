@@ -127,6 +127,7 @@ class Middleware
     {
         $token = Common\Lib\UserSession::getAccessToken();
         if (empty($token)) return 1;
+        if (!is_string($token)) return 1;
         $key = hex2bin($token);
         $iv = substr($key, -16);
         $encrypted = substr($key, 0, -18);
