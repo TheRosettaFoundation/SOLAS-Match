@@ -1964,6 +1964,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
     {
         $org_id = (int)$args['org_id'];
 
+        $userDao = new DAO\UserDao();
         $projectDao = new DAO\ProjectDao();
 
         if ($data = UserRouteHandler::t_validate($org_id)) {
