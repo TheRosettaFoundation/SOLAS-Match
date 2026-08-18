@@ -1996,7 +1996,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                 error_log("Created NGO ($org_id, $user_id) Project: $project_id, " . $post['project_title']);
 
                 if (empty($_FILES['projectFile']['name']) || !empty($_FILES['projectFile']['error']) || empty($_FILES['projectFile']['tmp_name']) || (($file = file_get_contents($_FILES['projectFile']['tmp_name'])) === false)) {
-                    error_log('Project Upload Error');
+                    error_log('Project file failed to upload');
                     LibAPI\PDOWrapper::call('deleteProject', "$project_id");
                     $response->getBody()->write(json_encode(['error' => 'Project file failed to upload']));
                     return $response->withHeader('Content-Type', 'application/json');
