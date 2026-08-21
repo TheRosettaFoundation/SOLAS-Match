@@ -41,7 +41,7 @@ class UserRouteHandler
             ->setName('t_home_options');
 
         $app->get(
-            '/org/task_type_details[/]',
+            '/task_type_details[/]',
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:task_type_details')
             ->setName('task_type_details');
 
