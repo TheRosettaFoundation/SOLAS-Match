@@ -41,6 +41,11 @@ class UserRouteHandler
             ->setName('t_home_options');
 
         $app->get(
+            '/org/task_type_details[/]',
+            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:task_type_details')
+            ->setName('task_type_details');
+
+        $app->get(
             '/org/{org_id}/ngo_projects[/]',
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:ngo_projects')
             ->add('\SolasMatch\UI\Lib\Middleware:authUserForOrg_incl_community_officer')
@@ -568,6 +573,12 @@ class UserRouteHandler
         $data = [];
         if ($ngo_orgs = $adminDao->get_orgs_if_ngo($_SERVER['HTTP_TWBID'])) $data = ['ngo_orgs' => $ngo_orgs];
         $response->getBody()->write(json_encode($data));
+        return $response->withHeader('Content-Type', 'application/json');
+    }
+
+    public function task_type_details(Request $request, Response $response)
+    {
+        $response->getBody()->write(json_encode(Common\Enums\TaskTypeEnum::$enum_to_UI));
         return $response->withHeader('Content-Type', 'application/json');
     }
 
