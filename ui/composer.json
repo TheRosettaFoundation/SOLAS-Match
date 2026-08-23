@@ -1,9 +1,7 @@
 {
     "require": {
         "slim/slim": "4.*",
-        "slim/psr7": "^1.4",
-        "smarty/smarty": "^4.1",
-        "lightopenid/lightopenid": "dev-master",
-        "twig/twig": "^3.3"
+        "slim/psr7": "^1.7",
+        "smarty/smarty": "^4.1"
     }
 }
