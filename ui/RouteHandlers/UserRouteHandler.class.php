@@ -606,28 +606,28 @@ class UserRouteHandler
 
             if ($roles&(SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER | NGO_ADMIN)) {
                 if (isset($post['revokeUser'])) {
-                    $user_id = $post['revokeUser'];
+                    $user_id = (int)$post['revokeUser'];
                     $adminDao->adjust_org_admin($user_id, $org_id, NGO_ADMIN | NGO_PROJECT_OFFICER | NGO_LINGUIST, 0);
                     $adminDao->adjust_org_admin($user_id, 0, 0, LINGUIST);
                     error_log("t revokeUser($user_id, $org_id) by $current_user_id");
                     return $response;
                 } elseif (isset($post['revokeOrgAdmin'])) {
-                    $user_id = $post['revokeOrgAdmin'];
+                    $user_id = (int)$post['revokeOrgAdmin'];
                     $adminDao->adjust_org_admin($user_id, $org_id, NGO_ADMIN, NGO_PROJECT_OFFICER);
                     error_log("t revokeOrgAdmin($user_id, $org_id) by $current_user_id");
                     return $response;
                 } elseif (isset($post['revokeOrgPO'])) {
-                    $user_id = $post['revokeOrgPO'];
+                    $user_id = (int)$post['revokeOrgPO'];
                     $adminDao->adjust_org_admin($user_id, $org_id, NGO_PROJECT_OFFICER, NGO_LINGUIST);
                     error_log("t revokeOrgPO($user_id, $org_id) by $current_user_id");
                     return $response;
                 } elseif (isset($post['makeOrgAdmin'])) {
-                    $user_id = $post['makeOrgAdmin'];
+                    $user_id = (int)$post['makeOrgAdmin'];
                     $adminDao->adjust_org_admin($user_id, $org_id, 0, NGO_ADMIN);
                     error_log("t makeOrgAdmin($user_id, $org_id) by $current_user_id");
                     return $response;
                 } elseif (isset($post['makeOrgPO'])) {
-                    $user_id = $post['makeOrgPO'];
+                    $user_id = (int)$post['makeOrgPO'];
                     $adminDao->adjust_org_admin($user_id, $org_id, 0, NGO_PROJECT_OFFICER);
                     error_log("t makeOrgPO($user_id, $org_id) by $current_user_id");
                     return $response;
