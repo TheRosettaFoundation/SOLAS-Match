@@ -599,7 +599,7 @@ class UserRouteHandler
             $current_user_id = $data['user']['id'];
             $roles = $adminDao->get_roles($current_user_id, $org_id);
 
-            $result = LibAPI\PDOWrapper::call('getOrg', $orgs[$task_id] . ',null,null,null,null,null,null,null,null');
+            $result = LibAPI\PDOWrapper::call('getOrg', "$org_id,null,null,null,null,null,null,null,null");
             $org = $result[0];
 
             $post = $request->getParsedBody();
