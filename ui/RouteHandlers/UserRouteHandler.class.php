@@ -636,7 +636,9 @@ class UserRouteHandler
             $data['roles'] = $roles;
             $data['current_page'] = 'org-public-profile';//(**)remove if new menu behaves differently
             $data['org'] = $org;
-            $data['orgMembers'] = $adminDao->getOrgMembers($org_id);
+            $oms = $adminDao->getOrgMembers($org_id);
+            foreach ($oms as $key => $om) unset($oms[$key]['password'], $oms[$key][3], $oms[$key]['nonce'], $oms[$key][9]);
+            $data['orgMembers'] = $oms;
             $data['entitlements'] = $projectDao->get_entitlements($org_id);
             $data['org_image'] = $userDao->get_org_image($org_id);
         }
