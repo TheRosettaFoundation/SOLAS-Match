@@ -57,6 +57,11 @@ class UserRouteHandler
             ->setName('t_ngo_projects');
 
         $app->map(['GET', 'POST'],
+            '/org/{org_id}/t_org_profile[/]',
+            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:t_org_profile')
+            ->setName('t_org_profile');
+
+        $app->map(['GET', 'POST'],
             '/task_stream[/]',
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:task_stream')
             ->add('\SolasMatch\UI\Lib\Middleware:authUserIsLoggedIn')
@@ -579,6 +584,63 @@ class UserRouteHandler
     public function task_type_details(Request $request, Response $response)
     {
         $response->getBody()->write(json_encode(Common\Enums\TaskTypeEnum::$enum_to_UI));
+        return $response->withHeader('Content-Type', 'application/json');
+    }
+
+    public function t_org_profile(Request $request, Response $response, $args)
+    {
+        $org_id = (int)$args['org_id'];
+
+        $adminDao = new DAO\AdminDao();
+        $projectDao = new DAO\ProjectDao();
+        $userDao = new DAO\UserDao();
+
+        if ($data = UserRouteHandler::t_validate($org_id)) {
+            $current_user_id = $data['user']['id'];
+            $roles = $adminDao->get_roles($current_user_id, $org_id);
+
+            $result = LibAPI\PDOWrapper::call('getOrg', $orgs[$task_id] . ',null,null,null,null,null,null,null,null');
+            $org = $result[0];
+
+            $post = $request->getParsedBody();
+
+            if ($roles&(SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER | NGO_ADMIN)) {
+                if (isset($post['revokeUser'])) {
+                    $user_id = $post['revokeUser'];
+                    $adminDao->adjust_org_admin($user_id, $org_id, NGO_ADMIN | NGO_PROJECT_OFFICER | NGO_LINGUIST, 0);
+                    $adminDao->adjust_org_admin($user_id, 0, 0, LINGUIST);
+                    error_log("t revokeUser($user_id, $org_id) by $current_user_id");
+                    return $response;
+                } elseif (isset($post['revokeOrgAdmin'])) {
+                    $user_id = $post['revokeOrgAdmin'];
+                    $adminDao->adjust_org_admin($user_id, $org_id, NGO_ADMIN, NGO_PROJECT_OFFICER);
+                    error_log("t revokeOrgAdmin($user_id, $org_id) by $current_user_id");
+                    return $response;
+                } elseif (isset($post['revokeOrgPO'])) {
+                    $user_id = $post['revokeOrgPO'];
+                    $adminDao->adjust_org_admin($user_id, $org_id, NGO_PROJECT_OFFICER, NGO_LINGUIST);
+                    error_log("t revokeOrgPO($user_id, $org_id) by $current_user_id");
+                    return $response;
+                } elseif (isset($post['makeOrgAdmin'])) {
+                    $user_id = $post['makeOrgAdmin'];
+                    $adminDao->adjust_org_admin($user_id, $org_id, 0, NGO_ADMIN);
+                    error_log("t makeOrgAdmin($user_id, $org_id) by $current_user_id");
+                    return $response;
+                } elseif (isset($post['makeOrgPO'])) {
+                    $user_id = $post['makeOrgPO'];
+                    $adminDao->adjust_org_admin($user_id, $org_id, 0, NGO_PROJECT_OFFICER);
+                    error_log("t makeOrgPO($user_id, $org_id) by $current_user_id");
+                    return $response;
+                }
+            }
+            $data['roles'] = $roles;
+            $data['current_page'] = 'org-public-profile';//(**)remove if new menu behaves differently
+            $data['org'] = $org;
+            $data['orgMembers'] = $adminDao->getOrgMembers($org_id);
+            $data['entitlements'] = $projectDao->get_entitlements($org_id);
+            $data['org_image'] = $userDao->get_org_image($org_id);
+        }
+        $response->getBody()->write(json_encode($data));
         return $response->withHeader('Content-Type', 'application/json');
     }
 
