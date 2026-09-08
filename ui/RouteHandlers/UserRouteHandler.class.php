@@ -1437,8 +1437,8 @@ error_log("result_json_full: $result_json_full");//(**)
                 $json_full = 0;
                 if ($responseCode == 200) $json_full = json_decode($result_json_full, true);
                 if ($errno || $responseCode != 200 || empty($json_full['organizations'])) {
-                    if     ($json['role'] == 'translator') $adminDao->adjust_org_admin($user_id, 0, 0, LINGUIST);
-                    elseif ($json['role'] == 'aidworker')  $adminDao->adjust_org_admin($user_id, 0, 0, AIDWORKER);
+                    if     ($json['role'] == 'translator') $adminDao->adjust_org_admin($user_id, 0, 0, LINGUIST, 1);
+                    elseif ($json['role'] == 'aidworker')  $adminDao->adjust_org_admin($user_id, 0, 0, AIDWORKER, 1);
                 } else {
                   foreach ($json_full['organizations'] as $organization) {
                     $t_org_id = $organization['id'];
@@ -1474,10 +1474,10 @@ error_log("dummy: $dummy");//(**)
                     }
                     if ($org_id && $update_twb_roles) {
                         if ($json['role'] == 'translator') {
-                            $adminDao->adjust_org_admin($user_id, 0, 0, LINGUIST);
-                            $adminDao->adjust_org_admin($user_id, $org_id, 0, NGO_LINGUIST);
+                            $adminDao->adjust_org_admin($user_id, 0, 0, LINGUIST, 1);
+                            $adminDao->adjust_org_admin($user_id, $org_id, 0, NGO_LINGUIST, 1);
                         } elseif ($json['role'] == 'aidworker')  {
-                            $adminDao->adjust_org_admin($user_id, $org_id, 0, NGO_PROJECT_OFFICER);
+                            $adminDao->adjust_org_admin($user_id, $org_id, 0, NGO_PROJECT_OFFICER, 1);
                         }
                     }
                   }
