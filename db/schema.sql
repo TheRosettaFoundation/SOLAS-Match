@@ -13276,10 +13276,12 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `get_orgs_if_ngo`(IN uID INT UNSIGNE
 BEGIN
     SELECT
         a.organisation_id,
-        o.name
+        o.name,
+        om.t_org_id AS tarjimly_org_id
     FROM      Admins              a
     JOIN      Organisations       o ON a.organisation_id=o.id
     LEFT JOIN user_org_defaults uod ON a.user_id=uod.user_id
+    LEFT JOIN organisation_map   om ON o.id=om.org_id
     WHERE
         a.user_id=uID AND
         (roles&12)>0
