@@ -1251,9 +1251,12 @@ error_log("result_json: $result_json");//(**)
                 $userExist = $userDao->getUserByEmail($email, null);
                 if ($userExist) {
                     if ($userDao->isUserVerified($userExist->getId())) {
-                        $adminDao->adjust_org_admin($userExist->getId(), $org_id, 0, $post['role']&~LINGUIST, 1);
-                        $adminDao->adjust_org_admin_source_of_user($userExist->getId(), $org_id, 1, $admin_id);
-                        UserRouteHandler::flashNow('success', 'A user with this email already exists and they have now been given the requested role.');
+                        if ($adminDao->get_roles($userExist->getId(), $org_id)&(NGO_ADMIN | NGO_PROJECT_OFFICER | NGO_LINGUIST)) UserRouteHandler::flashNow('error', 'A user with this email is already in this organization.');
+                        else {
+                            $adminDao->adjust_org_admin($userExist->getId(), $org_id, 0, $post['role']&~LINGUIST, 2);
+                            $adminDao->adjust_org_admin_source_of_user($userExist->getId(), $org_id, 1, $admin_id);
+                            UserRouteHandler::flashNow('success', 'A user with this email already exists and they have now been given the requested role.');
+                        }
                     } else {
                         UserRouteHandler::flashNow('error', 'This user is not verified, please verify them first, if you trust them.');
                     }
