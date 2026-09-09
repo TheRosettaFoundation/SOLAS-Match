@@ -1251,7 +1251,7 @@ error_log("result_json: $result_json");//(**)
                 $userExist = $userDao->getUserByEmail($email, null);
                 if ($userExist) {
                     if ($userDao->isUserVerified($userExist->getId())) {
-                        $adminDao->adjust_org_admin($userExist->getId(), $org_id, 0, $post['role']&~LINGUIST);
+                        $adminDao->adjust_org_admin($userExist->getId(), $org_id, 0, $post['role']&~LINGUIST, 1);
                         $adminDao->adjust_org_admin_source_of_user($userExist->getId(), $org_id, 1, $admin_id);
                         UserRouteHandler::flashNow('success', 'A user with this email already exists and they have now been given the requested role.');
                     } else {
