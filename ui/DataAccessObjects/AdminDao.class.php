@@ -196,15 +196,15 @@ error_log("adjust_org_admin($user_id, $org_id, $remove, $add)");
 error_log("copy_roles_from_special_registration($user_id, $email)");
         if (!empty($_SESSION['track_code']) && substr($_SESSION['track_code'], 0, 8) === 'org_ling') {
             if ($org_id = $this->decode_ngo_reg_link(substr($_SESSION['track_code'], 8))) {
-                $this->adjust_org_admin($user_id, $org_id, 0, NGO_LINGUIST);
-                $this->adjust_org_admin($user_id,       0, 0, LINGUIST);
+                $this->adjust_org_admin($user_id, $org_id, 0, NGO_LINGUIST, 1);
+                $this->adjust_org_admin($user_id,       0, 0, LINGUIST, 1);
                 $this->adjust_org_admin_source_of_user($user_id, $org_id, 1, 999999999);
             }
             unset($_SESSION['track_code']);
             return 0;
         }
         if (empty($_SESSION['reg_data'])) {
-            if (!$aidworker) $this->adjust_org_admin($user_id, 0, 0, LINGUIST);
+            if (!$aidworker) $this->adjust_org_admin($user_id, 0, 0, LINGUIST, 1);
             return 0;
         }
         $result = LibAPI\PDOWrapper::call('get_special_registration', LibAPI\PDOWrapper::cleanseWrapStr($_SESSION['reg_data']) . ',' . LibAPI\PDOWrapper::cleanseWrapStr(Common\Lib\Settings::get('site.reg_key')) . ',' . LibAPI\PDOWrapper::cleanse($user_id) . ',' . LibAPI\PDOWrapper::cleanseWrapStr($email));
@@ -217,15 +217,15 @@ error_log("copy_roles_from_special_registration($user_id, $email)");
 
         $special_registration = $result[0];
         if ($special_registration['mismatch']) {
-            $this->adjust_org_admin($user_id, 0, 0, LINGUIST);
+            $this->adjust_org_admin($user_id, 0, 0, LINGUIST, 1);
             error_log("special_registration[mismatch] on: $email (not {$special_registration['email']}), making $user_id LINGUIST");
             return "Expected special registration email: {$special_registration['email']}, got $email from Google, can't give special role, gave TWB linguist.";
         }
 
-        if ($special_registration['roles'] != (NGO_LINGUIST + LINGUIST)) $this->adjust_org_admin($user_id, $special_registration['org_id'], 0, $special_registration['roles']);
+        if ($special_registration['roles'] != (NGO_LINGUIST + LINGUIST)) $this->adjust_org_admin($user_id, $special_registration['org_id'], 0, $special_registration['roles'], 1);
         else {
-            $this->adjust_org_admin($user_id, $special_registration['org_id'], 0, NGO_LINGUIST);
-            $this->adjust_org_admin($user_id,                               0, 0, LINGUIST);
+            $this->adjust_org_admin($user_id, $special_registration['org_id'], 0, NGO_LINGUIST, 1);
+            $this->adjust_org_admin($user_id,                               0, 0, LINGUIST, 1);
         }
         $this->adjust_org_admin_source_of_user($user_id, $special_registration['org_id'], 1, $special_registration['admin_id']);
         return 0;
