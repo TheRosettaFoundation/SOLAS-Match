@@ -611,13 +611,13 @@ class OrgRouteHandler
             if ($roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER | NGO_ADMIN)) {
                 if (isset($post['revokeUser'])) {
                     $user_id = $post['revokeUser'];
-                    $adminDao->adjust_org_admin($user_id, $org_id, NGO_ADMIN | NGO_PROJECT_OFFICER | NGO_LINGUIST, 0);
+                    $adminDao->adjust_org_admin($user_id, $org_id, NGO_ADMIN | NGO_PROJECT_OFFICER | NGO_LINGUIST, 0, 1);
                     $adminDao->adjust_org_admin($user_id, 0, 0, LINGUIST);
                     UserRouteHandler::flashNow('success', 'Successfully revoked membership from user');
                     error_log("revokeUser($user_id, $org_id) by $current_user_id");
                 } elseif (isset($post['revokeOrgAdmin'])) {
                     $user_id = $post['revokeOrgAdmin'];
-                    $adminDao->adjust_org_admin($user_id, $org_id, NGO_ADMIN, NGO_PROJECT_OFFICER);
+                    $adminDao->adjust_org_admin($user_id, $org_id, NGO_ADMIN, NGO_PROJECT_OFFICER, 1);
                     error_log("revokeOrgAdmin($user_id, $org_id) by $current_user_id");
                 } elseif (isset($post['revokeOrgPO'])) {
                     $user_id = $post['revokeOrgPO'];
@@ -625,7 +625,7 @@ class OrgRouteHandler
                     error_log("revokeOrgPO($user_id, $org_id) by $current_user_id");
                 } elseif (isset($post['makeOrgAdmin'])) {
                     $user_id = $post['makeOrgAdmin'];
-                    $adminDao->adjust_org_admin($user_id, $org_id, 0, NGO_ADMIN);
+                    $adminDao->adjust_org_admin($user_id, $org_id, 0, NGO_ADMIN, 1);
                     error_log("makeOrgAdmin($user_id, $org_id) by $current_user_id");
                 } elseif (isset($post['makeOrgPO'])) {
                     $user_id = $post['makeOrgPO'];

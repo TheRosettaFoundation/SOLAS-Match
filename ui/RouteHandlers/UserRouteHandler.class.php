@@ -607,13 +607,13 @@ class UserRouteHandler
             if ($roles&(SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER | NGO_ADMIN)) {
                 if (isset($post['revokeUser'])) {
                     $user_id = (int)$post['revokeUser'];
-                    $adminDao->adjust_org_admin($user_id, $org_id, NGO_ADMIN | NGO_PROJECT_OFFICER | NGO_LINGUIST, 0);
+                    $adminDao->adjust_org_admin($user_id, $org_id, NGO_ADMIN | NGO_PROJECT_OFFICER | NGO_LINGUIST, 0, 1);
                     $adminDao->adjust_org_admin($user_id, 0, 0, LINGUIST);
                     error_log("t revokeUser($user_id, $org_id) by $current_user_id");
                     return $response;
                 } elseif (isset($post['revokeOrgAdmin'])) {
                     $user_id = (int)$post['revokeOrgAdmin'];
-                    $adminDao->adjust_org_admin($user_id, $org_id, NGO_ADMIN, NGO_PROJECT_OFFICER);
+                    $adminDao->adjust_org_admin($user_id, $org_id, NGO_ADMIN, NGO_PROJECT_OFFICER, 1);
                     error_log("t revokeOrgAdmin($user_id, $org_id) by $current_user_id");
                     return $response;
                 } elseif (isset($post['revokeOrgPO'])) {
@@ -623,7 +623,7 @@ class UserRouteHandler
                     return $response;
                 } elseif (isset($post['makeOrgAdmin'])) {
                     $user_id = (int)$post['makeOrgAdmin'];
-                    $adminDao->adjust_org_admin($user_id, $org_id, 0, NGO_ADMIN);
+                    $adminDao->adjust_org_admin($user_id, $org_id, 0, NGO_ADMIN, 1);
                     error_log("t makeOrgAdmin($user_id, $org_id) by $current_user_id");
                     return $response;
                 } elseif (isset($post['makeOrgPO'])) {
