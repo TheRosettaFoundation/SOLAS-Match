@@ -142,7 +142,7 @@ class AdminDao extends BaseDao
         return $result[0]['roles'];
     }
 
-    public function adjust_org_admin($user_id, $org_id, $remove, $add, $dont_tell_tarjimly = 0)
+    public function adjust_org_admin($user_id, $org_id, $remove, $add, $tell_tarjimly = 0)
     {
 error_log("adjust_org_admin($user_id, $org_id, $remove, $add)");
         LibAPI\PDOWrapper::call('adjust_org_admin', LibAPI\PDOWrapper::cleanse($user_id) . ',' .  LibAPI\PDOWrapper::cleanse($org_id) . ',' . LibAPI\PDOWrapper::cleanse($remove) . ',' . LibAPI\PDOWrapper::cleanse($add));
