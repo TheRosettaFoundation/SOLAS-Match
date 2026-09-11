@@ -144,8 +144,52 @@ class AdminDao extends BaseDao
 
     public function adjust_org_admin($user_id, $org_id, $remove, $add, $tell_tarjimly = 0)
     {
-error_log("adjust_org_admin($user_id, $org_id, $remove, $add)");
+error_log("adjust_org_admin($user_id, $org_id, $remove, $add, $tell_tarjimly)");
         LibAPI\PDOWrapper::call('adjust_org_admin', LibAPI\PDOWrapper::cleanse($user_id) . ',' .  LibAPI\PDOWrapper::cleanse($org_id) . ',' . LibAPI\PDOWrapper::cleanse($remove) . ',' . LibAPI\PDOWrapper::cleanse($add));
+
+        if ($org_id && $tell_tarjimly) {
+            $uid = $this->get_t_uid($user_id);
+            $result = LibAPI\PDOWrapper::call('get_t_org_id', LibAPI\PDOWrapper::cleanse($org_id));
+            if ($uid && !empty($result)) {
+                $t_org_id = $result[0]['t_org_id'];
+                $t_role = ($add == NGO_ADMIN) ? 'admin' : 'user';
+                if ($tell_tarjimly == 1) {
+                    if ($add) {
+                        $req = 'PATCH';
+                        $data = [['uid' => "$uid", 'role' => $t_role]];
+                    } else {
+                        $req = 'DELETE';
+                        $data = [['uid' => "$uid"]];
+                    }
+                } else {
+                    $req = 'POST';
+                    $data = [['uid' => "$uid", 'role' => $t_role]];
+                }
+                $ch = curl_init(Common\Lib\Settings::get('tarjimly.url') . "/api/v3/admins/organizations/$t_org_id/memberships");
+error_log(json_encode($data));//(**)DEL
+                curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+                curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $req);
+                curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json', 'Authorization: Bearer ' . Common\Lib\Settings::get('tarjimly.api_key')]);
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                $result_json = curl_exec($ch);
+error_log("???????$result_json");//(**)DEL
+            }
+        }
+    }
+
+    public function get_t_uid($user_id)
+    {
+        $result = LibAPI\PDOWrapper::call('getUser', "$user_id,null,null,null,null,null,null,null,null");
+        if (empty($result)) return 0;
+
+        $ch = curl_init(Common\Lib\Settings::get('tarjimly.url') . '/api/v3/admins/users?email=' . urlencode($result[0]['email']));
+        curl_setopt($ch, CURLOPT_HTTPHEADER, ['Authorization: Bearer ' . Common\Lib\Settings::get('tarjimly.api_key')]);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $result_json = curl_exec($ch);
+        $json = json_decode($result_json, true);
+        if (empty($json[0]['uid'])) return 0;
+
+        return $json[0]['uid'];
     }
 
     public function adjust_org_admin_source_of_user($user_id, $org_id, $source_of_user, $admin_id)

@@ -1325,6 +1325,9 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                     $data['get_payment_status_for_project'] = $get_payment_status_for_project;
                     $data['users_who_claimed'] = $projectDao->get_users_who_claimed($project_id);
                     $data['ngo_linguists_by_language_pair'] = $projectDao->get_language_pairs_with_ngo_linguists($project_id);
+
+                    $image_list = glob(Common\Lib\Settings::get('files.upload_path') . "proj-$project_id/image/image.*");
+                    if (!empty($image_list)) base64_encode(file_get_contents($image_list[0]));
                 } else $data = [];
             }
         } else $data = [];
