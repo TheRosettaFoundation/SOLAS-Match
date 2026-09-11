@@ -312,6 +312,16 @@ class UserRouteHandler
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:content_display')
             ->add('\SolasMatch\UI\Lib\Middleware:authUserIsLoggedIn')
             ->setName('content_display');
+
+        $app->map(['GET'],
+            '/t_content_list/{type}[/]',
+            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:t_content_list')
+            ->setName('t_content_list');
+
+        $app->map(['GET'],
+            '/t_content_display/{item_id}[/]',
+            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:t_content_display')
+            ->setName('t_content_display');
     }
 
     public function home(Request $request, Response $response, $args = [])
@@ -4038,6 +4048,67 @@ foreach ($rows as $index => $row) {
         if ($_SERVER['HTTP_TWBKEY'] == Common\Lib\Settings::get('tarjimly.twb_key')) $userDao->increment_content_item_views($args['id']);
         $response->getBody()->write(json_encode(['result' => 1]));
         return $response->withHeader('Content-Type', 'application/json');
+    }
+
+    public function t_content_list(Request $request, Response $response, $args)
+    {
+        $type = (int)$args['type'];
+
+        $userDao = new DAO\UserDao();
+
+        if ($data = self::t_validate_user()) {
+            $news = $userDao->get_content_items(null, $type, null, null, 1, null, null, null, 0, 0);
+            $images = [];
+            foreach ($news as $new) {
+                if ($new['number_images']) {
+                    $result = $userDao->get_content_item_attachments($new['id'], 1, null);
+                    if ($result) $images[$new['id']] = base64_encode($result[0]['attachment']);
+                }
+            }
+            $data['news'] = $news;
+            $data['images'] = $images;
+            $data['type'] = $type;
+        }
+        $response->getBody()->write(json_encode($data));
+        return $response->withHeader('Content-Type', 'application/json');
+    }
+
+    public function t_content_display(Request $request, Response $response, $args)
+    {
+        $item_id = (int)$args['item_id'];
+
+        $userDao = new DAO\UserDao();
+        $adminDao = new DAO\AdminDao();
+
+        if ($data = self::t_validate_user()) {
+            $new = $userDao->get_content_items($item_id, null, null, null, ($adminDao->get_roles($_SERVER['HTTP_TWBID'])&(SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER)) ? null : 1, null, null, null, 0, 0);
+            if (!empty($new)) $new = $new[0]; else $new = [];
+            $image = '';
+            if (!empty($new['number_images'])) {
+                $result = $userDao->get_content_item_attachments($new['id'], 1, null);
+                if ($result) $image = base64_encode($result[0]['attachment']);
+            }
+            $userDao->increment_content_item_views($item_id);
+            $data['new'] = $new;
+            $data['image'] = $image;
+        }
+        $response->getBody()->write(json_encode($data));
+        return $response->withHeader('Content-Type', 'application/json');
+    }
+
+    public static function t_validate_user()
+    {
+        $adminDao = new DAO\AdminDao();
+
+        if ($_SERVER['HTTP_TWBKEY'] == Common\Lib\Settings::get('tarjimly.twb_key')) {
+            $user_id = $_SERVER['HTTP_TWBID'];
+            $result = LibAPI\PDOWrapper::call('getUser', "$user_id,null,null,null,null,null,null,null,null");
+            $user = $result[0];
+            unset($user['password'], $user[3], $user['nonce'], $user[9]);
+            $ngo_orgs = ($orgs = $adminDao->get_orgs_if_ngo($user_id)) ? $orgs : [];
+            return ['user' => $user, 'ngo_orgs' => $ngo_orgs];
+        }
+        return [];
     }
 
     public static function flash($key, $value)
