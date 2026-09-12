@@ -314,14 +314,14 @@ class UserRouteHandler
             ->setName('content_display');
 
         $app->map(['GET'],
-            '/t_content_list/{type}[/]',
-            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:t_content_list')
-            ->setName('t_content_list');
+            '/content_list_t/{type}[/]',
+            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:content_list_t')
+            ->setName('content_list_t');
 
         $app->map(['GET'],
-            '/t_content_display/{item_id}[/]',
-            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:t_content_display')
-            ->setName('t_content_display');
+            '/content_display_t/{item_id}[/]',
+            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:content_display_t')
+            ->setName('content_display_t');
     }
 
     public function home(Request $request, Response $response, $args = [])
@@ -4050,7 +4050,7 @@ foreach ($rows as $index => $row) {
         return $response->withHeader('Content-Type', 'application/json');
     }
 
-    public function t_content_list(Request $request, Response $response, $args)
+    public function content_list_t(Request $request, Response $response, $args)
     {
         $type = (int)$args['type'];
 
@@ -4073,7 +4073,7 @@ foreach ($rows as $index => $row) {
         return $response->withHeader('Content-Type', 'application/json');
     }
 
-    public function t_content_display(Request $request, Response $response, $args)
+    public function content_display_t(Request $request, Response $response, $args)
     {
         $item_id = (int)$args['item_id'];
 
