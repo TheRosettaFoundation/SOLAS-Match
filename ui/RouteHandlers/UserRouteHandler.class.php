@@ -4058,15 +4058,13 @@ foreach ($rows as $index => $row) {
 
         if ($data = self::t_validate_user()) {
             $news = $userDao->get_content_items(null, $type, null, null, 1, null, null, null, 0, 0);
-            $images = [];
-            foreach ($news as $new) {
+            foreach ($news as $i => $new) {
                 if ($new['number_images']) {
                     $result = $userDao->get_content_item_attachments($new['id'], 1, null);
-                    if ($result) $images[] = [$new['id'] => base64_encode($result[0]['attachment'])];
+                    if ($result) $news[$i]['image'] = base64_encode($result[0]['attachment']);
                 }
             }
             $data['news'] = $news;
-            $data['images'] = $images;
             $data['type'] = $type;
         }
         $response->getBody()->write(json_encode($data));
@@ -4081,16 +4079,14 @@ foreach ($rows as $index => $row) {
         $adminDao = new DAO\AdminDao();
 
         if ($data = self::t_validate_user()) {
-            $new = $userDao->get_content_items($item_id, null, null, null, ($adminDao->get_roles($_SERVER['HTTP_TWBID'])&(SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER)) ? null : 1, null, null, null, 0, 0);
-            if (!empty($new)) $new = $new[0]; else $new = [];
-            $image = '';
-            if (!empty($new['number_images'])) {
-                $result = $userDao->get_content_item_attachments($new['id'], 1, null);
-                if ($result) $image = base64_encode($result[0]['attachment']);
+            $news = $userDao->get_content_items($item_id, null, null, null, ($adminDao->get_roles($_SERVER['HTTP_TWBID'])&(SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER)) ? null : 1, null, null, null, 0, 0);
+            if (!empty($news)) $news = $news[0]; else $news = [];
+            if (!empty($news['number_images'])) {
+                $result = $userDao->get_content_item_attachments($news['id'], 1, null);
+                if ($result) $news['image'] = base64_encode($result[0]['attachment']);
             }
             $userDao->increment_content_item_views($item_id);
-            $data['new'] = $new;
-            $data['image'] = $image;
+            $data['news'] = $news;
         }
         $response->getBody()->write(json_encode($data));
         return $response->withHeader('Content-Type', 'application/json');
