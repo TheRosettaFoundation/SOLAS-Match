@@ -166,6 +166,7 @@ error_log("adjust_org_admin($user_id, $org_id, $remove, $add, $tell_tarjimly)");
                     $data = [['uid' => "$uid", 'role' => $t_role]];
                 }
                 $ch = curl_init(Common\Lib\Settings::get('tarjimly.url') . "/api/v3/admins/organizations/$t_org_id/memberships");
+error_log(Common\Lib\Settings::get('tarjimly.url') . "/api/v3/admins/organizations/$t_org_id/memberships");//(**)DEL
 error_log(json_encode($data));//(**)DEL
                 curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
                 curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $req);
