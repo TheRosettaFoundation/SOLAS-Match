@@ -156,14 +156,14 @@ error_log("adjust_org_admin($user_id, $org_id, $remove, $add, $tell_tarjimly)");
                 if ($tell_tarjimly == 1) {
                     if ($add) {
                         $req = 'PATCH';
-                        $data = [['uid' => "$uid", 'role' => $t_role]];
+                        $data = [['uid' => "$uid", 'orgRole' => $t_role]];
                     } else {
                         $req = 'DELETE';
                         $data = [['uid' => "$uid"]];
                     }
                 } else {
                     $req = 'POST';
-                    $data = [['uid' => "$uid", 'role' => $t_role]];
+                    $data = [['uid' => "$uid", 'orgRole' => $t_role]];
                 }
                 $ch = curl_init(Common\Lib\Settings::get('tarjimly.url') . "/api/v3/admins/organizations/$t_org_id/memberships");
 error_log(Common\Lib\Settings::get('tarjimly.url') . "/api/v3/admins/organizations/$t_org_id/memberships");//(**)DEL
