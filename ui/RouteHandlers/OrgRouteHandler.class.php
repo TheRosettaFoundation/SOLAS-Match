@@ -253,7 +253,6 @@ class OrgRouteHandler
                         if ($uid = $adminDao->get_t_uid($user_id)) {
                             $data = ['email' => $post['email'], 'name' => $post['orgName'], 'address' => !empty($post['country']) ? $post['country'] : '', 'createdByUserId' => "$uid", 'type' => 'non_profit', 'twbOrgId' => "$org_id"];
                             $ch = curl_init(Common\Lib\Settings::get('tarjimly.url') . '/api/v3/admins/organizations');
-error_log(json_encode($data));//(**)DELRemove
                             curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
                             curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json', 'Authorization: Bearer ' . Common\Lib\Settings::get('tarjimly.api_key')]);
                             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -582,14 +581,11 @@ error_log($result_json);//(**)DELRemove
                             $t_org_id = $result[0]['t_org_id'];
                             $data = ['email' => $post['email'], 'name' => $post['orgName']];
                             $ch = curl_init(Common\Lib\Settings::get('tarjimly.url') . "/api/v3/admins/organizations/$t_org_id");
-error_log(Common\Lib\Settings::get('tarjimly.url') . "/api/v3/admins/organizations/$t_org_id");//(**)DELRemove
-error_log(json_encode($data));//(**)DELRemove
                             curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
                             curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PATCH');
                             curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json', 'Authorization: Bearer ' . Common\Lib\Settings::get('tarjimly.api_key')]);
                             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
                             $result_json = curl_exec($ch);
-error_log($result_json);//(**)DELRemove
                         }
                         return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor("org-public-profile", array("org_id" => $org->getId())));
                     } catch (Common\Exceptions\SolasMatchException $ex) {
