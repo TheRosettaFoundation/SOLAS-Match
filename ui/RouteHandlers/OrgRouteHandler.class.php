@@ -216,12 +216,12 @@ class OrgRouteHandler
                 $projectDao = new DAO\ProjectDao();
 
                 try {
-                    error_log("Calling createOrg(, $user_id)");
                     $new_org = $orgDao->createOrg($org, $user_id);
                     if ($new_org) {
+                        $org_id = $new_org->getId();
                         $org_name = $org->getName();
                         $org_biography = $org->getBiography();
-                        error_log("Called createOrg() for: $org_name");
+                        error_log("createOrg(, $user_id): $org_id, $org_name");
                         UserRouteHandler::flash(
                             'success',
                             sprintf(Lib\Localisation::getTranslation('create_org_created'), $org_name)
@@ -245,7 +245,21 @@ class OrgRouteHandler
                         $result = curl_exec($ch);
                         curl_close($ch);
                         $res = json_decode($result, true);
-                        $projectDao->set_memsource_client($new_org->getId(), $res['id'], $res['uid']);
+                        $projectDao->set_memsource_client($org_id, $res['id'], $res['uid']);
+
+                        $adminDao = new DAO\AdminDao();
+                        if ($uid = $adminDao->get_t_uid($user_id)) {
+                            $data = ['email' => $post['email'], 'name' => $post['orgName'], 'address' => !empty($post['country']) ? $post['country'] : '', 'createdByUserId' => "$uid", 'type' => 'non_profit', 'twbOrgId' => "$org_id"];
+                            $ch = curl_init(Common\Lib\Settings::get('tarjimly.url') . '/api/v3/admins/organizations');
+error_log(json_encode($data));//(**)DELRemove
+                            curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+                            curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json', 'Authorization: Bearer ' . Common\Lib\Settings::get('tarjimly.api_key')]);
+                            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                            $result_json = curl_exec($ch);
+error_log($result_json);//(**)DELRemove
+
+                            $adminDao->adjust_org_admin($user_id, $org_id, 0, NGO_ADMIN, 2);
+                        } else error_log("Could not get uid for $user_id");
 
                         return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('org-dashboard'));
                     }
@@ -560,6 +574,21 @@ class OrgRouteHandler
                     $orgDao = new DAO\OrganisationDao();
                     try {
                         $orgDao->updateOrg($org);
+
+                        $result = LibAPI\PDOWrapper::call('get_t_org_id', LibAPI\PDOWrapper::cleanse($org_id));
+                        if (!empty($result)) {
+                            $t_org_id = $result[0]['t_org_id'];
+                            $data = ['email' => $post['email'], 'name' => $post['orgName']];
+                            $ch = curl_init(Common\Lib\Settings::get('tarjimly.url') . "/api/v3/admins/organizations/$t_org_id");
+error_log(Common\Lib\Settings::get('tarjimly.url') . "/api/v3/admins/organizations/$t_org_id");//(**)DELRemove
+error_log(json_encode($data));//(**)DELRemove
+                            curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+                            curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PATCH');
+                            curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json', 'Authorization: Bearer ' . Common\Lib\Settings::get('tarjimly.api_key')]);
+                            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                            $result_json = curl_exec($ch);
+error_log($result_json);//(**)DELRemove
+                        }
                         return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor("org-public-profile", array("org_id" => $org->getId())));
                     } catch (Common\Exceptions\SolasMatchException $ex) {
                         $org_name = $org->getName();
