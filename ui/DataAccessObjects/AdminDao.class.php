@@ -166,14 +166,11 @@ error_log("adjust_org_admin($user_id, $org_id, $remove, $add, $tell_tarjimly)");
                     $data = [['uid' => "$uid", 'orgRole' => $t_role]];
                 }
                 $ch = curl_init(Common\Lib\Settings::get('tarjimly.url') . "/api/v3/admins/organizations/$t_org_id/memberships");
-error_log(Common\Lib\Settings::get('tarjimly.url') . "/api/v3/admins/organizations/$t_org_id/memberships");//(**)DEL
-error_log(json_encode($data));//(**)DEL
                 curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
                 curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $req);
                 curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json', 'Authorization: Bearer ' . Common\Lib\Settings::get('tarjimly.api_key')]);
                 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
                 $result_json = curl_exec($ch);
-error_log("???????$result_json");//(**)DEL
             }
         }
     }

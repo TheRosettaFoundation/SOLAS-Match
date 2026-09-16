@@ -962,16 +962,6 @@ error_log("claimTask_shell($userId, $taskId)");
         return $org_id;
     }
 
-    public static function insertOrg($org_name, $email)
-    {
-        $org_id = 0;
-        $result = LibAPI\PDOWrapper::call('organisationInsertAndUpdate', 'null,null,' . LibAPI\PDOWrapper::cleanseNullOrWrapStr($org_name) . ',null,' . LibAPI\PDOWrapper::cleanseNullOrWrapStr($email) . ',null,null,null,null');
-        if (!empty($result)) {
-            $org_id = $result[0]['id'];
-        }
-        return $org_id;
-    }
-
     public function finishRegistration($uuid)
     {
         $request = "{$this->siteApi}v0/users/$uuid/finishRegistration";
