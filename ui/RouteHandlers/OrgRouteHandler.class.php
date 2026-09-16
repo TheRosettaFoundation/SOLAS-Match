@@ -7,8 +7,10 @@ use \SolasMatch\UI\Lib as Lib;
 use \SolasMatch\Common as Common;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
+use \SolasMatch\API\Lib as LibAPI;
 
 require_once __DIR__."/../lib/Validator.php";
+require_once __DIR__ . '/../../api/lib/PDOWrapper.class.php';
 
 class OrgRouteHandler
 {
