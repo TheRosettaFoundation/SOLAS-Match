@@ -1126,8 +1126,7 @@ error_log("un/pw verification errno: $errno, responseCode: $responseCode");//(**
                         }
                     }
                     $ch = curl_init(Common\Lib\Settings::get('tarjimly.url') . '/api/v3/admins/users/bulk-create');
-error_log('un/pw verification bulk-create POST JSON:' . print_r($data, 1));//(**)
-error_log(json_encode($data));//(**)
+error_log('un/pw verification bulk-create POST JSON: ' . json_encode($data));//(**)
                     curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
                     curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json', 'Authorization: Bearer ' . Common\Lib\Settings::get('tarjimly.api_key')]);
                     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
