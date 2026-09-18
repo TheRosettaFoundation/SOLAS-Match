@@ -1510,6 +1510,7 @@ error_log('login PUT JSON:' . print_r($data, 1));//(**)
             curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json', 'Authorization: Bearer ' . Common\Lib\Settings::get('tarjimly.api_key')]);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
             $dummy = curl_exec($ch);
+error_log("dummy: $dummy");//(**)
 
             $userDao->update_terms_accepted($user_id, 1); // Will be redirected to googleregister
         } else {
