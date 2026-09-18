@@ -1239,7 +1239,8 @@ error_log("result_json: $result_json");//(**)
         if ($roles == NGO_LINGUIST || $roles == (NGO_LINGUIST | LINGUIST)) return ['translator', $org_id, ''];
         if ($roles == LINGUIST) return ['translator', 0, ''];
         if ($roles&(SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER | FINANCE | AIDWORKER)) return ['aidworker', 0, ''];
-        return ['aidworker', $org_id, 'admin'];
+        if ($roles&NGO_ADMIN) return ['aidworker', $org_id, 'admin'];
+        return ['aidworker', $org_id, ''];
     }
 
     public function invite_admins(Request $request, Response $response, $args)
