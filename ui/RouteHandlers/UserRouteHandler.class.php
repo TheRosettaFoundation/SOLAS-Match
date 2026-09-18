@@ -1107,7 +1107,7 @@ error_log("un/pw verification errno: $errno, responseCode: $responseCode");//(**
                     $result = LibAPI\PDOWrapper::call('getUserPersonalInfo', 'null,' . LibAPI\PDOWrapper::cleanse($user_id) . ',null,null,null,null,null,null,null,null,null,null');
                     $info = $result[0];
 
-                    [$t_role, $org_id] = $this->get_requested_t_role($user_id, $email);
+                    [$t_role, $org_id, $o_role] = $this->get_requested_t_role($user_id, $email);
                     $data = [[
                         'firstName' => $info['firstName'],
                         'lastName' => $info['lastName'],
@@ -1225,21 +1225,21 @@ error_log("result_json: $result_json");//(**)
         $adminDao = new DAO\AdminDao();
 
         if (!empty($_SESSION['track_code']) && substr($_SESSION['track_code'], 0, 8) === 'org_ling') {
-            if ($org_id = $adminDao->decode_ngo_reg_link(substr($_SESSION['track_code'], 8))) return ['translator', $org_id];
-            return ['translator', 0];
+            if ($org_id = $adminDao->decode_ngo_reg_link(substr($_SESSION['track_code'], 8))) return ['translator', $org_id, ''];
+            return ['translator', 0, ''];
         }
-        if (empty($_SESSION['reg_data'])) return ['translator', 0];
+        if (empty($_SESSION['reg_data'])) return ['translator', 0, ''];
         $result = LibAPI\PDOWrapper::call('get_special_registration', LibAPI\PDOWrapper::cleanseWrapStr($_SESSION['reg_data']) . ',' . LibAPI\PDOWrapper::cleanseWrapStr(Common\Lib\Settings::get('site.reg_key')) . ',' . LibAPI\PDOWrapper::cleanse($user_id) . ',' . LibAPI\PDOWrapper::cleanseWrapStr($email));
-        if (empty($result)) return ['translator', 0];
+        if (empty($result)) return ['translator', 0, ''];
         $special_registration = $result[0];
         $roles = $special_registration['roles'];
         $org_id = $special_registration['org_id'];
-        if ($special_registration['mismatch']) return ['translator', 0];
+        if ($special_registration['mismatch']) return ['translator', 0, ''];
 
-        if ($roles == NGO_LINGUIST || $roles == (NGO_LINGUIST | LINGUIST)) return ['translator', $org_id];
-        if ($roles == LINGUIST) return ['translator', 0];
-        if ($roles&(SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER | FINANCE | AIDWORKER)) return ['aidworker', 0];
-        return ['aidworker', $org_id];
+        if ($roles == NGO_LINGUIST || $roles == (NGO_LINGUIST | LINGUIST)) return ['translator', $org_id, ''];
+        if ($roles == LINGUIST) return ['translator', 0, ''];
+        if ($roles&(SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER | FINANCE | AIDWORKER)) return ['aidworker', 0, ''];
+        return ['aidworker', $org_id, 'admin'];
     }
 
     public function invite_admins(Request $request, Response $response, $args)
@@ -1431,7 +1431,7 @@ error_log('Google login JSON:' . print_r($json, 1));//(**)
             $data = ['twbId' => "$user_id"];
             if (empty($json['role'])) {
                 if ($google_login) {
-                    [$t_role, $org_id] = $this->get_requested_t_role($user_id, $email);
+                    [$t_role, $org_id, $o_role] = $this->get_requested_t_role($user_id, $email);
                     $data['role'] = $t_role;
                     if ($org_id) {
                         $result = LibAPI\PDOWrapper::call('get_t_org_id', LibAPI\PDOWrapper::cleanse($org_id));
