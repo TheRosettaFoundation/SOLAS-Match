@@ -1120,7 +1120,10 @@ error_log("un/pw verification errno: $errno, responseCode: $responseCode");//(**
                         'twbId' => "$user_id"]];
                     if ($org_id) {
                         $result = LibAPI\PDOWrapper::call('get_t_org_id', LibAPI\PDOWrapper::cleanse($org_id));
-                        if (!empty($result)) $data[0]['organizationId'] = "{$result[0]['t_org_id']}";
+                        if (!empty($result)) {
+                          $data[0]['organizationId'] = "{$result[0]['t_org_id']}";
+                          if (!empty($o_role)) $data[0]['orgRole'] = $o_role;
+                        }
                     }
                     $ch = curl_init(Common\Lib\Settings::get('tarjimly.url') . '/api/v3/admins/users/bulk-create');
 error_log('un/pw verification bulk-create POST JSON:' . print_r($data, 1));//(**)
@@ -1436,7 +1439,10 @@ error_log('Google login JSON:' . print_r($json, 1));//(**)
                     $data['role'] = $t_role;
                     if ($org_id) {
                         $result = LibAPI\PDOWrapper::call('get_t_org_id', LibAPI\PDOWrapper::cleanse($org_id));
-                        if (!empty($result)) $data['organizationId'] = "{$result[0]['t_org_id']}";
+                        if (!empty($result)) {
+                            $data['organizationId'] = "{$result[0]['t_org_id']}";
+                            if (!empty($o_role)) $data['orgRole'] = $o_role;
+                        }
                     }
                 }
             } else {
