@@ -44,6 +44,11 @@ class ProjectRouteHandler
             ->setName('project-alter');
 
         $app->map(['GET', 'POST'],
+            '/project/{project_id}/t_alter[/]',
+            '\SolasMatch\UI\RouteHandlers\ProjectRouteHandler:t_project_alter')
+            ->setName('t_project_alter');
+
+        $app->map(['GET', 'POST'],
             '/project/{org_id}/create[/]',
             '\SolasMatch\UI\RouteHandlers\ProjectRouteHandler:projectCreate')
             ->add('\SolasMatch\UI\Lib\Middleware:authUserForOrg')
@@ -1635,6 +1640,129 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
         ));
 
         return UserRouteHandler::render("project/project.alter.tpl", $response);
+    }
+
+    public function t_project_alter(Request $request, Response $response, $args)
+    {
+        $project_id = (int)$args['project_id'];
+
+        $projectDao = new DAO\ProjectDao();
+
+        $result = LibAPI\PDOWrapper::call('getProject', "$project_id,null,null,null,null,null,null,null,null,null,null,null,null");
+        if (!empty($result)) {
+            $project = $result[0];
+            $org_id = $project['organisationId'];
+
+            if ($data = UserRouteHandler::t_validate($org_id)) {
+                $user_id = $data['user']['id'];
+
+                $memsource_project = $projectDao->get_memsource_project($project_id);
+
+                if ($post = $request->getParsedBody()) {
+
+                    if (isset($post['delete_image'])) {
+                        $files = glob(Common\Lib\Settings::get('files.upload_path') . "proj-$project_id/image/image.*");
+                        if (!empty($files)) {
+                            $file = $files[0];
+                            $name = pathinfo($file, PATHINFO_FILENAME);
+                            $ext = pathinfo($file, PATHINFO_EXTENSION);
+                            $dir = pathinfo($file, PATHINFO_DIRNAME);
+                            $date = date('-d-m-Y-h-i-s-a', time());
+                            rename($file, "$dir/$name$date.$ext");
+                            $project['imageUploaded'] = 0;
+                            $project['imageApproved'] = 0;
+                            $projectDao->update_project_directly($project);
+
+                            LibAPI\PDOWrapper::call('insert_queue_request', "3,30,0,0,0,$project_id,0,0,''"); // ProjectImageRemovedEmail
+                        }
+                        return $response;
+                    }
+
+                    if (empty($post['project_title']) || empty($post['project_description']) || empty($post['project_impact']) || empty($post['project_deadline']) || !preg_match('/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/', $post['project_deadline'])) {
+                        $response->getBody()->write(json_encode(['error' => 'Missing fields or bad date']));
+                        return $response->withHeader('Content-Type', 'application/json');
+                    }
+                    $set_dateDue_in_memsource = $project['deadline'] != $post['project_deadline'];
+                    $projectDao->queue_asana_project($project_id);
+
+                    $project['title'] = mb_substr($post['project_title'], 0, 128);
+                    $project['description'] = $post['project_description'];
+                    $project['impact'] = $post['project_impact'];
+                    $project['deadline'] = $post['project_deadline'];
+                    $project['reference'] = $post['project_reference'];
+                    error_log("UPDATED NGO ($org_id, $user_id) Project: $project_id, " . $post['project_title']);
+                    LibAPI\PDOWrapper::call('projectInsertAndUpdate', "$project_id," .
+                        LibAPI\PDOWrapper::cleanseNullOrWrapStr(mb_substr($post['project_title'], 0, 128)) . ',' .
+                        LibAPI\PDOWrapper::cleanseNullOrWrapStr($post['project_description']) . ',' .
+                        LibAPI\PDOWrapper::cleanseNullOrWrapStr($post['project_impact']) . ',' .
+                        LibAPI\PDOWrapper::cleanseNullOrWrapStr($post['project_deadline']) .
+                        ",$org_id," .
+                        LibAPI\PDOWrapper::cleanseNullOrWrapStr($post['project_reference']) .
+                        ",NULL,NULL,NULL,NULL,{$project['image_uploaded']},{$project['image_approved']}");
+
+                    $image_failed = false;
+                    if (!empty($_FILES['projectImageFile']['name'])) {
+                        $filename = $_FILES['projectImageFile']['name'];
+                        $ext_index = strrpos($filename, '.');
+                        $ext = substr($filename, $ext_index + 1);
+                        $ext = strtolower($ext);
+                        $filename = substr($filename, 0, $ext_index + 1) . $ext;
+
+                        if ($ext_index <= 0 || !in_array($ext, explode(',', Common\Lib\Settings::get('projectImages.supported_formats'))) || !empty($_FILES['projectImageFile']['error']) || empty($_FILES['projectImageFile']['tmp_name']) ||(($image = file_get_contents($_FILES['projectImageFile']['tmp_name'])) === false)) {
+                            $image_failed = true;
+                        } else {
+                            $imageMaxWidth  = Common\Lib\Settings::get('projectImages.max_width');
+                            $imageMaxHeight = Common\Lib\Settings::get('projectImages.max_height');
+                            list($width, $height) = getimagesize($_FILES['projectImageFile']['tmp_name']);
+
+                            if (empty($width) || empty($height) || (($width <= $imageMaxWidth) && ($height <= $imageMaxHeight))) {
+                                $projectDao->save_image($project_id, $filename, $image);
+                                $success = true;
+                            } else { // Resize the image
+                                $ratio = min($imageMaxWidth / $width, $imageMaxHeight / $height);
+                                $newWidth  = floor($width * $ratio);
+                                $newHeight = floor($height * $ratio);
+
+                                if ($ext == 'png') {
+                                    $img = imagecreatefrompng($_FILES['projectImageFile']['tmp_name']);
+                                    $filename = substr($filename, 0, $ext_index + 1) . 'jpg';
+                                } else {
+                                    $img = imagecreatefromjpeg($_FILES['projectImageFile']['tmp_name']);
+                                }
+
+                                $tci = imagecreatetruecolor($newWidth, $newHeight);
+                                if (!empty($img) && $tci !== false) {
+                                    if (imagecopyresampled($tci, $img, 0, 0, 0, 0, $newWidth, $newHeight, $width, $height)) {
+                                        imagejpeg($tci, $_FILES['projectImageFile']['tmp_name'], 100); // Overwrite
+                                        // If we did not get this far, give up and use the un-resized image
+                                    }
+                                }
+
+                                $success = false;
+                                $image = file_get_contents($_FILES['projectImageFile']['tmp_name']);
+                                if ($image !== false) {
+                                    $projectDao->save_image($project_id, $filename, $image);
+                                    $success = true;
+                                }
+                            }
+                            if (!$success) $image_failed = true;
+                        }
+                    }
+                    if ($image_failed) {
+                        $response->getBody()->write(json_encode(['error' => 'Project image failed to upload']));
+                        return $response->withHeader('Content-Type', 'application/json');
+                    }
+
+                    if ($set_dateDue_in_memsource) $projectDao->set_dateDue_in_memsource_for_project($memsource_project, $post['project_deadline']);
+
+                    $response->getBody()->write(json_encode(['project_id' => $project_id]));
+                    return $response->withHeader('Content-Type', 'application/json');
+                }
+                $data['project'] = $project;
+            }
+        } else $data = [];
+        $response->getBody()->write(json_encode($data));
+        return $response->withHeader('Content-Type', 'application/json');
     }
 
     public function projectCreate(Request $request, Response $response, $args)

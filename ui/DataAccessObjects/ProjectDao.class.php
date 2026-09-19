@@ -166,6 +166,18 @@ else error_log("call projectInsertAndUpdate($args): Fail");//(**)
         LibAPI\PDOWrapper::call('projectInsertAndUpdate', $args);
     }
 
+    public function update_project_directly($project)
+    {
+        LibAPI\PDOWrapper::call('projectInsertAndUpdate', "{$project['id']}," .
+            LibAPI\PDOWrapper::cleanseNullOrWrapStr($project['title']) . ',' .
+            LibAPI\PDOWrapper::cleanseNullOrWrapStr($project['description']) . ',' .
+            LibAPI\PDOWrapper::cleanseNullOrWrapStr($project['impact']) . ',' .
+            LibAPI\PDOWrapper::cleanseNullOrWrapStr($project['project_deadline']) .
+            ",$org_id," .
+            LibAPI\PDOWrapper::cleanseNullOrWrapStr($project['project_reference']) .
+            ",NULL,NULL,NULL,NULL,{$project['imageUploaded']},{$project['imageApproved']}");
+    }
+
     public function add_to_project_word_count($project_id, $word_count)
     {
         LibAPI\PDOWrapper::call('add_to_project_word_count', LibAPI\PDOWrapper::cleanse($project_id) . ',' . LibAPI\PDOWrapper::cleanse($word_count));
