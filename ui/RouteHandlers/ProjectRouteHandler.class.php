@@ -1690,7 +1690,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                     $project['impact'] = $post['project_impact'];
                     $project['deadline'] = $post['project_deadline'];
                     $project['reference'] = $post['project_reference'];
-                    error_log("UPDATED NGO ($org_id, $user_id) Project: $project_id, " . $post['project_title']);
+                    error_log("UPDATED NGO ($org_id, $user_id) Project: $project_id, {$post['project_title']}");
                     $projectDao->update_project_directly($project);
 
                     $image_failed = false;
