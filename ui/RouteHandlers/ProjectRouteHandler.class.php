@@ -1691,14 +1691,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                     $project['deadline'] = $post['project_deadline'];
                     $project['reference'] = $post['project_reference'];
                     error_log("UPDATED NGO ($org_id, $user_id) Project: $project_id, " . $post['project_title']);
-                    LibAPI\PDOWrapper::call('projectInsertAndUpdate', "$project_id," .
-                        LibAPI\PDOWrapper::cleanseNullOrWrapStr(mb_substr($post['project_title'], 0, 128)) . ',' .
-                        LibAPI\PDOWrapper::cleanseNullOrWrapStr($post['project_description']) . ',' .
-                        LibAPI\PDOWrapper::cleanseNullOrWrapStr($post['project_impact']) . ',' .
-                        LibAPI\PDOWrapper::cleanseNullOrWrapStr($post['project_deadline']) .
-                        ",$org_id," .
-                        LibAPI\PDOWrapper::cleanseNullOrWrapStr($post['project_reference']) .
-                        ",NULL,NULL,NULL,NULL,{$project['image_uploaded']},{$project['image_approved']}");
+                    $projectDao->update_project_directly($project);
 
                     $image_failed = false;
                     if (!empty($_FILES['projectImageFile']['name'])) {
