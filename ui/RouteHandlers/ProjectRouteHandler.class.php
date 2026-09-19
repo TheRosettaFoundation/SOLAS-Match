@@ -1758,7 +1758,6 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                     $response->getBody()->write(json_encode(['project_id' => $project_id]));
                     return $response->withHeader('Content-Type', 'application/json');
                 }
-
                 $data['project'] = $project;
                 $image_list = glob(Common\Lib\Settings::get('files.upload_path') . "proj-$project_id/image/image.*");
                 if (!empty($image_list)) $data['image'] = base64_encode(file_get_contents($image_list[0]));
