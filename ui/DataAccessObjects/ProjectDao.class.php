@@ -172,9 +172,9 @@ else error_log("call projectInsertAndUpdate($args): Fail");//(**)
             LibAPI\PDOWrapper::cleanseNullOrWrapStr($project['title']) . ',' .
             LibAPI\PDOWrapper::cleanseNullOrWrapStr($project['description']) . ',' .
             LibAPI\PDOWrapper::cleanseNullOrWrapStr($project['impact']) . ',' .
-            LibAPI\PDOWrapper::cleanseNullOrWrapStr($project['project_deadline']) .
-            ",$org_id," .
-            LibAPI\PDOWrapper::cleanseNullOrWrapStr($project['project_reference']) .
+            LibAPI\PDOWrapper::cleanseNullOrWrapStr($project['deadline']) .
+            ',NULL,' .
+            LibAPI\PDOWrapper::cleanseNullOrWrapStr($project['reference']) .
             ",NULL,NULL,NULL,NULL,{$project['imageUploaded']},{$project['imageApproved']}");
     }
 
