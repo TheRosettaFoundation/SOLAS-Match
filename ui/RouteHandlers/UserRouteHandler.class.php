@@ -4136,7 +4136,7 @@ if (!empty($post['biography'])) error_log("empty biography");//(**)
 if (!empty($post['email'])) error_log("email");//(**)
 if (Lib\Validator::validateEmail($post['email'])) error_log("not valid email");//(**)
 if (Lib\Validator::filterSpecialChars($post['name'])) error_log("not filetr name");//(**)
-            if (($post = $request->getParsedBody()) && !empty($post['name']) && !empty($post['biography']) && !empty($post['email']) && Lib\Validator::validateEmail($post['email']) && Lib\Validator::filterSpecialChars($post['name'])) {
+            if ($request->getMethod() === 'POST' && ($post = $request->getParsedBody()) && !empty($post['name']) && !empty($post['biography']) && !empty($post['email']) && Lib\Validator::validateEmail($post['email']) && Lib\Validator::filterSpecialChars($post['name'])) {
                 LibAPI\PDOWrapper::call('organisationInsertAndUpdate', "$org_id," .
                     LibAPI\PDOWrapper::cleanseWrapStr(Lib\Validator::validateURL($post['homepage']) ? Lib\Validator::addhttp($post['homepage']) : '') . ',' .
                     LibAPI\PDOWrapper::cleanseWrapStr($post['name']) . ',' .
