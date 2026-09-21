@@ -107,7 +107,7 @@
                              </div>
                     {/if}
                    
-                    {if $private_access || ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER))}
+                    {if $private_access || ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $VOLUNTEER_PO + $COMMUNITY_OFFICER))}
                     
                         <div class="d-flex justify-content-between flex-wrap mb-3">
                          <a href="mailto:{$this_user->getEmail()}" class=" text-body"> {$this_user->getEmail()}</a>
