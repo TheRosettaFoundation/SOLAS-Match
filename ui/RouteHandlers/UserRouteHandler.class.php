@@ -4137,29 +4137,32 @@ if (!empty($post['biography'])) error_log("empty biography");//(**)
 if (!empty($post['email'])) error_log("email");//(**)
 if (Lib\Validator::validateEmail($post['email'])) error_log("not valid email");//(**)
 if (Lib\Validator::filterSpecialChars($post['name'])) error_log("not filetr name");//(**)
-            if ($request->getMethod() === 'POST' && ($post = $request->getParsedBody()) && !empty($post['name']) && !empty($post['biography']) && !empty($post['email']) && Lib\Validator::validateEmail($post['email']) && Lib\Validator::filterSpecialChars($post['name'])) {
-                LibAPI\PDOWrapper::call('organisationInsertAndUpdate', "$org_id," .
-                    LibAPI\PDOWrapper::cleanseWrapStr(Lib\Validator::validateURL($post['homepage']) ? Lib\Validator::addhttp($post['homepage']) : '') . ',' .
-                    LibAPI\PDOWrapper::cleanseWrapStr($post['name']) . ',' .
-                    LibAPI\PDOWrapper::cleanseWrapStr($post['biography']) . ',' .
-                    LibAPI\PDOWrapper::cleanseWrapStr($post['email']) . ',' .
-                    LibAPI\PDOWrapper::cleanseWrapStr(Lib\Validator::validateURL($post['facebook']) ? Lib\Validator::addhttp($post['facebook']) : '') . ',' .
-                    LibAPI\PDOWrapper::cleanseWrapStr(Lib\Validator::validateURL($post['linkedin']) ? Lib\Validator::addhttp($post['linkedin']) : '') . ',' .
-                    LibAPI\PDOWrapper::cleanseWrapStr($post['country']) . ',' .
-                    LibAPI\PDOWrapper::cleanseWrapStr(Lib\Validator::validateURL($post['twitter']) ? Lib\Validator::addhttp($post['twitter']) : ''));
-                $result = LibAPI\PDOWrapper::call('get_t_org_id', LibAPI\PDOWrapper::cleanse($org_id));
-                if (!empty($result)) {
-                    $t_org_id = $result[0]['t_org_id'];
-                    $ch = curl_init(Common\Lib\Settings::get('tarjimly.url') . "/api/v3/admins/organizations/$t_org_id");
-                    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode(['email' => $post['email'], 'name' => $post['name']]));
-                    curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PATCH');
-                    curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json', 'Authorization: Bearer ' . Common\Lib\Settings::get('tarjimly.api_key')]);
-                    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-                    $result_json = curl_exec($ch);
+            if ($request->getMethod() === 'POST') {
+                $post = $request->getParsedBody();
+                if (!empty($post['name']) && !empty($post['biography']) && !empty($post['email']) && Lib\Validator::validateEmail($post['email']) && Lib\Validator::filterSpecialChars($post['name'])) {
+                    LibAPI\PDOWrapper::call('organisationInsertAndUpdate', "$org_id," .
+                        LibAPI\PDOWrapper::cleanseWrapStr(Lib\Validator::validateURL($post['homepage']) ? Lib\Validator::addhttp($post['homepage']) : '') . ',' .
+                        LibAPI\PDOWrapper::cleanseWrapStr($post['name']) . ',' .
+                        LibAPI\PDOWrapper::cleanseWrapStr($post['biography']) . ',' .
+                        LibAPI\PDOWrapper::cleanseWrapStr($post['email']) . ',' .
+                        LibAPI\PDOWrapper::cleanseWrapStr(Lib\Validator::validateURL($post['facebook']) ? Lib\Validator::addhttp($post['facebook']) : '') . ',' .
+                        LibAPI\PDOWrapper::cleanseWrapStr(Lib\Validator::validateURL($post['linkedin']) ? Lib\Validator::addhttp($post['linkedin']) : '') . ',' .
+                        LibAPI\PDOWrapper::cleanseWrapStr($post['country']) . ',' .
+                        LibAPI\PDOWrapper::cleanseWrapStr(Lib\Validator::validateURL($post['twitter']) ? Lib\Validator::addhttp($post['twitter']) : ''));
+                    $result = LibAPI\PDOWrapper::call('get_t_org_id', LibAPI\PDOWrapper::cleanse($org_id));
+                    if (!empty($result)) {
+                        $t_org_id = $result[0]['t_org_id'];
+                        $ch = curl_init(Common\Lib\Settings::get('tarjimly.url') . "/api/v3/admins/organizations/$t_org_id");
+                        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode(['email' => $post['email'], 'name' => $post['name']]));
+                        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PATCH');
+                        curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json', 'Authorization: Bearer ' . Common\Lib\Settings::get('tarjimly.api_key')]);
+                        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                        $result_json = curl_exec($ch);
+                    }
+                } else {
+                    $response->getBody()->write(json_encode(['error' => 'Missing fields, bad name or email']));
+                    return $response->withHeader('Content-Type', 'application/json');
                 }
-            } else {
-                $response->getBody()->write(json_encode(['error' => 'Missing fields, bad name or email']));
-                return $response->withHeader('Content-Type', 'application/json');
             }
             $data['org'] = $org;
         }
