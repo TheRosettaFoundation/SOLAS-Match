@@ -393,7 +393,7 @@
                             <hr class="bg-light-subtle"/>
 
                             {if !empty($moodle_datas)}
-                                {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
+                                {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $VOLUNTEER_PO + $COMMUNITY_OFFICER)}
                                     <h4 class="mb-3 fw-bold">Learning Center Courses</h4>
                                     <div>
                                         <ul>
@@ -572,7 +572,7 @@
                             <ul>
                         {foreach from=$certifications item=certification}
                         <li>
-                        {if $private_access || ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER))}
+                        {if $private_access || ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $VOLUNTEER_PO + $COMMUNITY_OFFICER))}
                             {if ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)) && $certification['reviewed'] == 0 && $certification['certification_key'] != 'TRANSLATOR' && $certification['certification_key'] != 'TWB'}
                             <form method="post" action="{urlFor name="user-public-profile" options="user_id.$user_id"}">
                                 <input type="submit" class="btn btn-primary text-white " name="mark_certification_reviewed" value="Mark Reviewed" />
