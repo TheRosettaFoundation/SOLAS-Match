@@ -322,6 +322,11 @@ class UserRouteHandler
             '/content_display_t/{item_id}[/]',
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:content_display_t')
             ->setName('content_display_t');
+
+        $app->map(['GET', 'POST'],
+            '/org/{org_id}/t_private[/]',
+            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:t_private')
+            ->setName('t_private');
     }
 
     public function home(Request $request, Response $response, $args = [])
@@ -4112,6 +4117,48 @@ foreach ($rows as $index => $row) {
             return ['user' => $user, 'ngo_orgs' => $ngo_orgs];
         }
         return [];
+    }
+
+    public function t_private(Request $request, Response $response, $args)
+    {
+        $org_id = (int)$args['org_id'];
+
+        if ($data = UserRouteHandler::t_validate($org_id)) {
+            $result = LibAPI\PDOWrapper::call('getOrg', "$org_id,null,null,null,null,null,null,null,null");
+            $org = $result[0];
+
+            $org['facebook'] = $org['address'];
+            $org['linkedin'] = $org['city'];
+            $org['twitter'] = $org['regionalFocus'];
+
+            if (($post = $request->getParsedBody()) && !empty($post['name']) && !empty($post['biography']) && !empty($post['email']) && Lib\Validator::validateEmail($post['email']) && Lib\Validator::filterSpecialChars($post['name'])) {
+                LibAPI\PDOWrapper::call('organisationInsertAndUpdate', "$org_id," .
+                    LibAPI\PDOWrapper::cleanseWrapStr(Lib\Validator::validateURL($post['homepage']) ? Lib\Validator::addhttp($post['homepage']) : '') . ',' .
+                    LibAPI\PDOWrapper::cleanseWrapStr($post['name']) . ',' .
+                    LibAPI\PDOWrapper::cleanseWrapStr($post['biography']) . ',' .
+                    LibAPI\PDOWrapper::cleanseWrapStr($post['email']) . ',' .
+                    LibAPI\PDOWrapper::cleanseWrapStr(Lib\Validator::validateURL($post['facebook']) ? Lib\Validator::addhttp($post['facebook']) : '') . ',' .
+                    LibAPI\PDOWrapper::cleanseWrapStr(Lib\Validator::validateURL($post['linkedin']) ? Lib\Validator::addhttp($post['linkedin']) : '') . ',' .
+                    LibAPI\PDOWrapper::cleanseWrapStr($post['country']) . ',' .
+                    LibAPI\PDOWrapper::cleanseWrapStr(Lib\Validator::validateURL($post['twitter']) ? Lib\Validator::addhttp($post['twitter']) : ''));
+                $result = LibAPI\PDOWrapper::call('get_t_org_id', LibAPI\PDOWrapper::cleanse($org_id));
+                if (!empty($result)) {
+                    $t_org_id = $result[0]['t_org_id'];
+                    $ch = curl_init(Common\Lib\Settings::get('tarjimly.url') . "/api/v3/admins/organizations/$t_org_id");
+                    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode(['email' => $post['email'], 'name' => $post['name']]));
+                    curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PATCH');
+                    curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json', 'Authorization: Bearer ' . Common\Lib\Settings::get('tarjimly.api_key')]);
+                    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                    $result_json = curl_exec($ch);
+                }
+            } else {
+                $response->getBody()->write(json_encode(['error' => 'Missing fields, bad name or email']));
+                return $response->withHeader('Content-Type', 'application/json');
+            }
+            $data['org'] = $org;
+        }
+        $response->getBody()->write(json_encode($data));
+        return $response->withHeader('Content-Type', 'application/json');
     }
 
     public static function flash($key, $value)
