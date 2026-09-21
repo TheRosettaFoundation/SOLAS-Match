@@ -4131,12 +4131,6 @@ foreach ($rows as $index => $row) {
             $org['linkedin'] = $org['city'];
             $org['twitter'] = $org['regionalFocus'];
 
-$post = $request->getParsedBody();//(**)
-if (!empty($post['name'])) error_log("empty name");//(**)
-if (!empty($post['biography'])) error_log("empty biography");//(**)
-if (!empty($post['email'])) error_log("email");//(**)
-if (Lib\Validator::validateEmail($post['email'])) error_log("not valid email");//(**)
-if (Lib\Validator::filterSpecialChars($post['name'])) error_log("not filetr name");//(**)
             if ($request->getMethod() === 'POST') {
                 $post = $request->getParsedBody();
                 if (!empty($post['name']) && !empty($post['biography']) && !empty($post['email']) && Lib\Validator::validateEmail($post['email']) && Lib\Validator::filterSpecialChars($post['name'])) {
