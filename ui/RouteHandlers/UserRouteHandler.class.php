@@ -3841,6 +3841,7 @@ foreach ($rows as $index => $row) {
         $smarty->registerPlugin('function', 'urlFor', 'SolasMatch\UI\RouteHandlers\smarty_function_urlFor');
 
         foreach ($template_data as $key => $item) $smarty->assign($key, $item);
+        $smarty->assign('VOLUNTEER_PO',      512);
         $smarty->assign('SITE_ADMIN',         64);
         $smarty->assign('PROJECT_OFFICER',    32);
         $smarty->assign('COMMUNITY_OFFICER',  16);
