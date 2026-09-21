@@ -4159,6 +4159,8 @@ if (Lib\Validator::filterSpecialChars($post['name'])) error_log("not filetr name
                         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
                         $result_json = curl_exec($ch);
                     }
+                    $response->getBody()->write(json_encode(['success' => 1]));
+                    return $response->withHeader('Content-Type', 'application/json');
                 } else {
                     $response->getBody()->write(json_encode(['error' => 'Missing fields, bad name or email']));
                     return $response->withHeader('Content-Type', 'application/json');
