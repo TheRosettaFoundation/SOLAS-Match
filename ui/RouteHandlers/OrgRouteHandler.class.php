@@ -257,7 +257,6 @@ class OrgRouteHandler
                             curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json', 'Authorization: Bearer ' . Common\Lib\Settings::get('tarjimly.api_key')]);
                             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
                             $result_json = curl_exec($ch);
-error_log($result_json);//(**)DELRemove
 
                             $adminDao->adjust_org_admin($user_id, $org_id, 0, NGO_ADMIN, 2);
                         } else error_log("Could not get uid for $user_id");
