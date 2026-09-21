@@ -4131,6 +4131,7 @@ foreach ($rows as $index => $row) {
             $org['linkedin'] = $org['city'];
             $org['twitter'] = $org['regionalFocus'];
 
+$post = $request->getParsedBody();//(**)
 if (!empty($post['name'])) error_log("empty name");//(**)
 if (!empty($post['biography'])) error_log("empty biography");//(**)
 if (!empty($post['email'])) error_log("email");//(**)
