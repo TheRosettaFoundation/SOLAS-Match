@@ -22,7 +22,7 @@
 
      <div class="d-flex align-items-center flex-wrap ">
 
-                   {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
+                   {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $VOLUNTEER_PO + $COMMUNITY_OFFICER)}
                             <a href="{urlFor name="claimed-tasks" options="user_id.{$this_user->getId()}"}" class="btnPrimary me-2 text-white mt-2 mt-md-0">
                             <img src="{urlFor name='home'}ui/img/claimed.svg" class="me-2"> {Localisation::getTranslation('claimed_tasks_claimed_tasks')}
                             </a>
@@ -65,7 +65,7 @@
     </p>
 {/if}
 
-    {if isset($this_user) && ($private_access || ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER + 128)) || $receive_credit || !empty($linguist_orgs_for_admin))}
+    {if isset($this_user) && ($private_access || ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $VOLUNTEER_PO + $COMMUNITY_OFFICER + 128)) || $receive_credit || !empty($linguist_orgs_for_admin))}
         <div class="row g-4 ">    
         <div class="bg-body p-4 rounded-3 text-body col-12 col-md-7  >
        
@@ -107,7 +107,7 @@
                              </div>
                     {/if}
                    
-                    {if $private_access || ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER))}
+                    {if $private_access || ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $VOLUNTEER_PO + $COMMUNITY_OFFICER))}
                     
                         <div class="d-flex justify-content-between flex-wrap mb-3">
                          <a href="mailto:{$this_user->getEmail()}" class=" text-body"> {$this_user->getEmail()}</a>
@@ -393,7 +393,7 @@
                             <hr class="bg-light-subtle"/>
 
                             {if !empty($moodle_datas)}
-                                {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
+                                {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $VOLUNTEER_PO + $COMMUNITY_OFFICER)}
                                     <h4 class="mb-3 fw-bold">Learning Center Courses</h4>
                                     <div>
                                         <ul>
@@ -572,7 +572,7 @@
                             <ul>
                         {foreach from=$certifications item=certification}
                         <li>
-                        {if $private_access || ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER))}
+                        {if $private_access || ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $VOLUNTEER_PO + $COMMUNITY_OFFICER))}
                             {if ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)) && $certification['reviewed'] == 0 && $certification['certification_key'] != 'TRANSLATOR' && $certification['certification_key'] != 'TWB'}
                             <form method="post" action="{urlFor name="user-public-profile" options="user_id.$user_id"}">
                                 <input type="submit" class="btn btn-primary text-white " name="mark_certification_reviewed" value="Mark Reviewed" />
@@ -1363,7 +1363,7 @@ If a language is to be removed from this list, the community will be informed be
 {/if}
 
 
-{if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
+{if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $VOLUNTEER_PO + $COMMUNITY_OFFICER)}
     <div class="mt-2 p-4 rounded-3 bg-body">
 
 
@@ -1676,7 +1676,7 @@ If a language is to be removed from this list, the community will be informed be
   {/if}
 
 
-{if ($private_access && $user_task_limitation_current_user['limit_profile_changes'] == 0) || ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER))}
+{if ($private_access && $user_task_limitation_current_user['limit_profile_changes'] == 0) || ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $VOLUNTEER_PO + $COMMUNITY_OFFICER))}
  <div class="mt-4 rounded-3 p-4 bg-body fs-5">
     <div class="d-flex justify-content-between flex-wrap">
         <h3 class="fw-bold">{Localisation::getTranslation('user_public_profile_task_stream_notifications')} <span class="text-muted fs-5">{Localisation::getTranslation('user_public_profile_6')}</span></h3>

@@ -19,7 +19,7 @@
 
                         <span class="d-none">
                     <!-- Parameters... -->
-                        <div id="isSiteAdmin">{if $roles & ($SITE_ADMIN + $PROJECT_OFFICER)}1{else}0{/if}</div>
+                        <div id="isSiteAdmin">{if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $VOLUNTEER_PO)}1{else}0{/if}</div>
                         <div id="isNGOAdmin">{if $roles & ($NGO_ADMIN + $NGO_PROJECT_OFFICER)}1{else}0{/if}</div>
                     </span>
 
@@ -36,7 +36,7 @@
                     <div class="d-flex justify-content-sm-end">     
 
                     <form id="copyChunksProjectForm" class="d-flex flex-wrap" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}">
-                    {if ($roles & ($SITE_ADMIN + $PROJECT_OFFICER)) && !empty($matecat_analyze_url)}
+                    {if ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $VOLUNTEER_PO)) && !empty($matecat_analyze_url)}
                         <input type="hidden" name="copyChunks" value="1" />
                         {if $disable_sync}
                         <a class="btngray-lg mt-2 mt-md-0 me-2 disabled" aria-disabled="true">
@@ -49,12 +49,12 @@
                             {if !empty($memsource_project)}Phrase TMS Project{else}Kató TM analysis{/if}
                         </a>
                     {/if}
-                    {if ($roles & ($SITE_ADMIN + $PROJECT_OFFICER) || in_array($project->getOrganisationId(), $ORG_EXCEPTIONS) && $roles & ($NGO_ADMIN + $NGO_PROJECT_OFFICER)) && !empty($memsource_project)}
+                    {if ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $VOLUNTEER_PO) || in_array($project->getOrganisationId(), $ORG_EXCEPTIONS) && $roles & ($NGO_ADMIN + $NGO_PROJECT_OFFICER)) && !empty($memsource_project)}
                         <a href="{urlFor name="project-add-shell-tasks" options="project_id.$project_id"}" class="btnPrimary text-white mt-2 mt-md-0 me-2">
                             Add Shell Tasks
                         </a>
                     {/if}
-                    {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $NGO_ADMIN + $NGO_PROJECT_OFFICER)}
+                    {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $VOLUNTEER_PO + $NGO_ADMIN + $NGO_PROJECT_OFFICER)}
                         <a href="{urlFor name="project-alter" options="project_id.$project_id"}" class='btnPrimary text-white mt-2 mt-md-0 '>
                         <i class="fa-solid fa-screwdriver-wrench me-2 "></i> {Localisation::getTranslation('common_edit_project')}
                         </a> 
@@ -288,7 +288,7 @@
                 <tr class="p-4">
                     <td>
                         {if $project->getImageUploaded()}
-                            {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER)}
+                            {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $VOLUNTEER_PO)}
                                 <div>
                                     <img class="mb-4" src="{urlFor name="download-project-image" options="project_id.$project_id"}?{$imgCacheToken}"/>
                                     {if !$project->getImageApproved()}
@@ -357,7 +357,7 @@
 
 
 
-    {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER + $NGO_ADMIN + $NGO_PROJECT_OFFICER)}
+    {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $VOLUNTEER_PO + $COMMUNITY_OFFICER + $NGO_ADMIN + $NGO_PROJECT_OFFICER)}
 
 
         <div class="sticky-top bg-light-subtle d-flex justify-content-between mt-4 mb-4 flex-wrap align-items-center">
@@ -395,7 +395,7 @@
       
         <div class="">
         <div class="d-flex mb-4 flex-wrap gap-y-2">
-        {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $NGO_ADMIN + $NGO_PROJECT_OFFICER)}
+        {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $VOLUNTEER_PO + $NGO_ADMIN + $NGO_PROJECT_OFFICER)}
             <form id="publish_selected_tasks" class="bg-light-subtle  d-flex flex-column justify-content-center form_action me-2  mb-4 mb-lg-0 mb-sm-2 mb-md-0" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
                 <a class="d-flex fs-6 text-muted text-decoration-none p-1" onclick="$('#publish_selected_tasks').submit();" >
                     <i class="fa-check fa-regular me-2"></i> <span>Publish Selected Tasks</span>
@@ -434,7 +434,7 @@
         </div>
 
         <div class="d-flex mb-4 flex-wrap gap-y-2">
-        {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER) || in_array($project->getOrganisationId(), $ORG_EXCEPTIONS) && $roles & ($NGO_ADMIN + $NGO_PROJECT_OFFICER)}
+        {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $VOLUNTEER_PO) || in_array($project->getOrganisationId(), $ORG_EXCEPTIONS) && $roles & ($NGO_ADMIN + $NGO_PROJECT_OFFICER)}
             <form id="status_as_unclaimed" class="bg-light-subtle  d-flex flex-column justify-content-center form_action me-2  mb-4 mb-lg-0" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
                 <a class="d-flex text-muted p-1 fs-6 text-decoration-none" onclick="$('#status_as_unclaimed').submit();" >
                     <i class="fa fa-unlock me-2"  aria-hidden="true"></i> <span>Set Status of Selected to Unclaimed</span>
@@ -492,7 +492,7 @@
         {/if}
         </div>
         <div class=" d-flex mt-4 flex-wrap">
-        {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER)}
+        {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $VOLUNTEER_PO)}
             <div class="bg-light-subtle  d-flex flex-column justify-content-center form_action me-2  mb-4 mb-lg-0">
             <a class="d-flex p-1 text-muted fs-6 text-decoration-none "  data-bs-toggle="modal" href="#wordcountmodal" role="button">
             <i class="fa-solid fa-check me-2 "></i> <span> Distribute Word Count </span>
@@ -574,17 +574,17 @@
                             </div>
                           </div>
                         </div>
-{if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER + $NGO_ADMIN + $NGO_PROJECT_OFFICER)}
+{if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $VOLUNTEER_PO + $COMMUNITY_OFFICER + $NGO_ADMIN + $NGO_PROJECT_OFFICER)}
     {assign var="pair" value="`$project->getSourceLocale()->getLanguageCode()`|`$languageCountry`"}
     {assign var="pair" value={$pair|replace:',':'-'}}
     {if !empty($ngo_linguists_by_language_pair[$pair])}
-        {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
+        {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $VOLUNTEER_PO + $COMMUNITY_OFFICER)}
                   <span data-bs-toggle="tooltip" data-bs-placement="right" data-bs-html="true" data-bs-title="This allows you to specify whether a task will be available to the <strong>Full TWB Community</strong> with various levels of native language matching or to <strong>Organization Members</strong> only. If you select any of these any incremental matching will stop and sourcing will remain at that level.">
         {else}
                   <span data-bs-toggle="tooltip" data-bs-placement="right" data-bs-html="true" data-bs-title="This allows you to specify whether a task will be available to the <strong>Full TWB Community</strong> or to <strong>Organization Members</strong> only. If you select one of these any incremental matching will stop and sourcing will remain at this level.">
         {/if}
     {else}
-        {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
+        {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $VOLUNTEER_PO + $COMMUNITY_OFFICER)}
                   <span data-bs-toggle="tooltip" data-bs-placement="right" data-bs-html="true" data-bs-title="This NGO has no eligible <strong>Organization Members</strong> and so that option is not available in the selection.">
         {else}
                   <span data-bs-toggle="tooltip" data-bs-placement="right" data-bs-html="true" data-bs-title="This is grayed out because you have no eligible <strong>Organization Members</strong> and so the task will be available to the <strong>Full TWB Community</strong>.">
@@ -636,7 +636,7 @@
                                             <div class="text-secondary-sublte fs-6 fw-bold ">
                                               {if $get_payment_status_for_project[$task_id]['sourcing_level'] == 3}
                                                   <i class="fa-solid fa-users mt-2" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Available to organization members"></i>
-                                              {elseif ($roles&($NGO_ADMIN + $NGO_PROJECT_OFFICER) && !($roles&($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER))) || $get_payment_status_for_project[$task_id]['native_matching'] == 0}
+                                              {elseif ($roles&($NGO_ADMIN + $NGO_PROJECT_OFFICER) && !($roles&($SITE_ADMIN + $PROJECT_OFFICER + $VOLUNTEER_PO + $COMMUNITY_OFFICER))) || $get_payment_status_for_project[$task_id]['native_matching'] == 0}
                                                   <i class="fa-solid fa-globe mt-2" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Available to full TWB community"></i>
                                               {elseif $get_payment_status_for_project[$task_id]['native_matching'] == 1}
                                               <span data-bs-toggle="tooltip" data-bs-placement="top" class="mt-2"
@@ -654,7 +654,7 @@
                                             <div class="text-secondary-sublte fs-6 fw-bold">
                                               {if $get_payment_status_for_project[$task_id]['sourcing_level'] == 3}
                                                   <i class="fa-solid fa-users mt-2" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Available to organization members"></i>
-                                              {elseif ($roles&($NGO_ADMIN + $NGO_PROJECT_OFFICER) && !($roles&($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER))) || $get_payment_status_for_project[$task_id]['native_matching'] == 0}
+                                              {elseif ($roles&($NGO_ADMIN + $NGO_PROJECT_OFFICER) && !($roles&($SITE_ADMIN + $PROJECT_OFFICER + $VOLUNTEER_PO + $COMMUNITY_OFFICER))) || $get_payment_status_for_project[$task_id]['native_matching'] == 0}
                                                   <i class="fa-solid fa-globe mt-2" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Available to full TWB community"></i>
                                                 {elseif $get_payment_status_for_project[$task_id]['native_matching'] == 1}
                                                 <span data-bs-toggle="tooltip" data-bs-placement="top" class="mt-2"
@@ -668,7 +668,7 @@
                                             </div>
 
                                         {elseif $status_id == TaskStatusEnum::IN_PROGRESS}
-                                          {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER + $NGO_ADMIN + $NGO_PROJECT_OFFICER)}
+                                          {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $VOLUNTEER_PO + $COMMUNITY_OFFICER + $NGO_ADMIN + $NGO_PROJECT_OFFICER)}
                                             <a href="{urlFor name="task-org-feedback" options="task_id.$task_id"}">
                                                 {Localisation::getTranslation('common_in_progress')}
                                             </a><br />
@@ -677,7 +677,7 @@
                                           {/if}
                                             {$user_id = $users_who_claimed[$task_id]['user_id']}
                                             <i class=" fa-solid fa-user "></i> <a  href="{urlFor name="user-public-profile" options="user_id.$user_id"}" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Task claimed by {$users_who_claimed[$task_id]['display_name']}">{TemplateHelper::uiCleanseHTML($users_who_claimed[$task_id]['display_name'])}</a>
-                                                {if ($roles & ($SITE_ADMIN + $PROJECT_OFFICER) || in_array($project->getOrganisationId(), $ORG_EXCEPTIONS) && $roles & ($NGO_ADMIN + $NGO_PROJECT_OFFICER)) && TaskTypeEnum::$enum_to_UI[$task->getTaskType()]['shell_task']}
+                                                {if ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $VOLUNTEER_PO) || in_array($project->getOrganisationId(), $ORG_EXCEPTIONS) && $roles & ($NGO_ADMIN + $NGO_PROJECT_OFFICER)) && TaskTypeEnum::$enum_to_UI[$task->getTaskType()]['shell_task']}
                                                     <form id="complete_form_{$task_id}" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}">
                                                         <input type="hidden" name="task_id" value="{$task_id}" />
                                                         <input type="hidden" name="complete_task" value="1" />
@@ -688,7 +688,7 @@
                                                     </form>
                                                 {/if}
                                         {elseif $status_id == TaskStatusEnum::CLAIMED}
-                                          {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER + $NGO_ADMIN + $NGO_PROJECT_OFFICER)}
+                                          {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $VOLUNTEER_PO + $COMMUNITY_OFFICER + $NGO_ADMIN + $NGO_PROJECT_OFFICER)}
                                             <a href="{urlFor name="task-org-feedback" options="task_id.$task_id"}" class="custom-link">
                                                 Claimed
                                             </a><br />
@@ -698,7 +698,7 @@
                                             {if !empty($users_who_claimed[$task_id])}
                                                 {$user_id = $users_who_claimed[$task_id]['user_id']}
                                              <i class=" fa-solid fa-user "></i>   <a  href="{urlFor name="user-public-profile" options="user_id.$user_id"}" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Task claimed by {$users_who_claimed[$task_id]['display_name']}">{TemplateHelper::uiCleanseHTML($users_who_claimed[$task_id]['display_name'])}</a>
-                                                {if ($roles & ($SITE_ADMIN + $PROJECT_OFFICER) || in_array($project->getOrganisationId(), $ORG_EXCEPTIONS) && $roles & ($NGO_ADMIN + $NGO_PROJECT_OFFICER)) && TaskTypeEnum::$enum_to_UI[$task->getTaskType()]['shell_task']}
+                                                {if ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $VOLUNTEER_PO) || in_array($project->getOrganisationId(), $ORG_EXCEPTIONS) && $roles & ($NGO_ADMIN + $NGO_PROJECT_OFFICER)) && TaskTypeEnum::$enum_to_UI[$task->getTaskType()]['shell_task']}
                                                     <form id="complete_form_{$task_id}" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}">
                                                         <input type="hidden" name="task_id" value="{$task_id}" />
                                                         <input type="hidden" name="complete_task" value="1" />

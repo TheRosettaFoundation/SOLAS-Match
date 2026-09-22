@@ -106,7 +106,7 @@ class Middleware
                 $roles = $adminDao->isSiteAdmin_any_or_org_admin_any_for_any_org($current_user_id);
                 $tasks = $userDao->getUserTasks($current_user_id);
                 if (!empty($tasks)) $template_data = array_merge($template_data, ['user_has_active_tasks' => 1]);
-                if ($roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER | FINANCE)) $template_data = array_merge($template_data, ['site_admin' => 1]);
+                if ($roles & (SITE_ADMIN | PROJECT_OFFICER | VOLUNTEER_PO | COMMUNITY_OFFICER | FINANCE)) $template_data = array_merge($template_data, ['site_admin' => 1]);
                 if ($orgs = $adminDao->get_orgs_if_ngo($current_user_id)) $template_data = array_merge($template_data, ['ngo_orgs' => $orgs]);
               } catch (Common\Exceptions\SolasMatchException $e) {
                 Common\Lib\UserSession::clearCurrentUserID();
@@ -249,7 +249,7 @@ class Middleware
 
     public function authIsSiteAdmin_or_PO(Request $request, RequestHandler $handler)
     {
-        return $this->authIsSiteAdmin($request, $handler, PROJECT_OFFICER);
+        return $this->authIsSiteAdmin($request, $handler, PROJECT_OFFICER | VOLUNTEER_PO);
     }
 
     public function authIsSiteAdmin_or_COMMUNITY(Request $request, RequestHandler $handler)
@@ -259,7 +259,7 @@ class Middleware
 
     public function authIsSiteAdmin_any(Request $request, RequestHandler $handler)
     {
-        return $this->authIsSiteAdmin($request, $handler, PROJECT_OFFICER | COMMUNITY_OFFICER);
+        return $this->authIsSiteAdmin($request, $handler, PROJECT_OFFICER | VOLUNTEER_PO | COMMUNITY_OFFICER);
     }
 
     public function authIsSiteAdmin_or_FINANCE(Request $request, RequestHandler $handler)
@@ -313,7 +313,7 @@ class Middleware
         $adminDao = new DAO\AdminDao();
         $task = $taskDao->getTask($task_id);
         $project = $projectDao->getProject($task->getProjectId());
-        if ($adminDao->get_roles($user_id, $project->getOrganisationId()) & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER | NGO_ADMIN | NGO_PROJECT_OFFICER)) return $handler->handle($request);
+        if ($adminDao->get_roles($user_id, $project->getOrganisationId()) & (SITE_ADMIN | PROJECT_OFFICER | VOLUNTEER_PO | COMMUNITY_OFFICER | NGO_ADMIN | NGO_PROJECT_OFFICER)) return $handler->handle($request);
 
         if ($claimant = $taskDao->getUserClaimedTask($task_id)) {
             if ($user_id != $claimant->getId()) {
@@ -333,7 +333,7 @@ class Middleware
         $org_id = $route->getArgument('org_id');
         if (!empty($_SESSION['user_id']) && !empty($org_id)) {
             $adminDao = new DAO\AdminDao();
-            if ($adminDao->get_roles($_SESSION['user_id'], $org_id) & (SITE_ADMIN | PROJECT_OFFICER | $community | NGO_ADMIN | NGO_PROJECT_OFFICER)) return $handler->handle($request);
+            if ($adminDao->get_roles($_SESSION['user_id'], $org_id) & (SITE_ADMIN | PROJECT_OFFICER | VOLUNTEER_PO | $community | NGO_ADMIN | NGO_PROJECT_OFFICER)) return $handler->handle($request);
         }
         \SolasMatch\UI\RouteHandlers\UserRouteHandler::flash('error', Localisation::getTranslation('common_error_not_exist'));
         return $app->getResponseFactory()->createResponse()->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('home'));
@@ -353,7 +353,7 @@ class Middleware
         $org_id = $route->getArgument('org_id');
         if (!empty($_SESSION['user_id']) && !empty($org_id)) {
             $adminDao = new DAO\AdminDao();
-            if ($adminDao->get_roles($_SESSION['user_id'], $org_id) & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER | NGO_ADMIN)) return $handler->handle($request);
+            if ($adminDao->get_roles($_SESSION['user_id'], $org_id) & (SITE_ADMIN | PROJECT_OFFICER | VOLUNTEER_PO | COMMUNITY_OFFICER | NGO_ADMIN)) return $handler->handle($request);
         }
         \SolasMatch\UI\RouteHandlers\UserRouteHandler::flash('error', Localisation::getTranslation('common_error_not_exist'));
         return $app->getResponseFactory()->createResponse()->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('home'));
@@ -377,7 +377,7 @@ class Middleware
         if (!empty($_SESSION['user_id']) && !empty($task_id)) {
             $task = $taskDao->getTask($task_id);
             $project = $projectDao->getProject($task->getProjectId());
-            if ($adminDao->get_roles($_SESSION['user_id'], $project->getOrganisationId()) & (SITE_ADMIN | PROJECT_OFFICER | $community | NGO_ADMIN | NGO_PROJECT_OFFICER)) return $handler->handle($request);
+            if ($adminDao->get_roles($_SESSION['user_id'], $project->getOrganisationId()) & (SITE_ADMIN | PROJECT_OFFICER | VOLUNTEER_PO | $community | NGO_ADMIN | NGO_PROJECT_OFFICER)) return $handler->handle($request);
         }
         \SolasMatch\UI\RouteHandlers\UserRouteHandler::flash('error', Localisation::getTranslation('common_error_not_exist'));
         return $app->getResponseFactory()->createResponse()->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('home'));
@@ -400,7 +400,7 @@ class Middleware
         $project_id = $route->getArgument('project_id');
         if (!empty($_SESSION['user_id']) && !empty($project_id)) {
             $project = $projectDao->getProject($project_id);
-            if ($adminDao->get_roles($_SESSION['user_id'], $project->getOrganisationId()) & (SITE_ADMIN | PROJECT_OFFICER | NGO_ADMIN | NGO_PROJECT_OFFICER)) return $handler->handle($request);
+            if ($adminDao->get_roles($_SESSION['user_id'], $project->getOrganisationId()) & (SITE_ADMIN | PROJECT_OFFICER | VOLUNTEER_PO | NGO_ADMIN | NGO_PROJECT_OFFICER)) return $handler->handle($request);
         }
         \SolasMatch\UI\RouteHandlers\UserRouteHandler::flash('error', Localisation::getTranslation('common_error_not_exist'));
         return $app->getResponseFactory()->createResponse()->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('home'));
@@ -413,7 +413,7 @@ class Middleware
         $projectDao = new DAO\ProjectDao();
         $adminDao = new DAO\AdminDao();
 
-        if (!empty($_SESSION['user_id']) && ($adminDao->get_roles($_SESSION['user_id']) & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER))) return $handler->handle($request);
+        if (!empty($_SESSION['user_id']) && ($adminDao->get_roles($_SESSION['user_id']) & (SITE_ADMIN | PROJECT_OFFICER | VOLUNTEER_PO | COMMUNITY_OFFICER))) return $handler->handle($request);
         
         $routeContext = RouteContext::fromRequest($request);
         $route = $routeContext->getRoute();
@@ -443,7 +443,7 @@ class Middleware
             if ($taskDao->getUserClaimedTask($task_id)) return $handler->handle($request); // weird
 
             $project = $projectDao->getProject($task->getProjectId());
-            if ($adminDao->get_roles($_SESSION['user_id'], $project->getOrganisationId()) & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER | NGO_ADMIN | NGO_PROJECT_OFFICER)) return $handler->handle($request);
+            if ($adminDao->get_roles($_SESSION['user_id'], $project->getOrganisationId()) & (SITE_ADMIN | PROJECT_OFFICER | VOLUNTEER_PO | COMMUNITY_OFFICER | NGO_ADMIN | NGO_PROJECT_OFFICER)) return $handler->handle($request);
         }
         \SolasMatch\UI\RouteHandlers\UserRouteHandler::flash('error', Localisation::getTranslation('common_error_not_exist'));
         return $app->getResponseFactory()->createResponse()->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('home'));

@@ -4,7 +4,7 @@
         <h1>
             {Localisation::getTranslation('org_dashboard_organisation_dashboard')} <small>{Localisation::getTranslation('org_dashboard_0')}</small>
             <div class="pull-right">
-                {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER)}
+                {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $VOLUNTEER_PO)}
                     <a href="{urlFor name="create-org"}" class="btn btn-success" onclick="return confirm('{Localisation::getTranslation('user_public_profile_1')}')">
                         <i class="icon-star icon-white"></i> {Localisation::getTranslation('common_create_organisation')}
                     </a>
@@ -50,7 +50,7 @@
                 <i class="icon-upload icon-white"></i> New Phrase Project
             </a>
 
-            {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER) || in_array($org_id, $create_non_phrase)}
+            {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $VOLUNTEER_PO) || in_array($org_id, $create_non_phrase)}
             <a class="btn btn-success" href="{urlFor name="project-create-empty" options="org_id.$org_id"}">
                 <i class="icon-upload icon-white"></i> New non-Phrase Project
             </a>

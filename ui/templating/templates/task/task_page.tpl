@@ -67,7 +67,7 @@
 
           <div class="ms-lg-auto">
             {if $status_id == TaskStatusEnum::PENDING_CLAIM && !$is_denied_for_task && !TaskTypeEnum::$enum_to_UI[$type_id]['shell_task']}
-              {if ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER + $LINGUIST + $NGO_LINGUIST)) && $user_within_limitations}
+              {if ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $VOLUNTEER_PO + $COMMUNITY_OFFICER + $LINGUIST + $NGO_LINGUIST)) && $user_within_limitations}
               <button class="btn btn-orange" id="claim_button">
                 Claim the {strtolower(TaskTypeEnum::$enum_to_UI[$type_id]['type_text'])} task
               </button>
@@ -84,11 +84,11 @@
               {/if}
             </div>
 
-            {if !empty($matecat_url) && (($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)) || (in_array($project->getOrganisationId(), $ORG_EXCEPTIONS) && $roles & ($NGO_ADMIN + $NGO_PROJECT_OFFICER) && !TaskTypeEnum::$enum_to_UI[$type_id]['shell_task']))}
+            {if !empty($matecat_url) && (($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $VOLUNTEER_PO + $COMMUNITY_OFFICER)) || (in_array($project->getOrganisationId(), $ORG_EXCEPTIONS) && $roles & ($NGO_ADMIN + $NGO_PROJECT_OFFICER) && !TaskTypeEnum::$enum_to_UI[$type_id]['shell_task']))}
               <a href="{$matecat_url}" target="_blank" class="btn btn-orange mt-2">Work URL</a>
             {/if}
 
-            {if ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $NGO_ADMIN + $NGO_PROJECT_OFFICER))}
+            {if ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $VOLUNTEER_PO + $NGO_ADMIN + $NGO_PROJECT_OFFICER))}
               <a href="{urlFor name="task-alter" options="task_id.$task_id"}" class='btn btn-orange mt-2'><img src="{urlFor name='home'}ui/img/edit.svg" alt="edit-icon" class="me-2">Edit task details</a>
             {/if}
           </div>
@@ -98,7 +98,7 @@
 
         <!-- Stages -->
         <div class="row g-3">
-          {if !$is_claimer && !($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER + $NGO_ADMIN + $NGO_PROJECT_OFFICER)) &&
+          {if !$is_claimer && !($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $VOLUNTEER_PO + $COMMUNITY_OFFICER + $NGO_ADMIN + $NGO_PROJECT_OFFICER)) &&
             ($status_id > TaskStatusEnum::PENDING_CLAIM || $is_denied_for_task || !$user_within_limitations || TaskTypeEnum::$enum_to_UI[$type_id]['shell_task'])}
 
             <div class="col-12">
@@ -140,7 +140,7 @@
               <div class="stage-meta mt-2">
                   {if $step['this'] && $step['translations_not_all_complete']}Wait for Previous step ({/if}<i class="bi bi-clock me-1"></i>{if $step['this'] && $step['translations_not_all_complete']}This step: {/if}<span class="convert_utc_to_local_deadline_natural{if $step['this']}_this{/if}" style="visibility: hidden">{$step['deadline']}</span>{if $step['this'] && $step['translations_not_all_complete']}){/if}
               </div>
-              {if $step['this'] && ($is_claimer || ($step['status'] > 2 && ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER + $NGO_ADMIN + $NGO_PROJECT_OFFICER))))}
+              {if $step['this'] && ($is_claimer || ($step['status'] > 2 && ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $VOLUNTEER_PO + $COMMUNITY_OFFICER + $NGO_ADMIN + $NGO_PROJECT_OFFICER))))}
               <div class="mt-3">
                 <div class="list-group list-group-flush small">
                   {if $step['status'] == 10 || $step['status'] == 3}
@@ -335,7 +335,7 @@
         <thead>
          <tr class="fs-5 align-middle">
             <th>{Localisation::getTranslation('common_publish_task')}</th>
-            {if $status_id == TaskStatusEnum::IN_PROGRESS && ($roles & ($SITE_ADMIN + $PROJECT_OFFICER) || in_array($project->getOrganisationId(), $ORG_EXCEPTIONS) && $roles & ($NGO_ADMIN + $NGO_PROJECT_OFFICER)) && TaskTypeEnum::$enum_to_UI[$type_id]['shell_task']}
+            {if $status_id == TaskStatusEnum::IN_PROGRESS && ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $VOLUNTEER_PO) || in_array($project->getOrganisationId(), $ORG_EXCEPTIONS) && $roles & ($NGO_ADMIN + $NGO_PROJECT_OFFICER)) && TaskTypeEnum::$enum_to_UI[$type_id]['shell_task']}
             <th>Mark Shell Task Complete</th>
             {/if}
             <th>Cancelled?</th>
@@ -368,7 +368,7 @@
                 </form>
 
             </td>
-            {if $status_id == TaskStatusEnum::IN_PROGRESS && ($roles & ($SITE_ADMIN + $PROJECT_OFFICER) || in_array($project->getOrganisationId(), $ORG_EXCEPTIONS) && $roles & ($NGO_ADMIN + $NGO_PROJECT_OFFICER)) && TaskTypeEnum::$enum_to_UI[$type_id]['shell_task']}
+            {if $status_id == TaskStatusEnum::IN_PROGRESS && ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $VOLUNTEER_PO) || in_array($project->getOrganisationId(), $ORG_EXCEPTIONS) && $roles & ($NGO_ADMIN + $NGO_PROJECT_OFFICER)) && TaskTypeEnum::$enum_to_UI[$type_id]['shell_task']}
             <td>
                 <form id="complete_form_{$task_id}" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}">
                     <input type="hidden" name="task_id" value="{$task_id}" />
@@ -582,7 +582,7 @@
 {/if}
 
         <!-- Admin Assign -->
-        {if ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $NGO_ADMIN + $NGO_PROJECT_OFFICER)) && $task->getTaskStatus() < TaskStatusEnum::IN_PROGRESS}
+        {if ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $VOLUNTEER_PO + $NGO_ADMIN + $NGO_PROJECT_OFFICER)) && $task->getTaskStatus() < TaskStatusEnum::IN_PROGRESS}
         <div class="bg-body p-2 border-secondary rounded-3 mt-2">
           <div class="d-none d-md-flex justify-content-around p-2">
             <div class="fs-5 fw-bold w-75"> {Localisation::getTranslation('task_view_assign_label')}</div>
@@ -597,7 +597,7 @@
 
               <form id="assignTaskToUserForm" method="post" action="{urlFor name="task-view" options="task_id.$task_id"}" onsubmit="return confirm('{Localisation::getTranslation("task_view_assign_confirmation")}');">
 
-                {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
+                {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $VOLUNTEER_PO + $COMMUNITY_OFFICER)}
                   <input id="input" class="fs-6" type="email" name="userIdOrEmail" placeholder="{Localisation::getTranslation('task_view_assign_placeholder')}"><br />
                 {/if}
 
@@ -639,7 +639,7 @@
         </div>
         {/if}
 
-        {if ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER + $NGO_ADMIN + $NGO_PROJECT_OFFICER)) && $task->getTaskStatus() > TaskStatusEnum::PENDING_CLAIM}
+        {if ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $VOLUNTEER_PO + $COMMUNITY_OFFICER + $NGO_ADMIN + $NGO_PROJECT_OFFICER)) && $task->getTaskStatus() > TaskStatusEnum::PENDING_CLAIM}
         <div class="mb-2 mt-3">
           <strong>{Localisation::getTranslation('task_org_feedback_user_feedback')}</strong><hr />
 
@@ -672,7 +672,7 @@
         </div>
         {/if}
 
-        {if ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER + $NGO_ADMIN + $NGO_PROJECT_OFFICER)) && $task->getTaskStatus() == TaskStatusEnum::COMPLETE && !TaskTypeEnum::$enum_to_UI[$type_id]['shell_task']}
+        {if ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $VOLUNTEER_PO + $COMMUNITY_OFFICER + $NGO_ADMIN + $NGO_PROJECT_OFFICER)) && $task->getTaskStatus() == TaskStatusEnum::COMPLETE && !TaskTypeEnum::$enum_to_UI[$type_id]['shell_task']}
           {if !empty($memsource_task)}
           <p class="mt-4">{Localisation::getTranslation('org_task_review_0')}</p>
           <p>

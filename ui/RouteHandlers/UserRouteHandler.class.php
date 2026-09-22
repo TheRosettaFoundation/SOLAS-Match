@@ -1265,7 +1265,7 @@ error_log("result_json: $result_json");//(**)
         if ($request->getMethod() === 'POST') {
             $post = $request->getParsedBody();
             $email = $post['email'];
-            if ((($roles&(SITE_ADMIN + PROJECT_OFFICER + COMMUNITY_OFFICER + NGO_ADMIN)) || $post['role'] != NGO_ADMIN) && Lib\Validator::validateEmail($email)) {
+            if ((($roles&(SITE_ADMIN + PROJECT_OFFICER | VOLUNTEER_PO + COMMUNITY_OFFICER + NGO_ADMIN)) || $post['role'] != NGO_ADMIN) && Lib\Validator::validateEmail($email)) {
                 $userExist = $userDao->getUserByEmail($email, null);
                 if ($userExist) {
                     if ($userDao->isUserVerified($userExist->getId())) {
@@ -2759,7 +2759,7 @@ error_log("dummy: $dummy");//(**)
         $supported_ngos_paid = $userDao->supported_ngos_paid($user_id);
 
         $show_create_memsource_user = ($roles & SITE_ADMIN) && !$userDao->get_memsource_user($user_id) && ($adminDao->get_roles($user_id) & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER));
-        if (!$show_create_memsource_user && ($roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER)) && !$userDao->get_memsource_user($user_id) && in_array($adminDao->get_roles($user_id), [LINGUIST, NGO_LINGUIST, LINGUIST | NGO_LINGUIST]))
+        if (!$show_create_memsource_user && ($roles & (SITE_ADMIN | PROJECT_OFFICER | VOLUNTEER_PO | COMMUNITY_OFFICER)) && !$userDao->get_memsource_user($user_id) && in_array($adminDao->get_roles($user_id), [LINGUIST, NGO_LINGUIST, LINGUIST | NGO_LINGUIST]))
             $show_create_memsource_user = 2;
 
         if ($request->getMethod() === 'POST') {
@@ -2822,7 +2822,7 @@ error_log("result: $result");//(**)
                 UserRouteHandler::flashNow('success', 'Print request made for user');
             }
 
-            if (($roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER)) && !empty($post['admin_comment'])) {
+            if (($roles & (SITE_ADMIN | PROJECT_OFFICER | VOLUNTEER_PO | COMMUNITY_OFFICER)) && !empty($post['admin_comment'])) {
                 if (empty($post['comment']) || (int)$post['work_again'] < 1 || (int)$post['work_again'] > 5) {
                     UserRouteHandler::flashNow('error', 'You must enter a comment and a score between 1 and 5');
                 } else {
@@ -2830,7 +2830,7 @@ error_log("result: $result");//(**)
                 }
             }
 
-            if (($roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER)) && !empty($post['mark_comment_delete'])) {
+            if (($roles & (SITE_ADMIN | PROJECT_OFFICER | VOLUNTEER_PO | COMMUNITY_OFFICER)) && !empty($post['mark_comment_delete'])) {
                 $userDao->delete_admin_comment($post['comment_id']);
             }
 
@@ -2877,7 +2877,7 @@ error_log("result: $result");//(**)
                 $userDao->deleteCertification($post['certification_id']);
             }
 
-            if (($roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER)) && !empty($post['mark_user_task_limitation'])) {
+            if (($roles & (SITE_ADMIN | PROJECT_OFFICER | VOLUNTEER_PO | COMMUNITY_OFFICER)) && !empty($post['mark_user_task_limitation'])) {
                 if (!preg_match('/^[0-9]*$/', $post['max_not_comlete_tasks']) || !strlen($post['max_not_comlete_tasks']) ||
                     !preg_match('/^[,0-9]*$/', $post['allowed_types']) || $post['allowed_types'] === '0' ||
                     !preg_match('/^[,0-9]*$/', $post['excluded_orgs']) ||
@@ -3029,7 +3029,7 @@ error_log("result: $result");//(**)
             'user_rate_pairs'    => ($roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER)) ? $userDao->get_user_rate_pairs($user_id) : 0,
         ));
 
-        if ($private_access || ($roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER))) {
+        if ($private_access || ($roles & (SITE_ADMIN | PROJECT_OFFICER | VOLUNTEER_PO | COMMUNITY_OFFICER))) {
             $notifData = $userDao->getUserTaskStreamNotification($user_id);
             $interval = null;
             $lastSent = null;
@@ -4204,6 +4204,7 @@ foreach ($rows as $index => $row) {
         $smarty->registerPlugin('function', 'urlFor', 'SolasMatch\UI\RouteHandlers\smarty_function_urlFor');
 
         foreach ($template_data as $key => $item) $smarty->assign($key, $item);
+        $smarty->assign('VOLUNTEER_PO',      512);
         $smarty->assign('SITE_ADMIN',         64);
         $smarty->assign('PROJECT_OFFICER',    32);
         $smarty->assign('COMMUNITY_OFFICER',  16);

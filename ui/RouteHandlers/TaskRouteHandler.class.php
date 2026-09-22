@@ -223,7 +223,7 @@ class TaskRouteHandler
         $loggedInUserId = Common\Lib\UserSession::getCurrentUserID();
         if ($loggedInUserId != $user_id) {
             $adminDao = new DAO\AdminDao();
-            if (!($adminDao->get_roles($loggedInUserId) & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER))) {
+            if (!($adminDao->get_roles($loggedInUserId) & (SITE_ADMIN | PROJECT_OFFICER | VOLUNTEER_PO | COMMUNITY_OFFICER))) {
                 UserRouteHandler::flash('error', 'You are not authorized to view this page');
                 return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('home'));
             }
@@ -442,7 +442,7 @@ class TaskRouteHandler
         $loggedInUserId = Common\Lib\UserSession::getCurrentUserID();
         if ($loggedInUserId != $user_id) {
             $adminDao = new DAO\AdminDao();
-            if (!($adminDao->get_roles($loggedInUserId) & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER))) {
+            if (!($adminDao->get_roles($loggedInUserId) & (SITE_ADMIN | PROJECT_OFFICER | VOLUNTEER_PO | COMMUNITY_OFFICER))) {
                 UserRouteHandler::flash('error', "You are not authorized to view this page"); //need to move to strings.xml
                 return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('home'));
             }
@@ -848,7 +848,7 @@ class TaskRouteHandler
                 if (!$memsource_task) $task->setTargetLocale($targetLocale);
             }
 
-            if ($roles & (SITE_ADMIN | PROJECT_OFFICER)) {
+            if ($roles & (SITE_ADMIN | PROJECT_OFFICER | VOLUNTEER_PO)) {
                 if (isset($post['word_count']) && ctype_digit($post['word_count']) && $post['word_count_partner_weighted'] && ctype_digit($post['word_count_partner_weighted'])) 
                 {
                     $task->setWordCount($post['word_count']);
@@ -865,7 +865,7 @@ class TaskRouteHandler
             if (isset($post['deadline']) && $post['deadline'] != "") {
                 if ($validTime = Lib\TemplateHelper::isValidDateTime($post['deadline'])) {
                     $date = date("Y-m-d H:i:s", $validTime);
-                   if (($roles & (SITE_ADMIN | PROJECT_OFFICER)) || $date >= $task->getDeadline()) {
+                   if (($roles & (SITE_ADMIN | PROJECT_OFFICER | VOLUNTEER_PO)) || $date >= $task->getDeadline()) {
                     $task->setDeadline($date);
                     if ($task->getTaskStatus() != Common\Enums\TaskStatusEnum::COMPLETE) {
                         $userDao = new DAO\UserDao();
@@ -921,7 +921,7 @@ class TaskRouteHandler
                 if (($roles & (SITE_ADMIN | PROJECT_OFFICER)) && ($task->getTaskStatus() <= Common\Enums\TaskStatusEnum::PENDING_CLAIM) && !empty($post['required_qualification_level'])) {
                     $taskDao->updateRequiredTaskQualificationLevel($task_id, $post['required_qualification_level']);
                 }
-                if (($roles & (SITE_ADMIN | PROJECT_OFFICER) || in_array($project->getOrganisationId(), ORG_EXCEPTIONS) && $roles & (NGO_ADMIN + NGO_PROJECT_OFFICER)) && !empty($post['shell_task_url'])) {
+                if (($roles & (SITE_ADMIN | PROJECT_OFFICER | VOLUNTEER_PO) || in_array($project->getOrganisationId(), ORG_EXCEPTIONS) && $roles & (NGO_ADMIN + NGO_PROJECT_OFFICER)) && !empty($post['shell_task_url'])) {
                     $url = $post['shell_task_url'];
                     if (!preg_match('#^(http|https)://#i', $url)) $url = "https://$url";
                     if ($taskDao->get_task_url($task_id)) $taskDao->update_task_url($task_id, $url);
@@ -1021,7 +1021,7 @@ class TaskRouteHandler
             $post = $request->getParsedBody();
             if ($fail_CSRF = Common\Lib\UserSession::checkCSRFKey($post, 'taskView')) return $response->withStatus(302)->withHeader('Location', $fail_CSRF);
 
-            if (($roles & (SITE_ADMIN | PROJECT_OFFICER | NGO_ADMIN | NGO_PROJECT_OFFICER)) && isset($post['published'])) {
+            if (($roles & (SITE_ADMIN | PROJECT_OFFICER | VOLUNTEER_PO | NGO_ADMIN | NGO_PROJECT_OFFICER)) && isset($post['published'])) {
                 if ($post['published']) {
                     $task->setPublished(1);
                 } else {
@@ -1071,7 +1071,7 @@ class TaskRouteHandler
                 $paid_status = $taskDao->get_paid_status($task_id);
             }
 
-            if (!$taskClaimed && ($roles & (SITE_ADMIN | PROJECT_OFFICER | NGO_ADMIN | NGO_PROJECT_OFFICER)) && ((isset($post['userIdOrEmail']) && trim($post['userIdOrEmail']) != '') || !empty($post['assignUserSelect']))) {
+            if (!$taskClaimed && ($roles & (SITE_ADMIN | PROJECT_OFFICER | VOLUNTEER_PO | NGO_ADMIN | NGO_PROJECT_OFFICER)) && ((isset($post['userIdOrEmail']) && trim($post['userIdOrEmail']) != '') || !empty($post['assignUserSelect']))) {
                 if (!empty($post['assignUserSelect'])) $emailOrUserId = $post['assignUserSelect'];
                 else                                   $emailOrUserId = trim($post['userIdOrEmail']);
                 $userToBeAssigned = null;
@@ -1131,7 +1131,7 @@ class TaskRouteHandler
                 }
                 $post['userIdOrEmail'] = '';
             }
-            if (!$taskClaimed && ($roles & (SITE_ADMIN | PROJECT_OFFICER | NGO_ADMIN | NGO_PROJECT_OFFICER)) && !empty($post['userIdOrEmailDenyList'])) {
+            if (!$taskClaimed && ($roles & (SITE_ADMIN | PROJECT_OFFICER | VOLUNTEER_PO | NGO_ADMIN | NGO_PROJECT_OFFICER)) && !empty($post['userIdOrEmailDenyList'])) {
                 $userIdOrEmail = trim($post['userIdOrEmailDenyList']);
                 if (ctype_digit($userIdOrEmail)) $remove_deny_user = $userDao->getUser($userIdOrEmail);
                 else                             $remove_deny_user = $userDao->getUserByEmail($userIdOrEmail);
@@ -1142,7 +1142,7 @@ class TaskRouteHandler
                     UserRouteHandler::flashNow('success', 'Removed (assuming was actually in deny list)');
                 }
             }
-            if ($details_claimant && ($roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER | NGO_ADMIN | NGO_PROJECT_OFFICER)) && isset($post['feedback'])) {
+            if ($details_claimant && ($roles & (SITE_ADMIN | PROJECT_OFFICER | VOLUNTEER_PO | COMMUNITY_OFFICER | NGO_ADMIN | NGO_PROJECT_OFFICER)) && isset($post['feedback'])) {
                if (!empty($post['feedback'])) {
                    $taskDao->sendOrgFeedback($task_id, $user_id, $details_claimant->getId(), $post['feedback']);
                    UserRouteHandler::flashNow(
@@ -1254,7 +1254,7 @@ class TaskRouteHandler
 
         if ($task->getTaskStatus() == Common\Enums\TaskStatusEnum::IN_PROGRESS && $projectDao->are_translations_not_all_complete($task, $memsource_task)) $task->setTaskStatus(Common\Enums\TaskStatusEnum::CLAIMED);
 
-        if ($roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER | NGO_ADMIN | NGO_PROJECT_OFFICER)) {
+        if ($roles & (SITE_ADMIN | PROJECT_OFFICER | VOLUNTEER_PO | COMMUNITY_OFFICER | NGO_ADMIN | NGO_PROJECT_OFFICER)) {
             $template_data = array_merge($template_data, ['show_actions' => 1]);
         }
 
@@ -1265,7 +1265,7 @@ class TaskRouteHandler
         if (!$taskClaimed) {
             $more = 0;
             if (in_array($org_id, ORG_EXCEPTIONS)) $more = NGO_ADMIN | NGO_PROJECT_OFFICER;
-            if ($roles & (SITE_ADMIN | PROJECT_OFFICER | NGO_ADMIN | NGO_PROJECT_OFFICER)) $list_qualified_translators = $taskDao->list_qualified_translators($task_id, $org_id, $roles & (SITE_ADMIN | PROJECT_OFFICER | $more));
+            if ($roles & (SITE_ADMIN | PROJECT_OFFICER | VOLUNTEER_PO | NGO_ADMIN | NGO_PROJECT_OFFICER)) $list_qualified_translators = $taskDao->list_qualified_translators($task_id, $org_id, $roles & (SITE_ADMIN | PROJECT_OFFICER | VOLUNTEER_PO | $more));
         }
 
         if ($taskClaimed) $details_claimed_date = $taskDao->getClaimedDate($task_id);
@@ -1355,7 +1355,7 @@ class TaskRouteHandler
 
         $memsource_task = $projectDao->get_memsource_task($task_id);
 
-        $roles = $adminDao->get_roles(Common\Lib\UserSession::getCurrentUserID()) & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER);
+        $roles = $adminDao->get_roles(Common\Lib\UserSession::getCurrentUserID()) & (SITE_ADMIN | PROJECT_OFFICER | VOLUNTEER_PO | COMMUNITY_OFFICER);
         if (!$roles && in_array($project->getOrganisationId(), ORG_EXCEPTIONS)) {
             $roles = $adminDao->get_roles(Common\Lib\UserSession::getCurrentUserID(), $project->getOrganisationId()) & (NGO_ADMIN | NGO_PROJECT_OFFICER);
         }
@@ -1596,7 +1596,7 @@ class TaskRouteHandler
             "task" => $task,
             "taskClaimedDate" => $taskClaimedDate,
             "claimant" => $claimant,
-            'isSiteAdmin' => $adminDao->get_roles($user_id, $project->getOrganisationId()) & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER | NGO_ADMIN | NGO_PROJECT_OFFICER),
+            'isSiteAdmin' => $adminDao->get_roles($user_id, $project->getOrganisationId()) & (SITE_ADMIN | PROJECT_OFFICER | VOLUNTEER_PO | COMMUNITY_OFFICER | NGO_ADMIN | NGO_PROJECT_OFFICER),
             "task_tags" => $task_tags
         ));
 

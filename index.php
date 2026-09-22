@@ -46,6 +46,7 @@ function gc($maxlifetime)
 
 require_once __DIR__ . '/ui/vendor/autoload.php';
 
+define('VOLUNTEER_PO',      512);
 define('AIDWORKER',         256);
 define('FINANCE',           128);
 define('SITE_ADMIN',         64);
