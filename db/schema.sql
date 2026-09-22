@@ -2562,6 +2562,7 @@ DROP PROCEDURE IF EXISTS `findOrganisationsUserBelongsTo`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `findOrganisationsUserBelongsTo`(IN uID INT UNSIGNED)
 BEGIN
+    SET @VOLUNTEER_PO=      512;
     SET @SITE_ADMIN=         64;
     SET @PROJECT_OFFICER=    32;
     SET @COMMUNITY_OFFICER=  16;
@@ -2570,7 +2571,7 @@ BEGIN
     SET @NGO_LINGUIST=        2;
     SET @LINGUIST=            1;
 
-  IF EXISTS (SELECT * FROM Admins WHERE user_id=uID AND organisation_id=0 AND roles&(@SITE_ADMIN | @PROJECT_OFFICER | @COMMUNITY_OFFICER)!=0) THEN
+  IF EXISTS (SELECT * FROM Admins WHERE user_id=uID AND organisation_id=0 AND roles&(@SITE_ADMIN | @PROJECT_OFFICER | @VOLUNTEER_PO | @COMMUNITY_OFFICER)!=0) THEN
     CALL getOrg(null, null, null, null, null, null, null, null, null);
   ELSE
     SELECT
