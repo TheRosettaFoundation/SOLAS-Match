@@ -2663,6 +2663,7 @@ DROP PROCEDURE IF EXISTS `get_active_languages`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `get_active_languages`(IN uID INT)
 BEGIN
+    SET @VOLUNTEER_PO=      512;
     SET @SITE_ADMIN=         64;
     SET @PROJECT_OFFICER=    32;
     SET @COMMUNITY_OFFICER=  16;
@@ -2673,7 +2674,7 @@ BEGIN
 
     SET @isSiteAdmin = 0;
     SET @NGO_list = '';
-    IF EXISTS (SELECT 1 FROM Admins WHERE user_id=uID AND organisation_id=0 AND roles&(@SITE_ADMIN | @PROJECT_OFFICER | @COMMUNITY_OFFICER)!=0) THEN
+    IF EXISTS (SELECT 1 FROM Admins WHERE user_id=uID AND organisation_id=0 AND roles&(@SITE_ADMIN | @PROJECT_OFFICER | @VOLUNTEER_PO | @COMMUNITY_OFFICER)!=0) THEN
         SET @isSiteAdmin = 1;
     END IF;
 
@@ -4459,6 +4460,7 @@ BEGIN
     IF sourceLanguage='' THEN SET sourceLanguage = NULL; END IF;
     IF targetLanguage='' THEN SET targetLanguage = NULL; END IF;
 
+    SET @VOLUNTEER_PO=      512;
     SET @SITE_ADMIN=         64;
     SET @PROJECT_OFFICER=    32;
     SET @COMMUNITY_OFFICER=  16;
@@ -4469,7 +4471,7 @@ BEGIN
 
     SET @isSiteAdmin = 0;
     SET @NGO_list = '';
-    IF EXISTS (SELECT 1 FROM Admins WHERE user_id=uID AND organisation_id=0 AND roles&(@SITE_ADMIN | @PROJECT_OFFICER | @COMMUNITY_OFFICER)!=0) THEN
+    IF EXISTS (SELECT 1 FROM Admins WHERE user_id=uID AND organisation_id=0 AND roles&(@SITE_ADMIN | @PROJECT_OFFICER | @VOLUNTEER_PO | @COMMUNITY_OFFICER)!=0) THEN
         SET @isSiteAdmin = 1;
     END IF;
 
@@ -4573,6 +4575,7 @@ BEGIN
     if sourceLanguage = '' then set sourceLanguage = null; end if;
     if targetLanguage = '' then set targetLanguage = null; end if;
 
+    SET @VOLUNTEER_PO=      512;
     SET @SITE_ADMIN=         64;
     SET @PROJECT_OFFICER=    32;
     SET @COMMUNITY_OFFICER=  16;
@@ -4583,7 +4586,7 @@ BEGIN
 
     SET @isSiteAdmin = 0;
     SET @NGO_list = '';
-    IF EXISTS (SELECT 1 FROM Admins WHERE user_id=uID AND organisation_id=0 AND roles&(@SITE_ADMIN | @PROJECT_OFFICER | @COMMUNITY_OFFICER)!=0) THEN
+    IF EXISTS (SELECT 1 FROM Admins WHERE user_id=uID AND organisation_id=0 AND roles&(@SITE_ADMIN | @PROJECT_OFFICER | @VOLUNTEER_PO | @COMMUNITY_OFFICER)!=0) THEN
         SET @isSiteAdmin = 1;
     END IF;
 
@@ -7309,6 +7312,7 @@ DROP PROCEDURE IF EXISTS `isUserRestrictedFromTask`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `isUserRestrictedFromTask`(IN `taskID` INT, IN `userID` INT)
 BEGIN
+    SET @VOLUNTEER_PO=      512;
     SET @SITE_ADMIN=         64;
     SET @PROJECT_OFFICER=    32;
     SET @COMMUNITY_OFFICER=  16;
@@ -7326,7 +7330,7 @@ BEGIN
         WHERE
             user_id=userID AND
             organisation_id=0 AND
-            roles&(@SITE_ADMIN | @PROJECT_OFFICER | @COMMUNITY_OFFICER)!=0
+            roles&(@SITE_ADMIN | @PROJECT_OFFICER | @VOLUNTEER_PO | @COMMUNITY_OFFICER)!=0
     ) THEN
         SELECT 0 AS result;
 
@@ -7338,7 +7342,7 @@ BEGIN
         WHERE
             t.id=taskID AND
             oa.user_id=userID AND
-            roles&(@SITE_ADMIN | @PROJECT_OFFICER | @COMMUNITY_OFFICER | @NGO_ADMIN | @NGO_PROJECT_OFFICER)!=0
+            roles&(@SITE_ADMIN | @PROJECT_OFFICER | @VOLUNTEER_PO | @COMMUNITY_OFFICER | @NGO_ADMIN | @NGO_PROJECT_OFFICER)!=0
     ) THEN
         SELECT 0 AS result;
 
@@ -7390,6 +7394,7 @@ DROP PROCEDURE IF EXISTS `isUserRestrictedFromTaskButAllowTranslatorToDownload`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `isUserRestrictedFromTaskButAllowTranslatorToDownload`(IN `taskID` INT, IN `userID` INT)
 BEGIN
+    SET @VOLUNTEER_PO=      512;
     SET @SITE_ADMIN=         64;
     SET @PROJECT_OFFICER=    32;
     SET @COMMUNITY_OFFICER=  16;
@@ -7407,7 +7412,7 @@ BEGIN
         WHERE
             user_id=userID AND
             organisation_id=0 AND
-            roles&(@SITE_ADMIN | @PROJECT_OFFICER | @COMMUNITY_OFFICER)!=0
+            roles&(@SITE_ADMIN | @PROJECT_OFFICER | @VOLUNTEER_PO | @COMMUNITY_OFFICER)!=0
     ) THEN
         SELECT 0 AS result;
 
@@ -7419,7 +7424,7 @@ BEGIN
         WHERE
             t.id=taskID AND
             oa.user_id=userID AND
-            roles&(@SITE_ADMIN | @PROJECT_OFFICER | @COMMUNITY_OFFICER | @NGO_ADMIN | @NGO_PROJECT_OFFICER)!=0
+            roles&(@SITE_ADMIN | @PROJECT_OFFICER | @VOLUNTEER_PO | @COMMUNITY_OFFICER | @NGO_ADMIN | @NGO_PROJECT_OFFICER)!=0
     ) THEN
         SELECT 0 AS result;
 
@@ -7499,6 +7504,7 @@ DROP PROCEDURE IF EXISTS `isUserRestrictedFromProject`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `isUserRestrictedFromProject`(IN `projectID` INT, IN `userID` INT)
 BEGIN
+    SET @VOLUNTEER_PO=      512;
     SET @SITE_ADMIN=         64;
     SET @PROJECT_OFFICER=    32;
     SET @COMMUNITY_OFFICER=  16;
@@ -7516,7 +7522,7 @@ BEGIN
         WHERE
             user_id=userID AND
             organisation_id=0 AND
-            roles&(@SITE_ADMIN | @PROJECT_OFFICER | @COMMUNITY_OFFICER)!=0
+            roles&(@SITE_ADMIN | @PROJECT_OFFICER | @VOLUNTEER_PO | @COMMUNITY_OFFICER)!=0
     ) THEN
         SELECT 0 AS result;
 
@@ -7527,7 +7533,7 @@ BEGIN
         WHERE
             p.id=projectID AND
             oa.user_id=userID AND
-            roles&(@SITE_ADMIN | @PROJECT_OFFICER | @COMMUNITY_OFFICER | @NGO_ADMIN | @NGO_PROJECT_OFFICER)!=0
+            roles&(@SITE_ADMIN | @PROJECT_OFFICER | @VOLUNTEER_PO | @COMMUNITY_OFFICER | @NGO_ADMIN | @NGO_PROJECT_OFFICER)!=0
     ) THEN
         SELECT 0 AS result;
 
@@ -13303,6 +13309,7 @@ DROP PROCEDURE IF EXISTS `isSiteAdmin_any_or_org_admin_any_or_linguist_for_any_o
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `isSiteAdmin_any_or_org_admin_any_or_linguist_for_any_org`(IN uID INT UNSIGNED)
 BEGIN
+    SET @VOLUNTEER_PO=      512;
     SET @SITE_ADMIN=         64;
     SET @PROJECT_OFFICER=    32;
     SET @COMMUNITY_OFFICER=  16;
@@ -13311,7 +13318,7 @@ BEGIN
     SET @NGO_LINGUIST=        2;
     SET @LINGUIST=            1;
 
-    SET @admin_roles = @SITE_ADMIN | @PROJECT_OFFICER | @COMMUNITY_OFFICER | @NGO_ADMIN | @NGO_PROJECT_OFFICER | @NGO_LINGUIST;
+    SET @admin_roles = @SITE_ADMIN | @PROJECT_OFFICER | @VOLUNTEER_PO | @COMMUNITY_OFFICER | @NGO_ADMIN | @NGO_PROJECT_OFFICER | @NGO_LINGUIST;
 
     SELECT BIT_OR(roles) AS roles
     FROM Admins
