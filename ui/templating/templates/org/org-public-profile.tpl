@@ -27,12 +27,12 @@
                 <p class="text-muted mb-0 small">Organization Profile</p>
             </div>
             <div class="col-md-auto d-flex gap-2">
-                {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER + $NGO_ADMIN + $NGO_PROJECT_OFFICER)}
+                {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $VOLUNTEER_PO + $COMMUNITY_OFFICER + $NGO_ADMIN + $NGO_PROJECT_OFFICER)}
                     <a href="{urlFor name="ngo_projects" options="org_id.$org_id"}" class="btn btn-twb-primary btn-sm px-3">
                         <i class="fas fa-briefcase me-1"></i> Projects
                     </a>
                 {/if}
-                {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER + $NGO_ADMIN)}
+                {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $VOLUNTEER_PO + $COMMUNITY_OFFICER + $NGO_ADMIN)}
                     <a href="{urlFor name="org-private-profile" options="org_id.$org_id"}" class='btn btn-twb-primary btn-sm px-3'>
                         <i class="fas fa-cog"></i>
                     </a>
@@ -87,7 +87,7 @@
 
         </div>
 
-        {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER + $NGO_ADMIN + $NGO_PROJECT_OFFICER)}
+        {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $VOLUNTEER_PO + $COMMUNITY_OFFICER + $NGO_ADMIN + $NGO_PROJECT_OFFICER)}
         <div class="mb-5">
             <h3 class="fw-bold mb-4">Packages and subscriptions</h3>
             <div class="twb-card overflow-hidden">
@@ -128,7 +128,7 @@
         </div>
         {/if}
 
-        {if $roles&($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER + $NGO_ADMIN + $NGO_PROJECT_OFFICER)}
+        {if $roles&($SITE_ADMIN + $PROJECT_OFFICER + $VOLUNTEER_PO + $COMMUNITY_OFFICER + $NGO_ADMIN + $NGO_PROJECT_OFFICER)}
             <div class="mb-5">
                 <div class="d-flex justify-content-between align-items-center mb-4">
                     <h3 class="fw-bold m-0 text-dark-mariam">Team</h3>
@@ -156,18 +156,18 @@
                                                 </div><div class="member-role">{str_replace(['---', '|'], ['', ' to '], $member['language_pairs'])}
                                             {/if}
                                         </div>
-                                        {if $roles&($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER) || $member['source_of_user']}
+                                        {if $roles&($SITE_ADMIN + $PROJECT_OFFICER + $VOLUNTEER_PO + $COMMUNITY_OFFICER) || $member['source_of_user']}
                                         <div class="member-name">{TemplateHelper::uiCleanseHTML($member['first_name'])|capitalize} {TemplateHelper::uiCleanseHTML($member['last_name'])|capitalize}</div>
                                         {else}
                                         <div class="member-name">{TemplateHelper::uiCleanseHTML($member['display_name'])}</div>
                                         {/if}
-                                        {if $roles&($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER) || $member['source_of_user']}
+                                        {if $roles&($SITE_ADMIN + $PROJECT_OFFICER + $VOLUNTEER_PO + $COMMUNITY_OFFICER) || $member['source_of_user']}
                                         <div class="member-email text-truncate">{$member['email']}</div>
                                         {/if}
                                     </div>
 
-                                    {if $roles&($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER + $NGO_ADMIN)}
-                                    {if $roles&($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER) || $member['source_of_user']}
+                                    {if $roles&($SITE_ADMIN + $PROJECT_OFFICER + $VOLUNTEER_PO + $COMMUNITY_OFFICER + $NGO_ADMIN)}
+                                    {if $roles&($SITE_ADMIN + $PROJECT_OFFICER + $VOLUNTEER_PO + $COMMUNITY_OFFICER) || $member['source_of_user']}
                                     <div class="dropdown">
                                         <a class="btn btn-twb-outline btn-sm w-100 rounded-pill py-2 fw-bold dropdown-toggle no-caret" href="#" id="hover_drop_down" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                             Manage Member
@@ -268,18 +268,18 @@
                                                 </div><div class="member-role">{str_replace(['---', '|'], ['', ' to '], $member['language_pairs'])}
                                             {/if}
                                         </div>
-                                        {if $roles&($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER) || $member['source_of_user']}
+                                        {if $roles&($SITE_ADMIN + $PROJECT_OFFICER + $VOLUNTEER_PO + $COMMUNITY_OFFICER) || $member['source_of_user']}
                                         <div class="member-name">{TemplateHelper::uiCleanseHTML($member['first_name'])|capitalize} {TemplateHelper::uiCleanseHTML($member['last_name'])|capitalize}</div>
                                         {else}
                                         <div class="member-name">{TemplateHelper::uiCleanseHTML($member['display_name'])}</div>
                                         {/if}
-                                        {if $roles&($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER) || $member['source_of_user']}
+                                        {if $roles&($SITE_ADMIN + $PROJECT_OFFICER + $VOLUNTEER_PO + $COMMUNITY_OFFICER) || $member['source_of_user']}
                                         <div class="member-email text-truncate">{$member['email']}</div>
                                         {/if}
                                     </div>
 
-                                    {if $roles&($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER + $NGO_ADMIN)}
-                                    {if $roles&($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER) || $member['source_of_user']}
+                                    {if $roles&($SITE_ADMIN + $PROJECT_OFFICER + $VOLUNTEER_PO + $COMMUNITY_OFFICER + $NGO_ADMIN)}
+                                    {if $roles&($SITE_ADMIN + $PROJECT_OFFICER + $VOLUNTEER_PO + $COMMUNITY_OFFICER) || $member['source_of_user']}
                                     <div class="dropdown">
                                         <a class="btn btn-twb-outline btn-sm w-100 rounded-pill py-2 fw-bold dropdown-toggle no-caret" href="#" id="hover_drop_down" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                             Manage Member
@@ -363,7 +363,7 @@
             </div>
         {/if}
 
-        {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
+        {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $VOLUNTEER_PO + $COMMUNITY_OFFICER)}
             <div class="bg-body-tertiary border border-2 rounded-4 p-4 p-md-5 mb-5 shadow-inner">
                 <h3 class="fw-bold mb-4" style="color: var(--twb-blue);"><i class="fas fa-user-shield me-2"></i>CLEAR Global Admin Section</h3>
                 <div class="row g-4">
