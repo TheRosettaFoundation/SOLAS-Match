@@ -65,7 +65,7 @@
     </p>
 {/if}
 
-    {if isset($this_user) && ($private_access || ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER + 128)) || $receive_credit || !empty($linguist_orgs_for_admin))}
+    {if isset($this_user) && ($private_access || ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $VOLUNTEER_PO + $COMMUNITY_OFFICER + 128)) || $receive_credit || !empty($linguist_orgs_for_admin))}
         <div class="row g-4 ">    
         <div class="bg-body p-4 rounded-3 text-body col-12 col-md-7  >
        
@@ -1363,7 +1363,7 @@ If a language is to be removed from this list, the community will be informed be
 {/if}
 
 
-{if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
+{if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $VOLUNTEER_PO + $COMMUNITY_OFFICER)}
     <div class="mt-2 p-4 rounded-3 bg-body">
 
 
