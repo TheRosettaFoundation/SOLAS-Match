@@ -47,7 +47,7 @@ class Middleware
     {
         if (is_null(DAO\UserDao::getLoggedInUser())) return self::return_error($request, 'The Authorization header does not match the current user or the user does not have permission to access the current resource authUserOwnsResource');
         $user = DAO\UserDao::getLoggedInUser();
-        if (DAO\AdminDao::get_roles($user->getId()) & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER)) {
+        if (DAO\AdminDao::get_roles($user->getId()) & (SITE_ADMIN | PROJECT_OFFICER | VOLUNTEER_PO | COMMUNITY_OFFICER)) {
             return $handler->handle($request);
         }
 
@@ -68,7 +68,7 @@ class Middleware
     {
         if (!is_null(DAO\UserDao::getLoggedInUser())) {
             $user = DAO\UserDao::getLoggedInUser();
-            if (DAO\AdminDao::get_roles($user->getId()) & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER)) {
+            if (DAO\AdminDao::get_roles($user->getId()) & (SITE_ADMIN | PROJECT_OFFICER | VOLUNTEER_PO | COMMUNITY_OFFICER)) {
                 return $handler->handle($request);
             }
         }
@@ -88,7 +88,7 @@ class Middleware
     {
         if (is_null(DAO\UserDao::getLoggedInUser())) return self::return_error($request, 'The Authorization header does not match the current user or the user does not have permission to access the current resource authenticateSiteAdmin');
         $user = DAO\UserDao::getLoggedInUser();
-        if (DAO\AdminDao::get_roles($user->getId()) & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER)) {
+        if (DAO\AdminDao::get_roles($user->getId()) & (SITE_ADMIN | PROJECT_OFFICER | VOLUNTEER_PO | COMMUNITY_OFFICER)) {
             return $handler->handle($request);
         }
         return self::return_error($request, 'The user does not have permission to access the current resource authenticateSiteAdmin');
@@ -103,7 +103,7 @@ class Middleware
         $routeContext = RouteContext::fromRequest($request);
         $route = $routeContext->getRoute();
         $orgId = $route->getArgument('orgId');
-        if ($orgId != null && (DAO\AdminDao::get_roles($userId, $orgId) & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER | NGO_ADMIN | NGO_PROJECT_OFFICER))) return $handler->handle($request);
+        if ($orgId != null && (DAO\AdminDao::get_roles($userId, $orgId) & (SITE_ADMIN | PROJECT_OFFICER | VOLUNTEER_PO | COMMUNITY_OFFICER | NGO_ADMIN | NGO_PROJECT_OFFICER))) return $handler->handle($request);
 
         return self::return_error($request, 'The user does not have permission to access the current resource authenticateOrgAdmin');
     }
@@ -119,7 +119,7 @@ class Middleware
         $projectId = $route->getArgument('projectId');
         $project = DAO\ProjectDao::getProject($projectId);
         $orgId = $project->getOrganisationId();
-        if ($orgId != null && (DAO\AdminDao::get_roles($userId, $orgId) & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER | NGO_ADMIN | NGO_PROJECT_OFFICER))) return $handler->handle($request);
+        if ($orgId != null && (DAO\AdminDao::get_roles($userId, $orgId) & (SITE_ADMIN | PROJECT_OFFICER | VOLUNTEER_PO | COMMUNITY_OFFICER | NGO_ADMIN | NGO_PROJECT_OFFICER))) return $handler->handle($request);
 
         return self::return_error($request, 'The user does not have permission to access the current resource authenticateUserForOrgProject');
     }
@@ -137,7 +137,7 @@ class Middleware
         $projectId = $task->getProjectId();
         $project = DAO\ProjectDao::getProject($projectId);
         $orgId = $project->getOrganisationId();
-        if ($orgId != null && (DAO\AdminDao::get_roles($userId, $orgId) & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER | NGO_ADMIN | NGO_PROJECT_OFFICER))) return $handler->handle($request);
+        if ($orgId != null && (DAO\AdminDao::get_roles($userId, $orgId) & (SITE_ADMIN | PROJECT_OFFICER | VOLUNTEER_PO | COMMUNITY_OFFICER | NGO_ADMIN | NGO_PROJECT_OFFICER))) return $handler->handle($request);
 
         return self::return_error($request, 'The user does not have permission to access the current resource authenticateUserForOrgTask');
     }
@@ -161,7 +161,7 @@ class Middleware
         $orgId = $project->getOrganisationId();
 
         if ($userId == $current_user) return $handler->handle($request);
-        if ($orgId != null && (DAO\AdminDao::get_roles($current_user, $orgId) & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER | NGO_ADMIN | NGO_PROJECT_OFFICER))) return $handler->handle($request);
+        if ($orgId != null && (DAO\AdminDao::get_roles($current_user, $orgId) & (SITE_ADMIN | PROJECT_OFFICER | VOLUNTEER_PO | COMMUNITY_OFFICER | NGO_ADMIN | NGO_PROJECT_OFFICER))) return $handler->handle($request);
 
         return self::return_error($request, 'The user does not have permission to access the current resource authUserOrOrgForTask');
     }
@@ -181,7 +181,7 @@ class Middleware
                     
         // cases where the orgId is null signify a system badge
         // badge ids 6, 7, 8... refer to the user controlled system badges
-        if ($orgId != null && (DAO\AdminDao::get_roles($userId, $orgId) & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER | NGO_ADMIN | NGO_PROJECT_OFFICER))) return $handler->handle($request);
+        if ($orgId != null && (DAO\AdminDao::get_roles($userId, $orgId) & (SITE_ADMIN | PROJECT_OFFICER | VOLUNTEER_PO | COMMUNITY_OFFICER | NGO_ADMIN | NGO_PROJECT_OFFICER))) return $handler->handle($request);
         elseif ($orgId == null && in_array($badgeId, array(6, 7, 8, 10, 11, 12, 13))) return $handler->handle($request);
 
         return self::return_error($request, 'The user does not have permission to access the current resource authenticateUserForOrgBadge');
@@ -204,7 +204,7 @@ class Middleware
         $orgId = $badge->getOwnerId();
                     
         if ($userId == $loggedInId) return $handler->handle($request);
-        if ($orgId != null && (DAO\AdminDao::get_roles($loggedInId, $orgId) & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER | NGO_ADMIN | NGO_PROJECT_OFFICER))) return $handler->handle($request);
+        if ($orgId != null && (DAO\AdminDao::get_roles($loggedInId, $orgId) & (SITE_ADMIN | PROJECT_OFFICER | VOLUNTEER_PO | COMMUNITY_OFFICER | NGO_ADMIN | NGO_PROJECT_OFFICER))) return $handler->handle($request);
             /*
              * currently this checks if the orgId is not Null
              * cases where the orgId is null signify a system badge
