@@ -150,7 +150,7 @@ error_log("adjust_org_admin($user_id, $org_id, $remove, $add)");
 
     public function adjust_org_admin_source_of_user($user_id, $org_id, $source_of_user, $admin_id)
     {
-        if (!($this->get_roles($admin_id)&(SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER)))
+        if (!($this->get_roles($admin_id)&(SITE_ADMIN | PROJECT_OFFICER | VOLUNTEER_PO | COMMUNITY_OFFICER)))
             LibAPI\PDOWrapper::call('adjust_org_admin_source_of_user', LibAPI\PDOWrapper::cleanse($user_id) . ',' .  LibAPI\PDOWrapper::cleanse($org_id) . ',' . LibAPI\PDOWrapper::cleanse($source_of_user));
     }
 

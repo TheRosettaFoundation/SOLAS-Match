@@ -144,7 +144,7 @@ class AdminRouteHandler
 
             $statsDao = new DAO\StatisticsDao();
 
-            if (($roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER)) && !empty($post['search_user'])) {
+            if (($roles & (SITE_ADMIN | PROJECT_OFFICER | VOLUNTEER_PO | COMMUNITY_OFFICER)) && !empty($post['search_user'])) {
                 $items_found = $statsDao->search_user($post['search_user']);
                 if (!empty($items_found)) {
                     UserRouteHandler::flashNow('search_user_results', $items_found);
@@ -153,7 +153,7 @@ class AdminRouteHandler
                 }
             }
 
-            if (($roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER))) {
+            if (($roles & (SITE_ADMIN | PROJECT_OFFICER | VOLUNTEER_PO | COMMUNITY_OFFICER))) {
             if (!empty($post['search_organisation'])) {
                 $items_found = $statsDao->search_organisation($post['search_organisation']);
                 if (!empty($items_found)) {
@@ -163,7 +163,7 @@ class AdminRouteHandler
                 }
             }
 
-            if (($roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER)) && !empty($post['search_project'])) {
+            if (($roles & (SITE_ADMIN | PROJECT_OFFICER | VOLUNTEER_PO | COMMUNITY_OFFICER)) && !empty($post['search_project'])) {
                 $items_found = $statsDao->search_project($post['search_project']);
                 if (!empty($items_found)) {
                     UserRouteHandler::flashNow('search_project_results', $items_found);
@@ -307,7 +307,7 @@ error_log("un/pw verify manually bulk-create errno: $errno, responseCode: $respo
                     );
                 }
             }
-            if (($roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER)) && isset($post['revokeTask']) && $post['revokeTask'] != '') {
+            if (($roles & (SITE_ADMIN | PROJECT_OFFICER | VOLUNTEER_PO | COMMUNITY_OFFICER)) && isset($post['revokeTask']) && $post['revokeTask'] != '') {
                 $taskId = filter_var($post['taskId'], FILTER_VALIDATE_INT);
                 $userToRevokeFrom = $userDao->getUserByEmail(urlencode(trim($post['userEmail'])));
                 if ($taskId && !is_null($userToRevokeFrom)) {

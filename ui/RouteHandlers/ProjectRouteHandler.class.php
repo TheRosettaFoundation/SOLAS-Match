@@ -750,7 +750,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
             $post = $request->getParsedBody();
             if ($fail_CSRF = Common\Lib\UserSession::checkCSRFKey($post, 'projectView')) return $response->withStatus(302)->withHeader('Location', $fail_CSRF);
 
-            if ($roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER | NGO_ADMIN | NGO_PROJECT_OFFICER)) {
+            if ($roles & (SITE_ADMIN | PROJECT_OFFICER | VOLUNTEER_PO | COMMUNITY_OFFICER | NGO_ADMIN | NGO_PROJECT_OFFICER)) {
                 if (isset($post['translators_count'])) {
                     $response->getBody()->write(json_encode($taskDao->count_users_who_can_claim($post['translators_count'])));
                     return $response->withHeader('Content-Type', 'application/json');
@@ -770,7 +770,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                 $task = $taskDao->getTask($post['revokeTaskId']);
             }
 
-            if (($roles & (SITE_ADMIN | PROJECT_OFFICER | NGO_ADMIN | NGO_PROJECT_OFFICER)) && isset($post['publishedTask']) && isset($post['task_id'])) {
+            if (($roles & (SITE_ADMIN | PROJECT_OFFICER | VOLUNTEER_PO | NGO_ADMIN | NGO_PROJECT_OFFICER)) && isset($post['publishedTask']) && isset($post['task_id'])) {
                 if ($post['publishedTask']) {
                     $task->setPublished(true);
                     UserRouteHandler::flashNow("success", " Task published  ");
@@ -787,7 +787,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
             if (isset($post['trackProject'])) {
                 if ($post['trackProject']) {
                     $userTrackProject = $userDao->trackProject($user_id, $project->getId());
-                    if ($roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER)) {
+                    if ($roles & (SITE_ADMIN | PROJECT_OFFICER | VOLUNTEER_PO | COMMUNITY_OFFICER)) {
                         $projectDao->follow_asana_tasks($project->getId(), $user_id);
                     }
                     if ($userTrackProject) {
@@ -797,7 +797,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                     }
                 } else {
                     $userUntrackProject = $userDao->untrackProject($user_id, $project->getId());
-                    if ($roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER)) {
+                    if ($roles & (SITE_ADMIN | PROJECT_OFFICER | VOLUNTEER_PO | COMMUNITY_OFFICER)) {
                         $projectDao->unfollow_asana_tasks($project->getId(), $user_id);
                     }
                     if ($userUntrackProject) {
@@ -842,7 +842,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                 }
             }
 
-            if ($roles & (SITE_ADMIN | PROJECT_OFFICER | NGO_ADMIN | NGO_PROJECT_OFFICER)) {
+            if ($roles & (SITE_ADMIN | PROJECT_OFFICER | VOLUNTEER_PO | NGO_ADMIN | NGO_PROJECT_OFFICER)) {
             if (isset($post['deleteTask'])) {
                 $taskDao->deleteTask($post['task_id']);
                 UserRouteHandler::flashNow(
@@ -900,7 +900,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                 if ($error) UserRouteHandler::flashNow('error', $error);
                 $reload_for_wordcount = 1;
             }
-            if ($roles & (SITE_ADMIN | PROJECT_OFFICER | NGO_ADMIN | NGO_PROJECT_OFFICER)) {
+            if ($roles & (SITE_ADMIN | PROJECT_OFFICER | VOLUNTEER_PO | NGO_ADMIN | NGO_PROJECT_OFFICER)) {
                 if (!empty($post['unpublish_selected_tasks']) || !empty($post['publish_selected_tasks'])) {
                     $tasks = [];
                     if (!empty($post['unpublish_selected_tasks'])) {
@@ -954,7 +954,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                     UserRouteHandler::flashNow('success', "$number tasks revoked.");
                 }
             }
-            if ($roles & (SITE_ADMIN | PROJECT_OFFICER) || in_array($project->getOrganisationId(), ORG_EXCEPTIONS) && $roles & (NGO_ADMIN + NGO_PROJECT_OFFICER)) {
+            if ($roles & (SITE_ADMIN | PROJECT_OFFICER | VOLUNTEER_PO) || in_array($project->getOrganisationId(), ORG_EXCEPTIONS) && $roles & (NGO_ADMIN + NGO_PROJECT_OFFICER)) {
                 $number = 0;
                 if (!empty($post['complete_selected_tasks'])) {
                     foreach (preg_split('/\,/', $post['complete_selected_tasks']) as $task_id) {
@@ -997,7 +997,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                 }
             }
 
-            if ($roles & (SITE_ADMIN | PROJECT_OFFICER) || in_array($project->getOrganisationId(), ORG_EXCEPTIONS) && $roles & (NGO_ADMIN + NGO_PROJECT_OFFICER)) {
+            if ($roles & (SITE_ADMIN | PROJECT_OFFICER | VOLUNTEER_PO) || in_array($project->getOrganisationId(), ORG_EXCEPTIONS) && $roles & (NGO_ADMIN + NGO_PROJECT_OFFICER)) {
                 if (!empty($post['status_as_unclaimed'])) {
                     $task_ids = preg_split ("/\,/", $post['status_as_unclaimed']);
                     foreach ($task_ids as $id) {
@@ -1024,7 +1024,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                 }
             }
 
-            if ($roles & (SITE_ADMIN | PROJECT_OFFICER)) {
+            if ($roles & (SITE_ADMIN | PROJECT_OFFICER | VOLUNTEER_PO)) {
                 if (!empty($post['wordnum']) && !empty($post['word_count'])) {
                     $total_wordCount = $post['word_count'];
                     $task_ids = preg_split("/\,/", $post['wordnum']);
@@ -1054,12 +1054,12 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                 }
             }
 
-            if ($roles & (SITE_ADMIN | PROJECT_OFFICER) && isset($post['request_quality_checks'])) {
+            if ($roles & (SITE_ADMIN | PROJECT_OFFICER | VOLUNTEER_PO) && isset($post['request_quality_checks'])) {
                 $number = $userDao->set_quality_checks($post['request_quality_checks']);
                 UserRouteHandler::flashNow('success', "$number new languages in files now have quality checks requested, these will take a few minutes to appear.");
             }
 
-            if ($roles & (SITE_ADMIN | PROJECT_OFFICER) || in_array($project->getOrganisationId(), ORG_EXCEPTIONS) && $roles & (NGO_ADMIN + NGO_PROJECT_OFFICER)) {
+            if ($roles & (SITE_ADMIN | PROJECT_OFFICER | VOLUNTEER_PO) || in_array($project->getOrganisationId(), ORG_EXCEPTIONS) && $roles & (NGO_ADMIN + NGO_PROJECT_OFFICER)) {
                 if (!empty($post['complete_task'])) {
                     $task_id = $post['task_id'];
                     $taskDao->setTaskStatus($task_id, Common\Enums\TaskStatusEnum::COMPLETE);
@@ -1082,7 +1082,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
         $one_paid = 0;
         $payment_status_for_project = [];
 
-        if ($roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER | NGO_ADMIN | NGO_PROJECT_OFFICER)) {
+        if ($roles & (SITE_ADMIN | PROJECT_OFFICER | VOLUNTEER_PO | COMMUNITY_OFFICER | NGO_ADMIN | NGO_PROJECT_OFFICER)) {
             $userSubscribedToProject = $userDao->isSubscribedToProject($user_id, $project_id);
             $taskMetaData = array();
             $project_tasks = $projectDao->getProjectTasks($project_id);
@@ -1516,7 +1516,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
         $userDao = new DAO\UserDao();
 
         $allowed = 1;
-        if (!($adminDao->get_roles($user_id, $org_id)&(SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER)) && !$projectDao->get_entitlement_remaining($org_id, 0)) $allowed = 0;
+        if (!($adminDao->get_roles($user_id, $org_id)&(SITE_ADMIN | PROJECT_OFFICER | VOLUNTEER_PO | COMMUNITY_OFFICER)) && !$projectDao->get_entitlement_remaining($org_id, 0)) $allowed = 0;
 
         if (empty($_SESSION['SESSION_CSRF_KEY'])) {
             $_SESSION['SESSION_CSRF_KEY'] = $this->random_string(10);

@@ -608,7 +608,7 @@ class OrgRouteHandler
             $post = $request->getParsedBody();
             if ($fail_CSRF = Common\Lib\UserSession::checkCSRFKey($post, 'orgPublicProfile')) return $response->withStatus(302)->withHeader('Location', $fail_CSRF);
                    
-            if ($roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER | NGO_ADMIN)) {
+            if ($roles & (SITE_ADMIN | PROJECT_OFFICER | VOLUNTEER_PO | COMMUNITY_OFFICER | NGO_ADMIN)) {
                 if (isset($post['revokeUser'])) {
                     $user_id = $post['revokeUser'];
                     $adminDao->adjust_org_admin($user_id, $org_id, NGO_ADMIN | NGO_PROJECT_OFFICER | NGO_LINGUIST, 0);
@@ -634,7 +634,7 @@ class OrgRouteHandler
                     error_log("makeOrgPO($user_id, $org_id) by $current_user_id");
                 }
             }
-            if ($roles & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER)) {
+            if ($roles & (SITE_ADMIN | PROJECT_OFFICER | VOLUNTEER_PO | COMMUNITY_OFFICER)) {
                 if (isset($post['asana_board'])) {
                     if (preg_match('/^\d*$/', $post['asana_board'])) $userDao->set_asana_board_for_org($org_id, $post['asana_board']);
                     else UserRouteHandler::flash('error', 'Asana ID must consist only of decimal digits.');
@@ -1096,7 +1096,7 @@ class OrgRouteHandler
     {
         $adminDao = new DAO\AdminDao();
         $org_members = $adminDao->getOrgMembers($args['org_id']);
-        $roles = $adminDao->get_roles(Common\Lib\UserSession::getCurrentUserID())&(SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER);
+        $roles = $adminDao->get_roles(Common\Lib\UserSession::getCurrentUserID())&(SITE_ADMIN | PROJECT_OFFICER | VOLUNTEER_PO | COMMUNITY_OFFICER);
 
         $data = "\xEF\xBB\xBF" . '"user_id","Given Name/Display Name","Family Name","email","Roles","Language Pairs"' . "\n";
         foreach ($org_members as $om) {
