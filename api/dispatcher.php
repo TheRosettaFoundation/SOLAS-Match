@@ -13,6 +13,7 @@ mb_internal_encoding('UTF-8');
 
 require __DIR__ . '/vendor/autoload.php';
 
+define('VOLUNTEER_PO',      512);
 define("SITE_ADMIN",         64);
 define("PROJECT_OFFICER",    32);
 define("COMMUNITY_OFFICER",  16);
