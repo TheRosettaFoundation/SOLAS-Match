@@ -12,7 +12,7 @@
     <div id="org_id">{$org_id}</div>
     <div id="user_id">{$user_id}</div>
     <div id="deadline_timestamp">{$deadline_timestamp}</div>
-    <div id="userIsAdmin">{if $roles & ($SITE_ADMIN + $PROJECT_OFFICER)}1{else}0{/if}</div>
+    <div id="userIsAdmin">{if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $VOLUNTEER_PO)}1{else}0{/if}</div>
 </span>
 
 <div class="grid_8">
@@ -120,8 +120,8 @@
                     <br />
 
                     <label for="wordCountInput" style="font-size: large"><strong>{Localisation::getTranslation('common_word_count')}</strong><span style="color: red">*</span></label>
-                    <input type="text" maxlength="6" value="{$project->getWordCount()}" style="width: 400px;  margin-bottom: 20px" name="wordCountInput" id="wordCountInput" {if !($roles & ($SITE_ADMIN + $PROJECT_OFFICER))}disabled{/if} />
-                    {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER)}
+                    <input type="text" maxlength="6" value="{$project->getWordCount()}" style="width: 400px;  margin-bottom: 20px" name="wordCountInput" id="wordCountInput" {if !($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $VOLUNTEER_PO))}disabled{/if} />
+                    {if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $VOLUNTEER_PO)}
                     <br />
                     <button onclick="updatewordCount(); return false;" class="btn btn-primary" id="updatewordCountBtn">
                         <i class="icon-refresh icon-white"></i>{Localisation::getTranslation('common_submit')} {Localisation::getTranslation('common_word_count')}

@@ -10,7 +10,7 @@
     <div id="org_id">{$org_id}</div>
     <div id="user_id">{$user_id}</div>
     <div id="deadline_timestamp">{$deadline_timestamp}</div>
-    <div id="userIsAdmin">{if $roles & ($SITE_ADMIN + $PROJECT_OFFICER)}1{else}0{/if}</div>
+    <div id="userIsAdmin">{if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $VOLUNTEER_PO)}1{else}0{/if}</div>
     <div id="template_language_options">
         <option value="0"></option>
         {foreach from=$languages key=codes item=language}
