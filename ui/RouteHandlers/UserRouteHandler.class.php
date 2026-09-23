@@ -1022,7 +1022,7 @@ error_log("result_json: $result_json");//(**)
         if ($request->getMethod() === 'POST') {
             $post = $request->getParsedBody();
             $email = $post['email'];
-            if ((($roles&(SITE_ADMIN + PROJECT_OFFICER | VOLUNTEER_PO + COMMUNITY_OFFICER + NGO_ADMIN)) || $post['role'] != NGO_ADMIN) && Lib\Validator::validateEmail($email)) {
+            if ((($roles&(SITE_ADMIN | PROJECT_OFFICER | VOLUNTEER_PO | COMMUNITY_OFFICER | NGO_ADMIN)) || $post['role'] != NGO_ADMIN) && Lib\Validator::validateEmail($email)) {
                 $userExist = $userDao->getUserByEmail($email, null);
                 if ($userExist) {
                     if ($userDao->isUserVerified($userExist->getId())) {
