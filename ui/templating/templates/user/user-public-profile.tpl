@@ -1629,9 +1629,9 @@ If a language is to be removed from this list, the community will be informed be
 {/if}
 
 
+{if $private_access || ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $VOLUNTEER_PO + $COMMUNITY_OFFICER))}
+
 {if $private_access || ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER))}
-
-
     {if !empty($badges)}
         <div class="mt-4 rounded-3 p-4 bg-body fs-5">
         <div class='d-flex justify-content-between flex-wrap'>
@@ -1639,7 +1639,6 @@ If a language is to be removed from this list, the community will be informed be
                 <a href='{urlFor name="badge-list"}' class=' btn btn-primary text-white  '>
                     <i class="icon-list icon-white"></i> {Localisation::getTranslation('user_public_profile_list_all_badges')}
                 </a>
-           
         </div>
 
         {foreach $badges as $badge}
@@ -1660,15 +1659,11 @@ If a language is to be removed from this list, the community will be informed be
                         {$org->getName()}</a> - {TemplateHelper::uiCleanseHTML($badge->getTitle())}
                 </h3>
                 <p>{TemplateHelper::uiCleanseHTML($badge->getDescription())}</p>
-    
         {/foreach}
 
- </div>
-
-  
-    
-  {/if}
-
+        </div>
+    {/if}
+{/if}
 
 {if ($private_access && $user_task_limitation_current_user['limit_profile_changes'] == 0) || ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $VOLUNTEER_PO + $COMMUNITY_OFFICER))}
  <div class="mt-4 rounded-3 p-4 bg-body fs-5">
