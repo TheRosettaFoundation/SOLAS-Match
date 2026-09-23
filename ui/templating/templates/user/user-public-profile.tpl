@@ -1423,7 +1423,7 @@ If a language is to be removed from this list, the community will be informed be
 
 </div>
 
-
+{if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
 <hr class="bg-light-subtle"/>
 
 <h4 class="fw-bold">Recognition Program Points Adjustment (for Non Strategic languages)</h4>
@@ -1468,13 +1468,10 @@ If a language is to be removed from this list, the community will be informed be
 {/foreach}
 </table>
 
- 
 </div>
  
 
-
 <hr/>
-
 
 <h4 class="fw-bold">Recognition Program Points Adjustment (for  Strategic languages)</h4>
 <div class="d-flex justify-content-between fs-5">
@@ -1513,18 +1510,13 @@ If a language is to be removed from this list, the community will be informed be
                 <input type="hidden" name="comment_id" value="{$adjust_point['id']}" />
                 {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
             </form>
-            
         </td>
     </tr>
 {/foreach}
 </table>
- 
 
     </div>
- 
-
-
-
+{/if}
 
 <form method="post"  action="{urlFor name="user-public-profile" options="user_id.$user_id"}">
 
@@ -1559,7 +1551,7 @@ If a language is to be removed from this list, the community will be informed be
 {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
 </form>
 
-
+{if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER)}
 {if $roles & ($SITE_ADMIN + $COMMUNITY_OFFICER)}<form method="post" action="{urlFor name="user-public-profile" options="user_id.$user_id"}">{/if}
 <div class="table-responsive fs-5">
 <table class="table" >
@@ -1608,6 +1600,8 @@ If a language is to be removed from this list, the community will be informed be
 {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
 </form>
 {/if}
+{/if}
+
 </div>
 {/if}
 
