@@ -138,7 +138,6 @@
                 {/if}
 
                 {if !empty($ngo_orgs)}
-{print_r($ngo_orgs, 1)}
                     <li class="nav-item">
                         <a href="{urlFor name="metabase_ngo" options="org_id.{$ngo_orgs[0]['organisation_id']}"}" class="fs-5 nav-link fw-bold">Analytics</a>
                     </li>
