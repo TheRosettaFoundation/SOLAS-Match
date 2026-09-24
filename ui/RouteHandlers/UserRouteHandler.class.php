@@ -427,6 +427,7 @@ class UserRouteHandler
             'sesskey' => Common\Lib\UserSession::getCSRFKey(),
             ]);
 
+if (!empty($template_data['ngo_orgs'])) error_log('URH ngo orgs' . print_r($ngo_orgs, 1)) else error_log('URH ngo orgs EMPTY');
         return UserRouteHandler::render('home_mariam.tpl', $response);
     }
 
