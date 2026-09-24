@@ -256,7 +256,7 @@
 	                                <a href="{Settings::get('site.forum_link')}" target="_blank">{Localisation::getTranslation('common_forum')}</a>
 	                            </li>
                             {/if}
-                        {if isset($site_admin)}
+                        {if isset($site_admin) && ($site_admin&($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER + 128))}
                             <li>
                                 <a href="{urlFor name="analytics"}" target="_blank">Analytics</a>
                             </li>
