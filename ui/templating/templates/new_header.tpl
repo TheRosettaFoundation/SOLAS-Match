@@ -131,7 +131,7 @@
                     </li>
                 {/if}
 
-                {if isset($site_admin)}
+                {if isset($site_admin) && ($site_admin&($SITE_ADMIN + $PROJECT_OFFICER + $COMMUNITY_OFFICER + 128))}
                             <li class="nav-item">
                                 <a href="{urlFor name="analytics"}"  class=" fs-5 nav-link fw-bold">Analytics</a>
                             </li>
