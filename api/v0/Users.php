@@ -237,7 +237,8 @@ class Users
 
         $app->delete(
 //            '/api/v0/users_t/{userId}/key/{key}/t_key/',
-            '/api/v0/users_t/{userId}/',
+//            '/api/v0/users_t/{userId}/',
+            '/api/v0/users_t/{userId}/key/',
             '\SolasMatch\API\V0\Users:delete_user');
 
         // From cron
