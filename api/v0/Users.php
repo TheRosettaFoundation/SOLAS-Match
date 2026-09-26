@@ -236,7 +236,7 @@ class Users
             ->add('\SolasMatch\API\Lib\Middleware:authUserOwnsResource');
 
         $app->delete(
-            '/api/v0/users/{userId}/key/{key}/t_key/',
+            '/api/v0/users_t/{userId}/key/{key}/t_key/',
             '\SolasMatch\API\V0\Users:delete_user');
 
         // From cron
