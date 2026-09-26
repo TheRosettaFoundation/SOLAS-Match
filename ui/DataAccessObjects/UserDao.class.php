@@ -2723,4 +2723,9 @@ error_log(print_r($result, true));//(**)
         LibAPI\PDOWrapper::cleanse($admin_id);
         LibAPI\PDOWrapper::call('add_org_image', $args);
     }
+
+    public function delete_user($user_id)
+    {
+        $this->client->call(null, "{$this->siteApi}v0/users/$user_id/" . Common\Lib\Settings::get('tarjimly.api_key')  . '/', Common\Enums\HttpMethodEnum::DELETE);
+    }
 }

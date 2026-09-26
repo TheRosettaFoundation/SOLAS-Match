@@ -237,7 +237,7 @@ class Users
 
         $app->delete(
             '/api/v0/users/{userId}/key/{key}/',
-            '\SolasMatch\API\V0\Users:delete_user_key');
+            '\SolasMatch\API\V0\Users:delete_user');
 
         // From cron
         $app->get(
@@ -645,10 +645,10 @@ error_log("userClaimTask($userId, $taskId)");
         return API\Dispatcher::sendResponse($response, null, null);
     }
 
-    public static function delete_user_key(Request $request, Response $response, $args)
+    public static function delete_user(Request $request, Response $response, $args)
     {
-        if ($args['key'] == Common\Lib\Settings::get('tarjimly.api_key')) return self::deleteUser($request, $response, $args)
-        else return API\Dispatcher::sendResponse($response, null, null);
+        if ($args['key'] != Common\Lib\Settings::get('tarjimly.api_key')) return API\Dispatcher::sendResponse($response, null, null);
+        return self::deleteUser($request, $response, $args)
     }
 
     public static function getBannedComment(Request $request, Response $response, $args)

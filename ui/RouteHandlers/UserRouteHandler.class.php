@@ -327,6 +327,11 @@ class UserRouteHandler
             '/org/{org_id}/t_private[/]',
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:t_private')
             ->setName('t_private');
+
+        $app->map(['DELETE'],
+            '/user/{user_id}[/]',
+            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:delete_user')
+            ->setName('delete_user');
     }
 
     public function home(Request $request, Response $response, $args = [])
@@ -4164,6 +4169,17 @@ foreach ($rows as $index => $row) {
         }
         $response->getBody()->write(json_encode($data));
         return $response->withHeader('Content-Type', 'application/json');
+    }
+
+    public function delete_user(Request $request, Response $response, $args)
+    {
+        $user_id = (int)$args['user_id'];
+        if ($user_id != $_SERVER['HTTP_TWBID']) return $response;
+
+        $userDao = new DAO\UserDao();
+
+        if (self::t_validate_user()) $userDao->delete_user($user_id);
+        return $response;
     }
 
     public static function flash($key, $value)
