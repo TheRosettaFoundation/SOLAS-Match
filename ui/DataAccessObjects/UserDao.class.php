@@ -2726,6 +2726,7 @@ error_log(print_r($result, true));//(**)
 
     public function delete_user($user_id)
     {
-        $this->client->call(null, "{$this->siteApi}v0/users/$user_id/key/" . urlencode(Common\Lib\Settings::get('tarjimly.api_key')) . '/', Common\Enums\HttpMethodEnum::DELETE);
+        //$this->client->call(null, "{$this->siteApi}v0/users/$user_id/key/" . urlencode(Common\Lib\Settings::get('tarjimly.api_key')) . '/', Common\Enums\HttpMethodEnum::DELETE);
+        $this->client->call(null, "{$this->siteApi}v0/users/$user_id/key/" . '66666' . '/', Common\Enums\HttpMethodEnum::DELETE);
     }
 }
