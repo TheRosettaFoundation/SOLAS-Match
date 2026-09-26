@@ -648,7 +648,7 @@ error_log("userClaimTask($userId, $taskId)");
     public static function delete_user(Request $request, Response $response, $args)
     {
         if ($args['key'] != Common\Lib\Settings::get('tarjimly.api_key')) return API\Dispatcher::sendResponse($response, null, null);
-        return self::deleteUser($request, $response, $args)
+        return self::deleteUser($request, $response, $args);
     }
 
     public static function getBannedComment(Request $request, Response $response, $args)
