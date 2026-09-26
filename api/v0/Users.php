@@ -235,6 +235,10 @@ class Users
             '\SolasMatch\API\V0\Users:deleteUser')
             ->add('\SolasMatch\API\Lib\Middleware:authUserOwnsResource');
 
+        $app->delete(
+            '/api/v0/users/{userId}/key/{key}/',
+            '\SolasMatch\API\V0\Users:delete_user_key');
+
         // From cron
         $app->get(
             '/api/v0/dequeue_claim_task',
@@ -639,6 +643,12 @@ error_log("userClaimTask($userId, $taskId)");
         error_log("deleteUser($userId)");
         DAO\UserDao::deleteUser($userId);
         return API\Dispatcher::sendResponse($response, null, null);
+    }
+
+    public static function delete_user_key(Request $request, Response $response, $args)
+    {
+        if ($args['key'] == Common\Lib\Settings::get('tarjimly.api_key')) return self::deleteUser($request, $response, $args)
+        else return API\Dispatcher::sendResponse($response, null, null);
     }
 
     public static function getBannedComment(Request $request, Response $response, $args)
