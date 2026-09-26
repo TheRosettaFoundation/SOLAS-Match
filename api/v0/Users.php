@@ -238,7 +238,8 @@ class Users
         $app->delete(
 //            '/api/v0/users_t/{userId}/key/{key}/t_key/',
 //            '/api/v0/users_t/{userId}/',
-            '/api/v0/users_t/{userId}/key/',
+//            '/api/v0/users_t/{userId}/key/',
+            '/api/v0/users_t/{userId}/key/{key}/',
             '\SolasMatch\API\V0\Users:delete_user');
 
         // From cron
@@ -649,6 +650,7 @@ error_log("userClaimTask($userId, $taskId)");
 
     public static function delete_user(Request $request, Response $response, $args)
     {
+error_log('key: ' . $args['key']);//(**)DEL
         if ($args['key'] != Common\Lib\Settings::get('tarjimly.api_key')) return API\Dispatcher::sendResponse($response, null, null);
         return self::deleteUser($request, $response, $args);
     }
