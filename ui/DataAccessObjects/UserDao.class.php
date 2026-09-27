@@ -2728,6 +2728,6 @@ error_log(print_r($result, true));//(**)
     {
 error_log("DELETE: " . "{$this->siteApi}v0/users_t/$user_id/key/" . Common\Lib\Settings::get('tarjimly.twb_key') . '/');//(**)DEL
 error_log("urlencode DELETE: " . "{$this->siteApi}v0/users_t/$user_id/key/" . urlencode(Common\Lib\Settings::get('tarjimly.twb_key')) . '/');//(**)DEL
-        $this->client->call(null, "{$this->siteApi}v0/users_t/$user_id/key/" . Common\Lib\Settings::get('tarjimly.twb_key') . '/', Common\Enums\HttpMethodEnum::DELETE);
+        $this->client->call(null, "{$this->siteApi}v0/users_t/$user_id/key/" . Common\Lib\Settings::get('tarjimly.twb_key'), Common\Enums\HttpMethodEnum::DELETE);
     }
 }
