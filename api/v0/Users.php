@@ -647,8 +647,7 @@ error_log("userClaimTask($userId, $taskId)");
 
     public static function delete_user(Request $request, Response $response, $args)
     {
-error_log('key: ' . $args['key']);//(**)DEL
-        if ($args['key'] != Common\Lib\Settings::get('tarjimly.api_key')) return API\Dispatcher::sendResponse($response, null, null);
+        if ($args['key'] != Common\Lib\Settings::get('tarjimly.twb_key')) return API\Dispatcher::sendResponse($response, null, null);
         return self::deleteUser($request, $response, $args);
     }
 
