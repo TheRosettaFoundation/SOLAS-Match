@@ -1679,6 +1679,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                     }
 
                     if (empty($post['project_title']) || empty($post['project_description']) || empty($post['project_impact']) || empty($post['project_deadline']) || !preg_match('/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/', $post['project_deadline'])) {
+error_log('Return: ' . json_encode(['error' => 'Missing fields or bad date']));//(**)DEL
                         $response->getBody()->write(json_encode(['error' => 'Missing fields or bad date']));
                         return $response->withHeader('Content-Type', 'application/json');
                     }
@@ -1742,12 +1743,14 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                         }
                     }
                     if ($image_failed) {
+error_log('Return: ' . json_encode($data));//(**)DEL
                         $response->getBody()->write(json_encode(['error' => 'Project image failed to upload']));
                         return $response->withHeader('Content-Type', 'application/json');
                     }
 
                     if ($set_dateDue_in_memsource) $projectDao->set_dateDue_in_memsource_for_project($memsource_project, $post['project_deadline']);
 
+error_log('Return: ' . json_encode($data));//(**)DEL
                     $response->getBody()->write(json_encode(['project_id' => $project_id]));
                     return $response->withHeader('Content-Type', 'application/json');
                 }
@@ -1756,6 +1759,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                 if (!empty($image_list)) $data['image'] = base64_encode(file_get_contents($image_list[0]));
             }
         } else $data = [];
+error_log('Return: ' . json_encode($data));//(**)DEL
         $response->getBody()->write(json_encode($data));
         return $response->withHeader('Content-Type', 'application/json');
     }
