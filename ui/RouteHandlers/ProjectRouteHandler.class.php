@@ -1759,7 +1759,9 @@ error_log('Return: ' . json_encode($data));//(**)DEL
                 if (!empty($image_list)) $data['image'] = base64_encode(file_get_contents($image_list[0]));
             }
         } else $data = [];
-error_log('Return: ' . json_encode($data));//(**)DEL
+$data_no_image = $data;//(**)
+if (!empty($data_no_image['image'])) $data_no_image['image'] = '...';//(**)
+error_log('Return: ' . json_encode($data_no_image));//(**)DEL
         $response->getBody()->write(json_encode($data));
         return $response->withHeader('Content-Type', 'application/json');
     }
