@@ -448,6 +448,7 @@ class UserRouteHandler
         $projectDao = new DAO\ProjectDao();
 
         if ($data = self::t_validate($org_id)) {
+            $user_id = $data['user']['id'];
             if (!empty($data['user_has_active_tasks'])) $claimed_tasks = LibAPI\PDOWrapper::call('getFilteredUserClaimedTasks', "$user_id,4,0,0,3,2");
             if (empty($claimed_tasks)) $claimed_tasks = [];
 
