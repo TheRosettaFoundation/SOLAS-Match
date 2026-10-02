@@ -626,7 +626,6 @@ class UserRouteHandler
             $post = $request->getParsedBody();
 
 error_log('t_org_profile method: ' . $request->getMethod());//(**)
-error_log('post: ' . print_r($post, 1));//(**)
 error_log('post: ' . print_r($_POST, 1));//(**)
 error_log("roles: $roles");//(**)
             if ($roles&(SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER | NGO_ADMIN)) {

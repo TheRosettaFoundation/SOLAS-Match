@@ -1644,6 +1644,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
 
     public function t_project_alter(Request $request, Response $response, $args)
     {
+error_log('BODY' . (string)$request->getBody());//(**)DEL
         $project_id = (int)$args['project_id'];
 
         $projectDao = new DAO\ProjectDao();
@@ -1659,7 +1660,6 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                 $memsource_project = $projectDao->get_memsource_project($project_id);
 
 error_log('t_project_alter method: ' . $request->getMethod());//(**)
-error_log('post: ' . print_r($request->getParsedBody(), 1));//(**)
 error_log('post: ' . print_r($_POST, 1));//(**)
                 if ($post = $request->getParsedBody()) {
 
