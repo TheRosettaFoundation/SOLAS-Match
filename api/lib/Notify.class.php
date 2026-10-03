@@ -115,42 +115,6 @@ class Notify
             $feedback->getFeedback());
     }
 
-    public static function notifyUserClaimedTask($user_id, $task_id)
-    {
-        DAO\UserDao::insert_queue_request(
-            PROJECTQUEUE,
-            UserTaskClaim,
-            $user_id,
-            0,
-            0,
-            0,
-            $task_id,
-            0,
-            '');
-        error_log("notifyUserClaimedTask($user_id, $task_id)");
-    }
-
-    public static function notifyOrgClaimedTask($claimant_id, $task_id)
-    {
-        $subscribed_users = DAO\TaskDao::getSubscribedUsers($task_id);
-        if (!empty($subscribed_users)) {
-            foreach ($subscribed_users as $user) {
-                $user_id = $user->getId();
-                DAO\UserDao::insert_queue_request(
-                    PROJECTQUEUE,
-                    TaskClaimed,
-                    $user_id,
-                    0,
-                    0,
-                    0,
-                    $task_id,
-                    $claimant_id,
-                    '');
-                error_log("notifyOrgClaimedTask($claimant_id, $task_id) Send to: $user_id");
-            }
-        }
-    }
-
     public static function sendTaskUploadNotifications($task_id)
     {
         DAO\UserDao::insert_queue_request(

@@ -488,11 +488,7 @@ error_log("claimTask($userId, $taskId, ..., $project_id, ...)");
                 }
 
                 LibAPI\PDOWrapper::call('update_tasks_status_claimant', LibAPI\PDOWrapper::cleanse($taskId) . ',10,' . LibAPI\PDOWrapper::cleanse($userId) . ',NULL');
-
-                // This now only does the notifications
-error_log("claimTask($userId, $taskId, ..., $project_id, ...) Before Notify");
-                $this->client->call(null, "{$this->siteApi}v0/users/$userId/tasks/$taskId", Common\Enums\HttpMethodEnum::POST);
-error_log("claimTask($userId, $taskId, ..., $project_id, ...) After Notify");
+                $userDao->notify_claimed_task($userId, $taskId);
 
                 // Add corresponding task(s) to deny list for translator
                 $projectDao = new ProjectDao();
@@ -518,7 +514,7 @@ error_log("claimTask($userId, $taskId, ..., $project_id, ...) After Notify");
                 $this->possibly_mark_quality_assigned($userId, $memsource_task, $task);
             }
         } else {
-            $this->client->call(null, "{$this->siteApi}v0/users/$userId/tasks/$taskId", Common\Enums\HttpMethodEnum::POST);
+            $userDao->notify_claimed_task($userId, $taskId);
         }
         return 1;
     }
@@ -529,7 +525,7 @@ error_log("claimTask_shell($userId, $taskId)");
         $taskDao = new TaskDao();
         $taskDao->claimTask($taskId, $userId, false);
         LibAPI\PDOWrapper::call('update_tasks_status_claimant', LibAPI\PDOWrapper::cleanse($taskId) . ',3,' . LibAPI\PDOWrapper::cleanse($userId) . ',NULL');
-        $this->client->call(null, "{$this->siteApi}v0/users/$userId/tasks/$taskId", Common\Enums\HttpMethodEnum::POST);
+        $userDao->notify_claimed_task($userId, $taskId);
     }
 
     public function propagate_cancelled($cancelled, $memsource_project, $task_id, $comment, $whole_workflow, $hook_from_phrase = 0)
@@ -2727,5 +2723,17 @@ error_log(print_r($result, true));//(**)
     public function delete_user($user_id)
     {
         $this->client->call(null, "{$this->siteApi}v0/users_t/$user_id/key/" . Common\Lib\Settings::get('tarjimly.twb_key'), Common\Enums\HttpMethodEnum::DELETE);
+    }
+
+    public function notify_claimed_task($user_id, $task_id)
+    {
+        LibAPI\PDOWrapper::call('insert_queue_request', "3,2,$user_id,0,0,0,$task_id,0,''"); // UserTaskClaim
+
+        if ($result = LibAPI\PDOWrapper::call('getSubscribedUsers', "$task_id")) {
+            foreach ($result as $row) {
+                $admin_id = $row['id'];
+                LibAPI\PDOWrapper::call('insert_queue_request', "3,7,$admin_id,0,0,0,$task_id,$user_id,''"); // TaskClaimed
+            }
+        }
     }
 }

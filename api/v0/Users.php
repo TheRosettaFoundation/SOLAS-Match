@@ -39,11 +39,6 @@ class Users
             '\SolasMatch\API\V0\Users:deleteUserbadgesByID')
             ->add('\SolasMatch\API\Lib\Middleware:authenticateUserOrOrgForOrgBadge');
 
-        $app->post(
-            '/api/v0/users/{userId}/tasks/{taskId}/',
-            '\SolasMatch\API\V0\Users:userClaimTask')
-            ->add('\SolasMatch\API\Lib\Middleware:isloggedIn');
-
         $app->delete(
             '/api/v0/users/{userId}/tasks/{taskId}/key/{key}/',
             '\SolasMatch\API\V0\Users:userUnClaimTask');
@@ -400,17 +395,6 @@ class Users
         $limit = API\Dispatcher::clenseArgs($request, 'limit', 10);
         $offset = API\Dispatcher::clenseArgs($request, 'offset', 0);
         return API\Dispatcher::sendResponse($response, DAO\TaskDao::getUserTasks($userId, $limit, $offset), null);
-    }
-
-    public static function userClaimTask(Request $request, Response $response, $args)
-    {
-        $userId = $args['userId'];
-        $taskId = $args['taskId'];
-
-error_log("userClaimTask($userId, $taskId)");
-        Lib\Notify::notifyUserClaimedTask($userId, $taskId);
-        Lib\Notify::notifyOrgClaimedTask($userId, $taskId);
-        return API\Dispatcher::sendResponse($response, 1, null); // Don't claim here, return 1, just do notifications...
     }
 
     public static function dequeue_claim_task()
