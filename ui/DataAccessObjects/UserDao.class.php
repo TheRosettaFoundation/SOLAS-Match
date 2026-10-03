@@ -800,7 +800,7 @@ error_log("claimTask_shell($userId, $taskId)");
         if ($deny_user) LibAPI\PDOWrapper::call('add_to_deny', LibAPI\PDOWrapper::cleanse($taskId) . ',' . LibAPI\PDOWrapper::cleanse($userId));
 
         $ret = null;
-        $request = "{$this->siteApi}v0/users/$userId/tasks/$taskId";
+        $request = "{$this->siteApi}v0/users/$userId/tasks/$taskId/key/" . Common\Lib\Settings::get('tarjimly.twb_key');
         $ret = $this->client->call(null, $request, Common\Enums\HttpMethodEnum::DELETE, $feedback);
 
         LibAPI\PDOWrapper::call('update_tasks_status', LibAPI\PDOWrapper::cleanse($taskId) . ',2,NULL');

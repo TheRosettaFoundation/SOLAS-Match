@@ -45,9 +45,8 @@ class Users
             ->add('\SolasMatch\API\Lib\Middleware:isloggedIn');
 
         $app->delete(
-            '/api/v0/users/{userId}/tasks/{taskId}/',
-            '\SolasMatch\API\V0\Users:userUnClaimTask')
-            ->add('\SolasMatch\API\Lib\Middleware:authUserOrOrgForTask');
+            '/api/v0/users/{userId}/tasks/{taskId}/key/{key}/',
+            '\SolasMatch\API\V0\Users:userUnClaimTask');
 
         $app->put(
             '/api/v0/users/{userId}/tags/{tagId}/',
@@ -303,6 +302,7 @@ class Users
 
     public static function userUnClaimTask(Request $request, Response $response, $args)
     {
+        if ($args['key'] != Common\Lib\Settings::get('tarjimly.twb_key')) return API\Dispatcher::sendResponse($response, null, null);
         $userId = $args['userId'];
         $taskId = $args['taskId'];
         $feedback = (string)$request->getBody();
