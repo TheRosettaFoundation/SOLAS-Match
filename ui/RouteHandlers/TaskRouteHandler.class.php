@@ -1368,7 +1368,7 @@ class TaskRouteHandler
                             error_log("t_task_view set_task_published($project_id,$task_id,$pub) by $user_id");
                             return $response;
                         }
-                        if (isset($post['track')) {
+                        if (isset($post['track'])) {
                             if ($post['track']) LibAPI\PDOWrapper::call('track_task', "$user_id,$project_id,$task_id");
                             else                LibAPI\PDOWrapper::call('untrack_task', "$user_id,$project_id,$task_id");
                             return $response;
