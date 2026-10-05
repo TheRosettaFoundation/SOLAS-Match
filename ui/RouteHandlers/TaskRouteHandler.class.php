@@ -8,9 +8,11 @@ use \SolasMatch\Common as Common;
 use SolasMatch\Common\Lib\APIHelper;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
+use \SolasMatch\API\Lib as LibAPI;
 
 require_once __DIR__.'/../../api/lib/IO.class.php';
 require_once __DIR__."/../../Common/lib/SolasMatchException.php";
+require_once __DIR__ . '/../../api/lib/PDOWrapper.class.php';
 
 class TaskRouteHandler
 {
@@ -99,6 +101,11 @@ class TaskRouteHandler
             '\SolasMatch\UI\RouteHandlers\TaskRouteHandler:taskView')
             ->add('\SolasMatch\UI\Lib\Middleware:authUserIsLoggedIn')
             ->setName('task-view');
+
+        $app->map(['GET', 'POST'],
+            '/task/{task_id}/t_task_view[/]',
+            '\SolasMatch\UI\RouteHandlers\ProjectRouteHandler:t_task_view')
+            ->setName('t_task_view');
 
         $app->map(['GET', 'POST'],
             '/task/{task_id}/search_translators_any_country_no_source[/]',
@@ -1320,6 +1327,162 @@ class TaskRouteHandler
         ));
 
         return UserRouteHandler::render('task/task_page.tpl', $response);
+    }
+
+    public function t_task_view(Request $request, Response $response, $args)
+    {
+        $task_id = (int)$args['task_id'];
+
+        $taskDao = new DAO\TaskDao();
+        $projectDao = new DAO\ProjectDao();
+        $userDao = new DAO\UserDao();
+        $orgDao = new DAO\OrganisationDao();
+        $adminDao = new DAO\AdminDao();
+
+        $result = LibAPI\PDOWrapper::call('getTask', "$task_id,null,null,null,null,null,null,null,null,null,null,null,null,null");
+        if (!empty($result)) {
+            $task = $result[0];
+            $task_obj = Common\Lib\ModelFactory::buildModel('Task', $task)
+            $project_id = $task['project_id'];
+            $result = LibAPI\PDOWrapper::call('getProject', "$project_id,null,null,null,null,null,null,null,null,null,null,null,null");
+            $project = $result[0];
+            $project_obj = Common\Lib\ModelFactory::buildModel('Project', $project)
+            $org_id = $project['organisationId'];
+
+            if ($data = UserRouteHandler::t_validate($org_id)) {
+                $user_id = $data['user']['id'];
+                if (!$taskDao->isUserRestrictedFromTask($task_id, $user_id)) {
+                    $memsource_task = $projectDao->get_memsource_task($task_id);
+                    LibAPI\PDOWrapper::call('recordTaskView', "$task_id,$user_id");
+                    $roles = $adminDao->get_roles($user_id, $org_id);
+
+                    $result = LibAPI\PDOWrapper::call('getUserClaimedTask', "$task_id");
+                    if (!empty($result)) $details_claimant = $result[0];
+                    else $details_claimant = 0;
+
+                    if ($request->getMethod() === 'POST') {
+                        $post = $request->getParsedBody();
+                        if (isset($post['published'])) {
+                            $pub = (int)$post['published'];
+                            LibAPI\PDOWrapper::call('set_task_published', "$project_id,$task_id,$pub");
+                            error_log("t_task_view set_task_published($project_id,$task_id,$pub) by $user_id");
+                            return $response;
+                        }
+                        if (isset($post['track')) {
+                            if ($post['track']) LibAPI\PDOWrapper::call('track_task', "$user_id,$project_id,$task_id");
+                            else                LibAPI\PDOWrapper::call('untrack_task', "$user_id,$project_id,$task_id");
+                            return $response;
+                        }
+                        $assign_user = 0;
+                        if (!empty($post['assign_user_id'])) {
+                            $assign_user_id = (int)$post['assign_user_id'];
+                            $result = LibAPI\PDOWrapper::call('getUser', "$assign_user_id,null,null,null,null,null,null,null,null");
+                            if (!empty($result)) $assign_user = $result[0];
+                        } else if (!empty($post['assign_user_email'])) {
+                            $email = trim($post['assign_user_email']);
+                            if (Lib\Validator::validateEmail($email)) {
+                                $result = LibAPI\PDOWrapper::call('getUser', 'null,null,' . LibAPI\PDOWrapper::cleanseWrapStr($email) . ',null,null,null,null,null,null');
+                                if (!empty($result)) $assign_user = $result[0];
+                                else {
+                                    $response->getBody()->write(json_encode(['error' => 'email not found']));
+                                    return $response->withHeader('Content-Type', 'application/json');
+                                }
+                            }
+                        }
+                        if (!$details_claimant && $assign_user) {
+                            $assign_user_id = $assign_user['id'];
+                            if ($userDao->terms_accepted($assign_user_id) < 3 || empty($assign_user['language_id'])) {
+                                $response->getBody()->write(json_encode(['error' => 'The task could not be assigned: User has not fully completed registration']));
+                                return $response->withHeader('Content-Type', 'application/json');
+                            }
+                            $result = LibAPI\PDOWrapper::call('isUserBlacklistedForTask', "$assign_user_id,$task_id");
+                            if ($result[0]['result']) {
+                                $response->getBody()->write(json_encode(['error' => 'The task could not be assigned: This user has been deny listed for this task']));
+                                return $response->withHeader('Content-Type', 'application/json');
+                            }
+                            if (Common\Enums\TaskTypeEnum::$enum_to_UI[$task['taskType']]['shell_task']) {
+                                $userDao->claimTask_shell($assign_user_id, $task_id);
+                                $response->getBody()->write(json_encode(['result' => 1]));
+                                return $response->withHeader('Content-Type', 'application/json');
+                            } else {
+                                $success = $userDao->claimTask($assign_user_id, $task_id, $memsource_task, $project_id, $task_obj);
+                                if ($success == 1) {
+                                    $response->getBody()->write(json_encode(['result' => 1]));
+                                    return $response->withHeader('Content-Type', 'application/json');
+                                } elseif ($success == -1) {
+                                    $response->getBody()->write(json_encode(['error' => 'The task could not be assigned: Unable to create user in Phrase TMS']));
+                                    return $response->withHeader('Content-Type', 'application/json');
+                                } else {
+                                    $response->getBody()->write(json_encode(['error' => 'The task could not be assigned: The job has been removed from Phrase and will soon be removed from here']));
+                                    return $response->withHeader('Content-Type', 'application/json');
+                                }
+                            }
+                        }
+                        if (!empty($post['deny_user_id_or_email'])) {
+                            $deny_user_id_or_email = trim($post['deny_user_id_or_email']);
+                            if (ctype_digit($deny_user_id_or_email) {
+                                $deny_user_id_or_email = (int)$deny_user_id_or_email;
+                                $result = LibAPI\PDOWrapper::call('getUser', "$deny_user_id_or_email,null,null,null,null,null,null,null,null");
+                            } else {
+                                $result = LibAPI\PDOWrapper::call('getUser', 'null,null,' . LibAPI\PDOWrapper::cleanseWrapStr($deny_user_id_or_email) . ',null,null,null,null,null,null');
+                            }
+                            if (empty($result)) {
+                                $response->getBody()->write(json_encode(['error' => 'User not found']));
+                                return $response->withHeader('Content-Type', 'application/json');
+                            }
+                            $taskDao->removeUserFromTaskBlacklist($result[0]['id'], $task_id);
+                            $response->getBody()->write(json_encode(['result' => 1]));
+                            return $response->withHeader('Content-Type', 'application/json');
+                        }
+                        if ($details_claimant && !empty($post['feedback'])) {
+                            $taskDao->sendOrgFeedback($task_id, $user_id, $details_claimant['id'], $post['feedback']);
+                            LibAPI\PDOWrapper::call('insert_queue_request', "3,18,$user_id,0,0,0,$task_id,{$details_claimant['id']}," . LibAPI\PDOWrapper::cleanseWrapStr($post['feedback'])); // OrgFeedback
+                            if (!empty($post['revokeTask'])) {
+                                error_log("t_task_view revokeTask: $task_id by $user_id");
+                                $userDao->unclaimTask($details_claimant['id'], $task_id, null, !empty($post['deny_user']));
+                                LibAPI\PDOWrapper::call('updateRequiredTaskClaimable', "$task_id");
+                            }
+                        }
+                    }
+                    if ($task['taskStatus'] == Common\Enums\TaskStatusEnum::IN_PROGRESS && $projectDao->are_translations_not_all_complete($task_obj, $memsource_task)) $task['taskStatus'] = Common\Enums\TaskStatusEnum::CLAIMED;
+                    $task_obj->setTaskStatus($task['taskStatus']);
+
+                    $data['current_user_id'] = $user_id;
+                    $data['roles'] = $roles;
+                    $data['project'] = $project;
+                    $data['task'] = $task;
+                    $data['memsource_task'] = $memsource_task;
+                    $data['chunks'] = $userDao->getUserTaskChunks($task_id);
+                    $result = LibAPI\PDOWrapper::call('userSubscribedToTask', "$user_id,$task_id");
+                    $data['tracking'] = $result[0]['result'];
+                    $data['discourse_slug'] = $projectDao->discourse_parameterize($project_obj);
+                    $data['matecat_url'] = !Common\Enums\TaskTypeEnum::$enum_to_UI[$task['taskType']]['shell_task'] ? $taskDao->get_matecat_url_regardless(null, $memsource_task) : $taskDao->get_task_url($task_id);
+                    $data['details_claimant'] = $details_claimant;
+                    $data['list_qualified_translators'] = [];
+                    if ($details_claimant) {
+                        $result = LibAPI\PDOWrapper::call('getTaskClaimedTime', "$task_id");
+                        $data['details_claimed_date'] = $result[0]['result'];
+                    } else {
+                        $data['details_claimed_date'] = 0;
+                        $more = 0;
+                        if (in_array($org_id, ORG_EXCEPTIONS)) $more = NGO_ADMIN | NGO_PROJECT_OFFICER;
+                        $data['list_qualified_translators'] = $taskDao->list_qualified_translators($task_id, $org_id, $roles & (SITE_ADMIN | PROJECT_OFFICER | VOLUNTEER_PO | $more));
+                    }
+                    $data['org_id'] = $org_id;
+                    $data['org_name'] = $orgDao->getOrganisation($org_id)->getName();
+                    $data['org_image'] = $userDao->get_org_image($org_id);
+                    $data['steps'] = $projectDao->find_all_workflow_steps($task_obj);
+                    $data['source_language_and_country'] = Lib\TemplateHelper::getLanguageAndCountry($task_obj->getSourceLocale());
+                    $data['target_language_and_country'] = Lib\TemplateHelper::getLanguageAndCountry($task_obj->getTargetLocale());
+                    $data['language_style'] = array_merge($userDao->get_content_items(null, 4, null, null, 1, "[\"{$task_obj->getTargetLocale()->getLanguageCode()}\"]", null, null, null, 0), $userDao->get_content_items(null, 3, null, null, 1, null, null, null, null, 0));
+                    $data['mt_used'] = $projectDao->is_task_using_mt($task_obj, $memsource_task);
+                    $data['review_done'] = $task_obj->getTaskStatus() == Common\Enums\TaskStatusEnum::COMPLETE && $details_claimant && $userDao->get_review_done($task_id, $details_claimant['id']);
+                    if (!Common\Enums\TaskTypeEnum::$enum_to_UI[$task['taskType']]['shell_task']) $data['file_preview_path'] = Common\Lib\Settings::get('site.location') . 'task/' . $this->encrypt_task_id($task_id) . '/download-task-external/';
+                } else $data = [];
+            }
+        } else $data = [];
+        $response->getBody()->write(json_encode($data));
+        return $response->withHeader('Content-Type', 'application/json');
     }
 
     public function task_search_translators_any_country_no_source(Request $request, Response $response, $args)
