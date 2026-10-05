@@ -1349,9 +1349,12 @@ class TaskRouteHandler
             $project_obj = Common\Lib\ModelFactory::buildModel('Project', $project);
             $org_id = $project['organisationId'];
 
+error_log("ORGID $org_id");error_log(print_r($task_obj, 1));error_log(print_r($project_obj, 1));//(**)DEL
             if ($data = UserRouteHandler::t_validate($org_id)) {
                 $user_id = $data['user']['id'];
+error_log("USERID $user_id");//(**)DEL
                 if (!$taskDao->isUserRestrictedFromTask($task_id, $user_id)) {
+error_log("NOT RESTRICTED");//(**)DEL
                     $memsource_task = $projectDao->get_memsource_task($task_id);
                     LibAPI\PDOWrapper::call('recordTaskView', "$task_id,$user_id");
                     $roles = $adminDao->get_roles($user_id, $org_id);
