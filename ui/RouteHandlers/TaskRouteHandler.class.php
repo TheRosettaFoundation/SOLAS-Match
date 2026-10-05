@@ -1343,7 +1343,7 @@ class TaskRouteHandler
         if (!empty($result)) {
             $task = $result[0];
             $task_obj = Common\Lib\ModelFactory::buildModel('Task', $task);
-            $project_id = $task['project_id'];
+            $project_id = $task['projectId'];
             $result = LibAPI\PDOWrapper::call('getProject', "$project_id,null,null,null,null,null,null,null,null,null,null,null,null");
             $project = $result[0];
             $project_obj = Common\Lib\ModelFactory::buildModel('Project', $project);
