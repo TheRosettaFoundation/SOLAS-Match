@@ -1420,7 +1420,7 @@ class TaskRouteHandler
                         }
                         if (!empty($post['deny_user_id_or_email'])) {
                             $deny_user_id_or_email = trim($post['deny_user_id_or_email']);
-                            if (ctype_digit($deny_user_id_or_email) {
+                            if (ctype_digit($deny_user_id_or_email)) {
                                 $deny_user_id_or_email = (int)$deny_user_id_or_email;
                                 $result = LibAPI\PDOWrapper::call('getUser', "$deny_user_id_or_email,null,null,null,null,null,null,null,null");
                             } else {
