@@ -1342,11 +1342,11 @@ class TaskRouteHandler
         $result = LibAPI\PDOWrapper::call('getTask', "$task_id,null,null,null,null,null,null,null,null,null,null,null,null,null");
         if (!empty($result)) {
             $task = $result[0];
-            $task_obj = Common\Lib\ModelFactory::buildModel('Task', $task)
+            $task_obj = Common\Lib\ModelFactory::buildModel('Task', $task);
             $project_id = $task['project_id'];
             $result = LibAPI\PDOWrapper::call('getProject', "$project_id,null,null,null,null,null,null,null,null,null,null,null,null");
             $project = $result[0];
-            $project_obj = Common\Lib\ModelFactory::buildModel('Project', $project)
+            $project_obj = Common\Lib\ModelFactory::buildModel('Project', $project);
             $org_id = $project['organisationId'];
 
             if ($data = UserRouteHandler::t_validate($org_id)) {
