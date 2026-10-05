@@ -104,7 +104,7 @@ class TaskRouteHandler
 
         $app->map(['GET', 'POST'],
             '/task/{task_id}/t_task_view[/]',
-            '\SolasMatch\UI\RouteHandlers\ProjectRouteHandler:t_task_view')
+            '\SolasMatch\UI\RouteHandlers\TaskRouteHandler:t_task_view')
             ->setName('t_task_view');
 
         $app->map(['GET', 'POST'],
