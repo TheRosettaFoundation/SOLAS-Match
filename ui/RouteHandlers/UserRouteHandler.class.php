@@ -177,7 +177,6 @@ class UserRouteHandler
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:userDownload')
             ->add('\SolasMatch\UI\Lib\Middleware:authUserIsLoggedIn')
             ->setName('user-download');
-        
 
         $app->get(
             '/users_review[/]',
@@ -332,6 +331,14 @@ class UserRouteHandler
             '/user/{user_id}[/]',
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:delete_user')
             ->setName('delete_user');
+
+        $app->map(['GET', 'POST'],
+            '/org/t_create_org[/]',
+            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:t_create_org');
+
+        $app->map(['GET', 'POST'],
+            '/org/t_give_org_role[/]',
+            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:t_give_org_role');
     }
 
     public function home(Request $request, Response $response, $args = [])
@@ -4183,6 +4190,96 @@ foreach ($rows as $index => $row) {
         $userDao = new DAO\UserDao();
 
         if (self::t_validate_user()) $userDao->delete_user($user_id);
+        return $response;
+    }
+
+    public function t_create_org(Request $request, Response $response)
+    {
+        $projectDao = new DAO\ProjectDao();
+
+        if ($request->getMethod() === 'POST' && $_SERVER['HTTP_TWBKEY'] == Common\Lib\Settings::get('tarjimly.twb_key')) {
+            $body = (string)$request->getBody();
+            $post = json_decode($body, true);
+            if (!empty($post['name']) $post['name'] = mb_substr($post['name'], 0, 128);
+            if (!empty($post['description']) $post['description'] = mb_substr($post['description'], 0, 4096);
+            if (!empty($post['email']) $post['email'] = mb_substr($post['email'], 0, 128);
+            if (!empty($post['address']) $post['address'] = mb_substr($post['address'], 0, 128);
+            if (!empty($post['homepage']) $post['homepage'] = mb_substr($post['homepage'], 0, 128);
+            if (!empty($post['facebook']) $post['facebook'] = mb_substr($post['facebook'], 0, 128);
+            if (!empty($post['linkedin']) $post['linkedin'] = mb_substr($post['linkedin'], 0, 128);
+            if (!empty($post['twitter']) $post['twitter'] = mb_substr($post['twitter'], 0, 128);
+            $result = LibAPI\PDOWrapper::call('organisationInsertAndUpdate', 'null,' .
+                LibAPI\PDOWrapper::cleanseNullOrWrapStr($post['homepage']) . ',' .
+                LibAPI\PDOWrapper::cleanseWrapStr($post['name']) . ',' .
+                LibAPI\PDOWrapper::cleanseNullOrWrapStr($post['description']) . ',' .
+                LibAPI\PDOWrapper::cleanseNullOrWrapStr($post['email']) . ',' .
+                LibAPI\PDOWrapper::cleanseNullOrWrapStr($post['facebook']) . ',' .
+                LibAPI\PDOWrapper::cleanseNullOrWrapStr($post['linkedin']) . ',' .
+                LibAPI\PDOWrapper::cleanseNullOrWrapStr($post['address']) . ',' .
+                LibAPI\PDOWrapper::cleanseNullOrWrapStr($post['twitter']));
+            if (!empty($result)) {
+                $org_id = $result[0]['id'];
+                $t_org_id = (int)$post['id'];
+                LibAPI\PDOWrapper::call('set_organisation_map', "$org_id,$t_org_id");
+
+                $ch = curl_init(Common\Lib\Settings::get('tarjimly.url') . "/api/v3/admins/organizations/$t_org_id");
+                curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode(['twbOrgId' => "$org_id"]));
+                curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PATCH');
+                curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json', 'Authorization: Bearer ' . Common\Lib\Settings::get('tarjimly.api_key')]);
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                $result_json = curl_exec($ch);
+
+                $data = ['name' => $post['name']];
+                if (!empty($post['description'])) {
+                    $data['note'] = $post['description'];
+                    $data['displayNoteInProject'] = true;
+                }
+                $ch = curl_init(Common\Lib\Settings::get('memsource.api_url_v1') . 'clients');
+                curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+                curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json', 'Authorization: Bearer ' . Common\Lib\Settings::get('memsource.memsource_api_token')]);
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                $result = curl_exec($ch);
+                $res = json_decode($result, true);
+                $projectDao->set_memsource_client($org_id, $res['id'], $res['uid']);
+            }
+        }
+        return $response;
+    }
+
+    public function t_give_org_role(Request $request, Response $response)
+    {
+        $adminDao = new DAO\AdminDao();
+        $userDao = new DAO\UserDao();
+
+        if ($request->getMethod() === 'POST' && $_SERVER['HTTP_TWBKEY'] == Common\Lib\Settings::get('tarjimly.twb_key')) {
+            $body = (string)$request->getBody();
+            $post = json_decode($body, true);
+            if (empty($post['twbId'])) {
+                $nonce = Common\Lib\Authentication::generateNonce();
+                $password = Common\Lib\Authentication::hashPassword(bin2hex(random_bytes(10)), $nonce);
+                $result = LibAPI\PDOWrapper::call('userInsertAndUpdate', LibAPI\PDOWrapper::cleanseWrapStr($post['email']) . ",$nonce," . LibAPI\PDOWrapper::cleanseNullOrWrapStr($password) . ',null,null,null,null,null');
+                $user_id = $result[0]['id'];
+                LibAPI\PDOWrapper::call('create_empty_role', LibAPI\PDOWrapper::cleanse($user_id));
+                LibAPI\PDOWrapper::call('userPersonalInfoInsertAndUpdate', 'null,' . LibAPI\PDOWrapper::cleanse($user_id) . ',' . LibAPI\PDOWrapper::cleanseWrapStr(empty($post['firstName']) ? '' : $post['firstName']) . ',' . LibAPI\PDOWrapper::cleanseWrapStr(empty($post['lastName']) ? '' : $post['lastName']) . ',null,null,1786,null,null,null,null,0');
+                LibAPI\PDOWrapper::call('userTaskStreamNotificationInsertAndUpdate', LibAPI\PDOWrapper::cleanse($user_id) . ',2,1');
+
+                $ch = curl_init(Common\Lib\Settings::get('tarjimly.url') . '/api/v3/admins/users/' . $post['tarjimly_id']);
+                curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode(['twbId' => "$user_id"]));
+                curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PUT');
+                curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json', 'Authorization: Bearer ' . Common\Lib\Settings::get('tarjimly.api_key')]);
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                $dummy = curl_exec($ch);
+error_log("dummy: $dummy");//(**)
+
+                if ($post['twb_roles'] >= 4) $userDao->update_terms_accepted($user_id, 3);
+                else                         $userDao->update_terms_accepted($user_id, 2);
+            } else $user_id = (int)$post['twbId'];
+            $result = LibAPI\PDOWrapper::call('get_twb_org_id', $post['organizationId']);
+            if (!empty($result)) {
+                if ($post['twb_roles'] < 4) $adminDao->adjust_org_admin($user_id, 0, 0, LINGUIST);
+                $adminDao->adjust_org_admin($user_id, $result[0]['org_id'], 0, $post['twb_roles']);
+            }
+        }
         return $response;
     }
 

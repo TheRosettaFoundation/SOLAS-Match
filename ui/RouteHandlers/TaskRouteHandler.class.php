@@ -1447,7 +1447,6 @@ class TaskRouteHandler
                     if ($task['taskStatus'] == Common\Enums\TaskStatusEnum::IN_PROGRESS && $projectDao->are_translations_not_all_complete($task_obj, $memsource_task)) $task['taskStatus'] = Common\Enums\TaskStatusEnum::CLAIMED;
                     $task_obj->setTaskStatus($task['taskStatus']);
 
-error_log("HERE1");//(**)DEL
                     $data['current_user_id'] = $user_id;
                     $data['roles'] = $roles;
                     $data['project'] = $project;
@@ -1479,7 +1478,6 @@ error_log("HERE1");//(**)DEL
                     $data['mt_used'] = $projectDao->is_task_using_mt($task_obj, $memsource_task);
                     $data['review_done'] = $task_obj->getTaskStatus() == Common\Enums\TaskStatusEnum::COMPLETE && $details_claimant && $userDao->get_review_done($task_id, $details_claimant['id']);
                     if (!Common\Enums\TaskTypeEnum::$enum_to_UI[$task['taskType']]['shell_task']) $data['file_preview_path'] = Common\Lib\Settings::get('site.location') . 'task/' . $this->encrypt_task_id($task_id) . '/download-task-external/';
-error_log("HERE2");//(**)DEL
                 } else $data = [];
             }
         } else $data = [];
