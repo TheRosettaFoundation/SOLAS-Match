@@ -4200,14 +4200,14 @@ foreach ($rows as $index => $row) {
         if ($request->getMethod() === 'POST' && $_SERVER['HTTP_TWBKEY'] == Common\Lib\Settings::get('tarjimly.twb_key')) {
             $body = (string)$request->getBody();
             $post = json_decode($body, true);
-            if (!empty($post['name']) $post['name'] = mb_substr($post['name'], 0, 128);
-            if (!empty($post['description']) $post['description'] = mb_substr($post['description'], 0, 4096);
-            if (!empty($post['email']) $post['email'] = mb_substr($post['email'], 0, 128);
-            if (!empty($post['address']) $post['address'] = mb_substr($post['address'], 0, 128);
-            if (!empty($post['homepage']) $post['homepage'] = mb_substr($post['homepage'], 0, 128);
-            if (!empty($post['facebook']) $post['facebook'] = mb_substr($post['facebook'], 0, 128);
-            if (!empty($post['linkedin']) $post['linkedin'] = mb_substr($post['linkedin'], 0, 128);
-            if (!empty($post['twitter']) $post['twitter'] = mb_substr($post['twitter'], 0, 128);
+            if (!empty($post['name'])) $post['name'] = mb_substr($post['name'], 0, 128);
+            if (!empty($post['description'])) $post['description'] = mb_substr($post['description'], 0, 4096);
+            if (!empty($post['email'])) $post['email'] = mb_substr($post['email'], 0, 128);
+            if (!empty($post['address'])) $post['address'] = mb_substr($post['address'], 0, 128);
+            if (!empty($post['homepage'])) $post['homepage'] = mb_substr($post['homepage'], 0, 128);
+            if (!empty($post['facebook'])) $post['facebook'] = mb_substr($post['facebook'], 0, 128);
+            if (!empty($post['linkedin'])) $post['linkedin'] = mb_substr($post['linkedin'], 0, 128);
+            if (!empty($post['twitter'])) $post['twitter'] = mb_substr($post['twitter'], 0, 128);
             $result = LibAPI\PDOWrapper::call('organisationInsertAndUpdate', 'null,' .
                 LibAPI\PDOWrapper::cleanseNullOrWrapStr($post['homepage']) . ',' .
                 LibAPI\PDOWrapper::cleanseWrapStr($post['name']) . ',' .
