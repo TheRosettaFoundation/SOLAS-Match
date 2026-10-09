@@ -4149,15 +4149,20 @@ foreach ($rows as $index => $row) {
 
             if ($request->getMethod() === 'POST') {
                 $post = $request->getParsedBody();
-                if (!empty($post['name']) && !empty($post['biography']) && !empty($post['email']) && Lib\Validator::validateEmail($post['email']) && Lib\Validator::filterSpecialChars($post['name'])) {
+                if (!empty($post['name']) && !empty($post['biography']) && !empty($post['email']) && Lib\Validator::validateEmail($post['email'])) {
+                    $post['name'] = mb_substr(str_replace(['<', '>', '"', '&'], ' ', $post['name']), 0, 128);
+                    $post['homepage'] = mb_substr($post['homepage'], 0, 120);
+                    $post['facebook'] = mb_substr($post['facebook'], 0, 120);
+                    $post['linkedin'] = mb_substr($post['linkedin'], 0, 120);
+                    $post['twitter'] = mb_substr($post['twitter'], 0, 120);
                     LibAPI\PDOWrapper::call('organisationInsertAndUpdate', "$org_id," .
                         LibAPI\PDOWrapper::cleanseWrapStr(Lib\Validator::validateURL($post['homepage']) ? Lib\Validator::addhttp($post['homepage']) : '') . ',' .
                         LibAPI\PDOWrapper::cleanseWrapStr($post['name']) . ',' .
-                        LibAPI\PDOWrapper::cleanseWrapStr($post['biography']) . ',' .
-                        LibAPI\PDOWrapper::cleanseWrapStr($post['email']) . ',' .
+                        LibAPI\PDOWrapper::cleanseWrapStr(mb_substr($post['biography'], 0, 4096)) . ',' .
+                        LibAPI\PDOWrapper::cleanseWrapStr(mb_substr($post['email'], 0, 128)) . ',' .
                         LibAPI\PDOWrapper::cleanseWrapStr(Lib\Validator::validateURL($post['facebook']) ? Lib\Validator::addhttp($post['facebook']) : '') . ',' .
                         LibAPI\PDOWrapper::cleanseWrapStr(Lib\Validator::validateURL($post['linkedin']) ? Lib\Validator::addhttp($post['linkedin']) : '') . ',' .
-                        LibAPI\PDOWrapper::cleanseWrapStr($post['country']) . ',' .
+                        LibAPI\PDOWrapper::cleanseWrapStr(mb_substr($post['country'], 0, 128)) . ',' .
                         LibAPI\PDOWrapper::cleanseWrapStr(Lib\Validator::validateURL($post['twitter']) ? Lib\Validator::addhttp($post['twitter']) : ''));
                     $result = LibAPI\PDOWrapper::call('get_t_org_id', LibAPI\PDOWrapper::cleanse($org_id));
                     if (!empty($result)) {
@@ -4200,7 +4205,7 @@ foreach ($rows as $index => $row) {
         if ($request->getMethod() === 'POST' && $_SERVER['HTTP_TWBKEY'] == Common\Lib\Settings::get('tarjimly.twb_key')) {
             $body = (string)$request->getBody();
             $post = json_decode($body, true);
-            if (!empty($post['name'])) $post['name'] = mb_substr($post['name'], 0, 128);
+            if (!empty($post['name'])) $post['name'] = mb_substr(str_replace(['<', '>', '"', '&'], ' ', $post['name']), 0, 128);
             if (!empty($post['description'])) $post['description'] = mb_substr($post['description'], 0, 4096);
             if (!empty($post['email'])) $post['email'] = mb_substr($post['email'], 0, 128);
             if (!empty($post['address'])) $post['address'] = mb_substr($post['address'], 0, 128);
