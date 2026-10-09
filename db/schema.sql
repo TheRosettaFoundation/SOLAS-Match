@@ -11080,10 +11080,11 @@ BEGIN
     LEFT JOIN TaskClaims         tc ON u.id=tc.user_id
     WHERE
         (ta.user_id IS NULL OR ta.accepted_level!=3) AND
-        (a.roles=@LINGUIST OR a.roles=0) AND
         tc.user_id IS NULL AND
         u.`created-time`>'2021-10-25 07:00:00' AND
         u.`created-time`<(NOW() - INTERVAL 204 HOUR)
+    GROUP BY u.id
+    HAVING MAX(a.roles)=@LINGUIST OR MAX(a.roles)=0
     ORDER BY u.`created-time`
     LIMIT 1;
 
