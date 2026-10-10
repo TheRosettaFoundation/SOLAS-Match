@@ -2104,7 +2104,7 @@ class TaskRouteHandler
                 $file_name = $result[0]['filename'];
                 $result = LibAPI\PDOWrapper::call('getTask', "$task_id,null,null,null,null,null,null,null,null,null,null,null,null,null");
                 $helper = new Common\Lib\APIHelper('.json');
-                $project_id = $result[0]['project_id'];
+                $project_id = $result[0]['projectId'];
                 $file = file_get_contents(Common\Lib\Settings::get('files.upload_path') . file_get_contents(Common\Lib\Settings::get('files.upload_path') . "proj-$project_id/task-$task_id/v-0/$file_name"));
                 $response->getBody()->write(json_encode(['mime' => $helper->getCanonicalMime($file_name), 'file_name' => $file_name, 'size' => strlen($file), 'file' => $file]));
                 return $response->withHeader('Content-Type', 'application/json');
@@ -2124,7 +2124,7 @@ class TaskRouteHandler
 
         $result = LibAPI\PDOWrapper::call('getTask', "$task_id,null,null,null,null,null,null,null,null,null,null,null,null,null");
         if (!empty($result)) {
-            $project_id = $result[0]['project_id'];
+            $project_id = $result[0]['projectId'];
             $result = LibAPI\PDOWrapper::call('getProject', "$project_id,null,null,null,null,null,null,null,null,null,null,null,null");
             if ($_SERVER['HTTP_TWBKEY'] == Common\Lib\Settings::get('tarjimly.twb_key') && $adminDao->get_roles($_SERVER['HTTP_TWBID'], $result[0]['organisationId']) & (SITE_ADMIN | PROJECT_OFFICER | VOLUNTEER_PO | COMMUNITY_OFFICER | NGO_ADMIN | NGO_PROJECT_OFFICER)) {
                 $result = LibAPI\PDOWrapper::call('getTaskFileMetaData', "$task_id,0,null,null,null,null");
