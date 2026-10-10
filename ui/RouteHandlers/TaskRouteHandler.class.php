@@ -2106,7 +2106,7 @@ class TaskRouteHandler
                 $helper = new Common\Lib\APIHelper('.json');
                 $project_id = $result[0]['project_id'];
                 $file = file_get_contents(Common\Lib\Settings::get('files.upload_path') . file_get_contents(Common\Lib\Settings::get('files.upload_path') . "proj-$project_id/task-$task_id/v-0/$file_name"));
-                $response->getBody()->write(json_encode(['mime' => $helper->getCanonicalMime($file_name), 'file_name' => $file_name, 'size' => strlen($file), 'file' => $file));
+                $response->getBody()->write(json_encode(['mime' => $helper->getCanonicalMime($file_name), 'file_name' => $file_name, 'size' => strlen($file), 'file' => $file]));
                 return $response->withHeader('Content-Type', 'application/json');
             }
         }
@@ -2136,7 +2136,7 @@ class TaskRouteHandler
                         $file = $userDao->memsource_get_target_file($memsource_project['memsource_project_uid'], $memsource_task['memsource_task_uid']);
                         if (!empty($file)) {
                             $helper = new Common\Lib\APIHelper('.json');
-                            $response->getBody()->write(json_encode(['mime' => $helper->getCanonicalMime($file_name), 'file_name' => $file_name, 'size' => strlen($file), 'file' => $file));
+                            $response->getBody()->write(json_encode(['mime' => $helper->getCanonicalMime($file_name), 'file_name' => $file_name, 'size' => strlen($file), 'file' => $file]));
                             return $response->withHeader('Content-Type', 'application/json');
                         }
                     }
