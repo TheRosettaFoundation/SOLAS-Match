@@ -2106,11 +2106,6 @@ class TaskRouteHandler
                 $helper = new Common\Lib\APIHelper('.json');
                 $project_id = $result[0]['projectId'];
                 $file = file_get_contents(Common\Lib\Settings::get('files.upload_path') . file_get_contents(Common\Lib\Settings::get('files.upload_path') . "proj-$project_id/task-$task_id/v-0/$file_name"));
-
-error_log(Common\Lib\Settings::get('files.upload_path') . "proj-$project_id/task-$task_id/v-0/$file_name");
-error_log(file_get_contents(Common\Lib\Settings::get('files.upload_path') . "proj-$project_id/task-$task_id/v-0/$file_name"));
-error_log(Common\Lib\Settings::get('files.upload_path') . file_get_contents(Common\Lib\Settings::get('files.upload_path') . "proj-$project_id/task-$task_id/v-0/$file_name"));
-
                 $response->getBody()->write(json_encode(['mime' => $helper->getCanonicalMime($file_name), 'file_name' => $file_name, 'size' => strlen($file), 'file' => base64_encode($file)]));
                 return $response->withHeader('Content-Type', 'application/json');
             }
