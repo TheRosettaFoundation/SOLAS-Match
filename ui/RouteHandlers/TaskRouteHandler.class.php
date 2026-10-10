@@ -160,6 +160,14 @@ class TaskRouteHandler
             '\SolasMatch\UI\RouteHandlers\TaskRouteHandler:task_complete')
             ->add('\SolasMatch\UI\Lib\Middleware:authenticateUserForTask')
             ->setName('task_complete');
+
+        $app->get(
+            '/task/{task_id}/t_download_source[/]',
+            '\SolasMatch\UI\RouteHandlers\TaskRouteHandler:t_download_source');
+
+        $app->get(
+            '/task/{task_id}/t_download_output[/]',
+            '\SolasMatch\UI\RouteHandlers\TaskRouteHandler:t_download_output');
     }
 
     public function archivedTasks(Request $request, Response $response, $args)
@@ -2082,6 +2090,61 @@ class TaskRouteHandler
             'task'    => $task
         ]);
         return UserRouteHandler::render('task/task.complete.tpl', $response);
+    }
+
+    public function t_download_source(Request $request, Response $response, $args)
+    {
+        $task_id = (string)$args['task_id'];
+
+        $taskDao = new DAO\TaskDao();
+
+        if ($_SERVER['HTTP_TWBKEY'] == Common\Lib\Settings::get('tarjimly.twb_key') && !$taskDao->isUserRestrictedFromTaskButAllowTranslatorToDownload($task_id, $_SERVER['HTTP_TWBID'])) {
+            $result = LibAPI\PDOWrapper::call('getTaskFileMetaData', "$task_id,0,null,null,null,null");
+            if (!empty($result)) {
+                $file_name = $result[0]['filename'];
+                $result = LibAPI\PDOWrapper::call('getTask', "$task_id,null,null,null,null,null,null,null,null,null,null,null,null,null");
+                $helper = new Common\Lib\APIHelper('.json');
+                $project_id = $result[0]['project_id'];
+                $file = file_get_contents(Common\Lib\Settings::get('files.upload_path') . file_get_contents(Common\Lib\Settings::get('files.upload_path') . "proj-$project_id/task-$task_id/v-0/$file_name"));
+                $response->getBody()->write(json_encode(['mime' => $helper->getCanonicalMime($file_name), 'file_name' => $file_name, 'size' => strlen($file), 'file' => $file));
+                return $response->withHeader('Content-Type', 'application/json');
+            }
+        }
+        $response->getBody()->write(json_encode(['error' => 'No rights']));
+        return $response->withHeader('Content-Type', 'application/json');
+    }
+
+    public function t_download_output(Request $request, Response $response, $args)
+    {
+        $task_id = (string)$args['task_id'];
+
+        $projectDao = new DAO\ProjectDao();
+        $userDao = new DAO\UserDao();
+        $adminDao = new DAO\AdminDao();
+
+        $result = LibAPI\PDOWrapper::call('getTask', "$task_id,null,null,null,null,null,null,null,null,null,null,null,null,null");
+        if (!empty($result)) {
+            $project_id = $result[0]['project_id'];
+            $result = LibAPI\PDOWrapper::call('getProject', "$project_id,null,null,null,null,null,null,null,null,null,null,null,null");
+            if ($_SERVER['HTTP_TWBKEY'] == Common\Lib\Settings::get('tarjimly.twb_key') && $adminDao->get_roles($_SERVER['HTTP_TWBID'], $result[0]['organisationId']) & (SITE_ADMIN | PROJECT_OFFICER | VOLUNTEER_PO | COMMUNITY_OFFICER | NGO_ADMIN | NGO_PROJECT_OFFICER)) {
+                $result = LibAPI\PDOWrapper::call('getTaskFileMetaData', "$task_id,0,null,null,null,null");
+                if (!empty($result)) {
+                    $file_name = $result[0]['filename'];
+                    $memsource_task = $projectDao->get_memsource_task($task_id);
+                    if ($memsource_task) {
+                        $memsource_project = $projectDao->get_memsource_project($project_id);
+                        $file = $userDao->memsource_get_target_file($memsource_project['memsource_project_uid'], $memsource_task['memsource_task_uid']);
+                        if (!empty($file)) {
+                            $helper = new Common\Lib\APIHelper('.json');
+                            $response->getBody()->write(json_encode(['mime' => $helper->getCanonicalMime($file_name), 'file_name' => $file_name, 'size' => strlen($file), 'file' => $file));
+                            return $response->withHeader('Content-Type', 'application/json');
+                        }
+                    }
+                }
+            }
+        }
+        $response->getBody()->write(json_encode(['error' => 'Not found or no rights']));
+        return $response->withHeader('Content-Type', 'application/json');
     }
 }
 
