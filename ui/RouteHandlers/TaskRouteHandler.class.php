@@ -1401,8 +1401,8 @@ class TaskRouteHandler
                             $assign_user_id = $assign_user['id'];
 error_log("assign_user_id: $assign_user_id");//(**)
 error_log("terms_accepted: " . $userDao->terms_accepted($assign_user_id));//(**)
-error_log("assign_user['language_id']: " . $assign_user['language_id']);//(**)
-                            if ($userDao->terms_accepted($assign_user_id) < 3 || empty($assign_user['language_id'])) {
+error_log("assign_user['languageCode']: " . $assign_user['languageCode']);//(**)
+                            if ($userDao->terms_accepted($assign_user_id) < 3 || empty($assign_user['languageCode'])) {
                                 $response->getBody()->write(json_encode(['error' => 'The task could not be assigned: User has not fully completed registration']));
                                 return $response->withHeader('Content-Type', 'application/json');
                             }
