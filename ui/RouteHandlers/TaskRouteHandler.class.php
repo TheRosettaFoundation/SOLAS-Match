@@ -1386,8 +1386,8 @@ class TaskRouteHandler
                             $assign_user_id = (int)$post['assignUserSelect'];
                             $result = LibAPI\PDOWrapper::call('getUser', "$assign_user_id,null,null,null,null,null,null,null,null");
                             if (!empty($result)) $assign_user = $result[0];
-                        } else if (!empty($post['assign_user_email'])) {
-                            $email = trim($post['assign_user_email']);
+                        } else if (!empty($post['userIdOrEmail'])) {
+                            $email = trim($post['userIdOrEmail']);
                             if (Lib\Validator::validateEmail($email)) {
                                 $result = LibAPI\PDOWrapper::call('getUser', 'null,null,' . LibAPI\PDOWrapper::cleanseWrapStr($email) . ',null,null,null,null,null,null');
                                 if (!empty($result)) $assign_user = $result[0];
