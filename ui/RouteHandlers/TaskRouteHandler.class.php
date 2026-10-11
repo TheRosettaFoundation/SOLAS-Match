@@ -1449,6 +1449,7 @@ class TaskRouteHandler
                                 $userDao->unclaimTask($details_claimant['id'], $task_id, null, !empty($post['deny_user']));
                                 LibAPI\PDOWrapper::call('updateRequiredTaskClaimable', "$task_id");
                             }
+                            return $response;
                         }
                     }
                     if ($task['taskStatus'] == Common\Enums\TaskStatusEnum::IN_PROGRESS && $projectDao->are_translations_not_all_complete($task_obj, $memsource_task)) $task['taskStatus'] = Common\Enums\TaskStatusEnum::CLAIMED;
