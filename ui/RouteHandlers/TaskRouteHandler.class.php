@@ -1399,9 +1399,6 @@ class TaskRouteHandler
                         }
                         if (!$details_claimant && $assign_user) {
                             $assign_user_id = $assign_user['id'];
-error_log("assign_user_id: $assign_user_id");//(**)
-error_log("terms_accepted: " . $userDao->terms_accepted($assign_user_id));//(**)
-error_log("assign_user['languageCode']: " . $assign_user['languageCode']);//(**)
                             if ($userDao->terms_accepted($assign_user_id) < 3 || empty($assign_user['languageCode'])) {
                                 $response->getBody()->write(json_encode(['error' => 'The task could not be assigned: User has not fully completed registration']));
                                 return $response->withHeader('Content-Type', 'application/json');
@@ -1446,7 +1443,6 @@ error_log("assign_user['languageCode']: " . $assign_user['languageCode']);//(**)
                             return $response->withHeader('Content-Type', 'application/json');
                         }
                         if ($details_claimant && !empty($post['feedback'])) {
-                            $taskDao->sendOrgFeedback($task_id, $user_id, $details_claimant['id'], $post['feedback']);
                             LibAPI\PDOWrapper::call('insert_queue_request', "3,18,$user_id,0,0,0,$task_id,{$details_claimant['id']}," . LibAPI\PDOWrapper::cleanseWrapStr($post['feedback'])); // OrgFeedback
                             if (!empty($post['revokeTask'])) {
                                 error_log("t_task_view revokeTask: $task_id by $user_id");
