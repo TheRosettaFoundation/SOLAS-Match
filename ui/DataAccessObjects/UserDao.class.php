@@ -488,7 +488,7 @@ error_log("claimTask($userId, $taskId, ..., $project_id, ...)");
                 }
 
                 LibAPI\PDOWrapper::call('update_tasks_status_claimant', LibAPI\PDOWrapper::cleanse($taskId) . ',10,' . LibAPI\PDOWrapper::cleanse($userId) . ',NULL');
-                $userDao->notify_claimed_task($userId, $taskId);
+                $this->notify_claimed_task($userId, $taskId);
 
                 // Add corresponding task(s) to deny list for translator
                 $projectDao = new ProjectDao();
@@ -514,7 +514,7 @@ error_log("claimTask($userId, $taskId, ..., $project_id, ...)");
                 $this->possibly_mark_quality_assigned($userId, $memsource_task, $task);
             }
         } else {
-            $userDao->notify_claimed_task($userId, $taskId);
+            $this->notify_claimed_task($userId, $taskId);
         }
         return 1;
     }
@@ -525,7 +525,7 @@ error_log("claimTask_shell($userId, $taskId)");
         $taskDao = new TaskDao();
         $taskDao->claimTask($taskId, $userId, false);
         LibAPI\PDOWrapper::call('update_tasks_status_claimant', LibAPI\PDOWrapper::cleanse($taskId) . ',3,' . LibAPI\PDOWrapper::cleanse($userId) . ',NULL');
-        $userDao->notify_claimed_task($userId, $taskId);
+        $this->notify_claimed_task($userId, $taskId);
     }
 
     public function propagate_cancelled($cancelled, $memsource_project, $task_id, $comment, $whole_workflow, $hook_from_phrase = 0)

@@ -1382,8 +1382,8 @@ class TaskRouteHandler
                             return $response;
                         }
                         $assign_user = 0;
-                        if (!empty($post['assign_user_id'])) {
-                            $assign_user_id = (int)$post['assign_user_id'];
+                        if (!empty($post['assignUserSelect'])) {
+                            $assign_user_id = (int)$post['assignUserSelect'];
                             $result = LibAPI\PDOWrapper::call('getUser', "$assign_user_id,null,null,null,null,null,null,null,null");
                             if (!empty($result)) $assign_user = $result[0];
                         } else if (!empty($post['assign_user_email'])) {
