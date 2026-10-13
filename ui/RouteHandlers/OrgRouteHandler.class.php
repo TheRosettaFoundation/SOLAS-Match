@@ -253,11 +253,12 @@ class OrgRouteHandler
                         if ($uid = $adminDao->get_t_uid($user_id)) {
                             $data = ['email' => $post['email'], 'name' => $post['orgName'], 'address' => !empty($post['country']) ? $post['country'] : '', 'createdByUserId' => "$uid", 'type' => 'non_profit', 'twbOrgId' => "$org_id"];
                             $ch = curl_init(Common\Lib\Settings::get('tarjimly.url') . '/api/v3/admins/organizations');
+error_log('createOrg... /api/v3/admins/organizations: ' . json_encode($data));//(**)
                             curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
                             curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json', 'Authorization: Bearer ' . Common\Lib\Settings::get('tarjimly.api_key')]);
                             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
                             $result_json = curl_exec($ch);
-
+error_log("Tarjimly JSON: $result_json");//(**)
                             $adminDao->adjust_org_admin($user_id, $org_id, 0, NGO_ADMIN, 2);
                         } else error_log("Could not get uid for $user_id");
 

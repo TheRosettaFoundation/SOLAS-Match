@@ -4204,6 +4204,7 @@ foreach ($rows as $index => $row) {
 
         if ($request->getMethod() === 'POST' && $_SERVER['HTTP_TWBKEY'] == Common\Lib\Settings::get('tarjimly.twb_key')) {
             $body = (string)$request->getBody();
+error_log("t_create_org: $body");//(**)
             $post = json_decode($body, true);
             if (!empty($post['name'])) $post['name'] = mb_substr(str_replace(['<', '>', '"', '&'], ' ', $post['name']), 0, 128);
             if (!empty($post['description'])) $post['description'] = mb_substr($post['description'], 0, 4096);
