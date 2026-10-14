@@ -251,7 +251,7 @@ class OrgRouteHandler
 
                         $adminDao = new DAO\AdminDao();
                         if ($uid = $adminDao->get_t_uid($user_id)) {
-                            $data = ['email' => $post['email'], 'name' => $post['orgName'], 'address' => !empty($post['country']) ? $post['country'] : '', 'createdByUserId' => "$uid", 'type' => 'non_profit', 'twbOrgId' => "$org_id"];
+                            $data = ['email' => $post['email'], 'name' => $post['orgName'], 'address' => !empty($post['country']) ? $post['country'] : '-', 'createdByUserId' => "$uid", 'type' => 'non_profit', 'twbOrgId' => "$org_id"];
                             $ch = curl_init(Common\Lib\Settings::get('tarjimly.url') . '/api/v3/admins/organizations');
 error_log('createOrg... /api/v3/admins/organizations: ' . json_encode($data));//(**)
                             curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
