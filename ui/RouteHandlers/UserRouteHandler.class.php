@@ -4247,7 +4247,6 @@ error_log("t_create_org: $body");//(**)
                     curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json', 'Authorization: Bearer ' . Common\Lib\Settings::get('memsource.memsource_api_token')]);
                     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
                     $result = curl_exec($ch);
-error_log("Phrase JSON: $result");//(**)
                     $res = json_decode($result, true);
                     $projectDao->set_memsource_client($org_id, $res['id'], $res['uid']);
                 }
