@@ -4207,47 +4207,50 @@ foreach ($rows as $index => $row) {
 error_log("t_create_org: $body");//(**)
             $post = json_decode($body, true);
             if (!empty($post['name'])) $post['name'] = mb_substr(str_replace(['<', '>', '"', '&'], ' ', $post['name']), 0, 128);
-            if (!empty($post['description'])) $post['description'] = mb_substr($post['description'], 0, 4096);
-            if (!empty($post['email'])) $post['email'] = mb_substr($post['email'], 0, 128);
-            if (!empty($post['address'])) $post['address'] = mb_substr($post['address'], 0, 128);
-            if (!empty($post['homepage'])) $post['homepage'] = mb_substr($post['homepage'], 0, 128);
-            if (!empty($post['facebook'])) $post['facebook'] = mb_substr($post['facebook'], 0, 128);
-            if (!empty($post['linkedin'])) $post['linkedin'] = mb_substr($post['linkedin'], 0, 128);
-            if (!empty($post['twitter'])) $post['twitter'] = mb_substr($post['twitter'], 0, 128);
-            $result = LibAPI\PDOWrapper::call('organisationInsertAndUpdate', 'null,' .
-                LibAPI\PDOWrapper::cleanseNullOrWrapStr($post['homepage']) . ',' .
-                LibAPI\PDOWrapper::cleanseWrapStr($post['name']) . ',' .
-                LibAPI\PDOWrapper::cleanseNullOrWrapStr($post['description']) . ',' .
-                LibAPI\PDOWrapper::cleanseNullOrWrapStr($post['email']) . ',' .
-                LibAPI\PDOWrapper::cleanseNullOrWrapStr($post['facebook']) . ',' .
-                LibAPI\PDOWrapper::cleanseNullOrWrapStr($post['linkedin']) . ',' .
-                LibAPI\PDOWrapper::cleanseNullOrWrapStr($post['address']) . ',' .
-                LibAPI\PDOWrapper::cleanseNullOrWrapStr($post['twitter']));
-            if (!empty($result)) {
-                $org_id = $result[0]['id'];
-                $t_org_id = (int)$post['id'];
-                LibAPI\PDOWrapper::call('set_organisation_map', "$org_id,$t_org_id");
+            $result = LibAPI\PDOWrapper::call('getOrg', 'null,' . LibAPI\PDOWrapper::cleanseWrapStr($post['name']) . ',null,null,null,null,null,null,null');
+            if (empty($result)) { // Not duplicate (e.g. because echo from createOrg)
+                if (!empty($post['description'])) $post['description'] = mb_substr($post['description'], 0, 4096);
+                if (!empty($post['email'])) $post['email'] = mb_substr($post['email'], 0, 128);
+                if (!empty($post['address'])) $post['address'] = mb_substr($post['address'], 0, 128);
+                if (!empty($post['homepage'])) $post['homepage'] = mb_substr($post['homepage'], 0, 128);
+                if (!empty($post['facebook'])) $post['facebook'] = mb_substr($post['facebook'], 0, 128);
+                if (!empty($post['linkedin'])) $post['linkedin'] = mb_substr($post['linkedin'], 0, 128);
+                if (!empty($post['twitter'])) $post['twitter'] = mb_substr($post['twitter'], 0, 128);
+                $result = LibAPI\PDOWrapper::call('organisationInsertAndUpdate', 'null,' .
+                    LibAPI\PDOWrapper::cleanseNullOrWrapStr($post['homepage']) . ',' .
+                    LibAPI\PDOWrapper::cleanseWrapStr($post['name']) . ',' .
+                    LibAPI\PDOWrapper::cleanseNullOrWrapStr($post['description']) . ',' .
+                    LibAPI\PDOWrapper::cleanseNullOrWrapStr($post['email']) . ',' .
+                    LibAPI\PDOWrapper::cleanseNullOrWrapStr($post['facebook']) . ',' .
+                    LibAPI\PDOWrapper::cleanseNullOrWrapStr($post['linkedin']) . ',' .
+                    LibAPI\PDOWrapper::cleanseNullOrWrapStr($post['address']) . ',' .
+                    LibAPI\PDOWrapper::cleanseNullOrWrapStr($post['twitter']));
+                if (!empty($result)) {
+                    $org_id = $result[0]['id'];
+                    $t_org_id = (int)$post['id'];
+                    LibAPI\PDOWrapper::call('set_organisation_map', "$org_id,$t_org_id");
 
-                $ch = curl_init(Common\Lib\Settings::get('tarjimly.url') . "/api/v3/admins/organizations/$t_org_id");
-                curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode(['twbOrgId' => "$org_id"]));
-                curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PATCH');
-                curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json', 'Authorization: Bearer ' . Common\Lib\Settings::get('tarjimly.api_key')]);
-                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-                $result_json = curl_exec($ch);
+                    $ch = curl_init(Common\Lib\Settings::get('tarjimly.url') . "/api/v3/admins/organizations/$t_org_id");
+                    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode(['twbOrgId' => "$org_id"]));
+                    curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PATCH');
+                    curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json', 'Authorization: Bearer ' . Common\Lib\Settings::get('tarjimly.api_key')]);
+                    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                    $result_json = curl_exec($ch);
 
-                $data = ['name' => $post['name']];
-                if (!empty($post['description'])) {
-                    $data['note'] = $post['description'];
-                    $data['displayNoteInProject'] = true;
-                }
-                $ch = curl_init(Common\Lib\Settings::get('memsource.api_url_v1') . 'clients');
-                curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
-                curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json', 'Authorization: Bearer ' . Common\Lib\Settings::get('memsource.memsource_api_token')]);
-                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-                $result = curl_exec($ch);
+                    $data = ['name' => $post['name']];
+                    if (!empty($post['description'])) {
+                        $data['note'] = $post['description'];
+                        $data['displayNoteInProject'] = true;
+                    }
+                    $ch = curl_init(Common\Lib\Settings::get('memsource.api_url_v1') . 'clients');
+                    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+                    curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json', 'Authorization: Bearer ' . Common\Lib\Settings::get('memsource.memsource_api_token')]);
+                    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                    $result = curl_exec($ch);
 error_log("Phrase JSON: $result");//(**)
-                $res = json_decode($result, true);
-                $projectDao->set_memsource_client($org_id, $res['id'], $res['uid']);
+                    $res = json_decode($result, true);
+                    $projectDao->set_memsource_client($org_id, $res['id'], $res['uid']);
+                }
             }
         }
         return $response;
