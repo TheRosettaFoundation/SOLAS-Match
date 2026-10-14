@@ -259,6 +259,8 @@ error_log('createOrg... /api/v3/admins/organizations: ' . json_encode($data));//
                             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
                             $result_json = curl_exec($ch);
 error_log("Tarjimly JSON: $result_json");//(**)
+                            $json = json_decode($result_json, true);
+                            LibAPI\PDOWrapper::call('set_organisation_map', "$org_id," . $json['id']);
                             $adminDao->adjust_org_admin($user_id, $org_id, 0, NGO_ADMIN, 2);
                         } else error_log("Could not get uid for $user_id");
 
