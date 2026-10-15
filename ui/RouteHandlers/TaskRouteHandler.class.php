@@ -1011,7 +1011,7 @@ class TaskRouteHandler
                         $response->getBody()->write(json_encode(['error' => 'Missing fields or bad date']));
                         return $response->withHeader('Content-Type', 'application/json');
                     }
-                    if ($post['deadline']) != $task['deadline'] && $task_obj->getTaskStatus() != Common\Enums\TaskStatusEnum::COMPLETE) $userDao->set_dateDue_in_memsource($task_obj, $projectDao->get_memsource_task($task_id), $post['deadline']);
+                    if ($post['deadline'] != $task['deadline'] && $task_obj->getTaskStatus() != Common\Enums\TaskStatusEnum::COMPLETE) $userDao->set_dateDue_in_memsource($task_obj, $projectDao->get_memsource_task($task_id), $post['deadline']);
 
                     LibAPI\PDOWrapper::call('update_task_fields', "$task_id," . LibAPI\PDOWrapper::cleanseWrapStr(mb_substr($post['title'], 0, 128)) . ',' . LibAPI\PDOWrapper::cleanseWrapStr(mb_substr($post['comment'], 0, 4096)) . ',' . LibAPI\PDOWrapper::cleanseWrapStr($post['deadline']) . ',' . !empty($post['publishTask']) ? 1 : 0);
                     $response->getBody()->write(json_encode(['task_id' => $task_id]));
