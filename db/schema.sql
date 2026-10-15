@@ -6390,6 +6390,14 @@ BEGIN
 END//
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `update_task_fields`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `update_task_fields`(IN tID BIGINT UNSIGNED, IN p_title VARCHAR(128), IN p_comment VARCHAR(4096), IN p_deadline DATETIME, IN p_published INT)
+BEGIN
+  UPDATE Tasks SET title=p_title, comment=p_comment, deadline=p_deadline, published=p_published WHERE id=tID;
+END//
+DELIMITER ;
+
 
 DROP PROCEDURE IF EXISTS `taskIsClaimed`;
 DELIMITER //

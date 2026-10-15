@@ -97,6 +97,10 @@ class TaskRouteHandler
             ->setName('task-alter');
 
         $app->map(['GET', 'POST'],
+            '/task/{task_id}/t_alter[/]',
+            '\SolasMatch\UI\RouteHandlers\TaskRouteHandler:t_task_alter');
+
+        $app->map(['GET', 'POST'],
             '/task/{task_id}/view[/]',
             '\SolasMatch\UI\RouteHandlers\TaskRouteHandler:taskView')
             ->add('\SolasMatch\UI\Lib\Middleware:authUserIsLoggedIn')
@@ -983,6 +987,41 @@ class TaskRouteHandler
         ));
 
         return UserRouteHandler::render("task/task.alter.tpl", $response);
+    }
+
+    public function t_task_alter(Request $request, Response $response, $args)
+    {
+        $task_id = (int)$args['task_id'];
+
+        $projectDao = new DAO\ProjectDao();
+        $userDao = new DAO\UserDao();
+
+        $result = LibAPI\PDOWrapper::call('getTask', "$task_id,null,null,null,null,null,null,null,null,null,null,null,null,null");
+        if (!empty($result)) {
+            $task = $result[0];
+            $task_obj = Common\Lib\ModelFactory::buildModel('Task', $task);
+            $project_id = $task['projectId'];
+            $result = LibAPI\PDOWrapper::call('getProject', "$project_id,null,null,null,null,null,null,null,null,null,null,null,null");
+            $project = $result[0];
+            $org_id = $project['organisationId'];
+
+            if ($data = UserRouteHandler::t_validate($org_id)) {
+                if ($post = $request->getParsedBody()) {
+                    if (empty($post['title']) || empty($post['deadline']) || !preg_match('/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/', $post['deadline'])) {
+                        $response->getBody()->write(json_encode(['error' => 'Missing fields or bad date']));
+                        return $response->withHeader('Content-Type', 'application/json');
+                    }
+                    if ($post['deadline']) != $task['deadline'] && $task_obj->getTaskStatus() != Common\Enums\TaskStatusEnum::COMPLETE) $userDao->set_dateDue_in_memsource($task_obj, $projectDao->get_memsource_task($task_id), $post['deadline']);
+
+                    LibAPI\PDOWrapper::call('update_task_fields', "$task_id," . LibAPI\PDOWrapper::cleanseWrapStr(mb_substr($post['title'], 0, 128)) . ',' . LibAPI\PDOWrapper::cleanseWrapStr(mb_substr($post['comment'], 0, 4096)) . ',' . LibAPI\PDOWrapper::cleanseWrapStr($post['deadline']) . ',' . !empty($post['publishTask']) ? 1 : 0);
+                    $response->getBody()->write(json_encode(['task_id' => $task_id]));
+                    return $response->withHeader('Content-Type', 'application/json');
+                }
+                $data['task'] = $task;
+            }
+        } else $data = [];
+        $response->getBody()->write(json_encode($data));
+        return $response->withHeader('Content-Type', 'application/json');
     }
 
     public function taskView(Request $request, Response $response, $args)
