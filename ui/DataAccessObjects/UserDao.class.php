@@ -663,10 +663,8 @@ error_log("claimTask_shell($userId, $taskId)");
     {
         if ($memsource_task && !Common\Enums\TaskTypeEnum::$enum_to_UI[$task->getTaskType()]['shell_task']) {
             $memsource_user_uid = 0;
-            $taskDao = new TaskDao();
-            $claimant = $taskDao->getUserClaimedTask($task->getId());
-            if (!empty($claimant)) $memsource_user_uid = $this->get_memsource_user($claimant->getId());
             $projectDao = new ProjectDao();
+            if ($claimant_id = $projectDao->getUserClaimedTask($task->getId())) $memsource_user_uid = $this->get_memsource_user($claimant_id);
             $memsource_project = $projectDao->get_memsource_project($task->getProjectId());
             $authorization = 'Authorization: Bearer ' . $this->memsourceApiToken;
             $url = $this->memsourceApiV1 . 'projects/' . $memsource_project['memsource_project_uid'] . '/jobs/' . $memsource_task['memsource_task_uid'];
