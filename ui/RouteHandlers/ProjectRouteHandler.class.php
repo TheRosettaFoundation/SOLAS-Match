@@ -1228,6 +1228,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
         $result = LibAPI\PDOWrapper::call('getProject', "$project_id,null,null,null,null,null,null,null,null,null,null,null,null");
         if (!empty($result)) {
             $project = $result[0];
+            $project_obj = Common\Lib\ModelFactory::buildModel('Project', $project);
             $org_id = $project['organisationId'];
 
             if ($data = UserRouteHandler::t_validate($org_id)) {
@@ -1295,6 +1296,8 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                     if (!empty($project_tasks)) {
                         $get_payment_status_for_project = $taskDao->get_payment_status_for_project($project_id);
                         foreach ($project_tasks as $task) {
+                            $task_obj = Common\Lib\ModelFactory::buildModel('Task', $task);
+                            $task['target_language_and_country'] = Lib\TemplateHelper::getLanguageAndCountry($task_obj->getTargetLocale());
                             $task_id = $task['id'];
                             if (!empty($translations_not_all_complete[$task_id])) $task['taskStatus'] = Common\Enums\TaskStatusEnum::CLAIMED;
                             $taskLanguageMap[$task['targetLanguageCode'] . ',' . $task['targetCountryCode']][] = $task;
@@ -1330,6 +1333,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                     $data['get_payment_status_for_project'] = $get_payment_status_for_project;
                     $data['users_who_claimed'] = $projectDao->get_users_who_claimed($project_id);
                     $data['ngo_linguists_by_language_pair'] = $projectDao->get_language_pairs_with_ngo_linguists($project_id);
+                    $data['source_language_and_country'] = Lib\TemplateHelper::getLanguageAndCountry($project_obj->getSourceLocale());
 
                     $image_list = glob(Common\Lib\Settings::get('files.upload_path') . "proj-$project_id/image/image.*");
                     if (!empty($image_list)) $data['image'] = base64_encode(file_get_contents($image_list[0]));
