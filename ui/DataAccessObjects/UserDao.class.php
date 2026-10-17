@@ -1703,7 +1703,7 @@ error_log("Sync memsource_list_jobs() project_id: $project_id, workflowLevels_ar
         return $res;
     }
 
-    public function create_memsource_project($post, $project, $file_name, $file)
+    public function create_memsource_project($post, $project, $file_name, $file, $user_id)
     {
         $projectDao = new ProjectDao();
 
@@ -1801,7 +1801,7 @@ error_log(print_r($project_result, true));//(**)
             empty($project_result['createdBy']['uid']) ? '' : $project_result['createdBy']['uid'],
             empty($project_result['owner']['uid']) ? '' : $project_result['owner']['uid'],
             $workflowLevels);
-        $projectDao->update_project_owner_id($project->getId(), Common\Lib\UserSession::getCurrentUserID(), 1);
+        $projectDao->update_project_owner_id($project->getId(), $user_id, 1);
 
         $split = 1;
         $projectDao->set_memsource_self_service_project($project_result['id'], $split);

@@ -1852,7 +1852,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                             $projectDao->saveProjectFile($project, $user_id, $projectFileName, $data);
                             error_log("Project File Saved($user_id): " . $post['project_title']);
                             if ($create_memsource) {
-                                $memsource_project = $userDao->create_memsource_project($post, $project, $projectFileName, $data);
+                                $memsource_project = $userDao->create_memsource_project($post, $project, $projectFileName, $data, $user_id);
                                 if (!$memsource_project) $success = false;
                             } else $memsource_project = 0;
                         } catch (\Exception $e) {
@@ -2151,7 +2151,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                 error_log("Save path: $destination$filename");
                 file_put_contents("$destination$filename", $physical_pointer);
 
-                $memsource_project = $userDao->create_memsource_project($post, $project, $filename, $file);
+                $memsource_project = $userDao->create_memsource_project($post, $project, $filename, $file, $user_id);
                 if (!$memsource_project) {
                     LibAPI\PDOWrapper::call('deleteProject', "$project_id");
                     $response->getBody()->write(json_encode(['error' => 'Phrase project not created']));
