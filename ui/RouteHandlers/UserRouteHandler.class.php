@@ -672,6 +672,7 @@ error_log("roles: $roles");//(**)
             $data['orgMembers'] = $oms;
             $data['entitlements'] = $projectDao->get_entitlements($org_id);
             $data['org_image'] = $userDao->get_org_image($org_id);
+            $data['invites'] = $adminDao->get_special_registration_records($org_id);
         }
         $response->getBody()->write(json_encode($data));
         return $response->withHeader('Content-Type', 'application/json');
