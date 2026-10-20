@@ -339,6 +339,10 @@ class UserRouteHandler
         $app->map(['GET', 'POST'],
             '/org/t_give_org_role[/]',
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:t_give_org_role');
+
+        $app->get(
+            '/org/{org_id}/t_download_community[/]',
+            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:t_download_community');
     }
 
     public function home(Request $request, Response $response, $args = [])
@@ -662,6 +666,32 @@ error_log("roles: $roles");//(**)
                     $adminDao->adjust_org_admin($user_id, $org_id, 0, NGO_PROJECT_OFFICER);
                     error_log("t makeOrgPO($user_id, $org_id) by $current_user_id");
                     return $response;
+                }
+                } elseif (isset($post['emails'])) {
+                    $not_verified = 0;
+                    $number = 0;
+                    $emails = explode(',', $post['emails']);
+                    foreach ($emails as $email) {
+                        $email = trim($email);
+                        if (Lib\Validator::validateEmail($email)) {
+                            $result = LibAPI\PDOWrapper::call('getUser', 'null,null,' . LibAPI\PDOWrapper::cleanseWrapStr($email) . ',null,null,null,null,null,null');
+                            if (!empty($result)) {
+                                $user_id = $result[0]['id'];
+                                if ($userDao->isUserVerified($user_id)) {
+                                    $adminDao->adjust_org_admin($user_id, $org_id, 0, 2, 2);
+                                    $adminDao->adjust_org_admin_source_of_user($user_id, $org_id, 1, $current_user_id);
+                                    $number++;
+                                } else $not_verified++;
+                            } else {
+                                $adminDao->insert_special_registration($post['role'], $email, $org_id, $current_user_id);
+                                $number++;
+                            }
+                        }
+                    }
+                    $data = ['number'=> $number];
+                    if ($not_verified) $data['warning'] = 'At least one email was not verified and must be verified before inviting';
+                    $response->getBody()->write(json_encode($data));
+                    return $response->withHeader('Content-Type', 'application/json');
                 }
             }
             $data['roles'] = $roles;
@@ -4291,6 +4321,28 @@ error_log("dummy: $dummy");//(**)
             }
         }
         return $response;
+    }
+
+    public function t_download_community(Request $request, Response $response, $args)
+    {
+        $org_id = (string)$args['org_id'];
+
+        $adminDao = new DAO\AdminDao();
+
+        if (self::t_validate($org_id)) {
+            $org_members = $adminDao->getOrgMembers($args['org_id']);
+            $file = "\xEF\xBB\xBF" . '"user_id","Given Name/Display Name","Family Name","email","Roles","Language Pairs"' . "\n";
+            foreach ($org_members as $om) {
+                if (strpos($om['roles_text'], 'NGO Linguist') !== false) {
+                    if ($om['source_of_user']) $file .= '"' . $om['id'] . '","' . $om['first_name'] . '","' . $om['last_name'] . '","' . $om['email'] . '","' . $om['roles_text'] . '","' . $om['language_pairs'] . '"' . "\n";
+                    else                       $file .= '"' . $om['id'] . '","' . $om['display_name'] . '","","","' . $om['roles_text'] . '","' . $om['language_pairs'] . '"' . "\n";
+                }
+            }
+            $response->getBody()->write(json_encode(['mime' => 'text/csv', 'file_name' => 'community.csv', 'size' => strlen($file), 'file' => base64_encode($file)]));
+            return $response->withHeader('Content-Type', 'application/json');
+        }
+        $response->getBody()->write(json_encode(['error' => 'Not found or no rights']));
+        return $response->withHeader('Content-Type', 'application/json');
     }
 
     public static function flash($key, $value)
