@@ -666,7 +666,6 @@ error_log("roles: $roles");//(**)
                     $adminDao->adjust_org_admin($user_id, $org_id, 0, NGO_PROJECT_OFFICER);
                     error_log("t makeOrgPO($user_id, $org_id) by $current_user_id");
                     return $response;
-                }
                 } elseif (isset($post['emails'])) {
                     $not_verified = 0;
                     $number = 0;
