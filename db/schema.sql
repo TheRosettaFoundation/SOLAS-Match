@@ -16224,6 +16224,27 @@ END//
 DELIMITER ;
 
 
+CREATE TABLE IF NOT EXISTS `ngo_on_tarjimly` (
+  org_id      INT UNSIGNED NOT NULL,
+  PRIMARY KEY (org_id),
+  CONSTRAINT FK_ngo_on_tarjimly_org_id FOREIGN KEY (org_id) REFERENCES Organisations (id) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+DROP PROCEDURE IF EXISTS `get_ngo_on_tarjimly`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_ngo_on_tarjimly`(IN uID INT UNSIGNED)
+BEGIN
+    SELECT a.organisation_id, a.roles
+    FROM Admins           a
+    JOIN ngo_on_tarjimly nt ON a.organisation_id=nt.org_id
+    WHERE
+        a.user_id=uID AND
+        a.roles&12 AND
+        NOT a.roles&~15;
+END//
+DELIMITER ;
+
+
 /*---------------------------------------end of procs----------------------------------------------*/
 
 
