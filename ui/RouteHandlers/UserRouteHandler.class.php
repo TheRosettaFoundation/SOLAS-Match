@@ -1259,7 +1259,7 @@ error_log(print_r($orgs, 1));//(**)
                 if (!empty($orgs)) {
                     $result = LibAPI\PDOWrapper::call('get_ngo_on_tarjimly', "$user_id");
 error_log('After result: ' . print_r($result, 1));//(**)
-                    if (!empty($result)) $response->withStatus(302)->withHeader('Location', Common\Lib\Settings::get('tarjimly.web') . '/login?twb=1');
+                    if (!empty($result)) return $response->withStatus(302)->withHeader('Location', Common\Lib\Settings::get('tarjimly.web') . '/login?twb=1');
 error_log('After redirect twb=1');//(**)
                     return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('home_ngo', ['org_id' => $orgs[0]['organisation_id']]));
                 }
@@ -1624,7 +1624,7 @@ error_log(print_r($orgs, 1));//(**)
                 if (!empty($orgs)) {
                     $result = LibAPI\PDOWrapper::call('get_ngo_on_tarjimly', "$user_id");
 error_log('After result: ' . print_r($result, 1));//(**)
-                    if (!empty($result)) $response->withStatus(302)->withHeader('Location', Common\Lib\Settings::get('tarjimly.web') . '/login?twb=1');
+                    if (!empty($result)) return $response->withStatus(302)->withHeader('Location', Common\Lib\Settings::get('tarjimly.web') . '/login?twb=1');
 error_log('After redirect twb=1');//(**)
                     return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('home_ngo', ['org_id' => $orgs[0]['organisation_id']]));
                 }
