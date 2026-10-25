@@ -1253,7 +1253,11 @@ error_log("result_json: $result_json");//(**)
                 if ($terms_accepted == 1) return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('googleregister', ['user_id' => $user_id]));
                 if ($terms_accepted  < 3) $userDao->update_terms_accepted($user_id, 3);
                 $orgs = $adminDao->get_orgs_if_ngo($user_id);
-                if (!empty($orgs)) return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('home_ngo', ['org_id' => $orgs[0]['organisation_id']]));
+                if (!empty($orgs)) {
+                    $result = LibAPI\PDOWrapper::call('get_ngo_on_tarjimly', "$user_id");
+                    if (!empty($result)) $response->withStatus(302)->withHeader('Location', Common\Lib\Settings::get('tarjimly.web') . '/login?twb=1');
+                    return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('home_ngo', ['org_id' => $orgs[0]['organisation_id']]));
+                }
                 return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('home'));
             } else {
                 if ($user['languageCode']) {
@@ -1610,7 +1614,11 @@ error_log("dummy: $dummy");//(**)
             if ($adminDao->isSiteAdmin_any_or_org_admin_any_for_any_org($user_id)) {
                 $userDao->update_terms_accepted($user_id, 3);
                 $orgs = $adminDao->get_orgs_if_ngo($user_id);
-                if (!empty($orgs)) return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('home_ngo', ['org_id' => $orgs[0]['organisation_id']]));
+                if (!empty($orgs)) {
+                    $result = LibAPI\PDOWrapper::call('get_ngo_on_tarjimly', "$user_id");
+                    if (!empty($result)) $response->withStatus(302)->withHeader('Location', Common\Lib\Settings::get('tarjimly.web') . '/login?twb=1');
+                    return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('home_ngo', ['org_id' => $orgs[0]['organisation_id']]));
+                }
                 return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('home'));
             }
             return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('user-private-profile', array('user_id' => $user_id)));
