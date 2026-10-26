@@ -702,6 +702,7 @@ error_log("roles: $roles");//(**)
             $data['entitlements'] = $projectDao->get_entitlements($org_id);
             $data['org_image'] = $userDao->get_org_image($org_id);
             $data['invites'] = $adminDao->get_special_registration_records($org_id);
+            $data['ngo_reg_link'] = $userDao->get_ngo_reg_link("$org_id");
         }
         $response->getBody()->write(json_encode($data));
         return $response->withHeader('Content-Type', 'application/json');
