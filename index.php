@@ -97,6 +97,7 @@ require_once 'ui/DataAccessObjects/OrganisationDao.class.php';
 require_once 'ui/DataAccessObjects/StatisticsDao.class.php';
 require_once 'ui/DataAccessObjects/ProjectDao.class.php';
 require_once 'ui/DataAccessObjects/TipDao.class.php';
+require_once 'ui/DataAccessObjects/KatongDao.class.php';
 
 \SolasMatch\Common\Enums\TaskTypeEnum::init();
 

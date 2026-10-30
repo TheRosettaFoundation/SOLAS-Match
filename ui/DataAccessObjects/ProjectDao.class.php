@@ -1380,6 +1380,7 @@ error_log("Sync update_task_from_job() task_id: $task_id, status: $status, job: 
     {
         if (empty($memsource_project)) return;
         $memsource_project_uid = $memsource_project['memsource_project_uid'];
+        if (preg_match('/^\d*$/', $memsource_project_uid)) return; // Not a Phrase project (Shell or Katong, Katong has no API yet to change the job due date)
         $ch = curl_init("https://cloud.memsource.com/web/api2/v1/projects/$memsource_project_uid");
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         $memsourceApiToken = Common\Lib\Settings::get('memsource.memsource_api_token');

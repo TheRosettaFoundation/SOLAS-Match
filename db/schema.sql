@@ -1284,6 +1284,69 @@ CREATE TABLE IF NOT EXISTS `queue_copy_task_original_files` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
+CREATE TABLE IF NOT EXISTS `KatongProjects` (
+  project_id   INT(10) UNSIGNED NOT NULL,
+  job_id       CHAR(36) COLLATE utf8mb4_unicode_ci NOT NULL,
+  external_ref VARCHAR(64) COLLATE utf8mb4_unicode_ci NOT NULL,
+  content_type VARCHAR(16) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'general',
+  file_name    VARCHAR(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  status       VARCHAR(16) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'queued',
+  created      DATETIME NOT NULL,
+  PRIMARY KEY FK_KatongProjects_project_id (project_id),
+  UNIQUE  KEY job_id (job_id),
+  CONSTRAINT FK_KatongProjects_project_id FOREIGN KEY (project_id) REFERENCES Projects (id) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+
+CREATE TABLE IF NOT EXISTS `KatongTasks` (
+  katong_task_id CHAR(36) COLLATE utf8mb4_unicode_ci NOT NULL,
+  job_id         CHAR(36) COLLATE utf8mb4_unicode_ci NOT NULL,
+  kind           VARCHAR(16) COLLATE utf8mb4_unicode_ci NOT NULL,
+  target_lang    VARCHAR(35) COLLATE utf8mb4_unicode_ci NOT NULL,
+  round          INT(10) UNSIGNED NOT NULL DEFAULT 1,
+  part           INT(10) UNSIGNED NOT NULL DEFAULT 1,
+  status         VARCHAR(16) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'queued',
+  materialised   INT(10) UNSIGNED NOT NULL DEFAULT 0,
+  task_id        BIGINT(20) UNSIGNED DEFAULT NULL,
+  PRIMARY KEY (katong_task_id),
+  UNIQUE  KEY FK_KatongTasks_task_id (task_id),
+  KEY job_id (job_id),
+  CONSTRAINT FK_KatongTasks_job_id  FOREIGN KEY (job_id)  REFERENCES KatongProjects (job_id) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT FK_KatongTasks_task_id FOREIGN KEY (task_id) REFERENCES Tasks (id) ON DELETE SET NULL ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+
+CREATE TABLE IF NOT EXISTS `KatongTaskMetrics` (
+  task_id            BIGINT(20) UNSIGNED NOT NULL,
+  katong_task_id     CHAR(36) COLLATE utf8mb4_unicode_ci NOT NULL,
+  active_ms          BIGINT(20) UNSIGNED NOT NULL DEFAULT 0,
+  wall_ms            BIGINT(20) UNSIGNED NOT NULL DEFAULT 0,
+  segments_accepted  INT(10) UNSIGNED NOT NULL DEFAULT 0,
+  segments_edited    INT(10) UNSIGNED NOT NULL DEFAULT 0,
+  segments_flagged   INT(10) UNSIGNED NOT NULL DEFAULT 0,
+  mean_edit_distance FLOAT DEFAULT NULL,
+  words_total        INT(10) UNSIGNED NOT NULL DEFAULT 0,
+  words_tm_101       INT(10) UNSIGNED NOT NULL DEFAULT 0,
+  words_tm_100       INT(10) UNSIGNED NOT NULL DEFAULT 0,
+  words_fuzzy_95_99  INT(10) UNSIGNED NOT NULL DEFAULT 0,
+  words_fuzzy_85_94  INT(10) UNSIGNED NOT NULL DEFAULT 0,
+  words_fuzzy_75_84  INT(10) UNSIGNED NOT NULL DEFAULT 0,
+  words_mt           INT(10) UNSIGNED NOT NULL DEFAULT 0,
+  words_new          INT(10) UNSIGNED NOT NULL DEFAULT 0,
+  by_reviewer        TEXT COLLATE utf8mb4_unicode_ci,
+  fetched_at         DATETIME NOT NULL,
+  PRIMARY KEY FK_KatongTaskMetrics_task_id (task_id),
+  CONSTRAINT FK_KatongTaskMetrics_task_id FOREIGN KEY (task_id) REFERENCES Tasks (id) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+
+CREATE TABLE IF NOT EXISTS `ProcessedKatongDeliveries` (
+  delivery_id VARCHAR(64) COLLATE utf8mb4_unicode_ci NOT NULL,
+  received    DATETIME NOT NULL,
+  PRIMARY KEY (delivery_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+
 CREATE TABLE IF NOT EXISTS `Referers` (
   referer VARCHAR(30) COLLATE utf8mb4_unicode_ci NOT NULL,
   PRIMARY KEY (referer)
@@ -10806,6 +10869,144 @@ DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `get_memsource_task_by_memsource_uid`(IN memsourceUID VARCHAR(30))
 BEGIN
     SELECT * FROM MemsourceTasks WHERE memsource_task_uid=memsourceUID;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `set_katong_project`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `set_katong_project`(IN projectID INT UNSIGNED, IN jobID CHAR(36), IN ref VARCHAR(64), IN ct VARCHAR(16), IN fname VARCHAR(255), IN st VARCHAR(16))
+BEGIN
+    INSERT INTO KatongProjects (project_id, job_id, external_ref, content_type, file_name, status, created)
+    VALUES                     ( projectID,  jobID,          ref,           ct,     fname,     st, UTC_TIMESTAMP())
+    ON DUPLICATE KEY UPDATE job_id=jobID, external_ref=ref, content_type=ct, file_name=fname, status=st;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `get_katong_project`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_katong_project`(IN projectID INT UNSIGNED)
+BEGIN
+    SELECT * FROM KatongProjects WHERE project_id=projectID;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `get_katong_project_by_job`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_katong_project_by_job`(IN jobID CHAR(36))
+BEGIN
+    SELECT * FROM KatongProjects WHERE job_id=jobID;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `update_katong_project_status`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `update_katong_project_status`(IN jobID CHAR(36), IN st VARCHAR(16))
+BEGIN
+    UPDATE KatongProjects SET status=st WHERE job_id=jobID;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `get_katong_projects_not_complete`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_katong_projects_not_complete`()
+BEGIN
+    SELECT * FROM KatongProjects WHERE status NOT IN ('completed', 'delivered', 'cancelled', 'failed');
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `set_katong_task`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `set_katong_task`(IN katongID CHAR(36), IN jobID CHAR(36), IN k VARCHAR(16), IN lang VARCHAR(35), IN r INT, IN p INT, IN st VARCHAR(16))
+BEGIN
+    INSERT INTO KatongTasks (katong_task_id, job_id, kind, target_lang, round, part, status)
+    VALUES                  (      katongID,  jobID,    k,        lang,     r,    p,     st)
+    ON DUPLICATE KEY UPDATE round=r, part=p, status=st;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `claim_katong_task_for_materialising`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `claim_katong_task_for_materialising`(IN katongID CHAR(36))
+BEGIN
+    UPDATE KatongTasks SET materialised=1 WHERE katong_task_id=katongID AND materialised=0;
+    SELECT IF(ROW_COUNT()=0, 0, 1) AS result;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `unclaim_katong_task_for_materialising`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `unclaim_katong_task_for_materialising`(IN katongID CHAR(36))
+BEGIN
+    UPDATE KatongTasks SET materialised=0 WHERE katong_task_id=katongID AND task_id IS NULL;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `link_katong_task`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `link_katong_task`(IN katongID CHAR(36), IN taskID BIGINT)
+BEGIN
+    UPDATE KatongTasks SET task_id=taskID WHERE katong_task_id=katongID;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `update_katong_task_status`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `update_katong_task_status`(IN katongID CHAR(36), IN st VARCHAR(16))
+BEGIN
+    UPDATE KatongTasks SET status=st WHERE katong_task_id=katongID;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `get_katong_task`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_katong_task`(IN katongID CHAR(36))
+BEGIN
+    SELECT * FROM KatongTasks WHERE katong_task_id=katongID;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `get_katong_task_by_task_id`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_katong_task_by_task_id`(IN taskID BIGINT)
+BEGIN
+    SELECT * FROM KatongTasks WHERE task_id=taskID;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `get_katong_tasks_for_job`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_katong_tasks_for_job`(IN jobID CHAR(36))
+BEGIN
+    SELECT * FROM KatongTasks WHERE job_id=jobID;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `is_katong_delivery_new`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `is_katong_delivery_new`(IN deliveryID VARCHAR(64))
+BEGIN
+    INSERT IGNORE INTO ProcessedKatongDeliveries (delivery_id, received) VALUES (deliveryID, UTC_TIMESTAMP());
+    SELECT IF(ROW_COUNT()=0, 0, 1) AS result;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `set_katong_task_metrics`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `set_katong_task_metrics`(IN taskID BIGINT, IN katongID CHAR(36), IN active BIGINT, IN wall BIGINT, IN accepted INT, IN edited INT, IN flagged INT, IN distance FLOAT,
+    IN total INT, IN tm101 INT, IN tm100 INT, IN f95 INT, IN f85 INT, IN f75 INT, IN mt INT, IN new_words INT, IN reviewers TEXT)
+BEGIN
+    REPLACE INTO KatongTaskMetrics (task_id, katong_task_id, active_ms, wall_ms, segments_accepted, segments_edited, segments_flagged, mean_edit_distance,
+        words_total, words_tm_101, words_tm_100, words_fuzzy_95_99, words_fuzzy_85_94, words_fuzzy_75_84, words_mt, words_new, by_reviewer, fetched_at)
+    VALUES (taskID, katongID, active, wall, accepted, edited, flagged, distance,
+        total, tm101, tm100, f95, f85, f75, mt, new_words, reviewers, UTC_TIMESTAMP());
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `get_katong_task_metrics`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_katong_task_metrics`(IN taskID BIGINT)
+BEGIN
+    SELECT * FROM KatongTaskMetrics WHERE task_id=taskID;
 END//
 DELIMITER ;
 

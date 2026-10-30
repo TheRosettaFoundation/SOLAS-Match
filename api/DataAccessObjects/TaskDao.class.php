@@ -301,6 +301,7 @@ class TaskDao
           }
 
             $memsource_project = self::get_memsource_project($task->getProjectId());
+          if (!preg_match('/^\d*$/', $memsource_task['memsource_task_uid'])) { // Not for Katong tasks (Katong has no unassign yet)
             $url = 'https://cloud.memsource.com/web/api2/v1/projects/' . $memsource_project['memsource_project_uid'] . '/jobs/' . $memsource_task['memsource_task_uid'];
             $ch = curl_init($url);
             $deadline = $task->getDeadline();
@@ -313,6 +314,7 @@ class TaskDao
             curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
             $result = curl_exec($ch);
             curl_close($ch);
+          }
         } else {
             $ret = Lib\PDOWrapper::call('unClaimTask', $args);
         }

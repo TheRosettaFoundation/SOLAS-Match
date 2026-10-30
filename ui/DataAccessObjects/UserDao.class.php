@@ -407,7 +407,13 @@ error_log("claimTask($userId, $taskId, ..., $project_id, ...)");
         $taskDao = new TaskDao();
         $taskDao->claimTask($taskId, $userId, false);
 
-        if ($memsource_task) {
+        if ($memsource_task && preg_match('/^\d*$/', $memsource_task['memsource_task_uid']) && ($katongDao = new KatongDao()) && $katongDao->get_katong_task_by_task_id($taskId)) {
+            if (!$katongDao->assign($taskId, $userId, $task->getDeadline())) {
+                $taskDao->unClaimTask($taskId, $userId);
+                return 0;
+            }
+            $this->claimed_in_tms($userId, $taskId, $memsource_task, $project_id, $task);
+        } elseif ($memsource_task) {
             $memsource_user_uid = $this->get_memsource_user($userId);
             if (!$memsource_user_uid) {
                 $ch = curl_init('https://cloud.memsource.com/web/api2/v3/users');
@@ -487,36 +493,45 @@ error_log("claimTask($userId, $taskId, ..., $project_id, ...)");
                     return 0;
                 }
 
-                LibAPI\PDOWrapper::call('update_tasks_status_claimant', LibAPI\PDOWrapper::cleanse($taskId) . ',10,' . LibAPI\PDOWrapper::cleanse($userId) . ',NULL');
-                $this->notify_claimed_task($userId, $taskId);
-
-                // Add corresponding task(s) to deny list for translator
-                $projectDao = new ProjectDao();
-                $top_level = $projectDao->get_top_level($memsource_task['internalId']);
-                $project_tasks = $projectDao->get_tasks_for_project($project_id);
-                foreach ($project_tasks as $project_task) {
-                    if ($top_level == $projectDao->get_top_level($project_task['internalId'])) {
-                        if ($memsource_task['workflowLevel'] != $project_task['workflowLevel']) { // Not same workflowLevel
-                            if ( $task->getTaskType() == Common\Enums\TaskTypeEnum::TRANSLATION ||
-                                ($task->getTaskType() == Common\Enums\TaskTypeEnum::PROOFREADING && $project_task['task-type_id'] == Common\Enums\TaskTypeEnum::TRANSLATION)) {
-//(**)Need to add additional code to deny if user translated ANY file (not just current)
-//(**)Will there be index on QA/Proofread?
-                                if (($memsource_task['beginIndex'] <= $project_task['endIndex']) && ($project_task['beginIndex'] <= $memsource_task['endIndex'])) { // Overlap
-                                    error_log("Adding $userId to Deny List for {$project_task['id']} {$project_task['internalId']}");
-                                    $taskDao->addUserToTaskBlacklist($userId, $project_task['id']);
-                                }
-                            }
-                        }
-                    }
-                }
-                $projectDao->make_tasks_claimable($project_id);
-
-                $this->possibly_mark_quality_assigned($userId, $memsource_task, $task);
+                $this->claimed_in_tms($userId, $taskId, $memsource_task, $project_id, $task);
             }
         } else {
             $this->notify_claimed_task($userId, $taskId);
         }
         return 1;
+    }
+
+    /*
+     * TWB bookkeeping once a claim has been accepted by the TMS (Phrase or Katong)
+     */
+    private function claimed_in_tms($userId, $taskId, $memsource_task, $project_id, $task)
+    {
+        $taskDao = new TaskDao();
+        LibAPI\PDOWrapper::call('update_tasks_status_claimant', LibAPI\PDOWrapper::cleanse($taskId) . ',10,' . LibAPI\PDOWrapper::cleanse($userId) . ',NULL');
+        $this->notify_claimed_task($userId, $taskId);
+
+        // Add corresponding task(s) to deny list for translator
+        $projectDao = new ProjectDao();
+        $top_level = $projectDao->get_top_level($memsource_task['internalId']);
+        $project_tasks = $projectDao->get_tasks_for_project($project_id);
+        foreach ($project_tasks as $project_task) {
+            if ($top_level == $projectDao->get_top_level($project_task['internalId'])) {
+                if ($memsource_task['workflowLevel'] != $project_task['workflowLevel']) { // Not same workflowLevel
+                    if ( $task->getTaskType() == Common\Enums\TaskTypeEnum::TRANSLATION ||
+                        ($task->getTaskType() == Common\Enums\TaskTypeEnum::PROOFREADING && $project_task['task-type_id'] == Common\Enums\TaskTypeEnum::TRANSLATION)) {
+//(**)Need to add additional code to deny if user translated ANY file (not just current)
+//(**)Will there be index on QA/Proofread?
+                        if (($memsource_task['beginIndex'] <= $project_task['endIndex']) && ($project_task['beginIndex'] <= $memsource_task['endIndex'])) { // Overlap
+                            error_log("Adding $userId to Deny List for {$project_task['id']} {$project_task['internalId']}");
+                            $taskDao->addUserToTaskBlacklist($userId, $project_task['id']);
+                        }
+                    }
+                }
+            }
+        }
+        $projectDao->make_tasks_claimable($project_id);
+
+        $this->possibly_mark_quality_assigned($userId, $memsource_task, $task);
     }
 
     public function claimTask_shell($userId, $taskId)
@@ -661,6 +676,12 @@ error_log("claimTask_shell($userId, $taskId)");
 
     public function set_dateDue_in_memsource($task, $memsource_task, $deadline)
     {
+        if ($memsource_task && preg_match('/^\d*$/', $memsource_task['memsource_task_uid']) && ($katongDao = new KatongDao()) && $katongDao->get_katong_task_by_task_id($task->getId())) {
+            // Katong has no separate deadline update, the deadline is set on assign
+            $projectDao = new ProjectDao();
+            if ($claimant_id = $projectDao->getUserClaimedTask($task->getId())) $katongDao->assign($task->getId(), $claimant_id, $deadline);
+            return;
+        }
         if ($memsource_task && !Common\Enums\TaskTypeEnum::$enum_to_UI[$task->getTaskType()]['shell_task']) {
             $memsource_user_uid = 0;
             $projectDao = new ProjectDao();
@@ -1687,6 +1708,8 @@ error_log("Sync memsource_list_jobs() project_id: $project_id, workflowLevels_ar
 
     public function memsource_get_target_file($memsource_project_uid, $memsource_task_uid)
     {
+        if (preg_match('/^\d+$/', $memsource_task_uid) && ($katongDao = new KatongDao()) && $katongDao->get_katong_task_by_task_id($memsource_task_uid)) return $katongDao->get_target_file($memsource_task_uid);
+
         $url = "{$this->memsourceApiV1}projects/$memsource_project_uid/jobs/$memsource_task_uid/targetFile";
         $re = curl_init($url);
         $httpHeaders = ["Authorization: Bearer $this->memsourceApiToken"];
