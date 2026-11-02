@@ -4368,7 +4368,7 @@ DELIMITER ;
 
 DROP PROCEDURE IF EXISTS `get_user_tasks`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `get_user_tasks`(IN uID INT UNSIGNED)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_user_tasks`(IN oID INT UNSIGNED, IN uID INT UNSIGNED)
 BEGIN
     SELECT t.id, t.project_id as projectId, t.title, t.`word-count` as wordCount,
             (select `en-name` from Languages l where l.id = t.`language_id-source`) as `sourceLanguageName`,
@@ -4381,8 +4381,12 @@ BEGIN
             (select code from Countries c where c.id = t.`country_id-target`) as `targetCountryCode`,
             t.`created-time` as createdTime, t.`comment`, t.`task-type_id` as taskType, t.`task-status_id` as taskStatus, t.published, t.deadline,
             tc.`claimed-time`
-        FROM Tasks t JOIN TaskClaims tc ON tc.task_id=t.id
-        WHERE tc.user_id = uID
+        FROM Projects    p
+        JOIN Tasks       t ON p.id=t.project_id
+        JOIN TaskClaims tc ON t.id=tc.task_id
+        WHERE
+            p.organisation_id=oID AND
+            tc.user_id=uID
         ORDER BY `created-time` DESC;
 END//
 DELIMITER ;
