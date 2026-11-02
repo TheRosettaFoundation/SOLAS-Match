@@ -715,9 +715,9 @@ class UserRouteHandler
         $user_id = (int)$args['user_id'];
 
         if ($data = UserRouteHandler::t_validate($org_id)) {
-            $data['user_tasks'] = [];
             $result = LibAPI\PDOWrapper::call('get_user_tasks', "$org_id,$user_id");
-            if (!empty($result)) $data['user_tasks'] = $result[0];
+            if (empty($result)) $result = [];
+            $data['user_tasks'] = $result;
         }
         $response->getBody()->write(json_encode($data));
         return $response->withHeader('Content-Type', 'application/json');
