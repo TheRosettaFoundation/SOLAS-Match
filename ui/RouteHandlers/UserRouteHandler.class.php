@@ -61,6 +61,10 @@ class UserRouteHandler
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:t_org_profile')
             ->setName('t_org_profile');
 
+        $app->get(
+            '/org/{org_id}/user/{user_id}/t_user_tasks[/]',
+            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:t_user_tasks');
+
         $app->map(['GET', 'POST'],
             '/task_stream[/]',
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:task_stream')
@@ -700,6 +704,20 @@ class UserRouteHandler
             $data['org_image'] = $userDao->get_org_image($org_id);
             $data['invites'] = $adminDao->get_special_registration_records($org_id);
             $data['ngo_reg_link'] = $userDao->get_ngo_reg_link("$org_id");
+        }
+        $response->getBody()->write(json_encode($data));
+        return $response->withHeader('Content-Type', 'application/json');
+    }
+
+    public function t_user_tasks(Request $request, Response $response, $args)
+    {
+        $org_id = (int)$args['org_id'];
+        $user_id = (int)$args['user_id'];
+
+        if ($data = UserRouteHandler::t_validate($org_id)) {
+            $data['user_tasks'] = [];
+            $result = LibAPI\PDOWrapper::call('get_user_tasks', "$org_id,$user_id");
+            if (!empty($result)) $data['user_tasks'] = $result[0];
         }
         $response->getBody()->write(json_encode($data));
         return $response->withHeader('Content-Type', 'application/json');
