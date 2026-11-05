@@ -71,10 +71,11 @@ var targetCountryCountry;
 
 var duplicateProjectTitle = null;
 
-// Katong (alternative to Phrase, Site Admins only)
-var katongAllowed = false;
-var katongLanguages = { selections: {}, pairs: [] }; // selections: TWB "xx-YY" => Katong code, pairs: ["en|fr", ...]
-var katongFileExtensions = ["docx", "pptx", "xlsx", "txt", "html", "htm", "srt", "vtt"];
+// Other TMSs than Phrase (Katong, Wordbee; Site Admins only)
+// tmsLanguages[tms]: selections: TWB "xx-YY" => TMS code, pairs: ["en|fr", ...] (empty: any pair), extensions (optional)
+var tmsLanguages = {};
+var tmsNames = { katong: "Katong", wordbee: "Wordbee" };
+var tmsFileExtensions = { katong: ["docx", "pptx", "xlsx", "txt", "html", "htm", "srt", "vtt"] };
 var allLanguageOptions = null; // Original options HTML, restored when switching back to Phrase
 var phraseSourceTextDesc = null;
 
@@ -192,35 +193,39 @@ function documentReady()
   selectedMonthChanged();
   initial_selected_day = null; // If user changes date after this, do not use the initial value
 
-  katongAllowed = document.getElementById("katong_allowed").innerHTML == 1;
-  if (katongAllowed) {
-    try {
-      katongLanguages = JSON.parse(document.getElementById("katong_languages").textContent);
-    } catch (e) {
-      katongLanguages = { selections: {}, pairs: [] };
-    }
+  try {
+    tmsLanguages = JSON.parse(document.getElementById("tms_languages").textContent) || {};
+  } catch (e) {
+    tmsLanguages = {};
+  }
+  for (var tms in tmsLanguages) {
+    if (tmsLanguages[tms].extensions) tmsFileExtensions[tms] = tmsLanguages[tms].extensions;
   }
 
   parameters = new Parameters(loadingComplete);
 }
 
-function isKatong()
+/**
+ * "phrase", "katong" or "wordbee"
+ */
+function selectedTms()
 {
-  var katong = document.getElementById("tms_katong");
-  return katongAllowed && katong != null && katong.checked;
+  var checked = document.querySelector("input[name='tms']:checked");
+  if (checked == null || !tmsLanguages[checked.value]) return "phrase";
+  return checked.value;
 }
 
 /**
- * Restrict the language selects to what Katong supports (or restore them for Phrase)
+ * Restrict the language selects to what the TMS supports (or restore them for Phrase)
  */
-function filterLanguageSelect(select, katong)
+function filterLanguageSelect(select, tms)
 {
   var selected = select.value;
   select.innerHTML = allLanguageOptions;
-  if (katong) {
+  if (tms != "phrase") {
     for (var i = select.options.length - 1; i >= 0; i--) {
       var value = select.options[i].value;
-      if (value != "0" && !katongLanguages.selections[value]) select.remove(i);
+      if (value != "0" && !tmsLanguages[tms].selections[value]) select.remove(i);
     }
   }
   select.value = selected;
@@ -229,43 +234,50 @@ function filterLanguageSelect(select, katong)
 
 function tmsChanged()
 {
-  var katong = isKatong();
+  var tms = selectedTms();
   if (allLanguageOptions == null) allLanguageOptions = document.getElementById("template_language_options").innerHTML;
   if (phraseSourceTextDesc == null) phraseSourceTextDesc = document.getElementById("source_text_desc").innerHTML;
 
-  filterLanguageSelect(document.getElementById("sourceLanguageSelect"), katong);
-  for (var i = 0; i < targetCount; i++) filterLanguageSelect(document.getElementById("target_language_" + i), katong);
+  filterLanguageSelect(document.getElementById("sourceLanguageSelect"), tms);
+  for (var i = 0; i < targetCount; i++) filterLanguageSelect(document.getElementById("target_language_" + i), tms);
 
-  document.getElementById("katong_options").classList.toggle("d-none", !katong);
+  for (var other in tmsNames) {
+    var options = document.getElementById(other + "_options");
+    if (options != null) options.classList.toggle("d-none", other != tms);
+  }
   var templateButtons = document.querySelectorAll("[onclick^='setTemplateLanguages']");
-  for (var j = 0; j < templateButtons.length; j++) templateButtons[j].disabled = katong;
+  for (var j = 0; j < templateButtons.length; j++) templateButtons[j].disabled = tms != "phrase";
 
-  document.getElementById("source_text_desc").innerHTML = katong
-    ? "Upload your source file for the project. Allowed file types: DOCX, XLSX, PPTX, TXT, HTML, SRT, VTT (up to 20 MB). If the total word count of the file exceeds 2000 words, it will be split into multiple tasks."
-    : phraseSourceTextDesc;
+  document.getElementById("source_text_desc").innerHTML = tms == "phrase"
+    ? phraseSourceTextDesc
+    : "Upload your source file for the project. Allowed file types: " + tmsFileExtensions[tms].join(", ").toUpperCase()
+      + (tms == "katong" ? " (up to 20 MB)" : "") + ". If the total word count of the file exceeds 2000 words, it will be split into multiple tasks.";
 }
 
 /**
- * Extra checks when the project is to be created in Katong, returns an error message or null
+ * Extra checks when the project is to be created in another TMS than Phrase, returns an error message or null
  */
-function validateKatong()
+function validateTms()
 {
-  if (!isKatong()) return null;
+  var tms = selectedTms();
+  if (tms == "phrase") return null;
+  var name = tmsNames[tms];
+  var languages = tmsLanguages[tms];
 
   if (projectFileName == null && document.getElementById("projectFile").files.length > 0) projectFileName = document.getElementById("projectFile").files[0].name;
   if (projectFileName != null) {
     var extension = projectFileName.substring(projectFileName.lastIndexOf(".") + 1).toLowerCase();
-    if (katongFileExtensions.indexOf(extension) == -1) return "Katong accepts DOCX, XLSX, PPTX, TXT, HTML, SRT and VTT files only.";
+    if (tmsFileExtensions[tms].indexOf(extension) == -1) return name + " accepts " + tmsFileExtensions[tms].join(", ").toUpperCase() + " files only.";
   }
 
-  var source = katongLanguages.selections[document.getElementById("sourceLanguageSelect").value];
-  if (!source) return "Please choose a source language Katong supports.";
+  var source = languages.selections[document.getElementById("sourceLanguageSelect").value];
+  if (!source) return "Please choose a source language " + name + " supports.";
   var targets = [];
   for (var i = 0; i < targetCount; i++) {
-    var target = katongLanguages.selections[document.getElementById("target_language_" + i).value];
-    if (!target) return "Please choose target languages Katong supports.";
-    if (target == source || targets.indexOf(target) != -1) return "Katong needs distinct languages: " + target + " is used twice (regional variants map to the same Katong language).";
-    if (katongLanguages.pairs.length > 0 && katongLanguages.pairs.indexOf(source + "|" + target) == -1) return "Katong does not support " + source + " to " + target + ".";
+    var target = languages.selections[document.getElementById("target_language_" + i).value];
+    if (!target) return "Please choose target languages " + name + " supports.";
+    if (target == source || targets.indexOf(target) != -1) return name + " needs distinct languages: " + target + " is used twice (regional variants map to the same " + name + " language).";
+    if (languages.pairs.length > 0 && languages.pairs.indexOf(source + "|" + target) == -1) return name + " does not support " + source + " to " + target + ".";
     targets.push(target);
   }
   return null;
@@ -350,7 +362,7 @@ function target_language_selected(event) {
     targetLanguageSelect.id   = "target_language_" + targetCount;
     targetLanguageSelect.className = "col-md-4";
     targetLanguageSelect.innerHTML = document.getElementById("template_language_options").innerHTML;
-    if (isKatong()) filterLanguageSelect(targetLanguageSelect, true);
+    if (selectedTms() != "phrase") filterLanguageSelect(targetLanguageSelect, selectedTms());
     targetLanguageSelect.addEventListener("input", target_language_selected);
     targetLanguageRow.appendChild(targetLanguageSelect);
 
@@ -446,9 +458,9 @@ function setTemplateLanguages(template_number)
  */
 function validateForm()
 {
-  var katongError = validateKatong();
-  if (katongError != null) {
-    window.alert(katongError);
+  var tmsError = validateTms();
+  if (tmsError != null) {
+    window.alert(tmsError);
     return false;
   }
 

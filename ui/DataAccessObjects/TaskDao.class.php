@@ -438,7 +438,7 @@ error_log("createTaskDirectly: $args");
 
     public function get_matecat_url($task, $memsource_task)
     {
-        if ($memsource_task && preg_match('/^\d*$/', $memsource_task['memsource_task_uid']) && (new KatongDao())->get_katong_task_by_task_id($memsource_task['task_id'])) return (new KatongDao())->get_editor_url($memsource_task['task_id']);
+        if ($tms = TmsDao::for_memsource_task($memsource_task)) return $tms->get_editor_url($memsource_task['task_id']);
         if (strpos($this->siteApi, 'twbplatform')) return "https://twbplatform.org/simplesaml/saml2/idp/SSOService.php?spentityid=https://eu.phrase.com/idm/saml/hoKMZESrFauJjF1hpLXwwo&RelayState=https://cloud.memsource.com/web/job/{$memsource_task['memsource_task_uid']}/translate";
         else                                 return "https://dev.translatorswb.org/simplesaml/saml2/idp/SSOService.php?spentityid=https://eu.phrase.com/idm/saml/5w166eozpDWHg3OKbfYvxm&RelayState=https://cloud.memsource.com/web/job/{$memsource_task['memsource_task_uid']}/translate";
     }
@@ -446,7 +446,7 @@ error_log("createTaskDirectly: $args");
     public function get_matecat_url_regardless($task, $memsource_task)
     {
         if (empty($memsource_task)) return '';
-        if (preg_match('/^\d*$/', $memsource_task['memsource_task_uid']) && (new KatongDao())->get_katong_task_by_task_id($memsource_task['task_id'])) return (new KatongDao())->get_editor_url($memsource_task['task_id']);
+        if ($tms = TmsDao::for_memsource_task($memsource_task)) return $tms->get_editor_url($memsource_task['task_id']);
         if (strpos($this->siteApi, 'twbplatform')) return "https://twbplatform.org/simplesaml/saml2/idp/SSOService.php?spentityid=https://eu.phrase.com/idm/saml/hoKMZESrFauJjF1hpLXwwo&RelayState=https://cloud.memsource.com/web/job/{$memsource_task['memsource_task_uid']}/translate";
         else                                 return "https://dev.translatorswb.org/simplesaml/saml2/idp/SSOService.php?spentityid=https://eu.phrase.com/idm/saml/5w166eozpDWHg3OKbfYvxm&RelayState=https://cloud.memsource.com/web/job/{$memsource_task['memsource_task_uid']}/translate";
     }

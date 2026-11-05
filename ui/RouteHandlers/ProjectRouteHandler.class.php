@@ -125,6 +125,11 @@ class ProjectRouteHandler
             '\SolasMatch\UI\RouteHandlers\ProjectRouteHandler:katongHook')
             ->setName('katong_hook');
 
+        $app->post(
+            '/wordbee_hook[/]',
+            '\SolasMatch\UI\RouteHandlers\ProjectRouteHandler:wordbeeHook')
+            ->setName('wordbee_hook');
+
         $app->get(
             '/task/{task_id}/katong_editor[/]',
             '\SolasMatch\UI\RouteHandlers\ProjectRouteHandler:katongEditor')
@@ -159,6 +164,33 @@ class ProjectRouteHandler
         if (function_exists('fastcgi_finish_request')) fastcgi_finish_request();
 
         $katongDao->handle_event($event);
+        die;
+    }
+
+    /*
+     * Wordbee webhooks (configured in the Wordbee UI, body e.g. {"projectId": {{projectId}}, ...}) and async operation callbacks (?type=trm)
+     */
+    public function wordbeeHook(Request $request)
+    {
+        if (!DAO\WordbeeDao::verify_secret($request->getHeaderLine('X-TWB-Webhook-Secret'))) {
+            error_log('X-TWB-Webhook-Secret does not match for Wordbee hook!');
+            http_response_code(401);
+            die;
+        }
+        $body = (string)$request->getBody();
+        $event = json_decode($body, true);
+        if (!is_array($event)) {
+            error_log("Wordbee hook not decoded: $body");
+            die;
+        }
+        $type = $request->getQueryParams()['type'] ?? 'event';
+        error_log("Wordbee $type " . mb_substr($body, 0, 2000));
+
+        // Answer quickly (Wordbee waits 30 seconds) and do the work afterwards
+        http_response_code(200);
+        if (function_exists('fastcgi_finish_request')) fastcgi_finish_request();
+
+        (new DAO\WordbeeDao())->handle_event($type, $event);
         die;
     }
 
@@ -978,10 +1010,9 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                 }
             }
 
-            if (!empty($post['copyChunks']) && !empty($memsource_project) && ($katong_project = (new DAO\KatongDao())->get_katong_project($project_id))) {
-                $katongDao = new DAO\KatongDao();
-                if ($job = $katongDao->get_job($katong_project['job_id'])) $katongDao->materialise_job($job);
-                else UserRouteHandler::flashNow('error', 'Could not read the Katong job');
+            if (!empty($post['copyChunks']) && !empty($memsource_project) && ($tms = DAO\TmsDao::for_project($project_id))) {
+                $error = $tms->sync_project($project_id);
+                if ($error) UserRouteHandler::flashNow('error', $error);
                 $reload_for_wordcount = 1;
             } elseif (!empty($post['copyChunks']) && !empty($memsource_project)) {
                 $error = $projectDao->sync_split_jobs($memsource_project);
@@ -1858,11 +1889,11 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
 
         $create_memsource = 1; // This org uses memsource
 
-        // Site Admins (only) may choose to create the project in Katong instead of Phrase
-        $katong_allowed = DAO\KatongDao::enabled() && ($adminDao->get_roles($user_id) & SITE_ADMIN);
+        // Site Admins (only) may choose to create the project in another TMS (Katong, Wordbee) instead of Phrase
+        $tms_allowed = ($adminDao->get_roles($user_id) & SITE_ADMIN) ? DAO\TmsDao::enabled_tms() : [];
 
         if ($post = $request->getParsedBody()) {
-            $use_katong = $katong_allowed && !empty($post['tms']) && $post['tms'] === 'katong';
+            $use_tms = !empty($post['tms']) && !empty($tms_allowed[$post['tms']]) ? $post['tms'] : ''; // '' for Phrase
             if (empty($post['sesskey']) || $post['sesskey'] !== $sesskey
                     || empty($post['project_title']) || empty($post['project_description']) || empty($post['project_impact'])
                     || empty($post['sourceLanguageSelect']) || empty($post['project_deadline'])
@@ -1921,7 +1952,10 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                              $extension = substr($projectFileName, $extensionStartIndex + 1);
                              $extension = strtolower($extension);
                              $projectFileName = substr($projectFileName, 0, $extensionStartIndex + 1) . $extension;
-                            if (!in_array($extension, $use_katong ? DAO\KatongDao::FILE_EXTENSIONS : ['docx', 'xslx', 'pptx', 'odt', 'txt', 'csv'])) {
+                            $allowed_extensions = ['docx', 'xslx', 'pptx', 'odt', 'txt', 'csv'];
+                            if ($use_tms == 'katong')  $allowed_extensions = DAO\KatongDao::FILE_EXTENSIONS;
+                            if ($use_tms == 'wordbee') $allowed_extensions = $tms_allowed['wordbee']->get_file_extensions();
+                            if (!in_array($extension, $allowed_extensions)) {
                                 error_log("Project File wrong extension $projectFileName ($user_id): " . $post['project_title']);
                                 $success = false;
                             }
@@ -1930,9 +1964,11 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                         try {
                             $projectDao->saveProjectFile($project, $user_id, $projectFileName, $data);
                             error_log("Project File Saved($user_id): " . $post['project_title']);
-                            if ($use_katong) {
-                                $katongDao = new DAO\KatongDao();
-                                $memsource_project = $katongDao->create_katong_project($post, $project, $projectFileName, $data, $user_id);
+                            if ($use_tms == 'katong') {
+                                $memsource_project = $tms_allowed['katong']->create_katong_project($post, $project, $projectFileName, $data, $user_id);
+                                if (!$memsource_project) $success = false;
+                            } elseif ($use_tms == 'wordbee') {
+                                $memsource_project = $tms_allowed['wordbee']->create_wordbee_project($post, $project, $projectFileName, $data, $user_id);
                                 if (!$memsource_project) $success = false;
                             } elseif ($create_memsource) {
                                 $memsource_project = $userDao->create_memsource_project($post, $project, $projectFileName, $data, $user_id);
@@ -1944,8 +1980,9 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                         }
                         }
                         if (!$success) {
-                            if ($use_katong) UserRouteHandler::flashNow('error', 'Katong project not created, check the file type (DOCX, XLSX, PPTX, TXT, HTML, SRT or VTT) and that Katong supports the languages chosen.');
-                            else             UserRouteHandler::flashNow('error', 'File upload stopped by extension, only DOCX, XSLX, PPTX, ODT, TXT and CSV file types are allowed.');
+                            if     ($use_tms == 'katong')  UserRouteHandler::flashNow('error', 'Katong project not created, check the file type (DOCX, XLSX, PPTX, TXT, HTML, SRT or VTT) and that Katong supports the languages chosen.');
+                            elseif ($use_tms == 'wordbee') UserRouteHandler::flashNow('error', 'Wordbee project not created, check the file type and that Wordbee has the languages chosen (details in the error log).');
+                            else                           UserRouteHandler::flashNow('error', 'File upload stopped by extension, only DOCX, XSLX, PPTX, ODT, TXT and CSV file types are allowed.');
                             try {
                                 $projectDao->deleteProject($project->getId());
                             } catch (\Exception $e) {
@@ -2159,8 +2196,8 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
             'minute_list'    => $minute_list,
             'selected_minute'=> $selected_minute,
             'create_memsource'=> $create_memsource,
-            'katong_allowed' => $katong_allowed ? 1 : 0,
-            'katong_languages' => $katong_allowed ? json_encode((new DAO\KatongDao())->get_language_selection_for_create()) : '',
+            'tms_allowed'    => array_keys($tms_allowed),
+            'tms_languages'  => json_encode(array_map(function($tms) { return $tms instanceof DAO\KatongDao ? $tms->get_language_selection_for_create() : $tms->get_selection_for_create(); }, $tms_allowed)),
             'katong_content_types' => DAO\KatongDao::CONTENT_TYPES,
             'languages'      => $projectDao->generate_language_selection($create_memsource),
             'ngo_linguists_by_language_pair' => $projectDao->ngo_linguists_by_language_pair($org_id),
@@ -2920,8 +2957,8 @@ error_log("fields: $fields targetlanguages: $targetlanguages");//(**)
                 $projectDao->update_tasks_status_conditionally($task_id, $task_item ? Common\Enums\TaskStatusEnum::CLAIMED : Common\Enums\TaskStatusEnum::IN_PROGRESS);
             }
         }
-        // Fallback in case a Katong webhook delivery was missed
-        if (!strpos((string)$request->getUri(), '/getwordcount')) (new DAO\KatongDao())->poll_jobs();
+        // Fallback in case a Katong or Wordbee webhook delivery was missed
+        if (!strpos((string)$request->getUri(), '/getwordcount')) foreach (DAO\TmsDao::enabled_tms() as $tms) $tms->poll_jobs();
         flock($fp_for_lock, LOCK_UN); // Release the lock
       }
       fclose($fp_for_lock);

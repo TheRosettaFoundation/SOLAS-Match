@@ -407,8 +407,8 @@ error_log("claimTask($userId, $taskId, ..., $project_id, ...)");
         $taskDao = new TaskDao();
         $taskDao->claimTask($taskId, $userId, false);
 
-        if ($memsource_task && preg_match('/^\d*$/', $memsource_task['memsource_task_uid']) && ($katongDao = new KatongDao()) && $katongDao->get_katong_task_by_task_id($taskId)) {
-            if (!$katongDao->assign($taskId, $userId, $task->getDeadline())) {
+        if ($tms = TmsDao::for_memsource_task($memsource_task)) {
+            if (!$tms->assign($taskId, $userId, $task->getDeadline())) {
                 $taskDao->unClaimTask($taskId, $userId);
                 return 0;
             }
@@ -551,7 +551,8 @@ error_log("claimTask_shell($userId, $taskId)");
       $taskDao = new TaskDao();
       $memsource_task = $projectDao->get_memsource_task($task_id);
       $task_ids = [$task_id];
-      $shell_task = $memsource_task && preg_match('/^\d*$/', $memsource_task['memsource_task_uid']); // A Phrase uid will not be an int, for a Shell Task this contains task_id (an int)
+      $tms = TmsDao::for_project($memsource_project['project_id']); // Katong or Wordbee project (these also have int uids)
+      $shell_task = $memsource_task && preg_match('/^\d*$/', $memsource_task['memsource_task_uid']) && !$tms; // A Phrase uid will not be an int, for a Shell Task this contains task_id (an int)
       if ($cancelled && $whole_workflow && $memsource_project && $memsource_task && !$shell_task) {
           $top_level = $projectDao->get_top_level($memsource_task['internalId']);
           $project_tasks = $projectDao->get_tasks_for_project($memsource_project['project_id']);
@@ -602,7 +603,9 @@ error_log("claimTask_shell($userId, $taskId)");
             if ($memsource_user_uid) $data['providers'] = [['type' => 'USER', 'id' => $memsource_user_uid]];
             error_log(print_r($data, true));
 
-           if ($whole_workflow && !$shell_task && !$hook_from_phrase) {
+           if ($tms) {
+            if (!$hook_from_phrase) $tms->set_cancelled($task_id, $cancelled); // $hook_from_phrase is also set when the change came from the TMS
+           } elseif ($whole_workflow && !$shell_task && !$hook_from_phrase) {
             $ch = curl_init($this->memsourceApiV1 . "projects/$memsource_project_uid/jobs/$memsource_task_uid");
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
             curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type:application/json', $authorization));
@@ -615,7 +618,7 @@ error_log("claimTask_shell($userId, $taskId)");
             if ($cancelled) {
                 $task->set_cancelled(1);
                 if ($status_id == Common\Enums\TaskStatusEnum::IN_PROGRESS) {
-                  if (!$shell_task) {
+                  if (!$shell_task && !$tms) {
                     $ch = curl_init("https://cloud.memsource.com/web/api2/v1/projects/$memsource_project_uid/jobs/segmentsCount");
                     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
                     curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type:application/json', $authorization));
@@ -676,10 +679,8 @@ error_log("claimTask_shell($userId, $taskId)");
 
     public function set_dateDue_in_memsource($task, $memsource_task, $deadline)
     {
-        if ($memsource_task && preg_match('/^\d*$/', $memsource_task['memsource_task_uid']) && ($katongDao = new KatongDao()) && $katongDao->get_katong_task_by_task_id($task->getId())) {
-            // Katong has no separate deadline update, the deadline is set on assign
-            $projectDao = new ProjectDao();
-            if ($claimant_id = $projectDao->getUserClaimedTask($task->getId())) $katongDao->assign($task->getId(), $claimant_id, $deadline);
+        if ($tms = TmsDao::for_memsource_task($memsource_task)) {
+            $tms->set_task_deadline($task->getId(), $deadline);
             return;
         }
         if ($memsource_task && !Common\Enums\TaskTypeEnum::$enum_to_UI[$task->getTaskType()]['shell_task']) {
@@ -817,6 +818,8 @@ error_log("claimTask_shell($userId, $taskId)");
         $ret = null;
         $request = "{$this->siteApi}v0/users/$userId/tasks/$taskId/key/" . Common\Lib\Settings::get('tarjimly.twb_key');
         $ret = $this->client->call(null, $request, Common\Enums\HttpMethodEnum::DELETE, $feedback);
+
+        if ($tms = TmsDao::for_task($taskId)) $tms->unassign($taskId);
 
         LibAPI\PDOWrapper::call('update_tasks_status', LibAPI\PDOWrapper::cleanse($taskId) . ',2,NULL');
         return $ret;
@@ -1708,7 +1711,7 @@ error_log("Sync memsource_list_jobs() project_id: $project_id, workflowLevels_ar
 
     public function memsource_get_target_file($memsource_project_uid, $memsource_task_uid)
     {
-        if (preg_match('/^\d+$/', $memsource_task_uid) && ($katongDao = new KatongDao()) && $katongDao->get_katong_task_by_task_id($memsource_task_uid)) return $katongDao->get_target_file($memsource_task_uid);
+        if (preg_match('/^\d+$/', $memsource_task_uid) && ($tms = TmsDao::for_task($memsource_task_uid))) return $tms->get_target_file($memsource_task_uid);
 
         $url = "{$this->memsourceApiV1}projects/$memsource_project_uid/jobs/$memsource_task_uid/targetFile";
         $re = curl_init($url);

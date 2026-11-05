@@ -13,8 +13,7 @@
     <div id="deadline_timestamp">{$deadline_timestamp}</div>
     <div id="userIsAdmin">{if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $VOLUNTEER_PO)}1{else}0{/if}</div>
     <div id="create_memsource">{$create_memsource}</div>
-    <div id="katong_allowed">{$katong_allowed}</div>
-    <div id="katong_languages">{if $katong_allowed}{TemplateHelper::uiCleanseHTML($katong_languages)}{/if}</div>
+    <div id="tms_languages">{if !empty($tms_allowed)}{TemplateHelper::uiCleanseHTML($tms_languages)}{/if}</div>
     <div id="split">{if true || in_array($org_id, [860])}1{else}0{/if}</div>
     <div id="template_language_options">
         <option value="0"></option>
@@ -123,7 +122,7 @@
             <div class="col-lg-12 order-1 space-y-8">
 
                 {* ── Card 0: Translation system (Site Admins only) ───────────── *}
-                {if $katong_allowed}
+                {if !empty($tms_allowed)}
                 <div class="card bg-light-mariam custom-card p-4 card-border-top-accent" id="tmsCard">
                     <div class="d-flex justify-content-between align-items-center mb-3 border-bottom pb-3">
                         <h2 class="fs-3 fw-bold text-dark-mariam mb-0">
@@ -134,12 +133,33 @@
                     <div class="btn-group mb-2" role="group" aria-label="Translation system">
                         <input type="radio" class="btn-check" name="tms" id="tms_phrase" value="phrase" autocomplete="off" checked="checked" onchange="tmsChanged();">
                         <label class="btn btn-outline-primary px-4" for="tms_phrase">Phrase</label>
+                        {if in_array('katong', $tms_allowed)}
                         <input type="radio" class="btn-check" name="tms" id="tms_katong" value="katong" autocomplete="off" onchange="tmsChanged();">
                         <label class="btn btn-outline-primary px-4" for="tms_katong">Katong</label>
+                        {/if}
+                        {if in_array('wordbee', $tms_allowed)}
+                        <input type="radio" class="btn-check" name="tms" id="tms_wordbee" value="wordbee" autocomplete="off" onchange="tmsChanged();">
+                        <label class="btn btn-outline-primary px-4" for="tms_wordbee">Wordbee</label>
+                        {/if}
                     </div>
                     <div class="form-text mb-2">
-                        Phrase is the standard workflow. Katong (sandbox, test content only) machine translates the file, then TWB linguists review it in the Katong editor.
+                        Phrase is the standard workflow.
+                        {if in_array('katong', $tms_allowed)}Katong (sandbox, test content only) machine translates the file, then TWB linguists review it in the Katong editor.{/if}
+                        {if in_array('wordbee', $tms_allowed)}Wordbee creates Translation and Revision jobs in Wordbee Translator, split into parts of about 2000 words, and TWB linguists work on them in the Wordbee editor.{/if}
                     </div>
+                    {if in_array('wordbee', $tms_allowed)}
+                    <div id="wordbee_options" class="row g-3 d-none">
+                        <div class="col-md-12">
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" role="switch" name="wordbee_revision" id="wordbee_revision" value="1" checked="checked">
+                                <label class="form-check-label fw-semibold text-dark-mariam" for="wordbee_revision">
+                                    Revision step after translation (creates Revision tasks for each language)
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    {/if}
+                    {if in_array('katong', $tms_allowed)}
                     <div id="katong_options" class="row g-3 d-none">
                         <div class="col-md-4">
                             <label for="katong_content_type" class="form-label fw-semibold text-dark-mariam">Content type</label>
@@ -158,6 +178,7 @@
                             </div>
                         </div>
                     </div>
+                    {/if}
                 </div>
                 {/if}
 

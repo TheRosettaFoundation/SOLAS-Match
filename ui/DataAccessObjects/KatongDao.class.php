@@ -362,126 +362,34 @@ class KatongDao extends BaseDao
     }
 
     /*
-     * Creates one TWB Task for a Katong review/sme_review task, mirroring what ProjectRouteHandler::create_task() does for a Phrase jobPart
+     * Creates one TWB Task for a Katong review/sme_review task (see TmsDao::create_twb_task())
      */
     private function create_twb_task($project_id, $memsource_project, $self_service_project, $job, $katong_task, $internalId)
     {
-        $projectDao = new ProjectDao();
-        $taskDao    = new TaskDao();
-
         $result = LibAPI\PDOWrapper::call('claim_katong_task_for_materialising', LibAPI\PDOWrapper::cleanseWrapStr($katong_task['id']));
         if (empty($result[0]['result'])) return; // Already done (or being done by a concurrent hook/cron)
 
-        $workflowLevel = self::KIND_TO_WORKFLOW_LEVEL[$katong_task['kind']];
-        $workflow_levels = [$memsource_project['workflow_level_1'], $memsource_project['workflow_level_2'], $memsource_project['workflow_level_3'], $memsource_project['workflow_level_4'], $memsource_project['workflow_level_5'], $memsource_project['workflow_level_6'], $memsource_project['workflow_level_7'], $memsource_project['workflow_level_8'], $memsource_project['workflow_level_9'], $memsource_project['workflow_level_10'], $memsource_project['workflow_level_11'], $memsource_project['workflow_level_12']];
-        $taskType = $workflowLevel == 1 ? Common\Enums\TaskTypeEnum::TRANSLATION : Common\Enums\TaskTypeEnum::PROOFREADING;
-
-        $project = $projectDao->getProject($project_id);
+        $projectDao = new ProjectDao();
         $katong_project = $this->get_katong_project($project_id);
-        $file_name = $katong_project['file_name'];
-
-        $task = new Common\Protobufs\Models\Task();
-        $task->setProjectId($project_id);
-        $task->setTitle(mb_substr("$internalId $file_name", 0, 128));
-
-        $projectSourceLocale = $project->getSourceLocale();
-        $taskSourceLocale = new Common\Protobufs\Models\Locale();
-        $taskSourceLocale->setLanguageCode($projectSourceLocale->getLanguageCode());
-        $taskSourceLocale->setCountryCode($projectSourceLocale->getCountryCode());
-        $task->setSourceLocale($taskSourceLocale);
-        $task->setTaskStatus(Common\Enums\TaskStatusEnum::WAITING_FOR_PREREQUISITES);
 
         // Target locale is the TWB one chosen on create (same order as target_langs)
         $project_languages = $projectDao->get_memsource_project_languages($project_id);
         $kp_target_language_pairs = explode(',', $project_languages['kp_target_language_pairs']);
-        $kp_target = $kp_target_language_pairs[array_search($katong_task['target_lang'], $job['target_langs'])];
-        [$target_language, $target_country] = $projectDao->convert_selection_to_language_country($kp_target);
-        $taskTargetLocale = new Common\Protobufs\Models\Locale();
-        $taskTargetLocale->setLanguageCode($target_language);
-        $taskTargetLocale->setCountryCode($target_country);
-        $task->setTargetLocale($taskTargetLocale);
-        $task->setTaskType($taskType);
 
-        $words = $this->get_word_count($katong_task['id']);
-        if ($words) {
-            $task->setWordCount($words);
-            $task->set_word_count_partner_weighted($words);
-            $task->set_word_count_original($words);
-            $task->set_source_quantity($words);
-            $projectDao->queue_asana_project($project_id);
-            // Parts are split before their TWB Tasks are created (unlike Phrase), so add each part, they sum to the whole
-            if ($taskType == Common\Enums\TaskTypeEnum::TRANSLATION && (empty($katong_task['round']) || $katong_task['round'] == 1) && $kp_target === $kp_target_language_pairs[0]) {
-                $projectDao->add_to_project_word_count($project_id, $words);
-            }
-        } else {
-            $task->setWordCount(1);
-        }
-
-        // Same deadlines as a Phrase self service split project
-        $deadline = strtotime($project->getDeadline());
-        $now = time();
-        $total = $deadline - $now;
-        if ($total < 0) $total = 0;
-        $deadline_less_4_days = $deadline - $total*45/100;
-        $deadline_less_1_days = $deadline - $total*5/100;
-        if ($workflow_levels[1] === '') $deadline_less_4_days = $deadline_less_1_days; // Only 1 workflow, give all the time to that
-        $task->setDeadline(gmdate('Y-m-d H:i:s', $taskType == Common\Enums\TaskTypeEnum::TRANSLATION ? $deadline_less_4_days : $deadline_less_1_days));
-        $task->setPublished(1);
-
-        $task_id = $taskDao->createTaskDirectly($task);
-        if (!$task_id) {
-            LibAPI\PDOWrapper::call('unclaim_katong_task_for_materialising', LibAPI\PDOWrapper::cleanseWrapStr($katong_task['id']));
-            error_log("Failed to add task for Katong task {$katong_task['id']}");
-            return;
-        }
-        error_log("Added Task: $task_id for Katong task {$katong_task['id']}");
-        LibAPI\PDOWrapper::call('link_katong_task', LibAPI\PDOWrapper::cleanseWrapStr($katong_task['id']) . ',' . LibAPI\PDOWrapper::cleanse($task_id));
-
-        $begin = isset($katong_task['seg_begin']) ? (int)$katong_task['seg_begin'] : 0;
-        $end   = isset($katong_task['seg_end'])   ? (int)$katong_task['seg_end']   : (empty($katong_task['progress']['total']) ? 0 : $katong_task['progress']['total'] - 1);
-        $success = $projectDao->set_memsource_task($task_id, 0, $task_id, $katong_task['target_lang'], $internalId, $workflowLevel, $begin, $end, 0);
-        if (!$success) {
-            $projectDao->delete_task_directly($task_id);
-            error_log("delete_task_directly($task_id) because of set_memsource_task fail (Katong)");
-            return;
-        }
-        if ($taskType == Common\Enums\TaskTypeEnum::TRANSLATION && $words) $projectDao->increment_used_entitlement($task_id, 0, $words);
-
-        $forward_order = [];
-        $reverse_order = [];
-        foreach ($workflow_levels as $i => $workflow_level) {
-            if (!empty(Common\Enums\TaskTypeEnum::$task_type_to_enum[$workflow_level])) {
-                $forward_order[Common\Enums\TaskTypeEnum::$task_type_to_enum[$workflow_level]] = ($i == 11 || empty(Common\Enums\TaskTypeEnum::$task_type_to_enum[$workflow_levels[$i + 1]])) ? 0 : Common\Enums\TaskTypeEnum::$task_type_to_enum[$workflow_levels[$i + 1]];
-                $reverse_order[Common\Enums\TaskTypeEnum::$task_type_to_enum[$workflow_level]] = ($i ==  0 || empty(Common\Enums\TaskTypeEnum::$task_type_to_enum[$workflow_levels[$i - 1]])) ? 0 : Common\Enums\TaskTypeEnum::$task_type_to_enum[$workflow_levels[$i - 1]];
-            }
-        }
-        $top_level = $projectDao->get_top_level($internalId);
-        foreach ($projectDao->get_tasks_for_project($project_id) as $project_task) {
-            if ($project_task['task_id'] == $task_id) continue;
-            if ($top_level == $projectDao->get_top_level($project_task['internalId'])) {
-                if (!empty($forward_order[$taskType]) && $forward_order[$taskType] == $project_task['task-type_id'])
-                    $projectDao->set_taskclaims_required_to_make_claimable($task_id, $project_task['task_id'], $project_id);
-                if (!empty($reverse_order[$taskType]) && $reverse_order[$taskType] == $project_task['task-type_id'])
-                    $projectDao->set_taskclaims_required_to_make_claimable($project_task['task_id'], $task_id, $project_id);
-            }
-        }
-
-        if ($projectDao->is_task_claimable($task_id)) $taskDao->setTaskStatus($task_id, Common\Enums\TaskStatusEnum::PENDING_CLAIM);
-
-        if ($self_service_project) {
-            $creator = $taskDao->get_self_creator_from_project_file($project_id);
-            $taskDao->trackTaskDirectly($creator['id'], $task_id);
-        }
-
-        // Original (source) file for the Task: Katong does not change it, so copy the project file (Phrase needs a cron download)
-        $uploadFolder = Common\Lib\Settings::get('files.upload_path') . "proj-$project_id/task-$task_id/v-0";
-        mkdir($uploadFolder, 0755, true);
-        $filesFolder = Common\Lib\Settings::get('files.upload_path') . "files/proj-$project_id/task-$task_id/v-0";
-        mkdir($filesFolder, 0755, true);
-        $filename = str_replace('/', '_', $file_name);
-        $source = $taskDao->getPhysicalProjectFilePath($project_id, $file_name);
-        if ($source === false || !copy($source, "$filesFolder/$filename")) file_put_contents("$filesFolder/$filename", '');
-        file_put_contents("$uploadFolder/$filename", "files/proj-$project_id/task-$task_id/v-0/$filename");
+        $task_id = TmsDao::create_twb_task($project_id, [
+            'ref'           => "Katong {$katong_task['id']}",
+            'workflowLevel' => self::KIND_TO_WORKFLOW_LEVEL[$katong_task['kind']],
+            'internalId'    => $internalId,
+            'kp_target'     => $kp_target_language_pairs[array_search($katong_task['target_lang'], $job['target_langs'])],
+            'words'         => $this->get_word_count($katong_task['id']),
+            'begin'         => isset($katong_task['seg_begin']) ? (int)$katong_task['seg_begin'] : 0,
+            'end'           => isset($katong_task['seg_end'])   ? (int)$katong_task['seg_end']   : (empty($katong_task['progress']['total']) ? 0 : $katong_task['progress']['total'] - 1),
+            'round'         => empty($katong_task['round']) ? 1 : $katong_task['round'],
+            'file_name'     => $katong_project['file_name'],
+        ], function($task_id) use ($katong_task) {
+            LibAPI\PDOWrapper::call('link_katong_task', LibAPI\PDOWrapper::cleanseWrapStr($katong_task['id']) . ',' . LibAPI\PDOWrapper::cleanse($task_id));
+        });
+        if (!$task_id) LibAPI\PDOWrapper::call('unclaim_katong_task_for_materialising', LibAPI\PDOWrapper::cleanseWrapStr($katong_task['id']));
     }
 
     /*
@@ -500,6 +408,40 @@ class KatongDao extends BaseDao
             'deadline'     => $this->iso8601($deadline),
         ]);
         return $code == 200;
+    }
+
+    public function unassign($task_id)
+    {
+        error_log("Katong has no unassign yet, task_id $task_id only unclaimed in TWB");
+        return 1;
+    }
+
+    /*
+     * Katong has no separate deadline update, the deadline is set on assign
+     */
+    public function set_task_deadline($task_id, $deadline)
+    {
+        $projectDao = new ProjectDao();
+        if ($claimant_id = $projectDao->getUserClaimedTask($task_id)) $this->assign($task_id, $claimant_id, $deadline);
+    }
+
+    public function set_project_deadline($project_id, $deadline)
+    {
+        error_log("Katong has no API yet to change the job due date, project_id $project_id only changed in TWB");
+    }
+
+    public function set_cancelled($task_id, $cancelled)
+    {
+        error_log("Katong has no cancel yet, task_id $task_id only " . ($cancelled ? 'cancelled' : 'uncancelled') . ' in TWB');
+    }
+
+    public function sync_project($project_id)
+    {
+        $katong_project = $this->get_katong_project($project_id);
+        if (empty($katong_project) || !($job = $this->get_job($katong_project['job_id']))) return 'Could not read the Katong job';
+        foreach ($job['tasks'] as $task) $this->set_katong_task($job['id'], $task);
+        $this->materialise_job($job);
+        return '';
     }
 
     /*
@@ -620,7 +562,6 @@ class KatongDao extends BaseDao
 
     private function task_status_changed($data)
     {
-        $taskDao = new TaskDao();
         $katong_task = $this->get_katong_task($data['task_id']);
         if (empty($katong_task)) {
             // e.g. a part created by a split, or an sme_review task created after review: fetch the job to record it
@@ -651,21 +592,11 @@ class KatongDao extends BaseDao
         switch ($data['status']) {
             case 'in_progress':
             case 'needs_rework':
-                if ($taskDao->taskIsClaimed($task_id) && $taskDao->getTaskStatus($task_id) == Common\Enums\TaskStatusEnum::COMPLETE) {
-                    $taskDao->setTaskStatus($task_id, Common\Enums\TaskStatusEnum::IN_PROGRESS);
-                    error_log("Katong {$data['status']} task_id: $task_id, reverting from COMPLETE");
-                }
+                TmsDao::reopen_task($task_id);
                 break;
             case 'completed':
             case 'delivered':
-                // Same as Phrase COMPLETED_BY_LINGUIST in ProjectRouteHandler::update_task_status()
-                if (!$taskDao->taskIsClaimed($task_id)) $taskDao->claimTask($task_id, 62927); // translators@translatorswithoutborders.org
-                if ($taskDao->getTaskStatus($task_id) != Common\Enums\TaskStatusEnum::COMPLETE) {
-                    $taskDao->setTaskStatus($task_id, Common\Enums\TaskStatusEnum::COMPLETE);
-                    $taskDao->sendTaskUploadNotifications($task_id, 1);
-                    $taskDao->set_task_complete_date($task_id);
-                    error_log("Katong completed task_id: $task_id, Katong task: {$data['task_id']}");
-                }
+                TmsDao::complete_task($task_id);
                 $this->store_metrics($task_id, $data['task_id']);
                 break;
             case 'failed':
