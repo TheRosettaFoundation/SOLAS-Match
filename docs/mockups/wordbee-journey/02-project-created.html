@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>2 Project Created</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<nav class="journey"><strong>Wordbee journey mockup</strong>
+  <a href="index.html">Overview</a>
+  <a href="01-create-project.html">1 Create project</a>
+  <a class="on" href="02-project-created.html">2 Project created</a>
+  <a href="03-tasks-created.html">3 Tasks created</a>
+  <a href="04-linguist-claims.html">4 Linguist claims</a>
+  <a href="05-wordbee-editor.html">5 Work in Wordbee</a>
+  <a href="06-task-completed.html">6 Back in TWB</a>
+</nav>
+<header class="twb-nav">
+  <div class="twb-logo"><span class="mark">TWB</span> Platform</div>
+  <a href="#">Home</a><a href="#">Projects</a><a href="#">Organisations</a><a href="#">Admin</a>
+  <div class="right">Sam Rivera <span class="role">Site admin</span></div>
+</header>
+
+<div class="page">
+  <div class="help" style="margin-bottom:10px">twbplatform.org/project/61237/view · Thursday 5 November 2026, 10:00 UTC</div>
+  <div class="flash ok">It may take a while for all Tasks to appear below, please refresh the page until they all appear</div>
+
+  <div class="layout">
+    <div>
+      <div class="card">
+        <div class="card-h">
+          <h2><span class="icon">▤</span>Cholera prevention leaflet (test)</h2>
+          <div style="display:flex;gap:8px;flex-wrap:wrap"><span class="btn btn-out btn-sm">✎ Edit project</span></div>
+        </div>
+        <div class="table-wrap"><table class="t">
+          <thead><tr><th class="l">Organisation</th><th>Source language</th><th>Reference</th><th>Word count</th><th>Created</th><th>Project deadline</th><th>Tracking</th></tr></thead>
+          <tbody><tr><td class="l"><a href="#">Health Partners NGO</a></td><td>English (United Kingdom)</td><td><a href="#">example.org/briefs/cholera</a></td><td>—</td><td>05 Nov 2026 10:00</td><td>20 Nov 2026 17:00</td><td>Tracked</td></tr></tbody>
+        </table></div>
+        <p style="margin:16px 0 0"><strong>Description:</strong> Leaflet for community health workers explaining how to prevent and treat cholera at home. Plain language.</p>
+        <p style="margin:6px 0 0"><strong>Community forum:</strong> <a href="#">Discussion topic created</a></p>
+      </div>
+
+      <div class="card">
+        <div class="card-h"><h2><span class="icon">☰</span>Tasks</h2></div>
+        <p class="help" style="font-size:15px;margin:0">No tasks yet.</p>
+      </div>
+    </div>
+
+    <aside class="side">
+      <div class="note">
+        <h3>What's happening now</h3>
+        <ol>
+          <li>Wordbee is importing <code>cholera-leaflet.docx</code>: splitting it into segments, pre-translating from memory and counting words. This runs in the background (an async "trm" request).</li>
+          <li>TWB waits up to 20 seconds while creating the project. If Wordbee hasn't finished by then, Wordbee calls TWB back at <code>/wordbee_hook?type=trm</code> when it's done; the every-minute cron job is the fallback.</li>
+          <li>Then, for each language, TWB reads the word count and asks Wordbee for jobs (<code>workflows/jobs/new</code>), split if over 2000 words. That's another background request.</li>
+        </ol>
+      </div>
+      <div class="gap">
+        <h3>Gap <span class="tag-gap">GAP</span></h3>
+        Phrase projects have <strong>Sync Phrase TMS</strong> and <strong>View in Phrase</strong> buttons here. They only show for Phrase projects, so for a Wordbee project there's no button to force a sync or open the project in Wordbee. The sync code exists (<code>WordbeeDao::sync_project</code>); only the buttons are missing.
+      </div>
+      <div class="gap">
+        <h3>Unknown</h3>
+        How long Wordbee takes to import and split a file hasn't been measured. This depends on the platform's background queue.
+      </div>
+    </aside>
+  </div>
+
+  <div class="nextprev"><a href="01-create-project.html">← Create project</a><a href="03-tasks-created.html">Next: tasks created →</a></div>
+</div>
+</body>
+</html>

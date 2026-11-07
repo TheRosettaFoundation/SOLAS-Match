@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>4 Linguist Claims</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<nav class="journey"><strong>Wordbee journey mockup</strong>
+  <a href="index.html">Overview</a>
+  <a href="01-create-project.html">1 Create project</a>
+  <a href="02-project-created.html">2 Project created</a>
+  <a href="03-tasks-created.html">3 Tasks created</a>
+  <a class="on" href="04-linguist-claims.html">4 Linguist claims</a>
+  <a href="05-wordbee-editor.html">5 Work in Wordbee</a>
+  <a href="06-task-completed.html">6 Back in TWB</a>
+</nav>
+<header class="twb-nav">
+  <div class="twb-logo"><span class="mark">TWB</span> Platform</div>
+  <a href="#">Home</a><a href="#">Claimed tasks</a><a href="#">Profile</a>
+  <div class="right">Amina Diallo <span class="role">Linguist</span></div>
+</header>
+
+<div class="page">
+  <div class="help" style="margin-bottom:10px">twbplatform.org/task/924511/claimed · Friday 6 November 2026, 08:12 UTC</div>
+  <div class="flash ok">You have claimed the task "1.1 cholera-leaflet.docx". A confirmation email is on its way.</div>
+
+  <div class="layout">
+    <div>
+      <div class="card">
+        <div class="card-h"><h2><span class="icon">✓</span>Translation task claimed</h2><span class="pill prog">Claimed</span></div>
+        <dl class="kv" style="margin-bottom:16px">
+          <dt>Task</dt><dd>1.1 cholera-leaflet.docx</dd>
+          <dt>Project</dt><dd>Cholera prevention leaflet (test) · Health Partners NGO</dd>
+          <dt>Languages</dt><dd>English (United Kingdom) → French (France)</dd>
+          <dt>Words</dt><dd>1,500 (segments 1–40 of the document)</dd>
+          <dt>Deadline</dt><dd>13 Nov 2026 19:51 UTC</dd>
+        </dl>
+        <h3>What to do now</h3>
+        <ol style="padding-left:20px;margin:0">
+          <li style="margin-bottom:10px">Please take a look at our <a href="#">Translator's Toolkit</a> before working on this task.</li>
+          <li>Translate the file to French (France).<br>
+            <span class="btn btn-grey" style="margin-top:8px">Translate using Phrase TMS</span> <span class="tag-gap">GAP: wrong label</span>
+            <div class="help" style="margin-top:6px">The button goes to Wordbee correctly; only its text is wrong. Proposed label: <strong>Translate using Wordbee</strong>.</div>
+            <a class="btn btn-blue" style="margin-top:8px" href="05-wordbee-editor.html">Translate using Wordbee ↗</a> <span class="help">(proposed, opens step 5)</span>
+          </li>
+        </ol>
+      </div>
+
+      <div class="card">
+        <div class="card-h"><h2><span class="icon">✉</span>Other parts of this document</h2></div>
+        <p style="margin:0" class="help" >Parts 1.2 and 1.3 are open to other linguists. Because you're translating part 1.1, you're kept off the French Revision of segments 1–40 (TWB's existing deny-list rule for overlapping segments).</p>
+      </div>
+    </div>
+
+    <aside class="side">
+      <div class="note">
+        <h3>Behind the scenes on "Claim"</h3>
+        <ol>
+          <li>First Wordbee claim for Amina, so TWB creates her Wordbee account: <code>persons/io/update</code> (ChangeOrCreate) in the TWB supplier company, login <code>twb_8871</code>, her TWB email, no password.</li>
+          <li>TWB assigns the job: <code>POST jobs/301/supplier</code> with her person id.</li>
+          <li>TWB sends the task deadline: <code>POST jobs/301/properties</code>.</li>
+          <li>If Wordbee refuses, the claim is undone in TWB and she sees an error, as with Phrase.</li>
+        </ol>
+        Next time she claims a Wordbee task, the stored account is reused.
+      </div>
+      <div class="note">
+        <h3>The button</h3>
+        It links to TWB's SAML login, which signs her in to Wordbee and opens <code>/ux/editor/go?s=jbs301</code>.
+      </div>
+      <div class="gap">
+        <h3>To confirm on Wordbee</h3>
+        Which SAML attribute Wordbee matches people on (email or login), and whether each linguist account uses a paid Wordbee seat.
+      </div>
+    </aside>
+  </div>
+
+  <div class="nextprev"><a href="03-tasks-created.html">← Tasks created</a><a href="05-wordbee-editor.html">Next: work in Wordbee →</a></div>
+</div>
+</body>
+</html>

@@ -71,6 +71,14 @@ var targetCountryCountry;
 
 var duplicateProjectTitle = null;
 
+// Other TMSs than Phrase (Katong, Wordbee; Site Admins only)
+// tmsLanguages[tms]: selections: TWB "xx-YY" => TMS code, pairs: ["en|fr", ...] (empty: any pair), extensions (optional)
+var tmsLanguages = {};
+var tmsNames = { katong: "Katong", wordbee: "Wordbee" };
+var tmsFileExtensions = { katong: ["docx", "pptx", "xlsx", "txt", "html", "htm", "srt", "vtt"] };
+var allLanguageOptions = null; // Original options HTML, restored when switching back to Phrase
+var phraseSourceTextDesc = null;
+
 $(document).ready(documentReady);
 
 
@@ -185,7 +193,94 @@ function documentReady()
   selectedMonthChanged();
   initial_selected_day = null; // If user changes date after this, do not use the initial value
 
+  try {
+    tmsLanguages = JSON.parse(document.getElementById("tms_languages").textContent) || {};
+  } catch (e) {
+    tmsLanguages = {};
+  }
+  for (var tms in tmsLanguages) {
+    if (tmsLanguages[tms].extensions) tmsFileExtensions[tms] = tmsLanguages[tms].extensions;
+  }
+
   parameters = new Parameters(loadingComplete);
+}
+
+/**
+ * "phrase", "katong" or "wordbee"
+ */
+function selectedTms()
+{
+  var checked = document.querySelector("input[name='tms']:checked");
+  if (checked == null || !tmsLanguages[checked.value]) return "phrase";
+  return checked.value;
+}
+
+/**
+ * Restrict the language selects to what the TMS supports (or restore them for Phrase)
+ */
+function filterLanguageSelect(select, tms)
+{
+  var selected = select.value;
+  select.innerHTML = allLanguageOptions;
+  if (tms != "phrase") {
+    for (var i = select.options.length - 1; i >= 0; i--) {
+      var value = select.options[i].value;
+      if (value != "0" && !tmsLanguages[tms].selections[value]) select.remove(i);
+    }
+  }
+  select.value = selected;
+  if (select.selectedIndex < 0) select.value = "0";
+}
+
+function tmsChanged()
+{
+  var tms = selectedTms();
+  if (allLanguageOptions == null) allLanguageOptions = document.getElementById("template_language_options").innerHTML;
+  if (phraseSourceTextDesc == null) phraseSourceTextDesc = document.getElementById("source_text_desc").innerHTML;
+
+  filterLanguageSelect(document.getElementById("sourceLanguageSelect"), tms);
+  for (var i = 0; i < targetCount; i++) filterLanguageSelect(document.getElementById("target_language_" + i), tms);
+
+  for (var other in tmsNames) {
+    var options = document.getElementById(other + "_options");
+    if (options != null) options.classList.toggle("d-none", other != tms);
+  }
+  var templateButtons = document.querySelectorAll("[onclick^='setTemplateLanguages']");
+  for (var j = 0; j < templateButtons.length; j++) templateButtons[j].disabled = tms != "phrase";
+
+  document.getElementById("source_text_desc").innerHTML = tms == "phrase"
+    ? phraseSourceTextDesc
+    : "Upload your source file for the project. Allowed file types: " + tmsFileExtensions[tms].join(", ").toUpperCase()
+      + (tms == "katong" ? " (up to 20 MB)" : "") + ". If the total word count of the file exceeds 2000 words, it will be split into multiple tasks.";
+}
+
+/**
+ * Extra checks when the project is to be created in another TMS than Phrase, returns an error message or null
+ */
+function validateTms()
+{
+  var tms = selectedTms();
+  if (tms == "phrase") return null;
+  var name = tmsNames[tms];
+  var languages = tmsLanguages[tms];
+
+  if (projectFileName == null && document.getElementById("projectFile").files.length > 0) projectFileName = document.getElementById("projectFile").files[0].name;
+  if (projectFileName != null) {
+    var extension = projectFileName.substring(projectFileName.lastIndexOf(".") + 1).toLowerCase();
+    if (tmsFileExtensions[tms].indexOf(extension) == -1) return name + " accepts " + tmsFileExtensions[tms].join(", ").toUpperCase() + " files only.";
+  }
+
+  var source = languages.selections[document.getElementById("sourceLanguageSelect").value];
+  if (!source) return "Please choose a source language " + name + " supports.";
+  var targets = [];
+  for (var i = 0; i < targetCount; i++) {
+    var target = languages.selections[document.getElementById("target_language_" + i).value];
+    if (!target) return "Please choose target languages " + name + " supports.";
+    if (target == source || targets.indexOf(target) != -1) return name + " needs distinct languages: " + target + " is used twice (regional variants map to the same " + name + " language).";
+    if (languages.pairs.length > 0 && languages.pairs.indexOf(source + "|" + target) == -1) return name + " does not support " + source + " to " + target + ".";
+    targets.push(target);
+  }
+  return null;
 }
 
 function loadingComplete()
@@ -267,6 +362,7 @@ function target_language_selected(event) {
     targetLanguageSelect.id   = "target_language_" + targetCount;
     targetLanguageSelect.className = "col-md-4";
     targetLanguageSelect.innerHTML = document.getElementById("template_language_options").innerHTML;
+    if (selectedTms() != "phrase") filterLanguageSelect(targetLanguageSelect, selectedTms());
     targetLanguageSelect.addEventListener("input", target_language_selected);
     targetLanguageRow.appendChild(targetLanguageSelect);
 
@@ -362,6 +458,12 @@ function setTemplateLanguages(template_number)
  */
 function validateForm()
 {
+  var tmsError = validateTms();
+  if (tmsError != null) {
+    window.alert(tmsError);
+    return false;
+  }
+
   // Reset error variables, clearing any previously displayed errors.
   createProjectError = null;
   titleError = null;

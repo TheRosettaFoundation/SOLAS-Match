@@ -1284,6 +1284,169 @@ CREATE TABLE IF NOT EXISTS `queue_copy_task_original_files` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
+CREATE TABLE IF NOT EXISTS `KatongProjects` (
+  project_id   INT(10) UNSIGNED NOT NULL,
+  job_id       CHAR(36) COLLATE utf8mb4_unicode_ci NOT NULL,
+  external_ref VARCHAR(64) COLLATE utf8mb4_unicode_ci NOT NULL,
+  content_type VARCHAR(16) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'general',
+  file_name    VARCHAR(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  status       VARCHAR(16) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'queued',
+  created      DATETIME NOT NULL,
+  PRIMARY KEY FK_KatongProjects_project_id (project_id),
+  UNIQUE  KEY job_id (job_id),
+  CONSTRAINT FK_KatongProjects_project_id FOREIGN KEY (project_id) REFERENCES Projects (id) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+
+CREATE TABLE IF NOT EXISTS `KatongTasks` (
+  katong_task_id CHAR(36) COLLATE utf8mb4_unicode_ci NOT NULL,
+  job_id         CHAR(36) COLLATE utf8mb4_unicode_ci NOT NULL,
+  kind           VARCHAR(16) COLLATE utf8mb4_unicode_ci NOT NULL,
+  target_lang    VARCHAR(35) COLLATE utf8mb4_unicode_ci NOT NULL,
+  round          INT(10) UNSIGNED NOT NULL DEFAULT 1,
+  part           INT(10) UNSIGNED NOT NULL DEFAULT 1,
+  status         VARCHAR(16) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'queued',
+  materialised   INT(10) UNSIGNED NOT NULL DEFAULT 0,
+  task_id        BIGINT(20) UNSIGNED DEFAULT NULL,
+  PRIMARY KEY (katong_task_id),
+  UNIQUE  KEY FK_KatongTasks_task_id (task_id),
+  KEY job_id (job_id),
+  CONSTRAINT FK_KatongTasks_job_id  FOREIGN KEY (job_id)  REFERENCES KatongProjects (job_id) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT FK_KatongTasks_task_id FOREIGN KEY (task_id) REFERENCES Tasks (id) ON DELETE SET NULL ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+
+CREATE TABLE IF NOT EXISTS `KatongTaskMetrics` (
+  task_id            BIGINT(20) UNSIGNED NOT NULL,
+  katong_task_id     CHAR(36) COLLATE utf8mb4_unicode_ci NOT NULL,
+  active_ms          BIGINT(20) UNSIGNED NOT NULL DEFAULT 0,
+  wall_ms            BIGINT(20) UNSIGNED NOT NULL DEFAULT 0,
+  segments_accepted  INT(10) UNSIGNED NOT NULL DEFAULT 0,
+  segments_edited    INT(10) UNSIGNED NOT NULL DEFAULT 0,
+  segments_flagged   INT(10) UNSIGNED NOT NULL DEFAULT 0,
+  mean_edit_distance FLOAT DEFAULT NULL,
+  words_total        INT(10) UNSIGNED NOT NULL DEFAULT 0,
+  words_tm_101       INT(10) UNSIGNED NOT NULL DEFAULT 0,
+  words_tm_100       INT(10) UNSIGNED NOT NULL DEFAULT 0,
+  words_fuzzy_95_99  INT(10) UNSIGNED NOT NULL DEFAULT 0,
+  words_fuzzy_85_94  INT(10) UNSIGNED NOT NULL DEFAULT 0,
+  words_fuzzy_75_84  INT(10) UNSIGNED NOT NULL DEFAULT 0,
+  words_mt           INT(10) UNSIGNED NOT NULL DEFAULT 0,
+  words_new          INT(10) UNSIGNED NOT NULL DEFAULT 0,
+  by_reviewer        TEXT COLLATE utf8mb4_unicode_ci,
+  fetched_at         DATETIME NOT NULL,
+  PRIMARY KEY FK_KatongTaskMetrics_task_id (task_id),
+  CONSTRAINT FK_KatongTaskMetrics_task_id FOREIGN KEY (task_id) REFERENCES Tasks (id) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+
+CREATE TABLE IF NOT EXISTS `ProcessedKatongDeliveries` (
+  delivery_id VARCHAR(64) COLLATE utf8mb4_unicode_ci NOT NULL,
+  received    DATETIME NOT NULL,
+  PRIMARY KEY (delivery_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+
+CREATE TABLE IF NOT EXISTS `WordbeeProjects` (
+  project_id     INT(10) UNSIGNED NOT NULL,
+  wb_project_id  INT(10) UNSIGNED NOT NULL,
+  document_id    INT(10) UNSIGNED NOT NULL DEFAULT 0,
+  reference      VARCHAR(64) COLLATE utf8mb4_unicode_ci NOT NULL,
+  file_name      VARCHAR(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  src_locale     VARCHAR(20) COLLATE utf8mb4_unicode_ci NOT NULL,
+  target_locales VARCHAR(400) COLLATE utf8mb4_unicode_ci NOT NULL,
+  revision       INT(10) UNSIGNED NOT NULL DEFAULT 1,
+  status         VARCHAR(16) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'importing',
+  last_polled    DATETIME DEFAULT NULL,
+  created        DATETIME NOT NULL,
+  PRIMARY KEY FK_WordbeeProjects_project_id (project_id),
+  UNIQUE  KEY wb_project_id (wb_project_id),
+  CONSTRAINT FK_WordbeeProjects_project_id FOREIGN KEY (project_id) REFERENCES Projects (id) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+
+CREATE TABLE IF NOT EXISTS `WordbeeLanguages` (
+  project_id    INT(10) UNSIGNED NOT NULL,
+  target_locale VARCHAR(20) COLLATE utf8mb4_unicode_ci NOT NULL,
+  state         INT(10) UNSIGNED NOT NULL DEFAULT 0, # 0 waiting for import, 1 jobs requested, 2 TWB Tasks created
+  words         INT(10) UNSIGNED NOT NULL DEFAULT 0,
+  segments      INT(10) UNSIGNED NOT NULL DEFAULT 0,
+  max_segments  INT(10) UNSIGNED NOT NULL DEFAULT 0,
+  PRIMARY KEY (project_id, target_locale),
+  CONSTRAINT FK_WordbeeLanguages_project_id FOREIGN KEY (project_id) REFERENCES WordbeeProjects (project_id) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+
+CREATE TABLE IF NOT EXISTS `WordbeeTasks` (
+  wb_job_id     VARCHAR(30) COLLATE utf8mb4_unicode_ci NOT NULL,
+  project_id    INT(10) UNSIGNED NOT NULL,
+  task_code     VARCHAR(10) COLLATE utf8mb4_unicode_ci NOT NULL,
+  target_locale VARCHAR(20) COLLATE utf8mb4_unicode_ci NOT NULL,
+  part          INT(10) UNSIGNED NOT NULL DEFAULT 1,
+  seg_from      INT(10) UNSIGNED NOT NULL DEFAULT 0,
+  seg_to        INT(10) UNSIGNED NOT NULL DEFAULT 0,
+  status        INT(10) NOT NULL DEFAULT 0,
+  assignee      INT(10) UNSIGNED NOT NULL DEFAULT 0,
+  materialised  INT(10) UNSIGNED NOT NULL DEFAULT 0,
+  task_id       BIGINT(20) UNSIGNED DEFAULT NULL,
+  PRIMARY KEY (wb_job_id),
+  UNIQUE  KEY FK_WordbeeTasks_task_id (task_id),
+  KEY project_id (project_id),
+  CONSTRAINT FK_WordbeeTasks_project_id FOREIGN KEY (project_id) REFERENCES WordbeeProjects (project_id) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT FK_WordbeeTasks_task_id    FOREIGN KEY (task_id)    REFERENCES Tasks (id) ON DELETE SET NULL ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+
+CREATE TABLE IF NOT EXISTS `WordbeeUsers` (
+  user_id       INT(10) UNSIGNED NOT NULL,
+  wb_person_id  INT(10) UNSIGNED NOT NULL,
+  wb_company_id INT(10) UNSIGNED NOT NULL,
+  PRIMARY KEY (user_id),
+  CONSTRAINT FK_WordbeeUsers_user_id FOREIGN KEY (user_id) REFERENCES Users (id) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+
+CREATE TABLE IF NOT EXISTS `WordbeeTaskMetrics` (
+  task_id         BIGINT(20) UNSIGNED NOT NULL,
+  wb_job_id       VARCHAR(30) COLLATE utf8mb4_unicode_ci NOT NULL,
+  words           INT(10) UNSIGNED NOT NULL DEFAULT 0,
+  segments        INT(10) UNSIGNED NOT NULL DEFAULT 0,
+  wd110           INT(10) UNSIGNED NOT NULL DEFAULT 0,
+  wd100           INT(10) UNSIGNED NOT NULL DEFAULT 0,
+  wd_match1       INT(10) UNSIGNED NOT NULL DEFAULT 0,
+  wd_match2       INT(10) UNSIGNED NOT NULL DEFAULT 0,
+  wd_match3       INT(10) UNSIGNED NOT NULL DEFAULT 0,
+  wd_match4       INT(10) UNSIGNED NOT NULL DEFAULT 0,
+  wd_match5       INT(10) UNSIGNED NOT NULL DEFAULT 0,
+  wd_pretrans_mt  INT(10) UNSIGNED NOT NULL DEFAULT 0,
+  raw             TEXT COLLATE utf8mb4_unicode_ci,
+  fetched_at      DATETIME NOT NULL,
+  PRIMARY KEY FK_WordbeeTaskMetrics_task_id (task_id),
+  CONSTRAINT FK_WordbeeTaskMetrics_task_id FOREIGN KEY (task_id) REFERENCES Tasks (id) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+
+CREATE TABLE IF NOT EXISTS `WordbeeAsyncOps` (
+  requestid     INT(10) UNSIGNED NOT NULL,
+  kind          VARCHAR(16) COLLATE utf8mb4_unicode_ci NOT NULL, # import or jobs
+  project_id    INT(10) UNSIGNED NOT NULL,
+  target_locale VARCHAR(20) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  status        VARCHAR(16) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'Waiting',
+  created       DATETIME NOT NULL,
+  PRIMARY KEY (requestid),
+  KEY status (status),
+  CONSTRAINT FK_WordbeeAsyncOps_project_id FOREIGN KEY (project_id) REFERENCES WordbeeProjects (project_id) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+
+CREATE TABLE IF NOT EXISTS `WordbeeCache` (
+  k       VARCHAR(32) COLLATE utf8mb4_unicode_ci NOT NULL, # e.g. token2, languages, formats
+  v       MEDIUMTEXT COLLATE utf8mb4_unicode_ci NOT NULL,
+  updated DATETIME NOT NULL,
+  PRIMARY KEY (k)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+
 CREATE TABLE IF NOT EXISTS `Referers` (
   referer VARCHAR(30) COLLATE utf8mb4_unicode_ci NOT NULL,
   PRIMARY KEY (referer)
@@ -10832,6 +10995,381 @@ DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `get_memsource_task_by_memsource_uid`(IN memsourceUID VARCHAR(30))
 BEGIN
     SELECT * FROM MemsourceTasks WHERE memsource_task_uid=memsourceUID;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `set_katong_project`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `set_katong_project`(IN projectID INT UNSIGNED, IN jobID CHAR(36), IN ref VARCHAR(64), IN ct VARCHAR(16), IN fname VARCHAR(255), IN st VARCHAR(16))
+BEGIN
+    INSERT INTO KatongProjects (project_id, job_id, external_ref, content_type, file_name, status, created)
+    VALUES                     ( projectID,  jobID,          ref,           ct,     fname,     st, UTC_TIMESTAMP())
+    ON DUPLICATE KEY UPDATE job_id=jobID, external_ref=ref, content_type=ct, file_name=fname, status=st;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `get_katong_project`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_katong_project`(IN projectID INT UNSIGNED)
+BEGIN
+    SELECT * FROM KatongProjects WHERE project_id=projectID;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `get_katong_project_by_job`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_katong_project_by_job`(IN jobID CHAR(36))
+BEGIN
+    SELECT * FROM KatongProjects WHERE job_id=jobID;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `update_katong_project_status`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `update_katong_project_status`(IN jobID CHAR(36), IN st VARCHAR(16))
+BEGIN
+    UPDATE KatongProjects SET status=st WHERE job_id=jobID;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `get_katong_projects_not_complete`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_katong_projects_not_complete`()
+BEGIN
+    SELECT * FROM KatongProjects WHERE status NOT IN ('completed', 'delivered', 'cancelled', 'failed');
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `set_katong_task`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `set_katong_task`(IN katongID CHAR(36), IN jobID CHAR(36), IN k VARCHAR(16), IN lang VARCHAR(35), IN r INT, IN p INT, IN st VARCHAR(16))
+BEGIN
+    INSERT INTO KatongTasks (katong_task_id, job_id, kind, target_lang, round, part, status)
+    VALUES                  (      katongID,  jobID,    k,        lang,     r,    p,     st)
+    ON DUPLICATE KEY UPDATE round=r, part=p, status=st;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `claim_katong_task_for_materialising`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `claim_katong_task_for_materialising`(IN katongID CHAR(36))
+BEGIN
+    UPDATE KatongTasks SET materialised=1 WHERE katong_task_id=katongID AND materialised=0;
+    SELECT IF(ROW_COUNT()=0, 0, 1) AS result;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `unclaim_katong_task_for_materialising`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `unclaim_katong_task_for_materialising`(IN katongID CHAR(36))
+BEGIN
+    UPDATE KatongTasks SET materialised=0 WHERE katong_task_id=katongID AND task_id IS NULL;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `link_katong_task`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `link_katong_task`(IN katongID CHAR(36), IN taskID BIGINT)
+BEGIN
+    UPDATE KatongTasks SET task_id=taskID WHERE katong_task_id=katongID;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `update_katong_task_status`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `update_katong_task_status`(IN katongID CHAR(36), IN st VARCHAR(16))
+BEGIN
+    UPDATE KatongTasks SET status=st WHERE katong_task_id=katongID;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `get_katong_task`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_katong_task`(IN katongID CHAR(36))
+BEGIN
+    SELECT * FROM KatongTasks WHERE katong_task_id=katongID;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `get_katong_task_by_task_id`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_katong_task_by_task_id`(IN taskID BIGINT)
+BEGIN
+    SELECT * FROM KatongTasks WHERE task_id=taskID;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `get_katong_tasks_for_job`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_katong_tasks_for_job`(IN jobID CHAR(36))
+BEGIN
+    SELECT * FROM KatongTasks WHERE job_id=jobID;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `is_katong_delivery_new`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `is_katong_delivery_new`(IN deliveryID VARCHAR(64))
+BEGIN
+    INSERT IGNORE INTO ProcessedKatongDeliveries (delivery_id, received) VALUES (deliveryID, UTC_TIMESTAMP());
+    SELECT IF(ROW_COUNT()=0, 0, 1) AS result;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `set_katong_task_metrics`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `set_katong_task_metrics`(IN taskID BIGINT, IN katongID CHAR(36), IN active BIGINT, IN wall BIGINT, IN accepted INT, IN edited INT, IN flagged INT, IN distance FLOAT,
+    IN total INT, IN tm101 INT, IN tm100 INT, IN f95 INT, IN f85 INT, IN f75 INT, IN mt INT, IN new_words INT, IN reviewers TEXT)
+BEGIN
+    REPLACE INTO KatongTaskMetrics (task_id, katong_task_id, active_ms, wall_ms, segments_accepted, segments_edited, segments_flagged, mean_edit_distance,
+        words_total, words_tm_101, words_tm_100, words_fuzzy_95_99, words_fuzzy_85_94, words_fuzzy_75_84, words_mt, words_new, by_reviewer, fetched_at)
+    VALUES (taskID, katongID, active, wall, accepted, edited, flagged, distance,
+        total, tm101, tm100, f95, f85, f75, mt, new_words, reviewers, UTC_TIMESTAMP());
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `get_katong_task_metrics`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_katong_task_metrics`(IN taskID BIGINT)
+BEGIN
+    SELECT * FROM KatongTaskMetrics WHERE task_id=taskID;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `set_wordbee_project`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `set_wordbee_project`(IN projectID INT UNSIGNED, IN wbID INT UNSIGNED, IN ref VARCHAR(64), IN fname VARCHAR(255), IN src VARCHAR(20), IN trgs VARCHAR(400), IN rev INT)
+BEGIN
+    INSERT INTO WordbeeProjects (project_id, wb_project_id, reference, file_name, src_locale, target_locales, revision, created)
+    VALUES                      ( projectID,          wbID,       ref,     fname,        src,           trgs,      rev, UTC_TIMESTAMP());
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `get_wordbee_project`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_wordbee_project`(IN projectID INT UNSIGNED)
+BEGIN
+    SELECT * FROM WordbeeProjects WHERE project_id=projectID;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `get_wordbee_project_by_wb_id`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_wordbee_project_by_wb_id`(IN wbID INT UNSIGNED)
+BEGIN
+    SELECT * FROM WordbeeProjects WHERE wb_project_id=wbID;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `update_wordbee_project_document`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `update_wordbee_project_document`(IN projectID INT UNSIGNED, IN docID INT UNSIGNED, IN st VARCHAR(16))
+BEGIN
+    UPDATE WordbeeProjects SET document_id=docID, status=st WHERE project_id=projectID;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `update_wordbee_project_status`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `update_wordbee_project_status`(IN projectID INT UNSIGNED, IN st VARCHAR(16))
+BEGIN
+    UPDATE WordbeeProjects SET status=st WHERE project_id=projectID;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `get_wordbee_projects_to_poll`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_wordbee_projects_to_poll`(IN minutes INT)
+BEGIN
+    SELECT * FROM WordbeeProjects
+    WHERE status NOT IN ('completed', 'cancelled', 'failed') AND (last_polled IS NULL OR last_polled < DATE_SUB(UTC_TIMESTAMP(), INTERVAL minutes MINUTE));
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `set_wordbee_project_polled`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `set_wordbee_project_polled`(IN projectID INT UNSIGNED)
+BEGIN
+    UPDATE WordbeeProjects SET last_polled=UTC_TIMESTAMP() WHERE project_id=projectID;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `set_wordbee_language`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `set_wordbee_language`(IN projectID INT UNSIGNED, IN trg VARCHAR(20), IN st INT, IN w INT, IN segs INT, IN maxSegs INT)
+BEGIN
+    INSERT INTO WordbeeLanguages (project_id, target_locale, state, words, segments, max_segments)
+    VALUES                       ( projectID,           trg,    st,     w,     segs,      maxSegs)
+    ON DUPLICATE KEY UPDATE state=st, words=w, segments=segs, max_segments=maxSegs;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `get_wordbee_languages`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_wordbee_languages`(IN projectID INT UNSIGNED)
+BEGIN
+    SELECT * FROM WordbeeLanguages WHERE project_id=projectID;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `claim_wordbee_language`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `claim_wordbee_language`(IN projectID INT UNSIGNED, IN trg VARCHAR(20), IN fromState INT, IN toState INT)
+BEGIN
+    UPDATE WordbeeLanguages SET state=toState WHERE project_id=projectID AND target_locale=trg AND state=fromState;
+    SELECT IF(ROW_COUNT()=0, 0, 1) AS result;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `set_wordbee_task`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `set_wordbee_task`(IN jobID VARCHAR(30), IN projectID INT UNSIGNED, IN code VARCHAR(10), IN trg VARCHAR(20), IN p INT, IN sfrom INT, IN sto INT, IN st INT)
+BEGIN
+    INSERT INTO WordbeeTasks (wb_job_id, project_id, task_code, target_locale, part, seg_from, seg_to, status)
+    VALUES                   (    jobID,  projectID,      code,           trg,    p,    sfrom,    sto,     st)
+    ON DUPLICATE KEY UPDATE status=st;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `claim_wordbee_task_for_materialising`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `claim_wordbee_task_for_materialising`(IN jobID VARCHAR(30))
+BEGIN
+    UPDATE WordbeeTasks SET materialised=1 WHERE wb_job_id=jobID AND materialised=0;
+    SELECT IF(ROW_COUNT()=0, 0, 1) AS result;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `unclaim_wordbee_task_for_materialising`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `unclaim_wordbee_task_for_materialising`(IN jobID VARCHAR(30))
+BEGIN
+    UPDATE WordbeeTasks SET materialised=0 WHERE wb_job_id=jobID AND task_id IS NULL;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `link_wordbee_task`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `link_wordbee_task`(IN jobID VARCHAR(30), IN taskID BIGINT)
+BEGIN
+    UPDATE WordbeeTasks SET task_id=taskID WHERE wb_job_id=jobID;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `update_wordbee_task_status`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `update_wordbee_task_status`(IN jobID VARCHAR(30), IN st INT, IN person INT UNSIGNED)
+BEGIN
+    UPDATE WordbeeTasks SET status=st, assignee=person WHERE wb_job_id=jobID;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `get_wordbee_task`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_wordbee_task`(IN jobID VARCHAR(30))
+BEGIN
+    SELECT * FROM WordbeeTasks WHERE wb_job_id=jobID;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `get_wordbee_task_by_task_id`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_wordbee_task_by_task_id`(IN taskID BIGINT)
+BEGIN
+    SELECT * FROM WordbeeTasks WHERE task_id=taskID;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `get_wordbee_tasks_for_project`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_wordbee_tasks_for_project`(IN projectID INT UNSIGNED)
+BEGIN
+    SELECT * FROM WordbeeTasks WHERE project_id=projectID ORDER BY target_locale, task_code, part;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `set_wordbee_user`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `set_wordbee_user`(IN userID INT UNSIGNED, IN personID INT UNSIGNED, IN companyID INT UNSIGNED)
+BEGIN
+    INSERT INTO WordbeeUsers (user_id, wb_person_id, wb_company_id) VALUES (userID, personID, companyID)
+    ON DUPLICATE KEY UPDATE wb_person_id=personID, wb_company_id=companyID;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `get_wordbee_user`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_wordbee_user`(IN userID INT UNSIGNED)
+BEGIN
+    SELECT * FROM WordbeeUsers WHERE user_id=userID;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `get_user_by_wordbee_person`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_user_by_wordbee_person`(IN personID INT UNSIGNED)
+BEGIN
+    SELECT * FROM WordbeeUsers WHERE wb_person_id=personID;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `set_wordbee_task_metrics`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `set_wordbee_task_metrics`(IN taskID BIGINT, IN jobID VARCHAR(30), IN w INT, IN segs INT, IN w110 INT, IN w100 INT, IN m1 INT, IN m2 INT, IN m3 INT, IN m4 INT, IN m5 INT, IN mt INT, IN r TEXT)
+BEGIN
+    REPLACE INTO WordbeeTaskMetrics (task_id, wb_job_id, words, segments, wd110, wd100, wd_match1, wd_match2, wd_match3, wd_match4, wd_match5, wd_pretrans_mt, raw, fetched_at)
+    VALUES (taskID, jobID, w, segs, w110, w100, m1, m2, m3, m4, m5, mt, r, UTC_TIMESTAMP());
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `set_wordbee_async_op`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `set_wordbee_async_op`(IN reqID INT UNSIGNED, IN k VARCHAR(16), IN projectID INT UNSIGNED, IN trg VARCHAR(20))
+BEGIN
+    INSERT INTO WordbeeAsyncOps (requestid, kind, project_id, target_locale, status, created)
+    VALUES                      (    reqID,    k,  projectID,           trg, 'Waiting', UTC_TIMESTAMP())
+    ON DUPLICATE KEY UPDATE kind=k, project_id=projectID, target_locale=trg;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `get_wordbee_async_op`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_wordbee_async_op`(IN reqID INT UNSIGNED)
+BEGIN
+    SELECT * FROM WordbeeAsyncOps WHERE requestid=reqID;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `get_wordbee_async_ops_pending`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_wordbee_async_ops_pending`()
+BEGIN
+    SELECT * FROM WordbeeAsyncOps WHERE status IN ('Waiting', 'Executing');
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `claim_wordbee_async_op`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `claim_wordbee_async_op`(IN reqID INT UNSIGNED, IN st VARCHAR(16))
+BEGIN
+    UPDATE WordbeeAsyncOps SET status=st WHERE requestid=reqID AND status IN ('Waiting', 'Executing');
+    SELECT IF(ROW_COUNT()=0, 0, 1) AS result;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `set_wordbee_cache`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `set_wordbee_cache`(IN key_name VARCHAR(32), IN val MEDIUMTEXT)
+BEGIN
+    REPLACE INTO WordbeeCache (k, v, updated) VALUES (key_name, val, UTC_TIMESTAMP());
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `get_wordbee_cache`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_wordbee_cache`(IN key_name VARCHAR(32))
+BEGIN
+    SELECT v, TIMESTAMPDIFF(SECOND, updated, UTC_TIMESTAMP()) AS age FROM WordbeeCache WHERE k=key_name;
 END//
 DELIMITER ;
 

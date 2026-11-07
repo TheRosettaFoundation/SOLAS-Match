@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Wordbee Journey Mockup</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<nav class="journey"><strong>Wordbee journey mockup</strong>
+  <a class="on" href="index.html">Overview</a>
+  <a href="01-create-project.html">1 Create project</a>
+  <a href="02-project-created.html">2 Project created</a>
+  <a href="03-tasks-created.html">3 Tasks created</a>
+  <a href="04-linguist-claims.html">4 Linguist claims</a>
+  <a href="05-wordbee-editor.html">5 Work in Wordbee</a>
+  <a href="06-task-completed.html">6 Back in TWB</a>
+</nav>
+
+<div class="page">
+  <h1>TWB Platform × Wordbee: the admin journey</h1>
+  <p>These pages show what an admin (and the linguist) would see when a project is created through the Wordbee option on
+  <code>project/{org_id}/create/</code>, as the code on branch <code>t_home_ngo</code> works today. They are static mockups
+  for discussion, made with sample test content and made-up people and organisations, not screenshots.</p>
+
+  <div class="layout">
+    <div>
+      <ol class="steps">
+        <li><a href="01-create-project.html">Create the project, with Wordbee selected</a><span class="who">Site admin</span>
+          <div class="help">The 3-option Translation system switch: Phrase, Katong, Wordbee.</div></li>
+        <li><a href="02-project-created.html">Project created, tasks on their way</a><span class="who">Site admin</span>
+          <div class="help">Wordbee imports the file and counts words in the background.</div></li>
+        <li><a href="03-tasks-created.html">Tasks created in TWB</a><span class="who">Site admin</span>
+          <div class="help">French (4,500 words) split into 3 parts; Swahili (800 words) in one.</div></li>
+        <li><a href="04-linguist-claims.html">A linguist claims a task</a><span class="who">Linguist</span>
+          <div class="help">TWB creates their Wordbee account and assigns the job in Wordbee.</div></li>
+        <li><a href="05-wordbee-editor.html">The linguist works in Wordbee</a><span class="who">Linguist</span>
+          <div class="help">Signed in through TWB's SAML login, straight into the job.</div></li>
+        <li><a href="06-task-completed.html">What appears in TWB when the task is completed</a><span class="who">Site admin</span>
+          <div class="help">Status, next steps, download and stored metrics.</div></li>
+      </ol>
+    </div>
+
+    <aside class="side">
+      <div class="note">
+        <h3>How to read these pages</h3>
+        <ul>
+          <li>The orange-topped cards are TWB Platform screens.</li>
+          <li><strong>Blue boxes</strong> explain what happens behind the scenes (API calls, saved data).</li>
+          <li><strong>Orange boxes</strong> and <span class="tag-gap">GAP</span> tags mark places where the current code falls short or where details are unknown.</li>
+        </ul>
+      </div>
+      <div class="gap">
+        <h3>Gaps found while building this mockup</h3>
+        <ul>
+          <li><strong>Wordbee's editor screen:</strong> I haven't seen it (the docs' screenshots weren't viewable here, and there's no Wordbee account). Step 5 is a generic illustration of a translation editor, not Wordbee's real interface.</li>
+          <li><strong>Wrong button label:</strong> the linguist's task page says "Translate using Phrase TMS" for Wordbee tasks too (step 4).</li>
+          <li><strong>No Sync or "View in Wordbee" buttons:</strong> the project page only shows "Sync Phrase TMS" and the Phrase link for Phrase projects, so admins can't trigger a sync by hand (step 3).</li>
+          <li><strong>Metrics aren't shown:</strong> Wordbee word counts and match bands are saved but not displayed anywhere in TWB (step 6).</li>
+          <li><strong>Unconfirmed API details:</strong> things like how long Wordbee takes to import, the job id format and the deliverable timing are based on the docs only (see <code>docs/wordbee/README.md</code>, Step 0).</li>
+        </ul>
+      </div>
+    </aside>
+  </div>
+</div>
+</body>
+</html>

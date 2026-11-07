@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>1 Create Project</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<nav class="journey"><strong>Wordbee journey mockup</strong>
+  <a href="index.html">Overview</a>
+  <a class="on" href="01-create-project.html">1 Create project</a>
+  <a href="02-project-created.html">2 Project created</a>
+  <a href="03-tasks-created.html">3 Tasks created</a>
+  <a href="04-linguist-claims.html">4 Linguist claims</a>
+  <a href="05-wordbee-editor.html">5 Work in Wordbee</a>
+  <a href="06-task-completed.html">6 Back in TWB</a>
+</nav>
+<header class="twb-nav">
+  <div class="twb-logo"><span class="mark">TWB</span> Platform</div>
+  <a href="#">Home</a><a href="#">Projects</a><a href="#">Organisations</a><a href="#">Admin</a>
+  <div class="right">Sam Rivera <span class="role">Site admin</span></div>
+</header>
+
+<div class="page">
+  <div class="help" style="margin-bottom:10px">twbplatform.org/project/4182/create/ · Organisation: Health Partners NGO</div>
+  <div class="layout">
+    <div>
+      <!-- Card 0: Translation system -->
+      <div class="card">
+        <div class="card-h"><h2><span class="icon">⑂</span>Translation system</h2></div>
+        <div class="seg" role="radiogroup" aria-label="Translation system">
+          <span>Phrase</span><span>Katong</span><span class="on">Wordbee</span>
+        </div>
+        <div class="help" style="margin-bottom:12px">Phrase is the standard workflow. Katong (sandbox, test content only) machine translates the file, then TWB linguists review it in the Katong editor.
+          Wordbee creates Translation and Revision jobs in Wordbee Translator, split into parts of about 2000 words, and TWB linguists work on them in the Wordbee editor.</div>
+        <label class="switch"><i></i> Revision step after translation (creates Revision tasks for each language)</label>
+      </div>
+
+      <!-- Card 1: Project details -->
+      <div class="card">
+        <div class="card-h"><h2><span class="icon">▤</span>Create a Project</h2><a class="btn btn-out btn-sm" href="#">↗ Guidelines</a></div>
+        <div class="grid2">
+          <div><label class="f">Title <span class="req">*</span></label><div class="input">Cholera prevention leaflet (test)</div></div>
+          <div><label class="f">Reference</label><div class="input">https://example.org/briefs/cholera</div></div>
+        </div>
+        <div style="margin-top:14px"><label class="f">Description <span class="req">*</span></label>
+          <div class="input textarea">Leaflet for community health workers explaining how to prevent and treat cholera at home. Plain language.</div></div>
+        <div style="margin-top:14px"><label class="f">Impact <span class="req">*</span></label>
+          <div class="input textarea">Helps families in affected areas recognise symptoms early and get treatment.</div></div>
+      </div>
+
+      <!-- Card 2: Files -->
+      <div class="card">
+        <div class="card-h"><h2><span class="icon">⇪</span>Files</h2></div>
+        <div class="grid2">
+          <div>
+            <label class="f">Source text <span class="req">*</span></label>
+            <div class="upload">
+              <div style="font-weight:600">Click to select</div>
+              <div class="help">Upload your source file for the project. Allowed file types: DOCX, XLSX, PPTX, ODT, TXT, CSV, HTML, SRT. If the total word count of the file exceeds 2000 words, it will be split into multiple tasks.</div>
+              <div class="file-chip">📄 cholera-leaflet.docx · 4,500 words</div>
+            </div>
+          </div>
+          <div>
+            <label class="f">Project image</label>
+            <div class="upload">
+              <div style="font-weight:600">Click to select</div>
+              <div class="help">If you do not upload an image, the most recent will be reused.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 3: Languages -->
+      <div class="card">
+        <div class="card-h"><h2><span class="icon">文</span>Languages</h2></div>
+        <div style="max-width:340px;margin-bottom:16px"><label class="f">Source language <span class="req">*</span></label><div class="select">English (United Kingdom) ▾</div></div>
+        <div class="lang-h" style="margin-top:0"><label class="f" style="margin:0">Target languages <span class="req">*</span></label>
+          <div style="display:flex;gap:8px"><span class="btn btn-accent btn-sm">＋ Add more target languages</span><span class="btn btn-out btn-sm">－ Remove</span></div></div>
+        <div class="target-row">
+          <div class="select">French (France) ▾</div><div class="select dis">TRA: Full TWB Community</div><div class="select dis">REV: Full TWB Community</div>
+        </div>
+        <div class="target-row">
+          <div class="select">Swahili (Kenya) ▾</div><div class="select dis">TRA: Full TWB Community</div><div class="select dis">REV: Full TWB Community</div>
+        </div>
+        <div class="help">Only languages Wordbee has are listed while Wordbee is selected.</div>
+      </div>
+
+      <!-- Card 4: Deadline -->
+      <div class="card">
+        <div class="card-h"><h2><span class="icon">◷</span>Deadline</h2></div>
+        <div style="max-width:420px"><label class="f">Deadline <span class="req">*</span></label>
+          <div class="input">20/11/2026 18:00 (your time, Europe/Paris)</div>
+          <div class="help">Saved as 2026-11-20 17:00:00 UTC.</div></div>
+      </div>
+
+      <div class="actions">
+        <span class="btn btn-out">⊘ Cancel</span>
+        <a class="btn btn-accent" href="02-project-created.html">⇪ Create Project</a>
+      </div>
+    </div>
+
+    <aside class="side">
+      <div class="note">
+        <h3>Who sees the switch</h3>
+        Only site admins, and only when <code>[wordbee] enabled</code> is set in <code>conf.ini</code>. Org admins see the form without this card and always use Phrase.
+      </div>
+      <div class="note">
+        <h3>When Wordbee is selected</h3>
+        <ul>
+          <li>The language lists only show languages Wordbee has (from <code>settings/languages/codes</code>).</li>
+          <li>The allowed file types come from Wordbee (<code>settings/documentformats</code>).</li>
+          <li>The template buttons are switched off.</li>
+          <li>On submit, the page checks the file type and that no two targets map to the same Wordbee language.</li>
+        </ul>
+      </div>
+      <div class="note">
+        <h3>On "Create Project"</h3>
+        <ol>
+          <li>TWB saves the project and the file, as for Phrase.</li>
+          <li><strong>API1</strong> <code>POST projects</code> creates a Standard project, reference <code>twb-project-61237</code>, with Translation and Revision steps.</li>
+          <li><strong>API2</strong> sets the workflow template, uploads the file and starts the import.</li>
+          <li>TWB writes the same rows as a Phrase project, plus <code>WordbeeProjects</code>.</li>
+        </ol>
+      </div>
+      <div class="gap">
+        <h3>Note</h3>
+        The file types shown here are an example: the real list depends on what your Wordbee platform reports.
+      </div>
+    </aside>
+  </div>
+
+  <div class="nextprev"><a href="index.html">← Overview</a><a href="02-project-created.html">Next: project created →</a></div>
+</div>
+</body>
+</html>
