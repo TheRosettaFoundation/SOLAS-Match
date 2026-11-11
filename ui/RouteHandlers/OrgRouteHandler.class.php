@@ -671,6 +671,10 @@ error_log("Tarjimly JSON: $result_json");//(**)
                 if (isset($post['set_mt_for_org'])) {
                     $userDao->set_mt_for_org($org_id, empty($post['mt_for_org']) ? 0 : 1);
                 }
+                if (isset($post['set_katong_for_org']) && ($roles & SITE_ADMIN)) { // New projects for this org go to Katong instead of Phrase
+                    $projectDao->set_katong_for_org($org_id, empty($post['katong_for_org']) ? 0 : 1);
+                    error_log("set_katong_for_org($org_id, " . (empty($post['katong_for_org']) ? 0 : 1) . ") by $current_user_id");
+                }
                 if (isset($post['set_image_for_org'])) {
                     if (empty($_FILES['org_image']['error']) && !empty($_FILES['org_image']['tmp_name']) && (($data = file_get_contents($_FILES['org_image']['tmp_name'])) !== false)) {
                       if (in_array($_FILES['org_image']['type'], ['image/jpeg', 'image/png', 'image/webp'])) {
@@ -698,6 +702,7 @@ error_log("Tarjimly JSON: $result_json");//(**)
             'orgMembers' => $adminDao->getOrgMembers($org_id),
             'asana_board_for_org' => $userDao->get_asana_board_for_org($org_id),
             'mt_for_org' => $userDao->get_mt_for_org($org_id),
+            'katong_for_org' => $projectDao->get_katong_for_org($org_id),
             'entitlements' => $projectDao->get_entitlements($org_id),
             'org_image' => $userDao->get_org_image($org_id),
             'extra_scripts' => "<script type=\"text/javascript\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/js/org_page.js\" defer></script>",

@@ -1192,9 +1192,9 @@ CREATE TABLE IF NOT EXISTS `MemsourceClients` (
 CREATE TABLE IF NOT EXISTS `MemsourceProjects` (
   project_id            INT(10) UNSIGNED NOT NULL,
   memsource_project_id  BIGINT(20) UNSIGNED NOT NULL,
-  memsource_project_uid VARCHAR(30) COLLATE utf8mb4_unicode_ci NOT NULL,
-  created_by_uid        VARCHAR(30) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  owner_uid             VARCHAR(30) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  memsource_project_uid VARCHAR(40) COLLATE utf8mb4_unicode_ci NOT NULL,
+  created_by_uid        VARCHAR(40) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  owner_uid             VARCHAR(40) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
   created_by_id         BIGINT(20) UNSIGNED NOT NULL DEFAULT 0,
   owner_id              BIGINT(20) UNSIGNED NOT NULL DEFAULT 0,
   workflow_level_1      VARCHAR(30) COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -1209,6 +1209,7 @@ CREATE TABLE IF NOT EXISTS `MemsourceProjects` (
   workflow_level_10     VARCHAR(30) COLLATE utf8mb4_unicode_ci NOT NULL,
   workflow_level_11     VARCHAR(30) COLLATE utf8mb4_unicode_ci NOT NULL,
   workflow_level_12     VARCHAR(30) COLLATE utf8mb4_unicode_ci NOT NULL,
+  tms                   INT NOT NULL DEFAULT 0, # 0 => Phrase, 1 => Katong
   PRIMARY KEY FK_MemsourceProjects_project_id (project_id),
   UNIQUE  KEY memsource_project_id            (memsource_project_id),
   UNIQUE  KEY memsource_project_uid           (memsource_project_uid),
@@ -1235,9 +1236,9 @@ CREATE TABLE IF NOT EXISTS `MemsourceSelfServiceProjects` (
 CREATE TABLE IF NOT EXISTS `MemsourceTasks` (
   task_id            BIGINT(20) UNSIGNED NOT NULL,
   memsource_task_id  BIGINT(20) UNSIGNED NOT NULL,
-  memsource_task_uid VARCHAR(30) COLLATE utf8mb4_unicode_ci NOT NULL,
-  task               VARCHAR(30) COLLATE utf8mb4_unicode_ci NOT NULL,
-  internalId         VARCHAR(30) COLLATE utf8mb4_unicode_ci NOT NULL
+  memsource_task_uid VARCHAR(40) COLLATE utf8mb4_unicode_ci NOT NULL,
+  task               VARCHAR(40) COLLATE utf8mb4_unicode_ci NOT NULL,
+  internalId         VARCHAR(40) COLLATE utf8mb4_unicode_ci NOT NULL,
   workflowLevel      INT(10) UNSIGNED NOT NULL,
   beginIndex         INT(10) UNSIGNED NOT NULL,
   endIndex           INT(10) UNSIGNED NOT NULL,
@@ -1258,14 +1259,14 @@ DELIMITER ;
 
 
 CREATE TABLE IF NOT EXISTS `ProcessedMemsourceTaskUIDs` (
-  memsource_task_uid VARCHAR(30) COLLATE utf8mb4_unicode_ci NOT NULL,
+  memsource_task_uid VARCHAR(40) COLLATE utf8mb4_unicode_ci NOT NULL,
   PRIMARY KEY (memsource_task_uid)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
 CREATE TABLE IF NOT EXISTS `memsource_statuses` (
   task_id            BIGINT(20) UNSIGNED NOT NULL,
-  memsource_task_uid VARCHAR(30) COLLATE utf8mb4_unicode_ci NOT NULL,
+  memsource_task_uid VARCHAR(40) COLLATE utf8mb4_unicode_ci NOT NULL,
   status             VARCHAR(30) COLLATE utf8mb4_unicode_ci NOT NULL,
   status_time        DATETIME NOT NULL,
   KEY FK_memsource_statuses_task_id         (task_id),
@@ -1277,7 +1278,7 @@ CREATE TABLE IF NOT EXISTS `memsource_statuses` (
 CREATE TABLE IF NOT EXISTS `queue_copy_task_original_files` (
   project_id         INT(10) UNSIGNED NOT NULL,
   task_id            BIGINT(20) UNSIGNED NOT NULL,
-  memsource_task_uid VARCHAR(30) COLLATE utf8mb4_unicode_ci NOT NULL,
+  memsource_task_uid VARCHAR(40) COLLATE utf8mb4_unicode_ci NOT NULL,
   filename           VARCHAR(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   UNIQUE KEY FK_queue_copy_task_original_files_task_id (task_id),
   CONSTRAINT FK_queue_copy_task_original_files_task_id FOREIGN KEY (task_id) REFERENCES Tasks (id) ON DELETE CASCADE ON UPDATE CASCADE
@@ -10677,7 +10678,7 @@ DELIMITER ;
 
 DROP PROCEDURE IF EXISTS `set_memsource_project`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `set_memsource_project`(IN projectID INT, IN memsourceID BIGINT, IN memsourceUID VARCHAR(30), IN createdUID VARCHAR(30), IN ownerUID VARCHAR(30), IN workflow1 VARCHAR(30), IN workflow2 VARCHAR(30), IN workflow3 VARCHAR(30), IN workflow4 VARCHAR(30), IN workflow5 VARCHAR(30), IN workflow6 VARCHAR(30), IN workflow7 VARCHAR(30), IN workflow8 VARCHAR(30), IN workflow9 VARCHAR(30), IN workflow10 VARCHAR(30), IN workflow11 VARCHAR(30), IN workflow12 VARCHAR(30))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `set_memsource_project`(IN projectID INT, IN memsourceID BIGINT, IN memsourceUID VARCHAR(40), IN createdUID VARCHAR(40), IN ownerUID VARCHAR(40), IN workflow1 VARCHAR(30), IN workflow2 VARCHAR(30), IN workflow3 VARCHAR(30), IN workflow4 VARCHAR(30), IN workflow5 VARCHAR(30), IN workflow6 VARCHAR(30), IN workflow7 VARCHAR(30), IN workflow8 VARCHAR(30), IN workflow9 VARCHAR(30), IN workflow10 VARCHAR(30), IN workflow11 VARCHAR(30), IN workflow12 VARCHAR(30))
 BEGIN
     INSERT INTO MemsourceProjects (project_id, memsource_project_id, memsource_project_uid, created_by_uid, owner_uid, workflow_level_1, workflow_level_2, workflow_level_3, workflow_level_4, workflow_level_5, workflow_level_6, workflow_level_7, workflow_level_8, workflow_level_9, workflow_level_10, workflow_level_11, workflow_level_12)
     VALUES                        ( projectID,          memsourceID,          memsourceUID,     createdUID,  ownerUID,        workflow1,        workflow2,        workflow3,        workflow4,        workflow5,        workflow6,        workflow7,        workflow8,        workflow9,        workflow10,        workflow11,        workflow12);
@@ -10686,7 +10687,7 @@ DELIMITER ;
 
 DROP PROCEDURE IF EXISTS `update_memsource_project_owner`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `update_memsource_project_owner`(IN projectID INT, IN ownerUID VARCHAR(30))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `update_memsource_project_owner`(IN projectID INT, IN ownerUID VARCHAR(40))
 BEGIN
     UPDATE MemsourceProjects
     SET owner_uid=ownerUID
@@ -10763,7 +10764,7 @@ DELIMITER ;
 
 DROP PROCEDURE IF EXISTS `get_memsource_project_by_memsource_uid`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `get_memsource_project_by_memsource_uid`(IN memsourceUID VARCHAR(30))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_memsource_project_by_memsource_uid`(IN memsourceUID VARCHAR(40))
 BEGIN
     SELECT * FROM MemsourceProjects WHERE memsource_project_uid=memsourceUID;
 END//
@@ -10788,7 +10789,7 @@ DELIMITER ;
 
 DROP PROCEDURE IF EXISTS `set_memsource_task`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `set_memsource_task`(IN taskID BIGINT, IN memsourceID BIGINT, IN memsourceUID VARCHAR(30), IN t VARCHAR(30), IN intID VARCHAR(30), IN level INT, IN begin INT, IN end INT, IN prereq BIGINT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `set_memsource_task`(IN taskID BIGINT, IN memsourceID BIGINT, IN memsourceUID VARCHAR(40), IN t VARCHAR(40), IN intID VARCHAR(40), IN level INT, IN begin INT, IN end INT, IN prereq BIGINT)
 BEGIN
     INSERT IGNORE INTO MemsourceTasks (task_id, memsource_task_id, memsource_task_uid, task, internalId, workflowLevel,beginIndex, endIndex, prerequisite)
     VALUES                            ( taskID,       memsourceID,       memsourceUID,    t,      intID,         level,     begin,      end,       prereq);
@@ -10798,7 +10799,7 @@ DELIMITER ;
 
 DROP PROCEDURE IF EXISTS `update_memsource_task`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `update_memsource_task`(IN taskID BIGINT, IN memsourceID BIGINT, IN t VARCHAR(30), IN intID VARCHAR(30), IN begin INT, IN end INT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `update_memsource_task`(IN taskID BIGINT, IN memsourceID BIGINT, IN t VARCHAR(40), IN intID VARCHAR(40), IN begin INT, IN end INT)
 BEGIN
     UPDATE MemsourceTasks
     SET
@@ -10829,7 +10830,7 @@ DELIMITER ;
 
 DROP PROCEDURE IF EXISTS `get_memsource_task_by_memsource_uid`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `get_memsource_task_by_memsource_uid`(IN memsourceUID VARCHAR(30))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_memsource_task_by_memsource_uid`(IN memsourceUID VARCHAR(40))
 BEGIN
     SELECT * FROM MemsourceTasks WHERE memsource_task_uid=memsourceUID;
 END//
@@ -10837,7 +10838,7 @@ DELIMITER ;
 
 DROP PROCEDURE IF EXISTS `is_job_uid_already_processed`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `is_job_uid_already_processed`(IN memsourceUID VARCHAR(30))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `is_job_uid_already_processed`(IN memsourceUID VARCHAR(40))
 BEGIN
     INSERT IGNORE INTO ProcessedMemsourceTaskUIDs (memsource_task_uid)
     VALUES                                        (memsourceUID);
@@ -10847,7 +10848,7 @@ DELIMITER ;
 
 DROP PROCEDURE IF EXISTS `get_memsource_tasks_for_project_language_type`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `get_memsource_tasks_for_project_language_type`(IN projectID INT, IN taskUID VARCHAR(30), IN typeID INT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_memsource_tasks_for_project_language_type`(IN projectID INT, IN taskUID VARCHAR(40), IN typeID INT)
 BEGIN
     SELECT
         mt.*,
@@ -10867,7 +10868,7 @@ DELIMITER ;
 
 DROP PROCEDURE IF EXISTS `get_memsource_tasks_for_project_internal_id_type`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `get_memsource_tasks_for_project_internal_id_type`(IN projectID INT, IN intID VARCHAR(30), IN typeID INT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_memsource_tasks_for_project_internal_id_type`(IN projectID INT, IN intID VARCHAR(40), IN typeID INT)
 BEGIN
     SELECT
         mt.*,
@@ -10887,7 +10888,7 @@ DELIMITER ;
 
 DROP PROCEDURE IF EXISTS `set_memsource_status`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `set_memsource_status`(IN taskID BIGINT, IN memsourceUID VARCHAR(30), IN statusID VARCHAR(30))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `set_memsource_status`(IN taskID BIGINT, IN memsourceUID VARCHAR(40), IN statusID VARCHAR(30))
 BEGIN
     INSERT INTO memsource_statuses (task_id, memsource_task_uid,   status, status_time)
     VALUES                         ( taskID,       memsourceUID, statusID,       NOW());
@@ -10896,7 +10897,7 @@ DELIMITER ;
 
 DROP PROCEDURE IF EXISTS `queue_copy_task_original_file`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `queue_copy_task_original_file`(IN projectID INT, IN taskID INT, IN memsourceUID VARCHAR(30), IN name VARCHAR(255))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `queue_copy_task_original_file`(IN projectID INT, IN taskID INT, IN memsourceUID VARCHAR(40), IN name VARCHAR(255))
 BEGIN
     INSERT INTO queue_copy_task_original_files (project_id, task_id, memsource_task_uid, filename)
     VALUES                                     ( projectID,  taskID,       memsourceUID,     name);
@@ -12707,7 +12708,7 @@ CREATE TABLE post_analysis_s (
   task_id                    BIGINT UNSIGNED NOT NULL,
   claimant_id                INT UNSIGNED NOT NULL,
   analyse_uid                VARCHAR(30) COLLATE utf8mb4_unicode_ci NOT NULL,
-  memsource_project_uid      VARCHAR(30) COLLATE utf8mb4_unicode_ci NOT NULL,
+  memsource_project_uid      VARCHAR(40) COLLATE utf8mb4_unicode_ci NOT NULL,
   workflow_level             INT NOT NULL,
   repetitions_segments       FLOAT NOT NULL,
   repetitions_words          FLOAT NOT NULL,
@@ -12797,7 +12798,7 @@ CREATE TABLE compare_analysis_s (
   task_id               BIGINT UNSIGNED NOT NULL,
   claimant_id           INT UNSIGNED NOT NULL,
   analyse_uid           VARCHAR(30) COLLATE utf8mb4_unicode_ci NOT NULL,
-  memsource_project_uid VARCHAR(30) COLLATE utf8mb4_unicode_ci NOT NULL,
+  memsource_project_uid VARCHAR(40) COLLATE utf8mb4_unicode_ci NOT NULL,
   sourceWorkflowLevel   INT NOT NULL,
   compareWorkflowLevel  INT NOT NULL,
   repetitions_segments  FLOAT NOT NULL,
@@ -12835,7 +12836,7 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_post_analysis`(
     IN p_task_id               BIGINT UNSIGNED,
     IN p_claimant_id           INT UNSIGNED,
     IN p_analyse_uid           VARCHAR(30),
-    IN p_memsource_project_uid VARCHAR(30),
+    IN p_memsource_project_uid VARCHAR(40),
     IN p_workflow_level        INT,
     IN p_repetitions_segments FLOAT,
     IN p_repetitions_words FLOAT,
@@ -13089,7 +13090,7 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_compare_analysis`(
     IN p_task_id               BIGINT UNSIGNED,
     IN p_claimant_id           INT UNSIGNED,
     IN p_analyse_uid           VARCHAR(30),
-    IN p_memsource_project_uid VARCHAR(30),
+    IN p_memsource_project_uid VARCHAR(40),
     IN p_sourceWorkflowLevel   INT,
     IN p_compareWorkflowLevel  INT,
     IN p_repetitions_segments  FLOAT,
@@ -16815,6 +16816,194 @@ WHERE 1=1
     [[AND proz.email = {{email}}]]
     [[AND proz.native_lang = {{native}}]]
 */
+
+
+# ============================================================================
+# Katong TMS integration
+# A Katong project is a row in MemsourceProjects with tms=1. Its workflow levels are fixed:
+#   workflow_level_1='Translation' (Katong "mt"), workflow_level_2='Revision' (Katong "review"), workflow_level_3='SME Review' (Katong "sme_review")
+# MemsourceProjects.memsource_project_uid holds the Katong job id (UUID), memsource_project_id holds the TWB project_id
+# MemsourceTasks.memsource_task_uid holds the Katong task id (UUID), task holds the Katong target language
+# For an existing database also run db/katong_migration.sql
+# ============================================================================
+
+INSERT INTO TaskTypes (id, name) VALUES
+  (40,'SME Review (Katong)')
+  ON DUPLICATE KEY UPDATE name=VALUES(name);
+
+INSERT INTO task_type_details (type_enum, type_category, enabled, for_self_managed, visible_community, shell_task, source_and_target, sourcing, divide_rate_by_60,
+    type_text, type_text_short, colour, claimed_template, show_section, memsource_name, unit_count_text, unit_count_text_short,
+    pricing_and_recognition_unit_text, pricing_and_recognition_unit_text_hours, source_unit_for_later_stats, unit_rate, unit_rate_pricing_default, rate_for_recognition, convert_to_words, convert_to_hours, convert_to_hours_for_cert,
+    type_description, type_text_verb)
+VALUES
+(40,1,1,0,1,0,1,0,0,'SME Review','SME Review','#6A1B9A','task/task.claimed-proofreading.tpl','REVISING','SME Review','Word Count','words',
+    'Words','Labor hours','Words',0.025,0.50,0,0.0166667,0,
+    'Review a revised translation as a subject-matter expert: check that the terminology, facts and register are right for the intended audience, and comment on or correct anything that is not.', 'review')
+ON DUPLICATE KEY UPDATE memsource_name=VALUES(memsource_name), shell_task=VALUES(shell_task), enabled=VALUES(enabled);
+
+
+CREATE TABLE IF NOT EXISTS `katong_orgs` (
+  org_id INT UNSIGNED NOT NULL,
+  PRIMARY KEY (org_id),
+  CONSTRAINT FK_katong_orgs_org_id FOREIGN KEY (org_id) REFERENCES Organisations (id) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+DROP PROCEDURE IF EXISTS `get_katong_for_org`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_katong_for_org`(IN oID INT UNSIGNED)
+BEGIN
+    SELECT * FROM katong_orgs WHERE org_id=oID;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `set_katong_for_org`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `set_katong_for_org`(IN oID INT UNSIGNED, IN val INT)
+BEGIN
+    IF val=1 THEN
+        INSERT IGNORE INTO katong_orgs (org_id) VALUES (oID);
+    ELSE
+        DELETE FROM katong_orgs WHERE org_id=oID;
+    END IF;
+END//
+DELIMITER ;
+
+
+CREATE TABLE IF NOT EXISTS `katong_projects` (
+  project_id         INT UNSIGNED NOT NULL,
+  job_uid            VARCHAR(40)   COLLATE utf8mb4_unicode_ci NOT NULL,
+  external_ref       VARCHAR(200)  COLLATE utf8mb4_unicode_ci NOT NULL,
+  lang_map           VARCHAR(2000) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '{}', # JSON: Katong target language => Phrase/selections "memsource" code
+  original_filename  VARCHAR(255)  COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  deliverable_format VARCHAR(20)   COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  status             VARCHAR(30)   COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  created            DATETIME NOT NULL,
+  PRIMARY KEY (project_id),
+  UNIQUE  KEY (job_uid),
+  CONSTRAINT FK_katong_projects_project_id FOREIGN KEY (project_id) REFERENCES Projects (id) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+DROP PROCEDURE IF EXISTS `set_project_tms`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `set_project_tms`(IN pID INT UNSIGNED, IN t INT)
+BEGIN
+    UPDATE MemsourceProjects SET tms=t WHERE project_id=pID;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `get_tasks_tms`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_tasks_tms`(IN tID BIGINT UNSIGNED)
+BEGIN
+    SELECT mp.tms
+    FROM Tasks             t
+    JOIN MemsourceProjects mp ON t.project_id=mp.project_id
+    WHERE t.id=tID;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `set_katong_project`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `set_katong_project`(IN pID INT UNSIGNED, IN jUID VARCHAR(40), IN ref VARCHAR(200), IN lmap VARCHAR(2000), IN fname VARCHAR(255), IN dformat VARCHAR(20), IN st VARCHAR(30))
+BEGIN
+    INSERT INTO katong_projects (project_id, job_uid, external_ref, lang_map, original_filename, deliverable_format, status, created)
+    VALUES (pID, jUID, ref, lmap, fname, dformat, st, UTC_TIMESTAMP())
+    ON DUPLICATE KEY UPDATE job_uid=jUID, external_ref=ref, lang_map=lmap, original_filename=fname, deliverable_format=dformat, status=st;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `update_katong_project_status`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `update_katong_project_status`(IN pID INT UNSIGNED, IN st VARCHAR(30))
+BEGIN
+    UPDATE katong_projects SET status=st WHERE project_id=pID;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `get_katong_project`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_katong_project`(IN pID INT UNSIGNED)
+BEGIN
+    SELECT kp.*, mp.workflow_level_1, mp.workflow_level_2, mp.workflow_level_3
+    FROM katong_projects    kp
+    JOIN MemsourceProjects  mp ON kp.project_id=mp.project_id
+    WHERE kp.project_id=pID;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `get_katong_project_by_job_uid`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_katong_project_by_job_uid`(IN jUID VARCHAR(40))
+BEGIN
+    SELECT * FROM katong_projects WHERE job_uid=jUID;
+END//
+DELIMITER ;
+
+
+CREATE TABLE IF NOT EXISTS `katong_webhook_deliveries` (
+  delivery_id VARCHAR(40) COLLATE utf8mb4_unicode_ci NOT NULL,
+  event       VARCHAR(50) COLLATE utf8mb4_unicode_ci NOT NULL,
+  received    DATETIME NOT NULL,
+  PRIMARY KEY (delivery_id),
+          KEY (received)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+DROP PROCEDURE IF EXISTS `record_katong_delivery`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `record_katong_delivery`(IN dID VARCHAR(40), IN ev VARCHAR(50))
+BEGIN
+    INSERT IGNORE INTO katong_webhook_deliveries (delivery_id, event, received) VALUES (dID, ev, UTC_TIMESTAMP());
+    SELECT IF(ROW_COUNT()=0, 0, 1) AS result;
+END//
+DELIMITER ;
+
+
+CREATE TABLE IF NOT EXISTS `katong_task_metrics` (
+  task_id            BIGINT UNSIGNED NOT NULL,
+  katong_task_uid    VARCHAR(40) COLLATE utf8mb4_unicode_ci NOT NULL,
+  claimant_id        INT UNSIGNED NOT NULL DEFAULT 0,
+  active_ms          BIGINT NOT NULL DEFAULT 0, # Payable time, idle time excluded
+  wall_ms            BIGINT NOT NULL DEFAULT 0,
+  segments_accepted  INT NOT NULL DEFAULT 0,
+  segments_edited    INT NOT NULL DEFAULT 0,
+  segments_flagged   INT NOT NULL DEFAULT 0,
+  mean_edit_distance FLOAT NULL,
+  words_total        INT NOT NULL DEFAULT 0,
+  words_by_band      VARCHAR(1000) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '{}', # JSON: tm_101, tm_100, fuzzy_95_99, fuzzy_85_94, fuzzy_75_84, mt, new
+  by_reviewer        TEXT COLLATE utf8mb4_unicode_ci NULL, # JSON
+  updated            DATETIME NOT NULL,
+  PRIMARY KEY (task_id),
+  CONSTRAINT FK_katong_task_metrics_task_id FOREIGN KEY (task_id) REFERENCES Tasks (id) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+DROP PROCEDURE IF EXISTS `set_katong_task_metrics`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `set_katong_task_metrics`(IN tID BIGINT UNSIGNED, IN kUID VARCHAR(40), IN cID INT UNSIGNED, IN ams BIGINT, IN wms BIGINT, IN sa INT, IN se INT, IN sf INT, IN med FLOAT, IN wt INT, IN wbb VARCHAR(1000), IN br TEXT)
+BEGIN
+    INSERT INTO katong_task_metrics (task_id, katong_task_uid, claimant_id, active_ms, wall_ms, segments_accepted, segments_edited, segments_flagged, mean_edit_distance, words_total, words_by_band, by_reviewer, updated)
+    VALUES (tID, kUID, cID, ams, wms, sa, se, sf, med, wt, wbb, br, UTC_TIMESTAMP())
+    ON DUPLICATE KEY UPDATE claimant_id=cID, active_ms=ams, wall_ms=wms, segments_accepted=sa, segments_edited=se, segments_flagged=sf, mean_edit_distance=med, words_total=wt, words_by_band=wbb, by_reviewer=br, updated=UTC_TIMESTAMP();
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `get_katong_task_metrics`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_katong_task_metrics`(IN tID BIGINT UNSIGNED)
+BEGIN
+    SELECT * FROM katong_task_metrics WHERE task_id=tID;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `delete_post_analysis_for_task_level`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `delete_post_analysis_for_task_level`(IN tID BIGINT UNSIGNED, IN level INT)
+BEGIN
+    DELETE FROM post_analysis_s WHERE task_id=tID AND workflow_level=level;
+END//
+DELIMITER ;
+# ============================================================================
+# End of Katong TMS integration
+# ============================================================================
 
 
 SET FOREIGN_KEY_CHECKS=1;

@@ -17,6 +17,7 @@ require_once __DIR__."/../../Common/lib/SolasMatchException.php";
 require_once __DIR__."/../lib/PDOWrapper.class.php";
 require_once __DIR__."/../lib/Notify.class.php";
 require_once __DIR__."/../lib/Upload.class.php";
+require_once __DIR__."/../../Common/lib/Katong.class.php";
 
 class TaskDao
 {
@@ -301,6 +302,14 @@ class TaskDao
           }
 
             $memsource_project = self::get_memsource_project($task->getProjectId());
+            if (!empty($memsource_project['tms']) && $memsource_project['tms'] == Common\Lib\Katong::TMS_KATONG) {
+                // Katong has no unassign, so assign the task to the default (non human) user
+                if (!Common\Lib\Katong::unassign_task($memsource_task['memsource_task_uid'], Common\Lib\Katong::role_for_level($memsource_task['workflowLevel']), null, $task->getDeadline()))
+                    error_log("unClaimTask($taskId, $userId): Katong reassign to default user failed");
+                $result = $ret[0]['result'];
+                error_log("result (Katong): $result");
+                return $result;
+            }
             $url = 'https://cloud.memsource.com/web/api2/v1/projects/' . $memsource_project['memsource_project_uid'] . '/jobs/' . $memsource_task['memsource_task_uid'];
             $ch = curl_init($url);
             $deadline = $task->getDeadline();

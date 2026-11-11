@@ -7,6 +7,7 @@ use \SolasMatch\UI\Lib as Lib;
 use \SolasMatch\API\Lib as LibAPI;
 
 require_once __DIR__."/../../Common/lib/APIHelper.class.php";
+require_once __DIR__."/../../Common/lib/Katong.class.php";
 require_once __DIR__."/BaseDao.php";
 require_once __DIR__."/../../api/lib/PDOWrapper.class.php";
 
@@ -396,6 +397,7 @@ error_log("createTaskDirectly: $args");
 
     public function get_matecat_analyze_url($project_id, $memsource_project)
     {
+        if ((new ProjectDao())->is_katong_project($memsource_project)) return ''; // No project page in Katong for linguists
         if (strpos($this->siteApi, 'twbplatform')) return "https://twbplatform.org/simplesaml/saml2/idp/SSOService.php?spentityid=https://eu.phrase.com/idm/saml/hoKMZESrFauJjF1hpLXwwo&RelayState=https://cloud.memsource.com/web/project2/show/{$memsource_project['memsource_project_uid']}";
         else                                 return "https://dev.translatorswb.org/simplesaml/saml2/idp/SSOService.php?spentityid=https://eu.phrase.com/idm/saml/5w166eozpDWHg3OKbfYvxm&RelayState=https://cloud.memsource.com/web/project2/show/{$memsource_project['memsource_project_uid']}";
     }
@@ -436,8 +438,19 @@ error_log("createTaskDirectly: $args");
         return Common\Lib\Settings::get('files.upload_path') . $path;
     }
 
+    /**
+     * Katong work URL: [katong base_url]/work/{katong_task_id} (linguists sign in with SAML), or '' if not a Katong task
+     */
+    public function get_katong_url($memsource_task)
+    {
+        if (empty($memsource_task['task_id']) || empty($memsource_task['memsource_task_uid'])) return '';
+        if (!(new ProjectDao())->is_katong_task($memsource_task['task_id'])) return '';
+        return Common\Lib\Katong::work_url($memsource_task['memsource_task_uid']);
+    }
+
     public function get_matecat_url($task, $memsource_task)
     {
+        if ($katong_url = $this->get_katong_url($memsource_task)) return $katong_url;
         if (strpos($this->siteApi, 'twbplatform')) return "https://twbplatform.org/simplesaml/saml2/idp/SSOService.php?spentityid=https://eu.phrase.com/idm/saml/hoKMZESrFauJjF1hpLXwwo&RelayState=https://cloud.memsource.com/web/job/{$memsource_task['memsource_task_uid']}/translate";
         else                                 return "https://dev.translatorswb.org/simplesaml/saml2/idp/SSOService.php?spentityid=https://eu.phrase.com/idm/saml/5w166eozpDWHg3OKbfYvxm&RelayState=https://cloud.memsource.com/web/job/{$memsource_task['memsource_task_uid']}/translate";
     }
@@ -445,6 +458,7 @@ error_log("createTaskDirectly: $args");
     public function get_matecat_url_regardless($task, $memsource_task)
     {
         if (empty($memsource_task)) return '';
+        if ($katong_url = $this->get_katong_url($memsource_task)) return $katong_url;
         if (strpos($this->siteApi, 'twbplatform')) return "https://twbplatform.org/simplesaml/saml2/idp/SSOService.php?spentityid=https://eu.phrase.com/idm/saml/hoKMZESrFauJjF1hpLXwwo&RelayState=https://cloud.memsource.com/web/job/{$memsource_task['memsource_task_uid']}/translate";
         else                                 return "https://dev.translatorswb.org/simplesaml/saml2/idp/SSOService.php?spentityid=https://eu.phrase.com/idm/saml/5w166eozpDWHg3OKbfYvxm&RelayState=https://cloud.memsource.com/web/job/{$memsource_task['memsource_task_uid']}/translate";
     }

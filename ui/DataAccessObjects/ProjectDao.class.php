@@ -11,6 +11,7 @@ require_once __DIR__."/../../Common/lib/CacheHelper.class.php";
 require_once __DIR__."/BaseDao.php";
 require_once __DIR__.'/../../api/lib/PDOWrapper.class.php';
 require_once __DIR__ . '/../../Common/lib/MoodleRest.php';
+require_once __DIR__ . '/../../Common/lib/Katong.class.php';
 
 
 class ProjectDao extends BaseDao
@@ -242,7 +243,7 @@ else error_log("call projectInsertAndUpdate($args): Fail");//(**)
 
         $request = "{$this->siteApi}v0/projects/archiveProject/$projectId/user/$userId";
         $ret = $this->client->call(null, $request, Common\Enums\HttpMethodEnum::PUT);
-        if ($ret && $memsource_project) {
+        if ($ret && $memsource_project && !$this->is_katong_project($memsource_project)) { // Katong has no archive
             $memsource_project_uid = $memsource_project['memsource_project_uid'];
             $memsourceApiToken = Common\Lib\Settings::get('memsource.memsource_api_token');
             $ch = curl_init("https://cloud.memsource.com/web/api2/v1/projects/$memsource_project_uid");
@@ -955,6 +956,11 @@ error_log('parent_tasks_filter:' . print_r($parent_tasks_filter, true));//(**)
         $project_id            = $memsource_project['project_id'];
         $memsource_project_uid = $memsource_project['memsource_project_uid'];
 
+        if ($this->is_katong_project($memsource_project)) { // Katong: create any missing tasks and update statuses from the Katong job
+            $project_route_handler->katong_sync_job_tasks($project_id);
+            return 0;
+        }
+
         $jobs = $userDao->memsource_list_jobs($memsource_project_uid, $project_id);
         if (empty($jobs)) return 0;
 
@@ -1365,6 +1371,7 @@ error_log("Sync update_task_from_job() task_id: $task_id, status: $status, job: 
 
     public function set_dateDue_in_memsource_when_new($memsource_project_uid, $memsource_task_uid, $deadline)
     {
+        if (($memsource_project = $this->get_memsource_project_by_memsource_uid($memsource_project_uid)) && $this->is_katong_project($memsource_project)) return; // Katong gets deadlines on assign
         $ch = curl_init(Common\Lib\Settings::get('memsource.api_url_v1') . "projects/$memsource_project_uid/jobs/$memsource_task_uid");
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         $authorization = 'Authorization: Bearer ' . Common\Lib\Settings::get('memsource.memsource_api_token');
@@ -1379,6 +1386,7 @@ error_log("Sync update_task_from_job() task_id: $task_id, status: $status, job: 
     public function set_dateDue_in_memsource_for_project($memsource_project, $deadline)
     {
         if (empty($memsource_project)) return;
+        if ($this->is_katong_project($memsource_project)) return; // Katong job due_at is set at creation; task deadlines go on assign
         $memsource_project_uid = $memsource_project['memsource_project_uid'];
         $ch = curl_init("https://cloud.memsource.com/web/api2/v1/projects/$memsource_project_uid");
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -1531,7 +1539,7 @@ error_log("delete_not_accepted_user DELETE uid: $uid, errno: $errno, responseCod
         return implode(',', $args);
     }
 
-    public function insert_post_analysis($task_id, $claimant_id, $analyse_uid, $memsource_project_uid, $workflow_level, $data)
+    public function insert_post_analysis($task_id, $claimant_id, $analyse_uid, $memsource_project_uid, $workflow_level, $data, $delete_phrase_analysis = 1)
     {
         $args = $this->get_analysis_data($data, [
             ['repetitions', 'segments'],
@@ -1630,11 +1638,12 @@ error_log("delete_not_accepted_user DELETE uid: $uid, errno: $errno, responseCod
             LibAPI\PDOWrapper::cleanseWrapStr($memsource_project_uid) . ',' .
             LibAPI\PDOWrapper::cleanse($workflow_level) . ',' .
             $args);
-        $this->delete_phrase_analysis($analyse_uid);
+        if ($delete_phrase_analysis) $this->delete_phrase_analysis($analyse_uid);
     }
 
     public function delete_phrase_analysis($analyse_uid)
     {
+        if (strpos($analyse_uid, 'katong_') === 0) return;
         $memsourceApiToken = Common\Lib\Settings::get('memsource.memsource_api_token');
         $url = "https://cloud.memsource.com/web/api2/v1/analyses/$analyse_uid?purge=true";
         $ch = curl_init($url);
@@ -2346,6 +2355,7 @@ error_log("Create PO ref: $result");
     {
         if (!$memsource_task || preg_match('/^\d*$/', $memsource_task['memsource_task_uid'])) return -1;
         if ($memsource_task['mt_used']) return $memsource_task['mt_used'];
+        if ($this->is_katong_project($task->getProjectId())) return 1; // Every Katong job starts with MT
 
         $authorization = 'Authorization: Bearer ' . Common\Lib\Settings::get('memsource.memsource_api_token');
         $memsource_project_uid = $this->get_memsource_project($task->getProjectId())['memsource_project_uid'];
@@ -2417,5 +2427,152 @@ error_log("Create PO ref: $result");
         $result = LibAPI\PDOWrapper::call('get_entitlements', LibAPI\PDOWrapper::cleanse($org_id));
         if (empty($result)) return [];
         return $result;
+    }
+
+    // ---------------------------------------------------------------------------------
+    // Katong TMS integration
+    // ---------------------------------------------------------------------------------
+
+    public function get_katong_for_org($org_id)
+    {
+        $result = LibAPI\PDOWrapper::call('get_katong_for_org', LibAPI\PDOWrapper::cleanse($org_id));
+        return empty($result) ? 0 : 1;
+    }
+
+    public function set_katong_for_org($org_id, $val)
+    {
+        LibAPI\PDOWrapper::call('set_katong_for_org', LibAPI\PDOWrapper::cleanse($org_id) . ',' . LibAPI\PDOWrapper::cleanse($val));
+    }
+
+    public function set_project_tms($project_id, $tms)
+    {
+        LibAPI\PDOWrapper::call('set_project_tms', LibAPI\PDOWrapper::cleanse($project_id) . ',' . LibAPI\PDOWrapper::cleanse($tms));
+    }
+
+    /**
+     * $memsource_project: a MemsourceProjects row (from get_memsource_project...) or a project_id
+     */
+    public function is_katong_project($memsource_project)
+    {
+        if (!is_array($memsource_project)) $memsource_project = $this->get_memsource_project($memsource_project);
+        return !empty($memsource_project['tms']) && $memsource_project['tms'] == Common\Lib\Katong::TMS_KATONG;
+    }
+
+    public function is_katong_task($task_id)
+    {
+        $result = LibAPI\PDOWrapper::call('get_tasks_tms', LibAPI\PDOWrapper::cleanse($task_id));
+        return !empty($result[0]['tms']) && $result[0]['tms'] == Common\Lib\Katong::TMS_KATONG;
+    }
+
+    public function set_katong_project($project_id, $job_uid, $external_ref, $lang_map, $original_filename, $deliverable_format, $status)
+    {
+        LibAPI\PDOWrapper::call('set_katong_project',
+            LibAPI\PDOWrapper::cleanse($project_id) . ',' .
+            LibAPI\PDOWrapper::cleanseWrapStr($job_uid) . ',' .
+            LibAPI\PDOWrapper::cleanseWrapStr($external_ref) . ',' .
+            LibAPI\PDOWrapper::cleanseWrapStr(json_encode($lang_map)) . ',' .
+            LibAPI\PDOWrapper::cleanseWrapStr(mb_substr($original_filename, 0, 255)) . ',' .
+            LibAPI\PDOWrapper::cleanseWrapStr($deliverable_format) . ',' .
+            LibAPI\PDOWrapper::cleanseWrapStr($status));
+    }
+
+    public function update_katong_project_status($project_id, $status)
+    {
+        LibAPI\PDOWrapper::call('update_katong_project_status', LibAPI\PDOWrapper::cleanse($project_id) . ',' . LibAPI\PDOWrapper::cleanseWrapStr($status));
+    }
+
+    public function get_katong_project($project_id)
+    {
+        $result = LibAPI\PDOWrapper::call('get_katong_project', LibAPI\PDOWrapper::cleanse($project_id));
+        if (empty($result)) return 0;
+        $result[0]['lang_map'] = json_decode($result[0]['lang_map'], true);
+        if (!is_array($result[0]['lang_map'])) $result[0]['lang_map'] = [];
+        return $result[0];
+    }
+
+    public function get_katong_project_by_job_uid($job_uid)
+    {
+        $result = LibAPI\PDOWrapper::call('get_katong_project_by_job_uid', LibAPI\PDOWrapper::cleanseWrapStr($job_uid));
+        if (empty($result)) return 0;
+        return $this->get_katong_project($result[0]['project_id']);
+    }
+
+    /**
+     * Returns 1 if this delivery has not been seen before (and records it), 0 if it is a repeat
+     */
+    public function record_katong_delivery($delivery_id, $event)
+    {
+        $result = LibAPI\PDOWrapper::call('record_katong_delivery', LibAPI\PDOWrapper::cleanseWrapStr(mb_substr($delivery_id, 0, 40)) . ',' . LibAPI\PDOWrapper::cleanseWrapStr(mb_substr($event, 0, 50)));
+        return empty($result[0]['result']) ? 0 : 1;
+    }
+
+    public function set_katong_task_metrics($task_id, $katong_task_uid, $claimant_id, $metrics)
+    {
+        $words = empty($metrics['words']) ? [] : $metrics['words'];
+        LibAPI\PDOWrapper::call('set_katong_task_metrics',
+            LibAPI\PDOWrapper::cleanse($task_id) . ',' .
+            LibAPI\PDOWrapper::cleanseWrapStr($katong_task_uid) . ',' .
+            LibAPI\PDOWrapper::cleanse((int)$claimant_id) . ',' .
+            LibAPI\PDOWrapper::cleanse(empty($metrics['active_ms']) ? 0 : (int)$metrics['active_ms']) . ',' .
+            LibAPI\PDOWrapper::cleanse(empty($metrics['wall_ms']) ? 0 : (int)$metrics['wall_ms']) . ',' .
+            LibAPI\PDOWrapper::cleanse(empty($metrics['segments_accepted']) ? 0 : (int)$metrics['segments_accepted']) . ',' .
+            LibAPI\PDOWrapper::cleanse(empty($metrics['segments_edited']) ? 0 : (int)$metrics['segments_edited']) . ',' .
+            LibAPI\PDOWrapper::cleanse(empty($metrics['segments_flagged']) ? 0 : (int)$metrics['segments_flagged']) . ',' .
+            (isset($metrics['mean_edit_distance']) && $metrics['mean_edit_distance'] !== null ? LibAPI\PDOWrapper::cleanse((float)$metrics['mean_edit_distance']) : 'NULL') . ',' .
+            LibAPI\PDOWrapper::cleanse(empty($words['total']) ? 0 : (int)$words['total']) . ',' .
+            LibAPI\PDOWrapper::cleanseWrapStr(json_encode(empty($words['by_band']) ? (object)[] : $words['by_band'])) . ',' .
+            LibAPI\PDOWrapper::cleanseWrapStr(json_encode(empty($metrics['by_reviewer']) ? [] : $metrics['by_reviewer'])));
+    }
+
+    /**
+     * Katong deliverable for a task's target language. Returns [bytes or 0, filename]; filename is the original filename,
+     * with the deliverable's extension if Katong converted the format (a PDF comes back as DOCX)
+     */
+    public function katong_get_target_file($project_id, $memsource_task, $original_filename)
+    {
+        $katong_project = $this->get_katong_project($project_id);
+        if (empty($katong_project) || empty($memsource_task['task'])) return [0, $original_filename];
+        $deliverable = Common\Lib\Katong::get_deliverable($katong_project['job_uid'], $memsource_task['task']);
+        if (empty($deliverable)) return [0, $original_filename];
+        if ($deliverable['untranslated']) error_log("Katong deliverable for task {$memsource_task['task_id']}: X-Untranslated-Segments {$deliverable['untranslated']}");
+        if (strlen($deliverable['body']) > 100000000) {
+            error_log("Katong deliverable for task {$memsource_task['task_id']} too big: " . strlen($deliverable['body']));
+            return [0, $original_filename];
+        }
+        return [$deliverable['body'], Common\Lib\Katong::deliverable_filename($original_filename, $katong_project['deliverable_format'])];
+    }
+
+    public function get_katong_task_metrics($task_id)
+    {
+        $result = LibAPI\PDOWrapper::call('get_katong_task_metrics', LibAPI\PDOWrapper::cleanse($task_id));
+        if (empty($result)) return 0;
+        return $result[0];
+    }
+
+    /**
+     * Store Katong word bands in post_analysis_s in the same shape as a Phrase PostAnalyse, so existing reports keep working.
+     * Bands: tm_101, tm_100 => 100% TM; fuzzy_95_99 => 95% TM; fuzzy_85_94 => 85% TM; fuzzy_75_84 => 75% TM; mt => MT (no match); new => no match
+     * Katong does not split active time by band, so the total payable active time (seconds) goes in repetitions_editingTime
+     * (the full figures, including per reviewer, are in katong_task_metrics)
+     */
+    public function insert_katong_post_analysis($task_id, $claimant_id, $memsource_project_uid, $workflow_level, $metrics)
+    {
+        $bands = empty($metrics['words']['by_band']) ? [] : $metrics['words']['by_band'];
+        $b = function ($key) use ($bands) { return empty($bands[$key]) ? 0 : $bands[$key]; };
+        $data = [
+            'repetitions' => ['editingTime' => empty($metrics['active_ms']) ? 0 : round($metrics['active_ms']/1000)],
+            'transMemoryMatches' => [
+                'match100' => ['words' => $b('tm_101') + $b('tm_100')],
+                'match95'  => ['words' => $b('fuzzy_95_99')],
+                'match85'  => ['words' => $b('fuzzy_85_94')],
+                'match75'  => ['words' => $b('fuzzy_75_84')],
+                'match0'   => ['words' => $b('new')],
+            ],
+            'machineTranslationMatches' => [
+                'match0' => ['words' => $b('mt')],
+            ],
+        ];
+        LibAPI\PDOWrapper::call('delete_post_analysis_for_task_level', LibAPI\PDOWrapper::cleanse($task_id) . ',' . LibAPI\PDOWrapper::cleanse($workflow_level));
+        $this->insert_post_analysis($task_id, $claimant_id, "katong_$task_id", $memsource_project_uid, $workflow_level, $data, 0);
     }
 }

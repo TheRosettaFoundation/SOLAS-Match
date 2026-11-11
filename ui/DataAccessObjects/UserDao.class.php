@@ -17,6 +17,7 @@ require_once __DIR__."/../../Common/Enums/MemsourceRoleEnum.class.php";
 require_once __DIR__."/../../Common/lib/MemsourceTimezone.class.php";
 require_once __DIR__ . '/../../Common/lib/Authentication.class.php';
 require_once __DIR__ . '/../../Common/lib/MoodleRest.php';
+require_once __DIR__ . '/../../Common/lib/Katong.class.php';
 
 
 class UserDao extends BaseDao
@@ -407,6 +408,18 @@ error_log("claimTask($userId, $taskId, ..., $project_id, ...)");
         $taskDao = new TaskDao();
         $taskDao->claimTask($taskId, $userId, false);
 
+        if ($memsource_task && (new ProjectDao())->is_katong_project($project_id)) {
+            // Katong: no TMS user account is needed, TWB just records the assignee in Katong
+            if (!$this->katong_assign($memsource_task, $task, $userId)) {
+                $taskDao->unClaimTask($taskId, $userId);
+                return 0;
+            }
+            LibAPI\PDOWrapper::call('update_tasks_status_claimant', LibAPI\PDOWrapper::cleanse($taskId) . ',10,' . LibAPI\PDOWrapper::cleanse($userId) . ',NULL');
+            $this->notify_claimed_task($userId, $taskId);
+            $this->add_to_deny_list_after_claim($userId, $memsource_task, $project_id, $task);
+            return 1;
+        }
+
         if ($memsource_task) {
             $memsource_user_uid = $this->get_memsource_user($userId);
             if (!$memsource_user_uid) {
@@ -519,6 +532,68 @@ error_log("claimTask($userId, $taskId, ..., $project_id, ...)");
         return 1;
     }
 
+    /**
+     * Katong: assign a task to a TWB user (also used to "unassign" to the default user, Katong has no unassign)
+     */
+    public function katong_assign($memsource_task, $task, $user_id)
+    {
+        $projectDao = new ProjectDao();
+        if ($user_id == Common\Lib\Katong::default_user_id()) {
+            $display_name = Common\Lib\Katong::default_user_name();
+        } else {
+            $display_name = '';
+            try {
+                $user_personal_info = $this->getUserPersonalInformation($user_id);
+                $display_name = trim($user_personal_info->firstName . ' ' . $user_personal_info->lastName);
+                if ($display_name === '') $display_name = $this->getUser($user_id)->display_name;
+            } catch (\Exception $e) {
+                error_log("katong_assign: no name for $user_id");
+            }
+        }
+        $languages = [];
+        foreach ([$task->getSourceLocale(), $task->getTargetLocale()] as $locale) {
+            $memsource_code = $projectDao->convert_language_country_to_memsource($locale->getLanguageCode(), $locale->getCountryCode());
+            $languages[] = Common\Lib\Katong::memsource_to_katong_lang($memsource_code ? $memsource_code : $locale->getLanguageCode());
+        }
+        $result = Common\Lib\Katong::assign_task($memsource_task['memsource_task_uid'], $user_id, $display_name,
+            Common\Lib\Katong::role_for_level($memsource_task['workflowLevel']), $languages, $task->getDeadline());
+        error_log("katong_assign({$memsource_task['memsource_task_uid']}, $user_id): " . ($result ? 'OK' : 'FAILED'));
+        return $result ? 1 : 0;
+    }
+
+    /**
+     * Add corresponding task(s) to deny list for translator (same rules as for Phrase)
+     */
+    public function add_to_deny_list_after_claim($userId, $memsource_task, $project_id, $task)
+    {
+        $taskDao = new TaskDao();
+        $projectDao = new ProjectDao();
+        $top_level = $projectDao->get_top_level($memsource_task['internalId']);
+        $project_tasks = $projectDao->get_tasks_for_project($project_id);
+        foreach ($project_tasks as $project_task) {
+            if ($top_level == $projectDao->get_top_level($project_task['internalId'])) {
+                if ($memsource_task['workflowLevel'] != $project_task['workflowLevel']) { // Not same workflowLevel
+                    if ( $task->getTaskType() == Common\Enums\TaskTypeEnum::TRANSLATION ||
+                        ($task->getTaskType() == Common\Enums\TaskTypeEnum::PROOFREADING && $project_task['task-type_id'] == Common\Enums\TaskTypeEnum::TRANSLATION)) {
+                        if (($memsource_task['beginIndex'] <= $project_task['endIndex']) && ($project_task['beginIndex'] <= $memsource_task['endIndex'])) { // Overlap
+                            error_log("Adding $userId to Deny List for {$project_task['id']} {$project_task['internalId']}");
+                            $taskDao->addUserToTaskBlacklist($userId, $project_task['id']);
+                        }
+                    }
+                }
+            }
+        }
+        $projectDao->make_tasks_claimable($project_id);
+        $this->possibly_mark_quality_assigned($userId, $memsource_task, $task);
+    }
+
+    private function is_katong_project_uid($memsource_project_uid)
+    {
+        $projectDao = new ProjectDao();
+        $memsource_project = $projectDao->get_memsource_project_by_memsource_uid($memsource_project_uid);
+        return $memsource_project && $projectDao->is_katong_project($memsource_project);
+    }
+
     public function claimTask_shell($userId, $taskId)
     {
 error_log("claimTask_shell($userId, $taskId)");
@@ -532,6 +607,11 @@ error_log("claimTask_shell($userId, $taskId)");
     {
       if (!$memsource_project) return 0;
       error_log("function propagate_cancelled($cancelled... $task_id... $whole_workflow, $hook_from_phrase)");
+      $katong = (new ProjectDao())->is_katong_project($memsource_project);
+      if ($katong && !$cancelled) {
+          error_log("propagate_cancelled: a cancelled Katong task can't be un-cancelled ($task_id)");
+          return 0;
+      }
       $projectDao = new ProjectDao();
       $taskDao = new TaskDao();
       $memsource_task = $projectDao->get_memsource_task($task_id);
@@ -587,7 +667,9 @@ error_log("claimTask_shell($userId, $taskId)");
             if ($memsource_user_uid) $data['providers'] = [['type' => 'USER', 'id' => $memsource_user_uid]];
             error_log(print_r($data, true));
 
-           if ($whole_workflow && !$shell_task && !$hook_from_phrase) {
+           if ($katong) {
+            if (!$shell_task && !$hook_from_phrase) Common\Lib\Katong::cancel_task($memsource_task_uid, $comment);
+           } elseif ($whole_workflow && !$shell_task && !$hook_from_phrase) {
             $ch = curl_init($this->memsourceApiV1 . "projects/$memsource_project_uid/jobs/$memsource_task_uid");
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
             curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type:application/json', $authorization));
@@ -600,7 +682,7 @@ error_log("claimTask_shell($userId, $taskId)");
             if ($cancelled) {
                 $task->set_cancelled(1);
                 if ($status_id == Common\Enums\TaskStatusEnum::IN_PROGRESS) {
-                  if (!$shell_task) {
+                  if (!$shell_task && !$katong) {
                     $ch = curl_init("https://cloud.memsource.com/web/api2/v1/projects/$memsource_project_uid/jobs/segmentsCount");
                     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
                     curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type:application/json', $authorization));
@@ -661,7 +743,13 @@ error_log("claimTask_shell($userId, $taskId)");
 
     public function set_dateDue_in_memsource($task, $memsource_task, $deadline)
     {
-        if ($memsource_task && !Common\Enums\TaskTypeEnum::$enum_to_UI[$task->getTaskType()]['shell_task']) {
+        if ($memsource_task && !Common\Enums\TaskTypeEnum::$enum_to_UI[$task->getTaskType()]['shell_task'] && (new ProjectDao())->is_katong_project($task->getProjectId())) {
+            // Katong takes the deadline on assign; only send it if someone is assigned
+            if ($claimant_id = (new ProjectDao())->getUserClaimedTask($task->getId())) {
+                $task->setDeadline($deadline);
+                $this->katong_assign($memsource_task, $task, $claimant_id);
+            }
+        } elseif ($memsource_task && !Common\Enums\TaskTypeEnum::$enum_to_UI[$task->getTaskType()]['shell_task']) {
             $memsource_user_uid = 0;
             $projectDao = new ProjectDao();
             if ($claimant_id = $projectDao->getUserClaimedTask($task->getId())) $memsource_user_uid = $this->get_memsource_user($claimant_id);
@@ -1598,6 +1686,7 @@ error_log("claimTask_shell($userId, $taskId)");
     public function memsource_list_jobs($memsource_project_uid, $project_id, $return_early = 0)
     {
         $projectDao = new ProjectDao();
+        if ($this->is_katong_project_uid($memsource_project_uid)) return []; // Katong: see ProjectRouteHandler::katong_sync_job_tasks()
 
         $url = $this->memsourceApiV1 . "projects/$memsource_project_uid/workflowSteps";
         $ch = curl_init($url);
@@ -1672,6 +1761,7 @@ error_log("Sync memsource_list_jobs() project_id: $project_id, workflowLevels_ar
 
     public function memsource_get_job($memsource_project_uid, $memsource_task_uid)
     {
+        if ($this->is_katong_project_uid($memsource_project_uid)) return 0;
         $url = $this->memsourceApiV1 . "projects/$memsource_project_uid/jobs/$memsource_task_uid";
         $ch = curl_init($url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -1687,6 +1777,7 @@ error_log("Sync memsource_list_jobs() project_id: $project_id, workflowLevels_ar
 
     public function memsource_get_target_file($memsource_project_uid, $memsource_task_uid)
     {
+        if ($this->is_katong_project_uid($memsource_project_uid)) return 0;
         $url = "{$this->memsourceApiV1}projects/$memsource_project_uid/jobs/$memsource_task_uid/targetFile";
         $re = curl_init($url);
         $httpHeaders = ["Authorization: Bearer $this->memsourceApiToken"];
@@ -2275,6 +2366,7 @@ error_log(print_r($result, true));//(**)
 
     public function update_phrase_field($project_uid, $field, $value, $timeout)
     {
+        if ($this->is_katong_project_uid($project_uid)) return; // No Phrase custom fields for Katong projects
         $field_uid = [ // Live Phrase fields
             'asana_partner_board_url'  => 'pdYAJoE10zGnPA0ib6q8Hv',
             'monitoring_dashboard_url' => 'NEKFhD2jmYHKbdCC4dtgA0',
@@ -2673,6 +2765,7 @@ error_log(print_r($result, true));//(**)
             $task = $taskDao->getTask($task_id);
             $memsource_task_uid = $projectDao->get_memsource_task($task_id)['memsource_task_uid'];
             $memsource_project_uid = $projectDao->get_memsource_project($task->getProjectId())['memsource_project_uid'];
+            if ($this->is_katong_project_uid($memsource_project_uid)) return; // No Phrase bilingual file for Katong
 
             $ch = curl_init("https://cloud.memsource.com/web/api2/v1/projects/$memsource_project_uid/jobs/bilingualFile?format=DOCX");
             curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode(['jobs' => [['uid' => $memsource_task_uid]]]));

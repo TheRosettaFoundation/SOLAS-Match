@@ -401,6 +401,16 @@
                                 <button type="submit" value="set_mt_for_org" name="set_mt_for_org" class="btn btn-twb-primary btn-sm">Update</button>
                                 {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
                             </form>
+                            {if $roles & $SITE_ADMIN}
+                            <form method="post" action="{urlFor name="org-public-profile" options="org_id.$org_id"}" class="mt-3">
+                                <div class="form-check form-switch pt-2">
+                                    <input class="form-check-input" type="checkbox" name="katong_for_org" id="katong_for_org" value="1" {if $katong_for_org}checked="checked"{/if}>
+                                    <label class="form-check-label small fw-semibold" for="katong_for_org">Use Katong TMS instead of Phrase for new projects</label>
+                                </div>
+                                <button type="submit" value="set_katong_for_org" name="set_katong_for_org" class="btn btn-twb-primary btn-sm">Update</button>
+                                {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
+                            </form>
+                            {/if}
                         </div>
                     </div>
 

@@ -218,11 +218,11 @@
                     <div class="pb-0 bg-dark rounded-2">
                       {if !empty($matecat_url)}
                         {if $type_id == 2}
-                            {assign var="translate_text" value="Translate using Phrase TMS"}
+                            {assign var="translate_text" value="Translate using `TemplateHelper::tms_name($memsource_task)`"}
                         {elseif $type_id == 3}
-                            {assign var="translate_text" value="Revise using Phrase TMS"}
+                            {assign var="translate_text" value="Revise using `TemplateHelper::tms_name($memsource_task)`"}
                         {elseif $type_id == 6}
-                            {assign var="translate_text" value="Proofread using Phrase TMS"}
+                            {assign var="translate_text" value="Proofread using `TemplateHelper::tms_name($memsource_task)`"}
                         {else}
                             {assign var="translate_text" value="Work using this URL"}
                         {/if}

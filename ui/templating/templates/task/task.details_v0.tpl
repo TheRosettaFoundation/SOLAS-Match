@@ -125,7 +125,7 @@
                 </td>
                 <td></td>
                 <td>
-                    {if ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $VOLUNTEER_PO + $COMMUNITY_OFFICER)) && !empty($matecat_url)}<strong>{if !empty($memsource_task)}{if !TaskTypeEnum::$enum_to_UI[$type_id]['shell_task']}Phrase TMS{/if}{else}Kató TM{/if} URL for task:</strong><hr/>{/if}
+                    {if ($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $VOLUNTEER_PO + $COMMUNITY_OFFICER)) && !empty($matecat_url)}<strong>{if !empty($memsource_task)}{if !TaskTypeEnum::$enum_to_UI[$type_id]['shell_task']}{TemplateHelper::tms_name($memsource_task)}{/if}{else}Kató TM{/if} URL for task:</strong><hr/>{/if}
                 </td>
             </tr>
             <tr valign="top">

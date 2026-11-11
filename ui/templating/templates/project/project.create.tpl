@@ -13,6 +13,7 @@
     <div id="deadline_timestamp">{$deadline_timestamp}</div>
     <div id="userIsAdmin">{if $roles & ($SITE_ADMIN + $PROJECT_OFFICER + $VOLUNTEER_PO)}1{else}0{/if}</div>
     <div id="create_memsource">{$create_memsource}</div>
+    <div id="create_katong">{if !empty($create_katong)}1{else}0{/if}</div>
     <div id="split">{if true || in_array($org_id, [860])}1{else}0{/if}</div>
     <div id="template_language_options">
         <option value="0"></option>

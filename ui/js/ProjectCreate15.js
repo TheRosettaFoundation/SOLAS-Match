@@ -14,6 +14,7 @@ var deadline_timestamp;
 var initial_selected_day;
 var userIsAdmin;
 var create_memsource;
+var create_katong;
 
 // Errors
 var createProjectError;
@@ -164,6 +165,7 @@ function documentReady()
   org_id           = document.getElementById("org_id").innerHTML;
   user_id          = document.getElementById("user_id").innerHTML;
   create_memsource = document.getElementById("create_memsource").innerHTML;
+  create_katong = document.getElementById("create_katong") ? document.getElementById("create_katong").innerHTML : "0";
   userIsAdmin      = document.getElementById("userIsAdmin").innerHTML;
   if (userIsAdmin == 1) {
     userIsAdmin = true;
@@ -285,6 +287,15 @@ function target_language_selected(event) {
     revision_sourcing.innerHTML = '<option value="0">REV: Full TWB Community</option>';
     revision_sourcing.disabled = true;
     targetLanguageRow.appendChild(revision_sourcing);
+
+    if (create_katong == 1) { // Katong: each target language has its own workflow (Translation is done by machine translation)
+      let katong_workflow = document.createElement("select");
+      katong_workflow.name = "katong_workflow_" + targetCount;
+      katong_workflow.id   = "katong_workflow_" + targetCount;
+      katong_workflow.className = "col-md-4";
+      katong_workflow.innerHTML = '<option value="1">Translation only (MT)</option><option value="2" selected="selected">Translation (MT) and Revision</option><option value="3">Translation (MT), Revision and SME Review</option>';
+      targetLanguageRow.appendChild(katong_workflow);
+    }
 
     // Add the completed target language "row" to the div containing all previously added target language "rows."
     document.getElementById("targetLangSelectDiv").appendChild(targetLanguageRow);

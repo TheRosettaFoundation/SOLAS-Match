@@ -146,15 +146,15 @@
                                         {/if}
                                         {if $type_id == 2}
                                             <a href="{$matecat_urls[$task_id]}" target="_blank" class="btn btn-small btn-success">
-                                                {if $memsource_tasks[$task_id]}Translate using Phrase TMS{else}{Localisation::getTranslation('task_claimed_translate_using_kato')}{/if}
+                                                {if $memsource_tasks[$task_id]}Translate using {TemplateHelper::tms_name($memsource_tasks[$task_id])}{else}{Localisation::getTranslation('task_claimed_translate_using_kato')}{/if}
                                             </a>
                                         {elseif $type_id == 3}
                                             <a href="{$matecat_urls[$task_id]}" target="_blank" class="btn btn-small btn-success">
-                                                {if $memsource_tasks[$task_id]}Revise using Phrase TMS{else}{Localisation::getTranslation('task_claimed_proofread_using_kato')}{/if}
+                                                {if $memsource_tasks[$task_id]}Revise using {TemplateHelper::tms_name($memsource_tasks[$task_id])}{else}{Localisation::getTranslation('task_claimed_proofread_using_kato')}{/if}
                                             </a>
                                         {elseif $type_id == 6}
                                             <a href="{$matecat_urls[$task_id]}" target="_blank" class="btn btn-small btn-success">
-                                                Proofread using Phrase TMS
+                                                Proofread using {TemplateHelper::tms_name($memsource_tasks[$task_id])}
                                             </a>
                                         {/if}
                                         {if empty($taskviews[$task_id])}

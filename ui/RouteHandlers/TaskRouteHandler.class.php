@@ -585,13 +585,22 @@ class TaskRouteHandler
                 }
                 $memsource_project = $projectDao->get_memsource_project($task->getProjectId());
                 $userDao = new DAO\UserDao();
+                $task_file_info = $taskDao->getTaskInfo($task_id, 0);
+                $filename = $task_file_info->getFilename();
+                if ($projectDao->is_katong_project($memsource_project)) {
+                    // Katong deliverable keeps the original filename (with the deliverable's extension if Katong converted it, e.g. PDF => DOCX)
+                    [$file, $filename] = $projectDao->katong_get_target_file($task->getProjectId(), $memsource_task, $filename);
+                    if (empty($file)) {
+                        UserRouteHandler::flash('error', 'The translated file is not available yet (machine translation may still be running), please try again later.');
+                        return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('task-view', ['task_id' => $task_id]));
+                    }
+                } else {
                 $file = $userDao->memsource_get_target_file($memsource_project['memsource_project_uid'], $memsource_task['memsource_task_uid']);
                 if (empty($file)) {
                     UserRouteHandler::flash('error', 'We are unable to retrieve files that are more than 12 months old. If your file is more recent, please get in touch.');
                     return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('home'));
                 }
-                $task_file_info = $taskDao->getTaskInfo($task_id, 0);
-                $filename = $task_file_info->getFilename();
+                }
                 $mime = $userDao->detectMimeType($file, $filename);
                 header("Content-type: $mime");
                 header('Content-Disposition: attachment; filename="' . $filename . '"');
@@ -2172,7 +2181,8 @@ class TaskRouteHandler
                     $memsource_task = $projectDao->get_memsource_task($task_id);
                     if ($memsource_task) {
                         $memsource_project = $projectDao->get_memsource_project($project_id);
-                        $file = $userDao->memsource_get_target_file($memsource_project['memsource_project_uid'], $memsource_task['memsource_task_uid']);
+                        if ($projectDao->is_katong_project($memsource_project)) [$file, $file_name] = $projectDao->katong_get_target_file($project_id, $memsource_task, $file_name);
+                        else $file = $userDao->memsource_get_target_file($memsource_project['memsource_project_uid'], $memsource_task['memsource_task_uid']);
                         if (!empty($file)) {
                             $helper = new Common\Lib\APIHelper('.json');
                             $response->getBody()->write(json_encode(['mime' => $helper->getCanonicalMime($file_name), 'file_name' => $file_name, 'size' => strlen($file), 'file' => base64_encode($file)]));

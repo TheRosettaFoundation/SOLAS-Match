@@ -7,6 +7,18 @@ use \SolasMatch\UI\DAO as DAO;
 
 class TemplateHelper
 {
+    /**
+     * Name of the TMS a task is worked in, for wording such as "Revise using Phrase TMS"
+     */
+    public static function tms_name($memsource_task)
+    {
+        if (!empty($memsource_task['task_id'])) {
+            $projectDao = new DAO\ProjectDao();
+            if ($projectDao->is_katong_task($memsource_task['task_id'])) return 'Katong';
+        }
+        return 'Phrase TMS';
+    }
+
     public static function utcStringToTime($sql_string)
     {
         return strtotime($sql_string . ' UTC');

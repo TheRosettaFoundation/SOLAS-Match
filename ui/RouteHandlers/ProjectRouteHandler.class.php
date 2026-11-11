@@ -13,6 +13,7 @@ require_once __DIR__."/../../Common/Enums/TaskTypeEnum.class.php";
 require_once __DIR__."/../../Common/Enums/TaskStatusEnum.class.php";
 require_once __DIR__."/../../Common/lib/SolasMatchException.php";
 require_once __DIR__ . '/../../api/lib/PDOWrapper.class.php';
+require_once __DIR__ . '/../../Common/lib/Katong.class.php';
 
 class ProjectRouteHandler
 {
@@ -119,6 +120,17 @@ class ProjectRouteHandler
             '/memsource_hook',
             '\SolasMatch\UI\RouteHandlers\ProjectRouteHandler:memsourceHook')
             ->setName('memsource_hook');
+
+        $app->post(
+            '/katong_hook',
+            '\SolasMatch\UI\RouteHandlers\ProjectRouteHandler:katongHook')
+            ->setName('katong_hook');
+
+        $app->get(
+            '/katong_register_webhook',
+            '\SolasMatch\UI\RouteHandlers\ProjectRouteHandler:katong_register_webhook')
+            ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin')
+            ->setName('katong_register_webhook');
     }
 
     public function memsourceHook(Request $request)
@@ -162,6 +174,396 @@ class ProjectRouteHandler
                 break;
         }
         die;
+    }
+
+    // =====================================================================================
+    // Katong TMS integration
+    // A Katong job is one source file and all target languages of a TWB project.
+    // Its tasks become TWB tasks through create_task() (the same code the Phrase JOB_CREATED hook uses),
+    // with the fixed workflow levels 1 Translation (mt), 2 Revision (review), 3 SME Review (sme_review).
+    // =====================================================================================
+
+    private $katong_created_tasks = []; // Katong task uid => TWB task_id, filled by create_task()
+    private $katong_source = [];        // project_id => source file bytes
+    private $katong_owner_id = 0;       // TWB user who created the project (owner of the copied source file)
+
+    private function katong_file_owner()
+    {
+        if ($this->katong_owner_id) return $this->katong_owner_id;
+        $default_user_id = Common\Lib\Katong::default_user_id();
+        return $default_user_id ? $default_user_id : 62927; // translators@translatorswithoutborders.org
+    }
+
+    private function katong_source_file($project_id)
+    {
+        if (isset($this->katong_source[$project_id])) return $this->katong_source[$project_id];
+
+        $bytes = '';
+        $projectDao = new DAO\ProjectDao();
+        $katong_project = $projectDao->get_katong_project($project_id);
+        $upload_path = Common\Lib\Settings::get('files.upload_path');
+        $candidates = [];
+        if (!empty($katong_project['original_filename'])) $candidates[] = $upload_path . "proj-$project_id/" . $katong_project['original_filename'];
+        foreach (glob($upload_path . "proj-$project_id/*") as $candidate) {
+            if (is_file($candidate)) $candidates[] = $candidate;
+        }
+        foreach ($candidates as $candidate) {
+            if (!is_file($candidate) || filesize($candidate) > 1000) continue; // Only small pointer files
+            $pointer = trim(file_get_contents($candidate)); // Contains e.g. "files/proj-123/leaflet.docx"
+            if (strpos($pointer, 'files/') === 0 && is_file($upload_path . $pointer)) {
+                $bytes = file_get_contents($upload_path . $pointer);
+                break;
+            }
+        }
+        $this->katong_source[$project_id] = $bytes;
+        return $bytes;
+    }
+
+    /**
+     * Create the Katong job for a TWB project (replaces UserDao::create_memsource_project() for orgs flagged for Katong).
+     * Returns the MemsourceProjects row, or 0 on failure.
+     */
+    public function create_katong_project($post, $project, $file_name, $file, $user_id)
+    {
+        $projectDao = new DAO\ProjectDao();
+        $project_id = $project->getId();
+
+        if (!Common\Lib\Katong::configured()) {
+            error_log('Katong is not configured ([katong] api_url and api_key in conf.ini)');
+            return 0;
+        }
+
+        [$kp_language, $kp_country] = $projectDao->convert_selection_to_language_country($post['sourceLanguageSelect']);
+        $sourceLang = $projectDao->convert_language_country_to_memsource($kp_language, $kp_country);
+        if (!$sourceLang) return 0;
+        [$kp_language, $kp_country] = $projectDao->convert_memsource_to_language_country($sourceLang);
+        $kp_source_language = "{$kp_language}-{$kp_country}";
+
+        // Each target language has its own workflow: Translation (always, by MT), plus optional Revision, plus optional SME Review
+        $target_langs = [];
+        $review_langs = [];
+        $sme_langs = [];
+        $lang_map = []; // Katong code => memsource code
+        $kp_target_languages = [];
+        $targetCount = 0;
+        while (!empty($post["target_language_$targetCount"])) {
+            [$kp_language, $kp_country] = $projectDao->convert_selection_to_language_country($post["target_language_$targetCount"]);
+            $lang = $projectDao->convert_language_country_to_memsource($kp_language, $kp_country);
+            if (!$lang) return 0;
+            $katong_lang = Common\Lib\Katong::memsource_to_katong_lang($lang);
+            if (isset($lang_map[$katong_lang])) {
+                error_log("Katong: two target languages map to the same Katong language ($katong_lang) for project $project_id");
+                return 0;
+            }
+            $lang_map[$katong_lang] = $lang;
+            $target_langs[] = $katong_lang;
+            // katong_workflow_N from the create form: 1 Translation only, 2 Translation and Revision, 3 Translation, Revision and SME Review
+            if (isset($post["katong_workflow_$targetCount"])) $workflow = (int)$post["katong_workflow_$targetCount"];
+            elseif (!empty($post["sme_$targetCount"]))        $workflow = 3;
+            elseif (isset($post["proofreading_$targetCount"])) $workflow = empty($post["proofreading_$targetCount"]) ? 1 : 2;
+            else                                               $workflow = 2; // Same default as Phrase (Translation and Revision)
+            if ($workflow >= 2) $review_langs[] = $katong_lang; // SME Review always follows Revision
+            if ($workflow >= 3) $sme_langs[] = $katong_lang;
+
+            [$kp_language, $kp_country] = $projectDao->convert_memsource_to_language_country($lang);
+            $kp_target_languages[] = "{$kp_language}-{$kp_country}";
+            $targetCount++;
+        }
+        if (empty($target_langs)) return 0;
+
+        $file_out = Common\Lib\Katong::upload_file($file_name, $file);
+        if (empty($file_out['id'])) {
+            error_log("Katong file upload failed for project $project_id");
+            return 0;
+        }
+
+        $external_ref = Common\Lib\Katong::cfg('external_ref_prefix', 'twb-project-') . $project_id;
+        $data = [
+            'external_ref' => $external_ref,
+            'partner_id'   => Common\Lib\Katong::cfg('partner_id', 'twb'),
+            'source_lang'  => Common\Lib\Katong::memsource_to_katong_lang($sourceLang),
+            'target_langs' => $target_langs,
+            'content_type' => Common\Lib\Katong::cfg('content_type', 'general'),
+            'title'        => mb_substr($post['project_title'], 0, 500),
+            'due_at'       => Common\Lib\Katong::iso_date($project->getDeadline()),
+            'source'       => ['file_id' => $file_out['id']],
+            'review_langs' => $review_langs,
+            'sme_langs'    => $sme_langs,
+            'brief'        => mb_substr($post['project_description'], 0, 20000),
+        ];
+        error_log('Katong job payload: ' . json_encode($data));
+        $job = Common\Lib\Katong::create_job($data);
+        if (empty($job['id'])) {
+            error_log("Katong job create failed for project $project_id");
+            return 0;
+        }
+
+        $projectDao->record_memsource_project_languages($project_id, $kp_source_language, implode(',', $kp_target_languages));
+        // created_by_uid and owner_uid hold the TWB user_id (as for other non Phrase projects), so TaskDao::get_creator() works
+        $projectDao->set_memsource_project($project_id, $project_id, $job['id'], (string)$user_id, (string)$user_id, Common\Lib\Katong::WORKFLOW_LEVELS);
+        $projectDao->set_project_tms($project_id, Common\Lib\Katong::TMS_KATONG);
+        $projectDao->set_katong_project($project_id, $job['id'], $external_ref, $lang_map, $file_name, empty($job['deliverable_format']) ? '' : $job['deliverable_format'], empty($job['status']) ? '' : $job['status']);
+        $projectDao->update_project_owner_id($project_id, $user_id, 1);
+        $projectDao->set_memsource_self_service_project($project_id, 0); // Same as Phrase projects created in TWB (published, deadlines per step), but no Phrase split
+
+        $this->katong_source[$project_id] = $file;
+        $this->katong_owner_id = $user_id;
+        $this->katong_sync_job_tasks($project_id, $job);
+
+        return $projectDao->get_memsource_project($project_id);
+    }
+
+    /**
+     * Create TWB tasks for Katong tasks not yet known, then bring statuses up to date.
+     */
+    public function katong_sync_job_tasks($project_id, $job = null)
+    {
+        $projectDao = new DAO\ProjectDao();
+        $taskDao    = new DAO\TaskDao();
+        $katong_project = $projectDao->get_katong_project($project_id);
+        if (empty($katong_project)) {
+            error_log("katong_sync_job_tasks($project_id): not a Katong project");
+            return 0;
+        }
+        if (empty($job)) $job = Common\Lib\Katong::get_job($katong_project['job_uid']);
+        if (empty($job['tasks'])) {
+            error_log("katong_sync_job_tasks($project_id): no tasks");
+            return 0;
+        }
+        $project = $projectDao->getProject($project_id);
+        $lang_map = $katong_project['lang_map'];
+        $lang_index = array_flip(array_keys($lang_map));
+
+        if (!empty($job['deliverable_format']) && $job['deliverable_format'] != $katong_project['deliverable_format']) {
+            $projectDao->set_katong_project($project_id, $katong_project['job_uid'], $katong_project['external_ref'], $lang_map, $katong_project['original_filename'], $job['deliverable_format'], empty($job['status']) ? '' : $job['status']);
+        }
+
+        // Which languages have which steps (for deadlines)
+        $levels_for_lang = [];
+        foreach ($job['tasks'] as $katong_task) {
+            $levels_for_lang[Common\Lib\Katong::normalise_lang($katong_task['target_lang'])][Common\Lib\Katong::level_for_kind($katong_task['kind'])] = 1;
+        }
+
+        $parts = [];
+        foreach ($job['tasks'] as $katong_task) {
+            $level = Common\Lib\Katong::level_for_kind($katong_task['kind']);
+            if (!$level) {
+                error_log("Katong task {$katong_task['id']} kind {$katong_task['kind']} not supported");
+                continue;
+            }
+            if ($projectDao->get_memsource_task_by_memsource_uid($katong_task['id'])) continue;
+            if (in_array($katong_task['status'], ['cancelled', 'failed']) && $level > 1) continue;
+
+            $lang = Common\Lib\Katong::normalise_lang($katong_task['target_lang']);
+            if (empty($lang_map[$lang])) {
+                error_log("Katong task {$katong_task['id']}: target_lang {$katong_task['target_lang']} not in project $project_id");
+                continue;
+            }
+            $internalId = (string)($lang_index[$lang] + 1);
+            $part_number = empty($katong_task['part']) ? 1 : $katong_task['part'];
+            if ($part_number > 1 || isset($katong_task['seg_begin']) && $katong_task['seg_begin'] !== null) $internalId .= ".$part_number";
+
+            $words = 0;
+            if ($metrics = Common\Lib\Katong::get_task_metrics($katong_task['id'])) $words = empty($metrics['words']['total']) ? 0 : $metrics['words']['total'];
+
+            $parts[] = [
+                'uid'           => $katong_task['id'],
+                'id'            => 0,
+                'fileName'      => $katong_project['original_filename'],
+                'project'       => ['id' => $project_id, 'lastWorkflowLevel' => max(array_keys($levels_for_lang[$lang]))],
+                'targetLang'    => $lang_map[$lang],
+                'task'          => $katong_task['target_lang'], // Katong language, used for the deliverable
+                'internalId'    => $internalId,
+                'workflowLevel' => $level,
+                'beginIndex'    => isset($katong_task['seg_begin']) && $katong_task['seg_begin'] !== null ? $katong_task['seg_begin'] : 0,
+                'endIndex'      => isset($katong_task['seg_end'])   && $katong_task['seg_end']   !== null ? $katong_task['seg_end']   : 999999,
+                'wordsCount'    => $words,
+                'dateDue'       => $this->katong_task_deadline($project, $level, !empty($levels_for_lang[$lang][3]), empty($katong_task['round']) ? 1 : $katong_task['round']),
+            ];
+        }
+        usort($parts, function ($a, $b) { return [$a['internalId'], $a['workflowLevel']] <=> [$b['internalId'], $b['workflowLevel']]; });
+
+        if (!empty($parts)) {
+            $this->katong_created_tasks = [];
+            $this->create_task(['jobParts' => $parts]);
+
+            // Translation is done by MT: the default (non human) user is the translator for accounting
+            $default_user_id = Common\Lib\Katong::default_user_id();
+            foreach ($this->katong_created_tasks as $uid => $task_id) {
+                $memsource_task = $projectDao->get_memsource_task($task_id);
+                if ($memsource_task && $memsource_task['workflowLevel'] == 1) {
+                    if ($default_user_id) {
+                        if (!$taskDao->taskIsClaimed($task_id)) $taskDao->claimTaskAndDeny($task_id, $default_user_id, $memsource_task);
+                    } else error_log('Katong: katong.default_user_id is not set, Translation task not claimed');
+                }
+            }
+        }
+
+        // Bring statuses up to date (a hook may have arrived before the task existed in TWB)
+        foreach ($job['tasks'] as $katong_task) {
+            if ($memsource_task = $projectDao->get_memsource_task_by_memsource_uid($katong_task['id'])) {
+                if (in_array($katong_task['status'], ['completed', 'delivered', 'cancelled'])) $this->katong_apply_status($memsource_task, $katong_task['status'], empty($katong_task['status_detail']) ? '' : $katong_task['status_detail']);
+            }
+        }
+        return count($parts);
+    }
+
+    /**
+     * Deadline for each step: MT straight away; Revision and SME Review share the time to the project deadline (less a day for the project manager)
+     */
+    private function katong_task_deadline($project, $level, $has_sme, $round)
+    {
+        $deadline = strtotime($project->getDeadline());
+        $now = time();
+        if ($round > 1) $deadline = max($deadline, $now + 3*24*60*60); // Another round after a reopen
+        $total = max(0, $deadline - $now);
+        $last = $deadline - min(24*60*60, $total/7);
+        if ($level == 1) $due = min($now + 60*60, $last);
+        elseif ($level == 2 && $has_sme) $due = $now + ($last - $now)*0.6;
+        else $due = $last;
+        return gmdate('Y-m-d\TH:i:s\Z', (int)$due);
+    }
+
+    private function katong_apply_status($memsource_task, $status, $detail = '')
+    {
+        $projectDao = new DAO\ProjectDao();
+        $taskDao    = new DAO\TaskDao();
+        $task_id = $memsource_task['task_id'];
+        $taskDao->set_memsource_status($task_id, $memsource_task['memsource_task_uid'], $status);
+        error_log("katong_apply_status task_id: $task_id, Katong task: {$memsource_task['memsource_task_uid']}, status: $status $detail");
+
+        switch ($status) {
+            case 'completed':
+            case 'delivered':
+                if (!$taskDao->taskIsClaimed($task_id)) {
+                    $user_id = Common\Lib\Katong::default_user_id();
+                    $taskDao->claimTask($task_id, $user_id ? $user_id : 62927);
+                }
+                if ($taskDao->getTaskStatus($task_id) != Common\Enums\TaskStatusEnum::COMPLETE) {
+                    $taskDao->setTaskStatus($task_id, Common\Enums\TaskStatusEnum::COMPLETE);
+                    $taskDao->sendTaskUploadNotifications($task_id, 1);
+                    $taskDao->set_task_complete_date($task_id);
+                    error_log("Katong completed task_id: $task_id");
+                    if ($memsource_task['workflowLevel'] > 1) $this->katong_save_metrics($task_id, $memsource_task);
+                }
+                break;
+            case 'needs_rework':
+                if ($taskDao->getTaskStatus($task_id) == Common\Enums\TaskStatusEnum::COMPLETE) $taskDao->setTaskStatus($task_id, Common\Enums\TaskStatusEnum::IN_PROGRESS);
+                break;
+            case 'cancelled':
+                $task = $taskDao->getTask($task_id);
+                if (!$task->get_cancelled()) {
+                    $memsource_project = $projectDao->get_memsource_project($task->getProjectId());
+                    $userDao = new DAO\UserDao();
+                    $userDao->propagate_cancelled(1, $memsource_project, $task_id, 'Hook from Katong' . ($detail ? ": $detail" : ''), 0, 1);
+                }
+                break;
+            case 'failed':
+                error_log("Katong task FAILED task_id: $task_id, {$memsource_task['memsource_task_uid']}: $detail");
+                break;
+        }
+    }
+
+    /**
+     * Payable time and word counts by match band (the Katong equivalent of the Phrase post analysis)
+     */
+    public function katong_save_metrics($task_id, $memsource_task)
+    {
+        $projectDao = new DAO\ProjectDao();
+        $taskDao    = new DAO\TaskDao();
+        $metrics = Common\Lib\Katong::get_task_metrics($memsource_task['memsource_task_uid']);
+        if (empty($metrics)) return;
+        $claimant_id = $projectDao->getUserClaimedTask($task_id);
+        $projectDao->set_katong_task_metrics($task_id, $memsource_task['memsource_task_uid'], $claimant_id, $metrics);
+        $task = $taskDao->getTask($task_id);
+        $memsource_project = $projectDao->get_memsource_project($task->getProjectId());
+        $projectDao->insert_katong_post_analysis($task_id, $claimant_id, $memsource_project['memsource_project_uid'], $memsource_task['workflowLevel'], $metrics);
+    }
+
+    public function katongHook(Request $request)
+    {
+        $body = (string)$request->getBody();
+        if (!Common\Lib\Katong::verify_signature(Common\Lib\Katong::cfg('webhook_secret'), $request->getHeaderLine('X-Katong-Signature'), $body)) {
+            error_log('Katong hook: bad or missing X-Katong-Signature');
+            http_response_code(401);
+            die;
+        }
+        $hook = json_decode($body, true);
+        if (empty($hook['event'])) {
+            error_log("Katong hook not decoded: $body");
+            die;
+        }
+        $delivery_id = $request->getHeaderLine('X-Katong-Delivery');
+        if (empty($delivery_id)) $delivery_id = empty($hook['id']) ? '' : $hook['id'];
+        $projectDao = new DAO\ProjectDao();
+        if ($delivery_id && !$projectDao->record_katong_delivery($delivery_id, $hook['event'])) {
+            error_log("Katong hook repeat delivery ignored: $delivery_id");
+            die;
+        }
+        error_log('Katong hook ' . $hook['event'] . ' ' . $body);
+
+        $data = empty($hook['data']) ? [] : $hook['data'];
+        $katong_project = empty($data['job_id']) ? 0 : $projectDao->get_katong_project_by_job_uid($data['job_id']);
+        if (empty($katong_project)) {
+            error_log('Katong hook for unknown job: ' . (empty($data['job_id']) ? '' : $data['job_id']));
+            die;
+        }
+        $project_id = $katong_project['project_id'];
+
+        switch ($hook['event']) {
+            case 'task.status_changed':
+                $memsource_task = $projectDao->get_memsource_task_by_memsource_uid($data['task_id']);
+                if (empty($memsource_task)) { // e.g. the first hook for the Translation (mt) step, create the task(s) "as normal"
+                    $this->katong_sync_job_tasks($project_id);
+                    $memsource_task = $projectDao->get_memsource_task_by_memsource_uid($data['task_id']);
+                }
+                if (empty($memsource_task)) {
+                    error_log("Katong hook: can't find task for {$data['task_id']}");
+                    break;
+                }
+                $this->katong_apply_status($memsource_task, $data['status'], empty($data['detail']) ? '' : $data['detail']);
+                break;
+            case 'job.reopened': // Creates a round 2 review task per language: a new Revision task in TWB
+                $this->katong_sync_job_tasks($project_id);
+                break;
+            case 'job.completed':
+                $projectDao->update_katong_project_status($project_id, 'completed');
+                $this->katong_sync_job_tasks($project_id);
+                break;
+            case 'job.cancelled':
+                $projectDao->update_katong_project_status($project_id, 'cancelled');
+                $this->katong_sync_job_tasks($project_id);
+                break;
+            case 'segment.flagged':
+                break; // Logged above
+        }
+        die;
+    }
+
+    /**
+     * Site admin: register this site's /katong_hook with Katong (once). The secret is shown once and must go in conf.ini [katong] webhook_secret
+     */
+    public function katong_register_webhook(Request $request, Response $response)
+    {
+        $adminDao = new DAO\AdminDao();
+        if (!($adminDao->get_roles(Common\Lib\UserSession::getCurrentUserID()) & SITE_ADMIN)) {
+            $response->getBody()->write('Not authorised');
+            return $response->withStatus(403);
+        }
+        $url = Common\Lib\Settings::get('site.location') . 'katong_hook';
+        foreach (Common\Lib\Katong::list_webhooks() as $webhook) {
+            if (!empty($webhook['url']) && $webhook['url'] === $url) {
+                $response->getBody()->write("A Katong webhook is already registered for $url (id {$webhook['id']}). Delete it in Katong first if you need a new secret.");
+                return $response->withHeader('Content-Type', 'text/plain');
+            }
+        }
+        $result = Common\Lib\Katong::register_webhook($url);
+        if (empty($result['secret'])) {
+            $response->getBody()->write("Katong webhook registration failed for $url, see the error log.");
+            return $response->withHeader('Content-Type', 'text/plain');
+        }
+        $response->getBody()->write("Katong webhook {$result['id']} registered for $url\n\nPut this secret in conf.ini [katong] webhook_secret (it is shown only once):\n\n{$result['secret']}\n");
+        return $response->withHeader('Content-Type', 'text/plain')->withHeader('Cache-Control', 'no-store');
     }
 
     private function create_project($hook)
@@ -355,6 +757,7 @@ class ProjectRouteHandler
             $task->setTitle(mb_substr((empty($part['internalId']) ? '' : $part['internalId'] . ' ') . $part['fileName'], 0, 128));
 
             $project = $projectDao->getProject($project_id);
+            $is_katong = $projectDao->is_katong_project($memsource_project);
 
             if ($projectDao->is_job_uid_already_processed($part['uid'])) {
                 error_log("Job uid is a duplicate for {$part['project']['id']} in new jobPart {$part['uid']} for: {$part['fileName']}");
@@ -449,9 +852,13 @@ error_log("Updating project_wordcount with {$part['wordsCount']}");//(**)
                 // If there is only 1 workflow, give all the time to that
                 if (!empty($part['project']['lastWorkflowLevel']) && $part['project']['lastWorkflowLevel'] == 1) $deadline_less_4_days = $deadline_less_1_days;
 
+                if ($is_katong && !empty($part['dateDue'])) { // Katong: deadline per step from katong_task_deadline(), sent to Katong on assign
+                    $task->setDeadline(Common\Lib\Katong::twb_date($part['dateDue']));
+                } else {
                 if ($taskType == Common\Enums\TaskTypeEnum::TRANSLATION) $task->setDeadline(gmdate('Y-m-d H:i:s', $deadline_less_4_days));
                 else                                                     $task->setDeadline(gmdate('Y-m-d H:i:s', $deadline_less_1_days));
                 $projectDao->set_dateDue_in_memsource_when_new($memsource_project['memsource_project_uid'], $part['uid'], gmdate('Y-m-d H:i:s', $taskType == Common\Enums\TaskTypeEnum::TRANSLATION ? $deadline_less_4_days : $deadline_less_1_days));
+                }
 
                 $task->setPublished(1);
             } else {
@@ -481,7 +888,7 @@ error_log("set_memsource_task($task_id... {$part['uid']}...), success: $success"
                 continue;
             }
             if ($taskType == Common\Enums\TaskTypeEnum::TRANSLATION && !empty($part['wordsCount'])) $projectDao->increment_used_entitlement($task_id, 0, $part['wordsCount']);
-            $projectDao->set_task_resource_info_trigger($task_id);
+            if (!$is_katong) $projectDao->set_task_resource_info_trigger($task_id); // Phrase translationResources
 
             $forward_order = [];
             $reverse_order = [];
@@ -520,12 +927,22 @@ error_log("set_memsource_task($task_id... {$part['uid']}...), success: $success"
             mkdir($filesFolder, 0755, true);
 
             $filename = str_replace('/', '_', $part['fileName']);
+            if ($is_katong) {
+                // Katong: TWB already has the source file, so copy it now (no cron copy from Phrase)
+                // (same as task_cron_1_minute does for Phrase once it has fetched the original)
+                $source_file = $this->katong_source_file($project_id);
+                if ($source_file !== '') $projectDao->save_task_file($this->katong_file_owner(), $project_id, $task_id, $filename, $source_file);
+                else error_log("Katong: no source file for project $project_id, task $task_id");
+                LibAPI\PDOWrapper::call('update_mt_used', LibAPI\PDOWrapper::cleanse($task_id) . ',1'); // Every Katong job starts with MT
+                $this->katong_created_tasks[$part['uid']] = $task_id;
+            } else {
             file_put_contents("$filesFolder/$filename", ''); // Placeholder
             file_put_contents("$uploadFolder/$filename", "files/proj-$project_id/task-$task_id/v-0/$filename"); // Point to it
 
             if (mb_strlen($filename) <= 255) $projectDao->queue_copy_task_original_file($project_id, $task_id, $part['uid'], $filename); // cron will copy file from memsource
+            }
 
-            if ($self_service_project && $self_service_project['split'] && $task->getWordCount() > 2000 && $task->getTaskType() == Common\Enums\TaskTypeEnum::TRANSLATION) {
+            if (!$is_katong && $self_service_project && $self_service_project['split'] && $task->getWordCount() > 2000 && $task->getTaskType() == Common\Enums\TaskTypeEnum::TRANSLATION) {
                 error_log("Splitting project_id: $project_id, task_id: $task_id");
                 $uid = $part['uid'];
                 $memsource_project_uid = $memsource_project['memsource_project_uid'];
@@ -1786,6 +2203,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
         $sesskey = $_SESSION['SESSION_CSRF_KEY']; // This is a check against CSRF (Posts should come back with same sesskey)
 
         $create_memsource = 1; // This org uses memsource
+        $create_katong = $projectDao->get_katong_for_org($org_id); // ... or Katong instead of Phrase (set by a site admin on the organisation page)
 
         if ($post = $request->getParsedBody()) {
             if (empty($post['sesskey']) || $post['sesskey'] !== $sesskey
@@ -1855,7 +2273,10 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                         try {
                             $projectDao->saveProjectFile($project, $user_id, $projectFileName, $data);
                             error_log("Project File Saved($user_id): " . $post['project_title']);
-                            if ($create_memsource) {
+                            if ($create_katong) {
+                                $memsource_project = $this->create_katong_project($post, $project, $projectFileName, $data, $user_id);
+                                if (!$memsource_project) $success = false;
+                            } elseif ($create_memsource) {
                                 $memsource_project = $userDao->create_memsource_project($post, $project, $projectFileName, $data, $user_id);
                                 if (!$memsource_project) $success = false;
                             } else $memsource_project = 0;
@@ -2079,6 +2500,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
             'minute_list'    => $minute_list,
             'selected_minute'=> $selected_minute,
             'create_memsource'=> $create_memsource,
+            'create_katong'  => $create_katong,
             'languages'      => $projectDao->generate_language_selection($create_memsource),
             'ngo_linguists_by_language_pair' => $projectDao->ngo_linguists_by_language_pair($org_id),
             'roles'          => $adminDao->get_roles($user_id, $org_id),
@@ -2155,10 +2577,11 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                 error_log("Save path: $destination$filename");
                 file_put_contents("$destination$filename", $physical_pointer);
 
-                $memsource_project = $userDao->create_memsource_project($post, $project, $filename, $file, $user_id);
+                if ($projectDao->get_katong_for_org($org_id)) $memsource_project = $this->create_katong_project($post, $project, $filename, $file, $user_id);
+                else                                          $memsource_project = $userDao->create_memsource_project($post, $project, $filename, $file, $user_id);
                 if (!$memsource_project) {
                     LibAPI\PDOWrapper::call('deleteProject', "$project_id");
-                    $response->getBody()->write(json_encode(['error' => 'Phrase project not created']));
+                    $response->getBody()->write(json_encode(['error' => 'TMS project not created']));
                     return $response->withHeader('Content-Type', 'application/json');
                 }
                 $image_failed = false;
@@ -2906,7 +3329,7 @@ error_log("fields: $fields targetlanguages: $targetlanguages");//(**)
                 }
             }
 
-            if (($task_id = $projectDao->get_task_analysis_trigger()) && ($memsource_task = $projectDao->get_memsource_task($task_id)) && !preg_match('/^\d*$/', $memsource_task_uid = $memsource_task['memsource_task_uid'])) {
+            if (($task_id = $projectDao->get_task_analysis_trigger()) && ($memsource_task = $projectDao->get_memsource_task($task_id)) && !preg_match('/^\d*$/', $memsource_task_uid = $memsource_task['memsource_task_uid']) && !$projectDao->is_katong_task($task_id)) { // Katong analysis comes from task metrics (katong_save_metrics)
                 $task = $taskDao->getTask($task_id);
                 if ($task->getTaskStatus() == Common\Enums\TaskStatusEnum::COMPLETE) {
                     list($translation_level, $revision_level) = $this->get_workflow_levels($task->getProjectId());
@@ -2943,6 +3366,10 @@ error_log("fields: $fields targetlanguages: $targetlanguages");//(**)
                 $memsource_project = $projectDao->get_memsource_project($task->getProjectId());
                 $memsource_task_uid = $memsource_task['memsource_task_uid'];
                 $memsource_project_uid = $memsource_project['memsource_project_uid'];
+                if ($projectDao->is_katong_project($memsource_project)) {
+                    if (++$count >= 20) break;
+                    continue; // No Phrase translationResources for Katong
+                }
 
                 $url = "https://cloud.memsource.com/web/api2/v1/projects/$memsource_project_uid/jobs/$memsource_task_uid/translationResources";
                 $ch = curl_init($url);
