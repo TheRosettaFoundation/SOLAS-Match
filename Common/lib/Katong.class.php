@@ -24,7 +24,7 @@ class Katong
 
     const KIND_TO_LEVEL = ['mt' => 1, 'translate' => 1, 'review' => 2, 'sme_review' => 3];
 
-    const LEVEL_TO_ROLE = [1 => 'translator', 2 => 'reviewer', 3 => 'sme'];
+    const LEVEL_TO_ROLE = [1 => 'translator', 2 => 'reviewer', 3 => 'reviewer'];
 
     // Katong accepts ISO 639-1 codes; map the few 3 letter codes TWB/Phrase may use
     const LANGUAGE_MAP = ['swh' => 'sw', 'swa' => 'sw', 'arb' => 'ar', 'ara' => 'ar', 'ben' => 'bn', 'fra' => 'fr', 'fre' => 'fr', 'spa' => 'es', 'por' => 'pt', 'eng' => 'en'];
