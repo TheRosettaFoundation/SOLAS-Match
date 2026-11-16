@@ -550,13 +550,7 @@ error_log("claimTask($userId, $taskId, ..., $project_id, ...)");
                 error_log("katong_assign: no name for $user_id");
             }
         }
-        $languages = [];
-        foreach ([$task->getSourceLocale(), $task->getTargetLocale()] as $locale) {
-            $memsource_code = $projectDao->convert_language_country_to_memsource($locale->getLanguageCode(), $locale->getCountryCode());
-            $languages[] = Common\Lib\Katong::memsource_to_katong_lang($memsource_code ? $memsource_code : $locale->getLanguageCode());
-        }
-        $result = Common\Lib\Katong::assign_task($memsource_task['memsource_task_uid'], $user_id, $display_name,
-            Common\Lib\Katong::role_for_level($memsource_task['workflowLevel']), $languages, $task->getDeadline());
+        $result = Common\Lib\Katong::assign_task($memsource_task['memsource_task_uid'], $user_id, $display_name, Common\Lib\Katong::role_for_level($memsource_task['workflowLevel']), $task->getDeadline());
         error_log("katong_assign({$memsource_task['memsource_task_uid']}, $user_id): " . ($result ? 'OK' : 'FAILED'));
         return $result ? 1 : 0;
     }

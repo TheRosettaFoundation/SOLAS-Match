@@ -304,7 +304,7 @@ class TaskDao
             $memsource_project = self::get_memsource_project($task->getProjectId());
             if (!empty($memsource_project['tms']) && $memsource_project['tms'] == Common\Lib\Katong::TMS_KATONG) {
                 // Katong has no unassign, so assign the task to the default (non human) user
-                if (!Common\Lib\Katong::unassign_task($memsource_task['memsource_task_uid'], Common\Lib\Katong::role_for_level($memsource_task['workflowLevel']), null, $task->getDeadline()))
+                if (!Common\Lib\Katong::unassign_task($memsource_task['memsource_task_uid'], Common\Lib\Katong::role_for_level($memsource_task['workflowLevel']), $task->getDeadline()))
                     error_log("unClaimTask($taskId, $userId): Katong reassign to default user failed");
                 $result = $ret[0]['result'];
                 error_log("result (Katong): $result");

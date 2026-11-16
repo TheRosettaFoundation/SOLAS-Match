@@ -211,23 +211,22 @@ class Katong
     /**
      * Assign (or reassign) a task. Katong has no unassign, so to "unassign" assign to the default user.
      */
-    public static function assign_task($task_uid, $assignee_id, $display_name, $role, $languages = null, $deadline = null)
+    public static function assign_task($task_uid, $assignee_id, $display_name, $role, $deadline = null)
     {
         $data = [
             'assignee_id'  => (string)$assignee_id,
             'display_name' => mb_substr(empty($display_name) ? "User $assignee_id" : $display_name, 0, 200),
             'role'         => $role,
         ];
-        if (!empty($languages)) $data['languages'] = array_values($languages);
         if (!empty($deadline))  $data['deadline']  = self::iso_date($deadline);
         [$code, $result] = self::request('POST', "tasks/$task_uid/assign", $data);
         if ($code != 200) return 0;
         return $result;
     }
 
-    public static function unassign_task($task_uid, $role, $languages = null, $deadline = null)
+    public static function unassign_task($task_uid, $role, $deadline = null)
     {
-        return self::assign_task($task_uid, self::default_user_id(), self::default_user_name(), $role, $languages, $deadline);
+        return self::assign_task($task_uid, self::default_user_id(), self::default_user_name(), $role, $deadline);
     }
 
     public static function cancel_task($task_uid, $reason = null)
