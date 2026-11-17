@@ -2508,7 +2508,7 @@ error_log('login PUT JSON:' . print_r($data, 1));//(**)
         $testing_center_projects = $projectDao->get_testing_center_projects($user_id, $testing_center_projects_by_code);
         $supported_ngos_paid = $userDao->supported_ngos_paid($user_id);
 
-        $show_create_memsource_user = ($roles & SITE_ADMIN) && !$userDao->get_memsource_user($user_id) && ($adminDao->get_roles($user_id) & (SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER));
+        $show_create_memsource_user = ($roles & SITE_ADMIN) && !$userDao->get_memsource_user($user_id) && ($adminDao->get_roles($user_id) & (SITE_ADMIN | PROJECT_OFFICER | VOLUNTEER_PO | COMMUNITY_OFFICER));
         if (!$show_create_memsource_user && ($roles & (SITE_ADMIN | PROJECT_OFFICER | VOLUNTEER_PO | COMMUNITY_OFFICER)) && !$userDao->get_memsource_user($user_id) && in_array($adminDao->get_roles($user_id), [LINGUIST, NGO_LINGUIST, LINGUIST | NGO_LINGUIST]))
             $show_create_memsource_user = 2;
 
