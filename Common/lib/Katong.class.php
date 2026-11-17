@@ -26,9 +26,6 @@ class Katong
 
     const LEVEL_TO_ROLE = [1 => 'translator', 2 => 'reviewer', 3 => 'reviewer'];
 
-    // Katong accepts ISO 639-1 codes; map the few 3 letter codes TWB/Phrase may use
-    const LANGUAGE_MAP = ['swh' => 'sw', 'swa' => 'sw', 'arb' => 'ar', 'ara' => 'ar', 'ben' => 'bn', 'fra' => 'fr', 'fre' => 'fr', 'spa' => 'es', 'por' => 'pt', 'eng' => 'en'];
-
     /**
      * Settings::get() throws if a key is missing; a deployment without a [katong] section must keep working for Phrase
      */
@@ -80,30 +77,6 @@ class Katong
     public static function role_for_level($level)
     {
         return empty(self::LEVEL_TO_ROLE[$level]) ? 'reviewer' : self::LEVEL_TO_ROLE[$level];
-    }
-
-    /**
-     * Convert a Phrase/selections "memsource" code (e.g. "fr_fr", "sw", "es_419") to the code sent to Katong.
-     */
-    public static function memsource_to_katong_lang($memsource_code)
-    {
-        $code = strtolower($memsource_code);
-        $pos = strpos($code, '_');
-        if ($pos !== false) $code = substr($code, 0, $pos);
-        if (!empty(self::LANGUAGE_MAP[$code])) $code = self::LANGUAGE_MAP[$code];
-        return $code;
-    }
-
-    /**
-     * Normalise a language code returned by Katong (it may return a locale such as "es-419") to the code TWB sent.
-     */
-    public static function normalise_lang($lang)
-    {
-        $lang = strtolower(str_replace('_', '-', $lang));
-        $pos = strpos($lang, '-');
-        if ($pos !== false) $lang = substr($lang, 0, $pos);
-        if (!empty(self::LANGUAGE_MAP[$lang])) $lang = self::LANGUAGE_MAP[$lang];
-        return $lang;
     }
 
     /**

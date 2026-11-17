@@ -250,7 +250,7 @@ class ProjectRouteHandler
             [$kp_language, $kp_country] = $projectDao->convert_selection_to_language_country($post["target_language_$targetCount"]);
             $lang = $projectDao->convert_language_country_to_memsource($kp_language, $kp_country);
             if (!$lang) return 0;
-            $katong_lang = Common\Lib\Katong::memsource_to_katong_lang($lang);
+            $katong_lang = $lang;
             if (isset($lang_map[$katong_lang])) {
                 error_log("Katong: two target languages map to the same Katong language ($katong_lang) for project $project_id");
                 return 0;
@@ -281,7 +281,7 @@ class ProjectRouteHandler
         $data = [
             'external_ref' => $external_ref,
             'partner_id'   => Common\Lib\Katong::cfg('partner_id', 'twb'),
-            'source_lang'  => Common\Lib\Katong::memsource_to_katong_lang($sourceLang),
+            'source_lang'  => $sourceLang,
             'target_langs' => $target_langs,
             'content_type' => Common\Lib\Katong::cfg('content_type', 'general'),
             'title'        => mb_substr($post['project_title'], 0, 500),
@@ -341,7 +341,7 @@ class ProjectRouteHandler
         // Which languages have which steps (for deadlines)
         $levels_for_lang = [];
         foreach ($job['tasks'] as $katong_task) {
-            $levels_for_lang[Common\Lib\Katong::normalise_lang($katong_task['target_lang'])][Common\Lib\Katong::level_for_kind($katong_task['kind'])] = 1;
+            $levels_for_lang[$katong_task['target_lang']][Common\Lib\Katong::level_for_kind($katong_task['kind'])] = 1;
         }
 
         $parts = [];
@@ -354,7 +354,7 @@ class ProjectRouteHandler
             if ($projectDao->get_memsource_task_by_memsource_uid($katong_task['id'])) continue;
             if (in_array($katong_task['status'], ['cancelled', 'failed']) && $level > 1) continue;
 
-            $lang = Common\Lib\Katong::normalise_lang($katong_task['target_lang']);
+            $lang = $katong_task['target_lang'];
             if (empty($lang_map[$lang])) {
                 error_log("Katong task {$katong_task['id']}: target_lang {$katong_task['target_lang']} not in project $project_id");
                 continue;
