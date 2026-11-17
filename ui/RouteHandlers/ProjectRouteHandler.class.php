@@ -318,6 +318,7 @@ class ProjectRouteHandler
      */
     public function katong_sync_job_tasks($project_id, $job = null)
     {
+error_log("katong_sync_job_tasks($project_id...)");
         $projectDao = new DAO\ProjectDao();
         $taskDao    = new DAO\TaskDao();
         $katong_project = $projectDao->get_katong_project($project_id);
@@ -347,6 +348,7 @@ class ProjectRouteHandler
         $parts = [];
         foreach ($job['tasks'] as $katong_task) {
             $level = Common\Lib\Katong::level_for_kind($katong_task['kind']);
+error_log("Katong task {$katong_task['id']} kind {$katong_task['kind']} level: $level");
             if (!$level) {
                 error_log("Katong task {$katong_task['id']} kind {$katong_task['kind']} not supported");
                 continue;

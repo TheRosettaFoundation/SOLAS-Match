@@ -186,6 +186,7 @@ class Katong
      */
     public static function assign_task($task_uid, $assignee_id, $display_name, $role, $deadline = null)
     {
+error_log("assign_task($task_uid, $assignee_id, $display_name, $role, $deadline = null)");
         $data = [
             'assignee_id'  => (string)$assignee_id,
             'display_name' => mb_substr(empty($display_name) ? "User $assignee_id" : $display_name, 0, 200),
