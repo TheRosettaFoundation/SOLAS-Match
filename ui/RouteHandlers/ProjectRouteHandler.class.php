@@ -234,7 +234,7 @@ class ProjectRouteHandler
         }
 
         [$kp_language, $kp_country] = $projectDao->convert_selection_to_language_country($post['sourceLanguageSelect']);
-        $sourceLang = $projectDao->convert_language_country_to_memsource($kp_language, $kp_country);
+        $sourceLang = $projectDao->convert_language_country_to_memsource($kp_language, $kp_country, 1);
         if (!$sourceLang) return 0;
         [$kp_language, $kp_country] = $projectDao->convert_memsource_to_language_country($sourceLang);
         $kp_source_language = "{$kp_language}-{$kp_country}";
@@ -248,7 +248,7 @@ class ProjectRouteHandler
         $targetCount = 0;
         while (!empty($post["target_language_$targetCount"])) {
             [$kp_language, $kp_country] = $projectDao->convert_selection_to_language_country($post["target_language_$targetCount"]);
-            $lang = $projectDao->convert_language_country_to_memsource($kp_language, $kp_country);
+            $lang = $projectDao->convert_language_country_to_memsource($kp_language, $kp_country, 1);
             if (!$lang) return 0;
             $katong_lang = $lang;
             if (isset($lang_map[$katong_lang])) {

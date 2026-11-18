@@ -555,13 +555,20 @@ $replace = array(
         return [$memsource, '--'];
     }
 
-    public function convert_language_country_to_memsource($kp_language, $kp_country)
+    public function convert_language_country_to_memsource($kp_language, $kp_country, $katong = false)
     {
         $selections = $this->get_selections();
         foreach ($selections as $selection) {
-            if ($selection['language_code'] === $kp_language AND $selection['country_code'] === $kp_country) return $selection['memsource'];
+            if ($selection['language_code'] === $kp_language AND $selection['country_code'] === $kp_country) {
+                $code = $selection['memsource'];
+                if ($katong) {
+                    $pos = strpos($code, '_');
+                    if ($pos !== false) $code = substr($code, 0, $pos) . strtoupper(substr($code, $pos));
+                    $code = str_replace(['_', '-CYRL', '-ARAB', '-LATN'], ['-', '-Cyrl', '-Arab', '-Latn'], $code);
+                }
+                return $code;
+            }
         }
-
         error_log("Failed: convert_language_country_to_memsource($kp_language, $kp_country)");
         return 0;
     }
