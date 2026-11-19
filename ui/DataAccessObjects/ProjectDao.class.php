@@ -545,7 +545,7 @@ $replace = array(
 
     public function convert_memsource_to_language_country($memsource)
     {
-        $memsource = str_replace('-', '_', $memsource)
+        $memsource = str_replace('-', '_', $memsource);
         $selections = $this->get_selections();
         foreach ($selections as $selection) {
             if (strtolower($selection['memsource']) === strtolower($memsource)) return [$selection['language_code'], $selection['country_code']];
