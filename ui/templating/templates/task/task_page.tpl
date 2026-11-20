@@ -84,7 +84,7 @@
               {/if}
             </div>
 
-            {if !empty($matecat_url) && (($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $VOLUNTEER_PO + $COMMUNITY_OFFICER)) || (in_array($project->getOrganisationId(), $ORG_EXCEPTIONS) && $roles & ($NGO_ADMIN + $NGO_PROJECT_OFFICER) && !TaskTypeEnum::$enum_to_UI[$type_id]['shell_task']))}
+            {if !empty($matecat_url) && (($roles & ($SITE_ADMIN + $PROJECT_OFFICER + $VOLUNTEER_PO + $COMMUNITY_OFFICER)) || ($roles & ($NGO_ADMIN + $NGO_PROJECT_OFFICER) && !TaskTypeEnum::$enum_to_UI[$type_id]['shell_task']))}
               <a href="{$matecat_url}" target="_blank" class="btn btn-orange mt-2">Work URL</a>
             {/if}
 
