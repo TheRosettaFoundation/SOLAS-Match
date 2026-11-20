@@ -280,7 +280,7 @@ class ProjectRouteHandler
         $external_ref = Common\Lib\Katong::cfg('external_ref_prefix', 'twb-project-') . $project_id;
         $data = [
             'external_ref' => $external_ref,
-            'partner_id'   => Common\Lib\Katong::cfg('partner_id', 'twb'),
+            'partner_id'   => (string)$project->getOrganisationId(),
             'source_lang'  => $sourceLang,
             'target_langs' => $target_langs,
             'content_type' => Common\Lib\Katong::cfg('content_type', 'general'),
