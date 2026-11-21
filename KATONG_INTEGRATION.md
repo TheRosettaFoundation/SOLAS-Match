@@ -55,3 +55,28 @@ organisation go to Katong. All other organisations keep using Phrase, with no ch
 - **Cancel.** A cancelled Katong task cannot be un-cancelled.
 - **Sync.** The "Sync" button on the project page re-reads the Katong job. It creates missing
   tasks and brings statuses up to date.
+
+## Translation-step metrics and splitting Revision
+
+- **Metrics for every step.** Task metrics (`GET /v1/tasks/{id}/metrics`) are saved in
+  `katong_task_metrics` for the Translation step as well as for Revision and SME Review:
+  - for the Translation step, when TWB creates it and again when MT completes;
+  - for Revision and SME Review, when they complete.
+
+  Only Revision and SME Review are also written to `post_analysis_s`.
+- **Weighted Word Count (WWC).** It is computed for each language from the Translation step's
+  `words_by_band`:
+
+  `WWC = 0.15*tm_101 + 0.25*tm_100 + 0.40*fuzzy_95_99 + 0.60*fuzzy_85_94 + 0.75*fuzzy_75_84 + 0.80*mt + 1.00*new`
+- **Split.** If WWC > 2000, that language's round-1 Revision task is split in Katong into
+  `floor(WWC/2000) + 1` parts, before TWB creates the Revision tasks. Each part becomes its own
+  TWB Revision task (`internalId` "n.part", with its segment range). SME Review waits for all
+  parts to be complete.
+- **Timing.** If the word bands are not ready when the job is created, TWB creates that language's
+  Revision and SME Review tasks on a later sync. The Translation step's status hooks trigger that
+  sync.
+- **Limits.**
+  - Katong cuts parts at segment and paragraph boundaries, so one part's WWC can be above or
+    below WWC/n.
+  - Katong allows at most 20 parts.
+  - Round-2 reviews (after a reopen) are not split.

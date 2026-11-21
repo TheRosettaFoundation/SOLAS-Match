@@ -26,6 +26,15 @@ class Katong
 
     const LEVEL_TO_ROLE = [1 => 'translator', 2 => 'reviewer', 3 => 'reviewer'];
 
+    // Weighted Word Count (WWC) weights per Katong word band (from the Translation step's task metrics)
+    const WWC_WEIGHTS = ['tm_101' => 0.15, 'tm_100' => 0.25, 'fuzzy_95_99' => 0.40, 'fuzzy_85_94' => 0.60, 'fuzzy_75_84' => 0.75, 'mt' => 0.80, 'new' => 1.00];
+
+    // A round 1 Revision step with a WWC above this is split so each part averages less than it
+    const SPLIT_WWC = 2000;
+
+    // Katong accepts 2..20 parts
+    const MAX_SPLIT_PARTS = 20;
+
     /**
      * Settings::get() throws if a key is missing; a deployment without a [katong] section must keep working for Phrase
      */
@@ -213,6 +222,44 @@ error_log("assign_task($task_uid, $assignee_id, $display_name, $role, $deadline 
     {
         [$code, $result] = self::request('POST', "jobs/$job_uid/cancel", ['reason' => $reason ? mb_substr($reason, 0, 2000) : null]);
         return $code == 200 ? $result : 0;
+    }
+
+    /**
+     * WWC = 0.15*tm_101 + 0.25*tm_100 + 0.40*fuzzy_95_99 + 0.60*fuzzy_85_94 + 0.75*fuzzy_75_84 + 0.80*mt + 1.00*new
+     * $by_band: words.by_band from task metrics (or katong_task_metrics.words_by_band decoded); missing bands count 0, unknown bands are ignored
+     */
+    public static function weighted_word_count($by_band)
+    {
+        if (!is_array($by_band)) return 0;
+        $wwc = 0;
+        foreach (self::WWC_WEIGHTS as $band => $weight) {
+            if (!empty($by_band[$band])) $wwc += $weight*$by_band[$band];
+        }
+        return $wwc;
+    }
+
+    /**
+     * Number of parts for a Revision step: 1 if WWC <= 2000, else floor(WWC/2000) + 1 (capped at Katong's maximum of 20)
+     */
+    public static function split_parts($wwc)
+    {
+        if ($wwc <= self::SPLIT_WWC) return 1;
+        $parts = (int)floor($wwc/self::SPLIT_WWC) + 1;
+        if ($parts > self::MAX_SPLIT_PARTS) {
+            error_log("Katong split_parts($wwc): $parts parts capped at " . self::MAX_SPLIT_PARTS);
+            $parts = self::MAX_SPLIT_PARTS;
+        }
+        return $parts;
+    }
+
+    /**
+     * Split an unstarted task into parts; the task becomes part 1, parts 2..n are new tasks. Returns the parts (TaskOut array) or 0
+     */
+    public static function split_task($task_uid, $parts)
+    {
+        [$code, $result] = self::request('POST', "tasks/$task_uid/split", ['parts' => (int)$parts]);
+        if ($code != 200 || !is_array($result)) return 0;
+        return $result;
     }
 
     public static function get_task_metrics($task_uid)

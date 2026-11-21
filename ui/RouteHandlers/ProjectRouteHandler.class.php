@@ -345,6 +345,36 @@ error_log("katong_sync_job_tasks($project_id...)");
             $levels_for_lang[$katong_task['target_lang']][Common\Lib\Katong::level_for_kind($katong_task['kind'])] = 1;
         }
 
+        // Split each language's round 1 Revision step if the Translation step's Weighted Word Count (WWC) is over 2000.
+        // Katong only splits unstarted tasks, so this is done before TWB creates (and makes claimable) the Revision task.
+        $mt_metrics = []; // target_lang => Translation step task metrics
+        $deferred = [];   // target_lang => 1 if the Translation step's word bands are not ready yet
+        $split_done = false;
+        foreach ($job['tasks'] as $katong_task) {
+            if ($katong_task['kind'] !== 'review') continue;
+            if ((empty($katong_task['round']) ? 1 : $katong_task['round']) != 1) continue; // Round 1 only
+            if ($katong_task['status'] !== 'queued' || !empty($katong_task['assignee_id'])) continue;
+            if ((empty($katong_task['part']) ? 1 : $katong_task['part']) != 1 || (isset($katong_task['seg_begin']) && $katong_task['seg_begin'] !== null)) continue; // Already split
+            if ($projectDao->get_memsource_task_by_memsource_uid($katong_task['id'])) continue; // Already in TWB
+
+            $lang = $katong_task['target_lang'];
+            $wwc = $this->katong_translation_wwc($job, $lang, $mt_metrics);
+            if ($wwc === null) {
+                error_log("Katong project $project_id, $lang: Translation step word bands not ready, Revision deferred");
+                $deferred[$lang] = 1;
+                continue;
+            }
+            $split_parts = Common\Lib\Katong::split_parts($wwc);
+            error_log("Katong project $project_id, $lang: WWC $wwc " . json_encode($mt_metrics[$lang]['words']['by_band']) . " => $split_parts part(s)");
+            if ($split_parts > 1) {
+                if (Common\Lib\Katong::split_task($katong_task['id'], $split_parts)) $split_done = true;
+                else error_log("Katong split of {$katong_task['id']} into $split_parts parts failed, Revision left as one task");
+            }
+        }
+        if ($split_done) {
+            if ($new_job = Common\Lib\Katong::get_job($katong_project['job_uid'])) $job = $new_job; // Now lists parts 2..n with seg_begin/seg_end
+        }
+
         $parts = [];
         foreach ($job['tasks'] as $katong_task) {
             $level = Common\Lib\Katong::level_for_kind($katong_task['kind']);
@@ -361,12 +391,18 @@ error_log("Katong task {$katong_task['id']} kind {$katong_task['kind']} level: $
                 error_log("Katong task {$katong_task['id']}: target_lang {$katong_task['target_lang']} not in project $project_id");
                 continue;
             }
+            if ($level > 1 && !empty($deferred[$lang])) continue; // Created on a later sync, once the WWC is known
             $internalId = (string)($lang_index[$lang] + 1);
             $part_number = empty($katong_task['part']) ? 1 : $katong_task['part'];
             if ($part_number > 1 || isset($katong_task['seg_begin']) && $katong_task['seg_begin'] !== null) $internalId .= ".$part_number";
 
             $words = 0;
-            if ($metrics = Common\Lib\Katong::get_task_metrics($katong_task['id'])) $words = empty($metrics['words']['total']) ? 0 : $metrics['words']['total'];
+            if ($level == 1 && !empty($mt_metrics[$lang])) $metrics = $mt_metrics[$lang];
+            else $metrics = Common\Lib\Katong::get_task_metrics($katong_task['id']);
+            if ($metrics) {
+                $words = empty($metrics['words']['total']) ? 0 : $metrics['words']['total'];
+                if ($level == 1) $mt_metrics[$lang] = $metrics;
+            }
 
             $parts[] = [
                 'uid'           => $katong_task['id'],
@@ -397,6 +433,10 @@ error_log("Katong task {$katong_task['id']} kind {$katong_task['kind']} level: $
                     if ($default_user_id) {
                         if (!$taskDao->taskIsClaimed($task_id)) $taskDao->claimTaskAndDeny($task_id, $default_user_id, $memsource_task);
                     } else error_log('Katong: katong.default_user_id is not set, Translation task not claimed');
+
+                    // Translation step metrics (word bands for the WWC), with the bands used for the split decision
+                    $lang = $memsource_task['task'];
+                    $this->katong_save_metrics($task_id, $memsource_task, empty($mt_metrics[$lang]) ? null : $mt_metrics[$lang]);
                 }
             }
         }
@@ -446,7 +486,7 @@ error_log("Katong task {$katong_task['id']} kind {$katong_task['kind']} level: $
                     $taskDao->sendTaskUploadNotifications($task_id, 1);
                     $taskDao->set_task_complete_date($task_id);
                     error_log("Katong completed task_id: $task_id");
-                    if ($memsource_task['workflowLevel'] > 1) $this->katong_save_metrics($task_id, $memsource_task);
+                    $this->katong_save_metrics($task_id, $memsource_task); // Every step, including Translation (word bands)
                 }
                 break;
             case 'needs_rework':
@@ -469,17 +509,45 @@ error_log("Katong task {$katong_task['id']} kind {$katong_task['kind']} level: $
     /**
      * Payable time and word counts by match band (the Katong equivalent of the Phrase post analysis)
      */
-    public function katong_save_metrics($task_id, $memsource_task)
+    public function katong_save_metrics($task_id, $memsource_task, $metrics = null)
     {
         $projectDao = new DAO\ProjectDao();
         $taskDao    = new DAO\TaskDao();
-        $metrics = Common\Lib\Katong::get_task_metrics($memsource_task['memsource_task_uid']);
-        if (empty($metrics)) return;
+        if (empty($metrics)) $metrics = Common\Lib\Katong::get_task_metrics($memsource_task['memsource_task_uid']);
+        if (empty($metrics)) return 0;
         $claimant_id = $projectDao->getUserClaimedTask($task_id);
         $projectDao->set_katong_task_metrics($task_id, $memsource_task['memsource_task_uid'], $claimant_id, $metrics);
+        if ($memsource_task['workflowLevel'] == 1) return $metrics; // Translation step: word bands only, no post analysis (as for Phrase)
         $task = $taskDao->getTask($task_id);
         $memsource_project = $projectDao->get_memsource_project($task->getProjectId());
         $projectDao->insert_katong_post_analysis($task_id, $claimant_id, $memsource_project['memsource_project_uid'], $memsource_task['workflowLevel'], $metrics);
+        return $metrics;
+    }
+
+    /**
+     * Weighted Word Count of a language's Translation step (Katong mt task), from its task metrics.
+     * If the Translation task is already in TWB, its metrics are stored first and the WWC comes from the stored katong_task_metrics.words_by_band.
+     * Returns null if the word bands are not ready yet (words.total is 0). $mt_metrics caches the metrics by language.
+     */
+    private function katong_translation_wwc($job, $lang, &$mt_metrics)
+    {
+        $projectDao = new DAO\ProjectDao();
+        foreach ($job['tasks'] as $katong_task) {
+            if (Common\Lib\Katong::level_for_kind($katong_task['kind']) != 1 || $katong_task['target_lang'] !== $lang) continue;
+
+            $metrics = Common\Lib\Katong::get_task_metrics($katong_task['id']);
+            if (empty($metrics['words']['total'])) return null;
+            $mt_metrics[$lang] = $metrics;
+
+            if ($memsource_task = $projectDao->get_memsource_task_by_memsource_uid($katong_task['id'])) {
+                $this->katong_save_metrics($memsource_task['task_id'], $memsource_task, $metrics);
+                $stored = $projectDao->get_katong_task_metrics($memsource_task['task_id']);
+                if (!empty($stored['words_by_band'])) return Common\Lib\Katong::weighted_word_count(json_decode($stored['words_by_band'], true));
+            }
+            return Common\Lib\Katong::weighted_word_count(empty($metrics['words']['by_band']) ? [] : $metrics['words']['by_band']);
+        }
+        error_log("katong_translation_wwc: no Translation step for $lang");
+        return null;
     }
 
     public function katongHook(Request $request)
@@ -524,6 +592,7 @@ error_log("Katong task {$katong_task['id']} kind {$katong_task['kind']} level: $
                     break;
                 }
                 $this->katong_apply_status($memsource_task, $data['status'], empty($data['detail']) ? '' : $data['detail']);
+                if ($memsource_task['workflowLevel'] == 1) $this->katong_sync_job_tasks($project_id); // Create Revision/SME tasks deferred until the WWC was known
                 break;
             case 'job.reopened': // Creates a round 2 review task per language: a new Revision task in TWB
                 $this->katong_sync_job_tasks($project_id);
