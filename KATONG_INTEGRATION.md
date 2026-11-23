@@ -72,9 +72,11 @@ organisation go to Katong. All other organisations keep using Phrase, with no ch
   `floor(WWC/2000) + 1` parts, before TWB creates the Revision tasks. Each part becomes its own
   TWB Revision task (`internalId` "n.part", with its segment range). SME Review waits for all
   parts to be complete.
-- **Timing.** If the word bands are not ready when the job is created, TWB creates that language's
-  Revision and SME Review tasks on a later sync. The Translation step's status hooks trigger that
-  sync.
+- **Timing.** The WWC is only computed once that language's Translation step is `completed`.
+  Before MT has run, unmatched words may count as `new` rather than `mt`, which would overstate the
+  WWC. Until then, that language's Revision and SME Review tasks are held back. The Translation
+  step's `completed` hook triggers a sync, which computes the WWC, splits if needed and creates the
+  tasks. If MT fails or is cancelled, the Revision step is created as one task, without a split.
 - **Limits.**
   - Katong cuts parts at segment and paragraph boundaries, so one part's WWC can be above or
     below WWC/n.

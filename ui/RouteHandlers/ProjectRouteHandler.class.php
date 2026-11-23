@@ -360,7 +360,7 @@ error_log("katong_sync_job_tasks($project_id...)");
             $lang = $katong_task['target_lang'];
             $wwc = $this->katong_translation_wwc($job, $lang, $mt_metrics);
             if ($wwc === null) {
-                error_log("Katong project $project_id, $lang: Translation step word bands not ready, Revision deferred");
+                error_log("Katong project $project_id, $lang: Translation step not completed (or word bands empty), Revision/SME deferred");
                 $deferred[$lang] = 1;
                 continue;
             }
@@ -527,13 +527,21 @@ error_log("Katong task {$katong_task['id']} kind {$katong_task['kind']} level: $
     /**
      * Weighted Word Count of a language's Translation step (Katong mt task), from its task metrics.
      * If the Translation task is already in TWB, its metrics are stored first and the WWC comes from the stored katong_task_metrics.words_by_band.
-     * Returns null if the word bands are not ready yet (words.total is 0). $mt_metrics caches the metrics by language.
+     * Returns null until the Translation step is completed (before MT has run, unmatched words may count as "new" rather than "mt",
+     * which would overstate the WWC) or while the word bands are empty. $mt_metrics caches the metrics by language.
+     * If MT failed or was cancelled, returns 0 so the Revision step is created unsplit rather than held back for ever.
      */
     private function katong_translation_wwc($job, $lang, &$mt_metrics)
     {
         $projectDao = new DAO\ProjectDao();
         foreach ($job['tasks'] as $katong_task) {
             if (Common\Lib\Katong::level_for_kind($katong_task['kind']) != 1 || $katong_task['target_lang'] !== $lang) continue;
+
+            if (in_array($katong_task['status'], ['failed', 'cancelled'])) {
+                error_log("katong_translation_wwc: Translation step {$katong_task['id']} for $lang is {$katong_task['status']}, Revision not split");
+                return 0;
+            }
+            if (!in_array($katong_task['status'], ['completed', 'delivered'])) return null; // Wait for MT to finish (the Translation completed hook syncs again)
 
             $metrics = Common\Lib\Katong::get_task_metrics($katong_task['id']);
             if (empty($metrics['words']['total'])) return null;
