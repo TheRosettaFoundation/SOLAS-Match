@@ -166,6 +166,18 @@ else error_log("call projectInsertAndUpdate($args): Fail");//(**)
         LibAPI\PDOWrapper::call('projectInsertAndUpdate', $args);
     }
 
+    public function update_project_directly($project)
+    {
+        LibAPI\PDOWrapper::call('projectInsertAndUpdate', "{$project['id']}," .
+            LibAPI\PDOWrapper::cleanseNullOrWrapStr($project['title']) . ',' .
+            LibAPI\PDOWrapper::cleanseNullOrWrapStr($project['description']) . ',' .
+            LibAPI\PDOWrapper::cleanseNullOrWrapStr($project['impact']) . ',' .
+            LibAPI\PDOWrapper::cleanseNullOrWrapStr($project['deadline']) .
+            ',NULL,' .
+            LibAPI\PDOWrapper::cleanseNullOrWrapStr($project['reference']) .
+            ",NULL,NULL,NULL,NULL,{$project['imageUploaded']},{$project['imageApproved']}");
+    }
+
     public function add_to_project_word_count($project_id, $word_count)
     {
         LibAPI\PDOWrapper::call('add_to_project_word_count', LibAPI\PDOWrapper::cleanse($project_id) . ',' . LibAPI\PDOWrapper::cleanse($word_count));
@@ -204,6 +216,24 @@ else error_log("call projectInsertAndUpdate($args): Fail");//(**)
             $fileData
         );
         return $response;
+    }
+
+    public function save_image($project_id, $filename, $image)
+    {
+        $destination = Common\Lib\Settings::get('files.upload_path') . "proj-$project_id/image";
+        if (!file_exists($destination)) mkdir($destination, 0755);
+        $this->set_uploaded_approved($project_id);
+
+        $images = glob(Common\Lib\Settings::get('files.upload_path') . "proj-$project_id/image/image.*");
+        if (!empty($images)) {
+            $name = pathinfo($images[0], PATHINFO_FILENAME);
+            $ext  = pathinfo($images[0], PATHINFO_EXTENSION);
+            $path = pathinfo($images[0], PATHINFO_DIRNAME);
+            $date = date('-d-m-Y-h-i-s-a', time());
+            rename($images[0], "$path/$name$date.$ext");
+        }
+        $ext = pathinfo($filename, PATHINFO_EXTENSION);
+        file_put_contents("$destination/image.$ext", $image);
     }
 
     public function archiveProject($projectId, $userId)
@@ -489,6 +519,20 @@ $replace = array(
         }
         asort($language_options);
         return $language_options;
+    }
+
+    public function t_generate_language_selection($create_memsource = 0)
+    {
+        $selections = $this->get_selections();
+        $language_options = [];
+        foreach ($selections as $selection) {
+            if ($selection['enabled']) $language_options[$selection['language_code'] . '-' . $selection['country_code']] = $selection['selection'];
+        }
+        asort($language_options);
+
+        $json = [];
+        foreach ($language_options as $code => $lang) $json[] = ['code' => $code, 'lang' => $lang];
+        return $json;
     }
 
     public function convert_selection_to_language_country($selection)
@@ -2042,6 +2086,17 @@ GROUP BY c.id, u.id';
             $ngo_linguists_by_language_pair[$row['language_pair']] = $row['number'];
         }
         return $ngo_linguists_by_language_pair;
+    }
+
+    public function t_ngo_linguists_by_language_pair($org_id)
+    {
+        $result = LibAPI\PDOWrapper::call('ngo_linguists_by_language_pair', LibAPI\PDOWrapper::cleanse($org_id));
+        if (empty($result)) return [];
+        $json = [];
+        foreach ($result as $row) {
+            $json[] = ['pair' => $row['language_pair'], 'num' => (int)$row['number']];
+        }
+        return $json;
     }
 
     public function get_language_pairs_with_ngo_linguists($project_id)

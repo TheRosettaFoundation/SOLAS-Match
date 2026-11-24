@@ -142,30 +142,6 @@ class Middleware
         return self::return_error($request, 'The user does not have permission to access the current resource authenticateUserForOrgTask');
     }
 
-    // Does the current user match the user id passed in the URL
-    // or does the current user belong to the organisation that created the task id passed in the URL?
-    public static function authUserOrOrgForTask(Request $request, RequestHandler $handler)
-    {
-        if (is_null(DAO\UserDao::getLoggedInUser())) return self::return_error($request, 'The Authorization header does not match the current user or the user does not have permission to access the current resource authUserOrOrgForTask');
-        $user = DAO\UserDao::getLoggedInUser();
-        $current_user = $user->getId();
-
-        $routeContext = RouteContext::fromRequest($request);
-        $route = $routeContext->getRoute();
-        $userId = $route->getArgument('userId');
-        // In this function, $userId refers to the id being tested which may not be the currently logged in user
-        $taskId = $route->getArgument('taskId');
-        $task = DAO\TaskDao::getTask($taskId);
-        $projectId = $task->getProjectId();
-        $project = DAO\ProjectDao::getProject($projectId);
-        $orgId = $project->getOrganisationId();
-
-        if ($userId == $current_user) return $handler->handle($request);
-        if ($orgId != null && (DAO\AdminDao::get_roles($current_user, $orgId) & (SITE_ADMIN | PROJECT_OFFICER | VOLUNTEER_PO | COMMUNITY_OFFICER | NGO_ADMIN | NGO_PROJECT_OFFICER))) return $handler->handle($request);
-
-        return self::return_error($request, 'The user does not have permission to access the current resource authUserOrOrgForTask');
-    }
-
     //Is the current user a member of the Organisation who created the Badge in question
     public static function authenticateUserForOrgBadge(Request $request, RequestHandler $handler)
     {

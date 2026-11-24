@@ -488,11 +488,7 @@ error_log("claimTask($userId, $taskId, ..., $project_id, ...)");
                 }
 
                 LibAPI\PDOWrapper::call('update_tasks_status_claimant', LibAPI\PDOWrapper::cleanse($taskId) . ',10,' . LibAPI\PDOWrapper::cleanse($userId) . ',NULL');
-
-                // This now only does the notifications
-error_log("claimTask($userId, $taskId, ..., $project_id, ...) Before Notify");
-                $this->client->call(null, "{$this->siteApi}v0/users/$userId/tasks/$taskId", Common\Enums\HttpMethodEnum::POST);
-error_log("claimTask($userId, $taskId, ..., $project_id, ...) After Notify");
+                $this->notify_claimed_task($userId, $taskId);
 
                 // Add corresponding task(s) to deny list for translator
                 $projectDao = new ProjectDao();
@@ -518,7 +514,7 @@ error_log("claimTask($userId, $taskId, ..., $project_id, ...) After Notify");
                 $this->possibly_mark_quality_assigned($userId, $memsource_task, $task);
             }
         } else {
-            $this->client->call(null, "{$this->siteApi}v0/users/$userId/tasks/$taskId", Common\Enums\HttpMethodEnum::POST);
+            $this->notify_claimed_task($userId, $taskId);
         }
         return 1;
     }
@@ -529,7 +525,7 @@ error_log("claimTask_shell($userId, $taskId)");
         $taskDao = new TaskDao();
         $taskDao->claimTask($taskId, $userId, false);
         LibAPI\PDOWrapper::call('update_tasks_status_claimant', LibAPI\PDOWrapper::cleanse($taskId) . ',3,' . LibAPI\PDOWrapper::cleanse($userId) . ',NULL');
-        $this->client->call(null, "{$this->siteApi}v0/users/$userId/tasks/$taskId", Common\Enums\HttpMethodEnum::POST);
+        $this->notify_claimed_task($userId, $taskId);
     }
 
     public function propagate_cancelled($cancelled, $memsource_project, $task_id, $comment, $whole_workflow, $hook_from_phrase = 0)
@@ -667,10 +663,8 @@ error_log("claimTask_shell($userId, $taskId)");
     {
         if ($memsource_task && !Common\Enums\TaskTypeEnum::$enum_to_UI[$task->getTaskType()]['shell_task']) {
             $memsource_user_uid = 0;
-            $taskDao = new TaskDao();
-            $claimant = $taskDao->getUserClaimedTask($task->getId());
-            if (!empty($claimant)) $memsource_user_uid = $this->get_memsource_user($claimant->getId());
             $projectDao = new ProjectDao();
+            if ($claimant_id = $projectDao->getUserClaimedTask($task->getId())) $memsource_user_uid = $this->get_memsource_user($claimant_id);
             $memsource_project = $projectDao->get_memsource_project($task->getProjectId());
             $authorization = 'Authorization: Bearer ' . $this->memsourceApiToken;
             $url = $this->memsourceApiV1 . 'projects/' . $memsource_project['memsource_project_uid'] . '/jobs/' . $memsource_task['memsource_task_uid'];
@@ -800,7 +794,7 @@ error_log("claimTask_shell($userId, $taskId)");
         if ($deny_user) LibAPI\PDOWrapper::call('add_to_deny', LibAPI\PDOWrapper::cleanse($taskId) . ',' . LibAPI\PDOWrapper::cleanse($userId));
 
         $ret = null;
-        $request = "{$this->siteApi}v0/users/$userId/tasks/$taskId";
+        $request = "{$this->siteApi}v0/users/$userId/tasks/$taskId/key/" . Common\Lib\Settings::get('tarjimly.twb_key');
         $ret = $this->client->call(null, $request, Common\Enums\HttpMethodEnum::DELETE, $feedback);
 
         LibAPI\PDOWrapper::call('update_tasks_status', LibAPI\PDOWrapper::cleanse($taskId) . ',2,NULL');
@@ -956,16 +950,6 @@ error_log("claimTask_shell($userId, $taskId)");
     {
         $org_id = 0;
         $result = LibAPI\PDOWrapper::call('getOrg', 'null,' . LibAPI\PDOWrapper::cleanseNullOrWrapStr($org_name) . ',null,null,null,null,null,null,null');
-        if (!empty($result)) {
-            $org_id = $result[0]['id'];
-        }
-        return $org_id;
-    }
-
-    public static function insertOrg($org_name, $email)
-    {
-        $org_id = 0;
-        $result = LibAPI\PDOWrapper::call('organisationInsertAndUpdate', 'null,null,' . LibAPI\PDOWrapper::cleanseNullOrWrapStr($org_name) . ',null,' . LibAPI\PDOWrapper::cleanseNullOrWrapStr($email) . ',null,null,null,null');
         if (!empty($result)) {
             $org_id = $result[0]['id'];
         }
@@ -1719,7 +1703,7 @@ error_log("Sync memsource_list_jobs() project_id: $project_id, workflowLevels_ar
         return $res;
     }
 
-    public function create_memsource_project($post, $project, $file_name, $file)
+    public function create_memsource_project($post, $project, $file_name, $file, $user_id)
     {
         $projectDao = new ProjectDao();
 
@@ -1817,7 +1801,7 @@ error_log(print_r($project_result, true));//(**)
             empty($project_result['createdBy']['uid']) ? '' : $project_result['createdBy']['uid'],
             empty($project_result['owner']['uid']) ? '' : $project_result['owner']['uid'],
             $workflowLevels);
-        $projectDao->update_project_owner_id($project->getId(), Common\Lib\UserSession::getCurrentUserID(), 1);
+        $projectDao->update_project_owner_id($project->getId(), $user_id, 1);
 
         $split = 1;
         $projectDao->set_memsource_self_service_project($project_result['id'], $split);
@@ -2732,5 +2716,22 @@ error_log(print_r($result, true));//(**)
         "x'" . bin2hex($attachment) . "'," .
         LibAPI\PDOWrapper::cleanse($admin_id);
         LibAPI\PDOWrapper::call('add_org_image', $args);
+    }
+
+    public function delete_user($user_id)
+    {
+        $this->client->call(null, "{$this->siteApi}v0/users_t/$user_id/key/" . Common\Lib\Settings::get('tarjimly.twb_key'), Common\Enums\HttpMethodEnum::DELETE);
+    }
+
+    public function notify_claimed_task($user_id, $task_id)
+    {
+        LibAPI\PDOWrapper::call('insert_queue_request', "3,2,$user_id,0,0,0,$task_id,0,''"); // UserTaskClaim
+
+        if ($result = LibAPI\PDOWrapper::call('getSubscribedUsers', "$task_id")) {
+            foreach ($result as $row) {
+                $admin_id = $row['id'];
+                LibAPI\PDOWrapper::call('insert_queue_request', "3,7,$admin_id,0,0,0,$task_id,$user_id,''"); // TaskClaimed
+            }
+        }
     }
 }

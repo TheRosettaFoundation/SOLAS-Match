@@ -4366,6 +4366,32 @@ BEGIN
 END//
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `get_user_tasks`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_user_tasks`(IN oID INT UNSIGNED, IN uID INT UNSIGNED)
+BEGIN
+    SELECT t.id, t.project_id as projectId, t.title, t.`word-count` as wordCount,
+            (select `en-name` from Languages l where l.id = t.`language_id-source`) as `sourceLanguageName`,
+            (select code from Languages l where l.id = t.`language_id-source`) as `sourceLanguageCode`,
+            (select `en-name` from Languages l where l.id = t.`language_id-target`) as `targetLanguageName`,
+            (select code from Languages l where l.id = t.`language_id-target`) as `targetLanguageCode`,
+            (select `en-name` from Countries c where c.id = t.`country_id-source`) as `sourceCountryName`,
+            (select code from Countries c where c.id = t.`country_id-source`) as `sourceCountryCode`,
+            (select `en-name` from Countries c where c.id = t.`country_id-target`) as `targetCountryName`,
+            (select code from Countries c where c.id = t.`country_id-target`) as `targetCountryCode`,
+            t.`created-time` as createdTime, t.`comment`, t.`task-type_id` as taskType, t.`task-status_id` as taskStatus, t.published, t.deadline,
+            tc.`claimed-time`
+        FROM Projects    p
+        JOIN Tasks       t ON p.id=t.project_id
+        JOIN TaskClaims tc ON t.id=tc.task_id
+        WHERE
+            p.organisation_id=oID AND
+            tc.user_id=uID
+        ORDER BY `created-time` DESC;
+END//
+DELIMITER ;
+
+
 DROP PROCEDURE IF EXISTS `getUserTasksCount`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getUserTasksCount`(IN `uID` INT)
@@ -6387,6 +6413,14 @@ BEGIN
 
         end if;
 
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `update_task_fields`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `update_task_fields`(IN tID BIGINT UNSIGNED, IN p_title VARCHAR(128), IN p_comment VARCHAR(4096), IN p_deadline DATETIME, IN p_published INT)
+BEGIN
+  UPDATE Tasks SET title=p_title, comment=p_comment, deadline=p_deadline, published=p_published WHERE id=tID;
 END//
 DELIMITER ;
 
@@ -11080,10 +11114,11 @@ BEGIN
     LEFT JOIN TaskClaims         tc ON u.id=tc.user_id
     WHERE
         (ta.user_id IS NULL OR ta.accepted_level!=3) AND
-        (a.roles=@LINGUIST OR a.roles=0) AND
         tc.user_id IS NULL AND
         u.`created-time`>'2021-10-25 07:00:00' AND
         u.`created-time`<(NOW() - INTERVAL 204 HOUR)
+    GROUP BY u.id
+    HAVING MAX(a.roles)=@LINGUIST OR MAX(a.roles)=0
     ORDER BY u.`created-time`
     LIMIT 1;
 
@@ -13285,10 +13320,12 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `get_orgs_if_ngo`(IN uID INT UNSIGNE
 BEGIN
     SELECT
         a.organisation_id,
-        o.name
+        o.name,
+        om.t_org_id AS tarjimly_org_id
     FROM      Admins              a
     JOIN      Organisations       o ON a.organisation_id=o.id
     LEFT JOIN user_org_defaults uod ON a.user_id=uod.user_id
+    LEFT JOIN organisation_map   om ON o.id=om.org_id
     WHERE
         a.user_id=uID AND
         (roles&12)>0
@@ -16164,6 +16201,72 @@ BEGIN
     ELSE
         SELECT '' AS email, 0 AS type;
     END IF;
+END//
+DELIMITER ;
+
+
+DROP PROCEDURE IF EXISTS `is_task_in_project`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `is_task_in_project`(IN pID INT UNSIGNED, IN tID BIGINT UNSIGNED)
+BEGIN
+    IF EXISTS (SELECT 1 FROM Tasks WHERE id=tID AND project_id=pID) THEN
+        SELECT 1 AS result;
+    ELSE
+        SELECT 0 AS result;
+    END IF;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `set_task_published`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `set_task_published`(IN pID INT UNSIGNED, IN tID BIGINT UNSIGNED, IN pub INT)
+BEGIN
+  update Tasks set published=pub WHERE id=tID AND project_id=pID;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `track_task`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `track_task`(IN uID INT UNSIGNED, IN pID INT UNSIGNED, IN tID BIGINT UNSIGNED)
+BEGIN
+    IF NOT EXISTS (SELECT 1 FROM UserTrackedTasks WHERE user_id=uID AND task_id=tID) THEN
+        IF EXISTS (SELECT 1 FROM Tasks WHERE id=tID AND project_id=pID) THEN
+            INSERT INTO UserTrackedTasks (user_id, task_id) VALUES (uID, tID);
+        END IF;
+    END IF;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `untrack_task`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `untrack_task`(IN uID INT UNSIGNED, IN pID INT UNSIGNED, IN tID BIGINT UNSIGNED)
+BEGIN
+    IF EXISTS (SELECT 1 FROM UserTrackedTasks WHERE user_id=uID AND task_id=tID) THEN
+        IF EXISTS (SELECT 1 FROM Tasks WHERE id=tID AND project_id=pID) THEN
+            DELETE FROM UserTrackedTasks WHERE user_id=uID AND task_id=tID;
+        END IF;
+    END IF;
+END//
+DELIMITER ;
+
+
+CREATE TABLE IF NOT EXISTS `ngo_on_tarjimly` (
+  org_id      INT UNSIGNED NOT NULL,
+  PRIMARY KEY (org_id),
+  CONSTRAINT FK_ngo_on_tarjimly_org_id FOREIGN KEY (org_id) REFERENCES Organisations (id) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+DROP PROCEDURE IF EXISTS `get_ngo_on_tarjimly`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_ngo_on_tarjimly`(IN uID INT UNSIGNED)
+BEGIN
+    SELECT a.organisation_id, a.roles
+    FROM Admins           a
+    JOIN ngo_on_tarjimly nt ON a.organisation_id=nt.org_id
+    WHERE
+        a.user_id=uID AND
+        a.roles&12 AND
+        NOT a.roles&~15;
 END//
 DELIMITER ;
 

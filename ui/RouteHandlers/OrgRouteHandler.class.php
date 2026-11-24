@@ -7,8 +7,10 @@ use \SolasMatch\UI\Lib as Lib;
 use \SolasMatch\Common as Common;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
+use \SolasMatch\API\Lib as LibAPI;
 
 require_once __DIR__."/../lib/Validator.php";
+require_once __DIR__ . '/../../api/lib/PDOWrapper.class.php';
 
 class OrgRouteHandler
 {
@@ -216,12 +218,12 @@ class OrgRouteHandler
                 $projectDao = new DAO\ProjectDao();
 
                 try {
-                    error_log("Calling createOrg(, $user_id)");
                     $new_org = $orgDao->createOrg($org, $user_id);
                     if ($new_org) {
+                        $org_id = $new_org->getId();
                         $org_name = $org->getName();
                         $org_biography = $org->getBiography();
-                        error_log("Called createOrg() for: $org_name");
+                        error_log("createOrg(, $user_id): $org_id, $org_name");
                         UserRouteHandler::flash(
                             'success',
                             sprintf(Lib\Localisation::getTranslation('create_org_created'), $org_name)
@@ -245,7 +247,22 @@ class OrgRouteHandler
                         $result = curl_exec($ch);
                         curl_close($ch);
                         $res = json_decode($result, true);
-                        $projectDao->set_memsource_client($new_org->getId(), $res['id'], $res['uid']);
+                        $projectDao->set_memsource_client($org_id, $res['id'], $res['uid']);
+
+                        $adminDao = new DAO\AdminDao();
+                        if ($uid = $adminDao->get_t_uid($user_id)) {
+                            $data = ['email' => $post['email'], 'name' => $post['orgName'], 'address' => !empty($post['country']) ? $post['country'] : '-', 'createdByUserId' => "$uid", 'type' => 'non_profit', 'twbOrgId' => "$org_id"];
+                            $ch = curl_init(Common\Lib\Settings::get('tarjimly.url') . '/api/v3/admins/organizations');
+error_log('createOrg... /api/v3/admins/organizations: ' . json_encode($data));//(**)
+                            curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+                            curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json', 'Authorization: Bearer ' . Common\Lib\Settings::get('tarjimly.api_key')]);
+                            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                            $result_json = curl_exec($ch);
+error_log("Tarjimly JSON: $result_json");//(**)
+                            $json = json_decode($result_json, true);
+                            LibAPI\PDOWrapper::call('set_organisation_map', "$org_id," . $json['id']);
+                            $adminDao->adjust_org_admin($user_id, $org_id, 0, NGO_ADMIN, 2);
+                        } else error_log("Could not get uid for $user_id");
 
                         return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('org-dashboard'));
                     }
@@ -560,6 +577,18 @@ class OrgRouteHandler
                     $orgDao = new DAO\OrganisationDao();
                     try {
                         $orgDao->updateOrg($org);
+
+                        $result = LibAPI\PDOWrapper::call('get_t_org_id', LibAPI\PDOWrapper::cleanse($org_id));
+                        if (!empty($result)) {
+                            $t_org_id = $result[0]['t_org_id'];
+                            $data = ['email' => $post['email'], 'name' => $post['orgName']];
+                            $ch = curl_init(Common\Lib\Settings::get('tarjimly.url') . "/api/v3/admins/organizations/$t_org_id");
+                            curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+                            curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PATCH');
+                            curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json', 'Authorization: Bearer ' . Common\Lib\Settings::get('tarjimly.api_key')]);
+                            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                            $result_json = curl_exec($ch);
+                        }
                         return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor("org-public-profile", array("org_id" => $org->getId())));
                     } catch (Common\Exceptions\SolasMatchException $ex) {
                         $org_name = $org->getName();
@@ -611,13 +640,13 @@ class OrgRouteHandler
             if ($roles & (SITE_ADMIN | PROJECT_OFFICER | VOLUNTEER_PO | COMMUNITY_OFFICER | NGO_ADMIN)) {
                 if (isset($post['revokeUser'])) {
                     $user_id = $post['revokeUser'];
-                    $adminDao->adjust_org_admin($user_id, $org_id, NGO_ADMIN | NGO_PROJECT_OFFICER | NGO_LINGUIST, 0);
+                    $adminDao->adjust_org_admin($user_id, $org_id, NGO_ADMIN | NGO_PROJECT_OFFICER | NGO_LINGUIST, 0, 1);
                     $adminDao->adjust_org_admin($user_id, 0, 0, LINGUIST);
                     UserRouteHandler::flashNow('success', 'Successfully revoked membership from user');
                     error_log("revokeUser($user_id, $org_id) by $current_user_id");
                 } elseif (isset($post['revokeOrgAdmin'])) {
                     $user_id = $post['revokeOrgAdmin'];
-                    $adminDao->adjust_org_admin($user_id, $org_id, NGO_ADMIN, NGO_PROJECT_OFFICER);
+                    $adminDao->adjust_org_admin($user_id, $org_id, NGO_ADMIN, NGO_PROJECT_OFFICER, 1);
                     error_log("revokeOrgAdmin($user_id, $org_id) by $current_user_id");
                 } elseif (isset($post['revokeOrgPO'])) {
                     $user_id = $post['revokeOrgPO'];
@@ -625,7 +654,7 @@ class OrgRouteHandler
                     error_log("revokeOrgPO($user_id, $org_id) by $current_user_id");
                 } elseif (isset($post['makeOrgAdmin'])) {
                     $user_id = $post['makeOrgAdmin'];
-                    $adminDao->adjust_org_admin($user_id, $org_id, 0, NGO_ADMIN);
+                    $adminDao->adjust_org_admin($user_id, $org_id, 0, NGO_ADMIN, 1);
                     error_log("makeOrgAdmin($user_id, $org_id) by $current_user_id");
                 } elseif (isset($post['makeOrgPO'])) {
                     $user_id = $post['makeOrgPO'];

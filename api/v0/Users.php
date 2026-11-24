@@ -39,15 +39,9 @@ class Users
             '\SolasMatch\API\V0\Users:deleteUserbadgesByID')
             ->add('\SolasMatch\API\Lib\Middleware:authenticateUserOrOrgForOrgBadge');
 
-        $app->post(
-            '/api/v0/users/{userId}/tasks/{taskId}/',
-            '\SolasMatch\API\V0\Users:userClaimTask')
-            ->add('\SolasMatch\API\Lib\Middleware:isloggedIn');
-
         $app->delete(
-            '/api/v0/users/{userId}/tasks/{taskId}/',
-            '\SolasMatch\API\V0\Users:userUnClaimTask')
-            ->add('\SolasMatch\API\Lib\Middleware:authUserOrOrgForTask');
+            '/api/v0/users/{userId}/tasks/{taskId}/key/{key}/',
+            '\SolasMatch\API\V0\Users:userUnClaimTask');
 
         $app->put(
             '/api/v0/users/{userId}/tags/{tagId}/',
@@ -235,6 +229,10 @@ class Users
             '\SolasMatch\API\V0\Users:deleteUser')
             ->add('\SolasMatch\API\Lib\Middleware:authUserOwnsResource');
 
+        $app->delete(
+            '/api/v0/users_t/{userId}/key/{key}/',
+            '\SolasMatch\API\V0\Users:delete_user');
+
         // From cron
         $app->get(
             '/api/v0/dequeue_claim_task',
@@ -299,6 +297,7 @@ class Users
 
     public static function userUnClaimTask(Request $request, Response $response, $args)
     {
+        if ($args['key'] != Common\Lib\Settings::get('tarjimly.twb_key')) return API\Dispatcher::sendResponse($response, null, null);
         $userId = $args['userId'];
         $taskId = $args['taskId'];
         $feedback = (string)$request->getBody();
@@ -396,17 +395,6 @@ class Users
         $limit = API\Dispatcher::clenseArgs($request, 'limit', 10);
         $offset = API\Dispatcher::clenseArgs($request, 'offset', 0);
         return API\Dispatcher::sendResponse($response, DAO\TaskDao::getUserTasks($userId, $limit, $offset), null);
-    }
-
-    public static function userClaimTask(Request $request, Response $response, $args)
-    {
-        $userId = $args['userId'];
-        $taskId = $args['taskId'];
-
-error_log("userClaimTask($userId, $taskId)");
-        Lib\Notify::notifyUserClaimedTask($userId, $taskId);
-        Lib\Notify::notifyOrgClaimedTask($userId, $taskId);
-        return API\Dispatcher::sendResponse($response, 1, null); // Don't claim here, return 1, just do notifications...
     }
 
     public static function dequeue_claim_task()
@@ -639,6 +627,12 @@ error_log("userClaimTask($userId, $taskId)");
         error_log("deleteUser($userId)");
         DAO\UserDao::deleteUser($userId);
         return API\Dispatcher::sendResponse($response, null, null);
+    }
+
+    public static function delete_user(Request $request, Response $response, $args)
+    {
+        if ($args['key'] != Common\Lib\Settings::get('tarjimly.twb_key')) return API\Dispatcher::sendResponse($response, null, null);
+        return self::deleteUser($request, $response, $args);
     }
 
     public static function getBannedComment(Request $request, Response $response, $args)

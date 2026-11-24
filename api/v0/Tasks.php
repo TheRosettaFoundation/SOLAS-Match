@@ -70,7 +70,6 @@ class Tasks
             '\SolasMatch\API\V0\Tasks:recordTaskView')
             ->add('\SolasMatch\API\Lib\Middleware:isloggedIn');
 
-
         $app->get(
             '/api/v0/tasks/proofreadTask/{taskId}/',
             '\SolasMatch\API\V0\Tasks:getProofreadTask')

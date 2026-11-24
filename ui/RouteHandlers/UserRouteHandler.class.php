@@ -31,10 +31,39 @@ class UserRouteHandler
             ->setName('home_ngo');
 
         $app->get(
+            '/org/{org_id}/t_home_ngo[/]',
+            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:t_home_ngo')
+            ->setName('t_home_ngo');
+
+        $app->get(
+            '/org/t_home_options[/]',
+            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:t_home_options')
+            ->setName('t_home_options');
+
+        $app->get(
+            '/task_type_details[/]',
+            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:task_type_details')
+            ->setName('task_type_details');
+
+        $app->get(
             '/org/{org_id}/ngo_projects[/]',
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:ngo_projects')
             ->add('\SolasMatch\UI\Lib\Middleware:authUserForOrg_incl_community_officer')
             ->setName('ngo_projects');
+
+        $app->get(
+            '/org/{org_id}/t_ngo_projects[/]',
+            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:t_ngo_projects')
+            ->setName('t_ngo_projects');
+
+        $app->map(['GET', 'POST'],
+            '/org/{org_id}/t_org_profile[/]',
+            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:t_org_profile')
+            ->setName('t_org_profile');
+
+        $app->get(
+            '/org/{org_id}/user/{user_id}/t_user_tasks[/]',
+            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:t_user_tasks');
 
         $app->map(['GET', 'POST'],
             '/task_stream[/]',
@@ -152,7 +181,6 @@ class UserRouteHandler
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:userDownload')
             ->add('\SolasMatch\UI\Lib\Middleware:authUserIsLoggedIn')
             ->setName('user-download');
-        
 
         $app->get(
             '/users_review[/]',
@@ -246,6 +274,11 @@ class UserRouteHandler
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:content_item_increment_views')
             ->setName('content_item_increment_views');
 
+        $app->map(['GET', 'POST'],
+            '/content_item_increment_views_t/{id}[/]',
+            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:content_item_increment_views_t')
+            ->setName('content_item_increment_views_t');
+
         $app->get(
             '/download_attachment/{content_id}/is_image/{is_image}/sorting_order/{sorting_order}/org/{org_id}[/]',
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:download_attachment')
@@ -282,6 +315,38 @@ class UserRouteHandler
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:content_display')
             ->add('\SolasMatch\UI\Lib\Middleware:authUserIsLoggedIn')
             ->setName('content_display');
+
+        $app->map(['GET'],
+            '/content_list_t/{type}[/]',
+            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:content_list_t')
+            ->setName('content_list_t');
+
+        $app->map(['GET'],
+            '/content_display_t/{item_id}[/]',
+            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:content_display_t')
+            ->setName('content_display_t');
+
+        $app->map(['GET', 'POST'],
+            '/org/{org_id}/t_private[/]',
+            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:t_private')
+            ->setName('t_private');
+
+        $app->map(['DELETE'],
+            '/user/{user_id}[/]',
+            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:delete_user')
+            ->setName('delete_user');
+
+        $app->map(['GET', 'POST'],
+            '/org/t_create_org[/]',
+            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:t_create_org');
+
+        $app->map(['GET', 'POST'],
+            '/org/t_give_org_role[/]',
+            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:t_give_org_role');
+
+        $app->get(
+            '/org/{org_id}/t_download_community[/]',
+            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:t_download_community');
     }
 
     public function home(Request $request, Response $response, $args = [])
@@ -390,6 +455,86 @@ class UserRouteHandler
         return $this->home($request, $response, $args);
     }
 
+    public function t_home_ngo(Request $request, Response $response, $args)
+    {
+        $org_id = (int)$args['org_id'];
+
+        $userDao = new DAO\UserDao();
+        $projectDao = new DAO\ProjectDao();
+
+        if ($data = self::t_validate($org_id)) {
+            $user_id = $data['user']['id'];
+            if (!empty($data['user_has_active_tasks'])) $claimed_tasks = LibAPI\PDOWrapper::call('getFilteredUserClaimedTasks', "$user_id,4,0,0,3,2");
+            if (empty($claimed_tasks)) $claimed_tasks = [];
+
+            $deadline_timestamps = [];
+            $matecat_urls = [];
+            $orgs = [];
+            $org_names = [];
+            $org_images = [];
+            foreach ($claimed_tasks as $task) {
+                $task_id = $task['id'];
+                $deadline = $task['deadline'];
+                $selected_year   = (int)substr($deadline,  0, 4);
+                $selected_month  = (int)substr($deadline,  5, 2);
+                $selected_day    = (int)substr($deadline,  8, 2);
+                $selected_hour   = (int)substr($deadline, 11, 2); // These are UTC, they will be recalculated to local time by JavaScript (we do not what the local time zone is)
+                $selected_minute = (int)substr($deadline, 14, 2);
+                $deadline_timestamps[$task_id] = gmmktime($selected_hour, $selected_minute, 0, $selected_month, $selected_day, $selected_year);
+
+                $task_model = new Common\Protobufs\Models\Task();
+                $task_model->setProjectId($task['projectId']);
+                $task_model->setTaskType($task['taskType']);
+                if (!$projectDao->are_translations_not_all_complete($task_model, $projectDao->get_memsource_task($task_id))) $matecat_urls[$task_id] = 1;
+
+                $result = LibAPI\PDOWrapper::call('getProject', $task['projectId'] . ',null,null,null,null,null,null,null,null,null,null,null,null');
+                $project = $result[0];
+                $orgs[$task_id] = $project['organisationId'];
+                $result = LibAPI\PDOWrapper::call('getOrg', $orgs[$task_id] . ',null,null,null,null,null,null,null,null');
+                $org_names[$task_id] = $result[0]['name'];
+                $org_images[$task_id] = $userDao->get_org_image($orgs[$task_id]);
+            }
+
+            $tasks = LibAPI\PDOWrapper::call('getUserTopTasks', "$user_id,0,4,0,null,null,null");
+            if (empty($tasks)) $tasks = [];
+            $task_ids = [];
+            foreach ($tasks as $task) {
+                $task_id = $task['id'];
+                array_push($task_ids, $task_id);
+                $deadline = $task['deadline'];
+                $selected_year   = (int)substr($deadline,  0, 4);
+                $selected_month  = (int)substr($deadline,  5, 2);
+                $selected_day    = (int)substr($deadline,  8, 2);
+                $selected_hour   = (int)substr($deadline, 11, 2); // These are UTC, they will be recalculated to local time by JavaScript (we do not what the local time zone is)
+                $selected_minute = (int)substr($deadline, 14, 2);
+                $deadline_timestamps[$task_id] = gmmktime($selected_hour, $selected_minute, 0, $selected_month, $selected_day, $selected_year);
+
+                $result = LibAPI\PDOWrapper::call('getProject', $task['projectId'] . ',null,null,null,null,null,null,null,null,null,null,null,null');
+                $project = $result[0];
+                $orgs[$task_id] = $project['organisationId'];
+                $result = LibAPI\PDOWrapper::call('getOrg', $orgs[$task_id] . ',null,null,null,null,null,null,null,null');
+                $org_names[$task_id] = $result[0]['name'];
+                $org_images[$task_id] = $userDao->get_org_image($orgs[$task_id]);
+            }
+            $chunks = $userDao->getUserTaskChunks(...$task_ids);
+
+            $data['current_projects'] = $projectDao->get_org_current_projects($org_id);
+            $data['completed_files'] = $projectDao->get_org_completed_files($org_id, 6);
+            $data['claimed_tasks'] = $claimed_tasks;
+            $data['matecat_urls'] = $matecat_urls;
+            $data['deadline_timestamps'] = $deadline_timestamps;
+            $data['tasks'] = $tasks;
+            $data['chunks'] = $chunks;
+            $data['org_images'] = $org_images;
+            $data['orgs'] = $orgs;
+            $data['org_names'] = $org_names;
+            $data['news']      = $userDao->get_content_items(null, 1, null, 1, 1, null, null, null, 0, 0);
+            $data['resources'] = $userDao->get_content_items(null, 7, null, 1, 1, null, null, null, 0, 0);
+        }
+        $response->getBody()->write(json_encode($data));
+        return $response->withHeader('Content-Type', 'application/json');
+    }
+
     public function ngo_projects(Request $request, Response $response, $args)
     {
         global $app, $template_data;
@@ -419,6 +564,163 @@ class UserRouteHandler
             ]);
 
         return UserRouteHandler::render('ngo_projects.tpl', $response);
+    }
+
+    public function t_ngo_projects(Request $request, Response $response, $args)
+    {
+        $org_id = (int)$args['org_id'];
+
+        $projectDao = new DAO\ProjectDao();
+
+        if ($data = self::t_validate($org_id)) {
+            $data['current_page'] = 'ngo_projects';//(**)remove if new menu behaves differently
+            $data['current_projects'] = $projectDao->get_org_current_projects($org_id, 1);
+            $data['completed_files'] = $projectDao->get_org_completed_files($org_id, 500);
+        }
+        $response->getBody()->write(json_encode($data));
+        return $response->withHeader('Content-Type', 'application/json');
+    }
+
+    public static function t_validate($org_id)
+    {
+        $projectDao = new DAO\ProjectDao();
+        $adminDao = new DAO\AdminDao();
+
+        if ($_SERVER['HTTP_TWBKEY'] == Common\Lib\Settings::get('tarjimly.twb_key')) {
+            $user_id = $_SERVER['HTTP_TWBID'];
+            $roles = $adminDao->get_roles($user_id, $org_id);
+            if ($roles&(SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER | NGO_ADMIN | NGO_PROJECT_OFFICER)) {
+                $result = LibAPI\PDOWrapper::call('getUser', "$user_id,null,null,null,null,null,null,null,null");
+                $user = $result[0];
+                unset($user['password'], $user[3], $user['nonce'], $user[9]);
+                $ngo_orgs = ($orgs = $adminDao->get_orgs_if_ngo($user_id)) ? $orgs : [];
+                if (!empty($ngo_orgs)) {
+                    if ($ngo_orgs[0]['organisation_id'] != $org_id) {
+                        $projectDao->set_org_default_for_user($user_id, $org_id);
+                        $ngo_orgs = $adminDao->get_orgs_if_ngo($user_id);
+                    }
+                }
+                $all_claimed_tasks = LibAPI\PDOWrapper::call('getFilteredUserClaimedTasks', "$user_id,4,0,0,0,2");
+                return ['user' => $user, 'user_has_active_tasks' => !empty($all_claimed_tasks), 'ngo_orgs' => $ngo_orgs, 'roles' => $roles, 'org_id' => $org_id];
+            }
+        }
+        return [];
+    }
+
+    public function t_home_options(Request $request, Response $response)
+    {
+        $adminDao = new DAO\AdminDao();
+
+        $data = [];
+        if ($ngo_orgs = $adminDao->get_orgs_if_ngo($_SERVER['HTTP_TWBID'])) $data = ['ngo_orgs' => $ngo_orgs];
+        $response->getBody()->write(json_encode($data));
+        return $response->withHeader('Content-Type', 'application/json');
+    }
+
+    public function task_type_details(Request $request, Response $response)
+    {
+        $response->getBody()->write(json_encode(Common\Enums\TaskTypeEnum::$enum_to_UI));
+        return $response->withHeader('Content-Type', 'application/json');
+    }
+
+    public function t_org_profile(Request $request, Response $response, $args)
+    {
+        $org_id = (int)$args['org_id'];
+
+        $adminDao = new DAO\AdminDao();
+        $projectDao = new DAO\ProjectDao();
+        $userDao = new DAO\UserDao();
+
+        if ($data = UserRouteHandler::t_validate($org_id)) {
+            $current_user_id = $data['user']['id'];
+            $roles = $adminDao->get_roles($current_user_id, $org_id);
+
+            $result = LibAPI\PDOWrapper::call('getOrg', "$org_id,null,null,null,null,null,null,null,null");
+            $org = $result[0];
+
+            $post = $request->getParsedBody();
+
+            if ($roles&(SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER | NGO_ADMIN)) {
+                if (isset($post['revokeUser'])) {
+                    $user_id = (int)$post['revokeUser'];
+                    $adminDao->adjust_org_admin($user_id, $org_id, NGO_ADMIN | NGO_PROJECT_OFFICER | NGO_LINGUIST, 0, 1);
+                    $adminDao->adjust_org_admin($user_id, 0, 0, LINGUIST);
+                    error_log("t revokeUser($user_id, $org_id) by $current_user_id");
+                    return $response;
+                } elseif (isset($post['revokeOrgAdmin'])) {
+                    $user_id = (int)$post['revokeOrgAdmin'];
+                    $adminDao->adjust_org_admin($user_id, $org_id, NGO_ADMIN, NGO_PROJECT_OFFICER, 1);
+                    error_log("t revokeOrgAdmin($user_id, $org_id) by $current_user_id");
+                    return $response;
+                } elseif (isset($post['revokeOrgPO'])) {
+                    $user_id = (int)$post['revokeOrgPO'];
+                    $adminDao->adjust_org_admin($user_id, $org_id, NGO_PROJECT_OFFICER, NGO_LINGUIST);
+                    error_log("t revokeOrgPO($user_id, $org_id) by $current_user_id");
+                    return $response;
+                } elseif (isset($post['makeOrgAdmin'])) {
+                    $user_id = (int)$post['makeOrgAdmin'];
+                    $adminDao->adjust_org_admin($user_id, $org_id, 0, NGO_ADMIN, 1);
+                    error_log("t makeOrgAdmin($user_id, $org_id) by $current_user_id");
+                    return $response;
+                } elseif (isset($post['makeOrgPO'])) {
+                    $user_id = (int)$post['makeOrgPO'];
+                    $adminDao->adjust_org_admin($user_id, $org_id, 0, NGO_PROJECT_OFFICER);
+                    error_log("t makeOrgPO($user_id, $org_id) by $current_user_id");
+                    return $response;
+                } elseif (isset($post['emails'])) {
+                    $not_verified = 0;
+                    $number = 0;
+                    $emails = explode(',', $post['emails']);
+                    foreach ($emails as $email) {
+                        $email = trim($email);
+                        if (Lib\Validator::validateEmail($email)) {
+                            $result = LibAPI\PDOWrapper::call('getUser', 'null,null,' . LibAPI\PDOWrapper::cleanseWrapStr($email) . ',null,null,null,null,null,null');
+                            if (!empty($result)) {
+                                $user_id = $result[0]['id'];
+                                if ($userDao->isUserVerified($user_id)) {
+                                    $adminDao->adjust_org_admin($user_id, $org_id, 0, 2, 2);
+                                    $adminDao->adjust_org_admin_source_of_user($user_id, $org_id, 1, $current_user_id);
+                                    $number++;
+                                } else $not_verified++;
+                            } else {
+                                $adminDao->insert_special_registration($post['role'], $email, $org_id, $current_user_id);
+                                $number++;
+                            }
+                        }
+                    }
+                    $data = ['number'=> $number];
+                    if ($not_verified) $data['warning'] = 'At least one email was not verified and must be verified before inviting';
+                    $response->getBody()->write(json_encode($data));
+                    return $response->withHeader('Content-Type', 'application/json');
+                }
+            }
+            $data['roles'] = $roles;
+            $data['current_page'] = 'org-public-profile';//(**)remove if new menu behaves differently
+            $data['org'] = $org;
+            $oms = $adminDao->getOrgMembers($org_id);
+            foreach ($oms as $key => $om) unset($oms[$key]['password'], $oms[$key][3], $oms[$key]['nonce'], $oms[$key][9]);
+            $data['orgMembers'] = $oms;
+            $data['entitlements'] = $projectDao->get_entitlements($org_id);
+            $data['org_image'] = $userDao->get_org_image($org_id);
+            $data['invites'] = $adminDao->get_special_registration_records($org_id);
+            $data['ngo_reg_link'] = $userDao->get_ngo_reg_link("$org_id");
+        }
+        $response->getBody()->write(json_encode($data));
+        return $response->withHeader('Content-Type', 'application/json');
+    }
+
+    public function t_user_tasks(Request $request, Response $response, $args)
+    {
+        $org_id = (int)$args['org_id'];
+        $user_id = (int)$args['user_id'];
+
+        if ($data = UserRouteHandler::t_validate($org_id)) {
+            $result = LibAPI\PDOWrapper::call('get_user_tasks', "$org_id,$user_id");
+            if (empty($result)) $result = [];
+            $data['user_tasks'] = $result;
+        }
+        $response->getBody()->write(json_encode($data));
+        return $response->withHeader('Content-Type', 'application/json');
     }
 
     public function task_stream(Request $request, Response $response)
@@ -872,7 +1174,7 @@ error_log("un/pw verification errno: $errno, responseCode: $responseCode");//(**
                     $result = LibAPI\PDOWrapper::call('getUserPersonalInfo', 'null,' . LibAPI\PDOWrapper::cleanse($user_id) . ',null,null,null,null,null,null,null,null,null,null');
                     $info = $result[0];
 
-                    [$t_role, $org_id] = $this->get_requested_t_role($user_id, $email);
+                    [$t_role, $org_id, $o_role] = $this->get_requested_t_role($user_id, $email);
                     $data = [[
                         'firstName' => $info['firstName'],
                         'lastName' => $info['lastName'],
@@ -885,11 +1187,13 @@ error_log("un/pw verification errno: $errno, responseCode: $responseCode");//(**
                         'twbId' => "$user_id"]];
                     if ($org_id) {
                         $result = LibAPI\PDOWrapper::call('get_t_org_id', LibAPI\PDOWrapper::cleanse($org_id));
-                        if (!empty($result)) $data[0]['organizationId'] = "{$result[0]['t_org_id']}";
+                        if (!empty($result)) {
+                          $data[0]['organizationId'] = "{$result[0]['t_org_id']}";
+                          if (!empty($o_role)) $data[0]['orgRole'] = $o_role;
+                        }
                     }
                     $ch = curl_init(Common\Lib\Settings::get('tarjimly.url') . '/api/v3/admins/users/bulk-create');
-error_log('un/pw verification bulk-create POST JSON:' . print_r($data, 1));//(**)
-error_log(json_encode($data));//(**)
+error_log('un/pw verification bulk-create POST JSON: ' . json_encode($data));//(**)
                     curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
                     curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json', 'Authorization: Bearer ' . Common\Lib\Settings::get('tarjimly.api_key')]);
                     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -965,7 +1269,11 @@ error_log("result_json: $result_json");//(**)
                 if ($terms_accepted == 1) return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('googleregister', ['user_id' => $user_id]));
                 if ($terms_accepted  < 3) $userDao->update_terms_accepted($user_id, 3);
                 $orgs = $adminDao->get_orgs_if_ngo($user_id);
-                if (!empty($orgs)) return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('home_ngo', ['org_id' => $orgs[0]['organisation_id']]));
+                if (!empty($orgs)) {
+                    $result = LibAPI\PDOWrapper::call('get_ngo_on_tarjimly', "$user_id");
+                    if (!empty($result)) return $response->withStatus(302)->withHeader('Location', Common\Lib\Settings::get('tarjimly.web') . '/login?twb=1');
+                    return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('home_ngo', ['org_id' => $orgs[0]['organisation_id']]));
+                }
                 return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('home'));
             } else {
                 if ($user['languageCode']) {
@@ -990,21 +1298,22 @@ error_log("result_json: $result_json");//(**)
         $adminDao = new DAO\AdminDao();
 
         if (!empty($_SESSION['track_code']) && substr($_SESSION['track_code'], 0, 8) === 'org_ling') {
-            if ($org_id = $adminDao->decode_ngo_reg_link(substr($_SESSION['track_code'], 8))) return ['translator', $org_id];
-            return ['translator', 0];
+            if ($org_id = $adminDao->decode_ngo_reg_link(substr($_SESSION['track_code'], 8))) return ['translator', $org_id, ''];
+            return ['translator', 0, ''];
         }
-        if (empty($_SESSION['reg_data'])) return ['translator', 0];
+        if (empty($_SESSION['reg_data'])) return ['translator', 0, ''];
         $result = LibAPI\PDOWrapper::call('get_special_registration', LibAPI\PDOWrapper::cleanseWrapStr($_SESSION['reg_data']) . ',' . LibAPI\PDOWrapper::cleanseWrapStr(Common\Lib\Settings::get('site.reg_key')) . ',' . LibAPI\PDOWrapper::cleanse($user_id) . ',' . LibAPI\PDOWrapper::cleanseWrapStr($email));
-        if (empty($result)) return ['translator', 0];
+        if (empty($result)) return ['translator', 0, ''];
         $special_registration = $result[0];
         $roles = $special_registration['roles'];
         $org_id = $special_registration['org_id'];
-        if ($special_registration['mismatch']) return ['translator', 0];
+        if ($special_registration['mismatch']) return ['translator', 0, ''];
 
-        if ($roles == NGO_LINGUIST || $roles == (NGO_LINGUIST | LINGUIST)) return ['translator', $org_id];
-        if ($roles == LINGUIST) return ['translator', 0];
-        if ($roles&(SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER | FINANCE | AIDWORKER)) return ['aidworker', 0];
-        return ['aidworker', $org_id];
+        if ($roles == NGO_LINGUIST || $roles == (NGO_LINGUIST | LINGUIST)) return ['translator', $org_id, ''];
+        if ($roles == LINGUIST) return ['translator', 0, ''];
+        if ($roles&(SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER | FINANCE | AIDWORKER)) return ['aidworker', 0, ''];
+        if ($roles&NGO_ADMIN) return ['aidworker', $org_id, 'admin'];
+        return ['aidworker', $org_id, ''];
     }
 
     public function invite_admins(Request $request, Response $response, $args)
@@ -1026,9 +1335,12 @@ error_log("result_json: $result_json");//(**)
                 $userExist = $userDao->getUserByEmail($email, null);
                 if ($userExist) {
                     if ($userDao->isUserVerified($userExist->getId())) {
-                        $adminDao->adjust_org_admin($userExist->getId(), $org_id, 0, $post['role']&~LINGUIST);
-                        $adminDao->adjust_org_admin_source_of_user($userExist->getId(), $org_id, 1, $admin_id);
-                        UserRouteHandler::flashNow('success', 'A user with this email already exists and they have now been given the requested role.');
+                        if ($adminDao->get_roles($userExist->getId(), $org_id)&(NGO_ADMIN | NGO_PROJECT_OFFICER | NGO_LINGUIST)) UserRouteHandler::flashNow('error', 'A user with this email is already in this organization.');
+                        else {
+                            $adminDao->adjust_org_admin($userExist->getId(), $org_id, 0, $post['role']&~LINGUIST, 2);
+                            $adminDao->adjust_org_admin_source_of_user($userExist->getId(), $org_id, 1, $admin_id);
+                            UserRouteHandler::flashNow('success', 'A user with this email already exists and they have now been given the requested role.');
+                        }
                     } else {
                         UserRouteHandler::flashNow('error', 'This user is not verified, please verify them first, if you trust them.');
                     }
@@ -1193,11 +1505,14 @@ error_log('Google login JSON:' . print_r($json, 1));//(**)
             $data = ['twbId' => "$user_id"];
             if (empty($json['role'])) {
                 if ($google_login) {
-                    [$t_role, $org_id] = $this->get_requested_t_role($user_id, $email);
+                    [$t_role, $org_id, $o_role] = $this->get_requested_t_role($user_id, $email);
                     $data['role'] = $t_role;
                     if ($org_id) {
                         $result = LibAPI\PDOWrapper::call('get_t_org_id', LibAPI\PDOWrapper::cleanse($org_id));
-                        if (!empty($result)) $data['organizationId'] = "{$result[0]['t_org_id']}";
+                        if (!empty($result)) {
+                            $data['organizationId'] = "{$result[0]['t_org_id']}";
+                            if (!empty($o_role)) $data['orgRole'] = $o_role;
+                        }
                     }
                 }
             } else {
@@ -1265,6 +1580,7 @@ error_log('login PUT JSON:' . print_r($data, 1));//(**)
             curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json', 'Authorization: Bearer ' . Common\Lib\Settings::get('tarjimly.api_key')]);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
             $dummy = curl_exec($ch);
+error_log("dummy: $dummy");//(**)
 
             $userDao->update_terms_accepted($user_id, 1); // Will be redirected to googleregister
         } else {
@@ -1314,7 +1630,11 @@ error_log('login PUT JSON:' . print_r($data, 1));//(**)
             if ($adminDao->isSiteAdmin_any_or_org_admin_any_for_any_org($user_id)) {
                 $userDao->update_terms_accepted($user_id, 3);
                 $orgs = $adminDao->get_orgs_if_ngo($user_id);
-                if (!empty($orgs)) return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('home_ngo', ['org_id' => $orgs[0]['organisation_id']]));
+                if (!empty($orgs)) {
+                    $result = LibAPI\PDOWrapper::call('get_ngo_on_tarjimly', "$user_id");
+                    if (!empty($result)) return $response->withStatus(302)->withHeader('Location', Common\Lib\Settings::get('tarjimly.web') . '/login?twb=1');
+                    return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('home_ngo', ['org_id' => $orgs[0]['organisation_id']]));
+                }
                 return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('home'));
             }
             return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('user-private-profile', array('user_id' => $user_id)));
@@ -3800,6 +4120,251 @@ foreach ($rows as $index => $row) {
         if ($result) $userDao->increment_content_item_views($args['id']);
         $results = json_encode(['result'=> $result]);
         $response->getBody()->write($results);
+        return $response->withHeader('Content-Type', 'application/json');
+    }
+
+    public function content_item_increment_views_t(Request $request, Response $response, $args)
+    {
+        $userDao = new DAO\UserDao();
+
+        if ($_SERVER['HTTP_TWBKEY'] == Common\Lib\Settings::get('tarjimly.twb_key')) $userDao->increment_content_item_views($args['id']);
+        $response->getBody()->write(json_encode(['result' => 1]));
+        return $response->withHeader('Content-Type', 'application/json');
+    }
+
+    public function content_list_t(Request $request, Response $response, $args)
+    {
+        $type = (int)$args['type'];
+
+        $userDao = new DAO\UserDao();
+
+        if ($data = self::t_validate_user()) {
+            $news = $userDao->get_content_items(null, $type, null, null, 1, null, null, null, 0, 0);
+            foreach ($news as $i => $new) {
+                if ($new['number_images']) {
+                    $result = $userDao->get_content_item_attachments($new['id'], 1, null);
+                    if ($result) $news[$i]['image'] = base64_encode($result[0]['attachment']);
+                }
+            }
+            $data['news'] = $news;
+            $data['type'] = $type;
+        }
+        $response->getBody()->write(json_encode($data));
+        return $response->withHeader('Content-Type', 'application/json');
+    }
+
+    public function content_display_t(Request $request, Response $response, $args)
+    {
+        $item_id = (int)$args['item_id'];
+
+        $userDao = new DAO\UserDao();
+        $adminDao = new DAO\AdminDao();
+
+        if ($data = self::t_validate_user()) {
+            $news = $userDao->get_content_items($item_id, null, null, null, ($adminDao->get_roles($_SERVER['HTTP_TWBID'])&(SITE_ADMIN | PROJECT_OFFICER | COMMUNITY_OFFICER)) ? null : 1, null, null, null, 0, 0);
+            if (!empty($news)) $news = $news[0]; else $news = [];
+            if (!empty($news['number_images'])) {
+                $result = $userDao->get_content_item_attachments($news['id'], 1, null);
+                if ($result) $news['image'] = base64_encode($result[0]['attachment']);
+            }
+            $userDao->increment_content_item_views($item_id);
+            $data['news'] = $news;
+        }
+        $response->getBody()->write(json_encode($data));
+        return $response->withHeader('Content-Type', 'application/json');
+    }
+
+    public static function t_validate_user()
+    {
+        $adminDao = new DAO\AdminDao();
+
+        if ($_SERVER['HTTP_TWBKEY'] == Common\Lib\Settings::get('tarjimly.twb_key')) {
+            $user_id = $_SERVER['HTTP_TWBID'];
+            $result = LibAPI\PDOWrapper::call('getUser', "$user_id,null,null,null,null,null,null,null,null");
+            $user = $result[0];
+            unset($user['password'], $user[3], $user['nonce'], $user[9]);
+            $ngo_orgs = ($orgs = $adminDao->get_orgs_if_ngo($user_id)) ? $orgs : [];
+            return ['user' => $user, 'ngo_orgs' => $ngo_orgs];
+        }
+        return [];
+    }
+
+    public function t_private(Request $request, Response $response, $args)
+    {
+        $org_id = (int)$args['org_id'];
+
+        if ($data = UserRouteHandler::t_validate($org_id)) {
+            $result = LibAPI\PDOWrapper::call('getOrg', "$org_id,null,null,null,null,null,null,null,null");
+            $org = $result[0];
+
+            $org['facebook'] = $org['address'];
+            $org['linkedin'] = $org['city'];
+            $org['twitter'] = $org['regionalFocus'];
+
+            if ($request->getMethod() === 'POST') {
+                $post = $request->getParsedBody();
+                if (!empty($post['name']) && !empty($post['biography']) && !empty($post['email']) && Lib\Validator::validateEmail($post['email'])) {
+                    $post['name'] = mb_substr(str_replace(['<', '>', '"', '&'], ' ', $post['name']), 0, 128);
+                    $post['homepage'] = mb_substr($post['homepage'], 0, 120);
+                    $post['facebook'] = mb_substr($post['facebook'], 0, 120);
+                    $post['linkedin'] = mb_substr($post['linkedin'], 0, 120);
+                    $post['twitter'] = mb_substr($post['twitter'], 0, 120);
+                    LibAPI\PDOWrapper::call('organisationInsertAndUpdate', "$org_id," .
+                        LibAPI\PDOWrapper::cleanseWrapStr(Lib\Validator::validateURL($post['homepage']) ? Lib\Validator::addhttp($post['homepage']) : '') . ',' .
+                        LibAPI\PDOWrapper::cleanseWrapStr($post['name']) . ',' .
+                        LibAPI\PDOWrapper::cleanseWrapStr(mb_substr($post['biography'], 0, 4096)) . ',' .
+                        LibAPI\PDOWrapper::cleanseWrapStr(mb_substr($post['email'], 0, 128)) . ',' .
+                        LibAPI\PDOWrapper::cleanseWrapStr(Lib\Validator::validateURL($post['facebook']) ? Lib\Validator::addhttp($post['facebook']) : '') . ',' .
+                        LibAPI\PDOWrapper::cleanseWrapStr(Lib\Validator::validateURL($post['linkedin']) ? Lib\Validator::addhttp($post['linkedin']) : '') . ',' .
+                        LibAPI\PDOWrapper::cleanseWrapStr(mb_substr($post['country'], 0, 128)) . ',' .
+                        LibAPI\PDOWrapper::cleanseWrapStr(Lib\Validator::validateURL($post['twitter']) ? Lib\Validator::addhttp($post['twitter']) : ''));
+                    $result = LibAPI\PDOWrapper::call('get_t_org_id', LibAPI\PDOWrapper::cleanse($org_id));
+                    if (!empty($result)) {
+                        $t_org_id = $result[0]['t_org_id'];
+                        $ch = curl_init(Common\Lib\Settings::get('tarjimly.url') . "/api/v3/admins/organizations/$t_org_id");
+                        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode(['email' => $post['email'], 'name' => $post['name']]));
+                        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PATCH');
+                        curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json', 'Authorization: Bearer ' . Common\Lib\Settings::get('tarjimly.api_key')]);
+                        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                        $result_json = curl_exec($ch);
+                    }
+                    $response->getBody()->write(json_encode(['success' => 1]));
+                    return $response->withHeader('Content-Type', 'application/json');
+                } else {
+                    $response->getBody()->write(json_encode(['error' => 'Missing fields, bad name or email']));
+                    return $response->withHeader('Content-Type', 'application/json');
+                }
+            }
+            $data['org'] = $org;
+        }
+        $response->getBody()->write(json_encode($data));
+        return $response->withHeader('Content-Type', 'application/json');
+    }
+
+    public function delete_user(Request $request, Response $response, $args)
+    {
+        $user_id = (int)$args['user_id'];
+        if ($user_id != $_SERVER['HTTP_TWBID']) return $response;
+
+        $userDao = new DAO\UserDao();
+
+        if (self::t_validate_user()) $userDao->delete_user($user_id);
+        return $response;
+    }
+
+    public function t_create_org(Request $request, Response $response)
+    {
+        $projectDao = new DAO\ProjectDao();
+
+        if ($request->getMethod() === 'POST' && $_SERVER['HTTP_TWBKEY'] == Common\Lib\Settings::get('tarjimly.twb_key')) {
+            $body = (string)$request->getBody();
+error_log("t_create_org: $body");//(**)
+            $post = json_decode($body, true);
+            if (!empty($post['name'])) $post['name'] = mb_substr(str_replace(['<', '>', '"', '&'], ' ', $post['name']), 0, 128);
+            $result = LibAPI\PDOWrapper::call('getOrg', 'null,' . LibAPI\PDOWrapper::cleanseWrapStr($post['name']) . ',null,null,null,null,null,null,null');
+            if (empty($result)) { // Not duplicate (e.g. because echo from createOrg)
+                if (!empty($post['description'])) $post['description'] = mb_substr($post['description'], 0, 4096);
+                if (!empty($post['email'])) $post['email'] = mb_substr($post['email'], 0, 128);
+                if (!empty($post['address'])) $post['address'] = mb_substr($post['address'], 0, 128);
+                if (!empty($post['homepage'])) $post['homepage'] = mb_substr($post['homepage'], 0, 128);
+                if (!empty($post['facebook'])) $post['facebook'] = mb_substr($post['facebook'], 0, 128);
+                if (!empty($post['linkedin'])) $post['linkedin'] = mb_substr($post['linkedin'], 0, 128);
+                if (!empty($post['twitter'])) $post['twitter'] = mb_substr($post['twitter'], 0, 128);
+                $result = LibAPI\PDOWrapper::call('organisationInsertAndUpdate', 'null,' .
+                    LibAPI\PDOWrapper::cleanseNullOrWrapStr($post['homepage']) . ',' .
+                    LibAPI\PDOWrapper::cleanseWrapStr($post['name']) . ',' .
+                    LibAPI\PDOWrapper::cleanseNullOrWrapStr($post['description']) . ',' .
+                    LibAPI\PDOWrapper::cleanseNullOrWrapStr($post['email']) . ',' .
+                    LibAPI\PDOWrapper::cleanseNullOrWrapStr($post['facebook']) . ',' .
+                    LibAPI\PDOWrapper::cleanseNullOrWrapStr($post['linkedin']) . ',' .
+                    LibAPI\PDOWrapper::cleanseNullOrWrapStr($post['address']) . ',' .
+                    LibAPI\PDOWrapper::cleanseNullOrWrapStr($post['twitter']));
+                if (!empty($result)) {
+                    $org_id = $result[0]['id'];
+                    $t_org_id = (int)$post['id'];
+                    LibAPI\PDOWrapper::call('set_organisation_map', "$org_id,$t_org_id");
+
+                    $ch = curl_init(Common\Lib\Settings::get('tarjimly.url') . "/api/v3/admins/organizations/$t_org_id");
+                    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode(['twbOrgId' => "$org_id"]));
+                    curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PATCH');
+                    curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json', 'Authorization: Bearer ' . Common\Lib\Settings::get('tarjimly.api_key')]);
+                    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                    $result_json = curl_exec($ch);
+
+                    $data = ['name' => $post['name']];
+                    if (!empty($post['description'])) {
+                        $data['note'] = $post['description'];
+                        $data['displayNoteInProject'] = true;
+                    }
+                    $ch = curl_init(Common\Lib\Settings::get('memsource.api_url_v1') . 'clients');
+                    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+                    curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json', 'Authorization: Bearer ' . Common\Lib\Settings::get('memsource.memsource_api_token')]);
+                    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                    $result = curl_exec($ch);
+                    $res = json_decode($result, true);
+                    $projectDao->set_memsource_client($org_id, $res['id'], $res['uid']);
+                }
+            }
+        }
+        return $response;
+    }
+
+    public function t_give_org_role(Request $request, Response $response)
+    {
+        $adminDao = new DAO\AdminDao();
+        $userDao = new DAO\UserDao();
+
+        if ($request->getMethod() === 'POST' && $_SERVER['HTTP_TWBKEY'] == Common\Lib\Settings::get('tarjimly.twb_key')) {
+            $body = (string)$request->getBody();
+            $post = json_decode($body, true);
+            if (empty($post['twbId'])) {
+                $nonce = Common\Lib\Authentication::generateNonce();
+                $password = Common\Lib\Authentication::hashPassword(bin2hex(random_bytes(10)), $nonce);
+                $result = LibAPI\PDOWrapper::call('userInsertAndUpdate', LibAPI\PDOWrapper::cleanseWrapStr($post['email']) . ",$nonce," . LibAPI\PDOWrapper::cleanseNullOrWrapStr($password) . ',null,null,null,null,null');
+                $user_id = $result[0]['id'];
+                LibAPI\PDOWrapper::call('create_empty_role', LibAPI\PDOWrapper::cleanse($user_id));
+                LibAPI\PDOWrapper::call('userPersonalInfoInsertAndUpdate', 'null,' . LibAPI\PDOWrapper::cleanse($user_id) . ',' . LibAPI\PDOWrapper::cleanseWrapStr(empty($post['firstName']) ? '' : $post['firstName']) . ',' . LibAPI\PDOWrapper::cleanseWrapStr(empty($post['lastName']) ? '' : $post['lastName']) . ',null,null,1786,null,null,null,null,0');
+                LibAPI\PDOWrapper::call('userTaskStreamNotificationInsertAndUpdate', LibAPI\PDOWrapper::cleanse($user_id) . ',2,1');
+
+                $ch = curl_init(Common\Lib\Settings::get('tarjimly.url') . '/api/v3/admins/users/' . $post['tarjimly_id']);
+                curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode(['twbId' => "$user_id"]));
+                curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PUT');
+                curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json', 'Authorization: Bearer ' . Common\Lib\Settings::get('tarjimly.api_key')]);
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                $dummy = curl_exec($ch);
+error_log("dummy: $dummy");//(**)
+
+                if ($post['twb_roles'] >= 4) $userDao->update_terms_accepted($user_id, 3);
+                else                         $userDao->update_terms_accepted($user_id, 2);
+            } else $user_id = (int)$post['twbId'];
+            $result = LibAPI\PDOWrapper::call('get_twb_org_id', $post['organizationId']);
+            if (!empty($result)) {
+                if ($post['twb_roles'] < 4) $adminDao->adjust_org_admin($user_id, 0, 0, LINGUIST);
+                $adminDao->adjust_org_admin($user_id, $result[0]['org_id'], 0, $post['twb_roles']);
+            }
+        }
+        return $response;
+    }
+
+    public function t_download_community(Request $request, Response $response, $args)
+    {
+        $org_id = (string)$args['org_id'];
+
+        $adminDao = new DAO\AdminDao();
+
+        if (self::t_validate($org_id)) {
+            $org_members = $adminDao->getOrgMembers($args['org_id']);
+            $file = "\xEF\xBB\xBF" . '"user_id","Given Name/Display Name","Family Name","email","Roles","Language Pairs"' . "\n";
+            foreach ($org_members as $om) {
+                if (strpos($om['roles_text'], 'NGO Linguist') !== false) {
+                    if ($om['source_of_user']) $file .= '"' . $om['id'] . '","' . $om['first_name'] . '","' . $om['last_name'] . '","' . $om['email'] . '","' . $om['roles_text'] . '","' . $om['language_pairs'] . '"' . "\n";
+                    else                       $file .= '"' . $om['id'] . '","' . $om['display_name'] . '","","","' . $om['roles_text'] . '","' . $om['language_pairs'] . '"' . "\n";
+                }
+            }
+            $response->getBody()->write(json_encode(['mime' => 'text/csv', 'file_name' => 'community.csv', 'size' => strlen($file), 'file' => base64_encode($file)]));
+            return $response->withHeader('Content-Type', 'application/json');
+        }
+        $response->getBody()->write(json_encode(['error' => 'Not found or no rights']));
         return $response->withHeader('Content-Type', 'application/json');
     }
 

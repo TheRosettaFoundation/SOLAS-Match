@@ -7,10 +7,12 @@ use \SolasMatch\UI\Lib as Lib;
 use \SolasMatch\Common as Common;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
+use \SolasMatch\API\Lib as LibAPI;
 
 require_once __DIR__."/../../Common/Enums/TaskTypeEnum.class.php";
 require_once __DIR__."/../../Common/Enums/TaskStatusEnum.class.php";
 require_once __DIR__."/../../Common/lib/SolasMatchException.php";
+require_once __DIR__ . '/../../api/lib/PDOWrapper.class.php';
 
 class ProjectRouteHandler
 {
@@ -25,6 +27,11 @@ class ProjectRouteHandler
             ->setName('project-view');
 
         $app->map(['GET', 'POST'],
+            '/project/{project_id}/t_project_view[/]',
+            '\SolasMatch\UI\RouteHandlers\ProjectRouteHandler:t_project_view')
+            ->setName('t_project_view');
+
+        $app->map(['GET', 'POST'],
             '/{project_id}/change_owner[/]',
             '\SolasMatch\UI\RouteHandlers\ProjectRouteHandler:change_owner')
             ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin_any')
@@ -37,10 +44,20 @@ class ProjectRouteHandler
             ->setName('project-alter');
 
         $app->map(['GET', 'POST'],
+            '/project/{project_id}/t_alter[/]',
+            '\SolasMatch\UI\RouteHandlers\ProjectRouteHandler:t_project_alter')
+            ->setName('t_project_alter');
+
+        $app->map(['GET', 'POST'],
             '/project/{org_id}/create[/]',
             '\SolasMatch\UI\RouteHandlers\ProjectRouteHandler:projectCreate')
             ->add('\SolasMatch\UI\Lib\Middleware:authUserForOrg')
             ->setName('project-create');
+
+        $app->map(['GET', 'POST'],
+            '/project/{org_id}/t_project_create[/]',
+            '\SolasMatch\UI\RouteHandlers\ProjectRouteHandler:t_project_create')
+            ->setName('t_project_create');
 
         $app->map(['GET', 'POST'],
             '/project/{org_id}/create_empty[/]',
@@ -1200,6 +1217,133 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
         return UserRouteHandler::render("project/project.view.tpl", $response);
     }
 
+    public function t_project_view(Request $request, Response $response, $args)
+    {
+        $project_id = (int)$args['project_id'];
+
+        $adminDao = new DAO\AdminDao();
+        $projectDao = new DAO\ProjectDao();
+        $taskDao = new DAO\TaskDao();
+
+        $result = LibAPI\PDOWrapper::call('getProject', "$project_id,null,null,null,null,null,null,null,null,null,null,null,null");
+        if (!empty($result)) {
+            $project = $result[0];
+            $project_obj = Common\Lib\ModelFactory::buildModel('Project', $project);
+            $org_id = $project['organisationId'];
+
+            if ($data = UserRouteHandler::t_validate($org_id)) {
+                $user_id = $data['user']['id'];
+                if (!$taskDao->isUserRestrictedFromProject($project_id, $user_id) && !in_array($project_id, [36065, 36066, 36067, 36068, 36068, 36072, 36070, 36069, 36071, 36073, 36074, 36075, 36076, 36958, 36963])) {
+                    $roles = $adminDao->get_roles($user_id, $org_id);
+                    $memsource_project = $projectDao->get_memsource_project($project_id);
+                    $post = $request->getParsedBody();
+                    if (isset($post['translators_count'])) {
+                        $response->getBody()->write(json_encode($taskDao->count_users_who_can_claim($post['translators_count'])));
+                        return $response->withHeader('Content-Type', 'application/json');
+                    }
+                    if (isset($post['matching'])) {
+                        error_log('updateRequiredTaskNativeMatching(' . $post['task_id'] . ', ' . $post['matching'] . "): $user_id");
+                        $response->getBody()->write(json_encode($taskDao->updateRequiredTaskNativeMatching($post['task_id'], $post['matching'])));
+                        return $response->withHeader('Content-Type', 'application/json');
+                    }
+                    if (isset($post['publishedTask'])) {
+                        $task_id = (int)$post['task_id'];
+                        $pub = (int)$post['publishedTask'];
+                        LibAPI\PDOWrapper::call('set_task_published', "$project_id,$task_id,$pub");
+                        error_log("projectView set_task_published($project_id,$task_id,$pub) by $user_id");
+                        return $response;
+                    }
+                    if (isset($post['trackProject'])) {
+                        if ($post['trackProject']) LibAPI\PDOWrapper::call('userTrackProject', "$project_id,$user_id");
+                        else LibAPI\PDOWrapper::call('userUnTrackProject', "$project_id,$user_id");
+                        return $response;
+                    }
+                    if (isset($post['trackTask'])) {
+                        $task_id = (int)$post['task_id'];
+                        if ($post['trackTask']) LibAPI\PDOWrapper::call('track_task', "$user_id,$project_id,$task_id");
+                        else                  LibAPI\PDOWrapper::call('untrack_task', "$user_id,$project_id,$task_id");
+                        return $response;
+                    }
+                    if ($roles&(SITE_ADMIN | PROJECT_OFFICER | NGO_ADMIN | NGO_PROJECT_OFFICER)) {
+                        if (isset($post['deleteTask'])) {
+                            $task_id = (int)$post['task_id'];
+                            $result = LibAPI\PDOWrapper::call('is_task_in_project', "$project_id,$task_id");
+                            if ($result[0]['result']) LibAPI\PDOWrapper::call('deleteTask', "$task_id");
+                            error_log("deleteTask(): $task_id BY $user_id");
+                            return $response;
+                        }
+                        if (isset($post['cancelled'])) {
+                            $task_id = (int)$post['task_id'];
+                            $comment = ($post['cancelled'] == 1) ? $post['cancel_task'] . ' - ' . $post['reason'] : 'Uncancelled';
+                            $cancelled = $post['cancelled'] ? 1 : 0;
+                            $result = LibAPI\PDOWrapper::call('is_task_in_project', "$project_id,$task_id");
+                            $number = 0;
+                            $userDao = new DAO\UserDao();
+                            if ($result[0]['result']) $number = $userDao->propagate_cancelled($cancelled, $memsource_project, $task_id, $comment, empty($post['cancel_selected_only']) ? 1 : 0);
+                            error_log("$number Tasks Marked Cancelled($cancelled) by $user_id, ID: $task_id");
+                            $response->getBody()->write(json_encode(['number'=> $number]));
+                            return $response->withHeader('Content-Type', 'application/json');
+                        }
+                    }
+                    $get_payment_status_for_project = [];
+
+                    $result = LibAPI\PDOWrapper::call('userSubscribedToProject', "$user_id,$project_id");
+                    $userSubscribedToProject = $result[0]['result'];
+                    $taskMetaData = [];
+                    $project_tasks = LibAPI\PDOWrapper::call('getTask', "null,$project_id,null,null,null,null,null,null,null,null,null,null,null,null");
+                    $translations_not_all_complete = $projectDao->identify_claimed_but_not_yet_in_progress($project_id);
+                    $taskLanguageMap = [];
+                    if (!empty($project_tasks)) {
+                        $get_payment_status_for_project = $taskDao->get_payment_status_for_project($project_id);
+                        foreach ($project_tasks as $task) {
+                            $task_obj = Common\Lib\ModelFactory::buildModel('Task', $task);
+                            $task['target_language_and_country'] = Lib\TemplateHelper::getLanguageAndCountry($task_obj->getTargetLocale());
+                            $task_id = $task['id'];
+                            if (!empty($translations_not_all_complete[$task_id])) $task['taskStatus'] = Common\Enums\TaskStatusEnum::CLAIMED;
+                            $taskLanguageMap[$task['targetLanguageCode'] . ',' . $task['targetCountryCode']][] = $task;
+                            $metaData = [];
+                            $result = LibAPI\PDOWrapper::call('userSubscribedToTask', "$user_id,$task_id");
+                            if ($result[0]['result']) {
+                                $metaData['tracking'] = true;
+                                $userSubscribedToProject = 1; // For self service projects, $userSubscribedToProject will not have been set (other projects are not initially tracked for creator)
+                            } else {
+                                $metaData['tracking'] = false;
+                            }
+                            $taskMetaData[$task_id] = $metaData;
+                        }
+                    } else $project_tasks = [];
+
+                    $creator = $taskDao->get_creator($project_id, $memsource_project);
+                    $pm = $creator['email'];
+                    if (strpos($pm, '@translatorswithoutborders.org') === false && strpos($pm, '@clearglobal.org') === false) $pm = 'projects@translatorswithoutborders.org';
+
+                    $data['roles'] = $roles;
+                    $data['org_name'] = $projectDao->get_project_org_name($project_id);
+                    $data['projectTasks'] = $project_tasks;
+                    $data['taskMetaData'] = $taskMetaData;
+                    $data['userSubscribedToProject'] = (int)$userSubscribedToProject;
+                    $data['taskLanguageMap'] = $taskLanguageMap;
+                    $data['imgCacheToken'] = time();
+                    $p = new Common\Protobufs\Models\Project();
+                    $p->setId($project['id']);
+                    $p->setTitle($project['title']);
+                    $data['discourse_slug'] = $projectDao->discourse_parameterize($p);
+                    $data['pm'] = $pm;
+                    $data['project'] = $project;
+                    $data['get_payment_status_for_project'] = $get_payment_status_for_project;
+                    $data['users_who_claimed'] = $projectDao->get_users_who_claimed($project_id);
+                    $data['ngo_linguists_by_language_pair'] = $projectDao->get_language_pairs_with_ngo_linguists($project_id);
+                    $data['source_language_and_country'] = Lib\TemplateHelper::getLanguageAndCountry($project_obj->getSourceLocale());
+
+                    $image_list = glob(Common\Lib\Settings::get('files.upload_path') . "proj-$project_id/image/image.*");
+                    if (!empty($image_list)) $data['image'] = base64_encode(file_get_contents($image_list[0]));
+                } else $data = [];
+            }
+        } else $data = [];
+        $response->getBody()->write(json_encode($data));
+        return $response->withHeader('Content-Type', 'application/json');
+    }
+
     public function change_owner(Request $request, Response $response, $args)
     {
         global $app, $template_data;
@@ -1502,6 +1646,124 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
         return UserRouteHandler::render("project/project.alter.tpl", $response);
     }
 
+    public function t_project_alter(Request $request, Response $response, $args)
+    {
+        $project_id = (int)$args['project_id'];
+
+        $projectDao = new DAO\ProjectDao();
+
+        $result = LibAPI\PDOWrapper::call('getProject', "$project_id,null,null,null,null,null,null,null,null,null,null,null,null");
+        if (!empty($result)) {
+            $project = $result[0];
+            $org_id = $project['organisationId'];
+
+            if ($data = UserRouteHandler::t_validate($org_id)) {
+                $user_id = $data['user']['id'];
+
+                $memsource_project = $projectDao->get_memsource_project($project_id);
+
+                if ($post = $request->getParsedBody()) {
+
+                    if (isset($post['delete_image'])) {
+                        $files = glob(Common\Lib\Settings::get('files.upload_path') . "proj-$project_id/image/image.*");
+                        if (!empty($files)) {
+                            $file = $files[0];
+                            $name = pathinfo($file, PATHINFO_FILENAME);
+                            $ext = pathinfo($file, PATHINFO_EXTENSION);
+                            $dir = pathinfo($file, PATHINFO_DIRNAME);
+                            $date = date('-d-m-Y-h-i-s-a', time());
+                            rename($file, "$dir/$name$date.$ext");
+                            $project['imageUploaded'] = 0;
+                            $project['imageApproved'] = 0;
+                            $projectDao->update_project_directly($project);
+
+                            LibAPI\PDOWrapper::call('insert_queue_request', "3,30,0,0,0,$project_id,0,0,''"); // ProjectImageRemovedEmail
+                        }
+                        return $response;
+                    }
+
+                    if (empty($post['project_title']) || empty($post['project_description']) || empty($post['project_impact']) || empty($post['project_deadline']) || !preg_match('/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/', $post['project_deadline'])) {
+                        $response->getBody()->write(json_encode(['error' => 'Missing fields or bad date']));
+                        return $response->withHeader('Content-Type', 'application/json');
+                    }
+                    $set_dateDue_in_memsource = $project['deadline'] != $post['project_deadline'];
+                    $projectDao->queue_asana_project($project_id);
+
+                    $project['title'] = mb_substr($post['project_title'], 0, 128);
+                    $project['description'] = $post['project_description'];
+                    $project['impact'] = $post['project_impact'];
+                    $project['deadline'] = $post['project_deadline'];
+                    $project['reference'] = $post['project_reference'];
+                    error_log("UPDATED NGO ($org_id, $user_id) Project: $project_id, {$post['project_title']}");
+                    $projectDao->update_project_directly($project);
+
+                    $image_failed = false;
+                    if (!empty($_FILES['projectImageFile']['name'])) {
+                        $filename = $_FILES['projectImageFile']['name'];
+                        $ext_index = strrpos($filename, '.');
+                        $ext = substr($filename, $ext_index + 1);
+                        $ext = strtolower($ext);
+                        $filename = substr($filename, 0, $ext_index + 1) . $ext;
+
+                        if ($ext_index <= 0 || !in_array($ext, explode(',', Common\Lib\Settings::get('projectImages.supported_formats'))) || !empty($_FILES['projectImageFile']['error']) || empty($_FILES['projectImageFile']['tmp_name']) ||(($image = file_get_contents($_FILES['projectImageFile']['tmp_name'])) === false)) {
+                            $image_failed = true;
+                        } else {
+                            $imageMaxWidth  = Common\Lib\Settings::get('projectImages.max_width');
+                            $imageMaxHeight = Common\Lib\Settings::get('projectImages.max_height');
+                            list($width, $height) = getimagesize($_FILES['projectImageFile']['tmp_name']);
+
+                            if (empty($width) || empty($height) || (($width <= $imageMaxWidth) && ($height <= $imageMaxHeight))) {
+                                $projectDao->save_image($project_id, $filename, $image);
+                                $success = true;
+                            } else { // Resize the image
+                                $ratio = min($imageMaxWidth / $width, $imageMaxHeight / $height);
+                                $newWidth  = floor($width * $ratio);
+                                $newHeight = floor($height * $ratio);
+
+                                if ($ext == 'png') {
+                                    $img = imagecreatefrompng($_FILES['projectImageFile']['tmp_name']);
+                                    $filename = substr($filename, 0, $ext_index + 1) . 'jpg';
+                                } else {
+                                    $img = imagecreatefromjpeg($_FILES['projectImageFile']['tmp_name']);
+                                }
+
+                                $tci = imagecreatetruecolor($newWidth, $newHeight);
+                                if (!empty($img) && $tci !== false) {
+                                    if (imagecopyresampled($tci, $img, 0, 0, 0, 0, $newWidth, $newHeight, $width, $height)) {
+                                        imagejpeg($tci, $_FILES['projectImageFile']['tmp_name'], 100); // Overwrite
+                                        // If we did not get this far, give up and use the un-resized image
+                                    }
+                                }
+
+                                $success = false;
+                                $image = file_get_contents($_FILES['projectImageFile']['tmp_name']);
+                                if ($image !== false) {
+                                    $projectDao->save_image($project_id, $filename, $image);
+                                    $success = true;
+                                }
+                            }
+                            if (!$success) $image_failed = true;
+                        }
+                    }
+                    if ($image_failed) {
+                        $response->getBody()->write(json_encode(['error' => 'Project image failed to upload']));
+                        return $response->withHeader('Content-Type', 'application/json');
+                    }
+
+                    if ($set_dateDue_in_memsource) $projectDao->set_dateDue_in_memsource_for_project($memsource_project, $post['project_deadline']);
+
+                    $response->getBody()->write(json_encode(['project_id' => $project_id]));
+                    return $response->withHeader('Content-Type', 'application/json');
+                }
+                $data['project'] = $project;
+                $image_list = glob(Common\Lib\Settings::get('files.upload_path') . "proj-$project_id/image/image.*");
+                if (!empty($image_list)) $data['image'] = base64_encode(file_get_contents($image_list[0]));
+            }
+        } else $data = [];
+        $response->getBody()->write(json_encode($data));
+        return $response->withHeader('Content-Type', 'application/json');
+    }
+
     public function projectCreate(Request $request, Response $response, $args)
     {
         global $app, $template_data;
@@ -1594,7 +1856,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                             $projectDao->saveProjectFile($project, $user_id, $projectFileName, $data);
                             error_log("Project File Saved($user_id): " . $post['project_title']);
                             if ($create_memsource) {
-                                $memsource_project = $userDao->create_memsource_project($post, $project, $projectFileName, $data);
+                                $memsource_project = $userDao->create_memsource_project($post, $project, $projectFileName, $data, $user_id);
                                 if (!$memsource_project) $success = false;
                             } else $memsource_project = 0;
                         } catch (\Exception $e) {
@@ -1826,6 +2088,180 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
             'allowed'        => $allowed,
         ));
         return UserRouteHandler::render("project/project.create.tpl", $response);
+    }
+
+    public function t_project_create(Request $request, Response $response, $args)
+    {
+        $org_id = (int)$args['org_id'];
+
+        $userDao = new DAO\UserDao();
+        $projectDao = new DAO\ProjectDao();
+
+        if ($data = UserRouteHandler::t_validate($org_id)) {
+            $user_id = $data['user']['id'];
+
+            if ($post = $request->getParsedBody()) {
+                if (empty($post['project_title']) || empty($post['project_description']) || empty($post['project_impact']) || empty($post['sourceLanguageSelect']) || empty($post['project_deadline']) || !preg_match('/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/', $post['project_deadline'])) {
+                    $response->getBody()->write(json_encode(['error' => 'Missing fields or bad date']));
+                    return $response->withHeader('Content-Type', 'application/json');
+                }
+                $sourceLocale = new Common\Protobufs\Models\Locale();
+                $project = new Common\Protobufs\Models\Project();
+                $project->setTitle(mb_substr($post['project_title'], 0, 128));
+                $project->setDescription($post['project_description']);
+                $project->setDeadline($post['project_deadline']);
+                $project->setImpact($post['project_impact']);
+                $project->setReference($post['project_reference']);
+                $project->setWordCount(1); // Code in taskInsertAndUpdate() does not support 0, so use 1 as placeholder
+
+                list($trommons_source_language_code, $trommons_source_country_code) = $projectDao->convert_selection_to_language_country($post['sourceLanguageSelect']);
+                $sourceLocale->setCountryCode($trommons_source_country_code);
+                $sourceLocale->setLanguageCode($trommons_source_language_code);
+                $project->setSourceLocale($sourceLocale);
+
+                $project->setOrganisationId($org_id);
+                $project->setCreatedTime(gmdate('Y-m-d H:i:s'));
+
+                $project = $projectDao->createProjectDirectly($project);
+                $project_id = $project->getId();
+                error_log("Created NGO ($org_id, $user_id) Project: $project_id, " . $post['project_title']);
+
+                if (empty($_FILES['projectFile']['name']) || !empty($_FILES['projectFile']['error']) || empty($_FILES['projectFile']['tmp_name']) || (($file = file_get_contents($_FILES['projectFile']['tmp_name'])) === false)) {
+                    error_log('Project file failed to upload');
+                    LibAPI\PDOWrapper::call('deleteProject', "$project_id");
+                    $response->getBody()->write(json_encode(['error' => 'Project file failed to upload']));
+                    return $response->withHeader('Content-Type', 'application/json');
+                }
+                $filename = $_FILES['projectFile']['name'];
+                $ext_index = strrpos($filename, '.');
+                $ext = substr($filename, $ext_index + 1);
+                $ext = strtolower($ext);
+                $filename = substr($filename, 0, $ext_index + 1) . $ext;
+                if ($ext_index <= 0 || !in_array($ext, ['docx', 'xslx', 'pptx', 'odt', 'txt', 'csv'])) {
+                    LibAPI\PDOWrapper::call('deleteProject', "$project_id");
+                    $response->getBody()->write(json_encode(['error' => 'File extension not allowed']));
+                    return $response->withHeader('Content-Type', 'application/json');
+                }
+                $destination = Common\Lib\Settings::get('files.upload_path') . "proj-$project_id/";
+                if (!file_exists($destination)) mkdir($destination, 0755);
+                $mimes = ['docx' => 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'xslx' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'pptx' => 'application/vnd.openxmlformats-officedocument.presentationml.presentation', 'odt' => 'application/vnd.oasis.opendocument.text', 'csv' => 'text/csv'];
+                $mime = !empty($mimes[$ext]) ? $mimes[$ext] : 'text/plain';
+                LibAPI\PDOWrapper::call('addProjectFile', "$project_id,$user_id," . LibAPI\PDOWrapper::cleanseNullOrWrapStr($filename) . ',' . LibAPI\PDOWrapper::cleanseNullOrWrapStr($filename) . ",'$mime'");
+
+                $dir_pointer = "files/proj-$project_id";
+                $physical_pointer = "$dir_pointer/$filename";
+                mkdir(Common\Lib\Settings::get('files.upload_path') . $dir_pointer, 0755);
+                file_put_contents(Common\Lib\Settings::get('files.upload_path') . $physical_pointer, $file);
+                error_log("Save path: $destination$filename");
+                file_put_contents("$destination$filename", $physical_pointer);
+
+                $memsource_project = $userDao->create_memsource_project($post, $project, $filename, $file, $user_id);
+                if (!$memsource_project) {
+                    LibAPI\PDOWrapper::call('deleteProject', "$project_id");
+                    $response->getBody()->write(json_encode(['error' => 'Phrase project not created']));
+                    return $response->withHeader('Content-Type', 'application/json');
+                }
+                $image_failed = false;
+                if (!empty($_FILES['projectImageFile']['name'])) {
+                    $filename = $_FILES['projectImageFile']['name'];
+                    $ext_index = strrpos($filename, '.');
+                    $ext = substr($filename, $ext_index + 1);
+                    $ext = strtolower($ext);
+                    $filename = substr($filename, 0, $ext_index + 1) . $ext;
+
+                    if ($ext_index <= 0 || !in_array($ext, explode(',', Common\Lib\Settings::get('projectImages.supported_formats'))) || !empty($_FILES['projectImageFile']['error']) || empty($_FILES['projectImageFile']['tmp_name']) ||(($image = file_get_contents($_FILES['projectImageFile']['tmp_name'])) === false)) {
+                        $image_failed = true;
+                    } else {
+                        $imageMaxWidth  = Common\Lib\Settings::get('projectImages.max_width');
+                        $imageMaxHeight = Common\Lib\Settings::get('projectImages.max_height');
+                        list($width, $height) = getimagesize($_FILES['projectImageFile']['tmp_name']);
+
+                        if (empty($width) || empty($height) || (($width <= $imageMaxWidth) && ($height <= $imageMaxHeight))) {
+                            $projectDao->save_image($project_id, $filename, $image);
+                            $success = true;
+                        } else { // Resize the image
+                            $ratio = min($imageMaxWidth / $width, $imageMaxHeight / $height);
+                            $newWidth  = floor($width * $ratio);
+                            $newHeight = floor($height * $ratio);
+
+                            if ($ext == 'png') {
+                                $img = imagecreatefrompng($_FILES['projectImageFile']['tmp_name']);
+                                $filename = substr($filename, 0, $ext_index + 1) . 'jpg';
+                            } else {
+                                $img = imagecreatefromjpeg($_FILES['projectImageFile']['tmp_name']);
+                            }
+
+                            $tci = imagecreatetruecolor($newWidth, $newHeight);
+                            if (!empty($img) && $tci !== false) {
+                                if (imagecopyresampled($tci, $img, 0, 0, 0, 0, $newWidth, $newHeight, $width, $height)) {
+                                    imagejpeg($tci, $_FILES['projectImageFile']['tmp_name'], 100); // Overwrite
+                                    // If we did not get this far, give up and use the un-resized image
+                                }
+                            }
+
+                            $success = false;
+                            $image = file_get_contents($_FILES['projectImageFile']['tmp_name']);
+                            if ($image !== false) {
+                                $projectDao->save_image($project_id, $filename, $image);
+                                $success = true;
+                            }
+                        }
+                        if (!$success) $image_failed = true;
+                    }
+                } else { // If no image uploaded, copy an old one
+                    if ($old_project_id = $projectDao->get_project_id_for_latest_org_image($org_id)) {
+                        $images = glob(Common\Lib\Settings::get('files.upload_path') . "proj-$old_project_id/image/image.*");
+                        if (!empty($images)) {
+                            $name = $images[0];
+                            $destination = Common\Lib\Settings::get('files.upload_path') . "proj-$project_id/image";
+                            mkdir($destination, 0755);
+                            $ext = pathinfo($name, PATHINFO_EXTENSION);
+                            copy($name, "$destination/image.$ext");
+                            $projectDao->set_uploaded_approved($project_id);
+                        }
+                    }
+                }
+                if ($image_failed) {
+                    LibAPI\PDOWrapper::call('deleteProject', "$project_id");
+                    $response->getBody()->write(json_encode(['error' => 'Project image failed to upload']));
+                    return $response->withHeader('Content-Type', 'application/json');
+                }
+                // Continue here whether there is, or is not, an image file uploaded as long as there was not an explicit failure
+                $target_languages = '';
+                $targetCount = 0;
+                $ngo_list = [];
+                if (!empty($post["target_language_$targetCount"])) {
+                    list($trommons_language_code, $trommons_country_code) = $projectDao->convert_selection_to_language_country($post["target_language_$targetCount"]);
+                    $target_languages = $trommons_language_code . '-' . $trommons_country_code;
+
+                    if (!empty($post["translation_sourcing_$targetCount"])) $ngo_list[] = '"' . $post['sourceLanguageSelect'] . '|' . $post["target_language_$targetCount"] . '|2"';
+                    if (!empty($post["revision_sourcing_$targetCount"]))    $ngo_list[] = '"' . $post['sourceLanguageSelect'] . '|' . $post["target_language_$targetCount"] . '|3"';
+                }
+                $targetCount++;
+                while (!empty($post["target_language_$targetCount"])) {
+                    list($trommons_language_code, $trommons_country_code) = $projectDao->convert_selection_to_language_country($post["target_language_$targetCount"]);
+                    $target_languages .= ',' . $trommons_language_code . '-' . $trommons_country_code;
+
+                    if (!empty($post["translation_sourcing_$targetCount"])) $ngo_list[] = '"' . $post['sourceLanguageSelect'] . '|' . $post["target_language_$targetCount"] . '|2"';
+                    if (!empty($post["revision_sourcing_$targetCount"]))    $ngo_list[] = '"' . $post['sourceLanguageSelect'] . '|' . $post["target_language_$targetCount"] . '|3"';
+                    $targetCount++;
+                }
+
+                if (!empty($ngo_list)) $projectDao->update_project_restriction_JSON($project_id, !empty($post['incremental_sourcing']) ? 1 : 0, '[' . implode(',', $ngo_list) . ']');
+
+                // Create a topic in the Community forum (Discourse)
+                error_log("projectCreate create_discourse_topic($project_id, $target_languages)");
+                $this->create_discourse_topic($project_id, $target_languages, 0, !empty($post['earthquake']), empty($memsource_project['memsource_project_uid']) ? '' : $memsource_project['memsource_project_uid']);
+
+                $response->getBody()->write(json_encode(['project_id' => $project_id]));
+                return $response->withHeader('Content-Type', 'application/json');
+            }
+            $data['languages'] = $projectDao->t_generate_language_selection();
+            $data['ngo_linguists_by_language_pair'] = $projectDao->t_ngo_linguists_by_language_pair($org_id);
+            $data['allowed'] = $projectDao->get_entitlement_remaining($org_id, 0) ? 1 : 0;
+        }
+        $response->getBody()->write(json_encode($data));
+        return $response->withHeader('Content-Type', 'application/json');
     }
 
     public function project_create_empty(Request $request, Response $response, $args)
